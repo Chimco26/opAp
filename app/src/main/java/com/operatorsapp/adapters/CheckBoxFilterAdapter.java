@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import com.example.common.SelectableString;
 import com.operatorsapp.R;
@@ -17,7 +16,6 @@ public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAd
 
     private final ArrayList<SelectableString> mFilterList;
     private CheckBoxFilterAdapterListener mCheckBoxFilterAdapterListener;
-    private boolean onBind;
 
     public CheckBoxFilterAdapter(ArrayList<SelectableString> list, CheckBoxFilterAdapterListener checkBoxFilterAdapterListener) {
         mFilterList = list;
@@ -34,38 +32,40 @@ public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAd
 
     @Override
     public void onBindViewHolder(@NonNull final CheckBoxFilterAdapter.ViewHolder viewHolder, final int position) {
-        onBind = true;
         viewHolder.mCheckBox.setText(mFilterList.get(position).getString());
         viewHolder.mCheckBox.setChecked(mFilterList.get(position).isSelected());
-        viewHolder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        viewHolder.mCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            public void onClick(View view) {
+                boolean check = ((CheckBox)view).isChecked();
+                mFilterList.get(position).setSelected(check);
                 if (mFilterList.get(position).getId().equals(SelectableString.SELECT_ALL_ID)) {
-                    updateAll(b);
-                } else if (!onBind){
-                    mFilterList.get(position).setSelected(b);
+                    updateAll(check);
+                } else {
+                    mFilterList.get(position).setSelected(check);
                     updateSelectAllItem(mFilterList);
                 }
                 mCheckBoxFilterAdapterListener.onItemCheck(mFilterList.get(position));
-
             }
         });
-        onBind = false;
     }
 
     private void updateSelectAllItem(ArrayList<SelectableString> selectableStrings) {
         boolean b = selectableStrings.get(1).isSelected();
-        int counter = 1;
+        int counter = 0;
+        boolean onlyOneUnselected = false;
         for (SelectableString selectableStrings1 : selectableStrings.subList(1, selectableStrings.size())) {
-            if (selectableStrings1.isSelected() && b
-                    || !selectableStrings1.isSelected() && !b){
+            if (selectableStrings1.isSelected() && b){
                 counter++;
             }else {
+                onlyOneUnselected = true;
                 break;
             }
         }
-        if (counter == selectableStrings.size()){
+        if (counter == selectableStrings.size() - 1){
             selectableStrings.get(0).setSelected(b);
+        }else if (onlyOneUnselected){
+            selectableStrings.get(0).setSelected(false);
         }
     }
 

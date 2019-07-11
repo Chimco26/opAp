@@ -1,0 +1,433 @@
+<resources>
+    <string name="app_name">Matics Operator</string>
+
+    <!-- General -->
+    <string name="no_communication">No communication</string>
+    <string name="pee_value_null" translatable="false">--</string>
+    <string name="default_empty_field" translatable="false">--</string>
+    <string name="unknown">Unknown</string>
+
+    <!-- Login screen -->
+    <string name="link_machine">Select your machine</string>
+    <string name="screen_title">Matics</string>
+    <string name="login_fields_error">Fill in all fields</string>
+    <string name="login">Log In</string>
+    <string name="login_screen_save">Save</string>
+    <string name="login_fields_factory_name_hint">Factory Name</string>URL de l'usine
+    <string name="login_fields_factory_url_hint">Factory URL</string>
+    <string name="login_fields_user_name_hint">User Name</string>
+    <string name="login_fields_password_hint">Password</string>
+    <string name="login_dialog_dismiss">DISMISS</string>
+    <string name="login_dialog_dismiss_all">DISMISS FOR THIS SHIFT</string>
+    <string name="network_error">Network Error</string>
+    <string name="credentials_error">Username/Password mismatch</string>
+    <string name="url_error">Site URL not correct</string>
+    <string name="could_not_log_in">Could not log in -</string>
+    <string name="could_not_get_data">Could not get data -</string>
+    <string name="could_not_reach_server_error">Error - could not reach server</string>
+    <string name="unrecognized_operator">Unrecognized operator</string>
+
+    <!--Select machine screen -->
+    <string name="select_machine_screen_title">Select Machine</string>
+
+    <string name="done">DONE</string>
+    <string name="add_another">Add Machine</string>
+    <string name="ok">OK</string>
+
+    <string name="go">Go</string>
+    <string name="machine_id_name">Machine ID or Name</string>
+    <string name="enter_machine_id_name">Enter Machine\nID or Name</string>
+    <string name="no_notifications">No Notifications</string>
+    <string name="no_data">No Data</string>
+    <string name="error_rest">Error in REST service</string>
+    <string name="jobs_actions">Job Actions</string>
+    <string name="job_id">Job ID</string>
+    <string name="product_name">Product Name</string>
+    <string name="erp">ERP</string>
+    <string name="planned_start">Planned Start</string>
+    <string name="number_of_units">Number Of Units</string>
+    <string name="new_job">New Job</string>
+    <string name="new_job_details">New job details</string>
+    <string name="product_id">Product id</string>
+    <string name="erp_id">ERP ID</string>
+    <string name="quantity">Quantity</string>
+    <string name="activate_new_job">Activate</string>
+    <string name="could_not_retrieve_job_list">Could not retrieve job list</string>
+    <string name="product">Product</string>
+    <string name="id">ID -</string>
+    <string name="job">Job</string>
+    <string name="josh">Josh</string>
+    <string name="shift">Shift</string>
+    <string name="machine_status">Machines status</string>
+    <string name="operator_id">Operator ID</string>
+    <string name="operator_name">Operator Name</string>
+    <string name="error_shift_log">Fail to perform GetMachineShiftLog function</string>
+
+    <string name="operator_sign_in">Operator\nSign In</string>
+    <string name="operator_sign_in_action_bar">Operator Sign In</string>
+    <string name="cancel">Cancel</string>
+    <string name="retry">Retry</string>
+    <string name="end">End</string>
+    <string name="start">Start</string>
+    <string name="duration">Duration</string>
+    <string name="report">REPORT</string>
+    <string name="stop_event">Stop Event</string>
+    <string name="enter_with_your_id">Enter\nYour ID</string>
+    <string name="report_rejects">Report Rejects</string>
+    <string name="reject_reason">Reject reason</string>
+    <string name="cause">Cause</string>
+    <string name="next">Next</string>
+    <string name="units">Units</string>
+    <string name="weight">Weight</string>
+    <string name="material_weight_alarm">Material Weight Alarm</string>
+    <string name="dashes" translatable="false">- -</string>
+    <string name="no_reasons">No reports are available</string>
+    <string name="report_stop_event_reason">Report Stop Event Reason</string>
+    <string name="report_stop_reason">Report Stop\nReason</string>
+    <string name="report_reject_nreason">Report Reject\nReason</string>
+    <string name="report_stop_start">"Start "</string>
+    <string name="report_stop_resume">"End"</string>
+    <string name="report_cycle_nunits">Report Cycle Units</string>
+    <string name="report_cycle_units">Change Units in Cycle</string>
+    <string name="report_inventory_nitem_production">Report Production \n</string>
+    <string name="report_inventory_item_production">Report Production</string>
+    <string name="package_type">Package Type</string>
+    <string name="settings">Settings</string>
+    <string name="operator_app_settings">Operator\nApp\nSettings</string>
+    <string name="language">Language</string>
+    <string name="factory_sign_in">Factory Sign In</string>
+    <string name="change">Change</string>
+    <string name="advanced_settings">Advanced Settings</string>
+    <string name="refresh_reporting_data">Refresh Reporting Data</string>
+    <string name="operator_napp_nadvanced_nsettings">Operator\nApp\nAdvanced\nSettings</string>
+    <string name="polling_frequency">Polling Frequency</string>
+    <string name="request_timeout">Request Timeout</string>
+    <string name="popup_timeout">Pop up Timeout</string>
+    <string name="request_timeout_range_error">Request timeout must be in range 20-120 seconds</string>
+    <string name="popup_timeout_range_error">Pop up timeout must be in range 5-30 seconds</string>
+    <string name="polling_frequency_range_error">Polling frequency must be in range 20-60 seconds</string>
+    <string name="refreshed">Refreshed</string>
+    <string name="one">1</string>
+    <string name="end_">End: </string>
+    <string name="start_">Start: </string>
+    <string name="chart_min_">Min: </string>
+    <string name="chart_standard_">Standard:&#160;</string>
+    <string name="chart_max_">Max: </string>
+    <string name="space" translatable="false">&#160;</string>
+    <string name="switch_user">Switch User</string>
+    <string name="standard">Standard&#160;</string>
+    <string name="total_required">Total Required&#160;</string>
+    <string name="shift_log_min">Min&#160;</string>
+    <string name="shift_log_max">Max&#160;</string>
+    <string name="shift_log_standard">Standard&#160;</string>
+    <string name="approving_technician">Approving Technician</string>
+    <string name="approve">Approve</string>
+    <string name="setup_end">Setup End</string>
+    <string name="first_item_approval">Setup End</string>
+    <string name="send_logs">Send Logs</string>
+    <string name="alarm">"Alarm"</string>
+    <string name="loading_data">Loading data...</string>
+    <string name="no_data_chart">You need to provide data\nfor the chart</string>
+    <string name="common_signin_button_text">SIGN IN</string>
+
+    <array name="languages_spinner_array">
+        <item>English</item>
+        <item>Hebrew</item>
+        <item>Chinese</item>
+        <item>German</item>
+        <item>Russian</item>
+        <item>Ukrainian</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>Dutch</item>
+        <item>Arabic</item>
+        <item>Italian</item>
+    </array>
+
+    <array name="language_codes_array">
+        <item>en</item>
+        <item>iw</item>
+        <item>zh</item>
+        <item>de</item>
+        <item>ru</item>
+        <item>uk</item>
+        <item>es</item>
+        <item>fr</item>
+        <item>nl</item>
+        <item>ar</item>
+        <item>it</item>
+    </array>
+    <array name="jobs_spinner_array">
+        <item>Activate Job</item>
+        <item>Add Rejects</item>
+        <item>Change Units In Cycle</item>
+        <item>Report Production</item>
+    </array>
+
+    <array name="shiftlog_spinner_items">
+
+        <item>All Events</item>
+        <item>Alarms</item>
+        <item>All Stops</item>
+        <item>Uncategorized Stops</item>
+
+    </array>
+
+    <string name="approve_first_item">End Setup</string>
+
+    <plurals name="days">
+        <item quantity="one">%d Day</item>
+        <item quantity="other">%d Days</item>
+    </plurals>
+
+    <plurals name="hours">
+        <item quantity="zero">Hour</item>
+        <item quantity="one">Hour</item>
+        <item quantity="other">Hours</item>
+    </plurals>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="welcome">Welcome</string>
+    <string name="log_in_to_nyour_factory">Log In To\nYour Factory</string>
+    <string name="machine_id" translatable="false">&#160;</string>
+    <string name="pConfig">configuration</string>
+    <string name="channel_0">Channel 0</string>
+    <string name="channel_1_99">Channel 1–99</string>
+    <string name="channel_100">Channel 100</string>
+    <string name="events_selected">Events selected:</string>
+    <string name="events">events</string>
+    <string name="loading_file">Loading File…</string>
+    <string name="loading_error">Loading error</string>
+    <string name="production_parameters">Production parameters</string>
+    <string name="smaller_than_symbole" translatable="false"><![CDATA[<]]></string>
+    <string name="actionnable_jobs">Actionable Jobs</string>
+    <string name="search_job_id_or_product_name">Search Job ID or Product Name</string>
+    <string name="search">Search</string>
+    <string name="activate">Activate</string>
+    <string name="no_available_image">No Available Image</string>
+    <string name="name">Name</string>
+    <string name="catalog">Catalog</string>
+    <string name="amount">Amount</string>
+    <string name="materials">Materials</string>
+    <string name="mold">Mold</string>
+    <string name="mold_catalog">Mold Catalog</string>
+    <string name="cavities_actual">Units In Cycle Actual</string>
+    <string name="cavities_standard">Units In Cycle STD</string>
+    <string name="actions">Actions</string>
+    <string name="action_details">Action details</string>
+    <string name="you_can_add_a_note">You can add a note</string>
+    <string name="close">Close</string>
+    <string name="add">Add</string>
+    <string name="start_job_success">Job Started Successfully</string>
+    <string name="end_setup_success">End Setup Successfully</string>
+    <string name="get_panding_jobs_failed_error">Get Pending Jobs Failed Error</string>
+    <string name="get_jobs_details_failed_error">Get Job Details Failed Error</string>
+    <string name="reject_reason_setup">Setup</string>
+    <string name="no_available_pdf">No Available Pdf</string>
+    <string name="add_note">Add Note</string>
+    <string name="min_duration_shiftlog">Min. Event Duration: </string>
+    <string name="minutes">Min.</string>
+    <string name="minutes_long">minutes</string>
+    <string name="tutorial_job_actions">Job Actions - New Job</string>
+    <string name="tutorial_job_actions_desc">Begin prep for the next job ahead of time</string>
+    <string name="tutorial_swipe">Swipe the dashboard sideways to view the recipe for the current job</string>
+    <string name="tutorial_event_log_title">Event Log</string>
+    <string name="tutorial_event_log_desc">Report single or several stops together when they share the same reason.</string>
+    <string name="tutorial_split_event_title">Split Event</string>
+    <string name="tutorial_split_event_Desc">Use the scissors to split an event. That way, you can report a different reason for each stretch.</string>
+    <string name="kg">kg</string>
+    <string name="gram">gr</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="one_hundred_percent" translatable="false">100%</string>
+    <string name="signed_out_successfully">Signed-out Successfully</string>
+    <string name="signed_in_successfully">Signed-in Successfully</string>
+    <string name="notes">Notes</string>
+    <string name="submit">submit</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="enter_note_here">Enter Your Note Here</string>
+    <string name="fill_units_or_weight">* Please report Units or Weight</string>
+    <string name="emerald_flavor_name" translatable="false">emerald</string>
+    <string name="lenox_flavor_name" translatable="false">Lenox</string>
+    <string name="machine">Machine</string>
+    <string name="activate_job_dialog_message">You Are About to Activate a New Job, \n Are You Sure You Want to Proceed?</string>
+    <string name="activate_job_dialog_title">Activate New Job</string>
+    <string name="technician_list">Technician List</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="call_technician_title">Technician Call</string>
+    <string name="respond_notification_title">Respond to Notification</string>
+    <string name="call_technician_text">Need you to fix something</string>
+    <string name="called_technician">Called technician</string>
+    <string name="message_received">Message received</string>
+    <string name="message_declined">Message declined</string>
+    <string name="no_notification_to_show">No Notifications to Show From Past 24 hours</string>
+    <string name="alarms">Alarms</string>
+    <string name="attention_cycles_detected_in_a_non_production_status">Cycles detected in non production status.\nPlease do not forget to activate a job at time!</string>
+    <string name="under_maintenance">under maintenance</string>
+    <string name="at_work">At work</string>
+    <string name="work_comlpeted">Work completed</string>
+    <string name="technician_time_out">Attention: It’s been 20 minutes since you called for a technician with no response.  Reopen a call or contract your supervisor.</string>
+    <string name="message_from">Message from: </string>
+    <string name="operator">Operator</string>
+    <string name="sent_service_call">sent a service call from machine</string>
+    <string name="service_call_made">Service call has been sent to you from machine</string>
+    <string name="service_call_made_new">Service call has been sent by operator %1$s from machine</string>
+    <string name="call_for_technician_unresponsive">Your call for technician was unresponsive for 5 Minutes</string>
+    <string name="powered_by_leadermes">Powered by Matics</string>
+    <string name="default_unanswered_technocian_call">Waiting for the technician to reply</string>
+    <string name="default_unanswered_technician_call">Operator %1$s opened a service call. Waiting for the technician to reply</string>
+    <string name="general">General</string>
+    <string name="split_event_success">The Event was Split Successfully</string>
+    <string name="split_event_failed">Split Event Failed</string>
+    <string name="midnight">midnight</string>
+    <string name="split_event_validation_text">You Are About to split an event, \n Are You Sure You Want to Proceed?</string>
+    <string name="split_event_validation_title">Split Event</string>
+    <string name="split">Split</string>
+    <string name="gr">gr</string>
+    <string name="version">Version</string>
+    <string name="username">Username</string>
+    <string name="incremented_successfully">Incremented Successfully</string>
+    <string name="incremented_failure">Failed to Increment</string>
+    <string name="top_five_stop_events">Top 5 stop events</string>
+    <string name="top_five_reject_reasons">Top 5 Reject Reasons</string>
+    <string name="attention">Attention!</string>
+    <string name="activate_job">Activate Job</string>
+    <string name="total_amount">Total Amount:</string>
+    <string name="call_canceled">Call Canceled</string>
+    <string name="service_call_exists">Open Service Calls</string>
+    <string name="service_call_exists_subtitle">Open Service Calls were found, \n you can remove the open calls or open a new one</string>
+    <string name="open_new_call">New Service Call</string>
+    <string name="service_call_was_canceled"><b>Service call was canceled</b></string>
+    <string name="empty_job_list_msg">The Pending Job list is empty</string>
+    <string name="call_approved">Call is approved</string>
+    <string name="call_approved2">A call made by operator %1$s was approved</string>
+    <string name="call_declined">Call was declined</string>
+    <string name="call_declined2">A call made by operator %1$s was declined</string>
+    <string name="started_service">Attending call</string>
+    <string name="started_service2">Attending call made by operator %1$s</string>
+    <string name="service_completed">Service completed</string>
+    <string name="service_completed2">Service call made by operator %1$s was completed</string>
+    <string name="call_cancelled">Call Cancelled</string>
+    <string name="call_cancelled2">Call made by operator %1$s was Cancelled</string>
+    <string name="waiting_for_replay">Waiting for replay</string>
+    <string name="more_details">Waiting for more details</string>
+    <string name="technician">Technician</string>
+    <string name="time_left_to_current_job">Time left to current job</string>
+    <string name="hr">(Hr)</string>
+    <string name="hr2">hr</string>
+    <string name="see_pending_jobs">See pending jobs</string>
+    <string name="pending_jobs">Pending jobs</string>
+    <string name="end_setup">End Setup</string>
+    <string name="you_are_in_setup_mode">You are in setup mode</string>
+    <string name="get_ready_for_your_next_job">Get ready for your next job</string>
+    <string name="see_job">See Job</string>
+    <string name="dont_forget_to_activate_job">Don\'t forget to activate job!</string>
+    <string name="change_material">Change material</string>
+    <string name="more_info">More info</string>
+    <string name="max_value_is">max value is:</string>
+    <string name="change_factory">Change factory</string>
+
+    <!--keys for insights-->
+    <string name="NoProgressMinFromStartShift">It\'s %2$s minutes into the shift and machine %1$s have not yet begun production.</string>
+    <string name="SetupDurationMinActual">Machine %1$s is in setup for over %2$s minutes.</string>
+    <string name="SetupInjectionsCount">Machine %1$s has done over %2$s cycles in setup.</string>
+    <string name="UnReportedStopsPC">Machine %1$s: over %2$s %% of stop time this shift is uncategorized.</string>
+    <string name="RejectsPC">Machine %1$s has over %2$s %% Rejects.</string>
+    <string name="OpenEventDuration">Current stop time for machine %1$s is over %2$s minutes.</string>
+    <string name="ProductionModeInjectionsCount">%2$s cycles detected on %1$s in non production status.</string>
+    <string name="CycleTimeDeviation">%2$s %% exceeded Cycle Time standard on %1$s.</string>
+    <string name="ShortEventsFromProductionPC">Machine %1$s : Total short stops from the total production time exceeds %2$s %%.</string>
+    <string name="WorkerNotSigned">Machine %1$s: There isn\'t operator login to the machine %2$s minutes after the beginning of the shift.</string>
+    <string name="open_calls">Open Calls</string>
+    <string name="last_24h">Last 24hrs</string>
+    <string name="you_ve_reached_the_production_target">You’ve reached the production target!</string>
+    <string name="reported_stop_event">Reported stop event</string>
+    <string name="time_min">Time (min)</string>
+    <string name="report_events_reason">Report events reason</string>
+    <string name="keep_reporting_events_reason">Keep Reporting events reason</string>
+    <string name="target_reached">Target  Reached!</string>
+    <string name="setup_rejects_dialog_text">Do you want to report some of them as rejects?</string>
+    <string name="setup_good_units_dialog_text">Do you want to report some of them as good units?</string>
+    <string name="on_the_setup_you_produced">On the setup you produced</string>
+    <string name="from_the">from the</string>
+    <string name="activate_last_job">Activate last job</string>
+    <string name="do_you_want_to_activate_the_last_job_you_work_on_job">Do you want to activate the last job you work on?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="do_you_need_to_end_setup_before">Do you need to do set up before starting to produce on this job again?</string>
+    <string name="shiftlog">Shift log</string>
+    <string name="working">Working</string>
+    <string name="erp_job_id">ERP Job ID</string>
+    <string name="rejects">Rejects</string>
+    <string name="good_units">Good units</string>
+    <string name="working_time">Working time</string>
+    <string name="event_details">Event details</string>
+    <string name="service_calls">Service Calls</string>
+    <string name="messages">Messages</string>
+    <string name="message">Message</string>
+    <string name="production_report">Production Report</string>
+    <string name="select_all">Select all</string>
+    <string name="new_call">New Call</string>
+
+    <string name="working_setup">Working Setup</string>
+    <string name="parameter_deviation">Parameter Deviation</string>
+    <string name="stop">Stop</string>
+    <string name="stop_setup">Stop Setup</string>
+    <string name="idle">Idle</string>
+    <string name="working_no_production">Working no production</string>
+    <string name="no_communication_p">No Communication</string>
+
+    <string name="_100">100%</string>
+    <string name="filter_short">Filtered events</string>
+    <string name="min_duration_filter" translatable="false">(less than</string>
+    <string name="reported">Reported</string>
+    <string name="unreported">Unreported</string>
+    <string name="setup">Setup</string>
+    <string name="min">min</string>
+    <string name="estimated_date">Estimated date</string>
+    <string name="required_setup">Does the job require setup before activation?</string>
+    <string name="call_decline">Call was declined</string>
+    <string name="dont_activate">Don\'t Activate</string>
+    <string name="no_setup">No Setup</string>
+    <string name="go_to_setup">Go to Setup</string>
+    <string name="setup_mode">Setup mode</string>
+    <string name="rejects_quantity">Rejects quantity</string>
+    <string name="there_are_no_stop_event">There are no stop evens to report</string>
+    <string name="theoretical_units">Theoretical units</string>
+    <string name="average">Average:</string>
+    <string name="add_rejects">Add Rejects</string>
+    <string name="select_your_machine">Select your Machine</string>
+    <string name="search_department_or_machine_name">Search Department or Machine name</string>
+    <string name="storage_permission">Please allow storage access for application updates</string>
+    <string name="update_version_messege">Newer version is available, please allow installation when finish downloading file.</string>
+    <string name="update_version_title">Update In Progress</string>
+    <string name="filter_by">Filter By</string>
+    <string name="active_jobs">Active Jobs</string>
+    <string name="index">INDEX</string>
+    <string name="catalog_maj">CATALOG</string>
+    <string name="units_target">UNITS TARGET</string>
+    <string name="units_produced">UNITS PRODUCED</string>
+    <string name="end_time_actual">END TIME (ACTUAL)</string>
+    <string name="job_left_time">JOB LEFT TIME</string>
+    <string name="number_of_jobs">number of Jobs</string>
+    <string name="type_something">Type something</string>
+    <string name="service_calls_distribution">Service calls distribution</string>
+    <string name="shift_report">Shift Report</string>
+    <string name="you_have">You have</string>
+
+    <string-array name="color_array">
+        <item>#954b7d</item>
+        <item>#ff6b6b</item>
+        <item>#5aca96</item>
+        <item>#599abe</item>
+    </string-array >
+    <string name="cycle_time">Cycle time</string>
+    <string name="jobs_on_this_shift">Jobs on this shift</string>
+    <string name="report_cycle_failed_but_max_reported">the value you set to report cycle unit is over max value, the max value was reported</string>
+    <string name="report_cycle_failed_but_min_reported">the value you set to report cycle unit is under min value, the min value was reported</string>
+    <string name="min_value_is">min value is</string>
+    <string name="next_job_will_start_in">Next Job will start in</string>
+    <string name="start_job_now">Start Job Now</string>
+    <string name="cancel_job">Cancel Job</string>
+    <string name="graph">Graph</string>
+
+</resources>
