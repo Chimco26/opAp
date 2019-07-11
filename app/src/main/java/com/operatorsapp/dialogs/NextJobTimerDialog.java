@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.utils.TimeUtils;
 
@@ -27,9 +26,7 @@ public class NextJobTimerDialog implements View.OnClickListener {
     private final int mCounter;
     private final boolean mAutoActivateNextJobTimer;
     private AlertDialog mAlarmAlertDialog;
-    private ReportFieldsForMachine mReportFieldsForMachine;
-    private int mSelectedReasonId;
-    private int mSelectedTechnicianId;
+    private CountDownTimer mCountDownTimer;
 
 
     public NextJobTimerDialog(Activity activity, final NextJobTimerDialogListener listener,
@@ -61,13 +58,14 @@ public class NextJobTimerDialog implements View.OnClickListener {
         ImageView imageView = view.findViewById(R.id.DALJ_title_ic);
 
         if (mAutoActivateNextJobTimer) {
-            new CountDownTimer(mCounter, SECOND_IN_MILLIS) {
+            mCountDownTimer = new CountDownTimer(mCounter * SECOND_IN_MILLIS, SECOND_IN_MILLIS) {
                 public void onTick(long millisUntilFinished) {
-                    message.setText(TimeUtils.getHMFromMillis(millisUntilFinished));
+                    message.setText(TimeUtils.getHMSFromMillis(millisUntilFinished));
                 }
 
                 public void onFinish() {
                     mListener.onClickPositiveBtn();
+                    mAlarmAlertDialog.dismiss();
                 }
 
             }.start();
@@ -110,6 +108,9 @@ public class NextJobTimerDialog implements View.OnClickListener {
             case R.id.button_cancel:
                 mListener.onClickNegativeBtn();
                 mAlarmAlertDialog.dismiss();
+                if (mCountDownTimer != null){
+                    mCountDownTimer.cancel();
+                }
                 break;
             case R.id.DALJ_positive_btn:
                 mListener.onClickPositiveBtn();

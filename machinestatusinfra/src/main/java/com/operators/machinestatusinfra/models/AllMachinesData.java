@@ -94,6 +94,52 @@ public class AllMachinesData {
     private boolean AllowProductionModeOnOpApp = true;
     @SerializedName("AsUnReportedEvents")
     private boolean asUnReportedEvents;
+    @SerializedName("AutoActivateNextJob")
+    private Boolean mAutoActivateNextJob;
+    @SerializedName("AutoActivateNextJobTimerSec")
+    private Integer mAutoActivateNextJobTimerSec;
+    @SerializedName("AutoActivateNextJobTimer")
+    private Boolean mAutoActivateNextJobTimer;
+    @SerializedName("NextJobID")
+    private Long mNextJobID;
+    @SerializedName("NextERPJobID")
+    private String mNextERPJobID;
+
+    public Boolean getmAutoActivateNextJob() {
+        if (mAutoActivateNextJob != null) {
+            return mAutoActivateNextJob;
+        }else {
+            return false;
+        }
+    }
+
+    public Integer getmAutoActivateNextJobTimerSec() {
+        if (mAutoActivateNextJobTimerSec != null) {
+            return mAutoActivateNextJobTimerSec;
+        }else {
+            return 0;
+        }
+    }
+
+    public Boolean getmAutoActivateNextJobTimer() {
+        if (mAutoActivateNextJobTimer != null) {
+            return mAutoActivateNextJobTimer;
+        }else {
+            return false;
+        }
+    }
+
+    public Long getmNextJobID() {
+        if (mNextJobID != null) {
+            return mNextJobID;
+        }else {
+            return 0l;
+        }
+    }
+
+    public String getmNextERPJobID() {
+        return mNextERPJobID;
+    }
 
     public boolean isAllowProductionModeOnOpApp() {
         return AllowProductionModeOnOpApp;

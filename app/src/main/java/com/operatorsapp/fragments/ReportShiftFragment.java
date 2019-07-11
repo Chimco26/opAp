@@ -12,12 +12,11 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.common.Event;
+import com.example.common.SelectableString;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
@@ -25,7 +24,6 @@ import com.example.common.permissions.WidgetInfo;
 import com.example.common.reportShift.DepartmentShiftGraphRequest;
 import com.example.common.reportShift.DepartmentShiftGraphResponse;
 import com.example.common.reportShift.Graph;
-import com.example.common.reportShift.GraphSeries;
 import com.example.common.reportShift.Item;
 import com.example.common.reportShift.NotificationByType;
 import com.example.common.reportShift.ReqDepartment;
@@ -46,7 +44,7 @@ import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operatorsapp.R;
-import com.operatorsapp.adapters.GrapheSeriesSpinnerAdapter;
+import com.operatorsapp.adapters.CheckBoxFilterAdapter;
 import com.operatorsapp.adapters.TopFiveAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
@@ -92,12 +90,14 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     private PieChart mPieChart;
     private LineChart mCycleTime;
     private TextView mServiceCallsTitle;
-    private Spinner mCycleTimeSpinner;
     private int mGraphPosition;
-    private GrapheSeriesSpinnerAdapter mCycleTimeSpinnerAdapter;
+    private CheckBoxFilterAdapter mCheckBoxFilterAdapter;
     public static final int[] BLUE_COLORS = {
             Color.rgb(0, 0, 153), Color.rgb(0, 0, 204), Color.rgb(0, 0, 255),
             Color.rgb(51, 51, 255), Color.rgb(0, 102, 255), Color.rgb(51, 102, 255)};
+    private RecyclerView mGraphRv;
+    private ArrayList<Graph> mGraphs;
+    private ArrayList<SelectableString> mSelectableStrings;
 
     public static ReportShiftFragment newInstance(boolean isTimeLineOpen) {
         ReportShiftFragment reportShiftFragment = new ReportShiftFragment();
@@ -152,30 +152,37 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
     private void initCycleTimeVars(View view) {
         mCycleTime = view.findViewById(R.id.FRS_cycle_time_view).findViewById(R.id.CTV_cycle_time_chart);
-        mCycleTimeSpinner = view.findViewById(R.id.FRS_cycle_time_view).findViewById(R.id.CTV_spinner);
+        mGraphRv = view.findViewById(R.id.FRS_cycle_time_view).findViewById(R.id.CTV_filter_rv);
     }
 
-    private void initCycleTimeSpinner(final ArrayList<Graph> graphs) {
-        if (mCycleTimeSpinnerAdapter == null) {
-            mCycleTimeSpinnerAdapter = new GrapheSeriesSpinnerAdapter(getActivity(), R.layout.spinner_language_item, graphs, graphs.get(mGraphPosition).getDisplayName());
-            mCycleTimeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            mCycleTimeSpinner.setAdapter(mCycleTimeSpinnerAdapter);
-            mCycleTimeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
+    private void initGraphFilterRv(final ArrayList<Graph> graphs, final ArrayList<SelectableString> selectableStrings) {
+        if (mCheckBoxFilterAdapter == null) {
+            mCheckBoxFilterAdapter = new CheckBoxFilterAdapter(selectableStrings, new CheckBoxFilterAdapter.CheckBoxFilterAdapterListener() {
                 @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                public void onItemCheck(SelectableString selectableString) {
+                    if (selectableString.getId().equals(SelectableString.SELECT_ALL_ID)) {
+                        for (SelectableString selectableString1 : selectableStrings) {
+                            selectableString1.setSelected(selectableString.isSelected());
+                        }
+                    }
+                    mGraphRv.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mCheckBoxFilterAdapter.notifyDataSetChanged();
+                        }
+                    });
 
-                    mGraphPosition = position;
-                    setGraphData(null, graphs.get(mGraphPosition).getGraphSeries().get(0));
+                    setGraphData(selectableStrings, graphs);
                 }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-
-                }
-
             });
+        } else {
+            mCheckBoxFilterAdapter.notifyDataSetChanged();
         }
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        mGraphRv.setLayoutManager(layoutManager);
+
+        mGraphRv.setAdapter(mCheckBoxFilterAdapter);
     }
 
     private void initServiceCallsVars(View view) {
@@ -292,51 +299,62 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         }
     }
 
-    private void setGraphData(String displayName, GraphSeries graphSeries) {
+    private void setGraphData(ArrayList<SelectableString> selectableStrings, List<Graph> graphs) {
 
         LineChart graph = mCycleTime;
-
+        graph.removeAllViews();
         graph.setBackgroundColor(Color.TRANSPARENT);
         graph.setTouchEnabled(false);
         graph.setDrawGridBackground(false);
 
         ArrayList<ILineDataSet> allDataSets = new ArrayList<>();
 
-        ArrayList<List<Item>> listArrayList = splitItemsByNull(graphSeries.getItems());
-
-        if (listArrayList.size() > 0) {
-
-            for (List<Item> items : listArrayList) {
-
-                if (items.size() > 0) {
-
-                    ArrayList<Entry> values = new ArrayList<>();
-
-                    for (int i = 0; i < items.size(); i++) {
-
-                        Date date = TimeUtils.getDateForNotification(items.get(i).getX());
-
-                        if (date != null) {
-
-                            values.add(new Entry((float) date.getTime(), (float) (Math.round(items.get(i).getY().floatValue()))));
-                        }
-
-
-                    }
-                    LineDataSet set = new LineDataSet(values, "");
-
-                    set.setDrawCircles(false);
-
-                    set.setDrawValues(false);
-
-                    set.setMode(LineDataSet.Mode.LINEAR);
-
-                    set.setColor(getContext().getResources().getColor(R.color.blue1));
-
-                    allDataSets.add(set);
+        for (Graph graphItem : graphs) {
+            boolean isSelected = false;
+            for (SelectableString selectableString : selectableStrings) {
+                if (selectableString.getId().equals(graphItem.getId())) {
+                    isSelected = selectableString.isSelected();
                 }
             }
+            if (!isSelected) {
+                continue;
+            }
+            ArrayList<List<Item>> listArrayList = splitItemsByNull(graphItem.getGraphSeries().get(0).getItems());
 
+            if (listArrayList.size() > 0) {
+
+                for (List<Item> items : listArrayList) {
+
+                    if (items.size() > 0) {
+
+                        ArrayList<Entry> values = new ArrayList<>();
+
+                        for (int i = 0; i < items.size(); i++) {
+
+                            Date date = TimeUtils.getDateForNotification(items.get(i).getX());
+
+                            if (date != null) {
+
+                                values.add(new Entry((float) date.getTime(), (float) (Math.round(items.get(i).getY().floatValue()))));
+                            }
+
+
+                        }
+                        LineDataSet set = new LineDataSet(values, "");
+
+                        set.setDrawCircles(false);
+
+                        set.setDrawValues(false);
+
+                        set.setMode(LineDataSet.Mode.LINEAR);
+
+                        set.setColor(getContext().getResources().getColor(R.color.blue1));
+
+                        allDataSets.add(set);
+                    }
+                }
+
+            }
         }
         LineData data = new LineData(allDataSets);
         graph.setDescription(null);
@@ -345,7 +363,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         graph.getLegend().setEnabled(false);
         setXAxisStyle(graph);
         setYAxisStyle(graph);
-//        setLimitLine(graph, graphSeries.getMinValue(), graphSeries.getMaxValue());
+//        setLimitLine(graph, graphs.getMinValue(), graphs.getMaxValue());
         graph.notifyDataSetChanged();
         graph.invalidate();
     }
@@ -488,10 +506,30 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                             && response.body().getDepartments().get(0).getCurrentShift().size() > 0 && response.body().getDepartments().get(0).getCurrentShift().
                             get(0).getMachines().size() > 0 && response.body().getDepartments().get(0).getCurrentShift().
                             get(0).getMachines().get(0).getGraphs().size() > mGraphPosition) {
-                        setGraphData(null, response.body().getDepartments().get(0).getCurrentShift().
-                                get(0).getMachines().get(0).getGraphs().get(mGraphPosition).getGraphSeries().get(0));
-                        initCycleTimeSpinner((ArrayList<Graph>) response.body().getDepartments().get(0).getCurrentShift().
+                        ArrayList<SelectableString> selectableStrings = new ArrayList<>();
+                        selectableStrings.add(new SelectableString(getString(R.string.select_all), true, SelectableString.SELECT_ALL_ID));
+                        if (response.body().getDepartments().get(0).getCurrentShift().
+                                get(0).getMachines().get(0).getGraphs() != null) {
+                            for (Graph graph : response.body().getDepartments().get(0).getCurrentShift().
+                                    get(0).getMachines().get(0).getGraphs()) {
+                                graph.setId(graph.getName());
+                                selectableStrings.add(new SelectableString(graph.getDisplayName(), true, String.valueOf(graph.getId())));
+                            }
+                        }
+                        if (mSelectableStrings == null) {
+                            mSelectableStrings = new ArrayList<>();
+                        }
+                        ArrayList<SelectableString> arrayList = SelectableString.updateList(mSelectableStrings, selectableStrings);
+                        mSelectableStrings.clear();
+                        mSelectableStrings.addAll(arrayList);
+                        if (mGraphs == null) {
+                            mGraphs = new ArrayList<>();
+                        }
+                        mGraphs.clear();
+                        mGraphs.addAll(response.body().getDepartments().get(0).getCurrentShift().
                                 get(0).getMachines().get(0).getGraphs());
+                        initGraphFilterRv(mGraphs, mSelectableStrings);
+                        setGraphData(mSelectableStrings, mGraphs);
                     }
 
                 }
@@ -546,37 +584,5 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         mStopsAdapter.notifyDataSetChanged();
         mRejectsAdapter.notifyDataSetChanged();
     }
-//
-//    public class Main {
-//
-//        public static void main(String[] args) {
-//
-//            int nombresarah ; int nombrekeren;
-//
-//            Scanner clavier=new Scanner(System.in) ;
-//
-//            do {
-//
-//                    System.out.println ("sarah :Choisi un nombre entre 1 et 10 ");
-//                do{
-//                    nombrekeren =clavier.nextInt();
-//
-//                    if (nombrekeren==nombresarah){
-//                        System.out.println("felicitation");
-//
-//                    } else if (nombrekeren < nombresarah){
-//                        System.out.println("ton nombre est trop petit");
-//                    } else if (nombrekeren > nombresarah){
-//                        System.out.println("ton nombre est trop grand");
-//                    }
-//                }while (nombrekeren != nombresarah);
-//
-//                System.out.println ("Presse 1 si tu veux rejouer");
-//                String choice = clavier.nextInt();
-//            }while (choice == "1");
-//
-//            System.out.println ("By");
-//
-//        }
-//    }
+
 }

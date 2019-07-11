@@ -283,6 +283,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private String[] mReportCycleUnitValues = new String[2];//values of cycle unit report : [0] = originalValue ; [1] = max value if orinal is over the max
     private SparseArray<WidgetInfo> permissionForMachineHashMap;
     private NextJobTimerDialog mNextJobTimerDialog;
+    private int mShowDialogJobId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -999,10 +1000,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
                     checkShowReportBtn(getVisibleFragment());
 //                    setFilterWarningText(true);
-                    showTimeNextJobDialog(mCurrentMachineStatus.getmAutoActivateNextJob(),
-                            mCurrentMachineStatus.getmNextJobID(),
-                            mCurrentMachineStatus.getmAutoActivateNextJobTimer(),
-                            mCurrentMachineStatus.getmNextERPJobID(), mCurrentMachineStatus.getmAutoActivateNextJobTimerSec());
+                    showTimeNextJobDialog(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentJobID(), mCurrentMachineStatus.getAllMachinesData().get(0).getmAutoActivateNextJob(),
+                            mCurrentMachineStatus.getAllMachinesData().get(0).getmNextJobID(),
+                            mCurrentMachineStatus.getAllMachinesData().get(0).getmAutoActivateNextJobTimer(),
+                            mCurrentMachineStatus.getAllMachinesData().get(0).getmNextERPJobID(),
+                            mCurrentMachineStatus.getAllMachinesData().get(0).getmAutoActivateNextJobTimerSec());
 //     for test             showTimeNextJobDialog(true,
 //                           2,
 //                            true,
@@ -2567,17 +2569,21 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             if (((Response) response).getError() == null) {
 
-                mSelectJobId = data.getIntExtra(ActivateJobActivity.EXTRA_ACTIVATE_JOB_ID, PersistenceManager.getInstance().getJobId());
-
-                startJob();
-
-                ShowCrouton.jobsLoadingSuccessCrouton(DashboardActivity.this, getString(R.string.start_job_success));
-
-                dashboardDataStartPolling();
+                activateJob(data.getIntExtra(ActivateJobActivity.EXTRA_ACTIVATE_JOB_ID, PersistenceManager.getInstance().getJobId()));
             }
 
         }
 
+    }
+
+    private void activateJob(int jobId) {
+        mSelectJobId = jobId;
+
+        startJob();
+
+        ShowCrouton.jobsLoadingSuccessCrouton(DashboardActivity.this, getString(R.string.start_job_success));
+
+        dashboardDataStartPolling();
     }
 
     @Override
@@ -2700,7 +2706,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
         reportNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
-        mReportCore.registerListener(mReportCallbackListener);
+        mReportCore.registerListener(mReportRejectsCallbackListener);
         if (isUnit) {
             mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value), (double) 0, mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition).getJoshID());
         } else {
@@ -2772,6 +2778,54 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             getString(R.string.min_value_is), mReportCycleUnitValues[1]);
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.NETWORK_ERROR);
                 }
+            } else {
+                ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+            }
+
+            SendBroadcast.refreshPolling(DashboardActivity.this);
+
+        }
+
+        @Override
+        public void sendReportFailure(ErrorObjectInterface reason) {
+            ProgressDialogManager.dismiss();
+            OppAppLogger.getInstance().w(TAG, "sendReportFailure()");
+            if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
+                silentLoginFromDashBoard(DashboardActivity.this, new SilentLoginCallback() {
+                    @Override
+                    public void onSilentLoginSucceeded() {
+                        sendRejectReport(mSendRejectObject.getValue(), mSendRejectObject.isUnit(), mSendRejectObject.getSelectedCauseId(), mSendRejectObject.getSelectedReasonId());
+                    }
+
+                    @Override
+                    public void onSilentLoginFailed(ErrorObjectInterface reason) {
+                        OppAppLogger.getInstance().w(TAG, "Failed silent login");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
+                        ProgressDialogManager.dismiss();
+                    }
+                });
+            } else {
+
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, reason.getDetailedDescription());
+                ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject.getDetailedDescription(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+
+            }
+            SendBroadcast.refreshPolling(DashboardActivity.this);
+        }
+    };
+
+    ReportCallbackListener mReportRejectsCallbackListener = new ReportCallbackListener() {
+
+        @Override
+        public void sendReportSuccess(Object errorResponse) {
+            ResponseStatus response = objectToNewError(errorResponse);
+            ProgressDialogManager.dismiss();
+            OppAppLogger.getInstance().i(TAG, "sendReportSuccess()");
+            mReportCore.unregisterListener();
+
+            if (response.isFunctionSucceed()) {
+                ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
             } else {
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
@@ -3140,9 +3194,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     }
 
-    private void showTimeNextJobDialog(boolean autoActivateNextJob, final long nextJobID, boolean autoActivateNextJobTimer, String erpJobId, int counter) {
+    private void showTimeNextJobDialog(int currentJobID, boolean autoActivateNextJob, final long nextJobID, boolean autoActivateNextJobTimer, String erpJobId, int counter) {
 
+        if (mShowDialogJobId != 0 && mShowDialogJobId == currentJobID){
+            return;
+        }
         if (autoActivateNextJob && nextJobID > 0) {
+            mShowDialogJobId = currentJobID;
             mNextJobTimerDialog = new NextJobTimerDialog(this,
                     new NextJobTimerDialog.NextJobTimerDialogListener() {
                         @Override
@@ -3191,6 +3249,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject);
 
+                }if (((Response)response).getFunctionSucceed()){
+                    activateJob(Integer.parseInt(activateJobRequest.getJobID()));
                 }
             }
 
