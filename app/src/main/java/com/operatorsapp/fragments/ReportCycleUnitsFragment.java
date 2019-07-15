@@ -47,6 +47,7 @@ import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 
@@ -108,23 +109,10 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
     @Override
     public void onDetach() {
+        mOnCroutonRequestListener = null;
         super.onDetach();
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Analytics
-        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        PersistenceManager pm = PersistenceManager.getInstance();
-        mTracker.setScreenName(LOG_TAG);
-        mTracker.setClientId("machine id: " + pm.getMachineId());
-        mTracker.setAppVersion(pm.getVersion() + "");
-        mTracker.setHostname(pm.getSiteName());
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-//        getActiveJobs();
-    }
 
     @Nullable
     @Override
@@ -392,19 +380,14 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
             mReportCore.unregisterListener();
 
-//            if (getFragmentManager() != null) {
-//
-//                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//
-//            }
             dismissProgressDialog();
             if (response.isFunctionSucceed()){
-                // TODO: 17/07/2018 add crouton for success
                  ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
-
+                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.CHANGE_UNIT_IN_CYCLE, true, "Change unit in cycle");
                 //mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
             }else {
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), true);
+                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.CHANGE_UNIT_IN_CYCLE, false, "Change unit in cycle- " + response.getmError().getErrorDesc());
             }
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -420,7 +403,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         public void sendReportFailure(ErrorObjectInterface reason) {
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
             mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getDetailedDescription(), true);
-
+            new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.CHANGE_UNIT_IN_CYCLE, false, "Change unit in cycle- " + reason.getDetailedDescription());
             dismissProgressDialog();
             SendBroadcast.refreshPolling(getContext());
         }

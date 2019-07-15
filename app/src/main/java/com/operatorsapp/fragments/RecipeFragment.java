@@ -36,6 +36,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.callback.PostUpdateNotesForJobCallback;
+import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.ViewTagsHelper;
 
@@ -95,14 +96,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         }
 
         // Analytics
-        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        PersistenceManager pm = PersistenceManager.getInstance();
-        mTracker.setScreenName(LOG_TAG);
-        mTracker.setClientId("machine id: " + pm.getMachineId());
-        mTracker.setAppVersion(pm.getVersion() + "");
-        mTracker.setHostname(pm.getSiteName());
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        new GoogleAnalyticsHelper().trackScreen(getActivity(), "Recipe screen");
+
     }
 
     @Override

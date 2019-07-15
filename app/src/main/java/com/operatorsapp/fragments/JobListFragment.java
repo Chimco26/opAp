@@ -31,6 +31,7 @@ import com.operatorsapp.adapters.PendingJobsAdapter;
 import com.operatorsapp.adapters.PendingJobsAdapterNew;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.utils.GoogleAnalyticsHelper;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -79,14 +80,7 @@ public class JobListFragment extends Fragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Analytics
-        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        PersistenceManager pm = PersistenceManager.getInstance();
-        mTracker.setClientId("machine id: " + pm.getMachineId());
-        mTracker.setAppVersion(pm.getVersion() + "");
-        mTracker.setHostname(pm.getSiteName());
-        mTracker.setScreenName(TAG);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        new GoogleAnalyticsHelper().trackScreen(getActivity(), "Pending job list");
 
         if (getArguments() != null) {
             if (getArguments().containsKey(PendingJobResponse.TAG)) {

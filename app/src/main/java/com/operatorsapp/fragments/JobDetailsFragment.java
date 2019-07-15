@@ -56,6 +56,7 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.callback.PostUpdateNotesForJobCallback;
 import com.operatorsapp.utils.DownloadHelper;
+import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
@@ -124,14 +125,7 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Analytics
-        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        PersistenceManager pm = PersistenceManager.getInstance();
-        mTracker.setClientId("machine id: " + pm.getMachineId());
-        mTracker.setAppVersion(pm.getVersion() + "");
-        mTracker.setHostname(pm.getSiteName());
-        mTracker.setScreenName(TAG);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        new GoogleAnalyticsHelper().trackScreen(getActivity(), "Pending job details");
 
         if (getArguments() != null) {
             if (getArguments().containsKey(JobDetailsResponse.TAG)) {

@@ -26,6 +26,7 @@ import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 
@@ -54,16 +55,6 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_selected_operator, container, false);
         Bundle bundle = this.getArguments();
-
-        // Analytics
-        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        PersistenceManager pm = PersistenceManager.getInstance();
-        mTracker.setScreenName(LOG_TAG);
-        mTracker.setClientId("machine id: " + pm.getMachineId());
-        mTracker.setAppVersion(pm.getVersion() + "");
-        mTracker.setHostname(pm.getSiteName());
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         Gson gson = new Gson();
         if (bundle != null) {
@@ -100,13 +91,11 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
                 SendBroadcast.refreshPolling(getContext());
                 OppAppLogger.getInstance().i(LOG_TAG, "onSetOperatorSuccess()");
                 mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
-                Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
-                tracker.setHostname(PersistenceManager.getInstance().getSiteName());
-                tracker.send(new HitBuilders.EventBuilder()
-                                .setCategory("Operetor Sign in")
-                                .setAction("Signed in Successfully")
-                                .setLabel("Operator name: " + mSelectedOperator.getOperatorName() + ", ID: " + mSelectedOperator.getOperatorId())
-                                .build());
+
+                //Analytics
+                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.OPERATOR_SIGN_IN, true,
+                        "Operator name: " + mSelectedOperator.getOperatorName() + ", ID: " + mSelectedOperator.getOperatorId());
+
             }
 
             @Override
@@ -121,13 +110,10 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
     public void updateFailed(ErrorObjectInterface reason) {
         ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "Set operator failed. Reason : " + reason.getError().toString());
         OppAppLogger.getInstance().w(LOG_TAG, "Set operator failed. Reason : " + reason.getError().toString());
-        Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
-        tracker.setHostname(PersistenceManager.getInstance().getSiteName());
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Operetor Sign in")
-                .setAction("Signed in Failed")
-                .setLabel("Failed Reason: " + reason.getError().toString())
-                .build());
+        //Analytics
+        new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.OPERATOR_SIGN_IN, false,
+                "Failed Reason: " + reason.getError().toString());
+
         getActivity().onBackPressed();
     }
 

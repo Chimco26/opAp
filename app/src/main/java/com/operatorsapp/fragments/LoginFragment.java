@@ -39,6 +39,7 @@ import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 
@@ -77,14 +78,7 @@ public class LoginFragment extends Fragment {
         setHasOptionsMenu(true);
 
         // Analytics
-        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        PersistenceManager pm = PersistenceManager.getInstance();
-        mTracker.setClientId("machine id: " + pm.getMachineId());
-        mTracker.setAppVersion(pm.getVersion() + "");
-        mTracker.setHostname(pm.getSiteName());
-        mTracker.setScreenName(LOG_TAG);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        new GoogleAnalyticsHelper().trackScreen(getActivity(), "Login screen");
 
         if (getArguments() != null) {
             mGoToSelectMachine = getArguments().getBoolean(GO_TO_SELECT_MACHINE);

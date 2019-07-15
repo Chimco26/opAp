@@ -118,6 +118,7 @@ import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
+import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.SaveAlarmsHelper;
 import com.operatorsapp.utils.SaveHelperNew;
@@ -310,6 +311,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         OppAppLogger.getInstance().d(LOG_TAG, "onViewCreated(), start ");
         super.onViewCreated(view, savedInstanceState);
 
+        //Analytics
+        new GoogleAnalyticsHelper().trackScreen(getActivity(), "Main dashboard");
+
         mMainView = view;
         final ViewGroup.LayoutParams statusBarParams = initView(view);
 
@@ -458,6 +462,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mIsTimeLine = isChecked;
                 if (isChecked) {
+                    new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TOGGLE_SHIFT_LOG_VIEW, true, "Change shift log view- Events View" );
                     mEventsRecycler.setVisibility(View.VISIBLE);
                     mShiftLogRecycler.setVisibility(View.GONE);
                     mShowAlarmCheckBox.setVisibility(View.GONE);
@@ -474,6 +479,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                    }
                     PersistenceManager.getInstance().setIsNewShiftLog(true);
                 } else {
+                    new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TOGGLE_SHIFT_LOG_VIEW, true, "Change shift log view- Alarms View" );
                     mEventsRecycler.setVisibility(View.GONE);
                     mShiftLogRecycler.setVisibility(View.VISIBLE);
                     mFilterLy.setVisibility(View.GONE);
@@ -1412,13 +1418,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     ProgressDialogManager.dismiss();
                     mListener.onTechnicianCalled();
 
-                    Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
-                    tracker.setHostname(PersistenceManager.getInstance().getSiteName());
-                    tracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Technician Call")
-                            .setAction("Technician was called Successfully")
-                            .setLabel("technician name: " + techName)
-                            .build());
+                    new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TECH_CALL, true, "technician name: " + techName);
+
+//                    Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
+//                    tracker.setHostname(PersistenceManager.getInstance().getSiteName());
+//                    tracker.send(new HitBuilders.EventBuilder()
+//                            .setCategory("Technician Call")
+//                            .setAction("Technician was called Successfully")
+//                            .setLabel("technician name: " + techName)
+//                            .build());
                 } else {
                     String msg = "failed";
                     if (response.body() != null && response.body().getmError() != null) {
@@ -1438,13 +1446,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 if (t != null && t.getMessage() != null) {
                     m = t.getMessage();
                 }
-                Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
-                tracker.setHostname(PersistenceManager.getInstance().getSiteName());
-                tracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Technician Call")
-                        .setAction("Call for Technician failed")
-                        .setLabel("reason: " + m)
-                        .build());
+
+                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TECH_CALL, false, "reason: " + m);
+
+//                Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
+//                tracker.setHostname(PersistenceManager.getInstance().getSiteName());
+//                tracker.send(new HitBuilders.EventBuilder()
+//                        .setCategory("Technician Call")
+//                        .setAction("Call for Technician failed")
+//                        .setLabel("reason: " + m)
+//                        .build());
 
                 final GenericDialog dialog = new GenericDialog(getActivity(), t.getMessage(), getString(R.string.call_technician_title), getString(R.string.ok), true);
                 dialog.setListener(new GenericDialog.OnGenericDialogListener() {
@@ -1691,13 +1702,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             ProgressDialogManager.dismiss();
 
 
-                            Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
-                            tracker.setHostname(PersistenceManager.getInstance().getSiteName());
-                            tracker.send(new HitBuilders.EventBuilder()
-                                    .setCategory("Technician Call")
-                                    .setAction("Technician was called Successfully")
-                                    .setLabel("technician name: " + techName)
-                                    .build());
+                            new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TECH_CALL, true, "technician name: " + techName);
+//                            Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
+//                            tracker.setHostname(PersistenceManager.getInstance().getSiteName());
+//                            tracker.send(new HitBuilders.EventBuilder()
+//                                    .setCategory("Technician Call")
+//                                    .setAction("Technician was called Successfully")
+//                                    .setLabel("technician name: " + techName)
+//                                    .build());
                         } else {
                             String msg = "failed";
                             if (response.body() != null && response.body().getmError() != null) {
@@ -1716,13 +1728,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         if (t != null && t.getMessage() != null) {
                             m = t.getMessage();
                         }
-                        Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
-                        tracker.setHostname(PersistenceManager.getInstance().getSiteName());
-                        tracker.send(new HitBuilders.EventBuilder()
-                                .setCategory("Technician Call")
-                                .setAction("Call for Technician failed")
-                                .setLabel("reason: " + m)
-                                .build());
+
+                        new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TECH_CALL, false, "reason: " + m);
+
+//                        Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
+//                        tracker.setHostname(PersistenceManager.getInstance().getSiteName());
+//                        tracker.send(new HitBuilders.EventBuilder()
+//                                .setCategory("Technician Call")
+//                                .setAction("Call for Technician failed")
+//                                .setLabel("reason: " + m)
+//                                .build());
 
                         final GenericDialog dialog = new GenericDialog(getActivity(), t.getMessage(), getString(R.string.call_technician_title), getString(R.string.ok), true);
                         dialog.setListener(new GenericDialog.OnGenericDialogListener() {
@@ -1778,13 +1793,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mPopUpDialog.setCanceledOnTouchOutside(true);
         mPopUpDialog.show();
 
-        Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
-        tracker.setHostname(PersistenceManager.getInstance().getSiteName());
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Notifications dialog")
-                .setAction("Notifications dialog was opened")
-                .setLabel("Notifications dialog was opened")
-                .build());
+        new GoogleAnalyticsHelper().trackScreen(getActivity(), "Notifications dialog");
+
+//        Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
+//        tracker.setHostname(PersistenceManager.getInstance().getSiteName());
+//        tracker.send(new HitBuilders.EventBuilder()
+//                .setCategory("Notifications dialog")
+//                .setAction("Notifications dialog was opened")
+//                .setLabel("Notifications dialog was opened")
+//                .build());
 
 //        mPopUpDialog = new Dialog(getActivity());
 //        mPopUpDialog.setCanceledOnTouchOutside(true);
@@ -1880,12 +1897,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
                 ProgressDialogManager.dismiss();
+                //Analytics
+                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.SEND_NOTIFICATION, true, "Send New Notification");
             }
 
             @Override
             public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
                 ProgressDialogManager.dismiss();
-
+                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.SEND_NOTIFICATION, false, "Send New Notification");
             }
         });
     }
@@ -1940,6 +1959,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 @Override
                 public void onResponse(@NonNull Call<ResponseStatus> call, @NonNull Response<ResponseStatus> response) {
 
+                    new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.RESPOND_TO_NOTIFICATION, true, "Respond to Notification- ID: " + notification[0].getmNotificationID());
+
                     ArrayList<Notification> nList = pm.getNotificationHistory();
                     notification[0].setmResponseType(responseType);
                     nList.add(notification[0]);
@@ -1955,6 +1976,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onFailure(@NonNull Call<ResponseStatus> call, @NonNull Throwable t) {
+                    new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.RESPOND_TO_NOTIFICATION, false, "Respond to Notification- ID: " + notification[0].getmNotificationID());
                     if (ProgressDialogManager.isShowing()) {
                         ProgressDialogManager.dismiss();
                     }

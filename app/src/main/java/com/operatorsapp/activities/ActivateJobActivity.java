@@ -91,16 +91,6 @@ public class ActivateJobActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activate_job_activity);
 
-        // Analytics
-        OperatorApplication application = (OperatorApplication) getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        PersistenceManager pm = PersistenceManager.getInstance();
-        mTracker.setClientId("machine name + id: " + pm.getMachineName() + ", " + pm.getMachineId());
-        mTracker.setAppVersion(pm.getVersion() + "");
-        mTracker.setHostname(pm.getSiteName());
-        mTracker.setScreenName("Activate Job Screen");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-
         mCroutonCreator = new CroutonCreator();
 
         getExtras();

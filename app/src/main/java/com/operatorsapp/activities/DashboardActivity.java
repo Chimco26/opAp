@@ -155,6 +155,7 @@ import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.ClearData;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
+import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.SaveAlarmsHelper;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
@@ -2142,25 +2143,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 // TODO: 31/07/2018 display crouton
                 if (response.isFunctionSucceed()) {
                     dashboardDataStartPolling();
+                    //Analytics
+                    new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.PRODUCTION_STATUS, true, "Production Status Changed");
 
-                    Tracker tracker = ((OperatorApplication) getApplication()).getDefaultTracker();
-                    tracker.setHostname(PersistenceManager.getInstance().getSiteName());
-                    tracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Production Status")
-                            .setAction("Production Status Changed Successfully")
-                            .setLabel("New Status: " + newStatus)
-                            .build());
                 } else {
                     ProgressDialogManager.dismiss();
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
 
-                    Tracker tracker = ((OperatorApplication) getApplication()).getDefaultTracker();
-                    tracker.setHostname(PersistenceManager.getInstance().getSiteName());
-                    tracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Production Status")
-                            .setAction("Production Status Changed Failed")
-                            .setLabel("Error: " + response.getmError().getErrorDesc())
-                            .build());
                 }
             }
 
@@ -2169,13 +2158,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 ProgressDialogManager.dismiss();
                 // TODO: 31/07/2018 set error message
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, reason.getDetailedDescription(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
-                Tracker tracker = ((OperatorApplication) getApplication()).getDefaultTracker();
-                tracker.setHostname(PersistenceManager.getInstance().getSiteName());
-                tracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Production Status")
-                        .setAction("Production Status Changed Failed")
-                        .setLabel("Error: " + reason.getDetailedDescription())
-                        .build());
+                //Analytics
+                new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.PRODUCTION_STATUS, false, "Error: " + reason.getDetailedDescription());
 
             }
         }, NetworkManager.getInstance(), new SetProductionModeForMachineRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId(), id), persistenceManager.getTotalRetries());
@@ -2273,7 +2257,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         simpleRequests.postSplitEvent(persistenceManager.getSiteUrl(), new PostSplitEventCallback() {
             @Override
             public void onPostSplitEventSuccess(Object response) {
-
+                new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.SPLIT_STOP_EVENT, true, "Split stop event" );
                 ShowCrouton.jobsLoadingSuccessCrouton(DashboardActivity.this, getString(R.string.split_event_success));
                 dashboardDataStartPolling();
             }
@@ -2285,7 +2269,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     msg = getString(R.string.split_event_failed);
                 }
                 ShowCrouton.jobsLoadingAlertCrouton(DashboardActivity.this, msg);
-
+                new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.SPLIT_STOP_EVENT, false, "Split stop event- " + msg);
             }
         }, NetworkManager.getInstance(), new SplitEventRequest(persistenceManager.getSessionId(), String.valueOf(eventID)), persistenceManager.getTotalRetries(), persistenceManager.getRequestTimeout());
 
@@ -2825,8 +2809,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mReportCore.unregisterListener();
 
             if (response.isFunctionSucceed()) {
+                new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.REJECT_REPORT, true, "Report Reject");
+
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
             } else {
+                new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.REJECT_REPORT, false, "Report Reject- " + response.getmError().getErrorDesc());
+
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
 
@@ -2839,6 +2827,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             ProgressDialogManager.dismiss();
             OppAppLogger.getInstance().w(TAG, "sendReportFailure()");
             if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
+                new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.REJECT_REPORT, false, "Report Reject- Credentials_mismatch");
                 silentLoginFromDashBoard(DashboardActivity.this, new SilentLoginCallback() {
                     @Override
                     public void onSilentLoginSucceeded() {
@@ -2857,7 +2846,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, reason.getDetailedDescription());
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject.getDetailedDescription(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
-
+                new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.REJECT_REPORT, false, "Report Reject- " + errorObject.getDetailedDescription());
             }
             SendBroadcast.refreshPolling(DashboardActivity.this);
         }
@@ -2872,6 +2861,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             ProgressDialogManager.dismiss();
 
             if (response.isFunctionSucceed()) {
+                new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.END_SETUP, true, "End setup" );
                 if (mRejectForMultipleRequests != null && mRejectForMultipleRequests.size() > 0) {
                     sendMultipleRejectReport(mRejectForMultipleRequests);
                 } else {
@@ -2879,6 +2869,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     mRejectForMultipleRequests = null;
                 }
             } else {
+                new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.END_SETUP, false, "End setup" );
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
                 mRejectForMultipleRequests = null;
             }
@@ -2913,6 +2904,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                 ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
             }
+            new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.END_SETUP, false, "End setup- " + reason.getDetailedDescription() );
             SendBroadcast.refreshPolling(DashboardActivity.this);
 
         }
