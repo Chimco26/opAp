@@ -133,6 +133,7 @@ import com.operatorsapp.view.TimeLineView;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 
 import org.litepal.crud.DataSupport;
+import org.litepal.util.Const;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -3339,7 +3340,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                         isNew = false;
                                         tech.setmCallTime(TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT));
                                         tech.setmResponseType(not.getmResponseType());
+                                        techList.set(i, tech);
                                     } else if (tech.getmTechnicianId() == not.getmTargetUserId() && not.getmNotificationID() > tech.getmNotificationId()) {
+                                        techList.remove(i);
+                                    }else if(tech.getmNotificationId() == not.getmNotificationID() && not.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED){
                                         techList.remove(i);
                                     }
                                 }
@@ -3351,7 +3355,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 }
                             }
                         }
-
                     }
 
                     PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());

@@ -142,6 +142,7 @@
         <item>Dutch</item>
         <item>Arabic</item>
         <item>Italian</item>
+        <item>Hungarian</item>
     </array>
 
     <array name="language_codes_array">
@@ -156,6 +157,7 @@
         <item>nl</item>
         <item>ar</item>
         <item>it</item>
+        <item>hu</item>
     </array>
     <array name="jobs_spinner_array">
         <item>Activate Job</item>
