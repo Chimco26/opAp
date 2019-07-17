@@ -22,11 +22,11 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.Activ
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.GetPendingJobListRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Header;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsRequest;
-import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsResponse;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsStandardResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
-import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobResponse;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobStandardResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
-import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
+import com.operators.reportrejectnetworkbridge.server.response.StandardResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.PendingJobsAdapter;
 import com.operatorsapp.application.OperatorApplication;
@@ -69,12 +69,12 @@ public class ActivateJobActivity extends AppCompatActivity implements
     public static final String EXTRA_LAST_PRODUCT_NAME = "EXTRA_LAST_PRODUCT_NAME";
 
 
-    private PendingJobResponse mPendingJobsResponse;
+    private PendingJobStandardResponse mPendingJobsResponse;
     private HashMap<String, Header> mHashMapHeaders;
     private ArrayList<Header> mHeaders = new ArrayList<>();
     private ArrayList<PendingJob> mPendingJobs = new ArrayList<>();
     private ArrayList<PendingJob> mPendingJobsNoHeadersFiltered = new ArrayList<>();
-    private JobDetailsResponse mCurrentJobDetails;
+    private JobDetailsStandardResponse mCurrentJobDetails;
     private PendingJob mCurrentPendingJob;
 
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
@@ -205,7 +205,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
                 if (!isActive){
                     return;
                 }
-                mPendingJobsResponse = ((PendingJobResponse) response);
+                mPendingJobsResponse = ((PendingJobStandardResponse) response);
 
                 if (mPendingJobsResponse != null && mPendingJobsResponse.getPendingJobs() != null && mPendingJobsResponse.getPendingJobs().size() > 0) {
 
@@ -306,15 +306,15 @@ public class ActivateJobActivity extends AppCompatActivity implements
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
 
-                } else if (((Response) response).getError() != null) {
+                } else if (((StandardResponse) response).getError() != null) {
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
 
 
                 } else {
 
-                    mCurrentJobDetails = (JobDetailsResponse) response;
+                    mCurrentJobDetails = (JobDetailsStandardResponse) response;
                     //todo new open details
                     showJobDetailsFragment(mCurrentJobDetails);
                 }
@@ -391,14 +391,14 @@ public class ActivateJobActivity extends AppCompatActivity implements
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
 
-                } else if (((Response) response).getError() != null) {
+                } else if (((StandardResponse) response).getError() != null) {
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(ActivateJobActivity.this, errorObject);
 
                 } else {
 
-                    finishActivity((Response) response, activateJobRequest.getJobID());
+                    finishActivity((StandardResponse) response, activateJobRequest.getJobID());
                 }
             }
 
@@ -416,7 +416,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
     }
 
-    public void finishActivity(Response response, String jobID) {
+    public void finishActivity(StandardResponse response, String jobID) {
         isActive = false;
         Intent intent = getIntent();
         intent.putExtra(EXTRA_ACTIVATE_JOB_RESPONSE, response);
@@ -452,14 +452,14 @@ public class ActivateJobActivity extends AppCompatActivity implements
         getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, mRecipefragment).addToBackStack(RecipeFragment.TAG).commit();
     }
 
-    private void showJobListFragment(PendingJobResponse mPendingJobsResponse, ArrayList<PendingJob> mPendingJobs, ArrayList<Header> headers) {
+    private void showJobListFragment(PendingJobStandardResponse mPendingJobsResponse, ArrayList<PendingJob> mPendingJobs, ArrayList<Header> headers) {
 
         JobListFragment jobListFragment = JobListFragment.newInstance(mPendingJobsResponse, mPendingJobs, headers);
 
         getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, jobListFragment).addToBackStack(JobListFragment.class.getSimpleName()).commit();
     }
 
-    private void showJobDetailsFragment(JobDetailsResponse jobDetailsResponse) {
+    private void showJobDetailsFragment(JobDetailsStandardResponse jobDetailsResponse) {
 
         JobDetailsFragment jobDetailsFragment = JobDetailsFragment.newInstance(jobDetailsResponse, (ArrayList<Header>) mPendingJobsResponse.getHeaders(), mCurrentPendingJob);
 

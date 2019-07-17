@@ -42,7 +42,7 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.Actio
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Header;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Job;
-import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsResponse;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsStandardResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
 import com.operatorsapp.R;
@@ -100,7 +100,7 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
     private RecyclerView mPropsRv;
     private View mPropsRvOpenButton;
 
-    private JobDetailsResponse mCurrentJobDetails;
+    private JobDetailsStandardResponse mCurrentJobDetails;
     private PendingJob mCurrentPendingJob;
     private String mFirstPdf;
     private DownloadHelper mDownloadHelper;
@@ -109,11 +109,11 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
     private ArrayList<Action> mUpdatedActions;
     private ArrayList<Header> mHeaders;
 
-    public static JobDetailsFragment newInstance(JobDetailsResponse jobDetailsResponse, ArrayList<Header> headers, PendingJob pendingJob) {
+    public static JobDetailsFragment newInstance(JobDetailsStandardResponse jobDetailsResponse, ArrayList<Header> headers, PendingJob pendingJob) {
 
         JobDetailsFragment jobDetailsFragment = new JobDetailsFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(JobDetailsResponse.TAG, jobDetailsResponse);
+        bundle.putParcelable(JobDetailsStandardResponse.TAG, jobDetailsResponse);
         bundle.putParcelable(PendingJob.TAG, pendingJob);
         bundle.putParcelableArrayList(Header.TAG, headers);
         jobDetailsFragment.setArguments(bundle);
@@ -134,8 +134,8 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         if (getArguments() != null) {
-            if (getArguments().containsKey(JobDetailsResponse.TAG)) {
-                mCurrentJobDetails = getArguments().getParcelable(JobDetailsResponse.TAG);
+            if (getArguments().containsKey(JobDetailsStandardResponse.TAG)) {
+                mCurrentJobDetails = getArguments().getParcelable(JobDetailsStandardResponse.TAG);
 
             }
             if (getArguments().containsKey(PendingJob.TAG)) {
