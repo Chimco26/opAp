@@ -1,13 +1,16 @@
 <resources>
-
     <string name="app_name">Matics Operator</string>
+
+    <!-- General -->
     <string name="no_communication">Nincs kommunikáció</string>
-    <string name="pee_value_null">--</string>
-    <string name="default_empty_field">--</string>
-    <string name="unknown">--</string>
+    <string name="pee_value_null" translatable="false">--</string>
+    <string name="default_empty_field" translatable="false">--</string>
+    <string name="unknown">Unknown</string>
+
+    <!-- Login screen -->
     <string name="link_machine">Válassza ki a készüléket</string>
     <string name="screen_title">Matics</string>
-    <string name="login_fields_error"></string>
+    <string name="login_fields_error">Fill in all fields</string>
     <string name="login">Belépés</string>
     <string name="login_screen_save">Mentés</string>
     <string name="login_fields_factory_name_hint">Gyári név</string>
@@ -23,10 +26,14 @@
     <string name="could_not_get_data">Nem sikerült adatokat kapni -</string>
     <string name="could_not_reach_server_error">Hiba - nem érte el a kiszolgálót</string>
     <string name="unrecognized_operator">Ismeretlen operátor</string>
+
+    <!--Select machine screen -->
     <string name="select_machine_screen_title">Válassza a Gép lehetőséget</string>
+
     <string name="done">KÉSZ</string>
     <string name="add_another">Gép hozzáadása</string>
     <string name="ok">rendben</string>
+
     <string name="go">Megy</string>
     <string name="machine_id_name">Gépazonosító vagy név</string>
     <string name="enter_machine_id_name">Írja be a gép azonosítóját vagy nevét</string>
@@ -55,6 +62,7 @@
     <string name="operator_id">Üzemeltető azonosítója</string>
     <string name="operator_name">Üzemeltető neve</string>
     <string name="error_shift_log">Nem sikerült végrehajtani a GetMachineShiftLog funkciót</string>
+
     <string name="operator_sign_in">Üzemeltető \ t</string>
     <string name="operator_sign_in_action_bar">Üzemeltető bejelentkezés</string>
     <string name="cancel">Megszünteti</string>
@@ -67,18 +75,18 @@
     <string name="enter_with_your_id">Adja meg az azonosítóját</string>
     <string name="report_rejects">Jelentések elutasítása</string>
     <string name="reject_reason">Az ok elutasítása</string>
-    <string name="cause">Ok</string>
+    <string name="cause">Cause</string>
     <string name="next">Következő</string>
     <string name="units">egységek</string>
     <string name="weight">Súly</string>
     <string name="material_weight_alarm">Anyagtömeg riasztás</string>
-    <string name="dashes">- -</string>
+    <string name="dashes" translatable="false">- -</string>
     <string name="no_reasons">Nincs elérhető jelentés</string>
     <string name="report_stop_event_reason">Report Stop Event Reason</string>
     <string name="report_stop_reason">Jelentés leállítása</string>
     <string name="report_reject_nreason">Jelentés elutasítása</string>
-    <string name="report_stop_start">Rajt</string>
-    <string name="report_stop_resume">„Vége”</string>
+    <string name="report_stop_start">"Rajt"</string>
+    <string name="report_stop_resume">"Vége"</string>
     <string name="report_cycle_nunits">Egységek módosítása a ciklusban</string>
     <string name="report_cycle_units">Egységek módosítása ciklusban</string>
     <string name="report_inventory_nitem_production">Jelentés készítése</string>
@@ -100,17 +108,18 @@
     <string name="polling_frequency_range_error">A lekérdezési frekvenciának 20-60 másodpercnek kell lennie</string>
     <string name="refreshed">Megújult</string>
     <string name="one">1</string>
-    <string name="end_">vége:</string>
-    <string name="start_">Rajt:</string>
-    <string name="chart_min_">min:</string>
-    <string name="chart_standard_">Alapértelmezett:</string>
-    <string name="chart_max_">Max:</string>
+    <string name="end_">vége: </string>
+    <string name="start_">Rajt: </string>
+    <string name="chart_min_">Min: </string>
+    <string name="chart_standard_">Alapértelmezett:&#160;</string>
+    <string name="chart_max_">Max: </string>
+    <string name="space" translatable="false">&#160;</string>
     <string name="switch_user">Felhasználót váltani</string>
-    <string name="standard">Alapértelmezett</string>
-    <string name="total_required">Összes szükséges</string>
-    <string name="shift_log_min">min</string>
-    <string name="shift_log_max">Max</string>
-    <string name="shift_log_standard">Alapértelmezett</string>
+    <string name="standard">Alapértelmezett&#160;</string>
+    <string name="total_required">Összes szükséges&#160;</string>
+    <string name="shift_log_min">Min&#160;</string>
+    <string name="shift_log_max">Max&#160;</string>
+    <string name="shift_log_standard">Alapértelmezett&#160;</string>
     <string name="approving_technician">Technikus jóváhagyása</string>
     <string name="approve">Jóváhagy</string>
     <string name="setup_end">Beállítás vége</string>
@@ -120,21 +129,49 @@
     <string name="loading_data">Adatok betöltése...</string>
     <string name="no_data_chart">Adatokat kell adnia a diagramhoz</string>
     <string name="common_signin_button_text">BEJELENTKEZÉS</string>
+
+
+    <array name="jobs_spinner_array">
+        <item>Activate Job</item>
+        <item>Add Rejects</item>
+        <item>Change Units In Cycle</item>
+        <item>Report Production</item>
+    </array>
+
+    <array name="shiftlog_spinner_items">
+
+        <item>All Events</item>
+        <item>Alarms</item>
+        <item>All Stops</item>
+        <item>Uncategorized Stops</item>
+
+    </array>
+
     <string name="approve_first_item">Beállítás befejezése</string>
-    <string name="hello_blank_fragment">Hello üres töredék</string>
+
+    <plurals name="days">
+        <item quantity="one">%d Day</item>
+        <item quantity="other">%d Days</item>
+    </plurals>
+
+    <plurals name="hours">
+        <item quantity="zero">Hour</item>
+        <item quantity="one">Hour</item>
+        <item quantity="other">Hours</item>
+    </plurals>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="welcome">Üdvözöljük</string>
     <string name="log_in_to_nyour_factory">Jelentkezzen be a gyárba</string>
     <string name="pConfig">konfiguráció</string>
     <string name="channel_0">0 csatorna</string>
-    <string name="channel_1_99">1–99. Csatorna</string>
+    <string name="channel_1_99">1–99 Csatorna</string>
     <string name="channel_100">Csatorna 100</string>
     <string name="events_selected">A kiválasztott események:</string>
     <string name="events">események</string>
     <string name="loading_file">Fájl betöltése…</string>
     <string name="loading_error">Betöltési hiba</string>
     <string name="production_parameters">Termelési paraméterek</string>
-    <string name="smaller_than_symbole"></string>
-    <!--<string name="actionnable_jobs">Függő munkák</string>-->
+    <string name="actionnable_jobs">Termelési paraméterek</string>
     <string name="search_job_id_or_product_name">Keresés a munkahely azonosítójával vagy a termék nevével</string>
     <string name="search">Keresés</string>
     <string name="activate">Aktiválja</string>
@@ -159,7 +196,7 @@
     <string name="reject_reason_setup">Beállít</string>
     <string name="no_available_pdf">Nincs elérhető Pdf</string>
     <string name="add_note">Megjegyzés hozzáadása</string>
-    <string name="min_duration_shiftlog">Min. Esemény időtartama:</string>
+    <string name="min_duration_shiftlog">Min. Esemény időtartama: </string>
     <string name="minutes">Min.</string>
     <string name="minutes_long">percek</string>
     <string name="tutorial_job_actions">Feladatok - Új munka</string>
@@ -172,16 +209,14 @@
     <string name="kg">kg</string>
     <string name="gram">gr</string>
     <string name="sign_out">Kijelentkezés</string>
-    <string name="one_hundred_percent">1</string>
-    <string name="signed_out_successfully">Bejelentkezett sikeresen</string>
+    <string name="one_hundred_percent" translatable="false">100%</string>
+    <string name="signed_out_successfully">Kijelentkezett sikeresen</string>
     <string name="signed_in_successfully">Bejelentkezett sikeresen</string>
     <string name="notes">Megjegyzések</string>
     <string name="submit">beküldése</string>
     <string name="edit_note">Megjegyzés módosítása</string>
     <string name="enter_note_here">Írja be ide</string>
     <string name="fill_units_or_weight">* Kérjük, jelentse az egységeket vagy a súlyt</string>
-    <string name="emerald_flavor_name">smaragd</string>
-    <string name="lenox_flavor_name">Lenox</string>
     <string name="machine">Gép</string>
     <string name="activate_job_dialog_message">Ha új dolgot akarsz aktiválni, biztosan folytatni akarod?</string>
     <string name="activate_job_dialog_title">Új munka aktiválása</string>
@@ -201,15 +236,15 @@
     <string name="at_work">Munkában</string>
     <string name="work_comlpeted">A munka befejeződött</string>
     <string name="technician_time_out">Figyelem: 20 perc múlva hívtál egy szakembert, aki nem válaszolt. Nyissa meg újra a hívást, vagy kössön szerződést a felügyelővel.</string>
-    <string name="message_from">Üzenet valakitől:</string>
+    <string name="message_from">Üzenet valakitől: </string>
     <string name="operator">Operátor</string>
     <string name="sent_service_call">szervizhívást küldött a gépről</string>
     <string name="service_call_made">A szervizhívást a gépről küldték</string>
-    <string name="service_call_made_new">A szolgáltatáshívást a% 1 $ s operátor elküldte a géptől</string>
+    <string name="service_call_made_new">A szolgáltatáshívást a %1$s operátor elküldte a géptől</string>
     <string name="call_for_technician_unresponsive">A technikus hívása 5 percig nem reagált</string>
     <string name="powered_by_leadermes">Powered by Matics</string>
     <string name="default_unanswered_technocian_call">Várakozás a technikus válaszára</string>
-    <string name="default_unanswered_technician_call">A (z)% 1 $ s operátor hívást kezdeményezett. Várakozás a technikus válaszára</string>
+    <string name="default_unanswered_technician_call">A (z) %1$s operátor hívást kezdeményezett. Várakozás a technikus válaszára</string>
     <string name="general">Tábornok</string>
     <string name="split_event_success">Az esemény sikeresen megosztott</string>
     <string name="split_event_failed">Az osztott esemény sikertelen</string>
@@ -229,25 +264,25 @@
     <string name="total_amount">Teljes összeg:</string>
     <string name="call_canceled">Hívás megszakítva</string>
     <string name="service_call_exists">Nyitott szolgáltatáshívások</string>
-    <string name="service_call_exists_subtitle">Nyitott szolgáltatáshívásokat találtak, n eltávolíthatod a nyitott hívásokat, vagy új \ t</string>
+    <string name="service_call_exists_subtitle">Nyitott szolgáltatáshívásokat találtak, \n  eltávolíthatod a nyitott hívásokat, vagy újat</string>
     <string name="open_new_call">Új szervizhívás</string>
-    <!--<string name="service_call_was_canceled">A szolgáltatáshívást törölték</string>-->
+    <string name="service_call_was_canceled"><b>A szolgáltatáshívást törölték</b></string>
     <string name="empty_job_list_msg">A függőben lévő feladat lista üres</string>
     <string name="call_approved">A hívás jóváhagyása megtörtént</string>
-    <string name="call_approved2">A (z)% 1 $ s operátor által kezdeményezett hívást jóváhagyták</string>
+    <string name="call_approved2">A (z) %1$s operátor által kezdeményezett hívást jóváhagyták</string>
     <string name="call_declined">A hívás elutasítva</string>
-    <string name="call_declined2">Az% 1 $ s operátor által kezdeményezett hívást elutasították</string>
+    <string name="call_declined2">Az %1$s operátor által kezdeményezett hívást elutasították</string>
     <string name="started_service">A hívás résztvevője</string>
-    <string name="started_service2">A% 1 $ s operátor által kezdeményezett hívás</string>
+    <string name="started_service2">A %1$s operátor által kezdeményezett hívás</string>
     <string name="service_completed">A szolgáltatás befejeződött</string>
-    <string name="service_completed2">A (z)% 1 $ s szolgáltató által kezdeményezett szolgáltatáshívás befejeződött</string>
+    <string name="service_completed2">A (z) %1$s szolgáltató által kezdeményezett szolgáltatáshívás befejeződött</string>
     <string name="call_cancelled">Hívás megszakítva</string>
-    <string name="call_cancelled2">A (z)% 1 $ s operátor által kezdeményezett hívás törlése megtörtént</string>
+    <string name="call_cancelled2">A (z) %1$s operátor által kezdeményezett hívás törlése megtörtént</string>
     <string name="waiting_for_replay">Várakozás a visszajátszásra</string>
     <string name="more_details">További részletekre vár</string>
     <string name="technician">Technikus</string>
     <string name="time_left_to_current_job">Az aktuális munkához eltöltött idő</string>
-    <string name="hr">hr</string>
+    <string name="hr">(Hr)</string>
     <string name="hr2">hr</string>
     <string name="see_pending_jobs">Lásd függőben lévő feladatokat</string>
     <string name="pending_jobs">Függő munkák</string>
@@ -260,16 +295,18 @@
     <string name="more_info">Több információ</string>
     <string name="max_value_is">max. érték:</string>
     <string name="change_factory">Gyári változtatás</string>
-    <string name="NoProgressMinFromStartShift">Ez a% 2 $ s perc a műszakban és a gép% 1 $ s még nem kezdte meg a gyártást.</string>
-    <string name="SetupDurationMinActual">A% 1 $ s gép a (z)% 2 $ s percnél hosszabb ideig van beállítva.</string>
-    <string name="SetupInjectionsCount">A% 1 $ s gép a% 2 $ s ciklusokat hajtotta végre a telepítés során.</string>
-    <string name="UnReportedStopsPC">% 1 $ s:% 2 $ s% stop a leállítási időtől, ez a váltás nincs kategorizálva.</string>
-    <string name="RejectsPC">A (z)% 1 $ s több mint% 2 $ s %% elutasítása.</string>
-    <string name="OpenEventDuration">A (z)% 1 $ s aktuális leállási ideje% 2 $ s perc alatt van.</string>
-    <string name="ProductionModeInjectionsCount">% 2 $ s ciklusokat észleltek a (z)% 1 $ s nem termelési állapotban.</string>
-    <string name="CycleTimeDeviation">% 2 $ s %% meghaladta a Cycle Time szabványt% 1 $ s-n.</string>
-    <string name="ShortEventsFromProductionPC">% 1 $ s gép: A teljes gyártási idő rövid időtartama meghaladja a% 2 $ s %% értéket.</string>
-    <string name="WorkerNotSigned">A% 1 $ s gép: A felhasználó nem jelentkezik be a% 2 $ s percre a műszak kezdete után.</string>
+
+    <!--keys for insights-->
+    <string name="NoProgressMinFromStartShift">Ez a %2$s perc a műszakban és a gép %1$s még nem kezdte meg a gyártást.</string>
+    <string name="SetupDurationMinActual">A %1$s gép a (z) %2$s percnél hosszabb ideig van beállítva.</string>
+    <string name="SetupInjectionsCount">A %1$s gép a %2$s ciklusokat hajtotta végre a telepítés során.</string>
+    <string name="UnReportedStopsPC">%1$s : %2$s %% stop a leállítási időtől, ez a váltás nincs kategorizálva.</string>
+    <string name="RejectsPC">A (z) %1$s több mint %2$s %% elutasítása.</string>
+    <string name="OpenEventDuration">A (z) %1$s aktuális leállási ideje %2$s perc alatt van.</string>
+    <string name="ProductionModeInjectionsCount">%2$s ciklusokat észleltek a (z) %1$s nem termelési állapotban.</string>
+    <string name="CycleTimeDeviation">%2$s %% meghaladta a Cycle Time szabványt %1$s -n.</string>
+    <string name="ShortEventsFromProductionPC">%1$s gép: A teljes gyártási idő rövid időtartama meghaladja a %2$s %% értéket.</string>
+    <string name="WorkerNotSigned">A %1$s gép: A felhasználó nem jelentkezik be a %2$s percre a műszak kezdete után.</string>
     <string name="open_calls">Nyitott hívások</string>
     <string name="last_24h">Utolsó 24 óra</string>
     <string name="you_ve_reached_the_production_target">Elérte a termelési célt!</string>
@@ -300,6 +337,7 @@
     <string name="production_report">Gyártási jelentés</string>
     <string name="select_all">Mindet kiválaszt</string>
     <string name="new_call">Új hívás</string>
+
     <string name="working_setup">Munka beállítása</string>
     <string name="parameter_deviation">Paraméter-eltérés</string>
     <string name="stop">Állj meg</string>
@@ -307,13 +345,15 @@
     <string name="idle">Tétlen</string>
     <string name="working_no_production">Nincs termelés</string>
     <string name="no_communication_p">Nincs kommunikáció</string>
-    <string name="_100">1</string>
+
+    <string name="_100">100%</string>
     <string name="filter_short">Szűrt események</string>
     <string name="reported">Számolt</string>
     <string name="unreported">Nem jelentett</string>
     <string name="setup">Beállít</string>
     <string name="min">min</string>
     <string name="estimated_date">Becsült dátum</string>
+    <string name="required_setup">Does the job require setup before activation?</string>
     <string name="call_decline">A hívás elutasítva</string>
     <string name="dont_activate">Ne aktiválja</string>
     <string name="no_setup">Nincs beállítás</string>
@@ -324,8 +364,6 @@
     <string name="theoretical_units">Elméleti egységek</string>
     <string name="average">avg</string>
     <string name="add_rejects">Elutasítás hozzáadása</string>
-    <string name="actionnable_jobs">Feladható munkák</string>
-    <string name="service_call_was_canceled"><b> La chiamata di Servizio è stata cancellata </b></string>
     <string name="select_your_machine">Válassza ki a készüléket</string>
     <string name="search_department_or_machine_name">Keresési osztály vagy gép neve</string>
     <string name="storage_permission">Kérjük, engedélyezze az alkalmazásfrissítések tárolási hozzáférését</string>
@@ -337,657 +375,18 @@
     <string name="catalog_maj">Katalógus</string>
     <string name="units_target">EGYSÉGEK TARGET</string>
     <string name="units_produced">A TERMÉKEK TERMELÉSE</string>
-    <string name="end_time_actual">END TIME (ACTUAL)</string>
-    <string name="job_left_time">JOB LEFT TIME</string>
     <string name="number_of_jobs">munkahelyek száma</string>
     <string name="type_something">Gépelj valamit</string>
-    <string name="cycle_time">Ciklusidő</string>
     <string name="service_calls_distribution">Szolgáltatáshívások terjesztése</string>
     <string name="shift_report">Shift jelentés</string>
 
+    <string-array name="color_array">
+        <item>#954b7d</item>
+        <item>#ff6b6b</item>
+        <item>#5aca96</item>
+        <item>#599abe</item>
+    </string-array >
+
+    <string name="cycle_time">Ciklusidő</string>
+
 </resources>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

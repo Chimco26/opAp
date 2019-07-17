@@ -114,16 +114,6 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
                 @Override
                 public void onPageSelected(int position) {
-                    // Analytics
-                    OperatorApplication application = (OperatorApplication) getActivity().getApplication();
-                    Tracker mTracker = application.getDefaultTracker();
-                    PersistenceManager pm = PersistenceManager.getInstance();
-                    mTracker.setClientId("machine id: " + pm.getMachineId());
-                    mTracker.setAppVersion(pm.getVersion() + "");
-                    mTracker.setHostname(pm.getSiteName());
-                    mTracker.setScreenName("ViewPager new page Selected: " + mFragmentList.get(position).getTag());
-                    mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-
                 }
 
                 @Override

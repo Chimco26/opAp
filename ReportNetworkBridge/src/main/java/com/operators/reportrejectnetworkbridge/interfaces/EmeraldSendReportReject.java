@@ -1,8 +1,7 @@
 package com.operators.reportrejectnetworkbridge.interfaces;
 
 import com.operators.reportrejectnetworkbridge.server.request.SendReportRejectRequest;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
-import com.operators.reportrejectnetworkbridge.server.response.SendReportRejectResponse;
+import com.operators.reportrejectnetworkbridge.server.response.StandardResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -14,6 +13,6 @@ import retrofit2.http.POST;
 public interface EmeraldSendReportReject {
 
     @POST("/LeaderMESApi/ReportReject")
-    Call<ErrorResponse> sendReportReject(@Body SendReportRejectRequest sendReportRejectRequest);
+    Call<StandardResponse> sendReportReject(@Body SendReportRejectRequest sendReportRejectRequest);
 
 }

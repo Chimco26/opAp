@@ -46,6 +46,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.DavidVardi;
+import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
@@ -125,18 +126,6 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             }
         }
 
-        // Analytics
-        if (getActivity() != null && getActivity().getApplication() != null) {
-            OperatorApplication application = (OperatorApplication) getActivity().getApplication();
-            Tracker mTracker = application.getDefaultTracker();
-            PersistenceManager pm = PersistenceManager.getInstance();
-            mTracker.setScreenName(LOG_TAG);
-            mTracker.setClientId("machine id: " + pm.getMachineId());
-            mTracker.setAppVersion(pm.getVersion() + "");
-            mTracker.setHostname(pm.getSiteName());
-            mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        }
-//        getActiveJobs();
     }
 
     @Nullable
@@ -219,6 +208,8 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     }
 
     private void initStopReasons() {
+        //Analytics
+        new GoogleAnalyticsHelper().trackScreen(getActivity(), "Report Stop Reason- circle level 1");
 
         StopReasonsAdapter mStopReasonsAdapter = new StopReasonsAdapter(getContext(), mReportFieldsForMachine.getStopReasons(), this);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
@@ -226,6 +217,8 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     }
 
     private void initNewStopReasons() {
+        //Analytics
+        new GoogleAnalyticsHelper().trackScreen(getActivity(), "Report Stop Reason- table");
 
         NewStopReasonsAdapter newStopReasonsAdapter = new NewStopReasonsAdapter(getActivity(), mReportFieldsForMachine.getStopReasons(), this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));

@@ -51,6 +51,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.DavidVardi;
+import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
@@ -120,16 +121,6 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
             mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
             mJoshId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
         }
-
-        // Analytics
-        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        PersistenceManager pm = PersistenceManager.getInstance();
-        mTracker.setScreenName(LOG_TAG);
-        mTracker.setClientId("machine id: " + pm.getMachineId());
-        mTracker.setAppVersion(pm.getVersion() + "");
-        mTracker.setHostname(pm.getSiteName());
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Nullable
@@ -343,8 +334,10 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
             dismissProgressDialog();
 
             if (response.isFunctionSucceed()) {
+                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, true, "Report Production- units: " + mUnitsCounter + ", type: " + mSelectedPackageTypeName);
                 ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
             } else {
+                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, false, "Report Production- units: " + mUnitsCounter + ", type: " + mSelectedPackageTypeName);
                 ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
 
@@ -372,6 +365,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
         @Override
         public void sendReportFailure(ErrorObjectInterface reason) {
             dismissProgressDialog();
+            new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, false, "Report Production- " + reason.getDetailedDescription());
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
             mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getDetailedDescription(), true);
             SendBroadcast.refreshPolling(getContext());

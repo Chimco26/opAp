@@ -151,7 +151,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
 
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
                     holder.mSubtextTv.setText(mContext.getResources().getString(R.string.call_approved));
-                    holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_approved2), notification.getmSender()));
+                    holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_approved2), notification.getmOriginalSenderName()));
                     holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_sent_blue));
                 }else {
                     holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.baseline_check_circle));
@@ -165,7 +165,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
 
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
                     holder.mSubtextTv.setText(mContext.getResources().getString(R.string.call_declined));
-                    holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_declined2), notification.getmSender()));
+                    holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_declined2), notification.getmOriginalSenderName()));
                     holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_declined));
                 }else {
                     holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.close_circle_outline));
@@ -176,20 +176,20 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
             case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
                 holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.at_work_blue));
                 holder.mSubtextTv.setText(mContext.getResources().getString(R.string.at_work));
-                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.started_service2), notification.getmSender()));
+                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.started_service2), notification.getmOriginalSenderName()));
                 break;
 
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
                 holder.mSubtextTv.setText(mContext.getResources().getString(R.string.service_completed));
-                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.service_completed2), notification.getmSender()));
+                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.service_completed2), notification.getmOriginalSenderName()));
                 holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.service_done));
                 break;
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
                 holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cancel_blue));
                 holder.mSubtextTv.setText(mContext.getString(R.string.service_call_was_canceled));
-                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_cancelled2), notification.getmSender()));
+                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_cancelled2), notification.getmOriginalSenderName()));
                 break;
 
             default:

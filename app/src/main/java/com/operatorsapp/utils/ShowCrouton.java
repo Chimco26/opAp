@@ -14,6 +14,7 @@ import com.operatorsapp.managers.CroutonCreator;
 
 public class ShowCrouton {
     private static final int CROUTON_DURATION = 5000;
+    private static final String DEFAULT_SUCCESS_MESSAGE = "Success";
 
     public static void jobsLoadingErrorCrouton(OnCroutonRequestListener onCroutonRequestListener, ErrorObjectInterface reason) {
         if (reason == null) {
@@ -78,6 +79,8 @@ public class ShowCrouton {
     public static void showSimpleCrouton(OnCroutonRequestListener onCroutonRequestListener, String reason, CroutonCreator.CroutonType croutonType) {
         if (reason != null && reason.length() > 0) {
             createCrouton(onCroutonRequestListener, croutonType, null, reason);
+        }else {
+            createCrouton(onCroutonRequestListener, croutonType, null, DEFAULT_SUCCESS_MESSAGE);
         }
     }
 

@@ -24,6 +24,7 @@ import com.operators.reportrejectnetworkbridge.server.response.SendApproveFirstI
 import com.operators.reportrejectnetworkbridge.server.response.SendReportCycleUnitsResponse;
 import com.operators.reportrejectnetworkbridge.server.response.SendReportInventoryResponse;
 import com.operators.reportrejectnetworkbridge.server.response.SendReportStopResponse;
+import com.operators.reportrejectnetworkbridge.server.response.StandardResponse;
 
 import java.util.concurrent.TimeUnit;
 
@@ -165,11 +166,12 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
     public void sendReportReject(String siteUrl, String sessionId, String machineId, String operatorId, int rejectReasonId, int rejectCauseId, Double units, Double weight, Integer joshId, final SendReportRejectCallback callback, final int totalRetries, int specificRequestTimeout) {
         SendReportRejectRequest sendReportRejectRequest = new SendReportRejectRequest(sessionId, machineId, operatorId, rejectReasonId, units, rejectCauseId, weight, joshId);
         final int[] retryCount = {0};
-        Call<ErrorResponse> call = mReportRejectNetworkManagerInterface.reportRejectRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendReportReject(sendReportRejectRequest);
-        call.enqueue(new Callback<ErrorResponse>() {
+        Call<StandardResponse> call = mReportRejectNetworkManagerInterface.reportRejectRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendReportReject(sendReportRejectRequest);
+        call.enqueue(new Callback<StandardResponse>() {
             @Override
-            public void onResponse(@NonNull Call<ErrorResponse> call, @NonNull Response<ErrorResponse> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().getErrorCode() == 0) {
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getFunctionSucceed()
+                        && (response.body().getError() == null || response.body().getError().getErrorCode() == 0)) {
                     if (callback != null) {
                         callback.onSendReportSuccess(response.body());
                     } else {
@@ -178,14 +180,14 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                 } else {
                     String error = "";
                     if (response != null && response.body() != null){
-                        error = response.body().getErrorDesc();
+                        error = response.body().getError().getErrorDesc();
                     }
                     onFailure(call, new Exception(error));
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<ErrorResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");

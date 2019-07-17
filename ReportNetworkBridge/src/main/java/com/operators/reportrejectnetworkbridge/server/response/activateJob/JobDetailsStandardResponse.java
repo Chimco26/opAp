@@ -5,18 +5,19 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.operators.reportrejectnetworkbridge.server.response.StandardResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class JobDetailsResponse extends Response implements Parcelable{
+public class JobDetailsStandardResponse extends StandardResponse implements Parcelable{
 
-    public static final String TAG = JobDetailsResponse.class.getSimpleName();
+    public static final String TAG = JobDetailsStandardResponse.class.getSimpleName();
     @SerializedName("Jobs")
     @Expose
     private List<Job> jobs = null;
 
-    public JobDetailsResponse(List<Job> jobs) {
+    public JobDetailsStandardResponse(List<Job> jobs) {
         this.jobs = jobs;
     }
 
@@ -40,21 +41,21 @@ public class JobDetailsResponse extends Response implements Parcelable{
         dest.writeList(this.jobs);
     }
 
-    protected JobDetailsResponse(Parcel in) {
+    protected JobDetailsStandardResponse(Parcel in) {
         super(in);
         this.jobs = new ArrayList<Job>();
         in.readList(this.jobs, Job.class.getClassLoader());
     }
 
-    public static final Creator<JobDetailsResponse> CREATOR = new Creator<JobDetailsResponse>() {
+    public static final Creator<JobDetailsStandardResponse> CREATOR = new Creator<JobDetailsStandardResponse>() {
         @Override
-        public JobDetailsResponse createFromParcel(Parcel source) {
-            return new JobDetailsResponse(source);
+        public JobDetailsStandardResponse createFromParcel(Parcel source) {
+            return new JobDetailsStandardResponse(source);
         }
 
         @Override
-        public JobDetailsResponse[] newArray(int size) {
-            return new JobDetailsResponse[size];
+        public JobDetailsStandardResponse[] newArray(int size) {
+            return new JobDetailsStandardResponse[size];
         }
     };
 }

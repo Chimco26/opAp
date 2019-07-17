@@ -51,6 +51,7 @@ import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 
@@ -122,16 +123,6 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
                 mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
             }
         }
-
-        // Analytics
-        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        PersistenceManager pm = PersistenceManager.getInstance();
-        mTracker.setScreenName(LOG_TAG);
-        mTracker.setClientId("machine id: " + pm.getMachineId());
-        mTracker.setAppVersion(pm.getVersion() + "");
-        mTracker.setHostname(pm.getSiteName());
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Nullable
@@ -397,8 +388,11 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
             mReportCore.unregisterListener();
 
             if (response.isFunctionSucceed()) {
+                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.REJECT_REPORT, true, "Reject Reason id = " + mSelectedReasonId + ", Reject Ca1use id = " + mSelectedCauseId);
                 ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
             } else {
+                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.REJECT_REPORT, false, "Reject Reason id = " + mSelectedReasonId + ", Reject Ca1use id = " + mSelectedCauseId);
+
                 ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
             if (getFragmentManager() != null) {
@@ -412,6 +406,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
 
         @Override
         public void sendReportFailure(ErrorObjectInterface reason) {
+            new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.REJECT_REPORT, true, "Report Reject failed - " + reason.getDetailedDescription());
             dismissProgressDialog();
             OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
             if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {

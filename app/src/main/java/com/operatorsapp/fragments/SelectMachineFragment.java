@@ -33,6 +33,7 @@ import com.operatorsapp.adapters.DepartmentAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.ClearData;
+import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.KeyboardUtils;
 
 import java.lang.reflect.Type;
@@ -95,17 +96,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             mDepartmentMachine = gson.fromJson(getArguments().getString(MACHINES_LIST), listType);
         }
 
-        // Analytics
-        if (getActivity() != null && getActivity().getApplication() != null) {
-            OperatorApplication application = (OperatorApplication) getActivity().getApplication();
-            Tracker mTracker = application.getDefaultTracker();
-            PersistenceManager pm = PersistenceManager.getInstance();
-            mTracker.setScreenName(LOG_TAG);
-            mTracker.setClientId("machine id: " + pm.getMachineId());
-            mTracker.setAppVersion(pm.getVersion() + "");
-            mTracker.setHostname(pm.getSiteName());
-            mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        }
+        //Analytics
+        new GoogleAnalyticsHelper().trackScreen(getActivity(), "Select machine");
     }
 
 

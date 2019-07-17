@@ -82,13 +82,6 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
-        // Analytics
-        OperatorApplication application = (OperatorApplication) getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        mTracker.setHostname(PersistenceManager.getInstance().getSiteName());
-        mTracker.setScreenName(this.getLocalClassName());
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-
         mFileUrls = getIntent().getStringArrayListExtra(EXTRA_FILE_URL);
 
         mTitle = getIntent().getStringExtra(EXTRA_RECIPE_FILES_TITLE);

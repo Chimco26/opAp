@@ -41,6 +41,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.DavidVardi;
+import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
@@ -111,12 +112,6 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
         }
 
-        // Analytics
-        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        mTracker.setHostname(PersistenceManager.getInstance().getSiteName());
-        mTracker.setScreenName(LOG_TAG);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
@@ -163,6 +158,8 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //Analytics
+        new GoogleAnalyticsHelper().trackScreen(getActivity(), "Report Stop Reason- circle level 2");
 
 //        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
 //
@@ -301,12 +298,6 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
             ResponseStatus response = objectToNewError(o);
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
-            Tracker tracker = null;
-            try {
-                tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
-            } catch (NullPointerException e) {
-
-            }
 
             if (response.isFunctionSucceed()) {
                 // TODO: 17/07/2018 add crouton for success
@@ -315,23 +306,15 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
                 OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
                 Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
 
-                if (tracker != null) {
-                    tracker.setHostname(PersistenceManager.getInstance().getSiteName());
-                    tracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Stop Reason Report")
-                            .setAction("Reported Successfully")
-                            .setLabel("Screen: SelectStopReasonFragment, Stop Reason: " + mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName() + ", Subreason: " + mSelectedSubreason.getEName())
-                            .build());
-                }
+                //Analytics
+                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.STOP_REASON_REPORT, true,
+                        "Stop Reason: " + mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName() + ", Subreason: " + mSelectedSubreason.getEName());
+
             } else {
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), true);
-                if (tracker != null) {
-                    tracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Stop Reason Report")
-                            .setAction("Report Failed")
-                            .setLabel("Screen: SelectStopReasonFragment, Error: " + response.getmError().getErrorDesc())
-                            .build());
-                }
+                //Analytics
+                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.STOP_REASON_REPORT, false, "Error: " + response.getmError().getErrorDesc());
+
             }
 
             try {
@@ -355,15 +338,9 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
             dismissProgressDialog();
             OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
 
-            if (getActivity() != null && getActivity().getApplication() != null) {
-                Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
-                tracker.setHostname(PersistenceManager.getInstance().getSiteName());
-                tracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Stop Reason Report")
-                        .setAction("Report Failed")
-                        .setLabel("Screen: SelectStopReasonFragment, Error: " + reason.getDetailedDescription())
-                        .build());
-            }
+            //Analytics
+            new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.STOP_REASON_REPORT, false, "Error: " + reason.getDetailedDescription());
+
             if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override

@@ -69,16 +69,6 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Analytics
-        OperatorApplication application = (OperatorApplication) getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        PersistenceManager pm = PersistenceManager.getInstance();
-        mTracker.setClientId("machine id: " + pm.getMachineId());
-        mTracker.setAppVersion(pm.getVersion() + "");
-        mTracker.setHostname(pm.getSiteName());
-        mTracker.setScreenName(this.getLocalClassName());
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-
         Log.d(TAG, "ChangeLang: ");
         ChangeLang.changeLanguage(this);
 

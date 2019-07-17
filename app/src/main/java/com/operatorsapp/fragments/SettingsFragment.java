@@ -81,15 +81,6 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Analytics
-        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        PersistenceManager pm = PersistenceManager.getInstance();
-        mTracker.setScreenName(LOG_TAG);
-        mTracker.setClientId("machine id: " + pm.getMachineId());
-        mTracker.setAppVersion(pm.getVersion() + "");
-        mTracker.setHostname(pm.getSiteName());
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Nullable
