@@ -54,7 +54,7 @@ public class ReportCore {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
                             } else {
-                                OppAppLogger.getInstance().w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                                OppAppLogger.getInstance().w(LOG_TAG, "onSendReportFailed() mReportCallbackListener is null ");
                             }
                         }
                     }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());

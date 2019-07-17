@@ -94,7 +94,7 @@ import com.operators.reportrejectnetworkbridge.server.response.IntervalAndTimeOu
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
-import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
+import com.operators.reportrejectnetworkbridge.server.response.StandardResponse;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
 import com.operatorsapp.BuildConfig;
@@ -2551,7 +2551,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             ignoreFromOnPause = true;
             Object response = data.getParcelableExtra(ActivateJobActivity.EXTRA_ACTIVATE_JOB_RESPONSE);
 
-            if (((Response) response).getError() == null) {
+            if (((StandardResponse) response).getError() == null) {
 
                 activateJob(data.getIntExtra(ActivateJobActivity.EXTRA_ACTIVATE_JOB_ID, PersistenceManager.getInstance().getJobId()));
             }
@@ -2843,7 +2843,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     }
                 });
             } else {
-
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, reason.getDetailedDescription());
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject.getDetailedDescription(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                 new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.REJECT_REPORT, false, "Report Reject- " + errorObject.getDetailedDescription());
@@ -3236,12 +3235,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
 
-                } else if (((Response) response).getError() != null) {
+                } else if (((StandardResponse) response).getError() != null) {
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject);
 
-                }if (((Response)response).getFunctionSucceed()){
+                }if (((StandardResponse)response).getFunctionSucceed()){
                     activateJob(Integer.parseInt(activateJobRequest.getJobID()));
                 }
             }

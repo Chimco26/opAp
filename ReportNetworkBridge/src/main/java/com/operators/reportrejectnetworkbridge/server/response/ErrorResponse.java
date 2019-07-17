@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 public class ErrorResponse implements Parcelable {
+    private static final String DEFAULT_ERROR_MSG = "Error";
+    private static final String DEFAULT_SUCCESS_MSG = "Success";
     @SerializedName("ErrorDescription")
     private String mErrorDesc;
 
@@ -38,7 +40,14 @@ public class ErrorResponse implements Parcelable {
     }
 
     public String getErrorDesc() {
-        return mErrorDesc;
+        if (mErrorDesc != null && mErrorDesc.length() > 0) {
+            return mErrorDesc;
+        } else if (getErrorCode() != 0) {
+            return DEFAULT_ERROR_MSG;
+        } else {
+            return DEFAULT_SUCCESS_MSG;
+        }
+
     }
 
     public int getErrorCode() {

@@ -22,7 +22,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Header;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
-import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobResponse;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobStandardResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.JobHeadersAdapter;
@@ -56,7 +56,7 @@ public class JobListFragment extends Fragment implements
     private RecyclerView mPendingJobsRv;
     private JobHeadersSpinnerAdapter mHeadersAdapter;
     private PendingJobsAdapterNew mPendingJobsAdapter;
-    private PendingJobResponse mPendingJobsResponse;
+    private PendingJobStandardResponse mPendingJobsResponse;
     private ArrayList<PendingJob> mPendingJobs;
     private List<PendingJob> mPendingJobsNoHeadersFiltered = new ArrayList<>();
     private HashMap<String, Header> mHashMapHeaders;
@@ -65,11 +65,11 @@ public class JobListFragment extends Fragment implements
     private Header mSelectedHeader;
     private TextView mTitleTv;
 
-    public static JobListFragment newInstance(PendingJobResponse mPendingJobsResponse, ArrayList<PendingJob> mPendingJobs, ArrayList<Header> headers) {
+    public static JobListFragment newInstance(PendingJobStandardResponse mPendingJobsResponse, ArrayList<PendingJob> mPendingJobs, ArrayList<Header> headers) {
 
         JobListFragment jobListFragment = new JobListFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(PendingJobResponse.TAG, mPendingJobsResponse);
+        bundle.putParcelable(PendingJobStandardResponse.TAG, mPendingJobsResponse);
         bundle.putParcelableArrayList(PendingJob.TAG, mPendingJobs);
         bundle.putParcelableArrayList(Header.TAG, headers);
         jobListFragment.setArguments(bundle);
@@ -83,8 +83,8 @@ public class JobListFragment extends Fragment implements
         new GoogleAnalyticsHelper().trackScreen(getActivity(), "Pending job list");
 
         if (getArguments() != null) {
-            if (getArguments().containsKey(PendingJobResponse.TAG)) {
-                mPendingJobsResponse = getArguments().getParcelable(PendingJobResponse.TAG);
+            if (getArguments().containsKey(PendingJobStandardResponse.TAG)) {
+                mPendingJobsResponse = getArguments().getParcelable(PendingJobStandardResponse.TAG);
             }
             if (getArguments().containsKey(PendingJob.TAG)) {
                 mPendingJobs = getArguments().getParcelableArrayList(PendingJob.TAG);
@@ -289,7 +289,7 @@ public class JobListFragment extends Fragment implements
 
             for (Property property : pendingJob.getProperties()) {
 
-                if (property.getKey() != null && mHashMapHeaders.get(property.getKey()).isSelected()
+                if (property.getKey() != null && mHashMapHeaders.get(property.getKey()) != null && mHashMapHeaders.get(property.getKey()).isSelected()
                         && property.getValue() != null && mSearchViewEt.getText() != null &&
                         property.getValue().toLowerCase().contains(mSearchViewEt.getText().toString().toLowerCase())) {
 

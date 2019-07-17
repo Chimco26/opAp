@@ -4,6 +4,7 @@ package com.operators.reportrejectnetworkbridge.server;
 import com.example.common.callback.ErrorObjectInterface;
 
 public class ErrorObject implements ErrorObjectInterface {
+    private static final String DEFAULT_ERROR_MSG = "Error";
     private ErrorCode mError;
     private String mDetailedDescription;
 
@@ -19,7 +20,11 @@ public class ErrorObject implements ErrorObjectInterface {
 
     @Override
     public String getDetailedDescription() {
-        return mDetailedDescription;
+        if (mDetailedDescription != null && mDetailedDescription.length() > 0) {
+            return mDetailedDescription;
+        }else {
+            return DEFAULT_ERROR_MSG;
+        }
     }
 
     @Override

@@ -37,12 +37,13 @@ import com.operators.reportrejectnetworkbridge.server.response.IntervalAndTimeOu
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.VersionResponse;
 import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
+import com.operators.reportrejectnetworkbridge.server.response.StandardResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsUpdateRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.GetPendingJobListRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsRequest;
-import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsResponse;
-import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobResponse;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsStandardResponse;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobStandardResponse;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
 import com.operatorsapp.server.callback.PostUpdateNotesForJobCallback;
@@ -309,11 +310,11 @@ public class SimpleRequests {
 
         final int[] retryCount = {0};
 
-        Call<PendingJobResponse> call = getPendingJobListNetworkManager.emeraldGetPendingJobList(siteUrl, requestTimeout, TimeUnit.SECONDS).getPendingJobListRequest(getPendingJobListRequest);
+        Call<PendingJobStandardResponse> call = getPendingJobListNetworkManager.emeraldGetPendingJobList(siteUrl, requestTimeout, TimeUnit.SECONDS).getPendingJobListRequest(getPendingJobListRequest);
 
-        call.enqueue(new Callback<PendingJobResponse>() {
+        call.enqueue(new Callback<PendingJobStandardResponse>() {
             @Override
-            public void onResponse(@NonNull Call<PendingJobResponse> call, @NonNull Response<PendingJobResponse> response) {
+            public void onResponse(@NonNull Call<PendingJobStandardResponse> call, @NonNull Response<PendingJobStandardResponse> response) {
 
                 if (response.isSuccessful()) {
                     if (callback != null) {
@@ -332,7 +333,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(@NonNull Call<PendingJobResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<PendingJobStandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -403,11 +404,11 @@ public class SimpleRequests {
 
         final int[] retryCount = {0};
 
-        Call<JobDetailsResponse> call = getJobDetailsNetworkManager.emeraldGetJobDetails(siteUrl, requestTimeout, TimeUnit.SECONDS).getPendingJobListRequest(jobDetailsRequest);
+        Call<JobDetailsStandardResponse> call = getJobDetailsNetworkManager.emeraldGetJobDetails(siteUrl, requestTimeout, TimeUnit.SECONDS).getPendingJobListRequest(jobDetailsRequest);
 
-        call.enqueue(new Callback<JobDetailsResponse>() {
+        call.enqueue(new Callback<JobDetailsStandardResponse>() {
             @Override
-            public void onResponse(@NonNull Call<JobDetailsResponse> call, @NonNull Response<JobDetailsResponse> response) {
+            public void onResponse(@NonNull Call<JobDetailsStandardResponse> call, @NonNull Response<JobDetailsStandardResponse> response) {
 
                 if (response.isSuccessful()) {
                     if (callback != null) {
@@ -426,7 +427,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(@NonNull Call<JobDetailsResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<JobDetailsStandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -450,12 +451,12 @@ public class SimpleRequests {
 
         final int[] retryCount = {0};
 
-        Call<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> call = postUpdateActionsNetworkManager.emeraldpostUpdateActions(siteUrl, requestTimeout, TimeUnit.SECONDS).postUpdtaeActionsRequest(actionsUpdateRequest);
+        Call<StandardResponse> call = postUpdateActionsNetworkManager.emeraldpostUpdateActions(siteUrl, requestTimeout, TimeUnit.SECONDS).postUpdtaeActionsRequest(actionsUpdateRequest);
 
-        call.enqueue(new Callback<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response>() {
+        call.enqueue(new Callback<StandardResponse>() {
             @Override
-            public void onResponse(@NonNull Call<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> call,
-                                   @NonNull Response<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> response) {
+            public void onResponse(@NonNull Call<StandardResponse> call,
+                                   @NonNull Response<StandardResponse> response) {
 
                 if (response.isSuccessful()) {
                     if (callback != null) {
@@ -474,7 +475,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(@NonNull Call<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -498,12 +499,12 @@ public class SimpleRequests {
 
         final int[] retryCount = {0};
 
-        Call<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> call = postActivateJobNetworkManager.emeraldPostActivateJob(siteUrl, requestTimeout, TimeUnit.SECONDS).postActivateJobRequest(activateJobRequest);
+        Call<StandardResponse> call = postActivateJobNetworkManager.emeraldPostActivateJob(siteUrl, requestTimeout, TimeUnit.SECONDS).postActivateJobRequest(activateJobRequest);
 
-        call.enqueue(new Callback<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response>() {
+        call.enqueue(new Callback<StandardResponse>() {
             @Override
-            public void onResponse(@NonNull Call<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> call,
-                                   @NonNull Response<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> response) {
+            public void onResponse(@NonNull Call<StandardResponse> call,
+                                   @NonNull Response<StandardResponse> response) {
 
                 if (response.isSuccessful()) {
                     if (callback != null) {
@@ -522,7 +523,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(@NonNull Call<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");

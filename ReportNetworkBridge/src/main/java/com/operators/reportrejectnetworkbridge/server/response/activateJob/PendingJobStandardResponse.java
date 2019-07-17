@@ -5,13 +5,14 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.operators.reportrejectnetworkbridge.server.response.StandardResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PendingJobResponse extends Response implements Parcelable{
+public class PendingJobStandardResponse extends StandardResponse implements Parcelable{
 
-    public static final String TAG = PendingJobResponse.class.getSimpleName();
+    public static final String TAG = PendingJobStandardResponse.class.getSimpleName();
     @SerializedName("PandingJobs")
     @Expose
     private List<PendingJob> pendingJobs = null;
@@ -46,26 +47,26 @@ public class PendingJobResponse extends Response implements Parcelable{
         dest.writeList(this.headers);
     }
 
-    public PendingJobResponse() {
+    public PendingJobStandardResponse() {
 
     }
 
-    protected PendingJobResponse(Parcel in) {
+    protected PendingJobStandardResponse(Parcel in) {
         this.pendingJobs = new ArrayList<PendingJob>();
         in.readList(this.pendingJobs, PendingJob.class.getClassLoader());
         this.headers = new ArrayList<Header>();
         in.readList(this.headers, Header.class.getClassLoader());
     }
 
-    public static final Creator<PendingJobResponse> CREATOR = new Creator<PendingJobResponse>() {
+    public static final Creator<PendingJobStandardResponse> CREATOR = new Creator<PendingJobStandardResponse>() {
         @Override
-        public PendingJobResponse createFromParcel(Parcel source) {
-            return new PendingJobResponse(source);
+        public PendingJobStandardResponse createFromParcel(Parcel source) {
+            return new PendingJobStandardResponse(source);
         }
 
         @Override
-        public PendingJobResponse[] newArray(int size) {
-            return new PendingJobResponse[size];
+        public PendingJobStandardResponse[] newArray(int size) {
+            return new PendingJobStandardResponse[size];
         }
     };
 }

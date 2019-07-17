@@ -53,11 +53,11 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.GetPe
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Header;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Job;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsRequest;
-import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsResponse;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsStandardResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
-import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobResponse;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobStandardResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
-import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
+import com.operators.reportrejectnetworkbridge.server.response.StandardResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.JobActionsAdapter;
 import com.operatorsapp.adapters.JobHeadersAdapter;
@@ -130,14 +130,14 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private RecyclerView mPendingJobsRv;
     private View mMaterialItem;
     private View mMoldItem;
-    private PendingJobResponse mPendingJobsResponse;
+    private PendingJobStandardResponse mPendingJobsResponse;
     private JobHeadersAdapter mHeadersAdapter;
     private PendingJobsAdapter mPendingJobsAdapter;
     private HashMap<String, Header> mHashMapHeaders;
     private ArrayList<Header> mHeaders = new ArrayList<>();
     private ArrayList<PendingJob> mPendingJobs = new ArrayList<>();
     private ArrayList<PendingJob> mPendingJobsNoHeadersFiltered = new ArrayList<>();
-    private JobDetailsResponse mCurrentJobDetails;
+    private JobDetailsStandardResponse mCurrentJobDetails;
     private PendingJob mCurrentPendingJob;
     private DownloadHelper mDownloadHelper;
     private String mFirstPdf;
@@ -269,7 +269,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onGetPendingJobListSuccess(Object response) {
 
-                mPendingJobsResponse = ((PendingJobResponse) response);
+                mPendingJobsResponse = ((PendingJobStandardResponse) response);
 
                 if (mPendingJobsResponse != null && mPendingJobsResponse.getPendingJobs() != null && mPendingJobsResponse.getPendingJobs().size() > 0) {
 
@@ -362,15 +362,15 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
 
-                } else if (((Response) response).getError() != null) {
+                } else if (((StandardResponse) response).getError() != null) {
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(JobActionActivity.this, errorObject);
 
 
                 } else {
 
-                    mCurrentJobDetails = (JobDetailsResponse) response;
+                    mCurrentJobDetails = (JobDetailsStandardResponse) response;
                     initRightView();
                 }
             }
@@ -441,15 +441,15 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
 
-                } else if (((Response) response).getError() != null) {
+                } else if (((StandardResponse) response).getError() != null) {
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(JobActionActivity.this, errorObject);
 
 
                 } else {
 
-                    finishActivity((Response) response);
+                    finishActivity((StandardResponse) response);
                 }
             }
 
@@ -466,7 +466,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    public void finishActivity(Response response) {
+    public void finishActivity(StandardResponse response) {
         Intent intent = getIntent();
         intent.putExtra(EXTRA_ACTIVATE_JOB_RESPONSE, response);
         intent.putExtra(EXTRA_ACTIVATE_JOB_ID, mCurrentJobDetails.getJobs().get(0).getID());

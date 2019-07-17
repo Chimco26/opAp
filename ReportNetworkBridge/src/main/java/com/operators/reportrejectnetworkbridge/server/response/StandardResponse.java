@@ -1,13 +1,12 @@
-package com.operators.reportrejectnetworkbridge.server.response.activateJob;
+package com.operators.reportrejectnetworkbridge.server.response;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
 
-public class Response implements Parcelable {
+public class StandardResponse implements Parcelable {
 
     @SerializedName("FunctionSucceed")
     @Expose
@@ -19,15 +18,15 @@ public class Response implements Parcelable {
     @Expose
     private Integer leaderRecordID;
 
-    public static final Creator<Response> CREATOR = new Creator<Response>() {
+    public static final Creator<StandardResponse> CREATOR = new Creator<StandardResponse>() {
         @Override
-        public Response createFromParcel(Parcel in) {
-            return new Response(in);
+        public StandardResponse createFromParcel(Parcel in) {
+            return new StandardResponse(in);
         }
 
         @Override
-        public Response[] newArray(int size) {
-            return new Response[size];
+        public StandardResponse[] newArray(int size) {
+            return new StandardResponse[size];
         }
     };
 
@@ -66,10 +65,10 @@ public class Response implements Parcelable {
         dest.writeValue(this.leaderRecordID);
     }
 
-    public Response() {
+    public StandardResponse() {
     }
 
-    protected Response(Parcel in) {
+    protected StandardResponse(Parcel in) {
         this.functionSucceed = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.error = in.readParcelable(ErrorResponse.class.getClassLoader());
         this.leaderRecordID = (Integer) in.readValue(Integer.class.getClassLoader());
