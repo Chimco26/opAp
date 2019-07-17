@@ -3045,6 +3045,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.stop_idle));
 
+        } else if (status == MachineStatus.MachineServerStatus.DOWN_TIME.getId()) {
+
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.down_time));
+
         } else {
             OppAppLogger.getInstance().w(LOG_TAG, "Undefined parameter");
 
