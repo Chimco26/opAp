@@ -28,16 +28,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnErrorListener;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Action;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Header;
@@ -49,7 +46,6 @@ import com.operatorsapp.R;
 import com.operatorsapp.adapters.JobActionsAdapter;
 import com.operatorsapp.adapters.JobMaterialsSplitAdapter;
 import com.operatorsapp.adapters.PendingJobPropsAdapter;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.BasicTitleTextSingleBtnDialog;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
@@ -700,14 +696,14 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
         PostUpdateNotesForJobRequest updateNotesRequest = new PostUpdateNotesForJobRequest(pm.getSessionId(), mCurrentPendingJob.getID(), note);
         simpleRequests.postUpdateNotesForJob(pm.getSiteUrl(), new PostUpdateNotesForJobCallback() {
             @Override
-            public void onUpdateNotesSuccess(ResponseStatus responseNewVersion) {
+            public void onUpdateNotesSuccess(StandardResponse responseNewVersion) {
                 mProductNoteTv.setText(note);
                 ProgressDialogManager.dismiss();
                 alert.dismiss();
             }
 
             @Override
-            public void onUpdateNotesFailed(ErrorObjectInterface reason) {
+            public void onUpdateNotesFailed(StandardResponse reason) {
                 ProgressDialogManager.dismiss();
             }
         }, NetworkManager.getInstance(), updateNotesRequest, pm.getTotalRetries(), pm.getRequestTimeout());

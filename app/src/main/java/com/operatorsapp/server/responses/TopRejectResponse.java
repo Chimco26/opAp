@@ -1,5 +1,6 @@
 package com.operatorsapp.server.responses;
 
+import com.example.common.StandardResponse;
 import com.google.gson.annotations.SerializedName;
 import com.operatorsapp.model.TopFiveItem;
 
@@ -9,7 +10,7 @@ import java.util.ArrayList;
  * Created by alex on 20/12/2018.
  */
 
-public class TopRejectResponse extends PojoResponse{
+public class TopRejectResponse extends StandardResponse {
 
     @SerializedName("RejectsList")
     ArrayList<TopRejectReason> mRejectsList;

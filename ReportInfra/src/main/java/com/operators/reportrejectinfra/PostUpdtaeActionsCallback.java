@@ -1,10 +1,10 @@
 package com.operators.reportrejectinfra;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 
 public interface PostUpdtaeActionsCallback {
 
-    void onPostUpdtaeActionsSuccess(Object response);
+    void onPostUpdtaeActionsSuccess(StandardResponse response);
 
-    void onPostUpdtaeActionsFailed(ErrorObjectInterface reason);
+    void onPostUpdtaeActionsFailed(StandardResponse reason);
 }

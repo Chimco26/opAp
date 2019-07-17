@@ -1,6 +1,6 @@
 package com.operators.jobscore.interfaces;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 import com.operators.jobsinfra.JobListForMachine;
 
 /**
@@ -9,7 +9,7 @@ import com.operators.jobsinfra.JobListForMachine;
 public interface JobsForMachineUICallbackListener
 {
     void onJobListReceived(JobListForMachine jobListForMachine);
-    void onJobListReceiveFailed(ErrorObjectInterface reason);
+    void onJobListReceiveFailed(StandardResponse reason);
     void onStartJobSuccess();
-    void onStartJobFailed(ErrorObjectInterface reason);
+    void onStartJobFailed(StandardResponse reason);
 }

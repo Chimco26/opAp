@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
+import com.example.common.StandardResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
@@ -140,9 +141,9 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         }
 
         @Override
-        public void onOperatorDataReceiveFailure(ErrorObjectInterface reason) {
+        public void onOperatorDataReceiveFailure(StandardResponse reason) {
             OppAppLogger.getInstance().d(LOG_TAG, "Operator data receive failed. Reason : " + reason.getError().toString());
-            if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
+            if (reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
                     public void onSilentLoginSucceeded() {
@@ -152,7 +153,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                     }
 
                     @Override
-                    public void onSilentLoginFailed(ErrorObjectInterface reason) {
+                    public void onSilentLoginFailed(StandardResponse reason) {
                         ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, reason.getError().toString());
                     }
                 });
@@ -169,7 +170,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         }
 
         @Override
-        public void onSetOperatorFailed(ErrorObjectInterface reason) {
+        public void onSetOperatorFailed(StandardResponse reason) {
             dismissProgressDialog();
         }
     };

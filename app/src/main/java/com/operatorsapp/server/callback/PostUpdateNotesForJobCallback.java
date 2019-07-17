@@ -1,13 +1,12 @@
 package com.operatorsapp.server.callback;
 
-import com.example.common.callback.ErrorObjectInterface;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
+import com.example.common.StandardResponse;
 
 /**
  * Created by alex on 01/08/2018.
  */
 
 public interface PostUpdateNotesForJobCallback {
-    void onUpdateNotesSuccess(ResponseStatus responseNewVersion);
-    void onUpdateNotesFailed(ErrorObjectInterface reason);
+    void onUpdateNotesSuccess(StandardResponse responseNewVersion);
+    void onUpdateNotesFailed(StandardResponse reason);
 }

@@ -3,6 +3,7 @@ package com.operators.machinedatanetworkbridge;
 
 import android.support.annotation.NonNull;
 
+import com.example.common.StandardResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.machinedatainfra.interfaces.GetMachineDataCallback;
 import com.operators.machinedatainfra.interfaces.GetMachineDataNetworkBridgeInterface;
@@ -52,7 +53,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
                 else
                 {
                     OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse - getMachineData failed Error");
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getMachineData failed Error");
+                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "getMachineData failed Error");
                     getMachineDataCallback.onGetMachineDataFailed(errorObject);
                 }
             }
@@ -69,7 +70,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
                 {
                     mRetryCount = 0;
                     OppAppLogger.getInstance().d(LOG_TAG, "getMachineData, onFailure " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, t.getMessage());
+                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, t.getMessage());
                     getMachineDataCallback.onGetMachineDataFailed(errorObject);
 
                 }

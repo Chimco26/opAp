@@ -1,9 +1,9 @@
 package com.operators.shiftloginfra.model;
 
-import com.example.common.ErrorResponse;
+import com.example.common.StandardResponse;
 import com.google.gson.annotations.SerializedName;
 
-public class ShiftForMachineResponse {
+public class ShiftForMachineResponse extends StandardResponse {
 
     @SerializedName("Duration")
     private long mDuration;
@@ -13,8 +13,6 @@ public class ShiftForMachineResponse {
     private String mStartTime;
     @SerializedName("TimeFormat")
     private String mTimeFormat;
-    @SerializedName("error")
-    private ErrorResponse mError;
 
 
     public long getDuration() {
@@ -33,7 +31,4 @@ public class ShiftForMachineResponse {
         return mTimeFormat;
     }
 
-    public ErrorResponse getError() {
-        return mError;
-    }
 }

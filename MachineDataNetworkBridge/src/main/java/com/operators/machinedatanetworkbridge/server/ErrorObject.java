@@ -2,8 +2,6 @@ package com.operators.machinedatanetworkbridge.server;
 
 import com.example.common.callback.ErrorObjectInterface;
 
-import okhttp3.internal.http2.ErrorCode;
-
 public class ErrorObject implements ErrorObjectInterface {
     private ErrorCode mError;
     private String mDetailedDescription;
@@ -12,18 +10,6 @@ public class ErrorObject implements ErrorObjectInterface {
         mError = errorCode;
         mDetailedDescription = detailedDescription;
     }
-
-    @Override
-    public ErrorObjectInterface.ErrorCode getError() {
-        return mError;
-    }
-
-    @Override
-    public String getDetailedDescription() {
-        return mDetailedDescription;
-    }
-
-
     @Override
     public String toString() {
         return "ErrorObject{" +

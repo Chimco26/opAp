@@ -1,12 +1,12 @@
 package com.operators.reportrejectinfra;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 
 /**
  * Created by Sergey on 09/08/2016.
  */
 public interface SendReportStopCallback {
-    void onSendStopReportSuccess(Object o);
+    void onSendStopReportSuccess(StandardResponse o);
 
-    void onSendStopReportFailed(ErrorObjectInterface reason);
+    void onSendStopReportFailed(StandardResponse reason);
 }

@@ -1,7 +1,7 @@
 package com.operators.reportrejectnetworkbridge.interfaces;
 
 import com.operators.reportrejectnetworkbridge.server.request.SplitEventRequest;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
+import com.example.common.StandardResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -14,5 +14,5 @@ import retrofit2.http.POST;
 public interface EmeraldPostSplitEvent {
 
     @POST("/LeaderMESApi/SplitActiveEvent")
-    Call<ResponseStatus> postSplitEvent(@Body SplitEventRequest splitEventRequest);
+    Call<StandardResponse> postSplitEvent(@Body SplitEventRequest splitEventRequest);
 }

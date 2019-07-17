@@ -1,10 +1,11 @@
 package com.operators.reportrejectnetworkbridge.server.response.Recipe;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.common.ErrorResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
 
 import java.util.ArrayList;
 import java.util.List;

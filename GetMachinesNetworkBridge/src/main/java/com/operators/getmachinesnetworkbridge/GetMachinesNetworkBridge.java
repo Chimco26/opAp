@@ -1,11 +1,11 @@
 package com.operators.getmachinesnetworkbridge;
 
 
+import com.example.common.StandardResponse;
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.getmachinesnetworkbridge.interfaces.GetMachineNetworkManagerInterface;
-import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.getmachinesnetworkbridge.server.requests.GetMachinesRequest;
-import com.operators.getmachinesnetworkbridge.server.responses.ErrorResponse;
 import com.operators.getmachinesnetworkbridge.server.responses.MachinesResponse;
 import com.operators.infra.GetMachinesCallback;
 import com.operators.infra.GetMachinesNetworkBridgeInterface;
@@ -37,7 +37,7 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
                     if (response.body().getMachines() != null) {
                         machines = response.body().getMachines();
                     }
-                    if (response.body().getErrorResponse() == null) {
+                    if (response.body().getError().getErrorDesc() == null) {
                         if (machines != null && machines.size() > 0) {
                             OppAppLogger.getInstance().d(LOG_TAG, "onRequestSucceed(), " + machines.size() + " machines");
 
@@ -45,12 +45,13 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
 
                         } else {
                             OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), list null or empty");
-                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "list null or empty");
+                            StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.No_data, "list null or empty");
                             getMachinesCallback.onGetMachinesFailed(errorObject);
                         }
                     } else {
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequest(), getMachines failed");
-                        ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
+                        StandardResponse errorObject = new StandardResponse();
+                        errorObject.getError().setDefaultErrorCodeConstant(response.body().getError().getErrorCode());
                         getMachinesCallback.onGetMachinesFailed(errorObject);
                     }
                 }
@@ -63,7 +64,7 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
                     call.clone().enqueue(this);
                 } else {
                     OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
+                    StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "General Error");
                     getMachinesCallback.onGetMachinesFailed(errorObject);
                 }
             }
@@ -72,18 +73,5 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
 
     public void inject(GetMachineNetworkManagerInterface getMachineNetworkManagerInterface) {
         mGetMachineNetworkManagerInterface = getMachineNetworkManagerInterface;
-    }
-
-    private ErrorObject errorObjectWithErrorCode(ErrorResponse errorResponse) {
-        ErrorObject.ErrorCode code = toCode(errorResponse.getErrorCode());
-        return new ErrorObject(code, errorResponse.getErrorDesc());
-    }
-
-    private ErrorObject.ErrorCode toCode(int errorCode) {
-        switch (errorCode) {
-            case 101:
-                return ErrorObject.ErrorCode.Credentials_mismatch;
-        }
-        return ErrorObject.ErrorCode.Unknown;
     }
 }

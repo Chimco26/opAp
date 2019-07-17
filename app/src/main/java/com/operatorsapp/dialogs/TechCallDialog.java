@@ -11,11 +11,10 @@ import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.common.StandardResponse;
 import com.operators.reportfieldsformachineinfra.Technician;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.NotificationHistoryAdapter;
 import com.operatorsapp.adapters.TechCallAdapter;
@@ -201,11 +200,11 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                             srcId,
                             techCallInfo.getmTechnicianId() +"");
 
-                    NetworkManager.getInstance().postResponseToNotification(request, new Callback<ResponseStatus>() {
+                    NetworkManager.getInstance().postResponseToNotification(request, new Callback<StandardResponse>() {
                         @Override
-                        public void onResponse(@NonNull Call<ResponseStatus> call, @NonNull Response<ResponseStatus> response) {
+                        public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
 
-                            if (response != null && response.body() != null && response.body().getmError() == null){
+                            if (response != null && response.body() != null && response.body().getError().getErrorDesc() == null){
 
                                 mTechList.remove(techCallInfo);
                                 pm.setCalledTechnicianList(mTechList);
@@ -226,7 +225,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                         }
 
                         @Override
-                        public void onFailure(@NonNull Call<ResponseStatus> call, @NonNull Throwable t) {
+                        public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                             mProgressBarFl.setVisibility(View.GONE);
                         }
                     });

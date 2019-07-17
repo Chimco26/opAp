@@ -1,6 +1,6 @@
 package com.operators.activejobslistformachinecore.interfaces;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 
 /**
@@ -9,5 +9,5 @@ import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 public interface ActiveJobsListForMachineUICallbackListener {
 
     void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine);
-    void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason);
+    void onActiveJobsListForMachineReceiveFailed(StandardResponse reason);
 }

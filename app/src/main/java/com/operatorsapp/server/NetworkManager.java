@@ -3,6 +3,7 @@ package com.operatorsapp.server;
 import android.util.Base64;
 import android.util.Log;
 
+import com.example.common.StandardResponse;
 import com.example.common.permissions.PermissionResponse;
 import com.example.common.reportShift.DepartmentShiftGraphRequest;
 import com.example.common.reportShift.DepartmentShiftGraphResponse;
@@ -65,7 +66,6 @@ import com.operators.reportrejectnetworkbridge.interfaces.ReportCycleUnitsNetwor
 import com.operators.reportrejectnetworkbridge.interfaces.ReportInventoryNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportStopNetworkManagerInterface;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldActualBarExtraDetailsServiceRequest;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftForMachineServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftLogServiceRequests;
@@ -979,10 +979,10 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         return mRetrofit.create(EmeraldPostUpdateNotesForJob.class);
     }
 
-    public void postNotificationToken(PostNotificationTokenRequest request, final Callback<ResponseStatus> callback) {
+    public void postNotificationToken(PostNotificationTokenRequest request, final Callback<StandardResponse> callback) {
 
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
-        Call<ResponseStatus> call = mRetrofit.create(OpAppServiceRequests.class).postNotificationTokenRequest(request);
+        Call<StandardResponse> call = mRetrofit.create(OpAppServiceRequests.class).postNotificationTokenRequest(request);
         call.enqueue(callback);
 
     }
@@ -997,24 +997,24 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         call.enqueue(callback);
     }
 
-    public void postTechnicianCall(PostTechnicianCallRequest request, final Callback<ResponseStatus> callback) {
+    public void postTechnicianCall(PostTechnicianCallRequest request, final Callback<StandardResponse> callback) {
 
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
-        Call<ResponseStatus> call = mRetrofit.create(OpAppServiceRequests.class).postTechnicianCallRequest(request);
+        Call<StandardResponse> call = mRetrofit.create(OpAppServiceRequests.class).postTechnicianCallRequest(request);
         call.enqueue(callback);
 
     }
 
-    public void postResponseToNotification(RespondToNotificationRequest request, final Callback<ResponseStatus> callback) {
+    public void postResponseToNotification(RespondToNotificationRequest request, final Callback<StandardResponse> callback) {
 
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
-        Call<ResponseStatus> call = mRetrofit.create(OpAppServiceRequests.class).postNotificationResponse(request);
+        Call<StandardResponse> call = mRetrofit.create(OpAppServiceRequests.class).postNotificationResponse(request);
         call.enqueue(callback);
     }
 
-    public void postIncrementCounter(PostIncrementCounterRequest request, final Callback<ResponseStatus> callback) {
+    public void postIncrementCounter(PostIncrementCounterRequest request, final Callback<StandardResponse> callback) {
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
-        Call<ResponseStatus> call = mRetrofit.create(OpAppServiceRequests.class).postIncrementCounterRequest(request);
+        Call<StandardResponse> call = mRetrofit.create(OpAppServiceRequests.class).postIncrementCounterRequest(request);
         call.enqueue(callback);
     }
 
@@ -1042,9 +1042,9 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         call.enqueue(callback);
     }
 
-    public void postDeleteToken(PostDeleteTokenRequest request, final Callback<ResponseStatus> callback) {
+    public void postDeleteToken(PostDeleteTokenRequest request, final Callback<StandardResponse> callback) {
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
-        Call<ResponseStatus> call = mRetrofit.create(OpAppServiceRequests.class).postDeleteToken(request);
+        Call<StandardResponse> call = mRetrofit.create(OpAppServiceRequests.class).postDeleteToken(request);
         call.enqueue(callback);
     }
 

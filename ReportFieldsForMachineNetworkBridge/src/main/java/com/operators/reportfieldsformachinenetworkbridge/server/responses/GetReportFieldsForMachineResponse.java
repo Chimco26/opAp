@@ -1,5 +1,6 @@
 package com.operators.reportfieldsformachinenetworkbridge.server.responses;
 
+import com.example.common.StandardResponse;
 import com.google.gson.annotations.SerializedName;
 import com.operators.reportfieldsformachineinfra.PackageTypes;
 import com.operators.reportfieldsformachineinfra.RejectCauses;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * Created by Sergey on 02/08/2016.
  */
-public class GetReportFieldsForMachineResponse extends ErrorBaseResponse {
+public class GetReportFieldsForMachineResponse extends StandardResponse {
     @SerializedName("StopReason")
     private List<StopReasons> stopReasons = new ArrayList<StopReasons>();
     @SerializedName("RejectReason")

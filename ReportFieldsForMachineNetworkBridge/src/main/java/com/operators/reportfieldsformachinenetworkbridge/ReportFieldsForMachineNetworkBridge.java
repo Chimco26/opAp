@@ -1,13 +1,12 @@
 package com.operators.reportfieldsformachinenetworkbridge;
 
+import com.example.common.StandardResponse;
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
-
 import com.operators.reportfieldsformachineinfra.GetReportFieldsForMachineCallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachineNetworkBridgeInterface;
 import com.operators.reportfieldsformachinenetworkbridge.interfaces.GetReportFieldsForMachineNetworkManagerInterface;
-import com.operators.reportfieldsformachinenetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachinenetworkbridge.server.requests.GetReportFieldsForMachineRequest;
-import com.operators.reportfieldsformachinenetworkbridge.server.responses.ErrorResponse;
 import com.operators.reportfieldsformachinenetworkbridge.server.responses.GetReportFieldsForMachineResponse;
 
 import java.util.concurrent.TimeUnit;
@@ -47,7 +46,7 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                     {
                         if(response.body() == null || response.body().getReportFieldsForMachine() == null)
                         {
-                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response data is null");
+                            StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.No_data, "Response data is null");
                             callback.onGetReportFieldsForMachineFailed(errorObject);
                         }
                         else
@@ -61,8 +60,8 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                         if(response.body() != null)
                         {
                             OppAppLogger.getInstance().i(LOG_TAG, "getReportFieldsForMachine onResponse failure");
-                            ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                            callback.onGetReportFieldsForMachineFailed(errorObject);
+                            response.body().getError().setDefaultErrorCodeConstant(response.body().getError().getErrorCode());
+                            callback.onGetReportFieldsForMachineFailed(response.body());
                         }
                     }
                 }
@@ -86,7 +85,7 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                     {
                         mRetryCount = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Response Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Response Error");
                         callback.onGetReportFieldsForMachineFailed(errorObject);
                     }
                 }
@@ -99,19 +98,4 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
         });
     }
 
-    private ErrorObject errorObjectWithErrorCode(ErrorResponse errorResponse)
-    {
-        ErrorObject.ErrorCode code = toCode(errorResponse.getErrorCode());
-        return new ErrorObject(code, errorResponse.getErrorDesc());
-    }
-
-    private ErrorObject.ErrorCode toCode(int errorCode)
-    {
-        switch(errorCode)
-        {
-            case 101:
-                return ErrorObject.ErrorCode.Credentials_mismatch;
-        }
-        return ErrorObject.ErrorCode.Unknown;
-    }
 }

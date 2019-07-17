@@ -23,27 +23,24 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.common.ErrorResponse;
+import com.example.common.StandardResponse;
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.example.common.callback.ErrorObjectInterface;
-import com.operators.getmachinesnetworkbridge.server.ErrorObject;
+import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectCauseSpinnerAdapter;
 import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
@@ -160,7 +157,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
 //        getActiveJobs();
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
-            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+            StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             mNextButton.setEnabled(false);
             mNextButton.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_bg_disabled));
@@ -381,19 +378,19 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
 
         @Override
-        public void sendReportSuccess(Object errorResponse) {
-            ResponseStatus response = objectToNewError(errorResponse);
+        public void sendReportSuccess(StandardResponse errorResponse) {
+            StandardResponse response = objectToNewError(errorResponse);
             dismissProgressDialog();
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
 
-            if (response.isFunctionSucceed()) {
+            if (response.getFunctionSucceed()) {
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.REJECT_REPORT, true, "Reject Reason id = " + mSelectedReasonId + ", Reject Ca1use id = " + mSelectedCauseId);
-                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
             } else {
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.REJECT_REPORT, false, "Reject Reason id = " + mSelectedReasonId + ", Reject Ca1use id = " + mSelectedCauseId);
 
-                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
             if (getFragmentManager() != null) {
 
@@ -405,11 +402,11 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         }
 
         @Override
-        public void sendReportFailure(ErrorObjectInterface reason) {
-            new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.REJECT_REPORT, true, "Report Reject failed - " + reason.getDetailedDescription());
+        public void sendReportFailure(StandardResponse reason) {
+            new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.REJECT_REPORT, true, "Report Reject failed - " + reason.getError().getErrorDesc());
             dismissProgressDialog();
             OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
-            if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
+            if (reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
                     public void onSilentLoginSucceeded() {
@@ -417,17 +414,17 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
                     }
 
                     @Override
-                    public void onSilentLoginFailed(ErrorObjectInterface reason) {
+                    public void onSilentLoginFailed(StandardResponse reason) {
                         OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                         dismissProgressDialog();
                     }
                 });
             } else {
 
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, reason.getDetailedDescription());
-                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, errorObject.getDetailedDescription(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, reason.getError().getErrorDesc());
+                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, errorObject.getError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                 if (getFragmentManager() != null) {
 
                     getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -438,17 +435,17 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         }
     };
 
-    private ResponseStatus objectToNewError(Object o) {
-        ResponseStatus responseNewVersion;
-        if (o instanceof ResponseStatus) {
-            responseNewVersion = (ResponseStatus) o;
+    private StandardResponse objectToNewError(Object o) {
+        StandardResponse responseNewVersion;
+        if (o instanceof StandardResponse) {
+            responseNewVersion = (StandardResponse) o;
         } else {
             Gson gson = new GsonBuilder().create();
 
             ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
 
-            responseNewVersion = new ResponseStatus(true, 0, er);
-            if (responseNewVersion.getmError().getErrorCode() != 0) {
+            responseNewVersion = new StandardResponse(true, 0, er);
+            if (responseNewVersion.getError().getErrorCode() != 0) {
                 responseNewVersion.setFunctionSucceed(false);
             }
         }

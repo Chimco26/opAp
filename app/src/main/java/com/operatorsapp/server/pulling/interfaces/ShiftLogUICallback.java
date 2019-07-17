@@ -2,7 +2,7 @@ package com.operatorsapp.server.pulling.interfaces;
 
 
 import com.example.common.Event;
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 
 import java.util.ArrayList;
 
@@ -10,5 +10,5 @@ public interface ShiftLogUICallback {
 
     void onGetShiftLogSucceeded(ArrayList<Event> events);
 
-    void onGetShiftLogFailed(ErrorObjectInterface reason);
+    void onGetShiftLogFailed(StandardResponse reason);
 }

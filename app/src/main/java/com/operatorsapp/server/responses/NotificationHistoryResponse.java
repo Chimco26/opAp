@@ -1,5 +1,6 @@
 package com.operatorsapp.server.responses;
 
+import com.example.common.StandardResponse;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
  * Created by alex on 08/10/2018.
  */
 
-public class NotificationHistoryResponse extends PojoResponse{
+public class NotificationHistoryResponse extends StandardResponse {
 
     @SerializedName("notification")
     private ArrayList<Notification> mNotificationsList;

@@ -20,13 +20,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.oppapplog.OppAppLogger;
+import com.example.common.StandardResponse;
 import com.example.common.callback.ErrorObjectInterface;
-import com.operators.getmachinesnetworkbridge.server.ErrorObject;
+import com.example.oppapplog.OppAppLogger;
+import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
@@ -339,14 +339,14 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
     {
         @Override
-        public void sendReportSuccess(Object o)
+        public void sendReportSuccess(StandardResponse o)
         {//TODO crouton error
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
 
             if (o != null){
 
-                mDashboardCroutonListener.onShowCrouton(((ErrorResponse) o).getErrorDesc(), false);
+                mDashboardCroutonListener.onShowCrouton((o.getError().getErrorDesc()), false);
             }
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
@@ -358,11 +358,11 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
         }
 
         @Override
-        public void sendReportFailure(ErrorObjectInterface reason)
+        public void sendReportFailure(StandardResponse reason)
         {
             dismissProgressDialog();
             OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
-            if(reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch)
+            if(reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch)
             {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback()
                 {
@@ -373,10 +373,10 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
                     }
 
                     @Override
-                    public void onSilentLoginFailed(ErrorObjectInterface reason)
+                    public void onSilentLoginFailed(StandardResponse reason)
                     {
                         OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                         dismissProgressDialog();
                     }
@@ -385,7 +385,7 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
             else
             {
 
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                 ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             }
         }

@@ -7,7 +7,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.ProductData;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData;
-import com.operators.reportrejectnetworkbridge.server.response.StandardResponse;
+import com.example.common.StandardResponse;
 
 import java.util.List;
 

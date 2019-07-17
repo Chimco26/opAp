@@ -1,12 +1,12 @@
 package com.operatorsapp.server.interfaces;
 
+import com.example.common.StandardResponse;
 import com.example.common.permissions.PermissionResponse;
 import com.example.common.reportShift.DepartmentShiftGraphRequest;
 import com.example.common.reportShift.DepartmentShiftGraphResponse;
 import com.example.common.reportShift.ServiceCallsResponse;
 import com.example.common.request.BaseTimeRequest;
 import com.example.common.request.MachineIdRequest;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
@@ -35,19 +35,19 @@ import retrofit2.http.Streaming;
 public interface OpAppServiceRequests {
 
     @POST("/LeaderMESApi/SaveApplicationTokenForUser")
-    Call<ResponseStatus> postNotificationTokenRequest(@Body PostNotificationTokenRequest postNotificationTokenRequest);
+    Call<StandardResponse> postNotificationTokenRequest(@Body PostNotificationTokenRequest postNotificationTokenRequest);
 
     @POST("/LeaderMESApi/CallForTechnicianNotification")
-    Call<ResponseStatus> postTechnicianCallRequest(@Body PostTechnicianCallRequest postTechnicianCallRequest);
+    Call<StandardResponse> postTechnicianCallRequest(@Body PostTechnicianCallRequest postTechnicianCallRequest);
 
     @POST("/LeaderMESApi/GetNotificationHistory")
     Call<NotificationHistoryResponse> getNotificationHistoryRequest(@Body NotificationHistoryRequest notificationHistoryRequest);
 
     @POST("/LeaderMESApi/NotificationResponse")
-    Call<ResponseStatus> postNotificationResponse(@Body RespondToNotificationRequest respondToNotificationRequest);
+    Call<StandardResponse> postNotificationResponse(@Body RespondToNotificationRequest respondToNotificationRequest);
 
     @POST("/LeaderMESApi/ControllerFieldUpdateTotalCycles")
-    Call<ResponseStatus> postIncrementCounterRequest(@Body PostIncrementCounterRequest postIncrementCounterRequest);
+    Call<StandardResponse> postIncrementCounterRequest(@Body PostIncrementCounterRequest postIncrementCounterRequest);
 
     @POST("/LeaderMESApi/GetStopAndCriticalEvents")
     Call<StopAndCriticalEventsResponse> getStopAndCriticalEventsRequest(@Body GetTopRejectsAndEventsRequest request);
@@ -56,7 +56,7 @@ public interface OpAppServiceRequests {
     Call<TopRejectResponse> getRejects(@Body GetTopRejectsAndEventsRequest request);
 
     @POST("/LeaderMESApi/DeleteToken")
-    Call<ResponseStatus> postDeleteToken(@Body PostDeleteTokenRequest request);
+    Call<StandardResponse> postDeleteToken(@Body PostDeleteTokenRequest request);
 
     @POST("/LeaderMESApi/GetServiceCalls")
     Call<ServiceCallsResponse> getServiceCalls(@Body BaseTimeRequest request);

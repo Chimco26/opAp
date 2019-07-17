@@ -3,12 +3,15 @@ package com.operatorsapp.utils;
 import android.support.annotation.NonNull;
 
 import com.example.common.MultipleRejectRequestModel;
+import com.example.common.StandardResponse;
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.callback.GetDepartmentCallback;
 import com.example.common.department.DepartmentsMachinesResponse;
 import com.example.common.request.BaseRequest;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
+import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectinfra.GetJobDetailsCallback;
 import com.operators.reportrejectinfra.GetPendingJobListCallback;
@@ -28,7 +31,6 @@ import com.operators.reportrejectnetworkbridge.interfaces.PostActivateJobNetwork
 import com.operators.reportrejectnetworkbridge.interfaces.PostSplitEventNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostUpdateNotesForJobNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostUpdtaeActionsNetworkManager;
-import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.request.GetAllRecipesRequest;
 import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SessionIdModel;
@@ -36,8 +38,6 @@ import com.operators.reportrejectnetworkbridge.server.request.SplitEventRequest;
 import com.operators.reportrejectnetworkbridge.server.response.IntervalAndTimeOutResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.VersionResponse;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
-import com.operators.reportrejectnetworkbridge.server.response.StandardResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsUpdateRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.GetPendingJobListRequest;
@@ -99,7 +99,7 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getAllRecipesRequest_Failed Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "getAllRecipesRequest_Failed Error");
                         callback.onGetAllRecipeFailed(errorObject);
                     }
                 } else {
@@ -144,7 +144,7 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getAllRecipesRequest_Failed Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "getAllRecipesRequest_Failed Error");
                         callback.onGetVersionFailed(errorObject);
                     }
                 } else {
@@ -189,7 +189,7 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getDepartmentsMachines_Failed Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "getDepartmentsMachines_Failed Error");
                         callback.onGetDepartmentFailed(errorObject);
                     }
                 } else {
@@ -234,7 +234,7 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getAllRecipesRequest_Failed Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "getAllRecipesRequest_Failed Error");
                         callback.onGetVersionFailed(errorObject);
                     }
                 } else {
@@ -250,14 +250,14 @@ public class SimpleRequests {
 
         final int[] retryCount = {0};
 
-        Call<ResponseStatus> call = postUpdateNotesForJobNetworkManager.emeraldPostUpdateNotesForJob(siteUrl, requestTimeout, TimeUnit.SECONDS).postUpdateNotesForJobRequest(postUpdateNotesForJobRequest);
+        Call<StandardResponse> call = postUpdateNotesForJobNetworkManager.emeraldPostUpdateNotesForJob(siteUrl, requestTimeout, TimeUnit.SECONDS).postUpdateNotesForJobRequest(postUpdateNotesForJobRequest);
 
-        call.enqueue(new Callback<ResponseStatus>() {
+        call.enqueue(new Callback<StandardResponse>() {
             @Override
-            public void onResponse(@NonNull Call<ResponseStatus> call, @NonNull Response<ResponseStatus> response) {
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
 
                 if (response.isSuccessful() && response.body() != null &&
-                        response.body().isFunctionSucceed()) {
+                        response.body().getFunctionSucceed()) {
                     if (callback != null) {
 
                         callback.onUpdateNotesSuccess(response.body());
@@ -269,9 +269,9 @@ public class SimpleRequests {
                 } else {
 
                     if (callback != null){
-                        ErrorObject errorObject = null;
+                        StandardResponse errorObject = null;
                         if (response.body() != null) {
-                            errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, response.body().getmError().getErrorDesc());
+                            errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, response.body().getError().getErrorDesc());
                         }
 
                         callback.onUpdateNotesFailed(errorObject);
@@ -283,7 +283,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(@NonNull Call<ResponseStatus> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -291,7 +291,7 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "postUpdateNotesForJob Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "postUpdateNotesForJob Error");
                         callback.onUpdateNotesFailed(errorObject);
                     }
                 } else {
@@ -341,7 +341,7 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getPendingJobList_Failed Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "getPendingJobList_Failed Error");
                         callback.onGetPendingJobListFailed(errorObject);
                     }
                 } else {
@@ -357,11 +357,11 @@ public class SimpleRequests {
 
         final int[] retryCount = {0};
 
-        Call<Object> call = getReportMultipleRequestNetworkManager.emeraldReportMultipleRejects(siteUrl, requestTimeout, TimeUnit.SECONDS).reportMultipleRejects(multipleRejectRequestModel);
+        Call<StandardResponse> call = getReportMultipleRequestNetworkManager.emeraldReportMultipleRejects(siteUrl, requestTimeout, TimeUnit.SECONDS).reportMultipleRejects(multipleRejectRequestModel);
 
-        call.enqueue(new Callback<Object>() {
+        call.enqueue(new Callback<StandardResponse>() {
             @Override
-            public void onResponse(@NonNull Call<Object> call, @NonNull Response<Object> response) {
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
 
                 if (response.isSuccessful()) {
                     if (callback != null) {
@@ -380,7 +380,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(@NonNull Call<Object> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -388,7 +388,7 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "reportMultipleRejects Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "reportMultipleRejects Error");
                         callback.onRequestFailed(errorObject);
                     }
                 } else {
@@ -435,7 +435,7 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getJobDeatils_Failed Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "getJobDeatils_Failed Error");
                         callback.onGetJobDetailsFailed(errorObject);
                     }
                 } else {
@@ -483,7 +483,7 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "postUpdtaeActions_Failed Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "postUpdtaeActions_Failed Error");
                         callback.onPostUpdtaeActionsFailed(errorObject);
                     }
                 } else {
@@ -531,7 +531,7 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "PostActivateJob Failed Error");
                         callback.onPostActivateJobFailed(errorObject);
                     }
                 } else {
@@ -547,12 +547,12 @@ public class SimpleRequests {
 
         final int[] retryCount = {0};
 
-        Call<ResponseStatus> call = postSplitEventNetworkManager.emeraldPostSplitEvent(siteUrl, requestTimeout, TimeUnit.SECONDS).postSplitEvent(splitEventRequest);
+        Call<StandardResponse> call = postSplitEventNetworkManager.emeraldPostSplitEvent(siteUrl, requestTimeout, TimeUnit.SECONDS).postSplitEvent(splitEventRequest);
 
-        call.enqueue(new Callback<ResponseStatus>() {
+        call.enqueue(new Callback<StandardResponse>() {
             @Override
-            public void onResponse(@NonNull Call<ResponseStatus> call, @NonNull Response<ResponseStatus> response) {
-                if (response != null && response.body() != null && response.body().isFunctionSucceed()) {
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+                if (response != null && response.body() != null && response.body().getFunctionSucceed()) {
                     if (callback != null) {
 
                         callback.onPostSplitEventSuccess(response.body());
@@ -563,8 +563,8 @@ public class SimpleRequests {
                     }
                 } else {
                     String msg = "";
-                    if (response != null && response.body() != null && response.body().getmError() != null){
-                        msg = response.body().getmError().getErrorDesc();
+                    if (response != null && response.body() != null && response.body().getError() != null){
+                        msg = response.body().getError().getErrorDesc();
                     }
                     onFailure(call, new Throwable(msg));
                     //onFailure(call, new Exception("response not successful"));
@@ -573,7 +573,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(@NonNull Call<ResponseStatus> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -581,7 +581,7 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, t.getMessage());
                         callback.onPostSplitEventFailed(errorObject);
                     }
                 } else {
@@ -598,12 +598,12 @@ public class SimpleRequests {
 
         final int[] retryCount = {0};
 
-        Call<ResponseStatus> call = machineStatusNetworkBridge.postProductionModeForMachineRetroFitServiceRequests(siteUrl).postProductionModeForMachine(productionModeForMachineRequest);
+        Call<StandardResponse> call = machineStatusNetworkBridge.postProductionModeForMachineRetroFitServiceRequests(siteUrl).postProductionModeForMachine(productionModeForMachineRequest);
 
-        call.enqueue(new Callback<ResponseStatus>() {
+        call.enqueue(new Callback<StandardResponse>() {
             @Override
-            public void onResponse(@NonNull Call<ResponseStatus> call, @NonNull Response<ResponseStatus> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().isFunctionSucceed()) {
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getFunctionSucceed()) {
                     if (callback != null) {
 
                         callback.onPostProductionModeSuccess(response.body());
@@ -615,10 +615,10 @@ public class SimpleRequests {
                 } else {
 
                     String msg = "Production Mode Update Failed";
-                    if (response.body() != null && response.body().getmError() != null){
-                        msg = response.body().getmError().getErrorDesc();
+                    if (response.body() != null && response.body().getError() != null){
+                        msg = response.body().getError().getErrorDesc();
                     }
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, msg);
+                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, msg);
                     callback.onPostProductionModeFailed(errorObject);
                     onFailure(call, new Exception("response not successful"));
                 }
@@ -626,7 +626,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(@NonNull Call<ResponseStatus> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -634,7 +634,7 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostProductionMode_Failed Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "PostProductionMode_Failed Error");
                         callback.onPostProductionModeFailed(errorObject);
                     }
                 } else {

@@ -1,7 +1,7 @@
 package com.operators.reportrejectnetworkbridge.interfaces;
 
 import com.operators.reportrejectnetworkbridge.server.request.SendReportCycleUnitsRequest;
-import com.operators.reportrejectnetworkbridge.server.response.SendReportCycleUnitsResponse;
+import com.example.common.StandardResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -12,5 +12,5 @@ import retrofit2.http.POST;
  */
 public interface EmeraldSendReportCycleUnits {
     @POST("/LeaderMESApi/ReportCycleUnits")
-    Call<SendReportCycleUnitsResponse> sendReportCycleUnits(@Body SendReportCycleUnitsRequest reportCycleUnitsRequest);
+    Call<StandardResponse> sendReportCycleUnits(@Body SendReportCycleUnitsRequest reportCycleUnitsRequest);
 }

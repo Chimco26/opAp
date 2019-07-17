@@ -1,7 +1,7 @@
 package com.operatorsapp.server.pulling.interfaces;
 
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 import com.operators.machinestatusinfra.models.MachineStatus;
 
 public interface MachineStatusUICallback {
@@ -9,5 +9,5 @@ public interface MachineStatusUICallback {
 
     void onTimerChanged(long millisUntilFinished);
 
-    void onStatusReceiveFailed(ErrorObjectInterface reason);
+    void onStatusReceiveFailed(StandardResponse reason);
 }

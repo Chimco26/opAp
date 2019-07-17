@@ -16,8 +16,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.common.Event;
+import com.example.common.StandardResponse;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
-import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.example.common.permissions.WidgetInfo;
 import com.example.oppapplog.OppAppLogger;
@@ -288,7 +288,7 @@ public class WidgetFragment extends Fragment implements
     }
 
     @Override
-    public void onDataFailure(ErrorObjectInterface reason, CallType callType) {
+    public void onDataFailure(StandardResponse reason, CallType callType) {
 
         mLoadingDataView.setVisibility(View.GONE);
 

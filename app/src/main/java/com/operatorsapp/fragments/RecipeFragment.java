@@ -19,19 +19,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import com.example.common.StandardResponse;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.example.common.callback.ErrorObjectInterface;
 import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.BaseSplits;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSplits;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.No0ChanneAdapter;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
@@ -381,14 +377,14 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         PostUpdateNotesForJobRequest updateNotesRequest = new PostUpdateNotesForJobRequest(pm.getSessionId(), pm.getJobId(), note);
         simpleRequests.postUpdateNotesForJob(pm.getSiteUrl(), new PostUpdateNotesForJobCallback() {
             @Override
-            public void onUpdateNotesSuccess(ResponseStatus responseNewVersion) {
+            public void onUpdateNotesSuccess(StandardResponse responseNewVersion) {
                 mNoteTv.setText(note);
                 ProgressDialogManager.dismiss();
                 alert.dismiss();
             }
 
             @Override
-            public void onUpdateNotesFailed(ErrorObjectInterface reason) {
+            public void onUpdateNotesFailed(StandardResponse reason) {
                 ProgressDialogManager.dismiss();
             }
         }, NetworkManager.getInstance(), updateNotesRequest, pm.getTotalRetries(), pm.getRequestTimeout());

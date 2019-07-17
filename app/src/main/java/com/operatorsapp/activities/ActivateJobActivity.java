@@ -7,14 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 
-import com.example.common.callback.ErrorObjectInterface;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import com.example.common.StandardResponse;
+import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operators.reportrejectinfra.GetJobDetailsCallback;
 import com.operators.reportrejectinfra.GetPendingJobListCallback;
 import com.operators.reportrejectinfra.PostActivateJobCallback;
 import com.operators.reportrejectinfra.PostUpdtaeActionsCallback;
-import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Action;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsByJob;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsUpdateRequest;
@@ -26,10 +24,8 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDe
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobStandardResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
-import com.operators.reportrejectnetworkbridge.server.response.StandardResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.PendingJobsAdapter;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.BasicTitleTextBtnDialog;
 import com.operatorsapp.dialogs.GenericDialog;
 import com.operatorsapp.fragments.JobDetailsFragment;
@@ -259,12 +255,12 @@ public class ActivateJobActivity extends AppCompatActivity implements
             }
 
             @Override
-            public void onGetPendingJobListFailed(ErrorObjectInterface reason) {
+            public void onGetPendingJobListFailed(StandardResponse reason) {
                 if (!isActive){
                     return;
                 }
                 ProgressDialogManager.dismiss();
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, getString(R.string.get_panding_jobs_failed_error));
+                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, getString(R.string.get_panding_jobs_failed_error));
                 ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
 //                finish();
                 findViewById(R.id.AJA_no_data_tv).setVisibility(View.VISIBLE);
@@ -293,12 +289,12 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
                 if (response == null) {
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
+                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
 
                 } else if (((StandardResponse) response).getError() != null) {
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
+                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
 
 
@@ -311,13 +307,13 @@ public class ActivateJobActivity extends AppCompatActivity implements
             }
 
             @Override
-            public void onGetJobDetailsFailed(ErrorObjectInterface reason) {
+            public void onGetJobDetailsFailed(StandardResponse reason) {
                 if (!isActive){
                     return;
                 }
                 ProgressDialogManager.dismiss();
 
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, getString(R.string.get_jobs_details_failed_error));
+                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, getString(R.string.get_jobs_details_failed_error));
                 ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
             }
         }, NetworkManager.getInstance(), new JobDetailsRequest(persistanceManager.getSessionId(), jobIds), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
@@ -346,12 +342,12 @@ public class ActivateJobActivity extends AppCompatActivity implements
         simpleRequests.postUpdateActions(persistanceManager.getSiteUrl(), new PostUpdtaeActionsCallback() {
 
             @Override
-            public void onPostUpdtaeActionsSuccess(Object response) {
+            public void onPostUpdtaeActionsSuccess(StandardResponse response) {
 
             }
 
             @Override
-            public void onPostUpdtaeActionsFailed(ErrorObjectInterface reason) {
+            public void onPostUpdtaeActionsFailed(StandardResponse reason) {
 
             }
         }, NetworkManager.getInstance(), actionsUpdateRequest, persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
@@ -370,7 +366,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
         simpleRequests.postActivateJob(persistanceManager.getSiteUrl(), new PostActivateJobCallback() {
 
             @Override
-            public void onPostActivateJobSuccess(Object response) {
+            public void onPostActivateJobSuccess(StandardResponse response) {
                 if (!isActive){
                     return;
                 }
@@ -378,12 +374,12 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
                 if (response == null) {
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
+                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
 
                 } else if (((StandardResponse) response).getError() != null) {
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
+                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(ActivateJobActivity.this, errorObject);
 
                 } else {
@@ -393,13 +389,13 @@ public class ActivateJobActivity extends AppCompatActivity implements
             }
 
             @Override
-            public void onPostActivateJobFailed(ErrorObjectInterface reason) {
+            public void onPostActivateJobFailed(StandardResponse reason) {
                 if (!isActive){
                     return;
                 }
                 ProgressDialogManager.dismiss();
 
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, reason.getDetailedDescription());
+                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, reason.getError().getErrorDesc());
                 ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
             }
         }, NetworkManager.getInstance(), activateJobRequest, persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());

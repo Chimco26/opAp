@@ -1,9 +1,7 @@
 package com.operators.reportrejectnetworkbridge.interfaces;
 
-import com.operators.reportrejectnetworkbridge.server.request.SendReportCycleUnitsRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportInventoryRequest;
-import com.operators.reportrejectnetworkbridge.server.response.SendReportCycleUnitsResponse;
-import com.operators.reportrejectnetworkbridge.server.response.SendReportInventoryResponse;
+import com.example.common.StandardResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -14,5 +12,5 @@ import retrofit2.http.POST;
  */
 public interface EmeraldSendReportInventory {
     @POST("/LeaderMESApi/ReportInventory")
-    Call<SendReportInventoryResponse> sendReportInventory(@Body SendReportInventoryRequest reportInventoryRequest);
+    Call<StandardResponse> sendReportInventory(@Body SendReportInventoryRequest reportInventoryRequest);
 }

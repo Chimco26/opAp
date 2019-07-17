@@ -12,19 +12,15 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
+import com.example.common.StandardResponse;
 import com.example.oppapplog.OppAppLogger;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
-import com.example.common.callback.ErrorObjectInterface;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operatorsapp.R;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
-import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.ShowCrouton;
@@ -82,7 +78,7 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
             }
 
             @Override
-            public void onOperatorDataReceiveFailure(ErrorObjectInterface reason) {
+            public void onOperatorDataReceiveFailure(StandardResponse reason) {
                 updateFailed(reason);
             }
 
@@ -99,7 +95,7 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
             }
 
             @Override
-            public void onSetOperatorFailed(ErrorObjectInterface reason) {
+            public void onSetOperatorFailed(StandardResponse reason) {
                 updateFailed(reason);
 
             }
@@ -107,7 +103,7 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
         super.onViewCreated(view, savedInstanceState);
     }
 
-    public void updateFailed(ErrorObjectInterface reason) {
+    public void updateFailed(StandardResponse reason) {
         ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "Set operator failed. Reason : " + reason.getError().toString());
         OppAppLogger.getInstance().w(LOG_TAG, "Set operator failed. Reason : " + reason.getError().toString());
         //Analytics

@@ -1,5 +1,6 @@
 package com.operatorsapp.server.responses;
 
+import com.example.common.StandardResponse;
 import com.google.gson.annotations.SerializedName;
 import com.operatorsapp.model.TopFiveItem;
 import com.operatorsapp.utils.TimeUtils;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  * Created by alex on 20/12/2018.
  */
 
-public class StopAndCriticalEventsResponse  extends PojoResponse{
+public class StopAndCriticalEventsResponse  extends StandardResponse {
 
     @SerializedName("CriticalEvents")
     ArrayList<CriticalEvent> mCriticalEvents;

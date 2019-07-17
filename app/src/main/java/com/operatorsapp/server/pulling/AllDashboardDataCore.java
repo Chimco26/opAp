@@ -3,8 +3,8 @@ package com.operatorsapp.server.pulling;
 import android.util.Log;
 
 import com.example.common.Event;
+import com.example.common.StandardResponse;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
-import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.callback.GetMachineJoshDataCallback;
 import com.example.common.callback.MachineJoshDataCallback;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
@@ -12,11 +12,11 @@ import com.example.common.permissions.PermissionResponse;
 import com.example.common.request.MachineIdRequest;
 import com.example.common.request.MachineJoshDataRequest;
 import com.example.oppapplog.OppAppLogger;
-import com.operators.activejobslistformachinenetworkbridge.server.ErrorObject;
 import com.operators.machinedatainfra.interfaces.GetMachineDataCallback;
 import com.operators.machinedatainfra.interfaces.GetMachineDataNetworkBridgeInterface;
 import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerInterface;
 import com.operators.machinedatainfra.models.Widget;
+import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusCallback;
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusNetworkBridgeInterface;
 import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
@@ -213,7 +213,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                 }
 
                 @Override
-                public void onGetMachineStatusFailed(ErrorObjectInterface reason) {
+                public void onGetMachineStatusFailed(StandardResponse reason) {
                     OppAppLogger.getInstance().w(LOG_TAG, "getMachineStatus() onGetMachineStatusFailed " + reason.getError());
                     if (mMachineStatusUICallback != null) {
                         mMachineStatusUICallback.onStatusReceiveFailed(reason);
@@ -244,7 +244,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                 }
 
                 @Override
-                public void onGetMachineDataFailed(ErrorObjectInterface reason) {
+                public void onGetMachineDataFailed(StandardResponse reason) {
                     OppAppLogger.getInstance().w(LOG_TAG, "getMachineData() onGetMachineDataFailed " + reason.getError());
                     mGetMachineDataFinish = true;
                     setJobFinishToAll(onJobFinishedListener);
@@ -263,7 +263,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             public void onResponse(Call<PermissionResponse> call, Response<PermissionResponse> response) {
 
                 if (mMachinePermissionsCallback != null) {
-                    if (response.body() != null && response.body().getError() == null) {
+                    if (response.body() != null && response.body().getError().getErrorDesc() == null) {
                         mMachinePermissionsCallback.onMachinePermissionCallbackSucceeded(response.body());
                     } else {
                         onFailure(call, new Throwable(""));
@@ -276,7 +276,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             @Override
             public void onFailure(Call<PermissionResponse> call, Throwable t) {
                 OppAppLogger.getInstance().w(LOG_TAG, "getPermissionForMachine() failed");
-                ErrorObjectInterface errorResponse = new ErrorObject(ErrorObject.ErrorCode.No_data, "getPermissionForMachine Response is null Error");
+                StandardResponse errorResponse = new StandardResponse(ErrorObject.ErrorCode.No_data, "getPermissionForMachine Response is null Error");
                 mMachinePermissionsCallback.onMachinePermissionCallbackFailed(errorResponse);
             }
         });
@@ -319,7 +319,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                     }
 
                     @Override
-                    public void onShiftLogFailed(ErrorObjectInterface reason) {
+                    public void onShiftLogFailed(StandardResponse reason) {
                         OppAppLogger.getInstance().w(LOG_TAG, "getShiftLogs() onGetShiftLogFailed " + reason.getError());
                         mGetShiftLogFinish = true;
                         setJobFinishToAll(onJobFinishedListener);
@@ -360,9 +360,9 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             }
 
             @Override
-            public void onShiftForMachineFailed(ErrorObjectInterface reason) {
+            public void onShiftForMachineFailed(StandardResponse reason) {
                 shiftForMachineUICallback.onGetShiftForMachineFailed(reason);
-                OppAppLogger.getInstance().w(LOG_TAG, "getShiftForMachine() onShiftForMachineFailed" + reason.getDetailedDescription());
+                OppAppLogger.getInstance().w(LOG_TAG, "getShiftForMachine() onShiftForMachineFailed" + reason.getError().getErrorDesc());
             }
 
         }, mShiftLogPersistenceManagerInterface.getTotalRetries(), mShiftLogPersistenceManagerInterface.getRequestTimeout());
@@ -394,10 +394,10 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                     }
 
                     @Override
-                    public void onActualBarExtraDetailsFailed(ErrorObjectInterface reason) {
+                    public void onActualBarExtraDetailsFailed(StandardResponse reason) {
                         if (mActualBarExtraUICallback != null) {
                             mActualBarExtraUICallback.onActualBarExtraDetailsFailed(reason);
-                            OppAppLogger.getInstance().w(LOG_TAG, "getActualBarExtraDetails() onActualBarExtraDetailsFailed" + reason.getDetailedDescription());
+                            OppAppLogger.getInstance().w(LOG_TAG, "getActualBarExtraDetails() onActualBarExtraDetailsFailed" + reason.getError().getErrorDesc());
                         }
                     }
 
@@ -430,10 +430,10 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                     }
 
                     @Override
-                    public void onGetMachineJoshDataFailed(ErrorObjectInterface reason) {
+                    public void onGetMachineJoshDataFailed(StandardResponse reason) {
                         if (mMachineJoshDataCallback != null) {
                             mMachineJoshDataCallback.onMachineJoshDataCallbackFailed(reason);
-                            OppAppLogger.getInstance().w(LOG_TAG, "getMachineJoshData() onGetMachineJoshDataFailed" + reason.getDetailedDescription());
+                            OppAppLogger.getInstance().w(LOG_TAG, "getMachineJoshData() onGetMachineJoshDataFailed" + reason.getError().getErrorDesc());
                         }
                     }
 

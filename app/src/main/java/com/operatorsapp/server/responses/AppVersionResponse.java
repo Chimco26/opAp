@@ -1,10 +1,11 @@
 package com.operatorsapp.server.responses;
 
+import com.example.common.StandardResponse;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class AppVersionResponse extends PojoResponse{
+public class AppVersionResponse extends StandardResponse {
 
     @SerializedName("ApplicationVersion")
     ArrayList<ApplicationVersion> mAppVersion;

@@ -1,9 +1,7 @@
 package com.operators.reportrejectnetworkbridge.interfaces;
 
 import com.operators.reportrejectnetworkbridge.server.request.SendApproveFirstItemRequest;
-import com.operators.reportrejectnetworkbridge.server.request.SendReportRejectRequest;
-import com.operators.reportrejectnetworkbridge.server.response.SendApproveFirstItemResponse;
-import com.operators.reportrejectnetworkbridge.server.response.SendReportRejectResponse;
+import com.example.common.StandardResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -15,7 +13,7 @@ import retrofit2.http.POST;
 public interface EmeraldSendApproveFirstItem
 {
     @POST("/LeaderMESApi/ReportSetupEnd")
-    Call<SendApproveFirstItemResponse> sendApproveFirstItem(@Body SendApproveFirstItemRequest sendApproveFirstItemRequest);
+    Call<StandardResponse> sendApproveFirstItem(@Body SendApproveFirstItemRequest sendApproveFirstItemRequest);
 
 
 }

@@ -1,16 +1,16 @@
 package com.operators.jobsnetworkbridge;
 
+import com.example.common.StandardResponse;
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.jobsinfra.GetJobsListForMachineCallback;
-import com.operators.jobsinfra.JobsListForMachineNetworkBridgeInterface;
 import com.operators.jobsinfra.JobListForMachine;
+import com.operators.jobsinfra.JobsListForMachineNetworkBridgeInterface;
 import com.operators.jobsinfra.StartJobForMachineCallback;
 import com.operators.jobsnetworkbridge.interfaces.GetJobsListForMachineNetworkManagerInterface;
 import com.operators.jobsnetworkbridge.interfaces.StartJobForMachineNetworkManagerInterface;
-import com.operators.jobsnetworkbridge.server.ErrorObject;
 import com.operators.jobsnetworkbridge.server.requests.GetJobsListForMachineDataRequest;
 import com.operators.jobsnetworkbridge.server.requests.StartJobForMachineRequest;
-import com.operators.jobsnetworkbridge.server.responses.ErrorResponse;
 import com.operators.jobsnetworkbridge.server.responses.JobsListForMachineResponse;
 import com.operators.jobsnetworkbridge.server.responses.StartJobForMachineResponse;
 
@@ -57,14 +57,14 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                         }
                         else
                         {
-                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Jobs_list_Is_Empty Error");
+                            StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.No_data, "Jobs_list_Is_Empty Error");
                             getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                         }
                     }
                     else
                     {
                         OppAppLogger.getInstance().w(LOG_TAG, "jobListForMachine.getData() is null");
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Get_jobs_list_failed Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.No_data, "Get_jobs_list_failed Error");
                         getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                     }
                 }
@@ -72,13 +72,13 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                 {
                     if(response.body() != null)
                     {
-                        ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                        getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
+                        response.body().getError().setDefaultErrorCodeConstant(response.body().getError().getErrorCode());
+                        getJobsListForMachineCallback.onGetJobsListForMachineFailed(response.body());
                     }
                     else
                     {
                         OppAppLogger.getInstance().w(LOG_TAG, "response.body() is null");
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Get_jobs_list_failed Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.No_data, "Get_jobs_list_failed Error");
                         getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                     }
                 }
@@ -96,7 +96,7 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                 {
                     mRetryCount = 0;
                     OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Get_jobs_list_failed Error");
+                    StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Get_jobs_list_failed Error");
                     getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                 }
             }
@@ -121,12 +121,12 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                 {
                     if(response.body() != null)
                     {
-                        ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                        startJobForMachineCallback.onStartJobForMachineFailed(errorObject);
+                        response.body().getError().setDefaultErrorCodeConstant(response.body().getError().getErrorCode());
+                        startJobForMachineCallback.onStartJobForMachineFailed(response.body());
                     }
                     else
                     {
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response is empty");
+                        StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.No_data, "Response is empty");
                         startJobForMachineCallback.onStartJobForMachineFailed(errorObject);
                     }
                 }
@@ -135,26 +135,10 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
             @Override
             public void onFailure(Call<StartJobForMachineResponse> call, Throwable t)
             {
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
+                StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "General Error");
                 startJobForMachineCallback.onStartJobForMachineFailed(errorObject);
             }
         });
-    }
-
-    private ErrorObject errorObjectWithErrorCode(ErrorResponse errorResponse)
-    {
-        ErrorObject.ErrorCode code = toCode(errorResponse.getErrorCode());
-        return new ErrorObject(code, errorResponse.getErrorDesc());
-    }
-
-    private ErrorObject.ErrorCode toCode(int errorCode)
-    {
-        switch(errorCode)
-        {
-            case 101:
-                return ErrorObject.ErrorCode.Credentials_mismatch;
-        }
-        return ErrorObject.ErrorCode.Unknown;
     }
 }
 

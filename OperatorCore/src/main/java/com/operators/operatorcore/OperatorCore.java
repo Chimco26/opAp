@@ -1,11 +1,11 @@
 package com.operators.operatorcore;
 
 import com.app.operatorinfra.GetOperatorByIdCallback;
-import com.app.operatorinfra.OperatorNetworkBridgeInterface;
 import com.app.operatorinfra.Operator;
+import com.app.operatorinfra.OperatorNetworkBridgeInterface;
 import com.app.operatorinfra.OperatorPersistenceManagerInterface;
 import com.app.operatorinfra.SetOperatorForMachineCallback;
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 
@@ -47,7 +47,7 @@ public class OperatorCore {
                 }
 
                 @Override
-                public void onGetOperatorFailed(ErrorObjectInterface reason) {
+                public void onGetOperatorFailed(StandardResponse reason) {
                     if (mOperatorForMachineUICallbackListener != null) {
                         if (reason != null) {
                             mOperatorForMachineUICallbackListener.onOperatorDataReceiveFailure(reason);
@@ -78,7 +78,7 @@ public class OperatorCore {
                 }
 
                 @Override
-                public void onSetOperatorForMachineFailed(ErrorObjectInterface reason) {
+                public void onSetOperatorForMachineFailed(StandardResponse reason) {
                     if (mOperatorForMachineUICallbackListener != null) {
                         if (reason != null) {
                             mOperatorForMachineUICallbackListener.onSetOperatorFailed(reason);

@@ -1,7 +1,6 @@
 package com.operatorsapp.server.callback;
 
-import com.example.common.callback.ErrorObjectInterface;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
+import com.example.common.StandardResponse;
 
 /**
  * Created by alex on 30/07/2018.
@@ -10,7 +9,7 @@ import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 public interface PostProductionModeCallback {
 
 
-    void onPostProductionModeSuccess(ResponseStatus response);
+    void onPostProductionModeSuccess(StandardResponse response);
 
-    void onPostProductionModeFailed(ErrorObjectInterface reason);
+    void onPostProductionModeFailed(StandardResponse reason);
 }

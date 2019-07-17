@@ -26,15 +26,12 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.common.StandardResponse;
 import com.example.oppapplog.OppAppLogger;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.LanguagesSpinnerAdapter;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.SettingsInterface;
@@ -275,9 +272,9 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
         final PersistenceManager pm = PersistenceManager.getInstance();
         final String id = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
         PostNotificationTokenRequest request = new PostNotificationTokenRequest(pm.getSessionId(), pm.getMachineId(), pm.getNotificationToken(), id);
-        NetworkManager.getInstance().postNotificationToken(request, new Callback<ResponseStatus>() {
+        NetworkManager.getInstance().postNotificationToken(request, new Callback<StandardResponse>() {
             @Override
-            public void onResponse(Call<ResponseStatus> call, Response<ResponseStatus> response) {
+            public void onResponse(Call<StandardResponse> call, Response<StandardResponse> response) {
                 if (response != null && response.body() != null && response.isSuccessful()) {
                     Log.d(LOG_TAG, "token sent");
                     mSettingsInterface.onRefreshApplicationRequest();
@@ -288,7 +285,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
             }
 
             @Override
-            public void onFailure(Call<ResponseStatus> call, Throwable t) {
+            public void onFailure(Call<StandardResponse> call, Throwable t) {
                 Log.d(LOG_TAG, "token failed");
             }
         });

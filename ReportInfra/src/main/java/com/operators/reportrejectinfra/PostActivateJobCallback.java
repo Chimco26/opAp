@@ -1,10 +1,10 @@
 package com.operators.reportrejectinfra;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 
 public interface PostActivateJobCallback {
 
-    void onPostActivateJobSuccess(Object response);
+    void onPostActivateJobSuccess(StandardResponse response);
 
-    void onPostActivateJobFailed(ErrorObjectInterface reason);
+    void onPostActivateJobFailed(StandardResponse reason);
 }

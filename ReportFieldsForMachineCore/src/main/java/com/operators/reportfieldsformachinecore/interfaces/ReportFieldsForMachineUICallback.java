@@ -1,6 +1,6 @@
 package com.operators.reportfieldsformachinecore.interfaces;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 
 /**
@@ -9,5 +9,5 @@ import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 public interface ReportFieldsForMachineUICallback {
     void onReportFieldsReceivedSuccessfully(ReportFieldsForMachine reportFieldsForMachine);
 
-    void onReportFieldsReceivedSFailure(ErrorObjectInterface reason);
+    void onReportFieldsReceivedSFailure(StandardResponse reason);
 }

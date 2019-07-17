@@ -1,10 +1,10 @@
 package com.operators.reportrejectinfra;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 
 public interface GetAllRecipeCallback {
 
     void onGetAllRecipeSuccess(Object response);
 
-    void onGetAllRecipeFailed(ErrorObjectInterface reason);
+    void onGetAllRecipeFailed(StandardResponse reason);
 }
