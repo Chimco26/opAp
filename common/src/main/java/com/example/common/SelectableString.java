@@ -4,9 +4,17 @@ import java.util.ArrayList;
 
 public class SelectableString {
     public static final String SELECT_ALL_ID = "SELECT_ALL_ID";
+    private int color;
     private String id;
     String string;
     boolean isSelected;
+
+    public SelectableString(String string, boolean isSelected, String id, int color) {
+        this.string = string;
+        this.isSelected = isSelected;
+        this.id = id;
+        this.color = color;
+    }
 
     public SelectableString(String string, boolean isSelected, String id) {
         this.string = string;
@@ -17,6 +25,14 @@ public class SelectableString {
     public SelectableString(String string, boolean isSelected) {
         this.string = string;
         this.isSelected = isSelected;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 
     public String getString() {

@@ -348,7 +348,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
                         set.setMode(LineDataSet.Mode.LINEAR);
 
-                        set.setColor(getContext().getResources().getColor(R.color.blue1));
+                        set.setColor(graphItem.getColor());
 
                         allDataSets.add(set);
                     }
@@ -507,13 +507,21 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                             get(0).getMachines().size() > 0 && response.body().getDepartments().get(0).getCurrentShift().
                             get(0).getMachines().get(0).getGraphs().size() > mGraphPosition) {
                         ArrayList<SelectableString> selectableStrings = new ArrayList<>();
-                        selectableStrings.add(new SelectableString(getString(R.string.select_all), true, SelectableString.SELECT_ALL_ID));
+                        selectableStrings.add(new SelectableString(getString(R.string.select_all), true, SelectableString.SELECT_ALL_ID, getActivity().getResources().getColor(R.color.black)));
                         if (response.body().getDepartments().get(0).getCurrentShift().
                                 get(0).getMachines().get(0).getGraphs() != null) {
-                            for (Graph graph : response.body().getDepartments().get(0).getCurrentShift().
-                                    get(0).getMachines().get(0).getGraphs()) {
+                            int[] colors = getActivity().getResources().getIntArray(R.array.colorList);
+                            for (int i = 0; i < response.body().getDepartments().get(0).getCurrentShift().
+                                    get(0).getMachines().get(0).getGraphs().size(); i++) {
+                                Graph graph = response.body().getDepartments().get(0).getCurrentShift().
+                                        get(0).getMachines().get(0).getGraphs().get(i);
                                 graph.setId(graph.getName());
-                                selectableStrings.add(new SelectableString(graph.getDisplayName(), true, String.valueOf(graph.getId())));
+                                SelectableString selectableString = new SelectableString(graph.getDisplayName(), true, String.valueOf(graph.getId()));
+                                if (colors.length > i) {
+                                    graph.setColor(colors[i]);
+                                    selectableString.setColor(colors[i]);
+                                }
+                                selectableStrings.add(selectableString);
                             }
                         }
                         if (mSelectableStrings == null) {
