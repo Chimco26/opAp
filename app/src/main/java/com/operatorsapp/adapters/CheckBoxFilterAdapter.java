@@ -33,6 +33,7 @@ public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAd
     @Override
     public void onBindViewHolder(@NonNull final CheckBoxFilterAdapter.ViewHolder viewHolder, final int position) {
         viewHolder.mCheckBox.setText(mFilterList.get(position).getString());
+        viewHolder.mCheckBox.setTextColor(mFilterList.get(position).getColor());
         viewHolder.mCheckBox.setChecked(mFilterList.get(position).isSelected());
         viewHolder.mCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override

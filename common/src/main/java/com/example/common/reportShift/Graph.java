@@ -32,6 +32,11 @@ public class Graph {
     @Expose
     private String displayName;
     String id;
+    private int color;
+
+    public int getColor() {
+        return color;
+    }
 
     public String getId() {
         return id;
@@ -105,4 +110,7 @@ public class Graph {
         this.displayName = displayName;
     }
 
+    public void setColor(int color) {
+        this.color = color;
+    }
 }

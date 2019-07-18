@@ -77,4 +77,19 @@
     <color name="purple_other">#736faa</color>
     <color name="green_dark_2">#127510</color>
     <color name="red_dark">#850f16</color>
+
+    <array name="colorList">
+        <item>@color/blue1</item>
+        <item>@color/C3</item>
+        <item>@color/C4</item>
+        <item>@color/machine_blue</item>
+        <item>@color/C6</item>
+        <item>@color/C7</item>
+        <item>@color/C8</item>
+        <item>@color/C9</item>
+        <item>@color/purple</item>
+        <item>@color/yellow_light</item>
+        <item>@color/C3T</item>
+        <item>@color/colorAccent</item>
+    </array>
 </resources>
