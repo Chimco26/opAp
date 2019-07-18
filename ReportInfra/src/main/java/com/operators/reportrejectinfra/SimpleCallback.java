@@ -1,11 +1,11 @@
 package com.operators.reportrejectinfra;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 
 public interface SimpleCallback {
 
 
-    void onRequestSuccess(Object response);
+    void onRequestSuccess(StandardResponse response);
 
-    void onRequestFailed(ErrorObjectInterface reason);
+    void onRequestFailed(StandardResponse reason);
 }

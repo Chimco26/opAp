@@ -12,21 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.common.Event;
+import com.example.common.StandardResponse;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.example.common.permissions.WidgetInfo;
 import com.example.oppapplog.OppAppLogger;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.example.common.callback.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.ScreenSlidePagerAdapter;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.managers.PersistenceManager;
@@ -248,7 +245,7 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
     }
 
     @Override
-    public void onDataFailure(ErrorObjectInterface reason, CallType callType) {
+    public void onDataFailure(StandardResponse reason, CallType callType) {
 //        if (mSwipeRefresh.isRefreshing()){
 //            mSwipeRefresh.setRefreshing(false);
 //        }

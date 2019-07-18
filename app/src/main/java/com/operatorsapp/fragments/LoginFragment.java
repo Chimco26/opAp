@@ -20,12 +20,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 import com.example.common.callback.GetDepartmentCallback;
 import com.example.common.department.DepartmentsMachinesResponse;
 import com.example.oppapplog.OppAppLogger;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.operators.infra.Machine;
 import com.operators.logincore.LoginCore;
 import com.operators.logincore.interfaces.LoginUICallback;
@@ -34,7 +32,6 @@ import com.operators.reportrejectnetworkbridge.server.response.Recipe.VersionRes
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
@@ -291,7 +288,7 @@ public class LoginFragment extends Fragment {
             }
 
             @Override
-            public void onLoginFailed(final ErrorObjectInterface reason) {
+            public void onLoginFailed(final StandardResponse reason) {
                 dismissProgressDialog();
                 mCroutonCallback.onHideConnectivityCroutonRequest();
                 ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
@@ -309,7 +306,7 @@ public class LoginFragment extends Fragment {
             }
 
             @Override
-            public void onGetDepartmentFailed(ErrorObjectInterface reason) {
+            public void onGetDepartmentFailed(StandardResponse reason) {
 
             }
         }, NetworkManager.getInstance(), PersistenceManager.getInstance().getTotalRetries(), PersistenceManager.getInstance().getRequestTimeout());
@@ -357,7 +354,7 @@ public class LoginFragment extends Fragment {
             }
 
             @Override
-            public void onLoginFailed(final ErrorObjectInterface reason) {
+            public void onLoginFailed(final StandardResponse reason) {
                 dismissProgressDialog();
                 if (mCroutonCallback != null) {
                     mCroutonCallback.onHideConnectivityCroutonRequest();
@@ -389,7 +386,7 @@ public class LoginFragment extends Fragment {
 //            @Override
 //            public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
 //
-//                if (response != null && response.body() != null && response.body().getmError() == null) {
+//                if (response != null && response.body() != null && response.body().getError() == null) {
 //
 //                    for (Notification not : response.body().getmNotificationsList()) {
 //                        not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
@@ -443,7 +440,7 @@ public class LoginFragment extends Fragment {
             }
 
             @Override
-            public void onGetVersionFailed(ErrorObjectInterface reason) {
+            public void onGetVersionFailed(StandardResponse reason) {
 
                 if (isTryTologin) {
 

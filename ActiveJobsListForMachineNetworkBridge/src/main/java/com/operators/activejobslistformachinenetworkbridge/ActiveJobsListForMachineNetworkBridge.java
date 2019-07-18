@@ -2,16 +2,16 @@ package com.operators.activejobslistformachinenetworkbridge;
 
 import android.support.annotation.NonNull;
 
+import com.example.common.StandardResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachineCallback;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachineNetworkBridgeInterface;
 import com.operators.activejobslistformachinenetworkbridge.interfaces.ActiveJobsListForMachineNetworkManagerInterface;
-import com.operators.activejobslistformachinenetworkbridge.server.ErrorObject;
 import com.operators.activejobslistformachinenetworkbridge.server.requests.GetActiveJobsListForMachineRequest;
 import com.operators.activejobslistformachinenetworkbridge.server.responses.ActiveJobsListForMachineResponse;
-import com.operators.activejobslistformachinenetworkbridge.server.responses.ErrorResponse;
+
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
@@ -45,7 +45,7 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
                             if (activeJobsListForMachine != null && activeJobsListForMachine.getActiveJobs().size() > 0) {
                                 callback.onGetActiveJobsListForMachineSuccess(activeJobsListForMachine);
                             } else {
-                                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response is null Error");
+                                StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.No_data, "Response is null Error");
                                 callback.onGetActiveJobsListForMachineFailed(errorObject);
                             }
                         } else {
@@ -53,19 +53,21 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
 
                         }
                     } else {
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response is null Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.No_data, "Response is null Error");
                         callback.onGetActiveJobsListForMachineFailed(errorObject);
                     }
                 } else {
 
-                    ErrorObjectInterface errorObject;
+                    StandardResponse errorObject = new StandardResponse();
 
                     if (response.body() != null) {
-                        errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
+                        errorObject.getError().setDefaultErrorCodeConstant(response.body().getError().getErrorCode());
                     } else if (response.raw() != null && response.raw().code() == 401) {
-                        errorObject = new ErrorObject(ErrorObject.ErrorCode.SessionInvalid, response.raw().message() + "");
+                        errorObject.getError().setErrorCodeConstant(ErrorObjectInterface.ErrorCode.SessionInvalid);
+                        errorObject.getError().setErrorDesc(response.raw().message() + "");
                     } else {
-                        errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response is null Error");
+                        errorObject.getError().setErrorCodeConstant(ErrorObjectInterface.ErrorCode.No_data);
+                        errorObject.getError().setErrorDesc("Response is null Error");
                     }
 
                     callback.onGetActiveJobsListForMachineFailed(errorObject);
@@ -81,23 +83,10 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
                 } else {
                     mRetryCount = 0;
                     OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Response failure");
+                    StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Response failure");
                     callback.onGetActiveJobsListForMachineFailed(errorObject);
                 }
             }
         });
-    }
-
-    private ErrorObject errorObjectWithErrorCode(ErrorResponse errorResponse) {
-        ErrorObject.ErrorCode code = toCode(errorResponse.getErrorCode());
-        return new ErrorObject(code, errorResponse.getErrorDesc());
-    }
-
-    private ErrorObject.ErrorCode toCode(int errorCode) {
-        switch (errorCode) {
-            case 101:
-                return ErrorObject.ErrorCode.Credentials_mismatch;
-        }
-        return ErrorObject.ErrorCode.Unknown;
     }
 }

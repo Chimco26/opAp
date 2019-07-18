@@ -1,16 +1,13 @@
 package com.example.common.permissions;
 
-import com.example.common.ErrorResponse;
+import com.example.common.StandardResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class PermissionResponse {
+public class PermissionResponse extends StandardResponse {
 
-    @SerializedName("error")
-    @Expose
-    private ErrorResponse error;
     @SerializedName("Data")
     @Expose
     private List<Object> data = null;
@@ -33,13 +30,6 @@ public class PermissionResponse {
     @Expose
     private Object responseDataTable;
 
-    public ErrorResponse getError() {
-        return error;
-    }
-
-    public void setError(ErrorResponse error) {
-        this.error = error;
-    }
 
     public List<Object> getData() {
         return data;

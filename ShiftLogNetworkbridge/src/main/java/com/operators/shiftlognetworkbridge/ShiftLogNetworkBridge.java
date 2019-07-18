@@ -1,6 +1,9 @@
 package com.operators.shiftlognetworkbridge;
 
 import com.example.common.Event;
+import com.example.common.StandardResponse;
+import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.callback.GetMachineJoshDataCallback;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.example.common.request.MachineJoshDataRequest;
@@ -9,14 +12,11 @@ import com.operators.shiftloginfra.ActualBarExtraDetailsCallback;
 import com.operators.shiftloginfra.ShiftForMachineCoreCallback;
 import com.operators.shiftloginfra.ShiftLogCoreCallback;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
-import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
-import com.operators.shiftlognetworkbridge.server.ErrorObject;
 import com.operators.shiftlognetworkbridge.server.requests.ActualBarExtraDetailsRequest;
 import com.operators.shiftlognetworkbridge.server.requests.GetShiftForMachineRequest;
 import com.operators.shiftlognetworkbridge.server.requests.GetShiftLogRequest;
-import com.operators.shiftlognetworkbridge.server.responses.ErrorResponse;
 import com.operators.shiftlognetworkbridge.server.responses.ShiftLogResponse;
 
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
             public void onResponse(Call<ShiftLogResponse> call, Response<ShiftLogResponse> response) {
 
 
-                if (response.body() != null && response.body().getEvents() != null && (response.body().getErrorResponse() == null || response.body().getErrorResponse().getErrorCode() == 1967)) {
+                if (response.body() != null && response.body().getEvents() != null && (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorCode() == 1967)) {
                     ArrayList<Event> events = response.body().getEvents();
 
                     OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse " + events.size() + " events");
@@ -57,7 +57,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
                 } else {
 
                     OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse - getShiftLog failed Error");
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getShiftLog failed Error");
+                    StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "getShiftLog failed Error");
                     shiftLogCoreCallback.onShiftLogFailed(errorObject);
                 }
             }
@@ -72,7 +72,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
                     retryCount = 0;
                     OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog, onFailure " + t.getMessage());
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
+                    StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "General Error");
                     shiftLogCoreCallback.onShiftLogFailed(errorObject);
 
 
@@ -88,15 +88,15 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
         call.enqueue(new Callback<ShiftForMachineResponse>() {
             @Override
             public void onResponse(Call<ShiftForMachineResponse> call, Response<ShiftForMachineResponse> response) {
-                if (response.body() != null && response.body().getError() == null) {
+                if (response.body() != null && response.body().getError().getErrorDesc() == null) {
                     shiftForMachineCoreCallback.onShiftForMachineSucceeded(response.body());
                 } else if (response.body() != null) {
                     OppAppLogger.getInstance().e(LOG_TAG, "GetShiftForMachine onResponse, " + response.body().getError());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Server, "shift for machine failed" );
+                    StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Server, "shift for machine failed" );
                     shiftForMachineCoreCallback.onShiftForMachineFailed(errorObject);
                 } else {
                     OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse - GetShiftForMachine failed Error");
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "GetShiftForMachine failed Error");
+                    StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "GetShiftForMachine failed Error");
                     shiftForMachineCoreCallback.onShiftForMachineFailed(errorObject);
                 }
             }
@@ -109,7 +109,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
                 } else {
                     retryCount = 0;
                     OppAppLogger.getInstance().d(LOG_TAG, "GetShiftForMachine, onFailure " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
+                    StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "General Error");
                     shiftForMachineCoreCallback.onShiftForMachineFailed(errorObject);
                 }
 
@@ -132,7 +132,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
                     actualBarExtraResponseActualBarExtraDetailsCallback.onActualBarExtraDetailsSucceeded(response.body());
                 } else {
                     OppAppLogger.getInstance().d(LOG_TAG, "GetActualBarExtraDetails , onResponse - GetActualBarExtraDetails failed Error");
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "GetActualBarExtraDetails failed Error");
+                    StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "GetActualBarExtraDetails failed Error");
                     actualBarExtraResponseActualBarExtraDetailsCallback.onActualBarExtraDetailsFailed(errorObject);
                 }
             }
@@ -147,7 +147,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
                     retryCount = 0;
                     OppAppLogger.getInstance().d(LOG_TAG, "GetActualBarExtraDetails, onFailure " + t.getMessage());
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
+                    StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "General Error");
                     actualBarExtraResponseActualBarExtraDetailsCallback.onActualBarExtraDetailsFailed(errorObject);
 
 
@@ -173,7 +173,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
                     if (response.body() != null && response.body().getError() != null){
                         msg = response.body().getError().toString();
                     }
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, msg);
+                    StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, msg);
                     callback.onGetMachineJoshDataFailed(errorObject);
                     onFailure(call, new Exception("response not successful"));
                 }
@@ -189,7 +189,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
                     } else {
                         retryCount = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getMachineJoshData Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "getMachineJoshData Error");
                         callback.onGetMachineJoshDataFailed(errorObject);
                     }
                 } else {
@@ -198,22 +198,5 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
                 }
             }
         });
-    }
-
-    private ErrorObject errorObjectWithErrorCode(ErrorResponse errorResponse) {
-        ErrorObject.ErrorCode code = toCode(errorResponse.getErrorCode());
-        return new ErrorObject(code, errorResponse.getErrorDesc());
-    }
-
-    private ErrorObject.ErrorCode toCode(int errorCode) {
-        switch (errorCode) {
-            case 101:
-                return ErrorObject.ErrorCode.Credentials_mismatch;
-            case 0:
-                return ErrorObject.ErrorCode.No_data;
-            case 500:
-                return ErrorObject.ErrorCode.Server;
-        }
-        return ErrorObject.ErrorCode.Unknown;
     }
 }

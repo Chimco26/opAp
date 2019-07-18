@@ -3,12 +3,13 @@ package com.operators.machinedatanetworkbridge;
 
 import android.support.annotation.NonNull;
 
+import com.example.common.ErrorResponse;
+import com.example.common.StandardResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.machinedatainfra.interfaces.GetMachineDataCallback;
 import com.operators.machinedatainfra.interfaces.GetMachineDataNetworkBridgeInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinedatanetworkbridge.interfaces.GetMachineDataNetworkManagerInterface;
-import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operators.machinedatanetworkbridge.server.requests.GetMachineDataDataRequest;
 import com.operators.machinedatanetworkbridge.server.responses.MachineDataDataResponse;
 
@@ -43,7 +44,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
             public void onResponse(@NonNull Call<MachineDataDataResponse> call, @NonNull Response<MachineDataDataResponse> response)
             {
 
-                if(response.body() != null && response.body().getMachineParams() != null && response.body().getErrorResponse() == null)
+                if(response.body() != null && response.body().getMachineParams() != null && response.body().getError().getErrorDesc() == null)
                 {
                     ArrayList<Widget> widgets = response.body().getMachineParams();
                     OppAppLogger.getInstance().d(LOG_TAG, "getMachineData, onResponse " + widgets.size() + " widgets");
@@ -52,7 +53,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
                 else
                 {
                     OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse - getMachineData failed Error");
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getMachineData failed Error");
+                    StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getMachineData failed Error");
                     getMachineDataCallback.onGetMachineDataFailed(errorObject);
                 }
             }
@@ -69,7 +70,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
                 {
                     mRetryCount = 0;
                     OppAppLogger.getInstance().d(LOG_TAG, "getMachineData, onFailure " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, t.getMessage());
+                    StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, t.getMessage());
                     getMachineDataCallback.onGetMachineDataFailed(errorObject);
 
                 }

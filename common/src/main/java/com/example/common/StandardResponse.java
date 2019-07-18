@@ -1,8 +1,9 @@
-package com.operators.reportrejectnetworkbridge.server.response;
+package com.example.common;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.common.callback.ErrorObjectInterface;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -10,7 +11,7 @@ public class StandardResponse implements Parcelable {
 
     @SerializedName("FunctionSucceed")
     @Expose
-    private Boolean functionSucceed;
+    private Boolean isSucceed;
     @SerializedName("error")
     @Expose
     private ErrorResponse error;
@@ -30,14 +31,35 @@ public class StandardResponse implements Parcelable {
         }
     };
 
+    public StandardResponse(boolean isSucceed, int leaderRecordID, ErrorResponse error) {
+        this.error = error;
+        this.leaderRecordID = leaderRecordID;
+        this.isSucceed = isSucceed;
+    }
+
+    public StandardResponse(ErrorObjectInterface.ErrorCode enumCode, String desc) {
+        if (error == null){
+            error = new ErrorResponse();
+        }
+        this.error.setErrorCodeConstant(enumCode);
+        this.getError().setErrorDesc(desc);
+    }
+
+    public Boolean getSucceed() {
+        return isSucceed;
+    }
+
     public Boolean getFunctionSucceed() {
-        return functionSucceed;
+        return isSucceed;
     }
 
     public void setFunctionSucceed(Boolean functionSucceed) {
-        this.functionSucceed = functionSucceed;
+        this.isSucceed = functionSucceed;
     }
     public ErrorResponse getError() {
+        if (error == null){
+            error = new ErrorResponse();
+        }
         return error;
     }
 
@@ -60,7 +82,7 @@ public class StandardResponse implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(this.functionSucceed);
+        dest.writeValue(this.isSucceed);
         dest.writeParcelable(this.error, 0);
         dest.writeValue(this.leaderRecordID);
     }
@@ -69,7 +91,7 @@ public class StandardResponse implements Parcelable {
     }
 
     protected StandardResponse(Parcel in) {
-        this.functionSucceed = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.isSucceed = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.error = in.readParcelable(ErrorResponse.class.getClassLoader());
         this.leaderRecordID = (Integer) in.readValue(Integer.class.getClassLoader());
     }

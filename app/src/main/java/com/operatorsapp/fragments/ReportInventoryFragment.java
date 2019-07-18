@@ -24,25 +24,20 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.common.ErrorResponse;
+import com.example.common.StandardResponse;
 import com.example.oppapplog.OppAppLogger;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.example.common.callback.ErrorObjectInterface;
-import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectInventorySpinnerAdapter;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
@@ -147,7 +142,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getPackageTypes() == null || mReportFieldsForMachine.getPackageTypes().size() == 0) {
 
-            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+            StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             mButtonReport.setEnabled(false);
             mMinusButton.setEnabled(false);
@@ -326,19 +321,19 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
 
     private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override//TODO crouton error
-        public void sendReportSuccess(Object o) {
+        public void sendReportSuccess(StandardResponse o) {
 
 
-            ResponseStatus response = objectToNewError(o);
+            StandardResponse response = objectToNewError(o);
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
 
-            if (response.isFunctionSucceed()) {
+            if (response.getFunctionSucceed()) {
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, true, "Report Production- units: " + mUnitsCounter + ", type: " + mSelectedPackageTypeName);
-                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
             } else {
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, false, "Report Production- units: " + mUnitsCounter + ", type: " + mSelectedPackageTypeName);
-                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
 
             if (getFragmentManager() != null){
@@ -363,26 +358,26 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
         }
 
         @Override
-        public void sendReportFailure(ErrorObjectInterface reason) {
+        public void sendReportFailure(StandardResponse reason) {
             dismissProgressDialog();
-            new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, false, "Report Production- " + reason.getDetailedDescription());
-            OppAppLogger.getInstance().i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
-            mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getDetailedDescription(), true);
+            new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, false, "Report Production- " + reason.getError().getErrorDesc());
+            OppAppLogger.getInstance().i(LOG_TAG, "sendReportFailure() reason: " + reason.getError().getErrorDesc());
+            mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getError().getErrorDesc(), true);
             SendBroadcast.refreshPolling(getContext());
         }
     };
 
-    private ResponseStatus objectToNewError(Object o) {
-        ResponseStatus responseNewVersion;
-        if (o instanceof ResponseStatus){
-            responseNewVersion = (ResponseStatus)o;
+    private StandardResponse objectToNewError(Object o) {
+        StandardResponse responseNewVersion;
+        if (o instanceof StandardResponse){
+            responseNewVersion = (StandardResponse)o;
         }else {
             Gson gson = new GsonBuilder().create();
 
             ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
 
-            responseNewVersion = new ResponseStatus(true, 0, er);
-            if (responseNewVersion.getmError().getErrorCode() != 0){
+            responseNewVersion = new StandardResponse(true, 0, er);
+            if (responseNewVersion.getError().getErrorCode() != 0){
                 responseNewVersion.setFunctionSucceed(false);
             }
         }

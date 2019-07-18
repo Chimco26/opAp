@@ -9,6 +9,7 @@ import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -129,6 +130,7 @@ public class CroutonCreator {
 
             case URL_ERROR:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.crouton_error_view, null);
+                Log.d(LOG_TAG, "createCrouton: " + ((FrameLayout) croutonView).getChildCount());
                 setProgressCountDown(croutonView, DEFAULT_CROUTON_TIME);
                 break;
             case CONNECTIVITY:

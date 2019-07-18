@@ -1,18 +1,16 @@
 package com.operators.getmachinesstatusnetworkbridge;
 
 
+import com.example.common.StandardResponse;
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
-import com.operators.getmachinesstatusnetworkbridge.server.ErrorObject;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.GetMachineStatusDataRequest;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
-import com.operators.getmachinesstatusnetworkbridge.server.responses.ErrorResponse;
 import com.operators.getmachinesstatusnetworkbridge.server.responses.MachineStatusDataResponse;
-
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusCallback;
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusNetworkBridgeInterface;
 import com.operators.machinestatusinfra.models.MachineStatus;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 
 import java.util.concurrent.TimeUnit;
 
@@ -51,7 +49,7 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
                         if(response.body().getMachineStatus().getAllMachinesData().size() == 0)
                         {
                             OppAppLogger.getInstance().d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = 0");
-                            //                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, response.body().getErrorResponse().getErrorDesc());
+                            //                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Get_machines_failed, response.body().getErrorResponse().getErrorDesc());
                             //                        getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                         }
                         else
@@ -64,16 +62,17 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
                     else
                     {
                         OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse - getMachineStatus failed Error");
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getMachineData failed Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "getMachineData failed Error");
                         getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                     }
                 }
                 else
                 {
                     OppAppLogger.getInstance().d(LOG_TAG, "getMachineStatus, onResponse(),  " + "isSuccessful = false");
-                    if(response.body() != null && response.body().getErrorResponse() != null)
+                    if(response.body() != null && response.body().getError() != null)
                     {
-                        ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
+                        StandardResponse errorObject = new StandardResponse();
+                        errorObject.getError().setDefaultErrorCodeConstant(response.body().getError().getErrorCode());
                         getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                     }
                 }
@@ -91,7 +90,7 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
                 {
                     mRetryCount = 0;
                     OppAppLogger.getInstance().d(LOG_TAG, "getMachineStatus, onFailure " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Get_machines_failed Error");
+                    StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Get_machines_failed Error");
                     getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                 }
             }
@@ -102,35 +101,19 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
     public void setProductionModeForMachine(String siteUrl,int specificRequestTimeout, String sessionId, int machineId, int productionModeId)
     {
         SetProductionModeForMachineRequest setProductionModeForMachineRequest = new SetProductionModeForMachineRequest(sessionId, machineId, productionModeId);
-        Call<ResponseStatus> call = mGetMachineStatusNetworkManagerInterface.postProductionModeForMachineRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).postProductionModeForMachine(setProductionModeForMachineRequest);
-        call.enqueue(new Callback<ResponseStatus>(){
+        Call<StandardResponse> call = mGetMachineStatusNetworkManagerInterface.postProductionModeForMachineRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).postProductionModeForMachine(setProductionModeForMachineRequest);
+        call.enqueue(new Callback<StandardResponse>(){
 
             @Override
-            public void onResponse(Call<ResponseStatus> call, Response<ResponseStatus> response) {
+            public void onResponse(Call<StandardResponse> call, Response<StandardResponse> response) {
 
             }
 
             @Override
-            public void onFailure(Call<ResponseStatus> call, Throwable t) {
+            public void onFailure(Call<StandardResponse> call, Throwable t) {
 
             }
         });
-    }
-
-    private ErrorObject errorObjectWithErrorCode(ErrorResponse errorResponse)
-    {
-        ErrorObject.ErrorCode code = toCode(errorResponse.getErrorCode());
-        return new ErrorObject(code, errorResponse.getErrorDesc());
-    }
-
-    private ErrorObject.ErrorCode toCode(int errorCode)
-    {
-        switch(errorCode)
-        {
-            case 101:
-                return ErrorObject.ErrorCode.Credentials_mismatch;
-        }
-        return ErrorObject.ErrorCode.Unknown;
     }
 
 }

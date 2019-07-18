@@ -13,7 +13,7 @@ public interface ErrorObjectInterface {
         Missing_reports
     }
 
-    ErrorCode getError();
-
-    String getDetailedDescription();
+//    ErrorResponse getError();
+//
+//    String getDetailedDescription();
 }

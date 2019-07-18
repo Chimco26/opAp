@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import com.example.common.Event;
 import com.example.common.SelectableString;
+import com.example.common.StandardResponse;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
-import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.example.common.permissions.WidgetInfo;
 import com.example.common.reportShift.DepartmentShiftGraphRequest;
@@ -393,7 +393,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     }
 
     @Override
-    public void onDataFailure(ErrorObjectInterface reason, CallType callType) {
+    public void onDataFailure(StandardResponse reason, CallType callType) {
 
     }
 
@@ -418,7 +418,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         NetworkManager.getInstance().getTopRejects(request, new Callback<TopRejectResponse>() {
             @Override
             public void onResponse(Call<TopRejectResponse> call, Response<TopRejectResponse> response) {
-                if (isAdded() && response.body() != null && response.body().getmError() == null && response.body().getmRejectsList() != null) {
+                if (isAdded() && response.body() != null && response.body().getError().getErrorDesc() == null && response.body().getmRejectsList() != null) {
                     ((TopFiveAdapter) mTopRejects_rv.getAdapter()).setmTopList(response.body().getRejectsAsTopFive());
                     String goodUnits = "";
                     String rejectsPc = "";
@@ -456,7 +456,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         NetworkManager.getInstance().getTopStopAndCriticalEvents(request, new Callback<StopAndCriticalEventsResponse>() {
             @Override
             public void onResponse(Call<StopAndCriticalEventsResponse> call, Response<StopAndCriticalEventsResponse> response) {
-                if (response.body() != null && response.body().getmError() == null) {
+                if (response.body() != null && response.body().getError().getErrorDesc() == null) {
 
                     if (response.body().getmStopEvents() != null && response.body().getmStopEvents().size() > 0) {
                         ((TopFiveAdapter) mTopStops_rv.getAdapter()).setmTopList(response.body().getStopsAsTopFive());
@@ -500,7 +500,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         NetworkManager.getInstance().getDepartmentShiftGraph(departmentShiftGraphRequest, new Callback<DepartmentShiftGraphResponse>() {
             @Override
             public void onResponse(Call<DepartmentShiftGraphResponse> call, Response<DepartmentShiftGraphResponse> response) {
-                if (isAdded() && response.body() != null && response.body().getError() == null) {
+                if (isAdded() && response.body() != null && response.body().getError().getErrorDesc() == null) {
 
                     if (response.body().getDepartments() != null && response.body().getDepartments().size() > 0
                             && response.body().getDepartments().get(0).getCurrentShift().size() > 0 && response.body().getDepartments().get(0).getCurrentShift().

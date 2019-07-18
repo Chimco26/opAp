@@ -1,9 +1,9 @@
 package com.app.operatorinfra;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 
 public interface GetOperatorByIdCallback {
     void onGetOperatorSucceeded(Operator operator);
 
-    void onGetOperatorFailed(ErrorObjectInterface reason);
+    void onGetOperatorFailed(StandardResponse reason);
 }

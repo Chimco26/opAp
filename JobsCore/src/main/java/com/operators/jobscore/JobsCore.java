@@ -1,6 +1,6 @@
 package com.operators.jobscore;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.jobscore.interfaces.JobsForMachineUICallbackListener;
 import com.operators.jobsinfra.GetJobsListForMachineCallback;
@@ -47,7 +47,7 @@ public class JobsCore {
                     }
 
                     @Override
-                    public void onGetJobsListForMachineFailed(ErrorObjectInterface reason) {
+                    public void onGetJobsListForMachineFailed(StandardResponse reason) {
                         OppAppLogger.getInstance().w(LOG_TAG, "Error getting job list");
                         if (mJobsForMachineUICallbackListener != null) {
                             if (reason != null) {
@@ -79,7 +79,7 @@ public class JobsCore {
                     }
 
                     @Override
-                    public void onStartJobForMachineFailed(ErrorObjectInterface reason) {
+                    public void onStartJobForMachineFailed(StandardResponse reason) {
                         if (mJobsForMachineUICallbackListener != null) {
                             mJobsForMachineUICallbackListener.onStartJobFailed(reason);
                         }

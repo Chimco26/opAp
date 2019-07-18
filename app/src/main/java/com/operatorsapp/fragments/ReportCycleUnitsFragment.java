@@ -25,23 +25,19 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import com.example.common.ErrorResponse;
+import com.example.common.StandardResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.example.common.callback.ErrorObjectInterface;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
@@ -373,21 +369,21 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
     private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override
-        public void sendReportSuccess(Object o) {
+        public void sendReportSuccess(StandardResponse o) {
 
-            ResponseStatus response = objectToNewError(o);
+            StandardResponse response = objectToNewError(o);
             SendBroadcast.refreshPolling(getContext());
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
             mReportCore.unregisterListener();
 
             dismissProgressDialog();
-            if (response.isFunctionSucceed()){
-                 ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+            if (response.getFunctionSucceed()){
+                 ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.CHANGE_UNIT_IN_CYCLE, true, "Change unit in cycle");
-                //mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
+                //mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc());
             }else {
-                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), true);
-                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.CHANGE_UNIT_IN_CYCLE, false, "Change unit in cycle- " + response.getmError().getErrorDesc());
+                mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), true);
+                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.CHANGE_UNIT_IN_CYCLE, false, "Change unit in cycle- " + response.getError().getErrorDesc());
             }
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -400,27 +396,27 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         }
 
         @Override
-        public void sendReportFailure(ErrorObjectInterface reason) {
-            OppAppLogger.getInstance().i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
-            mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getDetailedDescription(), true);
-            new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.CHANGE_UNIT_IN_CYCLE, false, "Change unit in cycle- " + reason.getDetailedDescription());
+        public void sendReportFailure(StandardResponse reason) {
+            OppAppLogger.getInstance().i(LOG_TAG, "sendReportFailure() reason: " + reason.getError().getErrorDesc());
+            mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getError().getErrorDesc(), true);
+            new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.CHANGE_UNIT_IN_CYCLE, false, "Change unit in cycle- " + reason.getError().getErrorDesc());
             dismissProgressDialog();
             SendBroadcast.refreshPolling(getContext());
         }
 
     };
 
-    private ResponseStatus objectToNewError(Object o) {
-        ResponseStatus responseNewVersion;
-        if (o instanceof ResponseStatus){
-            responseNewVersion = (ResponseStatus)o;
+    private StandardResponse objectToNewError(Object o) {
+        StandardResponse responseNewVersion;
+        if (o instanceof StandardResponse){
+            responseNewVersion = (StandardResponse)o;
         }else {
             Gson gson = new GsonBuilder().create();
 
             ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
 
-            responseNewVersion = new ResponseStatus(true, 0, er);
-            if (responseNewVersion.getmError().getErrorCode() != 0){
+            responseNewVersion = new StandardResponse(true, 0, er);
+            if (responseNewVersion.getError().getErrorCode() != 0){
                 responseNewVersion.setFunctionSucceed(false);
             }
         }

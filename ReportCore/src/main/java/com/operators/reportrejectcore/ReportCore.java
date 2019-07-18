@@ -1,7 +1,7 @@
 package com.operators.reportrejectcore;
 
+import com.example.common.StandardResponse;
 import com.example.oppapplog.OppAppLogger;
-import com.example.common.callback.ErrorObjectInterface;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
 import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectinfra.SendReportCallback;
@@ -41,7 +41,7 @@ public class ReportCore {
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
                     , workerID, rejectReasonId, rejectReasonCause, units, weight, joshId, new SendReportRejectCallback() {
                         @Override
-                        public void onSendReportSuccess(Object o) {
+                        public void onSendReportSuccess(StandardResponse o) {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportSuccess(o);
                             } else {
@@ -50,7 +50,7 @@ public class ReportCore {
                         }
 
                         @Override
-                        public void onSendReportFailed(ErrorObjectInterface reason) {
+                        public void onSendReportFailed(StandardResponse reason) {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
                             } else {
@@ -67,7 +67,7 @@ public class ReportCore {
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
                     , mReportPersistenceManagerInterface.getOperatorId(), rejectReasonId, approvingTechnicianID, jobId, new SendReportCallback() {
                         @Override
-                        public void onSendReportSuccess(Object o) {
+                        public void onSendReportSuccess(StandardResponse o) {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportSuccess(o);
                             } else {
@@ -76,7 +76,7 @@ public class ReportCore {
                         }
 
                         @Override
-                        public void onSendReportFailed(ErrorObjectInterface reason) {
+                        public void onSendReportFailed(StandardResponse reason) {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
                             } else {
@@ -93,7 +93,7 @@ public class ReportCore {
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
                     , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, eventId, joshId, new SendReportStopCallback() {
                         @Override
-                        public void onSendStopReportSuccess(Object o) {
+                        public void onSendStopReportSuccess(StandardResponse o) {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportSuccess(o);
                             } else {
@@ -102,7 +102,7 @@ public class ReportCore {
                         }
 
                         @Override
-                        public void onSendStopReportFailed(ErrorObjectInterface reason) {
+                        public void onSendStopReportFailed(StandardResponse reason) {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
                             } else {
@@ -120,7 +120,7 @@ public class ReportCore {
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
                     , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, eventId, joshId, new SendReportStopCallback() {
                         @Override
-                        public void onSendStopReportSuccess(Object o) {
+                        public void onSendStopReportSuccess(StandardResponse o) {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportSuccess(o);
                             } else {
@@ -129,7 +129,7 @@ public class ReportCore {
                         }
 
                         @Override
-                        public void onSendStopReportFailed(ErrorObjectInterface reason) {
+                        public void onSendStopReportFailed(StandardResponse reason) {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
                             } else {
@@ -147,7 +147,7 @@ public class ReportCore {
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
                     , mReportPersistenceManagerInterface.getOperatorId(), unitsPerCycle, jobId, new SendReportCallback() {
                         @Override
-                        public void onSendReportSuccess(Object o) {
+                        public void onSendReportSuccess(StandardResponse o) {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportSuccess(o);
                             } else {
@@ -156,7 +156,7 @@ public class ReportCore {
                         }
 
                         @Override
-                        public void onSendReportFailed(ErrorObjectInterface reason) {
+                        public void onSendReportFailed(StandardResponse reason) {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
                             } else {
@@ -173,7 +173,7 @@ public class ReportCore {
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
                     , mReportPersistenceManagerInterface.getOperatorId(), packageTypeId, units, joshId, new SendReportCallback() {
                         @Override
-                        public void onSendReportSuccess(Object o) {
+                        public void onSendReportSuccess(StandardResponse o) {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportSuccess(o);
                             } else {
@@ -182,7 +182,7 @@ public class ReportCore {
                         }
 
                         @Override
-                        public void onSendReportFailed(ErrorObjectInterface reason) {
+                        public void onSendReportFailed(StandardResponse reason) {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
                             } else {

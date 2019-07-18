@@ -2,15 +2,15 @@ package com.operators.logincore;
 
 import android.util.Base64;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.infra.GetMachinesCallback;
 import com.operators.infra.GetMachinesNetworkBridgeInterface;
 import com.operators.infra.LoginCoreCallback;
 import com.operators.infra.LoginNetworkBridgeInterface;
 import com.operators.infra.Machine;
-import com.operators.logincore.interfaces.LoginUICallback;
 import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
+import com.operators.logincore.interfaces.LoginUICallback;
 
 import java.util.ArrayList;
 
@@ -51,15 +51,15 @@ public class LoginCore {
                     }
 
                     @Override
-                    public void onGetMachinesFailed(ErrorObjectInterface reason) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "getMachines, onGetMachinesFailed" + reason.getDetailedDescription());
+                    public void onGetMachinesFailed(StandardResponse reason) {
+                        OppAppLogger.getInstance().d(LOG_TAG, "getMachines, onGetMachinesFailed" + reason.getError().getErrorDesc());
                         loginUICallback.onLoginFailed(reason);
                     }
                 }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());
             }
 
             @Override
-            public void onLoginFailed(ErrorObjectInterface reason) {
+            public void onLoginFailed(StandardResponse reason) {
                 OppAppLogger.getInstance().d(LOG_TAG, "login, onLoginFailed");
                 loginUICallback.onLoginFailed(reason);
             }
@@ -80,7 +80,7 @@ public class LoginCore {
             }
 
             @Override
-            public void onLoginFailed(ErrorObjectInterface reason) {
+            public void onLoginFailed(StandardResponse reason) {
                 OppAppLogger.getInstance().d(LOG_TAG, "silentLoginFromDashBoard, onLoginFailed");
                 loginUICallback.onLoginFailed(reason);
             }

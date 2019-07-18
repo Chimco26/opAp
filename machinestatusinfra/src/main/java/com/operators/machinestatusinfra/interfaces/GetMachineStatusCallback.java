@@ -1,10 +1,10 @@
 package com.operators.machinestatusinfra.interfaces;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 import com.operators.machinestatusinfra.models.MachineStatus;
 
 public interface GetMachineStatusCallback<T> {
     void onGetMachineStatusSucceeded(MachineStatus machineStatus);
 
-    void onGetMachineStatusFailed(ErrorObjectInterface reason);
+    void onGetMachineStatusFailed(StandardResponse reason);
 }

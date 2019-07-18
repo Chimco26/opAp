@@ -1,21 +1,13 @@
 package com.example.common.reportShift;
 
+import com.example.common.StandardResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class ServiceCallsResponse {
+public class ServiceCallsResponse extends StandardResponse {
 
-    @SerializedName("FunctionSucceed")
-    @Expose
-    private Boolean functionSucceed;
-    @SerializedName("LeaderRecordID")
-    @Expose
-    private Integer leaderRecordID;
-    @SerializedName("error")
-    @Expose
-    private Object error;
     @SerializedName("NotificationByDateTime")
     @Expose
     private Object notificationByDateTime;
@@ -25,30 +17,6 @@ public class ServiceCallsResponse {
     @SerializedName("ServiceCallsForMachine")
     @Expose
     private Object serviceCallsForMachine;
-
-    public Boolean getFunctionSucceed() {
-        return functionSucceed;
-    }
-
-    public void setFunctionSucceed(Boolean functionSucceed) {
-        this.functionSucceed = functionSucceed;
-    }
-
-    public Integer getLeaderRecordID() {
-        return leaderRecordID;
-    }
-
-    public void setLeaderRecordID(Integer leaderRecordID) {
-        this.leaderRecordID = leaderRecordID;
-    }
-
-    public Object getError() {
-        return error;
-    }
-
-    public void setError(Object error) {
-        this.error = error;
-    }
 
     public Object getNotificationByDateTime() {
         return notificationByDateTime;

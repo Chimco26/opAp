@@ -1,10 +1,10 @@
 package com.operators.reportrejectinfra;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 
 public interface GetPendingJobListCallback {
 
     void onGetPendingJobListSuccess(Object response);
 
-    void onGetPendingJobListFailed(ErrorObjectInterface reason);
+    void onGetPendingJobListFailed(StandardResponse reason);
 }

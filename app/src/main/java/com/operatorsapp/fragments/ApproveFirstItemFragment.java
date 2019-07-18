@@ -21,21 +21,18 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.common.ErrorResponse;
+import com.example.common.StandardResponse;
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.example.common.callback.ErrorObjectInterface;
-import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.RejectReasons;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
@@ -147,7 +144,7 @@ public class ApproveFirstItemFragment extends DialogFragment implements View.OnC
         mNextButton = view.findViewById(R.id.button_approve);
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
-            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+            StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             mNextButton.setEnabled(false);
         } else {
@@ -321,15 +318,15 @@ public class ApproveFirstItemFragment extends DialogFragment implements View.OnC
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override
-        public void sendReportSuccess(Object o) {//TODO crouton error
-            ResponseStatus response = objectToNewError(o);
+        public void sendReportSuccess(StandardResponse o) {//TODO crouton error
+            StandardResponse response = objectToNewError(o);
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
 
-            if (response.isFunctionSucceed()) {
-                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), false);
+            if (response.getFunctionSucceed()) {
+                mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), false);
             } else {
-                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), true);
+                mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), true);
             }
 
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
@@ -345,10 +342,10 @@ public class ApproveFirstItemFragment extends DialogFragment implements View.OnC
         }
 
         @Override
-        public void sendReportFailure(ErrorObjectInterface reason) {
+        public void sendReportFailure(StandardResponse reason) {
             dismissProgressDialog();
             OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
-            if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
+            if (reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
                     public void onSilentLoginSucceeded() {
@@ -356,16 +353,16 @@ public class ApproveFirstItemFragment extends DialogFragment implements View.OnC
                     }
 
                     @Override
-                    public void onSilentLoginFailed(ErrorObjectInterface reason) {
+                    public void onSilentLoginFailed(StandardResponse reason) {
                         OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                         dismissProgressDialog();
                     }
                 });
             } else {
 
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                 ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             }
             SendBroadcast.refreshPolling(getContext());
@@ -373,17 +370,17 @@ public class ApproveFirstItemFragment extends DialogFragment implements View.OnC
         }
     };
 
-    private ResponseStatus objectToNewError(Object o) {
-        ResponseStatus responseNewVersion;
-        if (o instanceof ResponseStatus) {
-            responseNewVersion = (ResponseStatus) o;
+    private StandardResponse objectToNewError(Object o) {
+        StandardResponse responseNewVersion;
+        if (o instanceof StandardResponse) {
+            responseNewVersion = (StandardResponse) o;
         } else {
             Gson gson = new GsonBuilder().create();
 
             ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
 
-            responseNewVersion = new ResponseStatus(true, 0, er);
-            if (responseNewVersion.getmError().getErrorCode() != 0) {
+            responseNewVersion = new StandardResponse(true, 0, er);
+            if (responseNewVersion.getError().getErrorCode() != 0) {
                 responseNewVersion.setFunctionSucceed(false);
             }
         }

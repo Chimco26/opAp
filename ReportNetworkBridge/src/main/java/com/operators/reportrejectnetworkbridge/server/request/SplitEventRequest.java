@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class SplitEventRequest {
 
-    @SerializedName("")
+    @SerializedName("SessionID")
     @Expose
     private String sessionID;
 

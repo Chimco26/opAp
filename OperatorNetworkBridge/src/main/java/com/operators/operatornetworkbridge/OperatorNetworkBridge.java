@@ -3,20 +3,20 @@ package com.operators.operatornetworkbridge;
 import android.support.annotation.NonNull;
 
 import com.app.operatorinfra.GetOperatorByIdCallback;
-import com.app.operatorinfra.OperatorNetworkBridgeInterface;
 import com.app.operatorinfra.Operator;
+import com.app.operatorinfra.OperatorNetworkBridgeInterface;
 import com.app.operatorinfra.SetOperatorForMachineCallback;
+import com.example.common.ErrorResponse;
+import com.example.common.StandardResponse;
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.operatornetworkbridge.interfaces.GetOperatorByIdNetworkManagerInterface;
 import com.operators.operatornetworkbridge.interfaces.SetOperatorForMachineNetworkManagerInterface;
-import com.operators.operatornetworkbridge.server.ErrorObject;
 import com.operators.operatornetworkbridge.server.requests.GetOperatorByIdRequest;
 import com.operators.operatornetworkbridge.server.requests.SetOperatorForMachineRequest;
-import com.operators.operatornetworkbridge.server.responses.ErrorResponse;
 import com.operators.operatornetworkbridge.server.responses.OperatorDataResponse;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,8 +54,8 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
                     if (response.body() != null) {
                         operator = response.body().getOperator();
                         if (operator == null) {
-                            ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                            getOperatorByIdCallback.onGetOperatorFailed(errorObject);
+                            response.body().getError().setDefaultErrorCodeConstant(response.body().getError().getErrorCode());
+                            getOperatorByIdCallback.onGetOperatorFailed(response.body());
                         } else {
                             getOperatorByIdCallback.onGetOperatorSucceeded(operator);
                         }
@@ -65,8 +65,8 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
                 } else {
                     if (response.body() != null) {
 
-                        ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                        getOperatorByIdCallback.onGetOperatorFailed(errorObject);
+                        response.body().getError().setDefaultErrorCodeConstant(response.body().getError().getErrorCode());
+                        getOperatorByIdCallback.onGetOperatorFailed(response.body());
                     } else {
                         OppAppLogger.getInstance().w(LOG_TAG, "Response body is null");
 
@@ -82,7 +82,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
                 } else {
                     mRetryCount = 0;
                     OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Get_operator_failed Error");
+                    StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Get_operator_failed Error");
                     getOperatorByIdCallback.onGetOperatorFailed(errorObject);
                 }
             }
@@ -107,19 +107,18 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
                     e.printStackTrace();
                 }
 
-                ResponseStatus newResponse = objectToNewError(str);
+                StandardResponse newResponse = objectToNewError(str);
 
-                if (newResponse.isFunctionSucceed()){
+                if (newResponse.getFunctionSucceed()){
                     setOperatorForMachineCallback.onSetOperatorForMachineSuccess();
                 }else {
-                    ErrorObject errorObject;
-                    if (newResponse.getmError() != null && newResponse.getmError().getErrorDesc() != null && newResponse.getmError().getErrorDesc() != null) {
-                        errorObject = errorObjectWithErrorCode(new ErrorResponse(newResponse.getmError().getErrorDesc(), newResponse.getmError().getErrorDesc(),newResponse.getmError().getErrorCode()));
+                    if (newResponse.getError() != null && newResponse.getError().getErrorDesc() != null && newResponse.getError().getErrorDesc() != null) {
+                        newResponse.getError().setDefaultErrorCodeConstant(newResponse.getError().getErrorCode());
                     }else {
-                        errorObject = errorObjectWithErrorCode(new ErrorResponse("", "",500));
+                        newResponse.getError().setDefaultErrorCodeConstant(500);
 
                     }
-                    setOperatorForMachineCallback.onSetOperatorForMachineFailed(errorObject);
+                    setOperatorForMachineCallback.onSetOperatorForMachineFailed(newResponse);
                 }
 
 //                if (response.isSuccessful()) {
@@ -140,41 +139,29 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
                 } else {
                     mRetryCount = 0;
                     OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Set_operator_for_machine_failed Error");
+                    StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Set_operator_for_machine_failed Error");
                     setOperatorForMachineCallback.onSetOperatorForMachineFailed(errorObject);
                 }
             }
         });
     }
 
-    private ResponseStatus objectToNewError(String response) {
+    private StandardResponse objectToNewError(String response) {
 
         Gson gson = new GsonBuilder().create();
-        ResponseStatus responseNewVersion;
+        StandardResponse responseNewVersion;
 
         if (response.contains("FunctionSucceed")){
-            responseNewVersion = gson.fromJson(response, ResponseStatus.class);
+            responseNewVersion = gson.fromJson(response, StandardResponse.class);
         }else{
-            com.operators.reportrejectnetworkbridge.server.response.ErrorResponse er = gson.fromJson(response, com.operators.reportrejectnetworkbridge.server.response.ErrorResponse.class);
-            responseNewVersion = new ResponseStatus(true, 0, er);
+            ErrorResponse er = gson.fromJson(response, ErrorResponse.class);
+            responseNewVersion = new StandardResponse(true, 0, er);
 
-            if (responseNewVersion.getmError().getErrorCode() != 0){
+            if (responseNewVersion.getError().getErrorCode() != 0){
                 responseNewVersion.setFunctionSucceed(false);
             }
         }
         return responseNewVersion;
     }
 
-    private ErrorObject errorObjectWithErrorCode(ErrorResponse errorResponse) {
-        ErrorObject.ErrorCode code = toCode(errorResponse.getErrorCode());
-        return new ErrorObject(code, errorResponse.getErrorDesc());
-    }
-
-    private ErrorObject.ErrorCode toCode(int errorCode) {
-        switch (errorCode) {
-            case 101:
-                return ErrorObject.ErrorCode.Credentials_mismatch;
-        }
-        return ErrorObject.ErrorCode.Unknown;
-    }
 }

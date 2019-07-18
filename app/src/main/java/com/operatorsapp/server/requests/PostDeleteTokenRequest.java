@@ -12,7 +12,7 @@ public class PostDeleteTokenRequest {
     @SerializedName("MachineID")
     private int mMachineID;
 
-    @SerializedName("")
+    @SerializedName("SessionID")
     private String mSessionId;
 
     @SerializedName("ApplicationCode")

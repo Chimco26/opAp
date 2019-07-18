@@ -1,5 +1,6 @@
 package com.operators.getmachinesstatusnetworkbridge.server.responses;
 
+import com.example.common.StandardResponse;
 import com.google.gson.annotations.SerializedName;
 import com.operators.machinestatusinfra.models.AllMachinesData;
 import com.operators.machinestatusinfra.models.MachineStatus;
@@ -7,7 +8,7 @@ import com.operators.machinestatusinfra.models.MachineStatus;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MachineStatusDataResponse extends ErrorBaseResponse {
+public class MachineStatusDataResponse extends StandardResponse {
 
     @SerializedName("DepartmentMachinePC")
     private List<Object> mDepartmentMachinePC;

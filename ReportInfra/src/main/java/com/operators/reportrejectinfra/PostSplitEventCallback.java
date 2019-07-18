@@ -1,6 +1,6 @@
 package com.operators.reportrejectinfra;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 
 /**
  * Created by alex on 05/07/2018.
@@ -9,7 +9,7 @@ import com.example.common.callback.ErrorObjectInterface;
 public interface PostSplitEventCallback {
 
 
-    void onPostSplitEventSuccess(Object response);
+    void onPostSplitEventSuccess(StandardResponse response);
 
-    void onPostSplitEventFailed(ErrorObjectInterface reason);
+    void onPostSplitEventFailed(StandardResponse reason);
 }

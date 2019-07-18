@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
  * Awesome Pojo Generator
  * */
 public class GetAllRecipesRequest{
-  @SerializedName("")
+  @SerializedName("SessionID")
   @Expose
   private String SessionID;
   @SerializedName("JobID")

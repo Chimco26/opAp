@@ -16,21 +16,18 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.example.common.ErrorResponse;
+import com.example.common.StandardResponse;
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.example.common.callback.ErrorObjectInterface;
-import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.SubReasons;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
@@ -38,7 +35,6 @@ import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.NewStopReasonsAdapter;
 import com.operatorsapp.adapters.StopReasonsAdapter;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListener;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
@@ -153,7 +149,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
             OppAppLogger.getInstance().i(LOG_TAG, "No Reasons in list");
-            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+            StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
         } else {
 
@@ -351,15 +347,15 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override
-        public void sendReportSuccess(Object o) {
-            ResponseStatus response = objectToNewError(o);
+        public void sendReportSuccess(StandardResponse o) {
+            StandardResponse response = objectToNewError(o);
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
 
-            if (response.isFunctionSucceed()) {
+            if (response.getFunctionSucceed()) {
                 // TODO: 17/07/2018 add crouton for success
-                // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
-                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), false);
+                // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+                mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), false);
                 OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
                 Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
 
@@ -374,7 +370,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
 
             } else {
-                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), true);
+                mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), true);
             }
 
             try {
@@ -394,10 +390,10 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         }
 
         @Override
-        public void sendReportFailure(ErrorObjectInterface reason) {
+        public void sendReportFailure(StandardResponse reason) {
             dismissProgressDialog();
             OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
-            if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
+            if (reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
                     public void onSilentLoginSucceeded() {
@@ -405,18 +401,18 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                     }
 
                     @Override
-                    public void onSilentLoginFailed(ErrorObjectInterface reason) {
+                    public void onSilentLoginFailed(StandardResponse reason) {
                         OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                     }
                 });
             } else {
                 String msg = "missing reports";
-                if (reason != null && reason.getDetailedDescription() != null) {
-                    msg = reason.getDetailedDescription();
+                if (reason != null && reason.getError().getErrorDesc() != null) {
+                    msg = reason.getError().getErrorDesc();
                 }
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, msg);
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, msg);
                 ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             }
 
@@ -440,17 +436,17 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         }
     }
 
-    private ResponseStatus objectToNewError(Object o) {
-        ResponseStatus responseNewVersion;
-        if (o instanceof ResponseStatus) {
-            responseNewVersion = (ResponseStatus) o;
+    private StandardResponse objectToNewError(Object o) {
+        StandardResponse responseNewVersion;
+        if (o instanceof StandardResponse) {
+            responseNewVersion = (StandardResponse) o;
         } else {
             Gson gson = new GsonBuilder().create();
 
             ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
 
-            responseNewVersion = new ResponseStatus(true, 0, er);
-            if (responseNewVersion.getmError().getErrorCode() != 0) {
+            responseNewVersion = new StandardResponse(true, 0, er);
+            if (responseNewVersion.getError().getErrorCode() != 0) {
                 responseNewVersion.setFunctionSucceed(false);
             }
         }

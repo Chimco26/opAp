@@ -1,35 +1,22 @@
 package com.example.common.reportShift;
 
+import com.example.common.StandardResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class DepartmentShiftGraphResponse {
+public class DepartmentShiftGraphResponse extends StandardResponse {
 
-    @SerializedName("FunctionSucceed")
-    @Expose
-    private Boolean functionSucceed;
     @SerializedName("Departments")
     @Expose
     private List<Department> departments = null;
     @SerializedName("GraphColors")
     @Expose
     private List<GraphColor> graphColors = null;
-    @SerializedName("error")
-    @Expose
-    private Object error;
-    @SerializedName("LeaderRecordID")
-    @Expose
-    private Integer leaderRecordID;
 
-    public Boolean getFunctionSucceed() {
-        return functionSucceed;
-    }
 
-    public void setFunctionSucceed(Boolean functionSucceed) {
-        this.functionSucceed = functionSucceed;
-    }
+
 
     public List<Department> getDepartments() {
         return departments;
@@ -47,20 +34,5 @@ public class DepartmentShiftGraphResponse {
         this.graphColors = graphColors;
     }
 
-    public Object getError() {
-        return error;
-    }
-
-    public void setError(Object error) {
-        this.error = error;
-    }
-
-    public Integer getLeaderRecordID() {
-        return leaderRecordID;
-    }
-
-    public void setLeaderRecordID(Integer leaderRecordID) {
-        this.leaderRecordID = leaderRecordID;
-    }
 
 }

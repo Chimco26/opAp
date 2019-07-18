@@ -30,21 +30,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.ErrorResponse;
+import com.example.common.StandardResponse;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnErrorListener;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.reportrejectinfra.GetJobDetailsCallback;
 import com.operators.reportrejectinfra.GetPendingJobListCallback;
 import com.operators.reportrejectinfra.PostActivateJobCallback;
 import com.operators.reportrejectinfra.PostUpdtaeActionsCallback;
-import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Action;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsByJob;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsUpdateRequest;
@@ -57,14 +54,12 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDe
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobStandardResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
-import com.operators.reportrejectnetworkbridge.server.response.StandardResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.JobActionsAdapter;
 import com.operatorsapp.adapters.JobHeadersAdapter;
 import com.operatorsapp.adapters.JobMaterialsSplitAdapter;
 import com.operatorsapp.adapters.PendingJobPropsAdapter;
 import com.operatorsapp.adapters.PendingJobsAdapter;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.BasicTitleTextBtnDialog;
 import com.operatorsapp.dialogs.BasicTitleTextSingleBtnDialog;
 import com.operatorsapp.dialogs.GenericDialog;
@@ -330,10 +325,10 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             }
 
             @Override
-            public void onGetPendingJobListFailed(ErrorObjectInterface reason) {
+            public void onGetPendingJobListFailed(StandardResponse reason) {
 
                 ProgressDialogManager.dismiss();
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, getString(R.string.get_panding_jobs_failed_error));
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, getString(R.string.get_panding_jobs_failed_error));
                 ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
 
             }
@@ -359,12 +354,12 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                 if (response == null) {
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
+                    StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
 
                 } else if (((StandardResponse) response).getError() != null) {
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
+                    StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(JobActionActivity.this, errorObject);
 
 
@@ -376,11 +371,11 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             }
 
             @Override
-            public void onGetJobDetailsFailed(ErrorObjectInterface reason) {
+            public void onGetJobDetailsFailed(StandardResponse reason) {
 
                 ProgressDialogManager.dismiss();
 
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, getString(R.string.get_jobs_details_failed_error));
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, getString(R.string.get_jobs_details_failed_error));
                 ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
             }
         }, NetworkManager.getInstance(), new JobDetailsRequest(persistanceManager.getSessionId(), jobIds), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
@@ -408,12 +403,12 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         simpleRequests.postUpdateActions(persistanceManager.getSiteUrl(), new PostUpdtaeActionsCallback() {
 
             @Override
-            public void onPostUpdtaeActionsSuccess(Object response) {
+            public void onPostUpdtaeActionsSuccess(StandardResponse response) {
 
             }
 
             @Override
-            public void onPostUpdtaeActionsFailed(ErrorObjectInterface reason) {
+            public void onPostUpdtaeActionsFailed(StandardResponse reason) {
 
             }
         }, NetworkManager.getInstance(), actionsUpdateRequest, persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
@@ -432,18 +427,18 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         simpleRequests.postActivateJob(persistanceManager.getSiteUrl(), new PostActivateJobCallback() {
 
             @Override
-            public void onPostActivateJobSuccess(Object response) {
+            public void onPostActivateJobSuccess(StandardResponse response) {
 
                 ProgressDialogManager.dismiss();
 
                 if (response == null) {
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
+                    StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
 
                 } else if (((StandardResponse) response).getError() != null) {
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
+                    StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(JobActionActivity.this, errorObject);
 
 
@@ -454,11 +449,11 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             }
 
             @Override
-            public void onPostActivateJobFailed(ErrorObjectInterface reason) {
+            public void onPostActivateJobFailed(StandardResponse reason) {
 
                 ProgressDialogManager.dismiss();
 
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, reason.getDetailedDescription());
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, reason.getError().getErrorDesc());
                 ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
             }
         }, NetworkManager.getInstance(), activateJobRequest, persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
@@ -1143,14 +1138,14 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         PostUpdateNotesForJobRequest updateNotesRequest = new PostUpdateNotesForJobRequest(pm.getSessionId(), mCurrentPendingJob.getID(), note);
         simpleRequests.postUpdateNotesForJob(pm.getSiteUrl(), new PostUpdateNotesForJobCallback() {
             @Override
-            public void onUpdateNotesSuccess(ResponseStatus responseNewVersion) {
+            public void onUpdateNotesSuccess(StandardResponse responseNewVersion) {
                 mProductNoteTv.setText(note);
                 ProgressDialogManager.dismiss();
                 alert.dismiss();
             }
 
             @Override
-            public void onUpdateNotesFailed(ErrorObjectInterface reason) {
+            public void onUpdateNotesFailed(StandardResponse reason) {
                 ProgressDialogManager.dismiss();
             }
         }, NetworkManager.getInstance(), updateNotesRequest, pm.getTotalRetries(), pm.getRequestTimeout());

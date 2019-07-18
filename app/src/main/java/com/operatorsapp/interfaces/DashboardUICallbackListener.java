@@ -3,11 +3,11 @@ package com.operatorsapp.interfaces;
 import android.util.SparseArray;
 
 import com.example.common.Event;
+import com.example.common.StandardResponse;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.example.common.permissions.WidgetInfo;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.example.common.callback.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
 
@@ -31,7 +31,7 @@ public interface DashboardUICallbackListener {
 
     void onTimerChanged(String timeToEndInHours);
 
-    void onDataFailure(ErrorObjectInterface reason, CallType callType);
+    void onDataFailure(StandardResponse reason, CallType callType);
 
     void onApproveFirstItemEnabledChanged(boolean enabled);
 

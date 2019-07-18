@@ -1,6 +1,6 @@
 package com.operators.reportfieldsformachineinfra;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 
 /**
  * Created by Sergey on 02/08/2016.
@@ -8,5 +8,5 @@ import com.example.common.callback.ErrorObjectInterface;
 public interface GetReportFieldsForMachineCallback {
     void onGetReportFieldsForMachineSuccess(ReportFieldsForMachine reportFieldsForMachine);
 
-    void onGetReportFieldsForMachineFailed(ErrorObjectInterface reason);
+    void onGetReportFieldsForMachineFailed(StandardResponse reason);
 }

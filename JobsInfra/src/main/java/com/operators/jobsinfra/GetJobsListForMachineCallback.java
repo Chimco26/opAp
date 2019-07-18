@@ -1,9 +1,9 @@
 package com.operators.jobsinfra;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 
 public interface GetJobsListForMachineCallback<T> {
     void onGetJobsListForMachineSuccess(JobListForMachine jobListForMachine);
 
-    void onGetJobsListForMachineFailed(ErrorObjectInterface reason);
+    void onGetJobsListForMachineFailed(StandardResponse reason);
 }

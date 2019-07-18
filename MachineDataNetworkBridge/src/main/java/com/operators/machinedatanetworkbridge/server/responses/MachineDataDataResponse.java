@@ -1,11 +1,12 @@
 package com.operators.machinedatanetworkbridge.server.responses;
 
+import com.example.common.StandardResponse;
 import com.google.gson.annotations.SerializedName;
 import com.operators.machinedatainfra.models.Widget;
 
 import java.util.ArrayList;
 
-public class MachineDataDataResponse extends ErrorBaseResponse {
+public class MachineDataDataResponse extends StandardResponse {
 
     @SerializedName("MachineID")
     private int mMachineID;

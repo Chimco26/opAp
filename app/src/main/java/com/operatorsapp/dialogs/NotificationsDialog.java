@@ -1,6 +1,5 @@
 package com.operatorsapp.dialogs;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -12,14 +11,11 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.operatorsapp.R;
-import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.adapters.NotificationHistoryAdapter;
 import com.operatorsapp.adapters.NotificationsTemplateAdapter;
 import com.operatorsapp.managers.PersistenceManager;
@@ -28,7 +24,6 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.TopNotificationRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
-import com.operatorsapp.utils.Consts;
 
 import java.util.ArrayList;
 
@@ -114,7 +109,7 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
                 ProgressDialogManager.dismiss();
-                if (response.body() != null && response.body().getmError() == null) {
+                if (response.body() != null && response.body().getError().getErrorDesc() == null) {
                     mTemplateList = response.body().getmNotificationsList();
                     openTemplateDialog();
                 }else {

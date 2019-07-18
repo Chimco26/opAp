@@ -58,6 +58,7 @@ import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
 import com.example.common.Event;
+import com.example.common.StandardResponse;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
@@ -65,8 +66,6 @@ import com.example.common.permissions.WidgetInfo;
 import com.example.oppapplog.OppAppLogger;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.infra.Machine;
@@ -78,7 +77,6 @@ import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListene
 import com.operators.reportfieldsformachineinfra.PackageTypes;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.Technician;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
@@ -133,7 +131,6 @@ import com.operatorsapp.view.TimeLineView;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 
 import org.litepal.crud.DataSupport;
-import org.litepal.util.Const;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -928,7 +925,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
 
         @Override
-        public void onOperatorDataReceiveFailure(ErrorObjectInterface reason) {
+        public void onOperatorDataReceiveFailure(StandardResponse reason) {
 
         }
 
@@ -952,8 +949,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
 
         @Override
-        public void onSetOperatorFailed(ErrorObjectInterface reason) {
-            OppAppLogger.getInstance().d(LOG_TAG, "onSetOperatorFailed() " + reason.getError());
+        public void onSetOperatorFailed(StandardResponse reason) {
+            OppAppLogger.getInstance().d(LOG_TAG, "onSetOperatorFailed() " + reason.getError().getErrorDesc());
         }
 
     };
@@ -1403,15 +1400,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
         PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, technician.getID(), body, operatorName, technician.getEName(), sourceUserId);
-        NetworkManager.getInstance().postTechnicianCall(request, new Callback<ResponseStatus>() {
+        NetworkManager.getInstance().postTechnicianCall(request, new Callback<StandardResponse>() {
             @Override
-            public void onResponse(@NonNull Call<ResponseStatus> call, @NonNull Response<ResponseStatus> response) {
-                if (response.body() != null && response.body().getmError() == null) {
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+                if (response.body() != null && response.body().getError().getErrorDesc() == null) {
 
                     PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
                     PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
-                    TechCallInfo techCall = new TechCallInfo(0, techName, getString(R.string.called_technician) + "\n" + techName, Calendar.getInstance().getTimeInMillis(), response.body().getmLeaderRecordID(), technician.getID());
+                    TechCallInfo techCall = new TechCallInfo(0, techName, getString(R.string.called_technician) + "\n" + techName, Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID());
                     PersistenceManager.getInstance().setCalledTechnician(techCall);
                     PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                     setTechnicianCallStatus();
@@ -1430,8 +1427,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                            .build());
                 } else {
                     String msg = "failed";
-                    if (response.body() != null && response.body().getmError() != null) {
-                        msg = response.body().getmError().getErrorDesc();
+                    if (response.body() != null && response.body().getError() != null) {
+                        msg = response.body().getError().getErrorDesc();
                     }
                     onFailure(call, new Throwable(msg));
                 }
@@ -1439,7 +1436,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
 
             @Override
-            public void onFailure(@NonNull Call<ResponseStatus> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 ProgressDialogManager.dismiss();
                 PersistenceManager.getInstance().setCalledTechnicianName("");
 
@@ -1687,15 +1684,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 final int technicianId = techniciansList.get(position).getID();
 
                 PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, technicianId, body, operatorName, techniciansList.get(position).getEName(), sourceUserId);
-                NetworkManager.getInstance().postTechnicianCall(request, new Callback<ResponseStatus>() {
+                NetworkManager.getInstance().postTechnicianCall(request, new Callback<StandardResponse>() {
                     @Override
-                    public void onResponse(@NonNull Call<ResponseStatus> call, @NonNull Response<ResponseStatus> response) {
-                        if (response.body() != null && response.body().getmError() == null) {
+                    public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+                        if (response.body() != null && response.body().getError().getErrorDesc() == null) {
 
                             PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
                             PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
-                            TechCallInfo techCall = new TechCallInfo(0, techName, getString(R.string.called_technician) + "\n" + techName, Calendar.getInstance().getTimeInMillis(), response.body().getmLeaderRecordID(), technicianId);
+                            TechCallInfo techCall = new TechCallInfo(0, techName, getString(R.string.called_technician) + "\n" + techName, Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technicianId);
                             PersistenceManager.getInstance().setCalledTechnician(techCall);
                             PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                             setTechnicianCallStatus();
@@ -1713,15 +1710,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                                    .build());
                         } else {
                             String msg = "failed";
-                            if (response.body() != null && response.body().getmError() != null) {
-                                msg = response.body().getmError().getErrorDesc();
+                            if (response.body() != null && response.body().getError() != null) {
+                                msg = response.body().getError().getErrorDesc();
                             }
                             onFailure(call, new Throwable(msg));
                         }
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<ResponseStatus> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                         ProgressDialogManager.dismiss();
                         PersistenceManager.getInstance().setCalledTechnicianName("");
 
@@ -1956,9 +1953,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                    notification[0].getmTargetUserId() + "");
 
             ProgressDialogManager.show(getActivity());
-            NetworkManager.getInstance().postResponseToNotification(request, new Callback<ResponseStatus>() {
+            NetworkManager.getInstance().postResponseToNotification(request, new Callback<StandardResponse>() {
                 @Override
-                public void onResponse(@NonNull Call<ResponseStatus> call, @NonNull Response<ResponseStatus> response) {
+                public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
 
                     new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.RESPOND_TO_NOTIFICATION, true, "Respond to Notification- ID: " + notification[0].getmNotificationID());
 
@@ -1976,7 +1973,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<ResponseStatus> call, @NonNull Throwable t) {
+                public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                     new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.RESPOND_TO_NOTIFICATION, false, "Respond to Notification- ID: " + notification[0].getmNotificationID());
                     if (ProgressDialogManager.isShowing()) {
                         ProgressDialogManager.dismiss();
@@ -2854,7 +2851,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onDataFailure(final ErrorObjectInterface reason, CallType callType) {
+    public void onDataFailure(final StandardResponse reason, CallType callType) {
 
         if (mShiftLogSwipeRefresh.isRefreshing()) {
             mShiftLogSwipeRefresh.setRefreshing(false);
@@ -2880,13 +2877,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         silentLogin(reason);
     }
 
-    private void silentLogin(ErrorObjectInterface reason) {
+    private void silentLogin(StandardResponse reason) {
 
         if (!thereAlreadyRequest && getActivity() != null) {
 
             thereAlreadyRequest = true;
 
-            if (reason.getError() == ErrorObjectInterface.ErrorCode.Retrofit) {
+            if (reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Retrofit) {
 
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mCroutonCallback, new SilentLoginCallback() {
                     @Override
@@ -2898,7 +2895,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
 
                     @Override
-                    public void onSilentLoginFailed(ErrorObjectInterface reason) {
+                    public void onSilentLoginFailed(StandardResponse reason) {
 
                         ShowCrouton.operatorLoadingErrorCrouton(mCroutonCallback, reason.getError().toString());
                     }
@@ -3287,9 +3284,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         final PersistenceManager pm = PersistenceManager.getInstance();
         final String id = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
         PostNotificationTokenRequest request = new PostNotificationTokenRequest(pm.getSessionId(), pm.getMachineId(), pm.getNotificationToken(), id);
-        NetworkManager.getInstance().postNotificationToken(request, new Callback<ResponseStatus>() {
+        NetworkManager.getInstance().postNotificationToken(request, new Callback<StandardResponse>() {
             @Override
-            public void onResponse(Call<ResponseStatus> call, Response<ResponseStatus> response) {
+            public void onResponse(Call<StandardResponse> call, Response<StandardResponse> response) {
                 if (response != null && response.body() != null && response.isSuccessful()) {
                     Log.d(LOG_TAG, "token sent");
                     if (mListener != null) {
@@ -3301,7 +3298,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
 
             @Override
-            public void onFailure(Call<ResponseStatus> call, Throwable t) {
+            public void onFailure(Call<StandardResponse> call, Throwable t) {
                 Log.d(LOG_TAG, "token failed");
             }
         });
@@ -3323,7 +3320,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
 
-                if (response != null && response.body() != null && response.body().getmError() == null) {
+                if (response != null && response.body() != null && response.body().getError().getErrorDesc() == null) {
 
                     // TODO: 28/03/2019 update tech list for new calls
                     ArrayList<TechCallInfo> techList = PersistenceManager.getInstance().getCalledTechnician();

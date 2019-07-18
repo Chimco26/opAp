@@ -6,13 +6,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.example.common.StandardResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
@@ -71,9 +71,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
         if (machineId > 0 && siteUrl.length() > 0) {
             final String id = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
             PostNotificationTokenRequest request = new PostNotificationTokenRequest(sessionID, machineId, token, id);
-            NetworkManager.getInstance().postNotificationToken(request, new Callback<ResponseStatus>() {
+            NetworkManager.getInstance().postNotificationToken(request, new Callback<StandardResponse>() {
                 @Override
-                public void onResponse(Call<ResponseStatus> call, Response<ResponseStatus> response) {
+                public void onResponse(Call<StandardResponse> call, Response<StandardResponse> response) {
                     if (response != null && response.body() != null && response.isSuccessful()) {
                         Log.d(LOG_TAG, "token sent");
                         pm.setNeedUpdateToken(false);
@@ -90,7 +90,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                 }
 
                 @Override
-                public void onFailure(Call<ResponseStatus> call, Throwable t) {
+                public void onFailure(Call<StandardResponse> call, Throwable t) {
                     Log.d(LOG_TAG, "token failed");
                     if (retry[0]){
                         retry[0] = false;

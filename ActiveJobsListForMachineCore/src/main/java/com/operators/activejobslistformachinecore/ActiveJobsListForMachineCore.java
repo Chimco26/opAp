@@ -1,6 +1,6 @@
 package com.operators.activejobslistformachinecore;
 
-import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.StandardResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
@@ -56,7 +56,7 @@ public class ActiveJobsListForMachineCore {
                         }
 
                         @Override
-                        public void onGetActiveJobsListForMachineFailed(ErrorObjectInterface reason) {
+                        public void onGetActiveJobsListForMachineFailed(StandardResponse reason) {
                             mActiveJobsListForMachineUICallbackListener.onActiveJobsListForMachineReceiveFailed(reason);
                             OppAppLogger.getInstance().e(LOG_TAG, "getActiveJobsListForMachine() - onGetActiveJobsListForMachineFailed() ");
 

@@ -1,6 +1,7 @@
 package com.operators.reportfieldsformachinecore;
 
 
+import com.example.common.StandardResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
@@ -82,7 +83,7 @@ public class ReportFieldsForMachineCore {
                         }
 
                         @Override
-                        public void onGetReportFieldsForMachineFailed(ErrorObjectInterface reason) {
+                        public void onGetReportFieldsForMachineFailed(StandardResponse reason) {
                             if (mReportFieldsForMachineUICallback != null) {
                                 if (reason != null) {
                                     mReportFieldsForMachineUICallback.onReportFieldsReceivedSFailure(reason);

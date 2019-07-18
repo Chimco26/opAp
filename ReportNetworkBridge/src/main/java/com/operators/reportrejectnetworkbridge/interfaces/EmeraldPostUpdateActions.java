@@ -1,7 +1,7 @@
 package com.operators.reportrejectnetworkbridge.interfaces;
 
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsUpdateRequest;
-import com.operators.reportrejectnetworkbridge.server.response.StandardResponse;
+import com.example.common.StandardResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

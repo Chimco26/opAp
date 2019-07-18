@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class BaseRequest {
 
-    @SerializedName("")
+    @SerializedName("SessionID")
     private String sessionId;
 
     public BaseRequest(String sessionId) {

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class ActualBarExtraDetailsRequest {
 
-    @SerializedName("")
+    @SerializedName("SessionID")
     private String mSessionID;
     @SerializedName("StartTime")
     private String StartTime;

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class JobDetailsRequest {
 
-    @SerializedName("")
+    @SerializedName("SessionID")
     @Expose
     private String sessionID;
     @SerializedName("Jobs")

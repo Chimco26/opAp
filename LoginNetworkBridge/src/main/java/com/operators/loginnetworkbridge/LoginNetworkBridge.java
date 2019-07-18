@@ -3,14 +3,13 @@ package com.operators.loginnetworkbridge;
 
 import android.support.annotation.NonNull;
 
+import com.example.common.StandardResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.infra.LoginCoreCallback;
 import com.operators.infra.LoginNetworkBridgeInterface;
 import com.operators.loginnetworkbridge.interfaces.LoginNetworkManagerInterface;
-import com.operators.loginnetworkbridge.server.ErrorObject;
 import com.operators.loginnetworkbridge.server.requests.LoginRequest;
-import com.operators.loginnetworkbridge.server.responses.ErrorResponse;
 import com.operators.loginnetworkbridge.server.responses.SessionResponse;
 
 import java.util.concurrent.TimeUnit;
@@ -30,7 +29,7 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
     public void login(final String siteUrl, final String userName, final String password, String language, final LoginCoreCallback loginCoreCallback, final int totalRetries, int specificRequestTimeout) {
         HttpUrl httpUrl = HttpUrl.parse(siteUrl);
         if (httpUrl == null) {
-            loginCoreCallback.onLoginFailed(new ErrorObject(ErrorObjectInterface.ErrorCode.Url_not_correct, "Site URL is not correct"));
+            loginCoreCallback.onLoginFailed(new StandardResponse(ErrorObjectInterface.ErrorCode.Url_not_correct, "Site URL is not correct"));
             return;
         }
 
@@ -43,13 +42,13 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
                     onFailure(call, new NullPointerException());
                 } else {
                     SessionResponse.UserSessionIDResult sessionResult = response.body().getUserSessionIDResult();
-                    if (sessionResult.getErrorResponse() == null) {
+                    if (sessionResult.getError().getErrorDesc() == null) {
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestSucceed(), " + response.body().getUserSessionIDResult());
                         loginCoreCallback.onLoginSucceeded(response.body().getUserSessionIDResult().getSessionIds().get(0).getSessionId(), sessionResult.getSessionIds().get(0).getmSiteName(), sessionResult.getSessionIds().get(0).getUserID());
                     } else {
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequest(), getSessionId failed");
-                        ErrorObject errorObject = errorObjectWithErrorCode(sessionResult.getErrorResponse());
-                        loginCoreCallback.onLoginFailed(errorObject);
+                        sessionResult.getError().setDefaultErrorCodeConstant(sessionResult.getError().getErrorCode());
+                        loginCoreCallback.onLoginFailed(sessionResult);
                     }
                 }
 
@@ -64,7 +63,7 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
                 } else {
                     mRetryCount = 0;
                     OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
+                    StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "General Error");
                     loginCoreCallback.onLoginFailed(errorObject);
                 }
             }
@@ -74,19 +73,6 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
 
     public void inject(LoginNetworkManagerInterface loginNetworkManagerInterface) {
         mLoginNetworkManagerInterface = loginNetworkManagerInterface;
-    }
-
-    private ErrorObject errorObjectWithErrorCode(ErrorResponse errorResponse) {
-        ErrorObject.ErrorCode code = toCode(errorResponse.getErrorCode());
-        return new ErrorObject(code, errorResponse.getErrorDesc());
-    }
-
-    private ErrorObject.ErrorCode toCode(int errorCode) {
-        switch (errorCode) {
-            case 101:
-                return ErrorObject.ErrorCode.Credentials_mismatch;
-        }
-        return ErrorObject.ErrorCode.Unknown;
     }
 
 }

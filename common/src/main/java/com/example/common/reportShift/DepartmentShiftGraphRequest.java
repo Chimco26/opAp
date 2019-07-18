@@ -7,7 +7,7 @@ import java.util.List;
 
 public class DepartmentShiftGraphRequest {
 
-    @SerializedName("")
+    @SerializedName("SessionID")
     @Expose
     private String sessionID;
     @SerializedName("ReqDepartment")
