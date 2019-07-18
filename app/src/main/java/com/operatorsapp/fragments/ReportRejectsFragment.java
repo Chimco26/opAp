@@ -30,7 +30,6 @@ import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
@@ -157,7 +156,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
 //        getActiveJobs();
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
-            StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+            StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             mNextButton.setEnabled(false);
             mNextButton.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_bg_disabled));
@@ -416,14 +415,14 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
                     @Override
                     public void onSilentLoginFailed(StandardResponse reason) {
                         OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
-                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                         dismissProgressDialog();
                     }
                 });
             } else {
 
-                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, reason.getError().getErrorDesc());
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, reason.getError().getErrorDesc());
                 ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, errorObject.getError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                 if (getFragmentManager() != null) {
 

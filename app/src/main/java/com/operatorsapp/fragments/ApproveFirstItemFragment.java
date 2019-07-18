@@ -28,7 +28,6 @@ import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.RejectReasons;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
@@ -145,7 +144,7 @@ public class ApproveFirstItemFragment extends DialogFragment implements View.OnC
         mNextButton = view.findViewById(R.id.button_approve);
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
-            StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+            StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             mNextButton.setEnabled(false);
         } else {
@@ -356,14 +355,14 @@ public class ApproveFirstItemFragment extends DialogFragment implements View.OnC
                     @Override
                     public void onSilentLoginFailed(StandardResponse reason) {
                         OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
-                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                         dismissProgressDialog();
                     }
                 });
             } else {
 
-                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                 ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             }
             SendBroadcast.refreshPolling(getContext());

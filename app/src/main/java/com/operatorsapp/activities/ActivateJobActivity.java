@@ -7,8 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 
+import com.example.common.ErrorResponse;
 import com.example.common.StandardResponse;
-import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operators.reportrejectinfra.GetJobDetailsCallback;
 import com.operators.reportrejectinfra.GetPendingJobListCallback;
 import com.operators.reportrejectinfra.PostActivateJobCallback;
@@ -260,7 +260,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
                     return;
                 }
                 ProgressDialogManager.dismiss();
-                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, getString(R.string.get_panding_jobs_failed_error));
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, getString(R.string.get_panding_jobs_failed_error));
                 ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
 //                finish();
                 findViewById(R.id.AJA_no_data_tv).setVisibility(View.VISIBLE);
@@ -289,12 +289,12 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
                 if (response == null) {
 
-                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
+                    StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
 
                 } else if (((StandardResponse) response).getError().getErrorDesc() != null) {
 
-                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
+                    StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
 
 
@@ -313,7 +313,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
                 }
                 ProgressDialogManager.dismiss();
 
-                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, getString(R.string.get_jobs_details_failed_error));
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, getString(R.string.get_jobs_details_failed_error));
                 ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
             }
         }, NetworkManager.getInstance(), new JobDetailsRequest(persistanceManager.getSessionId(), jobIds), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
@@ -374,12 +374,12 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
                 if (response == null) {
 
-                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
+                    StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
 
                 } else if (((StandardResponse) response).getError().getErrorDesc() != null) {
 
-                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
+                    StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(ActivateJobActivity.this, errorObject);
 
                 } else {
@@ -395,7 +395,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
                 }
                 ProgressDialogManager.dismiss();
 
-                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, reason.getError().getErrorDesc());
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, reason.getError().getErrorDesc());
                 ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
             }
         }, NetworkManager.getInstance(), activateJobRequest, persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());

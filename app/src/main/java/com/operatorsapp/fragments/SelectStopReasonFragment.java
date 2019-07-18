@@ -19,7 +19,6 @@ import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.SubReasons;
 import com.operators.reportrejectcore.ReportCallbackListener;
@@ -348,13 +347,13 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
                     @Override
                     public void onSilentLoginFailed(StandardResponse reason) {
                         OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
-                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                     }
                 });
             } else {
 
-                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                 ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             }
 

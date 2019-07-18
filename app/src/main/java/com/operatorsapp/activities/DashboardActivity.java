@@ -72,7 +72,6 @@ import com.operators.logincore.LoginCore;
 import com.operators.logincore.interfaces.LoginUICallback;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinedatanetworkbridge.GetMachineDataNetworkBridge;
-import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatornetworkbridge.OperatorNetworkBridge;
@@ -2579,7 +2578,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             errorResponse = " ";
         }
         if (isError) {
-            StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, errorResponse);
+            StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, errorResponse);
             ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject);
         } else {
             mCroutonCreator.showCrouton(DashboardActivity.this, errorResponse, 0, getCroutonRoot(), CroutonCreator.CroutonType.SUCCESS);
@@ -2780,14 +2779,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     @Override
                     public void onSilentLoginFailed(StandardResponse reason) {
                         OppAppLogger.getInstance().w(TAG, "Failed silent login");
-                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
                         ProgressDialogManager.dismiss();
                     }
                 });
             } else {
 
-                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, reason.getError().getErrorDesc());
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, reason.getError().getErrorDesc());
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject.getError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
 
             }
@@ -2833,13 +2832,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     @Override
                     public void onSilentLoginFailed(StandardResponse reason) {
                         OppAppLogger.getInstance().w(TAG, "Failed silent login");
-                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
                         ProgressDialogManager.dismiss();
                     }
                 });
             } else {
-                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, reason.getError().getErrorDesc());
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, reason.getError().getErrorDesc());
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject.getError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                 new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.REJECT_REPORT, false, "Report Reject- " + errorObject.getError().getErrorDesc());
             }
@@ -2896,7 +2895,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 });
             } else {
 
-                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                 ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
             }
             new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.END_SETUP, false, "End setup- " + reason.getError().getErrorDesc() );
@@ -3228,12 +3227,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 if (response == null) {
 
-                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
+                    StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
 
                 } else if (((StandardResponse) response).getError() != null) {
 
-                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
+                    StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject);
 
                 }if (((StandardResponse)response).getFunctionSucceed()){
@@ -3246,7 +3245,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 ProgressDialogManager.dismiss();
 
-                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, reason.getError().getErrorDesc());
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, reason.getError().getErrorDesc());
                 ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
             }
         }, NetworkManager.getInstance(), activateJobRequest, persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());

@@ -2,6 +2,7 @@ package com.operatorsapp.server.pulling;
 
 import android.util.Log;
 
+import com.example.common.ErrorResponse;
 import com.example.common.Event;
 import com.example.common.StandardResponse;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
@@ -16,7 +17,6 @@ import com.operators.machinedatainfra.interfaces.GetMachineDataCallback;
 import com.operators.machinedatainfra.interfaces.GetMachineDataNetworkBridgeInterface;
 import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerInterface;
 import com.operators.machinedatainfra.models.Widget;
-import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusCallback;
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusNetworkBridgeInterface;
 import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
@@ -276,7 +276,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             @Override
             public void onFailure(Call<PermissionResponse> call, Throwable t) {
                 OppAppLogger.getInstance().w(LOG_TAG, "getPermissionForMachine() failed");
-                StandardResponse errorResponse = new StandardResponse(ErrorObject.ErrorCode.No_data, "getPermissionForMachine Response is null Error");
+                StandardResponse errorResponse = new StandardResponse(ErrorResponse.ErrorCode.No_data, "getPermissionForMachine Response is null Error");
                 mMachinePermissionsCallback.onMachinePermissionCallbackFailed(errorResponse);
             }
         });

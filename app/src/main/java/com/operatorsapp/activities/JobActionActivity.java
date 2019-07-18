@@ -30,13 +30,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.common.ErrorResponse;
 import com.example.common.StandardResponse;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnErrorListener;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operators.reportrejectinfra.GetJobDetailsCallback;
 import com.operators.reportrejectinfra.GetPendingJobListCallback;
 import com.operators.reportrejectinfra.PostActivateJobCallback;
@@ -328,7 +328,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             public void onGetPendingJobListFailed(StandardResponse reason) {
 
                 ProgressDialogManager.dismiss();
-                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, getString(R.string.get_panding_jobs_failed_error));
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, getString(R.string.get_panding_jobs_failed_error));
                 ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
 
             }
@@ -354,12 +354,12 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                 if (response == null) {
 
-                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
+                    StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
 
                 } else if (((StandardResponse) response).getError() != null) {
 
-                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
+                    StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(JobActionActivity.this, errorObject);
 
 
@@ -375,7 +375,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                 ProgressDialogManager.dismiss();
 
-                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, getString(R.string.get_jobs_details_failed_error));
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, getString(R.string.get_jobs_details_failed_error));
                 ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
             }
         }, NetworkManager.getInstance(), new JobDetailsRequest(persistanceManager.getSessionId(), jobIds), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
@@ -433,12 +433,12 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                 if (response == null) {
 
-                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
+                    StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
 
                 } else if (((StandardResponse) response).getError() != null) {
 
-                    StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
+                    StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(JobActionActivity.this, errorObject);
 
 
@@ -453,7 +453,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                 ProgressDialogManager.dismiss();
 
-                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, reason.getError().getErrorDesc());
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, reason.getError().getErrorDesc());
                 ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
             }
         }, NetworkManager.getInstance(), activateJobRequest, persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());

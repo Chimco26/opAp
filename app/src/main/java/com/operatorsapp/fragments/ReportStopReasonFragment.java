@@ -23,7 +23,6 @@ import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.SubReasons;
 import com.operators.reportrejectcore.ReportCallbackListener;
@@ -150,7 +149,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
             OppAppLogger.getInstance().i(LOG_TAG, "No Reasons in list");
-            StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+            StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
         } else {
 
@@ -404,7 +403,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                     @Override
                     public void onSilentLoginFailed(StandardResponse reason) {
                         OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
-                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                     }
                 });
@@ -413,7 +412,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 if (reason != null && reason.getError().getErrorDesc() != null) {
                     msg = reason.getError().getErrorDesc();
                 }
-                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, msg);
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, msg);
                 ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             }
 

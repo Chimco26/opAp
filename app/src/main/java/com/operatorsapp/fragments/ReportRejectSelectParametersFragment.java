@@ -20,10 +20,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.common.ErrorResponse;
 import com.example.common.StandardResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
-import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
@@ -376,7 +376,7 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
                     public void onSilentLoginFailed(StandardResponse reason)
                     {
                         OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
-                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                         dismissProgressDialog();
                     }
@@ -385,7 +385,7 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
             else
             {
 
-                StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                 ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             }
         }

@@ -48,7 +48,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
             public void onResponse(Call<ShiftLogResponse> call, Response<ShiftLogResponse> response) {
 
 
-                if (response.body() != null && response.body().getEvents() != null && (response.body().getErrorResponse() == null || response.body().getErrorResponse().getErrorCode() == 1967)) {
+                if (response.body() != null && response.body().getEvents() != null && (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorCode() == 1967)) {
                     ArrayList<Event> events = response.body().getEvents();
 
                     OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse " + events.size() + " events");

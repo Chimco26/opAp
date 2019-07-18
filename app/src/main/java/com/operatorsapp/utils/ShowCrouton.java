@@ -5,8 +5,8 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 
+import com.example.common.ErrorResponse;
 import com.example.common.StandardResponse;
-import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -22,40 +22,40 @@ public class ShowCrouton {
             String credentialsError = OperatorApplication.getAppContext().getString(R.string.could_not_reach_server_error);
             createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.NETWORK_ERROR,prefix,credentialsError);
         } else {
-            if (ErrorObject.ErrorCode.Url_not_correct.equals(reason.getError().getErrorCodeConstant())) {
+            if (ErrorResponse.ErrorCode.Url_not_correct.equals(reason.getError().getErrorCodeConstant())) {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_log_in).concat(" ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.url_error);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.URL_ERROR,prefix,credentialsError);
-            } else if (ErrorObject.ErrorCode.Credentials_mismatch.equals(reason.getError().getErrorCodeConstant())) {
+            } else if (ErrorResponse.ErrorCode.Credentials_mismatch.equals(reason.getError().getErrorCodeConstant())) {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.credentials_error);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError);
-            } else if (ErrorObject.ErrorCode.No_data.equals(reason.getError().getErrorCodeConstant())) {
+            } else if (ErrorResponse.ErrorCode.No_data.equals(reason.getError().getErrorCodeConstant())) {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.no_data);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError);
-            } else if (ErrorObject.ErrorCode.Retrofit.equals(reason.getError().getErrorCodeConstant())) {
+            } else if (ErrorResponse.ErrorCode.Retrofit.equals(reason.getError().getErrorCodeConstant())) {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.could_not_reach_server_error);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError);
-            } else if (ErrorObject.ErrorCode.Server.equals(reason.getError().getErrorCodeConstant())) {
+            } else if (ErrorResponse.ErrorCode.Server.equals(reason.getError().getErrorCodeConstant())) {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.error_rest);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError);
-            } else if (ErrorObject.ErrorCode.Missing_reports.equals(reason.getError().getErrorCodeConstant())) {
+            } else if (ErrorResponse.ErrorCode.Missing_reports.equals(reason.getError().getErrorCodeConstant())) {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.no_reasons);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError);
 
-            /*} else if (ErrorObject.ErrorCode.Error_rest.equals(reason.getError())) {
+            /*} else if (ErrorResponse.ErrorCode.Error_rest.equals(reason.getError())) {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.error_rest);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
-            } else if (ErrorObject.ErrorCode.Get_machines_failed.equals(reason.getError())) {
+            } else if (ErrorResponse.ErrorCode.Get_machines_failed.equals(reason.getError())) {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.error_rest);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
-            } else if (ErrorObject.ErrorCode.Fail_to_perform_GetMachineShiftLog.equals(reason.getError())) {
+            } else if (ErrorResponse.ErrorCode.Fail_to_perform_GetMachineShiftLog.equals(reason.getError())) {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.error_shift_log);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
