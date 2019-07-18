@@ -292,7 +292,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
                     StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
 
-                } else if (((StandardResponse) response).getError() != null) {
+                } else if (((StandardResponse) response).getError().getErrorDesc() != null) {
 
                     StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
@@ -377,7 +377,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
                     StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
 
-                } else if (((StandardResponse) response).getError() != null) {
+                } else if (((StandardResponse) response).getError().getErrorDesc() != null) {
 
                     StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(ActivateJobActivity.this, errorObject);
