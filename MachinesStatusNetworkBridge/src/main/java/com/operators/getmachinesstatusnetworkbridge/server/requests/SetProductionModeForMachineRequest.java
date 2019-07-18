@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class SetProductionModeForMachineRequest {
 
-    @SerializedName("")
+    @SerializedName("SessionID")
     private String mSessionId;
     @SerializedName("MachineID")
     private int mMachineId;

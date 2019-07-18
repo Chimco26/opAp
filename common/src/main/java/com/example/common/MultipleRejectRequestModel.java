@@ -7,7 +7,7 @@ import java.util.List;
 
 public class MultipleRejectRequestModel {
 
-    @SerializedName("")
+    @SerializedName("SessionID")
     @Expose
     private String sessionID;
     @SerializedName("Rejects")

@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 public class ActivateJobRequest implements Parcelable {
 
 
-    @SerializedName("")
+    @SerializedName("SessionID")
     @Expose
     private String sessionID;
     @SerializedName("MachineID")

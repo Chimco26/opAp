@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class TechnicianNotificationRequest {
     @SerializedName("sourceMachineID")
     private int sourceMachineID;
-    @SerializedName("")
+    @SerializedName("SessionID")
     private String sessionID;
 
     public TechnicianNotificationRequest(int sourceMachineID, String sessionID) {

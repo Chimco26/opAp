@@ -12,7 +12,7 @@ public class GetTopRejectsAndEventsRequest {
     @SerializedName("MachineID")
     private String[] mMachineID;
 
-    @SerializedName("")
+    @SerializedName("SessionID")
     private String mSessionId;
 
     @SerializedName("StartDate")

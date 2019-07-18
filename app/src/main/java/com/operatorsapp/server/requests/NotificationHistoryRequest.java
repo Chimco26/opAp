@@ -12,7 +12,7 @@ public class NotificationHistoryRequest {
 
     public static final int APPLICATION_CODE_FOR_NOTIFICATIONS = 2;
 
-    @SerializedName("")
+    @SerializedName("SessionID")
     private String sessionID;
 
     @SerializedName("sourceMachineID")

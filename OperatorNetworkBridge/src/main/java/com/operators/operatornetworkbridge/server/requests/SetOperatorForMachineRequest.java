@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 
 public class SetOperatorForMachineRequest {
-    @SerializedName("")
+    @SerializedName("SessionID")
     private String mSessionId;
     @SerializedName("MachineID")
     private String mMachineId;

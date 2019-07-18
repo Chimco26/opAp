@@ -3,7 +3,7 @@ package com.operators.shiftlognetworkbridge.server.requests;
 import com.google.gson.annotations.SerializedName;
 
 public class GetShiftLogRequest {
-    @SerializedName("")
+    @SerializedName("SessionID")
     private String mSessionID;
     @SerializedName("MachineID")
     private int mMachineID;

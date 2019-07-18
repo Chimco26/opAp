@@ -7,7 +7,7 @@ public class TopNotificationRequest {
     @SerializedName("NumberOfNotificationToDisplay")
     private int numberOfNotificationToDisplay;
 
-    @SerializedName("")
+    @SerializedName("SessionID")
     private String sessionID;
 
     public TopNotificationRequest(String sessionId, int number) {

@@ -1,7 +1,7 @@
 package com.operators.getmachinesnetworkbridge.server.requests;
 
 public class GetMachinesRequest {
-//    @SerializedName("")
+//    @SerializedName("SessionID")
 //    private String mSessionID;
 
     public GetMachinesRequest(String sessionID) {
