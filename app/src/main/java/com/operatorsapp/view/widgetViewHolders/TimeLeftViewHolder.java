@@ -70,25 +70,17 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         m3Btn = itemView.findViewById(R.id.TLWC_countdown_btn);
     }
 
-    public void setData(Widget widget, MachineStatus machineStatus, boolean endSetupDisable) {
+    public void setData(Widget widget, MachineStatus machineStatus, boolean endSetupDisable, boolean showEndSetupBtn, boolean showActivateJobBtn) {
         mMachineStatus = machineStatus;
         mEndSetupDisable = endSetupDisable;
+        mShowEndSetupBtn = showEndSetupBtn;
+        mShowActivateJobBtn = showActivateJobBtn;
         initListener();
         setView(widget);
     }
 
     private void setView(Widget widget) {
-//        mDivider.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                ViewGroup.MarginLayoutParams mItemViewParams4;
-//                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-//                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
-//                mDivider.requestLayout();
-//            }
-//        });
-//
-//        setSizes(mParentLayout);
+
         String nameByLang2 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         mTitle.setText(nameByLang2);
         long time = Long.parseLong(widget.getCurrentValue());
@@ -114,6 +106,11 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         } else {
             if (time >= 60) {
                 m1Ly.setVisibility(View.VISIBLE);
+                if (mShowActivateJobBtn) {
+                    m1Btn.setVisibility(View.VISIBLE);
+                }else {
+                    m1Btn.setVisibility(View.INVISIBLE);
+                }
                 m2CountDownLy.setVisibility(View.GONE);
                 m3Ly.setVisibility(View.GONE);
                 if (time > 24 * 60) {

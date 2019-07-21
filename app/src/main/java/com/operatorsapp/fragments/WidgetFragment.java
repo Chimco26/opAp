@@ -214,6 +214,10 @@ public class WidgetFragment extends Fragment implements
     @Override
     public void onPermissionForMachinePolling(SparseArray<WidgetInfo> permissionResponse) {
         mPermissionResponse = permissionResponse;
+//        if (mWidgetAdapter != null) {
+//            mWidgetAdapter.setNewData(mWidgets, mPermissionResponse);
+//            mWidgetAdapter.notifyDataSetChanged();
+//        }
     }
 
     @Override

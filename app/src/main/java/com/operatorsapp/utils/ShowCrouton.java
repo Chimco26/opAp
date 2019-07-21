@@ -21,7 +21,7 @@ public class ShowCrouton {
             String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
             String credentialsError = OperatorApplication.getAppContext().getString(R.string.could_not_reach_server_error);
             createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.NETWORK_ERROR,prefix,credentialsError);
-        } else {
+        } else if (reason.getError() == null || reason.getError().getErrorDesc() == null || reason.getError().getErrorDesc().length() < 1){
             if (ErrorResponse.ErrorCode.Url_not_correct.equals(reason.getError().getErrorCodeConstant())) {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_log_in).concat(" ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.url_error);
@@ -67,6 +67,13 @@ public class ShowCrouton {
                 String networkError = OperatorApplication.getAppContext().getString(R.string.no_communication);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.NETWORK_ERROR,prefix,networkError);
             }
+
+        }else if (reason.getError() != null && reason.getError().getErrorDesc() != null && reason.getError().getErrorDesc().length() > 0){
+            createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.NETWORK_ERROR, reason.getError().getErrorDesc(),"");
+        }else {
+            String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_log_in).concat(" ");
+            String networkError = OperatorApplication.getAppContext().getString(R.string.no_communication);
+            createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.NETWORK_ERROR,prefix,networkError);
         }
     }
 

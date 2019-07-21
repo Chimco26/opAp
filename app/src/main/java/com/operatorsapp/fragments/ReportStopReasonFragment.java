@@ -347,13 +347,16 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override
-        public void sendReportSuccess(StandardResponse o) {
-            StandardResponse response = objectToNewError(o);
+        public void sendReportSuccess(StandardResponse response) {
+//            StandardResponse response = objectToNewError(response);
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
 
             if (response.getFunctionSucceed()) {
                 // TODO: 17/07/2018 add crouton for success
+                if (response.getError().getErrorDesc() == null || response.getError().getErrorDesc().length() < 1) {
+                    response.getError().setErrorDesc(getString(R.string.success));
+                }
                 // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
                 mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), false);
                 OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");

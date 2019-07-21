@@ -211,7 +211,8 @@ public class WidgetAdapter extends Adapter {
                     break;
                 case NUMERIC:
                     final NumericViewHolder numericViewHolder = (NumericViewHolder) holder;
-                    numericViewHolder.setNumericItem(widget);
+                    numericViewHolder.setNumericItem(widget, WidgetInfo.getWidgetInfo(mPermissionResponse,WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(),
+                            WidgetInfo.getWidgetInfo(mPermissionResponse,WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean());
                     break;
                 case TIME:
                     final TimeViewHolder timeViewHolder = (TimeViewHolder) holder;
@@ -227,7 +228,9 @@ public class WidgetAdapter extends Adapter {
                     break;
                 case TIME_LEFT:
                     final TimeLeftViewHolder timeLeftViewHolder = (TimeLeftViewHolder) holder;
-                    timeLeftViewHolder.setData(widget, mMachineStatus, mEndSetupDisable);
+                    timeLeftViewHolder.setData(widget, mMachineStatus, mEndSetupDisable,
+                            WidgetInfo.getWidgetInfo(mPermissionResponse,WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean(),
+                            WidgetInfo.getWidgetInfo(mPermissionResponse,WidgetInfo.PermissionId.ACTIVATE_JOB.getId()).getHaspermissionBoolean());
                     mEndSetupDisable = false;
                 case REPORT_PERCENT:
                     final ReportStopViewHolder reportStopViewHolder = (ReportStopViewHolder) holder;
