@@ -18,31 +18,23 @@ import com.operatorsapp.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.operatorsapp.fragments.JobListFragment.END_TIME;
-import static com.operatorsapp.fragments.JobListFragment.ID;
-import static com.operatorsapp.fragments.JobListFragment.PRODUCT_CATALOG_ID;
-import static com.operatorsapp.fragments.JobListFragment.TIME_LEFT_HR_HOUR;
-import static com.operatorsapp.fragments.JobListFragment.UNITS_PRODUCED;
-import static com.operatorsapp.fragments.JobListFragment.UNITS_TARGET;
-
 public class PendingJobsAdapterNew extends RecyclerView.Adapter<PendingJobsAdapterNew.ViewHolder> {
 
     private final Context mContext;
     private final ArrayList<PendingJob> mPandingjobs;
     private final HashMap<String, Header> mHashMapHeaders;
+    private final String[] mOrderedHederasKey;
 
     private PendingJobsAdapter.PendingJobsAdapterListener mListener;
 
 
-    public PendingJobsAdapterNew(ArrayList<PendingJob> list, HashMap<String, Header> hashMapHeaders, PendingJobsAdapter.PendingJobsAdapterListener listener, Context context) {
+    public PendingJobsAdapterNew(ArrayList<PendingJob> list, HashMap<String, Header> hashMapHeaders, String[] orderedHederasKey, PendingJobsAdapter.PendingJobsAdapterListener listener, Context context) {
 
         mListener = listener;
-
         mContext = context;
-
         mPandingjobs = list;
-
         mHashMapHeaders = hashMapHeaders;
+        mOrderedHederasKey = orderedHederasKey;
     }
 
 
@@ -60,12 +52,12 @@ public class PendingJobsAdapterNew extends RecyclerView.Adapter<PendingJobsAdapt
         ArrayList<Property> properties = (ArrayList<Property>) mPandingjobs.get(viewHolder.getAdapterPosition()).getProperties();
         HashMap<String, String> propertiesHashMap = listToHashMap(properties);
 
-        viewHolder.mIndexTv.setText(propertiesHashMap.get(ID));
-        viewHolder.mCatalogTv.setText(propertiesHashMap.get(PRODUCT_CATALOG_ID));
-        viewHolder.mTargetTv.setText(propertiesHashMap.get(UNITS_TARGET));
-        viewHolder.mProducedTv.setText(propertiesHashMap.get(UNITS_PRODUCED));
-        viewHolder.mEndTimeTv.setText(propertiesHashMap.get(END_TIME));
-        viewHolder.mJobLeftTv.setText(propertiesHashMap.get(TIME_LEFT_HR_HOUR));
+        viewHolder.mIndexTv.setText(propertiesHashMap.get(mOrderedHederasKey[0]));
+        viewHolder.mCatalogTv.setText(propertiesHashMap.get(mOrderedHederasKey[1]));
+        viewHolder.mTargetTv.setText(propertiesHashMap.get(mOrderedHederasKey[2]));
+        viewHolder.mProducedTv.setText(propertiesHashMap.get(mOrderedHederasKey[3]));
+        viewHolder.mEndTimeTv.setText(propertiesHashMap.get(mOrderedHederasKey[4]));
+        viewHolder.mJobLeftTv.setText(propertiesHashMap.get(mOrderedHederasKey[5]));
 
         ImageLoader.getInstance().displayImage("", viewHolder.mImage);
 

@@ -18,8 +18,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Header;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobStandardResponse;
@@ -29,8 +27,6 @@ import com.operatorsapp.adapters.JobHeadersAdapter;
 import com.operatorsapp.adapters.JobHeadersSpinnerAdapter;
 import com.operatorsapp.adapters.PendingJobsAdapter;
 import com.operatorsapp.adapters.PendingJobsAdapterNew;
-import com.operatorsapp.application.OperatorApplication;
-import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 
 import java.util.ArrayList;
@@ -64,6 +60,7 @@ public class JobListFragment extends Fragment implements
     private JobListFragmentListener mListener;
     private Header mSelectedHeader;
     private TextView mTitleTv;
+    private String[] orderedHederasKey = new String[6];
 
     public static JobListFragment newInstance(PendingJobStandardResponse mPendingJobsResponse, ArrayList<PendingJob> mPendingJobs, ArrayList<Header> headers) {
 
@@ -140,18 +137,18 @@ public class JobListFragment extends Fragment implements
 
     private void initTitleViews(View view) {
         if (mHashMapHeaders != null) {
-            if (mHashMapHeaders.get(ID) != null)
-                ((TextView) view.findViewById(R.id.FJL_index)).setText(mHashMapHeaders.get(ID).getDisplayName());
-            if (mHashMapHeaders.get(PRODUCT_CATALOG_ID) != null)
-                ((TextView) view.findViewById(R.id.FJL_catalog)).setText(mHashMapHeaders.get(PRODUCT_CATALOG_ID).getDisplayName());
-            if (mHashMapHeaders.get(UNITS_TARGET) != null)
-                ((TextView) view.findViewById(R.id.FJL_target)).setText(mHashMapHeaders.get(UNITS_TARGET).getDisplayName());
-            if (mHashMapHeaders.get(UNITS_PRODUCED) != null)
-                ((TextView) view.findViewById(R.id.FJL_produced)).setText(mHashMapHeaders.get(UNITS_PRODUCED).getDisplayName());
-            if (mHashMapHeaders.get(END_TIME) != null)
-                ((TextView) view.findViewById(R.id.FJL_end_time)).setText(mHashMapHeaders.get(END_TIME).getDisplayName());
-            if (mHashMapHeaders.get(TIME_LEFT_HR_HOUR) != null)
-                ((TextView) view.findViewById(R.id.FJL_job_left)).setText(mHashMapHeaders.get(TIME_LEFT_HR_HOUR).getDisplayName());
+            if (mHashMapHeaders.get(orderedHederasKey[0]) != null)
+                ((TextView) view.findViewById(R.id.FJL_index)).setText(mHashMapHeaders.get(orderedHederasKey[0]).getDisplayName());
+            if (mHashMapHeaders.get(orderedHederasKey[1]) != null)
+                ((TextView) view.findViewById(R.id.FJL_catalog)).setText(mHashMapHeaders.get(orderedHederasKey[1]).getDisplayName());
+            if (mHashMapHeaders.get(orderedHederasKey[2]) != null)
+                ((TextView) view.findViewById(R.id.FJL_target)).setText(mHashMapHeaders.get(orderedHederasKey[2]).getDisplayName());
+            if (mHashMapHeaders.get(orderedHederasKey[3]) != null)
+                ((TextView) view.findViewById(R.id.FJL_produced)).setText(mHashMapHeaders.get(orderedHederasKey[3]).getDisplayName());
+            if (mHashMapHeaders.get(orderedHederasKey[4]) != null)
+                ((TextView) view.findViewById(R.id.FJL_end_time)).setText(mHashMapHeaders.get(orderedHederasKey[4]).getDisplayName());
+            if (mHashMapHeaders.get(orderedHederasKey[5]) != null)
+                ((TextView) view.findViewById(R.id.FJL_job_left)).setText(mHashMapHeaders.get(orderedHederasKey[5]).getDisplayName());
         }
     }
 
@@ -195,7 +192,7 @@ public class JobListFragment extends Fragment implements
 
             mPendingJobs.get(0).setSelected(true);
             RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-            mPendingJobsAdapter = new PendingJobsAdapterNew(mPendingJobs, mHashMapHeaders, this, getActivity());
+            mPendingJobsAdapter = new PendingJobsAdapterNew(mPendingJobs, mHashMapHeaders, orderedHederasKey, this, getActivity());
             mPendingJobsRv.setLayoutManager(layoutManager2);
             mPendingJobsRv.setAdapter(mPendingJobsAdapter);
         }
@@ -247,6 +244,11 @@ public class JobListFragment extends Fragment implements
                     return 1;
                 }
             });
+        }
+        for (int i = 0; i < 6; i++) {
+            if (mHeaders != null && mHeaders.size() > i) {
+                orderedHederasKey[i] = mHeaders.get(i).getName();
+            }
         }
     }
 

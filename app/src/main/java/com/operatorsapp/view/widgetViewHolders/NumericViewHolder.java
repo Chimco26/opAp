@@ -134,7 +134,9 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void setNumericItem(Widget widget) {
+    public void setNumericItem(Widget widget, boolean showChangeUnitInCycleBtn, boolean showAddRejectsBtn) {
+        mShowChangeUnitInCycle = showChangeUnitInCycleBtn;
+        mShowAddRejectsBtn = showAddRejectsBtn;
         switch (widget.getTargetScreen()) {
             case REPORT_REJECT_TAG:
                 setupNumericRejectItem(widget);
@@ -391,18 +393,22 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
                     if (mShowAddRejectsBtn) {
                         addEditClickListener(widget);
                         mEditBtn.setVisibility(View.VISIBLE);
+                        mEditIc.setVisibility(View.VISIBLE);
                         mEditBtn.setText(mEditBtn.getContext().getResources().getString(R.string.add_rejects));
                     }else {
                         mEditBtn.setVisibility(View.INVISIBLE);
+                        mEditIc.setVisibility(View.GONE);
                     }
                     break;
                 case REPORT_UNIT_CYCLE_TAG:
                     if (mShowChangeUnitInCycle) {
                         mEditBtn.setVisibility(View.VISIBLE);
+                        mEditIc.setVisibility(View.VISIBLE);
                         mEditBtn.setText(mEditBtn.getContext().getResources().getString(R.string.report_cycle_units));
                         addEditClickListener(widget);
                     }else {
                         mEditBtn.setVisibility(View.INVISIBLE);
+                        mEditIc.setVisibility(View.GONE);
                     }break;
             }
 
