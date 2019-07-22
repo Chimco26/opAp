@@ -433,23 +433,32 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
     private void showRecipeFragment() {
 
-        RecipeFragment mRecipefragment = RecipeFragment.newInstance(mCurrentJobDetails.getJobs().get(0).getRecipe());
-
-        getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, mRecipefragment).addToBackStack(RecipeFragment.TAG).commit();
+        try {
+            RecipeFragment mRecipefragment = RecipeFragment.newInstance(mCurrentJobDetails.getJobs().get(0).getRecipe());
+            getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, mRecipefragment).addToBackStack(RecipeFragment.TAG).commit();
+        }catch (Exception e){
+            findViewById(R.id.AJA_no_data_tv).setVisibility(View.VISIBLE);
+        }
     }
 
     private void showJobListFragment(PendingJobStandardResponse mPendingJobsResponse, ArrayList<PendingJob> mPendingJobs, ArrayList<Header> headers) {
 
-        JobListFragment jobListFragment = JobListFragment.newInstance(mPendingJobsResponse, mPendingJobs, headers);
-
-        getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, jobListFragment).addToBackStack(JobListFragment.class.getSimpleName()).commit();
+        try {
+            JobListFragment jobListFragment = JobListFragment.newInstance(mPendingJobsResponse, mPendingJobs, headers);
+            getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, jobListFragment).addToBackStack(JobListFragment.class.getSimpleName()).commit();
+        }catch (Exception e){
+            findViewById(R.id.AJA_no_data_tv).setVisibility(View.VISIBLE);
+        }
     }
 
     private void showJobDetailsFragment(JobDetailsStandardResponse jobDetailsResponse) {
 
-        JobDetailsFragment jobDetailsFragment = JobDetailsFragment.newInstance(jobDetailsResponse, (ArrayList<Header>) mPendingJobsResponse.getHeaders(), mCurrentPendingJob);
-
-        getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, jobDetailsFragment).addToBackStack(JobDetailsFragment.class.getSimpleName()).commit();
+        try {
+            JobDetailsFragment jobDetailsFragment = JobDetailsFragment.newInstance(jobDetailsResponse, (ArrayList<Header>) mPendingJobsResponse.getHeaders(), mCurrentPendingJob);
+            getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, jobDetailsFragment).addToBackStack(JobDetailsFragment.class.getSimpleName()).commit();
+        }catch (Exception e){
+            findViewById(R.id.AJA_no_data_tv).setVisibility(View.VISIBLE);
+        }
     }
 
 

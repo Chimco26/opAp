@@ -558,7 +558,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         NetworkManager.getInstance().getServiceCalls(baseTimeRequest, new Callback<ServiceCallsResponse>() {
             @Override
             public void onResponse(Call<ServiceCallsResponse> call, Response<ServiceCallsResponse> response) {
-                if (isAdded() && response.body() != null && response.body().getError() == null) {
+                if (isAdded() && response.body() != null && response.body().getError().getErrorDesc() == null) {
 
                     if (response.body().getNotificationByType() != null && response.body().getNotificationByType().size() > 0) {
                         mServiceCallsTitle.setText(getContext().getResources().getString(R.string.service_calls_distribution));

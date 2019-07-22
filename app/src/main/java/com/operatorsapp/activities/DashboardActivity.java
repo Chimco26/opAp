@@ -2136,11 +2136,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onPostProductionModeSuccess(StandardResponse response) {
                 // TODO: 31/07/2018 display crouton
+                dashboardDataStartPolling();
                 if (response.getFunctionSucceed()) {
-                    dashboardDataStartPolling();
                     //Analytics
                     new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.PRODUCTION_STATUS, true, "Production Status Changed");
-
                 } else {
                     ProgressDialogManager.dismiss();
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
@@ -2155,7 +2154,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, reason.getError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                 //Analytics
                 new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.PRODUCTION_STATUS, false, "Error: " + reason.getError().getErrorDesc());
-
+                dashboardDataStartPolling();
             }
         }, NetworkManager.getInstance(), new SetProductionModeForMachineRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId(), id), persistenceManager.getTotalRetries());
 

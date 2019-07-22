@@ -2020,6 +2020,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             return;
         }
         textview.setText(OperatorApplication.isEnglishLang() ? statusList.get(selected).getEName() : statusList.get(selected).getLName());
+        textview.setVisibility(View.VISIBLE);
         final ArrayAdapter<PackageTypes> productionStatusSpinnerAdapter = new ProductionSpinnerAdapter(getActivity(), R.layout.spinner_production_item, statusList, selected);
         productionStatusSpinner.setAdapter(productionStatusSpinnerAdapter);
         productionStatusSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.white), PorterDuff.Mode.SRC_ATOP);
@@ -2038,6 +2039,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 } else if (mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() != finalStatusList.get(position).getId()) {
                     ProgressDialogManager.show(getActivity());
                     mListener.onProductionStatusChanged(finalStatusList.get(position).getId(), finalStatusList.get(position).getEName());
+                    productionStatusSpinner.setVisibility(View.INVISIBLE);
+                    textview.setVisibility(View.INVISIBLE);
                 }
 
             }

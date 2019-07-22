@@ -619,8 +619,8 @@ public class SimpleRequests {
                         msg = response.body().getError().getErrorDesc();
                     }
                     StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, msg);
-                    callback.onPostProductionModeFailed(errorObject);
-                    onFailure(call, new Exception("response not successful"));
+//                    callback.onPostProductionModeFailed(errorObject);
+                    onFailure(call, new Exception(errorObject.getError().getErrorDesc()));
                 }
 
             }
@@ -634,7 +634,7 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "PostProductionMode_Failed Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, t.getMessage());
                         callback.onPostProductionModeFailed(errorObject);
                     }
                 } else {
