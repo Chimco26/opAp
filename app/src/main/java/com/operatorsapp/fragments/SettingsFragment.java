@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -52,7 +51,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     private Spinner mLanguagesSpinner;
     private TextView mRefreshStatusTextView;
     private TextView mAdvancedSettingsButton;
-    private Button mRefreshButton;
+    private TextView mRefreshButton;
     private TextView mCancelButton;
     private TextView mSaveButton;
     private String mSelectedLanguageCode;
