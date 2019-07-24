@@ -176,7 +176,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private LinearLayout mShiftLogLayout;
     private TextView mNoNotificationsText;
     private ProgressBar mLoadingDataText;
-    private LinearLayout mStatusLayout;
+    private RelativeLayout mStatusLayout;
     private int mDownX;
     private ShiftLogSqlAdapter mShiftLogAdapter;
     private ArrayDeque<Event> mEventsQueue = new ArrayDeque<>();
