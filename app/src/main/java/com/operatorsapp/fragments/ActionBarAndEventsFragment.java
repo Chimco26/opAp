@@ -199,7 +199,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private JobsSpinnerAdapter mJobsSpinnerAdapter;
     private List<JobActionsSpinnerItem> mJobActionsSpinnerItems;
     private int mApproveItemID;
-    private ViewGroup mMachineStatusLayout;
+//    private ViewGroup mMachineStatusLayout;
     public static final int REASON_UNREPORTED = 0;
     private SelectStopReasonBroadcast mReasonBroadcast = null;
     private boolean thereAlreadyRequest = false;
@@ -1230,6 +1230,20 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mJobActionsSpinnerItems.add(new JobActionsSpinnerItem(mApproveItemID, getString(R.string.approve_first_item)));
 
                 mJobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, mJobActionsSpinnerItems);
+
+//                try {
+//                    Field popup = Spinner.class.getDeclaredField("mPopup");
+//                    popup.setAccessible(true);
+//
+//                    // Get private mPopup member variable and try cast to ListPopupWindow
+//                    android.widget.ListPopupWindow popupWindow = (android.widget.ListPopupWindow) popup.get(mJobsSpinner);
+//
+//                    // Set popupWindow height to 500px
+//                    popupWindow.setHeight(new DisplayMetrics().heightPixels / 2);
+//                }
+//                catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
+//                    // silently fail...
+//                }
             }
 
             mJobsSpinner.setAdapter(mJobsSpinnerAdapter);
@@ -1303,10 +1317,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mStatusIndicatorImageView = mToolBarView.findViewById(R.id.job_indicator);
 //            mToolBarView.findViewById(R.id.ATATV_job_indicator_ly).setOnClickListener(this);
 
-            if (mMachineStatusLayout == null) {
-                mMachineStatusLayout = mToolBarView.findViewById(R.id.linearLayout2);
-                mMachineStatusLayout.setVisibility(View.INVISIBLE);
-            }
+//            if (mMachineStatusLayout == null) {
+//                mMachineStatusLayout = mToolBarView.findViewById(R.id.linearLayout2);
+//                mMachineStatusLayout.setVisibility(View.INVISIBLE);
+//            }
             ImageView settingsButton = mToolBarView.findViewById(R.id.settings_button);
             settingsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1316,7 +1330,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             });
             actionBar.setCustomView(mToolBarView);
 
-            setToolBarHeight(mToolBarView);
+//            setToolBarHeight(mToolBarView);
 
             if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
@@ -2864,7 +2878,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
         if (callType == CallType.Status) {
-            mMachineStatusLayout.setVisibility(View.VISIBLE);
+//            mMachineStatusLayout.setVisibility(View.VISIBLE);
             clearStatusLayout();
         }
 
@@ -2941,7 +2955,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         String statusNameByLang = OperatorApplication.isEnglishLang() ? machinesData.getMachineStatusEname() : machinesData.getMachineStatusLName();
         mMachineStatusStatusBarTextView.setText(statusNameByLang);
         statusAggregation(machineStatus);
-        mMachineStatusLayout.setVisibility(View.VISIBLE);
+//        mMachineStatusLayout.setVisibility(View.VISIBLE);
 
         if (machineStatus.getAllMachinesData().get(0).getCurrentStatusTimeMin() > 0) {
 

@@ -1,7 +1,10 @@
 package com.operatorsapp.view;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.Display;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
@@ -94,6 +97,13 @@ public class EmeraldSpinner extends android.support.v7.widget.AppCompatSpinner {
         return mOpenInitiated;
     }
 
+    @Override
+    public void getWindowVisibleDisplayFrame(Rect outRect) {
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        Display d = wm.getDefaultDisplay();
+        d.getRectSize(outRect);
+        outRect.set(outRect.left, (int) (outRect.top + 200 ), outRect.right, (int) (outRect.bottom - 100));
+    }
 
     public interface OnSpinnerEventsListener {
 
