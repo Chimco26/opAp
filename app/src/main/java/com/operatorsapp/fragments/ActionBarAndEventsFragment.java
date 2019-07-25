@@ -43,7 +43,6 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
@@ -749,9 +748,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 ImageView btnClose = mPopUpDialog.findViewById(R.id.notification_popup_iv);
                 ImageView icon = mPopUpDialog.findViewById(R.id.notification_popup_icon_iv);
-                Button btnApprove = mPopUpDialog.findViewById(R.id.notification_popup_approve_btn);
-                Button btnDecline = mPopUpDialog.findViewById(R.id.notification_popup_decline_btn);
-                Button btnClarify = mPopUpDialog.findViewById(R.id.notification_popup_clarify_btn);
+                ImageView btnApprove = mPopUpDialog.findViewById(R.id.notification_popup_approve_btn);
+                ImageView btnDecline = mPopUpDialog.findViewById(R.id.notification_popup_decline_btn);
+                ImageView btnClarify = mPopUpDialog.findViewById(R.id.notification_popup_clarify_btn);
                 TextView tvSender = mPopUpDialog.findViewById(R.id.notification_popup_tv_sender);
                 TextView tvBody = mPopUpDialog.findViewById(R.id.notification_popup_tv_body);
 

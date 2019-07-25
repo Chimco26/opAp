@@ -1,97 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
 
     <RelativeLayout
-        android:layout_margin="25dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp">
 
         <ImageView
             android:id="@+id/notification_popup_icon_iv"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginEnd="15dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/message_dark"/>
+            android:src="@drawable/message_dark" />
 
         <ImageView
             android:id="@+id/notification_popup_iv"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="15dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="15dp"
             android:padding="2dp"
-            android:src="@drawable/close"/>
+            android:src="@drawable/close" />
 
         <TextView
             android:id="@+id/notification_popup_tv_sender"
-            android:layout_toEndOf="@+id/notification_popup_tv_time"
-            android:layout_toStartOf="@+id/notification_popup_iv"
-            android:layout_alignParentTop="true"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:textColor="@color/dark_blue_two"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/notification_popup_iv"
+            android:layout_toEndOf="@+id/notification_popup_tv_time"
+            android:textColor="@color/dark_blue_two"
+            android:textSize="26sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/notification_popup_tv_time"
-            android:layout_toEndOf="@+id/notification_popup_icon_iv"
-            android:layout_alignParentTop="true"
-            android:textSize="22sp"
-            android:textColor="@color/dark_blue_two"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/notification_popup_icon_iv"
+            android:textColor="@color/dark_blue_two"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/notification_popup_tv_body"
-            android:layout_toEndOf="@+id/notification_popup_icon_iv"
-            android:layout_toStartOf="@+id/notification_popup_iv"
-            android:layout_below="@+id/notification_popup_tv_sender"
-            android:textSize="22sp"
-            android:textColor="@color/dark_indigo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"/>
+            android:layout_below="@+id/notification_popup_tv_sender"
+            android:layout_marginTop="20dp"
+            android:layout_toStartOf="@+id/notification_popup_iv"
+            android:layout_toEndOf="@+id/notification_popup_icon_iv"
+            android:textColor="@color/dark_indigo"
+            android:textSize="22sp" />
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
+            android:layout_below="@+id/notification_popup_tv_body"
             android:layout_marginTop="20dp"
-            android:layout_toEndOf="@+id/notification_popup_icon_iv"
             android:layout_toStartOf="@+id/notification_popup_iv"
-            android:layout_below="@+id/notification_popup_tv_body">
+            android:layout_toEndOf="@+id/notification_popup_icon_iv"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="11">
 
-            <Button
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="2" />
+
+            <com.operatorsapp.view.SquareImageView
                 android:id="@+id/notification_popup_approve_btn"
-                android:layout_width="40dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/baseline_check_circle"/>
+                android:layout_weight="1"
+                android:background="@drawable/baseline_check_circle" />
 
-            <Button
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="2" />
+
+            <com.operatorsapp.view.SquareImageView
                 android:id="@+id/notification_popup_decline_btn"
-                android:layout_width="40dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="80dp"
-                android:layout_marginRight="80dp"
-                android:background="@drawable/close_circle_outline"/>
+                android:layout_weight="1"
+                android:background="@drawable/close_circle_outline" />
 
-            <Button
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="2" />
+
+            <com.operatorsapp.view.SquareImageView
                 android:id="@+id/notification_popup_clarify_btn"
-                android:layout_width="40dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/question_circle_outline"/>
+                android:layout_weight="1"
+                android:background="@drawable/question_circle_outline" />
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="2" />
         </LinearLayout>
 
     </RelativeLayout>

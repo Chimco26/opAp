@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
@@ -30,7 +29,7 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
 {
     public static final String LOG_TAG = SelectedOperatorFragment.class.getSimpleName();
     private static final String SELECTED_OPERATOR = "selected_operator";
-    private Button mSignInButton;
+    private TextView mSignInButton;
     private Operator mSelectedOperator;
     private OperatorCore mOperatorCore;
     private OperatorCoreToDashboardActivityCallback mOperatorCoreToDashboardActivityCallback;

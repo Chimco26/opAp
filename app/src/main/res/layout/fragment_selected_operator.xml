@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/operator_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,109 +21,135 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="51dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:weightSum="100"
+        android:gravity="center_horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="15"
             android:gravity="center_vertical"
+            android:maxLines="2"
             android:text="@string/operator_sign_in"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            app:autoSizeTextType="uniform" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5" />
 
         <View
             android:layout_width="1dp"
             android:layout_height="120dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
             android:background="@color/C20" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="wrap_content"
+        <View
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_weight="5" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="48"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="horizontal">
+                    android:layout_weight="4"
+                    android:maxLines="1"
+                    android:text="@string/operator_id"
+                    android:textColor="@color/status_bar"
+                    android:textSize="22sp"
+                    app:autoSizeTextType="uniform" />
 
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/operator_id"
-                        android:textColor="@color/status_bar"
-                        android:textSize="22sp" />
-
-                    <TextView
-                        android:id="@+id/operator_id_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:text="@string/operator_id"
-                        android:textSize="22sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/operator_id_text_view"
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/operator_name"
-                        android:textColor="@color/status_bar"
-                        android:textSize="22sp" />
-
-                    <TextView
-                        android:id="@+id/operator_name_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:text="@string/operator_name"
-                        android:textSize="22sp" />
-                </LinearLayout>
-
+                    android:layout_marginStart="20dp"
+                    android:maxLines="1"
+                    android:text="@string/operator_id"
+                    android:textSize="22sp"
+                    app:autoSizeTextType="uniform" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
 
-            <!-- <Button
-                 android:id="@+id/button_selected_operator_sign_in"
-                 android:layout_width="85dp"
-                 android:layout_height="30dp"
-                 android:layout_marginEnd="2dp"
-                 android:layout_marginStart="90dp"
-                 android:background="@drawable/buttons_selector"
-                 android:text="@string/common_signin_button_text"
-                 android:textAllCaps="true"
-                 android:textColor="@drawable/button_text_color_selector"
-                 android:textSize="18sp" />-->
-            <Button
-                android:id="@+id/button_selected_operator_sign_in"
-                android:layout_width="138dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginEnd="2dp"
-                android:background="@drawable/buttons_selector"
-                android:clickable="false"
-                android:text="@string/common_signin_button_text"
-                android:textAllCaps="true"
-                android:textColor="@drawable/button_text_color_selector"
-                android:textSize="22sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:text="@string/operator_name"
+                    android:textColor="@color/status_bar"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/operator_name_text_view"
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/operator_name"
+                    android:textSize="22sp" />
+            </LinearLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
 
+        <!-- <Button
+             android:id="@+id/button_selected_operator_sign_in"
+             android:layout_width="85dp"
+             android:layout_height="30dp"
+             android:layout_marginEnd="2dp"
+             android:layout_marginStart="90dp"
+             android:background="@drawable/buttons_selector"
+             android:text="@string/common_signin_button_text"
+             android:textAllCaps="true"
+             android:textColor="@drawable/button_text_color_selector"
+             android:textSize="18sp" />-->
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:id="@+id/button_selected_operator_sign_in"
+            android:layout_width="0dp"
+            android:layout_weight="20"
+            android:layout_height="36dp"
+            android:background="@drawable/buttons_selector"
+            android:clickable="false"
+            android:text="@string/common_signin_button_text"
+            android:textAllCaps="true"
+            android:textColor="@drawable/button_text_color_selector"
+            android:textSize="22sp"
+            android:maxLines="1"
+            app:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
 
 </RelativeLayout>
