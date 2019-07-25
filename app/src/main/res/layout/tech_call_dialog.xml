@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="650dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/TCD_main">
 
     <FrameLayout
         android:id="@+id/tech_dialog_progress_fl"
@@ -20,14 +22,15 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_width="match_parent"
-        android:layout_height="550dp">
+        android:layout_height="match_parent"
+        android:weightSum="100">
 
         <ImageView
             android:id="@+id/tech_dialog_x_iv"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="10"
             android:layout_gravity="end"
-            android:padding="20dp"
             android:src="@drawable/close"/>
 
         <TextView
@@ -40,8 +43,11 @@
             android:textSize="35sp"
             android:textColor="@color/blue1"
             android:text="@string/service_calls"
+            android:maxLines="1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            app:autoSizeTextType="uniform"/>
 
         <TextView
             android:id="@+id/tech_dialog_subtitle_tv"
@@ -54,13 +60,17 @@
             android:textColor="@color/black"
             android:text="@string/service_call_exists_subtitle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="0dp"
+            android:maxLines="2"
+            android:layout_weight="15"
+            app:autoSizeTextType="uniform"/>
 
 
         <LinearLayout
             android:id="@+id/tech_dialog_ly_tabs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="20"
             android:orientation="vertical">
 
             <View
@@ -70,7 +80,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
+                android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:gravity="start|center_vertical"
                 android:orientation="horizontal"
@@ -80,7 +90,6 @@
                 <RelativeLayout
                     android:layout_width="170dp"
                     android:layout_height="wrap_content">
-
 
                     <TextView
                         android:id="@+id/tech_dialog_tv_left_tab"
@@ -208,10 +217,10 @@
             android:id="@+id/tech_dialog_rv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_weight="45"
             android:layout_margin="10dp"
             android:layout_marginTop="40dp"
             android:layout_marginBottom="30dp"
-            android:layout_weight="1"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarFadeDuration="10000"
             android:scrollbars="vertical" />
