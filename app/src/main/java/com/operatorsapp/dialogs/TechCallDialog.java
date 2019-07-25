@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -78,6 +79,16 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.tech_call_dialog);
+        final FrameLayout frameLayout = findViewById(R.id.TCD_main);
+        frameLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                frameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) frameLayout.getLayoutParams();
+                params.height = (int) (getContext().getResources().getDisplayMetrics().heightPixels * 0.90);
+                frameLayout.setLayoutParams(params);
+            }
+        });
         mRecyclerView = (RecyclerView) findViewById(R.id.tech_dialog_rv);
         mSubtitleTv = (TextView) findViewById(R.id.tech_dialog_subtitle_tv);
         mTitleTv = (TextView) findViewById(R.id.tech_dialog_title_tv);
@@ -157,12 +168,12 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
             });
 
         }
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        setRecyclerViewParams(85.0f);
         mRecyclerView.setAdapter(new TechnicianAdapter(getContext(), mTechniciansList, this));
     }
 
     private void setOpenCalls(int position) {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        setRecyclerViewParams(45.0f);
         mRecyclerView.setAdapter(new TechCallAdapter(getContext(), mTechList, new TechCallAdapter.TechCallItemListener() {
             @Override
             public void onRemoveCallPressed(final TechCallInfo techCallInfo) {
@@ -237,6 +248,13 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
         ((LinearLayoutManager) mRecyclerView.getLayoutManager()).scrollToPosition(position);
     }
 
+    private void setRecyclerViewParams(float v) {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mRecyclerView.getLayoutParams();
+        params.weight = v;
+        mRecyclerView.setLayoutParams(params);
+    }
+
 
     private void setLast24hrsCalls() {
         ArrayList<Notification> notList = new ArrayList<>();
@@ -250,7 +268,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                 notList.add(notification);
             }
         }
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        setRecyclerViewParams(65.0f);
         mRecyclerView.setAdapter(new NotificationHistoryAdapter(getContext(), notList, null));
     }
 

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="105dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal">
 
     <TextView
@@ -15,6 +16,8 @@
         android:singleLine="true"
         android:text="@string/jobs_actions"
         android:textColor="@color/white"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:maxLines="1"
+        app:autoSizeTextType="uniform"/>
 
 </LinearLayout>

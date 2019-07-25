@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -52,15 +51,15 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     private Spinner mLanguagesSpinner;
     private TextView mRefreshStatusTextView;
     private TextView mAdvancedSettingsButton;
-    private Button mRefreshButton;
+    private TextView mRefreshButton;
     private TextView mCancelButton;
-    private Button mSaveButton;
+    private TextView mSaveButton;
     private String mSelectedLanguageCode;
     private String mSelectedLanguageName;
-    private Button mButtonChange;
+//    private Button mButtonChange;
     private GoToScreenListener mGoToScreenListener;
     private SettingsInterface mSettingsInterface;
-    private Button mButtonChangeMachine;
+    private TextView mButtonChangeMachine;
 
     public static SettingsFragment newInstance() {
 
@@ -165,7 +164,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
 
         mSaveButton = view.findViewById(R.id.button_save);
         mCancelButton = view.findViewById(R.id.button_cancel);
-        mButtonChange = view.findViewById(R.id.button_change);
+//        mButtonChange = view.findViewById(R.id.button_change);
         mButtonChangeMachine = view.findViewById(R.id.button_change_machine);
     }
 
@@ -176,7 +175,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
         mSaveButton.setOnClickListener(null);
         mCancelButton.setOnClickListener(null);
         mRefreshButton.setOnClickListener(null);
-        mButtonChange.setOnClickListener(null);
+//        mButtonChange.setOnClickListener(null);
         mButtonChangeMachine.setOnClickListener(null);
     }
 
@@ -187,7 +186,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
         mSaveButton.setOnClickListener(this);
         mCancelButton.setOnClickListener(this);
         mRefreshButton.setOnClickListener(this);
-        mButtonChange.setOnClickListener(this);
+//        mButtonChange.setOnClickListener(this);
         mButtonChangeMachine.setOnClickListener(this);
     }
 
@@ -254,12 +253,12 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                 }
                 break;
             }
-            case R.id.button_change: {
-                boolean isShowTutorial = PersistenceManager.getInstance().isDisplayToolbarTutorial();
-                mSettingsInterface.onClearAppDataRequest();
-                PersistenceManager.getInstance().setDisplayToolbarTutorial(isShowTutorial);
-                break;
-            }
+//            case R.id.button_change: {
+//                boolean isShowTutorial = PersistenceManager.getInstance().isDisplayToolbarTutorial();
+//                mSettingsInterface.onClearAppDataRequest();
+//                PersistenceManager.getInstance().setDisplayToolbarTutorial(isShowTutorial);
+//                break;
+//            }
 
             case R.id.button_change_machine: {//todo kuti
                 mSettingsInterface.onChangeMachineRequest();

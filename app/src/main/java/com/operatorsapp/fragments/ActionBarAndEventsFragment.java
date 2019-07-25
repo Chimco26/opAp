@@ -43,7 +43,6 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
@@ -176,7 +175,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private LinearLayout mShiftLogLayout;
     private TextView mNoNotificationsText;
     private ProgressBar mLoadingDataText;
-    private LinearLayout mStatusLayout;
+    private RelativeLayout mStatusLayout;
     private int mDownX;
     private ShiftLogSqlAdapter mShiftLogAdapter;
     private ArrayDeque<Event> mEventsQueue = new ArrayDeque<>();
@@ -199,7 +198,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private JobsSpinnerAdapter mJobsSpinnerAdapter;
     private List<JobActionsSpinnerItem> mJobActionsSpinnerItems;
     private int mApproveItemID;
-    private ViewGroup mMachineStatusLayout;
+//    private ViewGroup mMachineStatusLayout;
     public static final int REASON_UNREPORTED = 0;
     private SelectStopReasonBroadcast mReasonBroadcast = null;
     private boolean thereAlreadyRequest = false;
@@ -749,9 +748,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 ImageView btnClose = mPopUpDialog.findViewById(R.id.notification_popup_iv);
                 ImageView icon = mPopUpDialog.findViewById(R.id.notification_popup_icon_iv);
-                Button btnApprove = mPopUpDialog.findViewById(R.id.notification_popup_approve_btn);
-                Button btnDecline = mPopUpDialog.findViewById(R.id.notification_popup_decline_btn);
-                Button btnClarify = mPopUpDialog.findViewById(R.id.notification_popup_clarify_btn);
+                ImageView btnApprove = mPopUpDialog.findViewById(R.id.notification_popup_approve_btn);
+                ImageView btnDecline = mPopUpDialog.findViewById(R.id.notification_popup_decline_btn);
+                ImageView btnClarify = mPopUpDialog.findViewById(R.id.notification_popup_clarify_btn);
                 TextView tvSender = mPopUpDialog.findViewById(R.id.notification_popup_tv_sender);
                 TextView tvBody = mPopUpDialog.findViewById(R.id.notification_popup_tv_body);
 
@@ -1230,6 +1229,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mJobActionsSpinnerItems.add(new JobActionsSpinnerItem(mApproveItemID, getString(R.string.approve_first_item)));
 
                 mJobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, mJobActionsSpinnerItems);
+
             }
 
             mJobsSpinner.setAdapter(mJobsSpinnerAdapter);
@@ -1303,10 +1303,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mStatusIndicatorImageView = mToolBarView.findViewById(R.id.job_indicator);
 //            mToolBarView.findViewById(R.id.ATATV_job_indicator_ly).setOnClickListener(this);
 
-            if (mMachineStatusLayout == null) {
-                mMachineStatusLayout = mToolBarView.findViewById(R.id.linearLayout2);
-                mMachineStatusLayout.setVisibility(View.INVISIBLE);
-            }
+//            if (mMachineStatusLayout == null) {
+//                mMachineStatusLayout = mToolBarView.findViewById(R.id.linearLayout2);
+//                mMachineStatusLayout.setVisibility(View.INVISIBLE);
+//            }
             ImageView settingsButton = mToolBarView.findViewById(R.id.settings_button);
             settingsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1316,7 +1316,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             });
             actionBar.setCustomView(mToolBarView);
 
-            setToolBarHeight(mToolBarView);
+//            setToolBarHeight(mToolBarView);
 
             if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
@@ -2864,7 +2864,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
         if (callType == CallType.Status) {
-            mMachineStatusLayout.setVisibility(View.VISIBLE);
+//            mMachineStatusLayout.setVisibility(View.VISIBLE);
             clearStatusLayout();
         }
 
@@ -2941,7 +2941,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         String statusNameByLang = OperatorApplication.isEnglishLang() ? machinesData.getMachineStatusEname() : machinesData.getMachineStatusLName();
         mMachineStatusStatusBarTextView.setText(statusNameByLang);
         statusAggregation(machineStatus);
-        mMachineStatusLayout.setVisibility(View.VISIBLE);
+//        mMachineStatusLayout.setVisibility(View.VISIBLE);
 
         if (machineStatus.getAllMachinesData().get(0).getCurrentStatusTimeMin() > 0) {
 

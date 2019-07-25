@@ -22,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,7 +34,6 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.broadcast.SendLogsBroadcast;
 import com.zemingo.logrecorder.LogRecorder;
-import com.zemingo.logrecorder.ZLogger;
 
 
 public class AdvancedSettingsFragment extends Fragment implements View.OnClickListener, CroutonRootProvider, SendLogsBroadcast.SendLogsListener {
@@ -53,7 +51,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     private EditText mPollingFrequencyEditText;
     private EditText mRequestTimeoutEditText;
     private EditText mPopupTimeoutEditText;
-    private Button mButtonSave;
+    private TextView mButtonSave;
     private TextView mPopupRangeErrorTextView;
     private TextView mPollingRangeErrorTextView;
     private TextView mTimeoutRangeErrorTextView;
