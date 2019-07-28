@@ -265,6 +265,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private LegendDialog mLegendDialog;
     private Event mOpenEvent;
     private SparseArray<WidgetInfo> permissionResponseHashmap;
+    private View mShowAlarmCheckBoxLy;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -428,6 +429,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         });
         mShowAlarmCheckBox = view.findViewById(R.id.FAAE_alarm_chekbox);
+        mShowAlarmCheckBoxLy = view.findViewById(R.id.FAAE_alarm_chekbox_ly);
         mShowAlarmCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -462,7 +464,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TOGGLE_SHIFT_LOG_VIEW, true, "Change shift log view- Events View" );
                     mEventsRecycler.setVisibility(View.VISIBLE);
                     mShiftLogRecycler.setVisibility(View.GONE);
-                    mShowAlarmCheckBox.setVisibility(View.GONE);
+                    mShowAlarmCheckBoxLy.setVisibility(View.GONE);
                     mMinDurationLil.setVisibility(View.GONE);
                     mFilterLy.setVisibility(View.VISIBLE);
                     if (mIsOpen) {
@@ -482,7 +484,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mFilterLy.setVisibility(View.GONE);
                     showLegendBtnVisibility(false);
                     if (!mIsSelectionMode) {
-                        mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+                        mShowAlarmCheckBoxLy.setVisibility(View.VISIBLE);
                         mMinDurationLil.setVisibility(View.VISIBLE);
                     }
                     if (mIsSelectionMode && mFirstSeletedEvent != null) {
@@ -2304,7 +2306,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             onStopEventSelected(event.getEventID(), true);
 
-            mShowAlarmCheckBox.setVisibility(View.GONE);
+            mShowAlarmCheckBoxLy.setVisibility(View.GONE);
             mMinDurationLil.setVisibility(View.GONE);
         } else {
             myTaskListener.onUpdateEventsRecyclerViews(cursor, events);
@@ -2457,7 +2459,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             public void run() {
                                 onStopEventSelected(event.getEventID(), true);
 
-                                mShowAlarmCheckBox.setVisibility(View.GONE);
+                                mShowAlarmCheckBoxLy.setVisibility(View.GONE);
                                 mMinDurationLil.setVisibility(View.GONE);
                             }
                         });
@@ -3119,7 +3121,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mSelectedNumberLy.setVisibility(View.GONE);
 
         if (!mIsTimeLine) {
-            mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+            mShowAlarmCheckBoxLy.setVisibility(View.VISIBLE);
             mMinDurationLil.setVisibility(View.VISIBLE);
         }
 
