@@ -32,8 +32,6 @@ import com.ravtech.david.sqlcore.DatabaseHelper;
 
 import java.util.ArrayList;
 
-import me.grantland.widget.AutofitTextView;
-
 public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
@@ -79,7 +77,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         private TextView mParameterSubReasonTv;
         //    private LinearLayout mStoppedParentLayout;
         private LinearLayout mStoppedTitleLayout;
-        private AutofitTextView mStoppedTitle;
+        private TextView mStoppedTitle;
         private ImageView mStoppedIcon;
         private TextView mStopEventSubReasonTv;
         private TextView mStoppedStart;
@@ -93,7 +91,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         private LinearLayout mStoppedSubtitle;
         //   private LinearLayout mParameterParentLayout;
         private LinearLayout mParameterTitleLayout;
-        private AutofitTextView mParameterTitle;
+        private TextView mParameterTitle;
         private ImageView mParameterIcon;
         private TextView mParameterSubtitleText;
         private TextView mParameterSubTitleValue;
@@ -115,6 +113,13 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             mStopEventSubReasonTv = itemView.findViewById(R.id.event_stopped_shift_log_item_sub_reason);
             //       mStoppedParentLayout = itemView.findViewById(R.id.event_stopped_parent_layout);
             mStoppedTitleLayout = itemView.findViewById(R.id.event_stopped_title_layout);
+            mStoppedTitleLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    mStoppedTitleLayout.getLayoutParams().width = mCloseWidth - 50;
+                    mStoppedTitleLayout.requestLayout();
+                }
+            });
             mStoppedTitle = itemView.findViewById(R.id.event_stopped_shift_log_item_title);
             mStoppedIcon = itemView.findViewById(R.id.event_stopped_shift_log_item_icon);
             mStoppedTime = itemView.findViewById(R.id.event_stopped_shift_log_item_time);
@@ -129,6 +134,13 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             mSplitEvent = itemView.findViewById(R.id.event_stopped_shift_log_item_split_event);
             //         mParameterParentLayout = itemView.findViewById(R.id.event_parameter_parent_layout);
             mParameterTitleLayout = itemView.findViewById(R.id.event_parameter_title_layout);
+            mParameterTitleLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    mParameterTitleLayout.getLayoutParams().width = mCloseWidth - 50;
+                    mParameterTitleLayout.requestLayout();
+                }
+            });
             mParameterTitle = itemView.findViewById(R.id.event_parameter_shift_log_item_title);
             mParameterIcon = itemView.findViewById(R.id.event_parameter_shift_log_item_icon);
             mParameterSubtitleText = itemView.findViewById(R.id.event_parameter_shift_log_item_subtitle_text);
@@ -198,6 +210,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                 mFirstStopEventPosition = viewHolder.getAdapterPosition();
                 if (!BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
                     holder.mSplitEvent.setVisibility(View.VISIBLE);
+
                 }
                 holder.mSplitEvent.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -217,6 +230,8 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
                 holder.mSplitEvent.setVisibility(View.GONE);
                 holder.mStopEventCheckBox.setVisibility(View.VISIBLE);
+                holder.mStopEventCheckBox.setClickable(true);
+                holder.mStopEventCheckBox.setFocusable(true);
                 holder.mStopEventCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -231,6 +246,8 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             } else {
 
                 holder.mStopEventCheckBox.setVisibility(View.GONE);
+                holder.mStopEventCheckBox.setClickable(false);
+                holder.mStopEventCheckBox.setFocusable(false);
             }
 
             if (mSelectedEvents != null) {
