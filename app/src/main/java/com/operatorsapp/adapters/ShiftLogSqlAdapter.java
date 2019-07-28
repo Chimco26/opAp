@@ -32,8 +32,6 @@ import com.ravtech.david.sqlcore.DatabaseHelper;
 
 import java.util.ArrayList;
 
-import me.grantland.widget.AutofitTextView;
-
 public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
@@ -93,7 +91,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         private LinearLayout mStoppedSubtitle;
         //   private LinearLayout mParameterParentLayout;
         private LinearLayout mParameterTitleLayout;
-        private AutofitTextView mParameterTitle;
+        private TextView mParameterTitle;
         private ImageView mParameterIcon;
         private TextView mParameterSubtitleText;
         private TextView mParameterSubTitleValue;
@@ -136,6 +134,13 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             mSplitEvent = itemView.findViewById(R.id.event_stopped_shift_log_item_split_event);
             //         mParameterParentLayout = itemView.findViewById(R.id.event_parameter_parent_layout);
             mParameterTitleLayout = itemView.findViewById(R.id.event_parameter_title_layout);
+            mParameterTitleLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    mParameterTitleLayout.getLayoutParams().width = mCloseWidth - 50;
+                    mParameterTitleLayout.requestLayout();
+                }
+            });
             mParameterTitle = itemView.findViewById(R.id.event_parameter_shift_log_item_title);
             mParameterIcon = itemView.findViewById(R.id.event_parameter_shift_log_item_icon);
             mParameterSubtitleText = itemView.findViewById(R.id.event_parameter_shift_log_item_subtitle_text);
