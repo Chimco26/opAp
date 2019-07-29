@@ -128,7 +128,7 @@ public class ApproveFirstItemFragment extends DialogFragment implements View.OnC
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //        setActionBar();
 
-        return inflater.inflate(R.layout.fragment_approve_first_item, container, false);
+        return inflater.inflate(R.layout.dialog_setup_end, container, false);
     }
 
     @Override
