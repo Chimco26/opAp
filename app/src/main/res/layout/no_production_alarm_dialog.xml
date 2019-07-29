@@ -2,56 +2,74 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/black_filter"
     android:gravity="center"
-    android:clickable="true">
+    android:clickable="true"
+    android:weightSum="3"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="483dp"
-        android:layout_height="409dp"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:weightSum="11">
 
         <ImageView
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="2"
             android:src="@drawable/attention"/>
 
         <TextView
             android:id="@+id/NPAD_note_main_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="2"
             android:layout_marginTop="10dp"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:maxLines="1"
             android:text="@string/attention"
             android:textAlignment="gravity"
             android:textColor="@color/blue1"
             android:textSize="35sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="35sp"/>
 
         <TextView
             android:id="@+id/NPAD_note_title"
-            android:layout_width="225dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
             android:layout_marginTop="25dp"
             android:gravity="center"
             android:text="@string/attention_cycles_detected_in_a_non_production_status"
             android:textAlignment="gravity"
             android:textColor="@color/black"
             android:textSize="18sp"
+            android:maxLines="4"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="18sp"
             />
 
         <Button
             android:id="@+id/NPAD_btn"
             android:layout_width="183dp"
-            android:layout_height="38dp"
+            android:layout_height="0dp"
+            android:layout_weight="2"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="21dp"
             android:background="@color/blue1"
             android:text="@string/activate_job"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="20sp"/>
     </LinearLayout>
 </LinearLayout>
