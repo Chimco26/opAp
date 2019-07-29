@@ -58,46 +58,72 @@
         android:orientation="vertical"
         android:padding="25dp">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="10">
 
             <TextView
                 android:id="@+id/pending_jobs_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_weight="2"
                 android:text="@string/pending_jobs"
                 android:textColor="@color/blue1"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:maxLines="1"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMaxTextSize="18sp"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="0.2" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:paddingEnd="10dp"
+                android:text="@string/filter_by"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:maxLines="1"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMaxTextSize="18sp"/>
+
+            <RelativeLayout
+                android:id="@+id/AJA_search_rv_rl"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.5"
+                android:background="@drawable/box_grey_stroke">
+
+                <Spinner
+                    android:id="@+id/AJA_search_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="37dp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="0.5" />
 
             <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
                 android:id="@+id/AJA_search_et_ll"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="37dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
+                android:layout_weight="3.8"
+                android:layoutDirection="rtl"
                 android:orientation="horizontal"
                 app:corner_radius="3dp">
-
-                <EditText
-                    android:id="@+id/AJA_search_et"
-                    android:layout_width="283dp"
-                    android:layout_height="37dp"
-                    android:layout_centerVertical="true"
-                    android:layout_toStartOf="@+id/AJA_search_btn"
-                    android:background="@drawable/box_grey_stroke_except_right"
-                    android:gravity="center_vertical"
-                    android:hint="@string/search"
-                    android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:textColor="@color/grey1"
-                    android:textSize="18sp" />
 
                 <ImageView
                     android:id="@+id/AJA_search_btn"
@@ -108,33 +134,28 @@
                     android:src="@drawable/ic_search_white_24dp"
                     tools:ignore="ContentDescription" />
 
+                <EditText
+                    android:id="@+id/AJA_search_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="37dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/AJA_search_btn"
+                    android:background="@drawable/box_grey_stroke_except_right"
+                    android:gravity="center_vertical"
+                    android:hint="@string/search"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/grey1"
+                    android:textSize="18sp"
+                    android:maxLines="1"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMaxTextSize="18sp"/>
+
+
             </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
-
-            <RelativeLayout
-                android:id="@+id/AJA_search_rv_rl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="12dp"
-                android:layout_toStartOf="@+id/AJA_search_et_ll"
-                android:background="@drawable/box_grey_stroke">
-
-                <Spinner
-                    android:id="@+id/AJA_search_rv"
-                    android:layout_width="230dp"
-                    android:layout_height="37dp" />
-            </RelativeLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="12dp"
-                android:layout_toStartOf="@+id/AJA_search_rv_rl"
-                android:text="@string/filter_by"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-        </RelativeLayout>
+        </LinearLayout>
 
         <View
             android:layout_width="1dp"
@@ -143,8 +164,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:paddingStart="25dp"
-            android:paddingEnd="22dp"            android:orientation="horizontal"
+            android:paddingEnd="22dp"
             android:weightSum="100">
 
             <TextView
@@ -241,7 +263,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="15"/>
+                android:layout_weight="15" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView

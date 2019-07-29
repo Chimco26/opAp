@@ -169,7 +169,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
             Spinner rejectReasonSpinner = view.findViewById(R.id.reject_reason_spinner);
 
             final RejectReasonSpinnerAdapter reasonSpinnerArrayAdapter = new RejectReasonSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getRejectReasons());
-            reasonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            reasonSpinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
             rejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
             rejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
