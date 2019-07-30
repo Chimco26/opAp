@@ -53,9 +53,9 @@ import com.operatorsapp.utils.broadcast.SendBroadcast;
 
 import static com.operatorsapp.application.OperatorApplication.isEnglishLang;
 
-public class ReportInventoryFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider, KeyboardUtils.KeyboardListener {
+public class ReportProductionFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider, KeyboardUtils.KeyboardListener {
 
-    public static final String LOG_TAG = ReportInventoryFragment.class.getSimpleName();
+    public static final String LOG_TAG = ReportProductionFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
     private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
@@ -79,14 +79,14 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     private int mSelectedPosition;
 
 
-    public static ReportInventoryFragment newInstance(int currentProductId, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
-        ReportInventoryFragment reportInventoryFragment = new ReportInventoryFragment();
+    public static ReportProductionFragment newInstance(int currentProductId, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
+        ReportProductionFragment reportProductionFragment = new ReportProductionFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(CURRENT_PRODUCT_ID, currentProductId);
         bundle.putParcelable(CURRENT_JOB_LIST_FOR_MACHINE, activeJobsListForMachine);
         bundle.putInt(CURRENT_SELECTED_POSITION, selectedPosition);
-        reportInventoryFragment.setArguments(bundle);
-        return reportInventoryFragment;
+        reportProductionFragment.setArguments(bundle);
+        return reportProductionFragment;
     }
 
     @Override
@@ -122,7 +122,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //        setActionBar();
-        return inflater.inflate(R.layout.fragment_report_inventory, container, false);
+        return inflater.inflate(R.layout.fragment_report_production, container, false);
     }
 
     @Override
