@@ -384,6 +384,16 @@
     <string name="cycle_time">وقت الدورة</string>
     <string name="service_calls_distribution">توزيع اتصالات الخدمة</string>
     <string name="shift_report">تقرير المناوبة</string>
+    <string name="you_have">لديك</string>
+    <string name="jobs_on_this_shift">الأعمال في هذه المناوبة</string>
+    <string name="report_cycle_failed_but_max_reported">القيمة التي حددتها للإعلام بوحدة الدورة أعلى من القيمة الأعلى، تم الإعلام بالوحدة العليا</string>
+    <string name="report_cycle_failed_but_min_reported">القيمة التي حددتها للإعلام بوحدة الدورة أقل من القيمة الأعلى، تم الإعلام بالوحدة الدنيا</string>
+    <string name="min_value_is">القيمة الصغرى هي</string>
+    <string name="next_job_will_start_in">العمل التالي يبدأ في</string>
+    <string name="start_job_now">ابدأ عملًا الآن</string>
+    <string name="cancel_job">إلغاء العمل</string>
+    <string name="graph">المخطط</string>
+    <string name="success">النجاح</string>
 
 
 </resources>

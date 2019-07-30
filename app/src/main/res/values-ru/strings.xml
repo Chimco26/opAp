@@ -382,4 +382,14 @@
     <string name="cycle_time">Время цикла</string>
     <string name="service_calls_distribution">Распределение обращений в техподдержку</string>
     <string name="shift_report">Отчет о смене</string>
+    <string name="you_have">У вас есть</string>
+    <string name="jobs_on_this_shift">Задания в эту смену</string>
+    <string name="report_cycle_failed_but_max_reported">установленное вами значение для сообщения об единице измерения цикла превышает максимальное значение, сообщено максимальное значение</string>
+    <string name="report_cycle_failed_but_min_reported">установленное вами значение для сообщения об единице измерения цикла меньше минимального значение, сообщено минимальное значение</string>
+    <string name="min_value_is">минимальное значение —</string>
+    <string name="next_job_will_start_in">Выполнение следующего задания начнется через</string>
+    <string name="start_job_now">Начать выполнение задания сейчас</string>
+    <string name="cancel_job">Отменить задание</string>
+    <string name="graph">График</string>
+    <string name="success">Успех</string>
 </resources>

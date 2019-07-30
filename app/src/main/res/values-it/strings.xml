@@ -331,4 +331,14 @@
     <string name="cycle_time">Tempo di ciclo</string>
     <string name="service_calls_distribution">Distribuzione delle chiamate per supporto</string>
     <string name="shift_report">Rapporto turni</string>
+    <string name="you_have">Hai</string>
+    <string name="jobs_on_this_shift">Lavori in questo turno</string>
+    <string name="report_cycle_failed_but_max_reported">il valore da te definito per segnalare la unità di ciclo supera il valore massimo. Il valore massimo è stato segnalato</string>
+    <string name="report_cycle_failed_but_min_reported">il valore da te definito per segnalare l\'unità di ciclo è inferiore al valore minimo. Il valore minimo è stato segnalato</string>
+    <string name="min_value_is">il valore minimo è</string>
+    <string name="next_job_will_start_in">Il lavoro successivo inizierà tra</string>
+    <string name="start_job_now">Inizia il lavoro adesso</string>
+    <string name="cancel_job">Annulla il lavoro</string>
+    <string name="graph">Grafico</string>
+    <string name="success">Riuscito</string>
 </resources>
