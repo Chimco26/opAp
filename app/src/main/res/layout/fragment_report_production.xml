@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_report_inventory"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,33 +25,33 @@
                 style="@style/Roboto_Regular_Status_Data"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:maxLength="50"
                 android:layout_marginStart="20dp"
                 android:gravity="center_vertical"
+                android:maxLength="50"
                 android:text="@string/id"
                 android:textColor="@color/status_bar"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/report_cycle_id_text_view"
                 style="@style/Roboto_Regular_Status_Data"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:maxEms="50"
                 android:layout_alignTop="@+id/ID_title"
                 android:layout_marginStart="10dp"
                 android:layout_toEndOf="@+id/ID_title"
                 android:gravity="center_vertical"
+                android:maxEms="50"
                 android:text="@string/product_id"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <FrameLayout
                 android:id="@+id/report_job_spinner_frame"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
-                android:layout_toEndOf="@id/job_title"
-                android:layout_marginEnd="39dp">
+                android:layout_marginEnd="39dp"
+                android:layout_toEndOf="@id/job_title">
 
                 <Spinner
                     android:id="@+id/report_job_spinner"
@@ -77,13 +78,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignTop="@+id/report_job_spinner_frame"
-                android:layout_marginEnd="10dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginEnd="10dp"
                 android:layout_toEndOf="@+id/report_cycle_id_text_view"
                 android:gravity="center_vertical"
                 android:text="@string/josh"
                 android:textColor="@color/status_bar"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
         </RelativeLayout>
 
@@ -108,14 +109,13 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
                         android:orientation="vertical">
 
 
                         <ImageView
                             android:id="@+id/imageView2"
-                            android:layout_width="93dp"
-                            android:layout_height="95dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
                             android:background="@drawable/ic_cardbox" />
 
@@ -133,7 +133,10 @@
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="18dp"
                             android:text="@string/report_inventory_nitem_production"
-                            android:textSize="30sp" />
+                            android:textSize="30sp"
+                            android:maxLines="1"
+                            app:autoSizeTextType="uniform"
+                            app:autoSizeMaxTextSize="30sp"/>
                     </LinearLayout>
 
 
@@ -147,78 +150,100 @@
                     android:weightSum="3">
 
                     <View
-                        android:id="@+id/FRI_top_view"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="0.8"
-                        android:visibility="gone" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="0.2" />
+                        android:layout_weight="0.5" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
+                        android:layout_weight="1.75"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="0.25" />
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_marginStart="50dp"
-                            android:layout_marginBottom="40dp"
-                            android:layout_weight="0.97"
+                            android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:weightSum="6.7">
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="7dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
                                 android:text="@string/package_type"
                                 android:textColor="@color/black"
-                                android:textSize="22sp" />
+                                android:textSize="22sp"
+                                android:maxLines="1"
+                                app:autoSizeTextType="uniform"
+                                app:autoSizeMaxTextSize="22sp"/>
 
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.1" />
                             <RelativeLayout
-                                android:layout_width="282dp"
-                                android:layout_height="48dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="2"
                                 android:background="@drawable/edit_text_background_selector">
 
                                 <Spinner
                                     android:id="@+id/package_type_spinner"
-                                    android:layout_width="280dp"
-                                    android:layout_height="46dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
                                     android:dropDownVerticalOffset="45dp" />
                             </RelativeLayout>
 
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1.25" />
+
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="50dp"
-                                android:layout_marginBottom="7dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
                                 android:text="@string/units"
                                 android:textColor="@color/black"
-                                android:textSize="22sp" />
-
+                                android:textSize="22sp"
+                                android:maxLines="1"
+                                app:autoSizeTextType="uniform"
+                                app:autoSizeMaxTextSize="22sp"/>
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.1" />
                             <LinearLayout
-                                android:layout_width="282dp"
-                                android:layout_height="48dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1.25"
                                 android:background="@color/divider_gray"
                                 android:gravity="center">
 
                                 <LinearLayout
-                                    android:layout_width="280dp"
-                                    android:layout_height="46dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
                                     android:background="@android:color/white"
                                     android:gravity="center"
-                                    android:orientation="horizontal">
+                                    android:orientation="horizontal"
+                                    android:weightSum="5">
 
                                     <ImageView
                                         android:id="@+id/button_minus"
-                                        android:layout_width="46dp"
+                                        android:layout_width="0dp"
                                         android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:scaleType="centerCrop"
                                         android:src="@drawable/button_minus_selector" />
 
                                     <EditText
@@ -226,67 +251,94 @@
                                         style="@style/FontStyle_T6"
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_weight="1"
+                                        android:layout_weight="3"
                                         android:background="@android:color/transparent"
                                         android:gravity="center"
                                         android:inputType="number"
                                         android:maxLength="5"
                                         android:text="@string/one"
                                         android:textColor="@color/status_bar"
-                                        android:textSize="22sp" />
+                                        android:textSize="22sp"
+                                        android:maxLines="1"
+                                        app:autoSizeTextType="uniform"
+                                        app:autoSizeMaxTextSize="22sp"/>
 
                                     <ImageView
                                         android:id="@+id/button_plus"
-                                        android:layout_width="46dp"
+                                        android:layout_width="0dp"
                                         android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:scaleType="centerCrop"
                                         android:src="@drawable/button_plus_selector" />
                                 </LinearLayout>
                             </LinearLayout>
 
                         </LinearLayout>
 
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="0.5" />
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="bottom"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:weightSum="6.5">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="37dp"
-                                android:layout_marginBottom="50dp"
+                                android:layout_height="0dp"
+                                android:layout_weight="1.5"
                                 android:gravity="end"
                                 android:orientation="horizontal"
-                                android:weightSum="1">
+                                android:weightSum="2.2">
 
                                 <TextView
                                     android:id="@+id/button_cancel"
                                     style="@style/FontStyle_Button"
-                                    android:layout_width="134dp"
-                                    android:layout_height="34dp"
-                                    android:layout_marginRight="5dp"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
                                     android:gravity="center"
                                     android:text="@string/cancel"
                                     android:textAllCaps="true"
                                     android:textColor="@drawable/button_cancel_text_selector"
-                                    android:textSize="22sp" />
+                                    android:textSize="22sp"
+                                    android:maxLines="1"
+                                    app:autoSizeTextType="uniform"
+                                    app:autoSizeMaxTextSize="22sp"
+                                    android:padding="5dp"/>
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="1dp"
+                                    android:layout_weight="0.2" />
 
                                 <Button
                                     android:id="@+id/button_report"
                                     style="@style/FontStyle_Button"
-                                    android:layout_width="94dp"
-                                    android:layout_height="34dp"
-                                    android:layout_weight="0.13"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
                                     android:background="@drawable/buttons_selector"
                                     android:text="@string/report"
                                     android:textColor="@drawable/button_text_color_selector"
-                                    android:textSize="22sp" />
+                                    android:textSize="22sp"
+                                    android:maxLines="1"
+                                    app:autoSizeTextType="uniform"
+                                    app:autoSizeMaxTextSize="22sp"
+                                    android:padding="5dp"/>
                             </LinearLayout>
 
                         </LinearLayout>
 
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="0.25"/>
 
                     </LinearLayout>
 

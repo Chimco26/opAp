@@ -196,7 +196,7 @@ public class ShowCrouton {
 
     private static void showNoDataCrouton(final OnCroutonRequestListener onCroutonRequestListener, final SpannableStringBuilder str, final CroutonCreator.CroutonType credentialsError, int viewId) {
         if (onCroutonRequestListener != null) {
-            onCroutonRequestListener.onShowCroutonRequest(str, Integer.MAX_VALUE, viewId, credentialsError); //R.id.fragment_report_inventory
+            onCroutonRequestListener.onShowCroutonRequest(str, Integer.MAX_VALUE, viewId, credentialsError); //R.id.fragment_report_production
         }
     }
     */
