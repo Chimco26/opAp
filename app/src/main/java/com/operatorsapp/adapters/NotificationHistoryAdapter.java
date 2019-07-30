@@ -260,9 +260,9 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
 
         private TextView mSubtextTv;
         private LinearLayout mBtnsLil;
-        private Button mApproveBtn;
-        private Button mClarifyBtn;
-        private Button mDeclineBtn;
+        private ImageView mApproveBtn;
+        private ImageView mClarifyBtn;
+        private ImageView mDeclineBtn;
         private TextView mDayTitleTv;
         private TextView mBodyTv;
         private TextView mSenderTv;
