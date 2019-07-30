@@ -1,120 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_marginTop="2dp"
-    android:layout_marginBottom="1dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="1dp"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/notification_item_tv_day_title"
-        android:textSize="22sp"
-        android:textColor="@color/dark_indigo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white_five"
-        android:paddingLeft="15dp"
         android:layout_marginTop="25dp"
         android:layout_marginBottom="10dp"
-        android:visibility="gone"/>
+        android:background="@color/white_five"
+        android:paddingLeft="15dp"
+        android:textColor="@color/dark_indigo"
+        android:textSize="22sp"
+        android:visibility="gone" />
 
     <RelativeLayout
-        android:padding="15dp"
-        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="15dp">
 
-            <ImageView
-                android:id="@+id/notification_item_iv"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="15dp"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:src="@drawable/message_dark"/>
-
-
-            <TextView
-                android:id="@+id/notification_item_subtext_tv"
-                style="@style/ProximaNovaSemiBold"
-                android:textColor="@color/black"
-                android:layout_width="55dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/notification_item_iv"
-                android:layout_marginRight="5dp"
-                android:textSize="12sp" />
+        <ImageView
+            android:id="@+id/notification_item_iv"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/message_dark" />
 
 
-            <TextView
-                    android:id="@+id/notification_item_tv_sender"
-                    android:layout_toRightOf="@+id/notification_item_iv"
-                    android:layout_toLeftOf="@+id/notification_item_tv_time"
-                    android:layout_alignParentTop="true"
-                    android:textSize="22sp"
-                    android:gravity="center_vertical"
-                    android:textStyle="bold"
-                    android:textColor="@color/dark_blue_two"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/notification_item_subtext_tv"
+            style="@style/ProximaNovaSemiBold"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/notification_item_iv"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/notification_item_tv_time"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:textSize="18sp"
-                android:textColor="@color/dark_blue_two"
-                android:textStyle="bold"
-                android:gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/notification_item_tv_body"
-                android:layout_toRightOf="@+id/notification_item_iv"
-                android:layout_below="@+id/notification_item_tv_sender"
-                android:textSize="18sp"
-                android:textColor="@color/dark_indigo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"/>
+        <TextView
+            android:id="@+id/notification_item_tv_sender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/notification_item_tv_time"
+            android:layout_toRightOf="@+id/notification_item_iv"
+            android:gravity="center_vertical"
+            android:textColor="@color/dark_blue_two"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
-            <LinearLayout
-                android:id="@+id/notification_item_btns_lil"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/notification_item_iv"
-                android:layout_below="@+id/notification_item_tv_body">
+        <TextView
+            android:id="@+id/notification_item_tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:textColor="@color/dark_blue_two"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/notification_item_approve_btn"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/baseline_check_circle"/>
+        <TextView
+            android:id="@+id/notification_item_tv_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/notification_item_tv_sender"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/notification_item_iv"
+            android:textColor="@color/dark_indigo"
+            android:textSize="18sp" />
 
-                <Button
-                    android:id="@+id/notification_item_decline_btn"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:background="@drawable/close_circle_outline"/>
+        <LinearLayout
+            android:id="@+id/notification_item_btns_lil"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/notification_item_tv_body"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/notification_item_iv"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="11">
 
-                <Button
-                    android:id="@+id/notification_item_clarify_btn"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/question_circle_outline"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="2" />
 
-            </LinearLayout>
+            <com.operatorsapp.view.SquareImageView
+                android:id="@+id/notification_item_approve_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/baseline_check_circle" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="2" />
+
+            <com.operatorsapp.view.SquareImageView
+                android:id="@+id/notification_item_decline_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/close_circle_outline" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="2" />
+
+            <com.operatorsapp.view.SquareImageView
+                android:id="@+id/notification_item_clarify_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/question_circle_outline" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="2" />
+        </LinearLayout>
+
 
     </RelativeLayout>
 
