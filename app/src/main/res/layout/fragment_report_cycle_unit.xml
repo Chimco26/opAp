@@ -233,59 +233,60 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"/>
+
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="bottom"
                         android:orientation="vertical"
-                        android:weightSum="2">
+                        android:weightSum="3">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_weight="1"
+                            android:layout_weight="2.2"
                             android:gravity="end"
                             android:orientation="horizontal"
-                            android:weightSum="2">
+                            android:weightSum="2.2">
 
                             <TextView
                                 android:id="@+id/button_cancel"
                                 style="@style/FontStyle_Button"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_marginEnd="5dp"
-                                android:padding="5dp"
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:text="@string/cancel"
                                 android:textAllCaps="true"
                                 android:textColor="@drawable/button_cancel_text_selector"
                                 android:textSize="22sp"
+                                android:padding="5dp"
                                 android:maxLines="1"
                                 app:autoSizeTextType="uniform"
-                                app:autoSizeMaxTextSize="22sp"/>
+                                app:autoSizeMaxTextSize="22sp"
+                                />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="1dp"
+                                android:layout_weight="0.2" />
 
                             <Button
                                 android:id="@+id/button_report"
                                 style="@style/FontStyle_Button"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_marginStart="20dp"
                                 android:layout_weight="1"
                                 android:background="@drawable/buttons_selector"
                                 android:text="@string/report"
                                 android:textColor="@drawable/button_text_color_selector"
                                 android:textSize="22sp"
-                                android:maxLines="1"
                                 android:padding="5dp"
+                                android:maxLines="1"
                                 app:autoSizeTextType="uniform"
-                                app:autoSizeMaxTextSize="22sp"/>
-
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="1dp"
-                                android:layout_weight="0.5" />
+                                app:autoSizeMaxTextSize="22sp"
+                                />
                         </LinearLayout>
 
                     </LinearLayout>
