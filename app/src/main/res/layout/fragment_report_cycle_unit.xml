@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:clickable="true"
-              android:background="@android:color/white">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
+    android:clickable="true"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,33 +18,33 @@
             style="@style/Roboto_Regular_Status_Data"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:maxLength="50"
             android:layout_marginStart="20dp"
             android:gravity="center_vertical"
+            android:maxLength="50"
             android:text="@string/id"
             android:textColor="@color/status_bar"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/report_cycle_id_text_view"
             style="@style/Roboto_Regular_Status_Data"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:maxEms="50"
             android:layout_alignTop="@+id/ID_title"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/ID_title"
             android:gravity="center_vertical"
+            android:maxEms="50"
             android:text="@string/product_id"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <FrameLayout
             android:id="@+id/report_job_spinner_frame"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@id/job_title"
-            android:layout_marginEnd="39dp">
+            android:layout_marginEnd="39dp"
+            android:layout_toEndOf="@id/job_title">
 
             <Spinner
                 android:id="@+id/report_job_spinner"
@@ -70,13 +71,13 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignTop="@+id/report_job_spinner_frame"
-            android:layout_marginEnd="10dp"
             android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
             android:layout_toEndOf="@+id/report_cycle_id_text_view"
             android:gravity="center_vertical"
             android:text="@string/josh"
             android:textColor="@color/status_bar"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
     </RelativeLayout>
 
@@ -85,181 +86,219 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <LinearLayout
+        <LinearLayout
 
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <RelativeLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/reports_background"
-            android:gravity="center_vertical">
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/reports_background"
+                android:gravity="center_vertical">
 
-
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="93dp"
-                    android:layout_height="83dp"
-                    android:layout_marginStart="20dp"
-                    android:background="@drawable/icrepeat"/>
-
-                <View
-                    android:layout_width="69dp"
-                    android:layout_height="2dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="14dp"
-                    android:background="@color/divider_gray"/>
-
-                <me.grantland.widget.AutofitTextView
-                    style="@style/FontStyle_T120"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="18dp"
-                    android:maxLines="1"
-                    android:text="@string/report_cycle_nunits"
-                    android:textSize="30sp"/>
-            </LinearLayout>
+                    android:layout_marginBottom="20dp"
+                    android:orientation="vertical">
 
 
-        </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="93dp"
+                        android:layout_height="83dp"
+                        android:layout_marginStart="20dp"
+                        android:background="@drawable/icrepeat" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:orientation="vertical"
-            android:gravity="top">
+                    <View
+                        android:layout_width="69dp"
+                        android:layout_height="2dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="14dp"
+                        android:background="@color/divider_gray" />
 
-            <!--<ScrollView-->
+                    <me.grantland.widget.AutofitTextView
+                        style="@style/FontStyle_T120"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="18dp"
+                        android:maxLines="1"
+                        android:text="@string/report_cycle_nunits"
+                        android:textSize="30sp" />
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="top"
+                android:orientation="vertical"
+                android:weightSum="6">
+
+                <!--<ScrollView-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="match_parent">-->
 
-            <View android:layout_width="match_parent" android:layout_weight="1" android:layout_height="0dp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2" />
 
                 <LinearLayout
-
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:weightSum="3.5">
 
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="0.25"/>
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="40dp"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:orientation="vertical">
-
+                        android:orientation="vertical"
+                        android:weightSum="4">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="7dp"
-                            android:layout_marginTop="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1.5"
+                            android:gravity="center_vertical"
                             android:text="@string/units"
                             android:textColor="@color/black"
-                            android:textSize="22sp"/>
+                            android:textSize="22sp"
+                            android:maxLines="1"
+                            app:autoSizeTextType="uniform"
+                            app:autoSizeMaxTextSize="22sp"/>
 
                         <LinearLayout
-                            android:layout_width="282dp"
-                            android:layout_height="48dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2.5"
                             android:background="@color/divider_gray"
                             android:gravity="center">
 
                             <LinearLayout
-                                android:layout_width="280dp"
-                                android:layout_height="46dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:background="@android:color/white"
                                 android:gravity="center"
-                                android:orientation="horizontal">
+                                android:orientation="horizontal"
+                                android:weightSum="5">
 
                                 <ImageView
                                     android:id="@+id/button_minus"
-                                    android:layout_width="46dp"
+                                    android:layout_width="0dp"
                                     android:layout_height="match_parent"
-                                    android:src="@drawable/button_minus_selector"/>
+                                    android:layout_weight="1"
+                                    android:src="@drawable/button_minus_selector" />
 
                                 <TextView
                                     android:id="@+id/units_text_view"
                                     style="@style/FontStyle_T6"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
-                                    android:layout_weight="2"
+                                    android:layout_weight="3"
                                     android:background="@android:color/transparent"
                                     android:gravity="center"
                                     android:text="@string/one"
-                                    android:maxLines="1"
                                     android:textColor="@color/status_bar"
-                                    android:textSize="22sp"/>
+                                    android:textSize="22sp"
+                                    android:maxLines="1"
+                                    app:autoSizeTextType="uniform"
+                                    app:autoSizeMaxTextSize="22sp"/>
 
                                 <ImageView
                                     android:id="@+id/button_plus"
-                                    android:layout_width="46dp"
+                                    android:layout_width="0dp"
                                     android:layout_height="match_parent"
-                                    android:src="@drawable/button_plus_selector"/>
+                                    android:layout_weight="1"
+                                    android:src="@drawable/button_plus_selector" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
 
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="bottom"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:weightSum="2">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="37dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
                             android:gravity="end"
                             android:orientation="horizontal"
-                            android:weightSum="1">
+                            android:weightSum="2">
 
                             <TextView
                                 android:id="@+id/button_cancel"
                                 style="@style/FontStyle_Button"
-                                android:layout_width="134dp"
-                                android:layout_height="34dp"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
                                 android:layout_marginEnd="5dp"
+                                android:layout_weight="1"
                                 android:gravity="center"
                                 android:text="@string/cancel"
                                 android:textAllCaps="true"
                                 android:textColor="@drawable/button_cancel_text_selector"
-                                android:textSize="22sp"/>
+                                android:textSize="22sp"
+                                android:maxLines="1"
+                                app:autoSizeTextType="uniform"
+                                app:autoSizeMaxTextSize="22sp"/>
 
                             <Button
                                 android:id="@+id/button_report"
                                 style="@style/FontStyle_Button"
-                                android:layout_width="94dp"
-                                android:layout_height="34dp"
-                                android:layout_weight="0.13"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="20dp"
+                                android:layout_weight="1"
                                 android:background="@drawable/buttons_selector"
                                 android:text="@string/report"
                                 android:textColor="@drawable/button_text_color_selector"
-                                android:textSize="22sp"/>
+                                android:textSize="22sp"
+                                android:maxLines="1"
+                                app:autoSizeTextType="uniform"
+                                app:autoSizeMaxTextSize="22sp"/>
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="1dp"
+                                android:layout_weight="0.5" />
                         </LinearLayout>
 
                     </LinearLayout>
 
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="0.25"/>
 
                 </LinearLayout>
 
-            <View android:layout_width="match_parent" android:layout_weight="5" android:layout_height="0dp"/>
-            <!--</ScrollView>-->
-        </LinearLayout>
+                <!--</ScrollView>-->
+            </LinearLayout>
 
-    </LinearLayout>
+        </LinearLayout>
 
     </FrameLayout>
 
