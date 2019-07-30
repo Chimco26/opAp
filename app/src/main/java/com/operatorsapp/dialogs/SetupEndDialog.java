@@ -69,12 +69,17 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 
         LayoutInflater inflater = mContext.getLayoutInflater();
-        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.fragment_approve_first_item, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_setup_end, null);
         builder.setView(view);
         isRejects = PersistenceManager.getInstance().getAddRejectsOnSetupEnd();
 
         mKeyBoardLayout = view.findViewById(R.id.FAFI_keyboard);
         mKeyBoardLayout.setVisibility(View.VISIBLE);
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+            }
+        });
         initRv(view);
         builder.setCancelable(true);
         mAlaramAlertDialog = builder.create();

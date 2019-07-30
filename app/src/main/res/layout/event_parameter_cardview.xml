@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/event_parameter_parent_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -17,62 +17,78 @@
             android:layout_width="140dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="7">
 
             <LinearLayout
+                android:id="@+id/ESC_main_height"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="3"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/event_parameter_shift_log_item_icon"
-                    android:layout_width="39dp"
-                    android:layout_height="39dp"
-                    android:layout_marginStart="24dp"
-                    android:src="@drawable/ic_cloud" />
-
-
-                <TextView
-                    android:id="@+id/event_parameter_shift_log_item_time"
-                    style="@style/FontStyle_T9"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="13dp"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:layout_marginStart="5dp"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
 
+                    <ImageView
+                        android:id="@+id/event_parameter_shift_log_item_icon"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1.5"
+                        android:src="@drawable/ic_cloud" />
 
+                    <TextView
+                        android:id="@+id/event_parameter_shift_log_item_time"
+                        style="@style/FontStyle_T9"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="2.5"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:paddingStart="5dp"
+                        android:text="12:25"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:autoSizeMaxTextSize="20sp"
+                        app:autoSizeTextType="uniform" />
+                </LinearLayout>
             </LinearLayout>
 
-            <me.grantland.widget.AutofitTextView
+            <TextView
                 android:id="@+id/event_parameter_shift_log_item_title"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="14dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="5dp"
+                android:layout_weight="1.8"
                 android:ellipsize="end"
-                android:textColor="@color/black"
                 android:maxLines="1"
+                android:textColor="@color/black"
                 android:textSize="18sp"
-                autofit:minTextSize="18sp" />
+                android:autoSizeMaxTextSize="18sp"
+                app:autoSizeTextType="uniform" />
 
-            <me.grantland.widget.AutofitTextView
+            <TextView
                 android:id="@+id/event_parameter_shift_log_item_sub_reason"
                 android:layout_width="match_parent"
-                android:layout_height="28dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="14dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="5dp"
+                android:layout_weight="1.2"
                 android:ellipsize="end"
+                android:gravity="center_vertical"
                 android:maxLines="1"
                 android:textColor="@color/black"
-                android:gravity="center_vertical"
                 android:textSize="12sp"
-                autofit:minTextSize="14sp"
-                android:visibility="visible"/>
-
+                android:visibility="gone"
+                app:autoSizeTextType="uniform" />
 
         </LinearLayout>
 
@@ -81,33 +97,37 @@
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@color/divider_gray"
             android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/event_parameter_shift_log_item_subtitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="10dp"
             android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="5">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:gravity="start"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/event_parameter_shift_log_item_subtitle_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
                     android:text="Cycle time"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeTextType="uniform" />
 
                 <TextView
                     android:id="@+id/event_parameter_shift_log_item_subtitle_value"
@@ -115,41 +135,56 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
+                    android:maxLines="1"
                     android:text="17"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeTextType="uniform" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
-                    android:orientation="vertical">
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:weightSum="2">
 
                     <TextView
                         android:id="@+id/event_parameter_shift_log_item_standard"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:ellipsize="end"
-                        android:maxLines="1"
                         android:maxWidth="120dp"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="10"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        app:autoSizeMaxTextSize="18sp"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:ellipsize="end"
-                        android:maxLines="1"
+                        android:gravity="center"
                         android:maxWidth="120dp"
+                        android:maxLines="1"
                         android:text="Standard"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        app:autoSizeMaxTextSize="18sp"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
 
                 <View
@@ -158,30 +193,38 @@
                     android:background="@color/divider_gray" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginStart="12dp"
-                    android:orientation="vertical">
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:weightSum="2">
 
                     <TextView
                         android:id="@+id/event_parameter_shift_log_item_min"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:ellipsize="end"
-                        android:maxLines="1"
                         android:maxWidth="120dp"
+                        android:maxLines="1"
+                        android:gravity="center"
                         android:text="10"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        app:autoSizeMaxTextSize="18sp"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:ellipsize="end"
-                        android:maxLines="1"
+                        android:gravity="center"
                         android:maxWidth="120dp"
+                        android:maxLines="1"
                         android:text="Min"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        app:autoSizeMaxTextSize="18sp"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
 
                 <View
@@ -190,29 +233,38 @@
                     android:background="@color/divider_gray" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:orientation="vertical">
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:weightSum="2">
 
                     <TextView
                         android:id="@+id/event_parameter_shift_log_item_max"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:gravity="center"
+                        android:layout_weight="1"
                         android:ellipsize="end"
-                        android:maxLines="1"
                         android:maxWidth="120dp"
+                        android:maxLines="1"
                         android:text="10"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        app:autoSizeMaxTextSize="18sp"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:ellipsize="end"
-                        android:maxLines="1"
+                        android:gravity="center"
                         android:maxWidth="120dp"
+                        android:maxLines="1"
                         android:text="Max"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        app:autoSizeMaxTextSize="18sp"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
             </LinearLayout>
 

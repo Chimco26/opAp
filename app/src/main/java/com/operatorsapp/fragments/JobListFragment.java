@@ -166,7 +166,7 @@ public class JobListFragment extends Fragment implements
             sortHeaders();
             mHeaders.add(0, new Header(getString(R.string.general), 0));
             mHeadersAdapter = new JobHeadersSpinnerAdapter(getActivity(), R.layout.spinner_language_item, mHeaders);
-            mHeadersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mHeadersAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
             mHeadersRv.setAdapter(mHeadersAdapter);
             mHeadersRv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override

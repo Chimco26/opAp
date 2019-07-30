@@ -4,7 +4,7 @@
     android:layout_margin="15dp"
     android:orientation="vertical"
     android:layout_width="300dp"
-    android:layout_height="400dp"
+    android:layout_height="match_parent"
     android:background="@drawable/combined_shape">
 
     <LinearLayout
@@ -38,7 +38,6 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/report_vertical_rv"
-        android:layout_below="@+id/report_horizontal_tv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
