@@ -383,5 +383,15 @@
     <string name="cycle_time">Тривалість циклу</string>
     <string name="service_calls_distribution">Розподіл викликів служби</string>
     <string name="shift_report">Звіт за зміну</string>
+    <string name="you_have">Ви маєте</string>
+    <string name="jobs_on_this_shift">Завдання протягом цієї зміни</string>
+    <string name="report_cycle_failed_but_max_reported">значення, яке ви встановили для повідомлення про одиницю циклу, перебільшує максимальне значення; було повідомлено максимальне значення</string>
+    <string name="report_cycle_failed_but_min_reported">значення, яке ви встановили для повідомлення про одиницю циклу, нижче за мінімальне значення; було повідомлено мінімальне значення</string>
+    <string name="min_value_is">мінімальне значення</string>
+    <string name="next_job_will_start_in">Наступне завдання почнеться через</string>
+    <string name="start_job_now">Почати завдання зараз</string>
+    <string name="cancel_job">Скасувати завдання</string>
+    <string name="graph">Графік</string>
+    <string name="success">Успіх</string>
 
 </resources>

@@ -393,5 +393,15 @@
     <string name="cycle_time">Cyclustijd</string>
     <string name="service_calls_distribution">Service-oproepen distributie</string>
     <string name="shift_report">Ploegrapport</string>
+    <string name="you_have">U hebt</string>
+    <string name="jobs_on_this_shift">Opdrachten tijdens deze dienst</string>
+    <string name="report_cycle_failed_but_max_reported">de waarde die u hebt ingesteld om cycluseenheid te melden is hoger dan max waarde, de max waarde werd gemeld</string>
+    <string name="report_cycle_failed_but_min_reported">de waarde die u hebt ingesteld om cycluseenheid te melden is lager dan min waarde, de min waarde werd gemeld</string>
+    <string name="min_value_is">min waarde is</string>
+    <string name="next_job_will_start_in">Volgende opdracht begint over</string>
+    <string name="start_job_now">Start opdracht nu</string>
+    <string name="cancel_job">Opdracht annuleren</string>
+    <string name="graph">Grafiek</string>
+    <string name="success">Succes</string>
 
 </resources>

@@ -403,5 +403,14 @@
     <string name="number_of_jobs">מספר פק\"עות</string>
     <string name="type_something">הקלד..</string>
     <string name="cycle_time">זמן מחזור</string>
+    <string name="jobs_on_this_shift">פק\"עות במשמרת הנוכחית</string>
+    <string name="report_cycle_failed_but_max_reported">הערך שהגדרת ליחידות במחזור הוא מעל לערך המקסימלי, הערך המקסימלי לדיווח</string>
+    <string name="report_cycle_failed_but_min_reported">הערך שהגדרת ליחידות במחזור הוא מתחת לערך המינימלי, הערך המינימלי לדיווח</string>
+    <string name="min_value_is">הערך המינימלי הוא</string>
+    <string name="next_job_will_start_in">הפק\"ע הבאה תחל בעוד</string>
+    <string name="start_job_now">התחל פק\"ע עכשיו</string>
+    <string name="cancel_job">בטל פק\"ע</string>
+    <string name="graph">גרף</string>
+    <string name="success">הצלחה</string>
 
 </resources>

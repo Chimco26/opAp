@@ -387,4 +387,14 @@
     <string name="cycle_time">Zykluszeit</string>
     <string name="service_calls_distribution">Service-Anrufe-Verteilung</string>
     <string name="shift_report">Schichtbericht</string>
+    <string name="you_have">Sie haben</string>
+    <string name="jobs_on_this_shift">Jobs in dieser Schicht</string>
+    <string name="report_cycle_failed_but_max_reported">Der Wert, den Sie für die Anzeige der Zykluseinheit festlegen, liegt über dem Maximalwert. Der Maximalwert wurde gemeldet.</string>
+    <string name="report_cycle_failed_but_min_reported">Der Wert, den Sie für die Anzeige der Zykluseinheit festlegen, liegt unter dem Mindestwert. Der Mindestwert wurde gemeldet.</string>
+    <string name="min_value_is">Mindestwert ist</string>
+    <string name="next_job_will_start_in">Nächster Job startet in</string>
+    <string name="start_job_now">Job jetzt starten</string>
+    <string name="cancel_job">Job abbrechen</string>
+    <string name="graph">Graph</string>
+    <string name="success">Erfolg</string>
 </resources>

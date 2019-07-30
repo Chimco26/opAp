@@ -385,6 +385,16 @@
     <string name="cycle_time">Tiempo de ciclo</string>
     <string name="service_calls_distribution">Distribución de llamadas de servicio</string>
     <string name="shift_report">Informe de turnos</string>
+    <string name="you_have">Tiene</string>
+    <string name="jobs_on_this_shift">Trabajos en este turno</string>
+    <string name="report_cycle_failed_but_max_reported">el valor que eligió para informar la unidad del ciclo supera el valor máximo. Se informó el valor máximo.</string>
+    <string name="report_cycle_failed_but_min_reported">el valor que eligió para informar la unidad del ciclo no llega al valor mínimo. Se informó el valor mínimo.</string>
+    <string name="min_value_is">el valor mínimo es</string>
+    <string name="next_job_will_start_in">El próximo trabajo empezará en</string>
+    <string name="start_job_now">Empezar trabajo ahora</string>
+    <string name="cancel_job">Cancelar trabajo</string>
+    <string name="graph">Gráfico</string>
+    <string name="success">Éxito</string>
 
 
 </resources>
