@@ -726,7 +726,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             if (notification != null) {
                 //check if notification was sent to self
-                if (notification.getmTargetUserId() == notification.getmSourceUserID() && notification.getmTargetName().equals(notification.getmSender())) return;
+                if (notification.getmTargetUserId() == notification.getmSourceUserID()){
+                    if (mPopUpDialog != null && mPopUpDialog instanceof NotificationsDialog && mPopUpDialog.isShowing()) {
+                        openNotificationsList();
+                    }
+                    return;
+                }
 
                 if (mPopUpDialog != null && mPopUpDialog.isShowing()) {
                     mPopUpDialog.dismiss();
@@ -3363,7 +3368,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
                     PersistenceManager.getInstance().setCalledTechnicianList(techList);
-                    if (openNotifications) {
+                    if (openNotifications || (mPopUpDialog != null && mPopUpDialog.isShowing() && mPopUpDialog instanceof NotificationsDialog)) {
                         openNotificationsList();
                     }
 
