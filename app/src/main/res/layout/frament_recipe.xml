@@ -12,7 +12,7 @@
         android:id="@+id/FR_note_ly"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_weight="2.2"
         android:layout_gravity="center_horizontal"
         android:layout_marginStart="150dp"
         android:layout_marginTop="5dp"
@@ -42,31 +42,38 @@
             android:layout_height="2dp"
             android:background="@color/divider_gray" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3"
             android:orientation="horizontal"
-            android:padding="5dp">
+            android:padding="5dp"
+            android:weightSum="10">
 
             <TextView
                 android:id="@+id/FR_notes_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="8"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
                 android:layout_height="wrap_content"
                 app:autoSizeTextType="uniform"
-                android:layout_marginEnd="60dp"
-                android:layout_centerVertical="true"/>
+                android:ellipsize="marquee" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
             <ImageView
                 android:id="@+id/FR_open_edit_text_btn"
-                android:layout_width="50dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
                 android:src="@drawable/note" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -198,7 +205,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7">
+        android:layout_weight="6.8">
 
         <include
             android:id="@+id/FR_channel_0_ly"
