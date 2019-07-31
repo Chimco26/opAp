@@ -364,13 +364,15 @@
             android:id="@+id/toolbar_operator_fl"
             android:layout_width="0dp"
             android:layout_weight="16"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
 
             <TextView
                 android:id="@+id/toolbar_operator_tv"
                 style="@style/FontStyle_T99"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
