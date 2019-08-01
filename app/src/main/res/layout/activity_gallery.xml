@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -29,9 +28,9 @@
                 android:layout_width="35dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="24dp"
-                android:paddingBottom="5dp"
-                android:paddingEnd="20dp"
                 android:paddingTop="5dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="5dp"
                 android:src="@drawable/button_x_selector" />
 
             <TextView
@@ -47,120 +46,127 @@
 
     </RelativeLayout>
 
-
-    <RelativeLayout
-        android:id="@+id/AG_center_layout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="520dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="650">
 
-        <com.github.chrisbanes.photoview.PhotoView
-            android:id="@+id/AG_image"
+        <RelativeLayout
+            android:id="@+id/AG_center_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true" />
+            android:layout_height="0dp"
+            android:layout_weight="510">
 
-        <com.github.barteksc.pdfviewer.PDFView
-            android:id="@+id/AG_pdf"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:visibility="gone" />
-
-        <com.halilibo.bettervideoplayer.BetterVideoPlayer
-            android:id="@+id/AG_player"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"/>
-
-        <LinearLayout
-            android:id="@+id/AG_scale_ly"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:orientation="horizontal"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/scale_background"
-            >
-
-            <TextView
-                android:id="@+id/AG_scale_minus"
-                android:layout_width="50dp"
+            <com.github.chrisbanes.photoview.PhotoView
+                android:id="@+id/AG_image"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/black"
-                android:textSize="25sp"
-                android:text="-"
-                android:gravity="center" />
+                android:layout_centerInParent="true" />
 
-            <TextView
-                android:id="@+id/AG_scale_tv"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="100%"
-                android:textSize="25sp"
-                android:gravity="center"/>
-
-            <TextView
-                android:id="@+id/AG_scale_plus"
-                android:layout_width="50dp"
+            <com.github.barteksc.pdfviewer.PDFView
+                android:id="@+id/AG_pdf"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/black"
-                android:textSize="25sp"
-                android:text="+"
-                android:gravity="center" />
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
 
-        </LinearLayout>
+            <com.halilibo.bettervideoplayer.BetterVideoPlayer
+                android:id="@+id/AG_player"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
 
-        <LinearLayout
-            android:id="@+id/AG_loading_ly"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="invisible">
-
-            <ProgressBar
-                android:id="@+id/AG_loading_progress"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                android:indeterminate="true"
-                android:indeterminateTint="@color/C16"
-                android:indeterminateTintMode="src_atop" />
-
-            <TextView
-                android:id="@+id/AG_loading_tv"
-                style="@style/FontStyle_T7"
+            <LinearLayout
+                android:id="@+id/AG_scale_ly"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/scale_background"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/AG_scale_minus"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="-"
+                    android:textColor="@color/black"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/AG_scale_tv"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="100%"
+                    android:textColor="@color/black"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/AG_scale_plus"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="+"
+                    android:textColor="@color/black"
+                    android:textSize="25sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/AG_loading_ly"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:text="@string/loading_file"
-                android:textColor="@color/divider_gray"
-                android:textSize="50sp" />
-        </LinearLayout>
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="invisible">
 
-    </RelativeLayout>
+                <ProgressBar
+                    android:id="@+id/AG_loading_progress"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/C16"
+                    android:indeterminateTintMode="src_atop" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/default_gray" />
+                <TextView
+                    android:id="@+id/AG_loading_tv"
+                    style="@style/FontStyle_T7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/loading_file"
+                    android:textColor="@color/divider_gray"
+                    android:textSize="50sp" />
+            </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/AG_rv"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp" />
+        </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/default_gray" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="12" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/default_gray" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/AG_rv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="125" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/default_gray" />
+    </LinearLayout>
 </LinearLayout>

@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -44,6 +43,16 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull final GalleryAdapter.ViewHolder viewHolder, final int position) {
+
+        viewHolder.mImgLy.post(new Runnable() {
+            @Override
+            public void run() {
+                ViewGroup.MarginLayoutParams mItemViewParams4;
+                mItemViewParams4 = (ViewGroup.MarginLayoutParams) viewHolder.mImgLy.getLayoutParams();
+                mItemViewParams4.width = mContext.getResources().getDisplayMetrics().widthPixels / 6;
+                viewHolder.mImgLy.requestLayout();
+            }
+        });
 
         if (mGalleryModels.get(position).isSelected()) {
 

@@ -104,9 +104,7 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
     private void initSplits(ViewHolder viewHolder, int position) {
 
         if (mChannelSplits.get(position).getBaseSplits() != null) {
-            mChannelSplits.get(position).getBaseSplits().addAll(mChannelSplits.get(position).getBaseSplits());
-            mChannelSplits.get(position).getBaseSplits().addAll(mChannelSplits.get(position).getBaseSplits());
-            mChannelSplits.get(position).getBaseSplits().addAll(mChannelSplits.get(position).getBaseSplits());
+
             ChannelItemsAdapters channelItemsAdapters = new ChannelItemsAdapters(mContext, this,
                     mChannelSplits.get(position).getBaseSplits());
 
