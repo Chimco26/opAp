@@ -36,11 +36,12 @@ import com.operatorsapp.server.callback.PostUpdateNotesForJobCallback;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.ViewTagsHelper;
+import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeFragment extends Fragment implements View.OnClickListener, No0ChannelAdapter.Channel100AdapterListener, ChannelItemsAdapters.ChannelItemsAdaptersListener {
+public class RecipeFragment extends Fragment implements View.OnClickListener, No0ChannelAdapter.Channel100AdapterListener {
 
     public static final String TAG = RecipeFragment.class.getSimpleName();
     private static final String RECIPE_RESPONS_KEY = "RECIPE_RESPONS_KEY";
@@ -76,6 +77,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private LinearLayout mNoteLy;
     private List<BaseSplits> mChannel0BaseSplits = new ArrayList<>();
     private ChannelItemsAdapters mChannelItemsAdapters;
+    private SingleLineKeyboard mKeyBoard;
+    private LinearLayout mKeyBoardLayout;
 
     public static RecipeFragment newInstance(RecipeResponse recipeResponse) {
         RecipeFragment recipeFragment = new RecipeFragment();
@@ -137,6 +140,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
     private void initVars(View view) {
 
+        mKeyBoardLayout = view.findViewById(R.id.FR_keyboard);
         mchannel0BotomView = view.findViewById(R.id.FR_channel_0_btn_bottom);
 
         mchannel1_99BotomView = view.findViewById(R.id.FR_channel_1_99_btn_bottom);
@@ -203,8 +207,32 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mLayoutChannel0ItemSplitRV = mLayoutChannel0Item.findViewById(R.id.IP_split_rv);
 
-        mChannelItemsAdapters = new ChannelItemsAdapters(getActivity(), this,
-                mChannel0BaseSplits);
+        mChannelItemsAdapters = new ChannelItemsAdapters(getActivity(),
+                mChannel0BaseSplits, new ChannelItemsAdapters.OnKeyboardManagerListener() {
+            @Override
+            public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
+                if (mKeyBoardLayout != null) {
+                    mKeyBoardLayout.setVisibility(View.VISIBLE);
+                    if (mKeyBoard == null) {
+                        mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
+                    }
+
+                    mKeyBoard.setChars(complementChars);
+                    mKeyBoard.openKeyBoard(text);
+                    mKeyBoard.setListener(listener);
+                }
+            }
+
+            @Override
+            public void onCloseKeyboard() {
+                if (mKeyBoardLayout != null) {
+                    mKeyBoardLayout.setVisibility(View.GONE);
+                }
+                if (mKeyBoard != null) {
+                    mKeyBoard.setListener(null);
+                }
+            }
+        });
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -225,7 +253,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
             if (mRecipeResponse != null && mRecipeResponse.getNote() != null && mRecipeResponse.getNote().length() > 0) {
                 mNoteTv.setText(mRecipeResponse.getNote());
-            }else {
+            } else {
                 mNoteTv.setText("");
             }
         }

@@ -17,7 +17,7 @@ import com.operatorsapp.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.ViewHolder> implements ChannelItemsAdapters.ChannelItemsAdaptersListener {
+public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.ViewHolder> {
 
     public static final int TYPE_CHANNEL_100 = 100;
     public static final int TYPE_CHANNEL_1_99 = 99;
@@ -105,8 +105,8 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
 
         if (mChannelSplits.get(position).getBaseSplits() != null) {
 
-            ChannelItemsAdapters channelItemsAdapters = new ChannelItemsAdapters(mContext, this,
-                    mChannelSplits.get(position).getBaseSplits());
+            ChannelItemsAdapters channelItemsAdapters = new ChannelItemsAdapters(mContext,
+                    mChannelSplits.get(position).getBaseSplits(), null);
 
             LinearLayoutManager layoutManager
                     = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
@@ -146,7 +146,6 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
     }
 
     public interface Channel100AdapterListener {
-
 
         void onImageProductClick(List<String> fileUrl, String s);
     }

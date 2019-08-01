@@ -187,18 +187,18 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
+    private void closeKeyboard(int editStop) {
+        if (editStop != 1) {
+            if (mOnKeyboardManagerListener != null)
+                mOnKeyboardManagerListener.onCloseKeyboard();
+        }
+    }
+
     public void enableNextBtn(String text, View nextBtn, EditText editText) {
         if (!text.isEmpty()) {
             nextBtn.setBackgroundColor(editText.getContext().getResources().getColor(R.color.blue1));
         } else {
             nextBtn.setBackgroundColor(editText.getContext().getResources().getColor(R.color.grey_lite));
-        }
-    }
-
-    private void closeKeyboard(int editStop) {
-        if (editStop != 1) {
-            if (mOnKeyboardManagerListener != null)
-                mOnKeyboardManagerListener.onCloseKeyboard();
         }
     }
 
