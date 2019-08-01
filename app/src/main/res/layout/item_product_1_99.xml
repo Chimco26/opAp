@@ -9,10 +9,10 @@
         android:layout_height="match_parent"
         android:background="@drawable/combined_shape"
         android:orientation="vertical"
-        android:paddingBottom="19dp"
-        android:paddingEnd="19dp"
         android:paddingStart="19dp"
-        android:paddingTop="17dp">
+        android:paddingTop="17dp"
+        android:paddingEnd="19dp"
+        android:paddingBottom="19dp">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -49,8 +49,8 @@
                 android:layout_width="76dp"
                 android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp" />
 
         </RelativeLayout>
 
@@ -60,24 +60,11 @@
             android:layout_marginTop="12dp"
             android:background="@color/default_gray" />
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/IP_split_rv"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:orientation="horizontal">
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:id="@+id/IP_split_ly"
-                    android:layout_width="match_parent"
-                    android:layout_height="380dp"
-                    android:orientation="vertical" />
-
-            </ScrollView>
-
-        </LinearLayout>
+            android:orientation="vertical" />
 
     </LinearLayout>
 
