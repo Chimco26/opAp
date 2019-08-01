@@ -27,7 +27,8 @@ import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSpl
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.R;
-import com.operatorsapp.adapters.No0ChanneAdapter;
+import com.operatorsapp.adapters.ChannelItemsAdapters;
+import com.operatorsapp.adapters.No0ChannelAdapter;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
@@ -39,7 +40,7 @@ import com.operatorsapp.utils.ViewTagsHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeFragment extends Fragment implements View.OnClickListener, No0ChanneAdapter.Channel100AdapterListener {
+public class RecipeFragment extends Fragment implements View.OnClickListener, No0ChannelAdapter.Channel100AdapterListener, ChannelItemsAdapters.ChannelItemsAdaptersListener {
 
     public static final String TAG = RecipeFragment.class.getSimpleName();
     private static final String RECIPE_RESPONS_KEY = "RECIPE_RESPONS_KEY";
@@ -54,7 +55,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private ImageView mLayoutChannel0Image;
     private TextView mLayoutChannel0ItemTitleTv;
     private TextView mLayoutChannel0ItemSubTitleTv;
-    private LinearLayout mLayoutChannel0ItemSplitLy;
+    private RecyclerView mLayoutChannel0ItemSplitRV;
     private View mMainView;
     private View mLayoutChannel100;
     private TextView mLayoutChannel100Title;
@@ -73,6 +74,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private ImageView mNoteIv;
     private TextView mNoteTv;
     private LinearLayout mNoteLy;
+    private List<BaseSplits> mChannel0BaseSplits = new ArrayList<>();
+    private ChannelItemsAdapters mChannelItemsAdapters;
 
     public static RecipeFragment newInstance(RecipeResponse recipeResponse) {
         RecipeFragment recipeFragment = new RecipeFragment();
@@ -198,7 +201,17 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mLayoutChannel0ItemSubTitleTv = mLayoutChannel0Item.findViewById(R.id.IP_sub_title);
 
-        mLayoutChannel0ItemSplitLy = mLayoutChannel0Item.findViewById(R.id.IP_split_ly);
+        mLayoutChannel0ItemSplitRV = mLayoutChannel0Item.findViewById(R.id.IP_split_rv);
+
+        mChannelItemsAdapters = new ChannelItemsAdapters(getActivity(), this,
+                mChannel0BaseSplits);
+
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+
+        mLayoutChannel0ItemSplitRV.setLayoutManager(layoutManager);
+
+        mLayoutChannel0ItemSplitRV.setAdapter(mChannelItemsAdapters);
     }
 
     private void initView() {
@@ -230,8 +243,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
             mLayoutChannel100Title.setText(mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getName());
 
-            No0ChanneAdapter mNo0ChannelAdapter = new No0ChanneAdapter(getActivity(), this,
-                    (ArrayList<ChannelSplits>) mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelSplits(), No0ChanneAdapter.TYPE_CHANNEL_100);
+            No0ChannelAdapter mNo0ChannelAdapter = new No0ChannelAdapter(getActivity(), this,
+                    (ArrayList<ChannelSplits>) mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelSplits(), No0ChannelAdapter.TYPE_CHANNEL_100);
 
             LinearLayoutManager layoutManager
                     = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -249,7 +262,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     }
 
     private void initChannel0View() {
-
+        mChannel0BaseSplits.clear();
         if (mRecipeResponse != null && mRecipeResponse.getRecipeData() != null
                 && mRecipeResponse.getRecipeData().size() > 0 && mRecipeResponse.getRecipeData().get(0) != null) {
 
@@ -279,35 +292,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
             if (recipeChannel0.getChannelSplits().get(0).getBaseSplits() != null) {
 
-                if (mLayoutChannel0ItemSplitLy.getChildAt(0) != null) {
+                mChannel0BaseSplits.addAll(recipeChannel0.getChannelSplits().get(0).getBaseSplits());
 
-                    mLayoutChannel0ItemSplitLy.removeAllViews();
-                }
-
-                for (BaseSplits baseSplits : recipeChannel0.getChannelSplits().get(0).getBaseSplits()) {
-
-                    if (getActivity() != null) {
-                        LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        View itemView;
-                        if (layoutInflater != null) {
-                            itemView = layoutInflater.inflate((R.layout.item_split), (ViewGroup) mMainView, false);
-                            ((TextView) itemView.findViewById(R.id.IS_tv)).setText(baseSplits.getPropertyName());
-
-                            ((TextView) itemView.findViewById(R.id.IS_tv_2)).setText(baseSplits.getFValue());
-
-                            ((TextView) itemView.findViewById(R.id.IS_range_tv)).setText(baseSplits.getRange());
-
-                            mLayoutChannel0ItemSplitLy.addView(itemView);
-                        }
-
-                    }
-
-
-                }
-
-            } else if (mLayoutChannel0ItemSplitLy.getChildAt(0) != null) {
-
-                mLayoutChannel0ItemSplitLy.removeAllViews();
             }
 
         } else {
@@ -316,12 +302,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
             mLayoutChannel0NoDataImage.setVisibility(View.VISIBLE);
             mLayoutChannel0NoDataTv.setVisibility(View.VISIBLE);
 
-            if (mLayoutChannel0ItemSplitLy.getChildAt(0) != null) {
-
-                mLayoutChannel0ItemSplitLy.removeAllViews();
-            }
         }
-
+        mChannelItemsAdapters.notifyDataSetChanged();
     }
 
     private void openNotesDialog() {

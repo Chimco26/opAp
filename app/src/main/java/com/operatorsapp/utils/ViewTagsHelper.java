@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSplits;
 import com.operatorsapp.R;
-import com.operatorsapp.adapters.No0ChanneAdapter;
+import com.operatorsapp.adapters.No0ChannelAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ public class ViewTagsHelper {
 
     }
 
-    public static void addRv(Context context, List<ChannelSplits> channelSplits, LinearLayout mainView, No0ChanneAdapter.Channel100AdapterListener listener) {
+    public static void addRv(Context context, List<ChannelSplits> channelSplits, LinearLayout mainView, No0ChannelAdapter.Channel100AdapterListener listener) {
 
         float mDensity = context.getResources().getDisplayMetrics().density;
 
@@ -79,7 +79,7 @@ public class ViewTagsHelper {
 
         recyclerView.setLayoutManager(layoutManager);
 
-        recyclerView.setAdapter(new No0ChanneAdapter(context, listener, (ArrayList<ChannelSplits>) channelSplits, No0ChanneAdapter.TYPE_CHANNEL_1_99));
+        recyclerView.setAdapter(new No0ChannelAdapter(context, listener, (ArrayList<ChannelSplits>) channelSplits, No0ChannelAdapter.TYPE_CHANNEL_1_99));
 
     }
 
