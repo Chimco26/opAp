@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.ProductData;
-import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData;
 import com.example.common.StandardResponse;
 
 import java.util.List;
@@ -18,7 +17,7 @@ public class Recipe extends StandardResponse implements Parcelable {
     private ProductData productData;
     @SerializedName("RecipeData")
     @Expose
-    private List<RecipeData> recipeData = null;
+    private List<com.operators.reportrejectnetworkbridge.server.response.Recipe.Recipe> recipeData = null;
 
     public ProductData getProductData() {
         return productData;
@@ -28,11 +27,11 @@ public class Recipe extends StandardResponse implements Parcelable {
         this.productData = productData;
     }
 
-    public List<RecipeData> getRecipeData() {
+    public List<com.operators.reportrejectnetworkbridge.server.response.Recipe.Recipe> getRecipeData() {
         return recipeData;
     }
 
-    public void setRecipeData(List<RecipeData> recipeData) {
+    public void setRecipeData(List<com.operators.reportrejectnetworkbridge.server.response.Recipe.Recipe> recipeData) {
         this.recipeData = recipeData;
     }
 
@@ -52,7 +51,7 @@ public class Recipe extends StandardResponse implements Parcelable {
 
     protected Recipe(Parcel in) {
         this.productData = in.readParcelable(ProductData.class.getClassLoader());
-        this.recipeData = in.createTypedArrayList(RecipeData.CREATOR);
+        this.recipeData = in.createTypedArrayList(com.operators.reportrejectnetworkbridge.server.response.Recipe.Recipe.CREATOR);
     }
 
     public static final Parcelable.Creator<Recipe> CREATOR = new Parcelable.Creator<Recipe>() {

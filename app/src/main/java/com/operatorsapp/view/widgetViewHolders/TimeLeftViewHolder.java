@@ -83,7 +83,10 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
 
         String nameByLang2 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         mTitle.setText(nameByLang2);
-        long time = Long.parseLong(widget.getCurrentValue());
+        long time = 0;
+        try {
+            time = Long.parseLong(widget.getCurrentValue());
+        }catch (Exception ignored){}
         int endLimit = END_LIMIT;
 //        time = 45;// test states
         if (mMachineStatus != null &&

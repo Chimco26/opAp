@@ -287,7 +287,8 @@
                 android:background="@color/white"
                 android:orientation="horizontal"
                 android:visibility="gone"
-                android:layout_weight="0.25" />
+                android:layout_weight="0.35"
+                />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

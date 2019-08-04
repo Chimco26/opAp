@@ -23,8 +23,8 @@ import com.example.common.StandardResponse;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.BaseSplits;
+import com.operators.reportrejectnetworkbridge.server.response.Recipe.Channel;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSplits;
-import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.ChannelItemsAdapters;
@@ -39,6 +39,7 @@ import com.operatorsapp.utils.ViewTagsHelper;
 import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class RecipeFragment extends Fragment implements View.OnClickListener, No0ChannelAdapter.Channel100AdapterListener {
@@ -207,32 +208,36 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mLayoutChannel0ItemSplitRV = mLayoutChannel0Item.findViewById(R.id.IP_split_rv);
 
-        mChannelItemsAdapters = new ChannelItemsAdapters(getActivity(),
-                mChannel0BaseSplits, new ChannelItemsAdapters.OnKeyboardManagerListener() {
-            @Override
-            public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
-                if (mKeyBoardLayout != null) {
-                    mKeyBoardLayout.setVisibility(View.VISIBLE);
-                    if (mKeyBoard == null) {
-                        mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
+        if (mChannelItemsAdapters == null) {
+            mChannelItemsAdapters = new ChannelItemsAdapters(getActivity(),
+                    mChannel0BaseSplits, new ChannelItemsAdapters.OnKeyboardManagerListener() {
+                @Override
+                public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
+                    if (mKeyBoardLayout != null) {
+                        mKeyBoardLayout.setVisibility(View.VISIBLE);
+                        if (mKeyBoard == null) {
+                            mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
+                        }
+
+                        mKeyBoard.setChars(complementChars);
+                        mKeyBoard.openKeyBoard(text);
+                        mKeyBoard.setListener(listener);
                     }
+                }
 
-                    mKeyBoard.setChars(complementChars);
-                    mKeyBoard.openKeyBoard(text);
-                    mKeyBoard.setListener(listener);
+                @Override
+                public void onCloseKeyboard() {
+                    if (mKeyBoardLayout != null) {
+                        mKeyBoardLayout.setVisibility(View.GONE);
+                    }
+                    if (mKeyBoard != null) {
+                        mKeyBoard.setListener(null);
+                    }
                 }
-            }
-
-            @Override
-            public void onCloseKeyboard() {
-                if (mKeyBoardLayout != null) {
-                    mKeyBoardLayout.setVisibility(View.GONE);
-                }
-                if (mKeyBoard != null) {
-                    mKeyBoard.setListener(null);
-                }
-            }
-        });
+            });
+        } else {
+            mChannelItemsAdapters.notifyDataSetChanged();
+        }
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -261,18 +266,18 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
     private void initChannel100View() {
 
-        if (mRecipeResponse != null && mRecipeResponse.getRecipeData() != null
-                && mRecipeResponse.getRecipeData().size() > 0 && mRecipeResponse.getRecipeData().get(0) != null &&
-                mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100) {
+        if (mRecipeResponse != null && mRecipeResponse.getRecipe() != null
+                && mRecipeResponse.getRecipe().getChannels() != null && mRecipeResponse.getRecipe().getChannels().size() > 0 && mRecipeResponse.getRecipe().getChannels().get(0) != null &&
+                mRecipeResponse.getRecipe().getChannels().get(mRecipeResponse.getRecipe().getChannels().size() - 1).getChannelNumber() == 100) {
 
             mLayoutChannel100NoDataImage.setVisibility(View.GONE);
             mLayoutChannel100NoDataTv.setVisibility(View.GONE);
             mLayoutChannel100RvLy.setVisibility(View.VISIBLE);
 
-            mLayoutChannel100Title.setText(mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getName());
+            mLayoutChannel100Title.setText(mRecipeResponse.getRecipe().getChannels().get(mRecipeResponse.getRecipe().getChannels().size() - 1).getChannelEname());
 
             No0ChannelAdapter mNo0ChannelAdapter = new No0ChannelAdapter(getActivity(), this,
-                    (ArrayList<ChannelSplits>) mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelSplits(), No0ChannelAdapter.TYPE_CHANNEL_100);
+                    (ArrayList<ChannelSplits>) mRecipeResponse.getRecipe().getChannels().get(mRecipeResponse.getRecipe().getChannels().size() - 1).getChannelSplits(), No0ChannelAdapter.TYPE_CHANNEL_100);
 
             LinearLayoutManager layoutManager
                     = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -290,15 +295,22 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     }
 
     private void initChannel0View() {
+
+        HashMap<Integer, String> editList = new HashMap<>();
+        for (BaseSplits baseSplits : mChannel0BaseSplits) {
+            if (baseSplits.isEditMode()) {
+                editList.put(baseSplits.getProductRecipeID(), baseSplits.getEditValue());
+            }
+        }
         mChannel0BaseSplits.clear();
-        if (mRecipeResponse != null && mRecipeResponse.getRecipeData() != null
-                && mRecipeResponse.getRecipeData().size() > 0 && mRecipeResponse.getRecipeData().get(0) != null) {
+        if (mRecipeResponse != null && mRecipeResponse.getRecipe() != null && mRecipeResponse.getRecipe().getChannels() != null
+                && mRecipeResponse.getRecipe().getChannels().size() > 0 && mRecipeResponse.getRecipe().getChannels().get(0) != null) {
 
             mLayoutChannel0MainLayout.setVisibility(View.VISIBLE);
             mLayoutChannel0NoDataImage.setVisibility(View.GONE);
             mLayoutChannel0NoDataTv.setVisibility(View.GONE);
 
-            RecipeData recipeChannel0 = mRecipeResponse.getRecipeData().get(0);
+            Channel recipeChannel0 = mRecipeResponse.getRecipe().getChannels().get(0);
 
             if (mRecipeResponse.getProductData() != null && mRecipeResponse.getProductData().getFileUrl() != null &&
                     mRecipeResponse.getProductData().getFileUrl().size() > 0) {
@@ -322,6 +334,13 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
                 mChannel0BaseSplits.addAll(recipeChannel0.getChannelSplits().get(0).getBaseSplits());
 
+                for (BaseSplits baseSplits : mChannel0BaseSplits) {
+                    if (editList.containsKey(baseSplits.getProductRecipeID())){
+                        baseSplits.setEditMode(true);
+                        baseSplits.setEditValue(editList.get(baseSplits.getProductRecipeID()));
+                        editList.remove(baseSplits.getProductRecipeID());
+                    }
+                }
             }
 
         } else {
@@ -415,9 +434,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
             @Override
             public void onClick(View v) {
 
-                if (mRecipeResponse.getProductData() != null && mRecipeResponse.getProductData().getFileUrl() != null && mRecipeResponse.getProductData().getFileUrl().size() > 0 &&
-                        mRecipeResponse.getRecipeData().size() > 0) {
-                    mListener.onImageProductClick(mRecipeResponse.getProductData().getFileUrl(), mRecipeResponse.getRecipeData().get(0).getName());
+                if (mRecipeResponse.getProductData() != null && mRecipeResponse.getProductData().getFileUrl() != null &&
+                        mRecipeResponse.getProductData().getFileUrl().size() > 0 &&
+                        mRecipeResponse.getRecipe().getChannels() != null &&
+                        mRecipeResponse.getRecipe().getChannels().size() > 0) {
+                    mListener.onImageProductClick(mRecipeResponse.getProductData().getFileUrl(), mRecipeResponse.getRecipe().getChannels().get(0).getChannelEname());
                 }
             }
         });
@@ -433,15 +454,15 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private void initChanne1_1_99_View() {
 
         if (mRecipeResponse != null) {
-            List<RecipeData> recipeResponse_1_99 = new ArrayList<>(mRecipeResponse.getRecipeData());
+            List<Channel> recipeResponse_1_99 = new ArrayList<>(mRecipeResponse.getRecipe().getChannels());
 
-            if (mRecipeResponse != null && mRecipeResponse.getRecipeData() != null && mRecipeResponse.getRecipeData().size() > 0 &&
-                    mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100) {
+            if (mRecipeResponse != null && mRecipeResponse.getRecipe() != null && mRecipeResponse.getRecipe().getChannels() != null && mRecipeResponse.getRecipe().getChannels().size() > 0 &&
+                    mRecipeResponse.getRecipe().getChannels().get(mRecipeResponse.getRecipe().getChannels().size() - 1).getChannelNumber() == 100) {
 
-                recipeResponse_1_99.remove(mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1));
+                recipeResponse_1_99.remove(mRecipeResponse.getRecipe().getChannels().get(mRecipeResponse.getRecipe().getChannels().size() - 1));
             }
 
-            if (mRecipeResponse != null && mRecipeResponse.getRecipeData() != null && mRecipeResponse.getRecipeData().size() > 0) {
+            if (mRecipeResponse != null && mRecipeResponse.getRecipe() != null && mRecipeResponse.getRecipe().getChannels().size() > 0) {
                 recipeResponse_1_99.remove(0);
             }
 
@@ -456,11 +477,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                     mlayoutChannel1_99.removeAllViews();
                 }
 
-                for (RecipeData recipeData : recipeResponse_1_99) {
+                for (Channel recipe : recipeResponse_1_99) {
 
-                    ViewTagsHelper.addTitle(getActivity(), recipeData.getName(), mlayoutChannel1_99);
+                    ViewTagsHelper.addTitle(getActivity(), recipe.getChannelEname(), mlayoutChannel1_99);
 
-                    ViewTagsHelper.addRv(getActivity(), recipeData.getChannelSplits(), mlayoutChannel1_99, this);
+                    ViewTagsHelper.addRv(getActivity(), recipe.getChannelSplits(), mlayoutChannel1_99, this);
 
                     ViewTagsHelper.addSeparator(getActivity(), mlayoutChannel1_99);
                 }

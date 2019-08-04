@@ -1,12 +1,15 @@
 package com.operatorsapp.view;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import static android.support.annotation.Dimension.SP;
 
 
 public class SingleLineKeyboard implements View.OnClickListener {
@@ -84,6 +87,9 @@ public class SingleLineKeyboard implements View.OnClickListener {
         button.setGravity(Gravity.CENTER);
         button.setId(id);
         button.setTextSize(23);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            button.setAutoSizeTextTypeUniformWithConfiguration(14, 23, 1, SP);
+        }
 
         button.setOnClickListener(this);
         parent.addView(button);
