@@ -26,14 +26,14 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
 
     private final Context mContext;
     public final List<BaseSplits> baseSplits;
-    private final OnKeyboardManagerListener mKeyBoardListener;
     private View mMainView;
+    private ChannelItemsAdaptersListener mListener;
 
-    public ChannelItemsAdapters(Context context, List<BaseSplits> channelSplits, OnKeyboardManagerListener onKeyboardManagerListener) {
+    public ChannelItemsAdapters(Context context, List<BaseSplits> channelSplits, ChannelItemsAdaptersListener channelItemsAdaptersListener) {
 
         mContext = context;
         baseSplits = channelSplits;
-        mKeyBoardListener = onKeyboardManagerListener;
+        mListener = channelItemsAdaptersListener;
     }
 
 
@@ -55,39 +55,45 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
         viewHolder.mRange.setText(String.format(Locale.getDefault(), "%s-%s", baseSplits.get(position).getLValue(), baseSplits.get(position).getHValue()));
         setEditCapabilities(viewHolder, baseSplits.get(position));
 
-        viewHolder.mEditEt.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int inType = viewHolder.mEditEt.getInputType(); // backup the input type
-                viewHolder.mEditEt.setInputType(InputType.TYPE_NULL); // disable soft input
-                viewHolder.mEditEt.onTouchEvent(event); // call native handler
-                viewHolder.mEditEt.setInputType(inType); // restore input type
-                setMode(true, viewHolder, baseSplits.get(position));
-                return false; // consume touch event
-            }
-        });
-        viewHolder.mDsiplayLy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setMode(true, viewHolder, baseSplits.get(position));
-            }
-        });
-        viewHolder.mEditEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        setEditModeFun(viewHolder, position);
+    }
 
-            }
+    public void setEditModeFun(@NonNull final ViewHolder viewHolder, final int position) {
+        if (mListener != null) {
+            viewHolder.mEditEt.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    int inType = viewHolder.mEditEt.getInputType(); // backup the input type
+                    viewHolder.mEditEt.setInputType(InputType.TYPE_NULL); // disable soft input
+                    viewHolder.mEditEt.onTouchEvent(event); // call native handler
+                    viewHolder.mEditEt.setInputType(inType); // restore input type
+                    setMode(true, viewHolder);
+                    return false; // consume touch event
+                }
+            });
+            viewHolder.mDsiplayLy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setMode(true, viewHolder);
+                }
+            });
+            viewHolder.mEditEt.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                baseSplits.get(position).setEditValue(charSequence.toString());
-            }
+                }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    baseSplits.get(viewHolder.getAdapterPosition()).setEditValue(charSequence.toString());
+                }
 
-            }
-        });
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+        }
     }
 
     private void setWeight(double weight, View view) {
@@ -98,8 +104,8 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
     }
 
     private void setKeyBoard(final EditText editText, String[] complementChars) {
-        if (mKeyBoardListener != null) {
-            mKeyBoardListener.onOpenKeyboard(new SingleLineKeyboard.OnKeyboardClickListener() {
+        if (mListener != null) {
+            mListener.onOpenKeyboard(new SingleLineKeyboard.OnKeyboardClickListener() {
                 @Override
                 public void onKeyboardClick(String text) {
                     editText.setText(text);
@@ -109,34 +115,41 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
     }
 
     private void setEditCapabilities(final ViewHolder viewHolder, final BaseSplits baseSplits) {
-        if (mKeyBoardListener != null) {
-            setMode(baseSplits.isEditMode(), viewHolder, baseSplits);
+        if (mListener != null) {
+            setMode(baseSplits.isEditMode(), viewHolder);
             viewHolder.mCancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    setMode(false, viewHolder, baseSplits);
-                    mKeyBoardListener.onCloseKeyboard();
+                    setMode(false, viewHolder);
+                    mListener.onCloseKeyboard();
                 }
             });
         }
     }
 
-    private void setMode(boolean edit, ViewHolder viewHolder, BaseSplits baseSplits) {
+    private void setMode(boolean edit, ViewHolder viewHolder) {
         if (edit) {
-            baseSplits.setEditMode(true);
-            viewHolder.mEditEt.setText(baseSplits.getEditValue());
+            baseSplits.get(viewHolder.getAdapterPosition()).setEditMode(true);
+            viewHolder.mEditEt.setText(baseSplits.get(viewHolder.getAdapterPosition()).getEditValue());
             viewHolder.mDsiplayLy.setVisibility(View.GONE);
             viewHolder.mEditLy.setVisibility(View.VISIBLE);
             setWeight(6, viewHolder.mDisplayOrEditLy);
             setWeight(4, viewHolder.mTitle);
             setKeyBoard(viewHolder.mEditEt, new String[]{".", "-"});
         } else {
-            baseSplits.setEditMode(false);
+            baseSplits.get(viewHolder.getAdapterPosition()).setEditMode(false);
             viewHolder.mDsiplayLy.setVisibility(View.VISIBLE);
             viewHolder.mEditLy.setVisibility(View.GONE);
             setWeight(7, viewHolder.mTitle);
             setWeight(3, viewHolder.mDisplayOrEditLy);
         }
+        for (BaseSplits baseSplits: baseSplits){
+            if (baseSplits.isEditMode()){
+                mListener.onEditMode(true);
+                return;
+            }
+        }
+        mListener.onEditMode(false);
     }
 
     @Override
@@ -173,9 +186,11 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
 
     }
 
-    public interface OnKeyboardManagerListener {
+    public interface ChannelItemsAdaptersListener {
         void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars);
 
         void onCloseKeyboard();
+
+        void onEditMode(boolean isEditMode);
     }
 }

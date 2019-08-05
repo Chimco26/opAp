@@ -13,9 +13,9 @@
     <string name="login_fields_error">Fill in all fields</string>
     <string name="login">Log In</string>
     <string name="login_screen_save">Save</string>
-    <string name="login_fields_factory_name_hint">Factory Name</string>URL de l'usine
+    <string name="login_fields_factory_name_hint">Factory eName</string>URL de l'usine
     <string name="login_fields_factory_url_hint">Factory URL</string>
-    <string name="login_fields_user_name_hint">User Name</string>
+    <string name="login_fields_user_name_hint">User eName</string>
     <string name="login_fields_password_hint">Password</string>
     <string name="login_dialog_dismiss">DISMISS</string>
     <string name="login_dialog_dismiss_all">DISMISS FOR THIS SHIFT</string>
@@ -35,14 +35,14 @@
     <string name="ok">OK</string>
 
     <string name="go">Go</string>
-    <string name="machine_id_name">Machine ID or Name</string>
-    <string name="enter_machine_id_name">Enter Machine\nID or Name</string>
+    <string name="machine_id_name">Machine ID or eName</string>
+    <string name="enter_machine_id_name">Enter Machine\nID or eName</string>
     <string name="no_notifications">No Notifications</string>
     <string name="no_data">No Data</string>
     <string name="error_rest">Error in REST service</string>
     <string name="jobs_actions">Job Actions</string>
     <string name="job_id">Job ID</string>
-    <string name="product_name">Product Name</string>
+    <string name="product_name">Product eName</string>
     <string name="erp">ERP</string>
     <string name="planned_start">Planned Start</string>
     <string name="number_of_units">Number Of Units</string>
@@ -60,7 +60,7 @@
     <string name="shift">Shift</string>
     <string name="machine_status">Machines status</string>
     <string name="operator_id">Operator ID</string>
-    <string name="operator_name">Operator Name</string>
+    <string name="operator_name">Operator eName</string>
     <string name="error_shift_log">Fail to perform GetMachineShiftLog function</string>
 
     <string name="operator_sign_in">Operator\nSign In</string>
@@ -202,11 +202,11 @@
     <string name="production_parameters">Production parameters</string>
     <string name="smaller_than_symbole" translatable="false"><![CDATA[<]]></string>
     <string name="actionnable_jobs">Actionable Jobs</string>
-    <string name="search_job_id_or_product_name">Search Job ID or Product Name</string>
+    <string name="search_job_id_or_product_name">Search Job ID or Product eName</string>
     <string name="search">Search</string>
     <string name="activate">Activate</string>
     <string name="no_available_image">No Available Image</string>
-    <string name="name">Name</string>
+    <string name="name">eName</string>
     <string name="catalog">Catalog</string>
     <string name="amount">Amount</string>
     <string name="materials">Materials</string>
@@ -432,5 +432,6 @@
     <string name="cancel_job">Cancel Job</string>
     <string name="graph">Graph</string>
     <string name="success">Success</string>
+    <string name="save_changes">Save changes</string>
 
 </resources>

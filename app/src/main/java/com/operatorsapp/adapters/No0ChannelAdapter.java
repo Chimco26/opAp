@@ -15,7 +15,6 @@ import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSpl
 import com.operatorsapp.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.ViewHolder> {
 
@@ -60,23 +59,24 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
 
         initSplits(viewHolder, position);
 
-        viewHolder.mTitle.setText(mChannelSplits.get(position).getName());
+        viewHolder.mTitle.setText(mChannelSplits.get(position).getlName());
 
-        if (mChannelSplits.get(position).getMaterialInformation() != null) {
-            viewHolder.mSubTitle.setText(String.format("%s", mChannelSplits.get(viewHolder.getAdapterPosition()).getMaterialInformation().getName()));
 
+        if (mChannelSplits.get(position).getBaseSplits() != null && mChannelSplits.get(position).getBaseSplits().size() > 0) {
+
+            viewHolder.mSubTitle.setText(String.format("%s", mChannelSplits.get(viewHolder.getAdapterPosition()).getBaseSplits().get(0).getMaterialLName()));
             if (mType == TYPE_CHANNEL_100) {
-                ((TextView) viewHolder.itemView.findViewById(R.id.IP_sub_title_id)).setText(mChannelSplits.get(position).getMaterialInformation().getCatalogID());
+                ((TextView) viewHolder.itemView.findViewById(R.id.IP_sub_title_id)).setText(mChannelSplits.get(position).getBaseSplits().get(0).getCatalogID());
             }
 
-            if (mChannelSplits.get(position).getMaterialInformation().getFileUrl() != null && mChannelSplits.get(position).getMaterialInformation().getFileUrl().get(0) != null) {
+            if (mChannelSplits.get(position).getBaseSplits().get(0).getMaterialImageLink() != null) {
 
-                ImageLoader.getInstance().displayImage(mChannelSplits.get(position).getMaterialInformation().getFileUrl().get(0), viewHolder.mImage);
+                ImageLoader.getInstance().displayImage(mChannelSplits.get(position).getBaseSplits().get(0).getMaterialImageLink(), viewHolder.mImage);
 
                 viewHolder.mImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mListener.onImageProductClick(mChannelSplits.get(viewHolder.getAdapterPosition()).getMaterialInformation().getFileUrl(), mChannelSplits.get(viewHolder.getAdapterPosition()).getMaterialInformation().getName() + "");
+                        mListener.onImageProductClick(mChannelSplits.get(viewHolder.getAdapterPosition()).getBaseSplits().get(0).getMaterialImageLink(), mChannelSplits.get(viewHolder.getAdapterPosition()).getlName() + "");
 
                     }
                 });
@@ -147,6 +147,6 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
 
     public interface Channel100AdapterListener {
 
-        void onImageProductClick(List<String> fileUrl, String s);
+        void onImageProductClick(String fileUrl, String s);
     }
 }
