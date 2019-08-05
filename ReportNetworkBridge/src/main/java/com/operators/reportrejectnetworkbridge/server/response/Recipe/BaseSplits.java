@@ -139,6 +139,9 @@ public class BaseSplits implements Parcelable {
     @SerializedName("ToolTip")
     @Expose
     private String toolTip;
+    @SerializedName("MaterialImageLink")
+    @Expose
+    private String materialImageLink;
     @SerializedName("ValidateValue")
     @Expose
     private Boolean validateValue;
@@ -150,6 +153,14 @@ public class BaseSplits implements Parcelable {
     private Integer matrixPositionID;
     private boolean isEditMode;
     private String editValue;
+
+    public String getMaterialImageLink() {
+        return materialImageLink;
+    }
+
+    public void setMaterialImageLink(String materialImageLink) {
+        this.materialImageLink = materialImageLink;
+    }
 
     public boolean isEditMode() {
         return isEditMode;
@@ -263,7 +274,7 @@ public class BaseSplits implements Parcelable {
         this.calcUpdateOption = calcUpdateOption;
     }
 
-    public Object getCatalogID() {
+    public String getCatalogID() {
         return catalogID;
     }
 
@@ -392,6 +403,9 @@ public class BaseSplits implements Parcelable {
     }
 
     public String getMaterialLName() {
+        if (materialLName == null){
+            return "";
+        }
         return materialLName;
     }
 
@@ -624,6 +638,7 @@ public class BaseSplits implements Parcelable {
         dest.writeValue(this.splitNum);
         dest.writeValue(this.toleranceUpdateOption);
         dest.writeString(this.toolTip);
+        dest.writeString(this.materialImageLink);
         dest.writeValue(this.validateValue);
         dest.writeValue(this.matrixModeID);
         dest.writeValue(this.matrixPositionID);
@@ -676,6 +691,7 @@ public class BaseSplits implements Parcelable {
         this.splitNum = (Integer) in.readValue(Integer.class.getClassLoader());
         this.toleranceUpdateOption = (Integer) in.readValue(Integer.class.getClassLoader());
         this.toolTip = in.readString();
+        this.materialImageLink = in.readString();
         this.validateValue = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.matrixModeID = (Integer) in.readValue(Integer.class.getClassLoader());
         this.matrixPositionID = (Integer) in.readValue(Integer.class.getClassLoader());

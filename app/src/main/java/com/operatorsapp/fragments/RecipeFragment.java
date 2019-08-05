@@ -80,6 +80,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private ChannelItemsAdapters mChannelItemsAdapters;
     private SingleLineKeyboard mKeyBoard;
     private LinearLayout mKeyBoardLayout;
+    private View mLayoutChannel0ItemSaveBtn;
 
     public static RecipeFragment newInstance(RecipeResponse recipeResponse) {
         RecipeFragment recipeFragment = new RecipeFragment();
@@ -204,36 +205,35 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mLayoutChannel0ItemTitleTv = mLayoutChannel0Item.findViewById(R.id.IP_title);
 
+        mLayoutChannel0ItemSaveBtn = mLayoutChannel0Item.findViewById(R.id.IP_save_btn);
+
         mLayoutChannel0ItemSubTitleTv = mLayoutChannel0Item.findViewById(R.id.IP_sub_title);
 
         mLayoutChannel0ItemSplitRV = mLayoutChannel0Item.findViewById(R.id.IP_split_rv);
 
         if (mChannelItemsAdapters == null) {
             mChannelItemsAdapters = new ChannelItemsAdapters(getActivity(),
-                    mChannel0BaseSplits, new ChannelItemsAdapters.OnKeyboardManagerListener() {
+                    mChannel0BaseSplits, new ChannelItemsAdapters.ChannelItemsAdaptersListener() {
                 @Override
                 public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
-                    if (mKeyBoardLayout != null) {
-                        mKeyBoardLayout.setVisibility(View.VISIBLE);
-                        if (mKeyBoard == null) {
-                            mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
-                        }
-
-                        mKeyBoard.setChars(complementChars);
-                        mKeyBoard.openKeyBoard(text);
-                        mKeyBoard.setListener(listener);
-                    }
+                    openKeyboard(listener, text, complementChars);
                 }
 
                 @Override
                 public void onCloseKeyboard() {
-                    if (mKeyBoardLayout != null) {
-                        mKeyBoardLayout.setVisibility(View.GONE);
-                    }
-                    if (mKeyBoard != null) {
-                        mKeyBoard.setListener(null);
+                    closeKeyBoard();
+                }
+
+                @Override
+                public void onEditMode(boolean isEditMode) {
+                    if (isEditMode){
+                        mLayoutChannel0ItemSaveBtn.setVisibility(View.VISIBLE);
+                    }else {
+                        mLayoutChannel0ItemSaveBtn.setVisibility(View.GONE);
+                        closeKeyBoard();
                     }
                 }
+
             });
         } else {
             mChannelItemsAdapters.notifyDataSetChanged();
@@ -245,6 +245,28 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         mLayoutChannel0ItemSplitRV.setLayoutManager(layoutManager);
 
         mLayoutChannel0ItemSplitRV.setAdapter(mChannelItemsAdapters);
+    }
+
+    public void closeKeyBoard() {
+        if (mKeyBoardLayout != null) {
+            mKeyBoardLayout.setVisibility(View.GONE);
+        }
+        if (mKeyBoard != null) {
+            mKeyBoard.setListener(null);
+        }
+    }
+
+    public void openKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
+        if (mKeyBoardLayout != null) {
+            mKeyBoardLayout.setVisibility(View.VISIBLE);
+            if (mKeyBoard == null) {
+                mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
+            }
+
+            mKeyBoard.setChars(complementChars);
+            mKeyBoard.openKeyBoard(text);
+            mKeyBoard.setListener(listener);
+        }
     }
 
     private void initView() {
@@ -320,15 +342,21 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
             if (getActivity().getResources() != null) {
                 mLayoutChannel0ItemTitleTv.setText(getActivity().getResources().getString(R.string.production_parameters));
             }
-            if (recipeChannel0.getChannelSplits().get(0).getMaterialInformation() != null) {
+            if (recipeChannel0.getChannelSplits().get(0).getBaseSplits() != null && recipeChannel0.getChannelSplits().get(0).getBaseSplits().size() > 0) {
 
-                mLayoutChannel0ItemSubTitleTv.setText(recipeChannel0.getChannelSplits().get(0).getMaterialInformation().getCatalogID());
+                mLayoutChannel0ItemSubTitleTv.setText(recipeChannel0.getChannelSplits().get(0).getBaseSplits().get(0).getCatalogID());
 
             } else {
 
                 mLayoutChannel0ItemSubTitleTv.setText("");
 
             }
+            mLayoutChannel0ItemSaveBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
 
             if (recipeChannel0.getChannelSplits().get(0).getBaseSplits() != null) {
 
@@ -591,9 +619,10 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     }
 
     @Override
-    public void onImageProductClick(List<String> fileUrls, String name) {
-
-        mListener.onImageProductClick(fileUrls, name);
+    public void onImageProductClick(String fileUrls, String name) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add(fileUrls);
+        mListener.onImageProductClick(arrayList, name);
     }
 
     public interface OnRecipeFragmentListener {

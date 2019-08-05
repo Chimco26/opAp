@@ -11,7 +11,7 @@
     <string name="login_fields_error">Alle Felder muessen ausgefuellt werden</string>
     <string name="login">Einloggen</string>
     <string name="login_screen_save">Speichern</string>
-    <string name="login_fields_factory_name_hint">Name des Betriebs</string>
+    <string name="login_fields_factory_name_hint">eName des Betriebs</string>
     <string name="login_fields_factory_url_hint">URL des Betriebs</string>
     <string name="login_fields_user_name_hint">Benutzername</string>
     <string name="login_fields_password_hint">Passwort</string>
@@ -34,7 +34,7 @@
 
     <string name="go">Los</string>
     <string name="machine_id_name">Maschinenname/ID</string>
-    <string name="enter_machine_id_name">Maschinennamen eingeben/ Name</string>
+    <string name="enter_machine_id_name">Maschinennamen eingeben/ eName</string>
     <string name="no_notifications">Keine Mitteilungen</string>
     <string name="no_data">Keine Daten</string>
     <string name="error_rest">Ausnahmen im Rest-Service</string>
@@ -57,7 +57,7 @@
     <string name="josh">Josh</string>
     <string name="shift">Schicht</string>
     <string name="operator_id">Werker-ID</string>
-    <string name="operator_name">Name des Werkers</string>
+    <string name="operator_name">eName des Werkers</string>
     <string name="error_shift_log">Funktion "GetMachineShiftLog" konnte nicht ausgeführt werden.</string>
 
     <string name="operator_sign_in">Werker\nSign in</string>
@@ -215,7 +215,7 @@
     <string name="minutes">Min.</string>
     <string name="mold">Werkzeug</string>
     <string name="mold_catalog">Werkzeug-Katalog</string>
-    <string name="name">Name</string>
+    <string name="name">eName</string>
     <string name="no_available_image">Kein Bild verfügbar</string>
     <string name="no_available_pdf">Kein PDF verfügbar</string>
     <string name="no_notification_to_show">Keine Mitteilungen in den letzten 24h verfügbar.</string>

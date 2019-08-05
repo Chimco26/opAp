@@ -17,20 +17,18 @@ public class ChannelSplits implements Parcelable {
   @SerializedName("splits")
   @Expose
   private List<BaseSplits> BaseSplits;
-  @SerializedName("MaterialInformation")
+//  @SerializedName("MaterialInformation")
+//  @Expose
+//  private MaterialInformation materialInformation;
+  @SerializedName("EName")
   @Expose
-  private MaterialInformation materialInformation;
-  @SerializedName("Name")
+  private String eName;
+  @SerializedName("LName")
   @Expose
-  private String Name;
+  private String lName;
   public ChannelSplits(){
   }
-  public ChannelSplits(Integer SplitNumber,List<BaseSplits> BaseSplits,MaterialInformation materialInformation,String Name){
-   this.SplitNumber=SplitNumber;
-   this.BaseSplits=BaseSplits;
-   this.materialInformation =materialInformation;
-   this.Name=Name;
-  }
+
   public void setSplitNumber(Integer SplitNumber){
    this.SplitNumber=SplitNumber;
   }
@@ -43,17 +41,26 @@ public class ChannelSplits implements Parcelable {
   public List<BaseSplits> getBaseSplits(){
    return BaseSplits;
   }
-  public void setMaterialInformation(MaterialInformation materialInformation){
-   this.materialInformation =materialInformation;
+//  public void setMaterialInformation(MaterialInformation materialInformation){
+//   this.materialInformation =materialInformation;
+//  }
+//  public MaterialInformation getMaterialInformation(){
+//   return materialInformation;
+//  }
+
+    public String getlName() {
+        return lName;
+    }
+
+    public void setlName(String lName) {
+        this.lName = lName;
+    }
+
+    public void seteName(String Name){
+   this.eName =Name;
   }
-  public MaterialInformation getMaterialInformation(){
-   return materialInformation;
-  }
-  public void setName(String Name){
-   this.Name=Name;
-  }
-  public String getName(){
-   return Name;
+  public String geteName(){
+   return eName;
   }
 
     @Override
@@ -65,16 +72,18 @@ public class ChannelSplits implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(this.SplitNumber);
         dest.writeList(this.BaseSplits);
-        dest.writeParcelable(this.materialInformation, flags);
-        dest.writeString(this.Name);
+//        dest.writeParcelable(this.materialInformation, flags);
+        dest.writeString(this.eName);
+        dest.writeString(this.lName);
     }
 
     protected ChannelSplits(Parcel in) {
         this.SplitNumber = (Integer) in.readValue(Integer.class.getClassLoader());
         this.BaseSplits = new ArrayList<com.operators.reportrejectnetworkbridge.server.response.Recipe.BaseSplits>();
         in.readList(this.BaseSplits, com.operators.reportrejectnetworkbridge.server.response.Recipe.BaseSplits.class.getClassLoader());
-        this.materialInformation = in.readParcelable(MaterialInformation.class.getClassLoader());
-        this.Name = in.readString();
+//        this.materialInformation = in.readParcelable(MaterialInformation.class.getClassLoader());
+        this.eName = in.readString();
+        this.lName = in.readString();
     }
 
     public static final Parcelable.Creator<ChannelSplits> CREATOR = new Parcelable.Creator<ChannelSplits>() {
