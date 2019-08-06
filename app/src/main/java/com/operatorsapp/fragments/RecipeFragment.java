@@ -265,6 +265,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         }
         if (mKeyBoard != null) {
             mKeyBoard.setListener(null);
+            mKeyBoard.closeKeyBoard();
         }
     }
 
