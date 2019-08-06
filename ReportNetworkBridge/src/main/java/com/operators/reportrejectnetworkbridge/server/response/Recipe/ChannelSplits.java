@@ -17,9 +17,6 @@ public class ChannelSplits implements Parcelable {
   @SerializedName("splits")
   @Expose
   private List<BaseSplits> BaseSplits;
-//  @SerializedName("MaterialInformation")
-//  @Expose
-//  private MaterialInformation materialInformation;
   @SerializedName("EName")
   @Expose
   private String eName;
@@ -41,13 +38,6 @@ public class ChannelSplits implements Parcelable {
   public List<BaseSplits> getBaseSplits(){
    return BaseSplits;
   }
-//  public void setMaterialInformation(MaterialInformation materialInformation){
-//   this.materialInformation =materialInformation;
-//  }
-//  public MaterialInformation getMaterialInformation(){
-//   return materialInformation;
-//  }
-
     public String getlName() {
         return lName;
     }

@@ -433,5 +433,6 @@
     <string name="graph">Graph</string>
     <string name="success">Success</string>
     <string name="save_changes">Save changes</string>
+    <string name="updating">Updating</string>
 
 </resources>

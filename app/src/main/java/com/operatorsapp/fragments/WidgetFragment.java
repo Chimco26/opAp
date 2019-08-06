@@ -440,6 +440,7 @@ public class WidgetFragment extends Fragment implements
         }
         if (mKeyBoard != null) {
             mKeyBoard.setListener(null);
+            mKeyBoard.closeKeyBoard();
         }
         mDashboardCentralContainerListener.onKeyboardEvent(false);
     }

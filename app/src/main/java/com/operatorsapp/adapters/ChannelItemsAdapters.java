@@ -59,7 +59,7 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
     }
 
     public void setEditModeFun(@NonNull final ViewHolder viewHolder, final int position) {
-        if (mListener != null) {
+        if (mListener != null && baseSplits.get(position).getIsEditable() && baseSplits.get(position).getIsEnabled()) {
             viewHolder.mEditEt.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -138,6 +138,7 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
             setKeyBoard(viewHolder.mEditEt, new String[]{".", "-"});
         } else {
             baseSplits.get(viewHolder.getAdapterPosition()).setEditMode(false);
+            baseSplits.get(viewHolder.getAdapterPosition()).setEditValue(null);
             viewHolder.mDsiplayLy.setVisibility(View.VISIBLE);
             viewHolder.mEditLy.setVisibility(View.GONE);
             setWeight(7, viewHolder.mTitle);

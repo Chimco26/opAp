@@ -9,6 +9,7 @@ import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.callback.GetDepartmentCallback;
 import com.example.common.department.DepartmentsMachinesResponse;
 import com.example.common.request.BaseRequest;
+import com.example.common.request.RecipeUpdateRequest;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
@@ -20,7 +21,7 @@ import com.operators.reportrejectinfra.PostActivateJobCallback;
 import com.operators.reportrejectinfra.PostSplitEventCallback;
 import com.operators.reportrejectinfra.PostUpdtaeActionsCallback;
 import com.operators.reportrejectinfra.SimpleCallback;
-import com.operators.reportrejectnetworkbridge.interfaces.GetAllRecipeNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.interfaces.RecipeNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.GetDepartmentNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetIntervalAndTimeOutNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetJobDetailsNetworkManager;
@@ -63,13 +64,13 @@ public class SimpleRequests {
 
     }
 
-    public void getAllRecipe(String siteUrl, String sessionId, Integer jobId, final GetAllRecipeCallback callback, GetAllRecipeNetworkManagerInterface getAllRecipeNetworkManagerInterface, final int totalRetries, int specificRequestTimeout) {
+    public void getAllRecipe(String siteUrl, String sessionId, Integer jobId, final GetAllRecipeCallback callback, RecipeNetworkManagerInterface recipeNetworkManagerInterface, final int totalRetries, int specificRequestTimeout) {
 
         GetAllRecipesRequest getAllRecipesRequest = new GetAllRecipesRequest(sessionId, jobId);
 
         final int[] retryCount = {0};
 
-        Call<RecipeResponse> call = getAllRecipeNetworkManagerInterface.emeraldGetAllRecipe(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getAllRecipesRequest(getAllRecipesRequest);
+        Call<RecipeResponse> call = recipeNetworkManagerInterface.emeraldGetAllRecipe(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getAllRecipesRequest(getAllRecipesRequest);
 
         call.enqueue(new Callback<RecipeResponse>() {
             @Override
@@ -110,35 +111,37 @@ public class SimpleRequests {
         });
     }
 
-    public void updateRecipe(String siteUrl, String sessionId, Integer jobId, final GetAllRecipeCallback callback, GetAllRecipeNetworkManagerInterface getAllRecipeNetworkManagerInterface, final int totalRetries, int specificRequestTimeout) {
-
-        GetAllRecipesRequest getAllRecipesRequest = new GetAllRecipesRequest(sessionId, jobId);
+    public void updateRecipe(String siteUrl, RecipeUpdateRequest recipeUpdateRequest, final SimpleCallback callback, RecipeNetworkManagerInterface recipeNetworkManagerInterface, final int totalRetries, int specificRequestTimeout) {
 
         final int[] retryCount = {0};
 
-        Call<RecipeResponse> call = getAllRecipeNetworkManagerInterface.emeraldGetAllRecipe(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getAllRecipesRequest(getAllRecipesRequest);
+        Call<StandardResponse> call = recipeNetworkManagerInterface.emeraldGetAllRecipe(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).updateRecipe(recipeUpdateRequest);
 
-        call.enqueue(new Callback<RecipeResponse>() {
+        call.enqueue(new Callback<StandardResponse>() {
             @Override
-            public void onResponse(@NonNull Call<RecipeResponse> call, @NonNull Response<RecipeResponse> response) {
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
 
-                if (response.isSuccessful()) {
+                if (response.body() != null && response.body().getError().getErrorDesc() == null) {
                     if (callback != null) {
 
-                        callback.onGetAllRecipeSuccess(response.body());
+                        callback.onRequestSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "getAllRecipesRequest(), onResponse() callback is null");
+                        OppAppLogger.getInstance().w(LOG_TAG, "updateRecipe(), onResponse() callback is null");
                     }
                 } else {
 
-                    onFailure(call, new Exception("response not successful"));
+                    if (response.body() != null && response.body().getError().getErrorDesc() != null) {
+                        onFailure(call, new Exception(response.body().getError().getErrorDesc()));
+                    } else {
+                        onFailure(call, new Exception("response not successful"));
+                    }
                 }
 
             }
 
             @Override
-            public void onFailure(@NonNull Call<RecipeResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -146,11 +149,11 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getAllRecipesRequest_Failed Error");
-                        callback.onGetAllRecipeFailed(errorObject);
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, t.getMessage());
+                        callback.onRequestFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "getAllRecipesRequest(), onFailure() callback is null");
+                    OppAppLogger.getInstance().w(LOG_TAG, "updateRecipe(), onFailure() callback is null");
 
                 }
             }

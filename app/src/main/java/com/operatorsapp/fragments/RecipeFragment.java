@@ -12,28 +12,36 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.common.StandardResponse;
+import com.example.common.request.RecipeUpdateRequest;
+import com.example.common.request.RecipeValue;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.operators.reportrejectinfra.SimpleCallback;
 import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.BaseSplits;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.Channel;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSplits;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.R;
+import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.adapters.ChannelItemsAdapters;
 import com.operatorsapp.adapters.No0ChannelAdapter;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.callback.PostUpdateNotesForJobCallback;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
+import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.ViewTagsHelper;
 import com.operatorsapp.view.SingleLineKeyboard;
@@ -81,6 +89,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private SingleLineKeyboard mKeyBoard;
     private LinearLayout mKeyBoardLayout;
     private View mLayoutChannel0ItemSaveBtn;
+    private ProgressBar mProgressBar;
+    private boolean isUpdating;
 
     public static RecipeFragment newInstance(RecipeResponse recipeResponse) {
         RecipeFragment recipeFragment = new RecipeFragment();
@@ -152,6 +162,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         mNoteIv = view.findViewById(R.id.FR_open_edit_text_btn);
         mNoteTv = view.findViewById(R.id.FR_notes_tv);
         mNoteLy = view.findViewById(R.id.FR_note_ly);
+
+        mProgressBar = view.findViewById(R.id.FR_progress_dialog);
 
         initChannel0Vars(view);
 
@@ -226,9 +238,9 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
                 @Override
                 public void onEditMode(boolean isEditMode) {
-                    if (isEditMode){
+                    if (isEditMode) {
                         mLayoutChannel0ItemSaveBtn.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         mLayoutChannel0ItemSaveBtn.setVisibility(View.GONE);
                         closeKeyBoard();
                     }
@@ -253,6 +265,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         }
         if (mKeyBoard != null) {
             mKeyBoard.setListener(null);
+            mKeyBoard.closeKeyBoard();
         }
     }
 
@@ -332,7 +345,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
             mLayoutChannel0NoDataImage.setVisibility(View.GONE);
             mLayoutChannel0NoDataTv.setVisibility(View.GONE);
 
-            Channel recipeChannel0 = mRecipeResponse.getRecipe().getChannels().get(0);
+            final Channel recipeChannel0 = mRecipeResponse.getRecipe().getChannels().get(0);
 
             if (mRecipeResponse.getProductData() != null && mRecipeResponse.getProductData().getFileUrl() != null &&
                     mRecipeResponse.getProductData().getFileUrl().size() > 0) {
@@ -354,7 +367,33 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
             mLayoutChannel0ItemSaveBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    if (getActivity() != null && getActivity().getWindow() != null) {
+                        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                    recipeChannel0.getChannelSplits().get(0).setBaseSplits(mChannel0BaseSplits);
+                    RecipeUpdateRequest recipeUpdateRequest = createRecipeUpdateRequest();
+                    SimpleRequests simpleRequests = new SimpleRequests();
+                    PersistenceManager persistenceManager = PersistenceManager.getInstance();
+                    isUpdating = true;
+                    simpleRequests.updateRecipe(persistenceManager.getSiteUrl(), recipeUpdateRequest, new SimpleCallback() {
+                        @Override
+                        public void onRequestSuccess(StandardResponse response) {
+                            ShowCrouton.showSimpleCrouton((DashboardActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
+                            mListener.onRefreshRecipe();
+                        }
 
+                        @Override
+                        public void onRequestFailed(StandardResponse reason) {
+                            ShowCrouton.showSimpleCrouton((DashboardActivity) getActivity(), reason.getError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+                            mProgressBar.setVisibility(View.GONE);
+                            isUpdating = false;
+                            if (getActivity() != null && getActivity().getWindow() != null) {
+                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            }
+                        }
+                    }, NetworkManager.getInstance(), persistenceManager.getTotalRetries(), persistenceManager.getRequestTimeout());
                 }
             });
 
@@ -363,7 +402,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                 mChannel0BaseSplits.addAll(recipeChannel0.getChannelSplits().get(0).getBaseSplits());
 
                 for (BaseSplits baseSplits : mChannel0BaseSplits) {
-                    if (editList.containsKey(baseSplits.getProductRecipeID())){
+                    if (editList.containsKey(baseSplits.getProductRecipeID())) {
                         baseSplits.setEditMode(true);
                         baseSplits.setEditValue(editList.get(baseSplits.getProductRecipeID()));
                         editList.remove(baseSplits.getProductRecipeID());
@@ -379,6 +418,27 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         }
         mChannelItemsAdapters.notifyDataSetChanged();
+    }
+
+    private RecipeUpdateRequest createRecipeUpdateRequest() {
+        PersistenceManager persistenceManager = PersistenceManager.getInstance();
+        ArrayList<RecipeValue> recipeValues = new ArrayList<>();
+        for (Channel channel : mRecipeResponse.getRecipe().getChannels()) {
+            for (ChannelSplits channelSplits : channel.getChannelSplits()) {
+                for (BaseSplits baseSplits : channelSplits.getBaseSplits()) {
+                    if (baseSplits.getMandatoryField() || (baseSplits.getEditValue() != null
+                            && !baseSplits.getEditValue().isEmpty() && !baseSplits.getFValue().equals(baseSplits.getEditValue()))) {
+                        if ((baseSplits.getEditValue() != null
+                                && !baseSplits.getEditValue().isEmpty() && !baseSplits.getFValue().equals(baseSplits.getEditValue()))) {
+                            baseSplits.setFValue(baseSplits.getEditValue());
+                        }
+                        recipeValues.add(new RecipeValue(baseSplits.getPropertyID(), baseSplits.getFValue(), baseSplits.getLValue(), baseSplits.getHValue()));
+                    }
+                }
+            }
+        }
+        return new RecipeUpdateRequest(persistenceManager.getSessionId(),
+                persistenceManager.getJobId(), recipeValues, mRecipeResponse.getRecipeRefStandardID(), mRecipeResponse.getRecipeRefType());
     }
 
     private void openNotesDialog() {
@@ -611,8 +671,15 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
     public void updateRecipeResponse(RecipeResponse recipeResponse) {
 
+        if (isUpdating) {
+            mProgressBar.setVisibility(View.GONE);
+            mChannel0BaseSplits.clear();
+            if (getActivity() != null && getActivity().getWindow() != null) {
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+            isUpdating = false;
+        }
         mRecipeResponse = recipeResponse;
-
         if (mLayoutChannel0MainLayout != null) {
             initView();
         }
@@ -628,5 +695,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     public interface OnRecipeFragmentListener {
 
         void onImageProductClick(List<String> fileUrl, String name);
+
+        void onRefreshRecipe();
     }
 }

@@ -157,6 +157,7 @@ import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.RefreshPollingBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
+import com.operatorsapp.view.SingleLineKeyboard;
 
 import org.litepal.crud.DataSupport;
 
@@ -2294,9 +2295,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         Fragment visible = getVisibleFragment();
 
-        if (mCustomKeyBoardIsOpen && mWidgetFragment != null) {
-            mWidgetFragment.onCloseKeyboard();
-
+        if (SingleLineKeyboard.isKeyBoardOpen) {
+            if (mRecipeFragment != null){
+                mRecipeFragment.closeKeyBoard();
+            }
+            if (mWidgetFragment != null) {
+                mWidgetFragment.onCloseKeyboard();
+            }
         } else if (mReportStopReasonFragment != null || mSelectStopReasonFragment != null) {
 
             if (mReportStopReasonFragment != null && mSelectStopReasonFragment == null) {
@@ -2500,6 +2505,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onImageProductClick(List<String> fileUrl, String name) {
 
         startGalleryActivity(fileUrl, name);
+    }
+
+    @Override
+    public void onRefreshRecipe() {
+        dashboardDataStartPolling();
     }
 
     private void startGalleryActivity(List<String> fileUrl, String name) {

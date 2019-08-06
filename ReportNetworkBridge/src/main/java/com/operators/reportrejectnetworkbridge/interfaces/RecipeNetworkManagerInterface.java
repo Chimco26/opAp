@@ -2,7 +2,7 @@ package com.operators.reportrejectnetworkbridge.interfaces;
 
 import java.util.concurrent.TimeUnit;
 
-public interface GetAllRecipeNetworkManagerInterface {
+public interface RecipeNetworkManagerInterface {
 
     EmeraldGetAllRecipe emeraldGetAllRecipe(String siteUrl, int timeout, TimeUnit timeUnit);
 

@@ -51,7 +51,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportCycle
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportInventory;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportReject;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendStopReport;
-import com.operators.reportrejectnetworkbridge.interfaces.GetAllRecipeNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.interfaces.RecipeNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.GetDepartmentNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetIntervalAndTimeOutNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetJobDetailsNetworkManager;
@@ -121,7 +121,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         ReportInventoryNetworkManagerInterface,
         ActiveJobsListForMachineNetworkManagerInterface,
         ApproveFirstItemNetworkManagerInterface,
-        GetAllRecipeNetworkManagerInterface,
+        RecipeNetworkManagerInterface,
         GetVersionNetworkManager,
         GetPendingJobListNetworkManager,
         GetJobDetailsNetworkManager,

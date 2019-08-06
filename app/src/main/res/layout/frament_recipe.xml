@@ -290,5 +290,19 @@
                 android:layout_weight="0.35"
                 />
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/FR_progress_dialog"
+            style="@style/FontStyle_T7"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:indeterminateTint="@color/blue1"
+            android:indeterminateTintMode="src_atop"
+            android:maxLines="1"
+            android:text="@string/updating"
+            android:textColor="@color/blue1"
+            android:textSize="30sp"
+            android:visibility="gone"
+            android:layout_centerInParent="true" />
     </RelativeLayout>
 </LinearLayout>

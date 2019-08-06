@@ -18,7 +18,7 @@ public class SingleLineKeyboard implements View.OnClickListener {
     private Context mContext;
     private String[] mChars;
     private String mText = "";
-    private static boolean isKeyBoardOpen = false;
+    public static boolean isKeyBoardOpen = false;
     private final static int DELETE = 123;
 
     private OnKeyboardClickListener mListener;

@@ -852,6 +852,11 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
         mListener.onStartGalleryActivity(fileUrl, name);
     }
 
+    @Override
+    public void onRefreshRecipe() {
+
+    }
+
     public interface JobDetailsFragmentListener {
 
         void onShowRecipeFragment();
