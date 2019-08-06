@@ -106,7 +106,7 @@ public class BaseSplits implements Parcelable {
     @SerializedName("PropertyHName")
     @Expose
     private String propertyHName;
-    @SerializedName("PropertyID")
+    @SerializedName("PropertyID")//recipeId in request update
     @Expose
     private Integer propertyID;
     @SerializedName("RecipeFValue")
@@ -186,28 +186,12 @@ public class BaseSplits implements Parcelable {
         this.fValue = fValue;
     }
 
-    public String getfValue() {
-        return fValue;
-    }
-
-    public void setfValue(String fValue) {
-        this.fValue = fValue;
-    }
-
     public String getfValueCalcFunction() {
         return fValueCalcFunction;
     }
 
     public void setfValueCalcFunction(String fValueCalcFunction) {
         this.fValueCalcFunction = fValueCalcFunction;
-    }
-
-    public Float gethValue() {
-        return hValue;
-    }
-
-    public void sethValue(Float hValue) {
-        this.hValue = hValue;
     }
 
     public Boolean getEditable() {
@@ -232,14 +216,6 @@ public class BaseSplits implements Parcelable {
 
     public void setValid(Boolean valid) {
         isValid = valid;
-    }
-
-    public Float getlValue() {
-        return lValue;
-    }
-
-    public void setlValue(Float lValue) {
-        this.lValue = lValue;
     }
 
     public String getPropertyName() {

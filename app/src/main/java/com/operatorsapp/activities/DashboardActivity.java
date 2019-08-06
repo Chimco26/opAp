@@ -2502,6 +2502,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         startGalleryActivity(fileUrl, name);
     }
 
+    @Override
+    public void onRefreshRecipe() {
+        dashboardDataStartPolling();
+    }
+
     private void startGalleryActivity(List<String> fileUrl, String name) {
 
         if (fileUrl != null && fileUrl.size() > 0) {

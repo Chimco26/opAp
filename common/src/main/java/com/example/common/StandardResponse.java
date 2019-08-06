@@ -63,6 +63,7 @@ public class StandardResponse implements Parcelable {
         return error;
     }
 
+
     public void setError(ErrorResponse error) {
         this.error = error;
     }

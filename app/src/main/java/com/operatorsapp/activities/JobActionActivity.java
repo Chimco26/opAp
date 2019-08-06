@@ -1302,6 +1302,11 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         startGalleryActivity(fileUrl, name);
     }
 
+    @Override
+    public void onRefreshRecipe() {
+
+    }
+
     private void startGalleryActivity(List<String> fileUrl, String name) {
 
         if (fileUrl != null && fileUrl.size() > 0) {
