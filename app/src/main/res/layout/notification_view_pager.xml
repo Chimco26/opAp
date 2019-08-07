@@ -96,17 +96,7 @@
             android:id="@+id/NVP_view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white">
-
-        </android.support.v7.widget.RecyclerView>
-
-        <!--<android.support.v4.view.ViewPager-->
-        <!--android:id="@+id/NVP_view_pager"-->
-        <!--android:background="@color/white"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" >-->
-
-        <!--</android.support.v4.view.ViewPager>-->
+            android:background="@color/white"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

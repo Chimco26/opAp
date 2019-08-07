@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -54,10 +55,12 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         WindowManager.LayoutParams wlp = getWindow().getAttributes();
         wlp.x = Gravity.END;
         wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         getWindow().setAttributes(wlp);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.notification_view_pager);
 
