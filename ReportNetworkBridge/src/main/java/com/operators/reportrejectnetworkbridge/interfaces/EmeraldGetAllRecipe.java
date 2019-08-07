@@ -14,7 +14,7 @@ public interface EmeraldGetAllRecipe {
     @POST("/LeaderMESApi/GetJobRecipe")
     Call<RecipeResponse> getAllRecipesRequest(@Body GetAllRecipesRequest getAllRecipesRequest);
 
-    @POST("/LeaderMESApi/UpdateProductRecipeJob")
+    @POST("/LeaderMESApi/UpdateProductRecipeJobOpApp")
     Call<StandardResponse> updateRecipe(@Body RecipeUpdateRequest recipeUpdateRequest);
 
 }

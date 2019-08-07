@@ -69,7 +69,8 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
                 ((TextView) viewHolder.itemView.findViewById(R.id.IP_sub_title_id)).setText(mChannelSplits.get(position).getBaseSplits().get(0).getCatalogID());
             }
 
-            if (mChannelSplits.get(position).getBaseSplits().get(0).getMaterialImageLink() != null) {
+            if (mChannelSplits.get(position).getBaseSplits().get(0).getMaterialImageLink() != null
+                    && !mChannelSplits.get(position).getBaseSplits().get(0).getMaterialImageLink().isEmpty()) {
 
                 ImageLoader.getInstance().displayImage(mChannelSplits.get(position).getBaseSplits().get(0).getMaterialImageLink(), viewHolder.mImage);
 
@@ -84,20 +85,20 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
                 if (mType == TYPE_CHANNEL_100) {
 
                     (viewHolder.itemView.findViewById(R.id.IP_vertical_separator)).setVisibility(View.VISIBLE);
-                    (viewHolder.itemView.findViewById(R.id.IP_img)).setVisibility(View.VISIBLE);
+                    viewHolder.mImage.setVisibility(View.VISIBLE);
 
                 }
 
             } else if (mType == TYPE_CHANNEL_100) {
 
                 (viewHolder.itemView.findViewById(R.id.IP_vertical_separator)).setVisibility(View.GONE);
-                (viewHolder.itemView.findViewById(R.id.IP_img)).setVisibility(View.GONE);
+                viewHolder.mImage.setVisibility(View.GONE);
             }
 
-        }else if (mType == TYPE_CHANNEL_100) {
+        } else if (mType == TYPE_CHANNEL_100) {
 
             (viewHolder.itemView.findViewById(R.id.IP_vertical_separator)).setVisibility(View.GONE);
-            (viewHolder.itemView.findViewById(R.id.IP_img)).setVisibility(View.GONE);
+            viewHolder.mImage.setVisibility(View.GONE);
         }
     }
 

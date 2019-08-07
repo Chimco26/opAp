@@ -432,7 +432,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                                 && !baseSplits.getEditValue().isEmpty() && !baseSplits.getFValue().equals(baseSplits.getEditValue()))) {
                             baseSplits.setFValue(baseSplits.getEditValue());
                         }
-                        recipeValues.add(new RecipeValue(baseSplits.getPropertyID(), baseSplits.getFValue(), baseSplits.getLValue(), baseSplits.getHValue()));
+                        recipeValues.add(new RecipeValue(baseSplits.getProductRecipeID(), baseSplits.getFValue(), baseSplits.getLValue(), baseSplits.getHValue()));
                     }
                 }
             }
@@ -541,16 +541,16 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
     private void initChanne1_1_99_View() {
 
-        if (mRecipeResponse != null) {
+        if (mRecipeResponse != null && mRecipeResponse.getRecipe() != null) {
             List<Channel> recipeResponse_1_99 = new ArrayList<>(mRecipeResponse.getRecipe().getChannels());
 
-            if (mRecipeResponse != null && mRecipeResponse.getRecipe() != null && mRecipeResponse.getRecipe().getChannels() != null && mRecipeResponse.getRecipe().getChannels().size() > 0 &&
+            if (mRecipeResponse.getRecipe().getChannels() != null && mRecipeResponse.getRecipe().getChannels().size() > 0 &&
                     mRecipeResponse.getRecipe().getChannels().get(mRecipeResponse.getRecipe().getChannels().size() - 1).getChannelNumber() == 100) {
 
                 recipeResponse_1_99.remove(mRecipeResponse.getRecipe().getChannels().get(mRecipeResponse.getRecipe().getChannels().size() - 1));
             }
 
-            if (mRecipeResponse != null && mRecipeResponse.getRecipe() != null && mRecipeResponse.getRecipe().getChannels().size() > 0) {
+            if (mRecipeResponse.getRecipe().getChannels().size() > 0) {
                 recipeResponse_1_99.remove(0);
             }
 
