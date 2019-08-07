@@ -27,6 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:maxLines="1"
                 android:textColor="@color/black"
                 android:textSize="25sp"
                 app:autoSizeTextType="uniform" />
@@ -36,6 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:maxLines="1"
                 android:gravity="center_vertical"
                 android:textColor="@color/default_gray"
                 android:textSize="20sp"
