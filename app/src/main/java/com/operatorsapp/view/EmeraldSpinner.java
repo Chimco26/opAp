@@ -10,13 +10,12 @@ import android.widget.Spinner;
 
 
 public class EmeraldSpinner extends android.support.v7.widget.AppCompatSpinner {
-   AdapterView.OnItemSelectedListener listener;
+    AdapterView.OnItemSelectedListener listener;
 
     private OnSpinnerEventsListener mListener;
     private boolean mOpenInitiated = false;
 
-    public EmeraldSpinner(Context context, AttributeSet attrs)
-    {
+    public EmeraldSpinner(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -38,20 +37,18 @@ public class EmeraldSpinner extends android.support.v7.widget.AppCompatSpinner {
     }
 
     @Override
-    public void setSelection(int position)
-    {
+    public void setSelection(int position) {
         super.setSelection(position);
 
-        if (position == getSelectedItemPosition() && listener != null)
-        {
+        if (position == getSelectedItemPosition() && listener != null) {
             listener.onItemSelected(null, null, position, 0);
         }
     }
 
-    public void setOnItemSelectedListener(AdapterView.OnItemSelectedListener listener)
-    {
+    public void setOnItemSelectedListener(AdapterView.OnItemSelectedListener listener) {
         this.listener = listener;
     }
+
     @Override
     public boolean performClick() {
         // register that the Spinner was opened so we have a status
@@ -64,7 +61,7 @@ public class EmeraldSpinner extends android.support.v7.widget.AppCompatSpinner {
     }
 
     @Override
-    public void onWindowFocusChanged (boolean hasFocus) {
+    public void onWindowFocusChanged(boolean hasFocus) {
         if (hasBeenOpened() && hasFocus) {
             performClosedEvent();
         }
@@ -99,10 +96,15 @@ public class EmeraldSpinner extends android.support.v7.widget.AppCompatSpinner {
 
     @Override
     public void getWindowVisibleDisplayFrame(Rect outRect) {
-        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        Display d = wm.getDefaultDisplay();
-        d.getRectSize(outRect);
-        outRect.set(outRect.left, (int) (outRect.top + 200), outRect.right, (int) (outRect.bottom - 200));
+        if (android.os.Build.VERSION.SDK_INT != android.os.Build.VERSION_CODES.LOLLIPOP
+                && android.os.Build.VERSION.SDK_INT != android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+            WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+            Display d = wm.getDefaultDisplay();
+            d.getRectSize(outRect);
+            outRect.set(outRect.left, outRect.top + 200, outRect.right, outRect.bottom - 100);
+        } else {
+            super.getWindowVisibleDisplayFrame(outRect);
+        }
     }
 
     public interface OnSpinnerEventsListener {
