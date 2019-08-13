@@ -176,7 +176,6 @@
                 android:layout_weight="10"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="@string/index"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -192,7 +191,6 @@
                 android:layout_weight="10"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="@string/catalog_maj"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -208,7 +206,6 @@
                 android:layout_weight="10"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="@string/units_target"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -224,7 +221,6 @@
                 android:layout_weight="10"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="@string/units_produced"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -240,7 +236,6 @@
                 android:layout_weight="10"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="@string/end_time_actual"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -256,7 +251,6 @@
                 android:layout_weight="10"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="@string/job_left_time"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 

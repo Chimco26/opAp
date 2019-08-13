@@ -28,6 +28,7 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
     public final List<BaseSplits> baseSplits;
     private View mMainView;
     private ChannelItemsAdaptersListener mListener;
+    private float mTitleSize = 15;
 
     public ChannelItemsAdapters(Context context, List<BaseSplits> channelSplits, ChannelItemsAdaptersListener channelItemsAdaptersListener) {
 
@@ -141,8 +142,8 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
             baseSplits.get(viewHolder.getAdapterPosition()).setEditValue(null);
             viewHolder.mDsiplayLy.setVisibility(View.VISIBLE);
             viewHolder.mEditLy.setVisibility(View.GONE);
-            setWeight(7, viewHolder.mTitle);
             setWeight(3, viewHolder.mDisplayOrEditLy);
+            setWeight(7, viewHolder.mTitle);
         }
         for (BaseSplits baseSplits: baseSplits){
             if (baseSplits.isEditMode()){
