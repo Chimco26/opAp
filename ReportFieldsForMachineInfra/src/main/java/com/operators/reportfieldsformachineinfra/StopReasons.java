@@ -1,6 +1,7 @@
 package com.operators.reportfieldsformachineinfra;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -62,7 +63,9 @@ public class StopReasons implements Parcelable {
         if (EventGroupIconID == null){
             return "";
         }
-        return EventGroupIconID.replace("-","_");
+
+        EventGroupIconID = EventGroupIconID.replace("-","_");
+        return EventGroupIconID.replace(".svg","");
     }
 
     public int getEventGroupOpAppDisplayOrder() {
@@ -79,7 +82,8 @@ public class StopReasons implements Parcelable {
     }
 
     public int getGroupColor(Context context){
-        return context.getResources().getIdentifier(getEventGroupColorID(), "color", context.getPackageName());
+        return Color.parseColor(getEventGroupColorID());
+//        return context.getResources().getIdentifier(getEventGroupColorID(), "color", context.getPackageName());
     }
 
 
