@@ -223,38 +223,43 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mLayoutChannel0ItemSplitRV = mLayoutChannel0Item.findViewById(R.id.IP_split_rv);
 
-        if (mChannelItemsAdapters == null) {
-            mChannelItemsAdapters = new ChannelItemsAdapters(getActivity(),
-                    mChannel0BaseSplits, new ChannelItemsAdapters.ChannelItemsAdaptersListener() {
-                @Override
-                public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
-                    openKeyboard(listener, text, complementChars);
-                }
-
-                @Override
-                public void onCloseKeyboard() {
-                    closeKeyBoard();
-                }
-
-                @Override
-                public void onEditMode(boolean isEditMode) {
-                    if (isEditMode) {
-                        mLayoutChannel0ItemSaveBtn.setVisibility(View.VISIBLE);
-                    } else {
-                        mLayoutChannel0ItemSaveBtn.setVisibility(View.GONE);
-                        closeKeyBoard();
-                    }
-                }
-
-            });
-        } else {
-            mChannelItemsAdapters.notifyDataSetChanged();
-        }
-
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
         mLayoutChannel0ItemSplitRV.setLayoutManager(layoutManager);
+
+        if (mChannelItemsAdapters == null) {
+            setChannelAdapter();
+        } else {
+            mChannelItemsAdapters.notifyDataSetChanged();
+        }
+    }
+
+    private void setChannelAdapter() {
+        mChannelItemsAdapters = new ChannelItemsAdapters(getActivity(),
+                mChannel0BaseSplits, new ChannelItemsAdapters.ChannelItemsAdaptersListener() {
+            @Override
+            public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
+                openKeyboard(listener, text, complementChars);
+            }
+
+            @Override
+            public void onCloseKeyboard() {
+                closeKeyBoard();
+            }
+
+            @Override
+            public void onEditMode(boolean isEditMode) {
+                if (isEditMode) {
+                    mLayoutChannel0ItemSaveBtn.setVisibility(View.VISIBLE);
+                } else {
+                    mLayoutChannel0ItemSaveBtn.setVisibility(View.GONE);
+                    closeKeyBoard();
+                }
+                setChannelAdapter();
+            }
+
+        });
 
         mLayoutChannel0ItemSplitRV.setAdapter(mChannelItemsAdapters);
     }

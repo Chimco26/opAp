@@ -69,6 +69,7 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
                     viewHolder.mEditEt.onTouchEvent(event); // call native handler
                     viewHolder.mEditEt.setInputType(inType); // restore input type
                     setMode(true, viewHolder);
+                    setOnEditModeCallBack();
                     return false; // consume touch event
                 }
             });
@@ -76,6 +77,7 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
                 @Override
                 public void onClick(View view) {
                     setMode(true, viewHolder);
+                    setOnEditModeCallBack();
                 }
             });
             viewHolder.mEditEt.addTextChangedListener(new TextWatcher() {
@@ -122,6 +124,7 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
                 @Override
                 public void onClick(View view) {
                     setMode(false, viewHolder);
+                    setOnEditModeCallBack();
                     mListener.onCloseKeyboard();
                 }
             });
@@ -145,6 +148,9 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
             setWeight(3, viewHolder.mDisplayOrEditLy);
             setWeight(7, viewHolder.mTitle);
         }
+    }
+
+    private void setOnEditModeCallBack() {
         for (BaseSplits baseSplits: baseSplits){
             if (baseSplits.isEditMode()){
                 mListener.onEditMode(true);
