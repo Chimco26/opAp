@@ -2,52 +2,71 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:focusable="true"
+    android:background="@color/white"
     android:clickable="true"
-    android:background="@color/white">
+    android:focusable="true"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5">
+
+            <com.operatorsapp.view.SquareImageView
+                android:id="@+id/FRSRN_close_select_events"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:minWidth="25dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/close" />
+
+            <Switch
+                android:id="@+id/stop_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/switch_grid_linear"
+                android:checked="true"
+                android:maxHeight="30dp"
+                android:maxWidth="80dp"
+                android:thumb="@null"
+                android:track="@null" />
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/stop_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="8.5"
+            android:layout_below="@+id/stop_switch"
+            android:scrollbarFadeDuration="0"
+            android:scrollbars="vertical" />
+
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/powered_by_leadermess_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@color/grey_lite"
-        android:text="@string/powered_by_leadermes"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="15dp"
-        android:visibility="gone"/>
-    
-    <Switch
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:id="@+id/stop_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:thumb="@null"
-        android:track="@null"
-        android:checked="true"
-        android:background="@drawable/switch_grid_linear"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/stop_recycler_view"
-        android:layout_below="@+id/stop_switch"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbarFadeDuration="0"
-        android:scrollbars="vertical"/>
-
-    <ImageView
-        android:id="@+id/FRSRN_close_select_events"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_gravity="end"
-        android:src="@drawable/close"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"/>
-
+        android:text="@string/powered_by_leadermes"
+        android:textColor="@color/grey_lite"
+        android:textSize="14sp"
+        android:visibility="gone" />
 
 </RelativeLayout>
 

@@ -388,5 +388,15 @@
     </string-array >
 
     <string name="cycle_time">Ciklusidő</string>
+    <string name="you_have">Rendelkezésre áll:</string>
+    <string name="jobs_on_this_shift">Feladat ebben a műszakban</string>
+    <string name="report_cycle_failed_but_max_reported">a ciklusegység-jelentéshez beállított érték túllépte a max. értéket, max. érték jelentve</string>
+    <string name="report_cycle_failed_but_min_reported">a ciklusegység-jelentéshez beállított érték a min. értéket nem érte el, min. érték jelentve</string>
+    <string name="min_value_is">min. érték</string>
+    <string name="next_job_will_start_in">Következő feladat ennyi idő múlva kezdődik:</string>
+    <string name="start_job_now">Feladat kezdése most</string>
+    <string name="cancel_job">Feladat visszavonása</string>
+    <string name="graph">Grafikon</string>
+    <string name="success">Siker</string>
 
 </resources>

@@ -43,16 +43,9 @@
         android:layout_marginTop="12dp"
         android:background="@color/default_gray" />
 
-
-    <ScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/IP_split_rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" />
 
-        <LinearLayout
-            android:id="@+id/IP_split_ly"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" />
-
-    </ScrollView>
 </LinearLayout>

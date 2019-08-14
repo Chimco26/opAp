@@ -105,7 +105,7 @@ import com.operatorsapp.fragments.AdvancedSettingsFragment;
 import com.operatorsapp.fragments.LenoxDashboardFragment;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.ReportCycleUnitsFragment;
-import com.operatorsapp.fragments.ReportInventoryFragment;
+import com.operatorsapp.fragments.ReportProductionFragment;
 import com.operatorsapp.fragments.ReportRejectsFragment;
 import com.operatorsapp.fragments.ReportShiftFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragment;
@@ -2953,7 +2953,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     break;
 
                 case REPORT_PRODUCTION_TAG:
-                    reportFragment = ReportInventoryFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSpinnerProductPosition);
+                    reportFragment = ReportProductionFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSpinnerProductPosition);
 
                     break;
 

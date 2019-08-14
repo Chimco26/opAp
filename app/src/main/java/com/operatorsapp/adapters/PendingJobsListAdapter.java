@@ -18,7 +18,7 @@ import com.operatorsapp.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PendingJobsAdapterNew extends RecyclerView.Adapter<PendingJobsAdapterNew.ViewHolder> {
+public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsListAdapter.ViewHolder> {
 
     private final Context mContext;
     private final ArrayList<PendingJob> mPandingjobs;
@@ -28,7 +28,7 @@ public class PendingJobsAdapterNew extends RecyclerView.Adapter<PendingJobsAdapt
     private PendingJobsAdapter.PendingJobsAdapterListener mListener;
 
 
-    public PendingJobsAdapterNew(ArrayList<PendingJob> list, HashMap<String, Header> hashMapHeaders, String[] orderedHederasKey, PendingJobsAdapter.PendingJobsAdapterListener listener, Context context) {
+    public PendingJobsListAdapter(ArrayList<PendingJob> list, HashMap<String, Header> hashMapHeaders, String[] orderedHederasKey, PendingJobsAdapter.PendingJobsAdapterListener listener, Context context) {
 
         mListener = listener;
         mContext = context;
@@ -40,14 +40,14 @@ public class PendingJobsAdapterNew extends RecyclerView.Adapter<PendingJobsAdapt
 
     @NonNull
     @Override
-    public PendingJobsAdapterNew.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PendingJobsListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        return new PendingJobsAdapterNew.ViewHolder(inflater.inflate(R.layout.item_job_details, parent, false));
+        return new PendingJobsListAdapter.ViewHolder(inflater.inflate(R.layout.item_job_details, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final PendingJobsAdapterNew.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final PendingJobsListAdapter.ViewHolder viewHolder, final int position) {
 
         ArrayList<Property> properties = (ArrayList<Property>) mPandingjobs.get(viewHolder.getAdapterPosition()).getProperties();
         HashMap<String, String> propertiesHashMap = listToHashMap(properties);

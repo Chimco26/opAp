@@ -1,99 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/white"
-    android:layout_width="370dp"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_marginTop="24dp"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="175dp"
-        android:gravity="start|center_vertical">
+        android:layout_marginTop="24dp"
+        android:gravity="start|center_vertical"
+        android:weightSum="10">
 
         <FrameLayout
             android:id="@+id/NVP_create_notification_fl"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="1px"
             android:layout_marginStart="25dp"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="25dp"
-            android:background="@color/grey_lite">
+            android:layout_weight="8"
+            android:background="@color/grey_lite"
+            android:padding="1px">
 
             <EditText
                 android:id="@+id/NVP_create_notification_tv"
-                android:layout_width="282dp"
+                android:layout_width="match_parent"
                 android:layout_height="133dp"
-                android:padding="5dp"
+                android:background="@color/white"
                 android:gravity="top"
                 android:hint="@string/type_something"
+                android:padding="5dp"
                 android:textColor="@color/black"
-                android:background="@color/white"
                 android:textSize="16sp" />
         </FrameLayout>
 
-        <ImageView
-            android:id="@+id/NVP_template_notification_iv"
-            android:layout_width="31dp"
-            android:layout_height="31dp"
-            android:layout_marginStart="13dp"
-            android:layout_alignTop="@+id/NVP_create_notification_fl"
-            android:layout_toEndOf="@+id/NVP_create_notification_fl"
-            android:background="@drawable/add"/>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="133dp"
+            android:layout_weight="2">
 
-        <ImageView
-            android:id="@+id/NVP_create_notification_iv"
-            android:layout_width="31dp"
-            android:layout_height="31dp"
-            android:layout_marginStart="13dp"
-            android:layout_alignBottom="@+id/NVP_create_notification_fl"
-            android:layout_toEndOf="@+id/NVP_create_notification_fl"
-            android:background="@drawable/send"/>
+            <ImageView
+                android:id="@+id/NVP_template_notification_iv"
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:minWidth="20dp"
+                android:minHeight="20dp"
+                android:maxHeight="31dp"
+                android:maxWidth="31dp"
+                android:layout_marginStart="13dp"
+                android:background="@drawable/add" />
 
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/NVP_create_notification_iv"
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:minWidth="20dp"
+                android:minHeight="20dp"
+                android:maxHeight="31dp"
+                android:maxWidth="31dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="13dp"
+                android:background="@drawable/send" />
+        </RelativeLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/NVP_no_notifications_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:paddingRight="20dp"
-        android:paddingLeft="20dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textAlignment="center"
-        android:visibility="visible"
-        android:textColor="@color/black"
+        android:padding="16dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:text="@string/no_notification_to_show"
-        />
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="visible" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/grey_lite"/>
+        android:background="@color/grey_lite" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/NVP_swipe"
-        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/NVP_view_pager"
-            android:background="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:background="@color/white">
 
         </android.support.v7.widget.RecyclerView>
 
         <!--<android.support.v4.view.ViewPager-->
-            <!--android:id="@+id/NVP_view_pager"-->
-            <!--android:background="@color/white"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent" >-->
+        <!--android:id="@+id/NVP_view_pager"-->
+        <!--android:background="@color/white"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" >-->
 
         <!--</android.support.v4.view.ViewPager>-->
 

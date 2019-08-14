@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="132dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -25,7 +26,9 @@
             android:paddingEnd="10dp"
             android:text="@string/index"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="14sp"/>
 
         <View
             android:layout_width="0dp"
@@ -43,7 +46,9 @@
             android:paddingEnd="10dp"
             android:text="@string/catalog_maj"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="14sp"/>
 
         <View
             android:layout_width="0dp"
@@ -61,7 +66,9 @@
             android:paddingEnd="10dp"
             android:text="@string/units_target"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="14sp"/>
 
         <View
             android:layout_width="0dp"
@@ -79,7 +86,9 @@
             android:paddingEnd="10dp"
             android:text="@string/units_produced"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="14sp"/>
 
         <View
             android:layout_width="0dp"
@@ -97,7 +106,9 @@
             android:paddingEnd="10dp"
             android:text="@string/end_time_actual"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="14sp"/>
 
         <View
             android:layout_width="0dp"
@@ -115,7 +126,9 @@
             android:paddingEnd="10dp"
             android:text="@string/job_left_time"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="14sp"/>
 
         <View
             android:layout_width="0dp"

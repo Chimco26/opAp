@@ -15,13 +15,13 @@ import com.operatorsapp.application.OperatorApplication;
 
 import java.util.List;
 
-public class RejectInventorySpinnerAdapter extends ArrayAdapter<PackageTypes> {
+public class RejectProductionSpinnerAdapter extends ArrayAdapter<PackageTypes> {
     private Activity mContext;
     private List<PackageTypes> mSpinnerItems;
     private TextView mRowName;
     private View mView;
 
-    public RejectInventorySpinnerAdapter(Activity context, int resource, List<PackageTypes> packageTypesList) {
+    public RejectProductionSpinnerAdapter(Activity context, int resource, List<PackageTypes> packageTypesList) {
         super(context, resource, packageTypesList);
         mSpinnerItems = packageTypesList;
         mContext = context;

@@ -26,7 +26,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.adapters.JobHeadersAdapter;
 import com.operatorsapp.adapters.JobHeadersSpinnerAdapter;
 import com.operatorsapp.adapters.PendingJobsAdapter;
-import com.operatorsapp.adapters.PendingJobsAdapterNew;
+import com.operatorsapp.adapters.PendingJobsListAdapter;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class JobListFragment extends Fragment implements
     private Spinner mHeadersRv;
     private RecyclerView mPendingJobsRv;
     private JobHeadersSpinnerAdapter mHeadersAdapter;
-    private PendingJobsAdapterNew mPendingJobsAdapter;
+    private PendingJobsListAdapter mPendingJobsAdapter;
     private PendingJobStandardResponse mPendingJobsResponse;
     private ArrayList<PendingJob> mPendingJobs;
     private List<PendingJob> mPendingJobsNoHeadersFiltered = new ArrayList<>();
@@ -192,7 +192,7 @@ public class JobListFragment extends Fragment implements
 
             mPendingJobs.get(0).setSelected(true);
             RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-            mPendingJobsAdapter = new PendingJobsAdapterNew(mPendingJobs, mHashMapHeaders, orderedHederasKey, this, getActivity());
+            mPendingJobsAdapter = new PendingJobsListAdapter(mPendingJobs, mHashMapHeaders, orderedHederasKey, this, getActivity());
             mPendingJobsRv.setLayoutManager(layoutManager2);
             mPendingJobsRv.setAdapter(mPendingJobsAdapter);
         }

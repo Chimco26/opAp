@@ -102,7 +102,7 @@ public class EmeraldSpinner extends android.support.v7.widget.AppCompatSpinner {
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
         d.getRectSize(outRect);
-        outRect.set(outRect.left, (int) (outRect.top + 200 ), outRect.right, (int) (outRect.bottom - 100));
+        outRect.set(outRect.left, (int) (outRect.top + 200), outRect.right, (int) (outRect.bottom - 200));
     }
 
     public interface OnSpinnerEventsListener {
