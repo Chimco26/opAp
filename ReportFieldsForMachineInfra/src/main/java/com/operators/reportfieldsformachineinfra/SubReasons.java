@@ -17,7 +17,7 @@ public class SubReasons implements Parcelable {
     private String EName;
     @SerializedName("LName")
     private String LName;
-    @SerializedName("EventGroupIconID")
+    @SerializedName("EventIconID")
     private String EventIconID;
     @SerializedName("EventOpAppDisplayOrder")
     private int EventOpAppDisplayOrder;
@@ -46,7 +46,8 @@ public class SubReasons implements Parcelable {
         if (EventIconID == null){
             return "";
         }
-        return EventIconID.replace("-","_");
+        EventIconID = EventIconID.replace("-","_");
+        return EventIconID.replace(".svg","");
     }
 
     public int getEventOpAppDisplayOrder() {
