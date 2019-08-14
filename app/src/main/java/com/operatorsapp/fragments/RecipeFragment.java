@@ -91,6 +91,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private View mLayoutChannel0ItemSaveBtn;
     private ProgressBar mProgressBar;
     private boolean isUpdating;
+    private LinearLayoutManager mChannel0ItemsAdaptersLyManager;
 
     public static RecipeFragment newInstance(RecipeResponse recipeResponse) {
         RecipeFragment recipeFragment = new RecipeFragment();
@@ -223,45 +224,47 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mLayoutChannel0ItemSplitRV = mLayoutChannel0Item.findViewById(R.id.IP_split_rv);
 
-        LinearLayoutManager layoutManager
+        mChannel0ItemsAdaptersLyManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
-        mLayoutChannel0ItemSplitRV.setLayoutManager(layoutManager);
+        mLayoutChannel0ItemSplitRV.setLayoutManager(mChannel0ItemsAdaptersLyManager);
 
-        if (mChannelItemsAdapters == null) {
-            setChannelAdapter();
-        } else {
-            mChannelItemsAdapters.notifyDataSetChanged();
-        }
+        setChannelAdapter();
     }
 
     private void setChannelAdapter() {
-        mChannelItemsAdapters = new ChannelItemsAdapters(getActivity(),
-                mChannel0BaseSplits, new ChannelItemsAdapters.ChannelItemsAdaptersListener() {
-            @Override
-            public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
-                openKeyboard(listener, text, complementChars);
-            }
+        int position = mChannel0ItemsAdaptersLyManager.findLastVisibleItemPosition();
+        ChannelItemsAdapters.ChannelItemsAdaptersListener listener;
+        if (true) {//todo
+            listener = new ChannelItemsAdapters.ChannelItemsAdaptersListener() {
+                @Override
+                public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
+                    openKeyboard(listener, text, complementChars);
+                }
 
-            @Override
-            public void onCloseKeyboard() {
-                closeKeyBoard();
-            }
-
-            @Override
-            public void onEditMode(boolean isEditMode) {
-                if (isEditMode) {
-                    mLayoutChannel0ItemSaveBtn.setVisibility(View.VISIBLE);
-                } else {
-                    mLayoutChannel0ItemSaveBtn.setVisibility(View.GONE);
+                @Override
+                public void onCloseKeyboard() {
                     closeKeyBoard();
                 }
-                setChannelAdapter();
-            }
 
-        });
+                @Override
+                public void onEditMode(boolean isEditMode) {
+                    if (isEditMode) {
+                        mLayoutChannel0ItemSaveBtn.setVisibility(View.VISIBLE);
+                    } else {
+                        mLayoutChannel0ItemSaveBtn.setVisibility(View.GONE);
+                        closeKeyBoard();
+                    }
+                    setChannelAdapter();
+                }
+
+            };
+        }
+        mChannelItemsAdapters = new ChannelItemsAdapters(getActivity(),
+                mChannel0BaseSplits, listener);
 
         mLayoutChannel0ItemSplitRV.setAdapter(mChannelItemsAdapters);
+        mLayoutChannel0ItemSplitRV.scrollToPosition(position);
     }
 
     public void closeKeyBoard() {
@@ -385,7 +388,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                     simpleRequests.updateRecipe(persistenceManager.getSiteUrl(), recipeUpdateRequest, new SimpleCallback() {
                         @Override
                         public void onRequestSuccess(StandardResponse response) {
-                            ShowCrouton.showSimpleCrouton((DashboardActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
                             mListener.onRefreshRecipe();
                         }
 
@@ -422,7 +424,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
             mLayoutChannel0NoDataTv.setVisibility(View.VISIBLE);
 
         }
-        mChannelItemsAdapters.notifyDataSetChanged();
+        setChannelAdapter();
     }
 
     private RecipeUpdateRequest createRecipeUpdateRequest() {
@@ -677,8 +679,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     public void updateRecipeResponse(RecipeResponse recipeResponse) {
 
         if (isUpdating) {
+            ShowCrouton.showSimpleCrouton((DashboardActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
             mProgressBar.setVisibility(View.GONE);
             mChannel0BaseSplits.clear();
+            mLayoutChannel0ItemSaveBtn.setVisibility(View.GONE);
+            closeKeyBoard();
             if (getActivity() != null && getActivity().getWindow() != null) {
                 getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }

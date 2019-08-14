@@ -373,7 +373,6 @@ public class LoginFragment extends Fragment {
             if (mGoToSelectMachine) {
                 mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(departmentsMachinesResponse), false, false);
             } else {
-
                 mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId(), machines);
             }
             mNavigationCallback.isTryToLogin(false);
