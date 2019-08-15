@@ -35,6 +35,9 @@ public class RecipeResponse implements Parcelable {
     @SerializedName("RecipeRefType")
     @Expose
     private Integer recipeRefType;
+    @SerializedName("CanEditRecipe")
+    @Expose
+    private boolean canEditRecipe;
 
     public RecipeResponse() {
     }
@@ -47,6 +50,15 @@ public class RecipeResponse implements Parcelable {
         this.Recipe = Recipe;
         this.note = note;
     }
+
+    public boolean getCanEditRecipe() {
+        return canEditRecipe;
+    }
+
+    public void setCanEditRecipe(boolean canEditRecipe) {
+        this.canEditRecipe = canEditRecipe;
+    }
+
     public Integer getRecipeRefStandardID() {
         return recipeRefStandardID;
     }

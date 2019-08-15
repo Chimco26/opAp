@@ -64,14 +64,11 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
             viewHolder.mEditEt.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    if (viewHolder.getAdapterPosition() > -1) {
-                        int inType = viewHolder.mEditEt.getInputType(); // backup the input type
-                        viewHolder.mEditEt.setInputType(InputType.TYPE_NULL); // disable soft input
-                        viewHolder.mEditEt.onTouchEvent(event); // call native handler
-                        viewHolder.mEditEt.setInputType(inType); // restore input type
-                        setMode(true, viewHolder);
-                        setOnEditModeCallBack();
-                    }
+                    int inType = viewHolder.mEditEt.getInputType(); // backup the input type
+                    viewHolder.mEditEt.setInputType(InputType.TYPE_NULL); // disable soft input
+                    viewHolder.mEditEt.onTouchEvent(event); // call native handler
+                    viewHolder.mEditEt.setInputType(inType); // restore input type
+                    setMode(true, viewHolder);
                     return false; // consume touch event
                 }
             });
@@ -79,7 +76,6 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
                 @Override
                 public void onClick(View view) {
                     setMode(true, viewHolder);
-                    setOnEditModeCallBack();
                 }
             });
             viewHolder.mEditEt.addTextChangedListener(new TextWatcher() {
@@ -90,9 +86,7 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (viewHolder.getAdapterPosition() > -1) {
-                        baseSplits.get(viewHolder.getAdapterPosition()).setEditValue(charSequence.toString());
-                    }
+                    baseSplits.get(viewHolder.getAdapterPosition()).setEditValue(charSequence.toString());
                 }
 
                 @Override
@@ -128,7 +122,6 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
                 @Override
                 public void onClick(View view) {
                     setMode(false, viewHolder);
-                    setOnEditModeCallBack();
                     mListener.onCloseKeyboard();
                 }
             });
@@ -137,30 +130,23 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
 
     private void setMode(boolean edit, ViewHolder viewHolder) {
         if (edit) {
-            for (BaseSplits baseSplits: baseSplits){
-                baseSplits.setEditMode(false);
-                baseSplits.setEditValue(null);
-            }
             baseSplits.get(viewHolder.getAdapterPosition()).setEditMode(true);
             viewHolder.mEditEt.setText(baseSplits.get(viewHolder.getAdapterPosition()).getEditValue());
             viewHolder.mDsiplayLy.setVisibility(View.GONE);
             viewHolder.mEditLy.setVisibility(View.VISIBLE);
-            setWeight(6, viewHolder.mDisplayOrEditLy);
-            setWeight(4, viewHolder.mTitle);
+//            setWeight(6, viewHolder.mDisplayOrEditLy);
+//            setWeight(4, viewHolder.mTitle);
             setKeyBoard(viewHolder.mEditEt, new String[]{".", "-"});
         } else {
             baseSplits.get(viewHolder.getAdapterPosition()).setEditMode(false);
             baseSplits.get(viewHolder.getAdapterPosition()).setEditValue(null);
             viewHolder.mDsiplayLy.setVisibility(View.VISIBLE);
             viewHolder.mEditLy.setVisibility(View.GONE);
-            setWeight(3, viewHolder.mDisplayOrEditLy);
-            setWeight(7, viewHolder.mTitle);
+//            setWeight(3, viewHolder.mDisplayOrEditLy);
+//            setWeight(7, viewHolder.mTitle);
         }
-    }
-
-    private void setOnEditModeCallBack() {
-        for (BaseSplits baseSplits : baseSplits) {
-            if (baseSplits.isEditMode()) {
+        for (BaseSplits baseSplits: baseSplits){
+            if (baseSplits.isEditMode()){
                 mListener.onEditMode(true);
                 return;
             }
