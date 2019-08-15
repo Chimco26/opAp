@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.operators.reportrejectnetworkbridge.server.response.activateJob.Header;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
 import com.operatorsapp.R;
@@ -22,18 +21,16 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
 
     private final Context mContext;
     private final ArrayList<PendingJob> mPandingjobs;
-    private final HashMap<String, Header> mHashMapHeaders;
     private final String[] mOrderedHederasKey;
 
     private PendingJobsAdapter.PendingJobsAdapterListener mListener;
 
 
-    public PendingJobsListAdapter(ArrayList<PendingJob> list, HashMap<String, Header> hashMapHeaders, String[] orderedHederasKey, PendingJobsAdapter.PendingJobsAdapterListener listener, Context context) {
+    public PendingJobsListAdapter(ArrayList<PendingJob> list, String[] orderedHederasKey, PendingJobsAdapter.PendingJobsAdapterListener listener, Context context) {
 
         mListener = listener;
         mContext = context;
         mPandingjobs = list;
-        mHashMapHeaders = hashMapHeaders;
         mOrderedHederasKey = orderedHederasKey;
     }
 
@@ -52,14 +49,41 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
         ArrayList<Property> properties = (ArrayList<Property>) mPandingjobs.get(viewHolder.getAdapterPosition()).getProperties();
         HashMap<String, String> propertiesHashMap = listToHashMap(properties);
 
-        viewHolder.mIndexTv.setText(propertiesHashMap.get(mOrderedHederasKey[0]));
-        viewHolder.mCatalogTv.setText(propertiesHashMap.get(mOrderedHederasKey[1]));
-        viewHolder.mTargetTv.setText(propertiesHashMap.get(mOrderedHederasKey[2]));
-        viewHolder.mProducedTv.setText(propertiesHashMap.get(mOrderedHederasKey[3]));
-        viewHolder.mEndTimeTv.setText(propertiesHashMap.get(mOrderedHederasKey[4]));
-        viewHolder.mJobLeftTv.setText(propertiesHashMap.get(mOrderedHederasKey[5]));
-
-        ImageLoader.getInstance().displayImage("", viewHolder.mImage);
+        if (mOrderedHederasKey[0] != null && mOrderedHederasKey[0].toLowerCase().equals("ProductImagePath".toLowerCase())) {
+            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[0]), viewHolder.m1Img);
+        } else {
+            viewHolder.m1Tv.setText(propertiesHashMap.get(mOrderedHederasKey[0]));
+        }
+        if (mOrderedHederasKey[1] != null && mOrderedHederasKey[1].toLowerCase().equals("ProductImagePath".toLowerCase())) {
+            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[1]), viewHolder.m2Img);
+        } else {
+            viewHolder.m2Tv.setText(propertiesHashMap.get(mOrderedHederasKey[1]));
+        }
+        if (mOrderedHederasKey[2] != null && mOrderedHederasKey[2].toLowerCase().equals("ProductImagePath".toLowerCase())) {
+            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[2]), viewHolder.m3Img);
+        } else {
+            viewHolder.m3Tv.setText(propertiesHashMap.get(mOrderedHederasKey[2]));
+        }
+        if (mOrderedHederasKey[3] != null && mOrderedHederasKey[3].toLowerCase().equals("ProductImagePath".toLowerCase())) {
+            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[3]), viewHolder.m4Img);
+        } else {
+            viewHolder.m4Tv.setText(propertiesHashMap.get(mOrderedHederasKey[3]));
+        }
+        if (mOrderedHederasKey[4] != null && mOrderedHederasKey[4].toLowerCase().equals("ProductImagePath".toLowerCase())) {
+            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[4]), viewHolder.m5Img);
+        } else {
+            viewHolder.m5Tv.setText(propertiesHashMap.get(mOrderedHederasKey[4]));
+        }
+        if (mOrderedHederasKey[5] != null && mOrderedHederasKey[5].toLowerCase().equals("ProductImagePath".toLowerCase())) {
+            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[5]), viewHolder.m6Img);
+        } else {
+            viewHolder.m6Tv.setText(propertiesHashMap.get(mOrderedHederasKey[5]));
+        }
+        if (mOrderedHederasKey[6] != null && mOrderedHederasKey[6].toLowerCase().equals("ProductImagePath".toLowerCase())) {
+            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[6]), viewHolder.m7Img);
+        } else {
+            viewHolder.m7Tv.setText(propertiesHashMap.get(mOrderedHederasKey[6]));
+        }
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,10 +97,6 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
         if (viewHolder.itemView.getContext().getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
             viewHolder.mArrow.setRotationY(180);
         }
-    }
-
-    private int getHeaderValue(HashMap<String, String> propertiesHashMap) {
-        return 0;
     }
 
     private HashMap<String, String> listToHashMap(ArrayList<Property> properties) {
@@ -101,25 +121,39 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        private final TextView mIndexTv;
-        private final TextView mCatalogTv;
-        private final TextView mTargetTv;
-        private final TextView mProducedTv;
-        private final TextView mEndTimeTv;
-        private final TextView mJobLeftTv;
-        private final ImageView mImage;
+        private final TextView m1Tv;
+        private final TextView m2Tv;
+        private final TextView m3Tv;
+        private final TextView m4Tv;
+        private final TextView m5Tv;
+        private final TextView m6Tv;
+        private final TextView m7Tv;
+        private final ImageView m1Img;
+        private final ImageView m2Img;
+        private final ImageView m3Img;
+        private final ImageView m4Img;
+        private final ImageView m5Img;
+        private final ImageView m6Img;
+        private final ImageView m7Img;
         private final View mArrow;
 
         ViewHolder(View itemView) {
             super(itemView);
 
-            mIndexTv = itemView.findViewById(R.id.FJL_index);
-            mCatalogTv = itemView.findViewById(R.id.FJL_catalog);
-            mTargetTv = itemView.findViewById(R.id.FJL_target);
-            mProducedTv = itemView.findViewById(R.id.FJL_produced);
-            mEndTimeTv = itemView.findViewById(R.id.FJL_end_time);
-            mJobLeftTv = itemView.findViewById(R.id.FJL_job_left);
-            mImage = itemView.findViewById(R.id.FJL_image);
+            m1Img = itemView.findViewById(R.id.FJL_img_1);
+            m2Img = itemView.findViewById(R.id.FJL_img_2);
+            m3Img = itemView.findViewById(R.id.FJL_img_3);
+            m4Img = itemView.findViewById(R.id.FJL_img_4);
+            m5Img = itemView.findViewById(R.id.FJL_img_5);
+            m6Img = itemView.findViewById(R.id.FJL_img_6);
+            m7Img = itemView.findViewById(R.id.FJL_img_7);
+            m1Tv = itemView.findViewById(R.id.FJL_1);
+            m2Tv = itemView.findViewById(R.id.FJL_2);
+            m3Tv = itemView.findViewById(R.id.FJL_3);
+            m4Tv = itemView.findViewById(R.id.FJL_4);
+            m5Tv = itemView.findViewById(R.id.FJL_5);
+            m6Tv = itemView.findViewById(R.id.FJL_6);
+            m7Tv = itemView.findViewById(R.id.FJL_7);
             mArrow = itemView.findViewById(R.id.FJL_arrow);
         }
 
