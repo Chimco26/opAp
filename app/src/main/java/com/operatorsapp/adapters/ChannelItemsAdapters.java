@@ -134,16 +134,16 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
             viewHolder.mEditEt.setText(baseSplits.get(viewHolder.getAdapterPosition()).getEditValue());
             viewHolder.mDsiplayLy.setVisibility(View.GONE);
             viewHolder.mEditLy.setVisibility(View.VISIBLE);
-//            setWeight(6, viewHolder.mDisplayOrEditLy);
-//            setWeight(4, viewHolder.mTitle);
+            setWeight(6, viewHolder.mDisplayOrEditLy);
+            setWeight(4, viewHolder.mTitle);
             setKeyBoard(viewHolder.mEditEt, new String[]{".", "-"});
         } else {
             baseSplits.get(viewHolder.getAdapterPosition()).setEditMode(false);
             baseSplits.get(viewHolder.getAdapterPosition()).setEditValue(null);
             viewHolder.mDsiplayLy.setVisibility(View.VISIBLE);
             viewHolder.mEditLy.setVisibility(View.GONE);
-//            setWeight(3, viewHolder.mDisplayOrEditLy);
-//            setWeight(7, viewHolder.mTitle);
+            setWeight(3, viewHolder.mDisplayOrEditLy);
+            setWeight(7, viewHolder.mTitle);
         }
         for (BaseSplits baseSplits: baseSplits){
             if (baseSplits.isEditMode()){

@@ -15,7 +15,7 @@
             android:id="@+id/IS_tv"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="5.5"
+            android:layout_weight="7"
             android:gravity="center_vertical"
             android:maxLines="1"
             android:textColor="@color/black"
@@ -27,19 +27,21 @@
             android:id="@+id/IS_display_or_edit_ly"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="4.5">
+            android:layout_weight="3">
 
             <LinearLayout
                 android:id="@+id/IS_number_ly"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:weightSum="2">
 
                 <TextView
                     android:id="@+id/IS_tv_2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:maxLines="1"
                     android:textColor="@color/blue1"
@@ -50,7 +52,8 @@
                 <TextView
                     android:id="@+id/IS_range_tv"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:maxLines="1"
                     android:textColor="@color/default_gray"
