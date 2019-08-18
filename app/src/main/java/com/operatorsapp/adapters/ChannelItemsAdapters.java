@@ -30,13 +30,14 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
     private ChannelItemsAdaptersListener mListener;
     private float mTitleSize = 15;
 
-    public ChannelItemsAdapters(Context context, List<BaseSplits> channelSplits, ChannelItemsAdaptersListener channelItemsAdaptersListener) {
+    public ChannelItemsAdapters(Context context, List<BaseSplits> channelSplits) {
 
         mContext = context;
         baseSplits = channelSplits;
-        mListener = channelItemsAdaptersListener;
     }
-
+    public void addListener(ChannelItemsAdaptersListener listener) {
+        mListener = listener;
+    }
 
     @NonNull
     @Override
@@ -160,6 +161,11 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
             return baseSplits.size();
         } else return 0;
     }
+
+    public boolean hasListener() {
+        return mListener != null;
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
