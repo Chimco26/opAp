@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.operators.machinedatainfra.models.Widget;
@@ -13,14 +13,12 @@ import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 
-import me.grantland.widget.AutofitTextView;
-
 public class CounterViewHolder extends RecyclerView.ViewHolder {
 
     private final Context mContext;
     private final int mHeight;
     private final int mWidth;
-    private RelativeLayout mParentLayout;
+    private LinearLayout mParentLayout;
     private View mDivider;
     private TextView mTitle;
     private TextView mSubtitle;
@@ -40,7 +38,7 @@ public class CounterViewHolder extends RecyclerView.ViewHolder {
         mWidth = width;
         mDashboardCentralContainerListener = listener;
 
-//        mParentLayout = itemView.findViewById(R.id.counter_parent_layout);
+        mParentLayout = itemView.findViewById(R.id.widget_parent_layout);
         mDivider = itemView.findViewById(R.id.divider);
         mTitle = itemView.findViewById(R.id.counter_widget_title);
         mValue1 = itemView.findViewById(R.id.counter_widget_value_tv1);
@@ -65,7 +63,7 @@ public class CounterViewHolder extends RecyclerView.ViewHolder {
 //        });
 //
 //
-//        setSizes(mParentLayout);
+        setSizes(mParentLayout);
         String nameByLang4 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         mTitle.setText(nameByLang4);
 
@@ -98,10 +96,10 @@ public class CounterViewHolder extends RecyclerView.ViewHolder {
         // TODO: 16/12/2018 complete logic
     }
 
-    private void setSizes(final RelativeLayout parent) {
+    private void setSizes(final LinearLayout parent) {
         ViewGroup.LayoutParams layoutParams;
         layoutParams = parent.getLayoutParams();
-        layoutParams.height = (int) (mHeight * 0.45);
+        layoutParams.height = (int) (mHeight * 0.5);
         layoutParams.width = (int) (mWidth * 0.325);
         parent.requestLayout();
 

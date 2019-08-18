@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -52,7 +52,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
     //    private RadioButton mWeightRadioBtn;
     private View mStep1CancelBtn;
     private TextView mStep1NextBtn;
-    private RelativeLayout mParentLayout;
+    private LinearLayout mParentLayout;
     private View mDivider;
     private TextView mTitle;
     private TextView mSubtitle;
@@ -376,7 +376,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 //            }
 //        });
 //
-//        setSizes(mParentLayout);
+        setSizes(mParentLayout);
         String nameByLang1 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         mTitle.setText(nameByLang1);
         mSubtitle.setVisibility(View.INVISIBLE);
@@ -440,10 +440,10 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    private void setSizes(final RelativeLayout parent) {
+    private void setSizes(final LinearLayout parent) {
         ViewGroup.LayoutParams layoutParams;
         layoutParams = parent.getLayoutParams();
-        layoutParams.height = (int) (mHeight * 0.45);
+        layoutParams.height = (int) (mHeight * 0.5);
         layoutParams.width = (int) (mWidth * 0.325);
         parent.requestLayout();
 

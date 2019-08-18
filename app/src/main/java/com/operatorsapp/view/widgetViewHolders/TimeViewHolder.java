@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.data.Entry;
@@ -29,7 +29,7 @@ public class TimeViewHolder extends RecyclerView.ViewHolder {
     private final Context mContext;
     private final int mHeight;
     private final int mWidth;
-    private RelativeLayout mParentLayout;
+    private LinearLayout mParentLayout;
     private View mDivider;
     private LineChartTimeSmall mChart;
     private TextView mTitle;
@@ -66,7 +66,7 @@ public class TimeViewHolder extends RecyclerView.ViewHolder {
 //        });
 //
 
-//        setSizes(mParentLayout);
+        setSizes(mParentLayout);
         String nameByLang2 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         mTitle.setText(nameByLang2);
         mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));
@@ -148,10 +148,10 @@ public class TimeViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void setSizes(final RelativeLayout parent) {
+    private void setSizes(final LinearLayout parent) {
         ViewGroup.LayoutParams layoutParams;
         layoutParams = parent.getLayoutParams();
-        layoutParams.height = (int) (mHeight * 0.45);
+        layoutParams.height = (int) (mHeight * 0.5);
         layoutParams.width = (int) (mWidth * 0.325);
         parent.requestLayout();
 

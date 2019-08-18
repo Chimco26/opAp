@@ -1,66 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widget_parent_layout"
     android:layout_width="@dimen/widget_width"
     android:layout_height="@dimen/widget_height"
     android:layout_centerInParent="true"
     android:background="@drawable/combined_shape"
-    android:padding="15dp">
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:weightSum="260">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/top_rl"
         android:layout_width="match_parent"
-        android:layout_height="65dp">
+        android:layout_height="0dp"
+        android:layout_weight="65"
+        android:orientation="horizontal"
+        android:weightSum="10">
 
-        <TextView
-            android:id="@+id/range_widget_title"
-            android:layout_width="wrap_content"
-            android:layout_height="28dp"
-            android:maxWidth="230dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Current quantity"
-            android:textColor="@android:color/black"
-            android:textSize="23sp" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            android:orientation="vertical"
+            android:weightSum="10">
 
-        <TextView
-            android:id="@+id/range_widget_subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxWidth="230dp"
-            android:layout_below="@+id/range_widget_title"
-            android:layout_marginTop="4dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Total required 2k"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/range_widget_title"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="6"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="Current quantity"
+                android:textColor="@android:color/black"
+                android:textSize="23sp"
+                app:autoSizeMaxTextSize="23sp"
+                app:autoSizeTextType="uniform" />
+
+            <TextView
+                android:id="@+id/range_widget_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:gravity="center_vertical"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxWidth="230dp"
+                android:maxLines="1"
+                android:text="Total required 2k"
+                android:textSize="18sp"
+                app:autoSizeMaxTextSize="18sp"
+                app:autoSizeTextType="uniform" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/range_widget_current_value"
             style="@style/FontStyle_T11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
             android:maxLines="1"
             android:text="1.7k"
             android:textColor="@color/blue1"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            app:autoSizeMaxTextSize="30sp"
+            app:autoSizeTextType="uniform" />
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/divider_gray" />
-    </RelativeLayout>
-
+    </LinearLayout>
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_gray" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/top_rl"
-        android:paddingTop="7dp">
+        android:layout_height="0dp"
+        android:layout_weight="195">
 
         <com.operatorsapp.view.RangeView2
             android:id="@+id/RWC_cycleTime"
@@ -73,8 +97,8 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_below="@+id/RWC_cycleTime"
-            android:layoutDirection="ltr"
             android:gravity="center_vertical"
+            android:layoutDirection="ltr"
             android:orientation="horizontal">
 
             <ImageView
@@ -86,8 +110,12 @@
                 android:id="@+id/RWC_standard_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 tools:text="Standard: 10.2"
-                android:textColor="@color/black"/>
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                app:autoSizeMaxTextSize="18sp"
+                app:autoSizeTextType="uniform"/>
 
             <ImageView
                 android:id="@+id/RWC_average_img"
@@ -99,8 +127,12 @@
                 android:id="@+id/RWC_average_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 tools:text="Average: 10.0"
-                android:textColor="@color/black"/>
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                app:autoSizeMaxTextSize="18sp"
+                app:autoSizeTextType="uniform"/>
         </LinearLayout>
 
 
@@ -244,4 +276,4 @@
         </RelativeLayout>
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>

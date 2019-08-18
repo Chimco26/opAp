@@ -2,6 +2,8 @@ package com.operatorsapp.view.widgetViewHolders;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.operators.machinedatainfra.models.Widget;
@@ -16,6 +18,9 @@ import java.util.Locale;
 public class GenericTimeViewHolder extends RecyclerView.ViewHolder {
     private static final int END_LIMIT = 10;//in minute
     private final TextView m1EstimatedDate;
+    private final int mHeight;
+    private final int mWidth;
+    private LinearLayout mParentLayout;
     private TextView mTitle;
     private TextView mSubTitle;
     private View m1Ly;
@@ -23,7 +28,7 @@ public class GenericTimeViewHolder extends RecyclerView.ViewHolder {
     private View m2CountDownLy;
     private CountDownView m3CountDownView;
 
-    public GenericTimeViewHolder(View itemView) {
+    public GenericTimeViewHolder(View itemView, int height, int width) {
         super(itemView);
 
         mTitle = itemView.findViewById(R.id.HGT_title);
@@ -33,6 +38,10 @@ public class GenericTimeViewHolder extends RecyclerView.ViewHolder {
         m1EstimatedDate = itemView.findViewById(R.id.HGT_estimated_tv);
         m2CountDownLy = itemView.findViewById(R.id.HGT_countdown_ly);
         m3CountDownView = itemView.findViewById(R.id.HGT_countdown);
+        mHeight = height;
+        mWidth = width;
+        mParentLayout = itemView.findViewById(R.id.widget_parent_layout);
+        setSizes(mParentLayout);
     }
 
     public void setData(Widget widget) {
@@ -74,6 +83,15 @@ public class GenericTimeViewHolder extends RecyclerView.ViewHolder {
     private void initCountDown(int time, int endLimit) {
         m3CountDownView.setEndModeTimeInMinute(endLimit);
         m3CountDownView.update(time, m3CountDownView.getContext().getString(R.string.min));
+    }
+
+    private void setSizes(final LinearLayout parent) {
+        ViewGroup.LayoutParams layoutParams;
+        layoutParams = parent.getLayoutParams();
+        layoutParams.height = (int) (mHeight * 0.5);
+        layoutParams.width = (int) (mWidth * 0.325);
+        parent.requestLayout();
+
     }
 
 }

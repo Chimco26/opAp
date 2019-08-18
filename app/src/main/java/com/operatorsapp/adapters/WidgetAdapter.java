@@ -131,6 +131,7 @@ public class WidgetAdapter extends Adapter {
 
             mImageLayout = itemView.findViewById(R.id.image_widget_layout);
             mParentLayout = itemView.findViewById(R.id.image_widget_parent_layout);
+            setSizes(mParentLayout);
 
         }
     }
@@ -138,7 +139,7 @@ public class WidgetAdapter extends Adapter {
     private void setSizes(final RelativeLayout parent) {
         ViewGroup.LayoutParams layoutParams;
         layoutParams = parent.getLayoutParams();
-        layoutParams.height = (int) (mHeight * 0.45);
+        layoutParams.height = (int) (mHeight * 0.5);
         layoutParams.width = (int) (mWidth * 0.325);
         parent.requestLayout();
 
@@ -182,7 +183,7 @@ public class WidgetAdapter extends Adapter {
                         mDashboardCentralContainerListener, mHeight, mWidth);
             }
             case GENERIC_TIME: {
-                return new GenericTimeViewHolder(inflater.inflate(R.layout.holder_generic_time, parent, false));
+                return new GenericTimeViewHolder(inflater.inflate(R.layout.holder_generic_time, parent, false), mHeight, mWidth);
             }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),

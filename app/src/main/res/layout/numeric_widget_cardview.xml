@@ -1,343 +1,389 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/widget_parent_layout"
     android:layout_width="@dimen/widget_width"
     android:layout_height="@dimen/widget_height"
     android:layout_centerInParent="true"
     android:background="@drawable/combined_shape"
+    android:orientation="vertical"
     android:padding="15dp">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/top_rl"
         android:layout_width="match_parent"
-        android:layout_height="65dp">
+        android:layout_height="0dp"
+        android:layout_weight="65"
+        android:orientation="vertical"
+        android:weightSum="10">
 
         <TextView
             android:id="@+id/numeric_widget_title"
-            android:layout_width="wrap_content"
-            android:layout_height="28dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6"
             android:ellipsize="end"
+            android:gravity="center_vertical"
             android:maxLines="1"
             android:text="Current quantity"
             android:textColor="@android:color/black"
-            android:textSize="23sp" />
+            android:textSize="23sp"
+            app:autoSizeMaxTextSize="23sp"
+            app:autoSizeTextType="uniform" />
 
         <TextView
             android:id="@+id/numeric_widget_subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/numeric_widget_title"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_marginTop="4dp"
+            android:layout_weight="4"
             android:ellipsize="end"
+            android:gravity="center_vertical"
             android:maxLines="1"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:autoSizeMaxTextSize="18sp"
+            app:autoSizeTextType="uniform" />
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/divider_gray" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/NWC_display_ly"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/top_rl"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/numeric_widget_value"
-                style="@style/FontStyle_T11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="marquee"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="center"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:scrollHorizontally="true"
-                android:singleLine="true"
-                android:text="33,850"
-                android:textColor="@color/C16"
-                android:textSize="45sp" />
-            <!--autofit:minTextSize="25sp"/>-->
-
-            <ImageView
-                android:id="@+id/numeric_widget_edit_ic"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="15dp"
-                android:src="@drawable/edit"
-                android:visibility="gone" />
-
-        </LinearLayout>
-
-        <me.grantland.widget.AutofitTextView
-            android:id="@+id/NWC_edit_btn"
-            android:layout_width="166dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/blue1"
-            android:gravity="center"
-            android:maxLines="1"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/NWC_edit_step_1_ly"
+    <View
+        android:id="@+id/divider"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/top_rl"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:layout_height="1dp"
+        android:background="@color/divider_gray" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="195">
 
         <LinearLayout
+            android:id="@+id/NWC_display_ly"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <LinearLayout
-                android:layout_width="155dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/numeric_widget_value"
+                    style="@style/FontStyle_T11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/rejects_quantity"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/NWC_edit_number_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="3dp"
-                    android:background="@drawable/box_grey_stroke"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:gravity="center"
-                    android:textSize="20sp" />
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="33,850"
+                    android:textColor="@color/C16"
+                    android:textSize="45sp" />
+                <!--autofit:minTextSize="25sp"/>-->
+
+                <ImageView
+                    android:id="@+id/numeric_widget_edit_ic"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="15dp"
+                    android:src="@drawable/edit"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp">
-
-                <RadioButton
-                    android:id="@+id/NWC_edit_unit_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:button="@drawable/radio_btn_selector_grey_blue"
-                    android:checked="true"
-                    android:paddingStart="3dp"
-                    android:text="@string/units"
-                    android:textColor="@color/black"
-                    android:textSize="24sp" />
-
-                <RadioButton
-                    android:id="@+id/NWC_edit_weight_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:button="@drawable/radio_btn_selector_grey_blue"
-                    android:paddingStart="3dp"
-                    android:text="@string/weight"
-                    android:textColor="@color/black"
-                    android:textSize="24sp" />
-            </RadioGroup>
-
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:id="@+id/NWC_edit_cancel_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:text="@string/cancel"
-                android:textColor="@color/blue1"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/NWC_edit_next_btn"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp"
-                android:background="@color/grey_lite"
-                android:gravity="center"
-                android:text="@string/next"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/NWC_edit_step_2_ly"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/top_rl"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="51dp"
-            android:orientation="horizontal">
-
-            <RelativeLayout
-                android:id="@+id/NWC_reason_spinner_rl"
-                android:layout_width="0dp"
-                android:layout_height="52dp"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="0.5"
-                android:background="@drawable/edit_text_background_selector">
-
-                <Spinner
-                    android:id="@+id/NWC_reason_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:dropDownVerticalOffset="55dp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/NWC_reason2_spinner_rl"
-                android:layout_width="0dp"
-                android:layout_height="52dp"
-                android:layout_marginStart="5dp"
-                android:layout_weight="0.5"
-                android:background="@drawable/edit_text_background_selector">
-
-                <Spinner
-                    android:id="@+id/NWC_reason2_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:dropDownVerticalOffset="55dp" />
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:id="@+id/NWC_edit_step2_cancel_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:gravity="center"
-                android:text="@string/cancel"
-                android:textColor="@color/blue1"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/NWC_edit_step2_next_btn"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp"
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/NWC_edit_btn"
+                android:layout_width="166dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
                 android:background="@color/blue1"
                 android:gravity="center"
-                android:text="@string/report"
+                android:maxLines="1"
                 android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+        </LinearLayout>
 
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/NWC_edit_quantity_ly"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/top_rl"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <EditText
-            android:id="@+id/NWC_edit_quantity_value_et"
+        <LinearLayout
+            android:id="@+id/NWC_edit_step_1_ly"
             android:layout_width="match_parent"
-            android:layout_height="51dp"
-            android:background="@drawable/box_grey_stroke"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:textColor="@color/blue1"
-            android:textSize="15sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:visibility="visible"
+            android:weightSum="10">
 
-        <RelativeLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="6"
+                android:orientation="horizontal"
+                android:weightSum="10"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="5.5"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="10">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="3"
+                        android:text="@string/rejects_quantity"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:maxLines="1"
+                        android:gravity="center_vertical"
+                        app:autoSizeMaxTextSize="16sp"
+                        app:autoSizeTextType="uniform"/>
+
+                    <EditText
+                        android:id="@+id/NWC_edit_number_et"
+                        android:layout_width="match_parent"
+                        android:layout_weight="7"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@drawable/box_grey_stroke"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        app:autoSizeMaxTextSize="20sp"
+                        app:autoSizeTextType="uniform"/>
+
+                </LinearLayout>
+
+                <RadioGroup
+                    android:layout_width="0dp"
+                    android:layout_weight="4.5"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:weightSum="2">
+
+                    <RadioButton
+                        android:id="@+id/NWC_edit_unit_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:button="@drawable/radio_btn_selector_grey_blue"
+                        android:checked="true"
+                        android:paddingStart="3dp"
+                        android:text="@string/units"
+                        android:textColor="@color/black"
+                        android:textSize="24sp"
+                        android:maxLines="1"
+                        android:gravity="center_vertical"
+                        app:autoSizeMaxTextSize="24sp"
+                        app:autoSizeTextType="uniform"/>
+
+                    <RadioButton
+                        android:id="@+id/NWC_edit_weight_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="7dp"
+                        android:button="@drawable/radio_btn_selector_grey_blue"
+                        android:paddingStart="3dp"
+                        android:text="@string/weight"
+                        android:maxLines="1"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/black"
+                        android:textSize="24sp"
+                        app:autoSizeMaxTextSize="24sp"
+                        app:autoSizeTextType="uniform"/>
+                </RadioGroup>
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:id="@+id/NWC_edit_cancel_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:text="@string/cancel"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/blue1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    app:autoSizeMaxTextSize="18sp"
+                    app:autoSizeTextType="uniform"/>
+
+                <TextView
+                    android:id="@+id/NWC_edit_next_btn"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="8dp"
+                    android:background="@color/grey_lite"
+                    android:gravity="center"
+                    android:text="@string/next"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    app:autoSizeMaxTextSize="18sp"
+                    app:autoSizeTextType="uniform"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/NWC_edit_step_2_ly"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginTop="20dp">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            <TextView
-                android:id="@+id/NWC_edit_quantity_cancel_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="51dp"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/NWC_reason_spinner_rl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/edit_text_background_selector">
+
+                    <Spinner
+                        android:id="@+id/NWC_reason_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:dropDownVerticalOffset="55dp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/NWC_reason2_spinner_rl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/edit_text_background_selector">
+
+                    <Spinner
+                        android:id="@+id/NWC_reason2_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:dropDownVerticalOffset="55dp" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:id="@+id/NWC_edit_step2_cancel_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:text="@string/cancel"
+                    android:textColor="@color/blue1"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/NWC_edit_step2_next_btn"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="8dp"
+                    android:background="@color/blue1"
+                    android:gravity="center"
+                    android:text="@string/report"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/NWC_edit_quantity_ly"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/NWC_edit_quantity_value_et"
+                android:layout_width="match_parent"
+                android:layout_height="51dp"
+                android:background="@drawable/box_grey_stroke"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:gravity="center"
-                android:text="@string/cancel"
                 android:textColor="@color/blue1"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/NWC_edit_quantity_next_btn"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp"
-                android:background="@color/grey_lite"
-                android:gravity="center"
-                android:text="@string/report"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="20dp">
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/NWC_edit_quantity_cancel_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:text="@string/cancel"
+                    android:textColor="@color/blue1"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/NWC_edit_quantity_next_btn"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="8dp"
+                    android:background="@color/grey_lite"
+                    android:gravity="center"
+                    android:text="@string/report"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
+            </RelativeLayout>
 
-</RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+</LinearLayout>
