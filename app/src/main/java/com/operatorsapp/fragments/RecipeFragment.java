@@ -225,47 +225,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mLayoutChannel0ItemSplitRV = mLayoutChannel0Item.findViewById(R.id.IP_split_rv);
 
-        if (mChannelItemsAdapters == null) {
-            ChannelItemsAdapters.ChannelItemsAdaptersListener listener = null;
-            if (mRecipeResponse != null && mRecipeResponse.getCanEditRecipe()) {
-//            if (true) {
-                listener = new ChannelItemsAdapters.ChannelItemsAdaptersListener() {
-                    @Override
-                    public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
-                        openKeyboard(listener, text, complementChars);
-                    }
-
-                    @Override
-                    public void onCloseKeyboard() {
-                        closeKeyBoard();
-                    }
-
-                    @Override
-                    public void onEditMode(boolean isEditMode) {
-                        mIsEditMode = isEditMode;
-                        if (isEditMode) {
-                            mLayoutChannel0ItemSaveBtn.setVisibility(View.VISIBLE);
-                        } else {
-                            mLayoutChannel0ItemSaveBtn.setVisibility(View.GONE);
-                            closeKeyBoard();
-                        }
-                    }
-
-                };
-            }
-            mChannelItemsAdapters = new ChannelItemsAdapters(getActivity(),
-                    mChannel0BaseSplits, listener);
-
-        } else {
-            mChannelItemsAdapters.notifyDataSetChanged();
-        }
-
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-
-        mLayoutChannel0ItemSplitRV.setLayoutManager(layoutManager);
-
-        mLayoutChannel0ItemSplitRV.setAdapter(mChannelItemsAdapters);
     }
 
     public void closeKeyBoard() {
@@ -429,7 +388,61 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
             mLayoutChannel0NoDataTv.setVisibility(View.VISIBLE);
 
         }
-        mChannelItemsAdapters.notifyDataSetChanged();
+        setChannel0Adapter();
+    }
+
+    private void setChannel0Adapter() {
+        if (mChannelItemsAdapters == null) {
+            mChannelItemsAdapters = new ChannelItemsAdapters(getActivity(),
+                    mChannel0BaseSplits);
+
+            LinearLayoutManager layoutManager
+                    = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+
+            mLayoutChannel0ItemSplitRV.setLayoutManager(layoutManager);
+
+            if (!mChannelItemsAdapters.hasListener()){
+                addChannelItemsAdapterListener();
+            }
+
+            mLayoutChannel0ItemSplitRV.setAdapter(mChannelItemsAdapters);
+
+        } else {
+            if (!mChannelItemsAdapters.hasListener()){
+                addChannelItemsAdapterListener();
+            }
+            mChannelItemsAdapters.notifyDataSetChanged();
+        }
+    }
+
+    private void addChannelItemsAdapterListener() {
+        ChannelItemsAdapters.ChannelItemsAdaptersListener listener = null;
+        if (mRecipeResponse != null && mRecipeResponse.getCanEditRecipe()) {
+            listener = new ChannelItemsAdapters.ChannelItemsAdaptersListener() {
+                @Override
+                public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
+                    openKeyboard(listener, text, complementChars);
+                }
+
+                @Override
+                public void onCloseKeyboard() {
+                    closeKeyBoard();
+                }
+
+                @Override
+                public void onEditMode(boolean isEditMode) {
+                    mIsEditMode = isEditMode;
+                    if (isEditMode) {
+                        mLayoutChannel0ItemSaveBtn.setVisibility(View.VISIBLE);
+                    } else {
+                        mLayoutChannel0ItemSaveBtn.setVisibility(View.GONE);
+                        closeKeyBoard();
+                    }
+                }
+
+            };
+        }
+        mChannelItemsAdapters.addListener(listener);
     }
 
     private RecipeUpdateRequest createRecipeUpdateRequest() {
