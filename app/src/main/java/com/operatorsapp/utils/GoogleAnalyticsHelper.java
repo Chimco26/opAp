@@ -73,6 +73,10 @@ public class GoogleAnalyticsHelper {
                 return "Send New Notification";
             case RESPOND_TO_NOTIFICATION:
                 return "Respond to Notification";
+            case RECIPE_EDIT:
+                return "Edit Recipe";
+            case SHIFT_REPORT:
+                return "Shift Report";
             default:return "";
         }
     }
@@ -91,8 +95,8 @@ public class GoogleAnalyticsHelper {
         PRODUCTION_STATUS,
         END_SETUP,
         SEND_NOTIFICATION,
-        RESPOND_TO_NOTIFICATION
-
-
+        RESPOND_TO_NOTIFICATION,
+        RECIPE_EDIT,
+        SHIFT_REPORT
     }
 }

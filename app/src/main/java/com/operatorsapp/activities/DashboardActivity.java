@@ -345,6 +345,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mReportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.SHIFT_REPORT, true, "Shift Report pressed");
                 initTopFiveFragment();
             }
         });

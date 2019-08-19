@@ -55,6 +55,7 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
+import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.text.DecimalFormat;
@@ -148,6 +149,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         initTopFiveStopsVars(view);
         initTopFiveRejects(view);
         getData();
+        new GoogleAnalyticsHelper().trackScreen(getActivity(), "Shift Report");
     }
 
     private void initCycleTimeVars(View view) {
