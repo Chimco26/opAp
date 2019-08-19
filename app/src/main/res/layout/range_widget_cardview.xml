@@ -1,80 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widget_parent_layout"
     android:layout_width="@dimen/widget_width"
     android:layout_height="@dimen/widget_height"
     android:layout_centerInParent="true"
     android:background="@drawable/combined_shape"
-    android:padding="15dp">
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:weightSum="260">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/top_rl"
         android:layout_width="match_parent"
-        android:layout_height="65dp">
+        android:layout_height="0dp"
+        android:layout_weight="65"
+        android:orientation="horizontal"
+        android:weightSum="10">
 
-        <TextView
-            android:id="@+id/range_widget_title"
-            android:layout_width="wrap_content"
-            android:layout_height="28dp"
-            android:maxWidth="230dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Current quantity"
-            android:textColor="@android:color/black"
-            android:textSize="23sp" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            android:orientation="vertical"
+            android:weightSum="10">
 
-        <TextView
-            android:id="@+id/range_widget_subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxWidth="230dp"
-            android:layout_below="@+id/range_widget_title"
-            android:layout_marginTop="4dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Total required 2k"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/range_widget_title"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="6"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="Current quantity"
+                android:textColor="@android:color/black"
+                android:textSize="23sp"
+                app:autoSizeMaxTextSize="23sp"
+                app:autoSizeTextType="uniform" />
+
+            <TextView
+                android:id="@+id/range_widget_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:gravity="center_vertical"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxWidth="230dp"
+                android:maxLines="1"
+                android:text="Total required 2k"
+                android:textSize="18sp"
+                app:autoSizeMaxTextSize="18sp"
+                app:autoSizeTextType="uniform" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/range_widget_current_value"
             style="@style/FontStyle_T11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
             android:maxLines="1"
             android:text="1.7k"
             android:textColor="@color/blue1"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            app:autoSizeMaxTextSize="30sp"
+            app:autoSizeTextType="uniform" />
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/divider_gray" />
-    </RelativeLayout>
-
-
-    <RelativeLayout
+    </LinearLayout>
+    <View
+        android:id="@+id/divider"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/top_rl"
-        android:paddingTop="7dp">
+        android:layout_height="1dp"
+        android:background="@color/divider_gray" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="195"
+        android:paddingTop="15dp"
+        android:orientation="vertical"
+        android:weightSum="195">
 
         <com.operatorsapp.view.RangeView2
             android:id="@+id/RWC_cycleTime"
             android:layout_width="match_parent"
-            android:layout_height="66dp"
+            android:layout_height="0dp"
+            android:layout_weight="100"
             android:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/RWC_cycleTime_ly"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_below="@+id/RWC_cycleTime"
-            android:layoutDirection="ltr"
+            android:layout_height="0dp"
+            android:layout_weight="35"
             android:gravity="center_vertical"
+            android:layoutDirection="ltr"
             android:orientation="horizontal">
 
             <ImageView
@@ -86,8 +114,12 @@
                 android:id="@+id/RWC_standard_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 tools:text="Standard: 10.2"
-                android:textColor="@color/black"/>
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                app:autoSizeMaxTextSize="18sp"
+                app:autoSizeTextType="uniform"/>
 
             <ImageView
                 android:id="@+id/RWC_average_img"
@@ -99,149 +131,153 @@
                 android:id="@+id/RWC_average_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 tools:text="Average: 10.0"
-                android:textColor="@color/black"/>
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                app:autoSizeMaxTextSize="18sp"
+                app:autoSizeTextType="uniform"/>
         </LinearLayout>
 
 
-        <RelativeLayout
-            android:id="@+id/range_widget_capsule_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:visibility="gone">
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/range_widget_capsule_layout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:visibility="gone">-->
 
-            <View
-                android:id="@+id/range_widget_scala_size"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginEnd="25dp" />
+            <!--<View-->
+                <!--android:id="@+id/range_widget_scala_size"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:layout_marginStart="25dp"-->
+                <!--android:layout_marginTop="30dp"-->
+                <!--android:layout_marginEnd="25dp" />-->
 
-            <View
-                android:id="@+id/range_widget_oval"
-                android:layout_width="match_parent"
-                android:layout_height="43dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="14dp"
-                android:background="@drawable/capsule_oval" />
+            <!--<View-->
+                <!--android:id="@+id/range_widget_oval"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="43dp"-->
+                <!--android:layout_marginStart="14dp"-->
+                <!--android:layout_marginTop="18dp"-->
+                <!--android:layout_marginEnd="14dp"-->
+                <!--android:background="@drawable/capsule_oval" />-->
 
-            <View
-                android:layout_width="2dp"
-                android:layout_height="53dp"
-                android:layout_alignStart="@id/range_widget_oval"
-                android:layout_marginStart="23dp"
-                android:layout_marginTop="18dp"
-                android:background="@color/divider_gray" />
+            <!--<View-->
+                <!--android:layout_width="2dp"-->
+                <!--android:layout_height="53dp"-->
+                <!--android:layout_alignStart="@id/range_widget_oval"-->
+                <!--android:layout_marginStart="23dp"-->
+                <!--android:layout_marginTop="18dp"-->
+                <!--android:background="@color/divider_gray" />-->
 
-            <View
-                android:layout_width="2dp"
-                android:layout_height="53dp"
-                android:layout_alignEnd="@id/range_widget_oval"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="23dp"
-                android:background="@color/divider_gray" />
+            <!--<View-->
+                <!--android:layout_width="2dp"-->
+                <!--android:layout_height="53dp"-->
+                <!--android:layout_alignEnd="@id/range_widget_oval"-->
+                <!--android:layout_marginTop="18dp"-->
+                <!--android:layout_marginEnd="23dp"-->
+                <!--android:background="@color/divider_gray" />-->
 
-            <com.operatorsapp.view.RangeView
-                android:id="@+id/range_widget_range_view_blue"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="35dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="38dp" />
+            <!--<com.operatorsapp.view.RangeView-->
+                <!--android:id="@+id/range_widget_range_view_blue"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="48dp"-->
+                <!--android:layout_marginStart="35dp"-->
+                <!--android:layout_marginTop="18dp"-->
+                <!--android:layout_marginEnd="38dp" />-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/range_widget_range_view_blue">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@id/range_widget_range_view_blue">-->
 
-                <TextView
-                    android:id="@+id/range_widget_current_value_in_chart"
-                    android:layout_width="78dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="1"
-                    android:textSize="14sp" />
-            </LinearLayout>
+                <!--<TextView-->
+                    <!--android:id="@+id/range_widget_current_value_in_chart"-->
+                    <!--android:layout_width="78dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:gravity="center_horizontal"-->
+                    <!--android:text="1"-->
+                    <!--android:textSize="14sp" />-->
+            <!--</LinearLayout>-->
 
-            <!-- <LinearLayout
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_below="@id/range_widget_range_view_blue"
-                 android:layout_marginEnd="30dp"
-                 android:layout_marginStart="35dp">
+            <!--&lt;!&ndash; <LinearLayout-->
+                 <!--android:layout_width="match_parent"-->
+                 <!--android:layout_height="wrap_content"-->
+                 <!--android:layout_below="@id/range_widget_range_view_blue"-->
+                 <!--android:layout_marginEnd="30dp"-->
+                 <!--android:layout_marginStart="35dp">-->
 
-                 <TextView
-                     android:id="@+id/range_widget_current_value_in_chart"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:text="15"
-                     android:textSize="14sp" />
-             </LinearLayout>-->
+                 <!--<TextView-->
+                     <!--android:id="@+id/range_widget_current_value_in_chart"-->
+                     <!--android:layout_width="wrap_content"-->
+                     <!--android:layout_height="wrap_content"-->
+                     <!--android:text="15"-->
+                     <!--android:textSize="14sp" />-->
+             <!--</LinearLayout>&ndash;&gt;-->
 
-            <com.operatorsapp.view.RangeView
-                android:id="@+id/range_widget_range_view_red"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="25dp" />
+            <!--<com.operatorsapp.view.RangeView-->
+                <!--android:id="@+id/range_widget_range_view_red"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="48dp"-->
+                <!--android:layout_marginStart="25dp"-->
+                <!--android:layout_marginTop="18dp"-->
+                <!--android:layout_marginEnd="25dp" />-->
 
-            <LinearLayout
-                android:id="@+id/range_widget_red_mark_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/range_widget_range_view_red"
-                android:layout_marginStart="27dp"
-                android:layout_marginTop="3dp"
-                android:layout_marginEnd="25dp">
+            <!--<LinearLayout-->
+                <!--android:id="@+id/range_widget_red_mark_layout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@id/range_widget_range_view_red"-->
+                <!--android:layout_marginStart="27dp"-->
+                <!--android:layout_marginTop="3dp"-->
+                <!--android:layout_marginEnd="25dp">-->
 
-                <ImageView
-                    android:id="@+id/range_widget_red_mark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_exclamation_mark" />
-            </LinearLayout>
+                <!--<ImageView-->
+                    <!--android:id="@+id/range_widget_red_mark"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:src="@drawable/ic_exclamation_mark" />-->
+            <!--</LinearLayout>-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/range_widget_red_mark_layout"
-                android:layout_marginStart="23dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@id/range_widget_red_mark_layout"-->
+                <!--android:layout_marginStart="23dp"-->
+                <!--android:layout_marginEnd="20dp"-->
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:orientation="horizontal">-->
 
-                <TextView
-                    android:id="@+id/range_widget_min"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="15"
-                    android:textSize="14sp" />
+                <!--<TextView-->
+                    <!--android:id="@+id/range_widget_min"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="15"-->
+                    <!--android:textSize="14sp" />-->
 
-                <TextView
-                    android:id="@+id/range_widget_standard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="19"
-                    android:textSize="14sp" />
+                <!--<TextView-->
+                    <!--android:id="@+id/range_widget_standard"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="19"-->
+                    <!--android:textSize="14sp" />-->
 
-                <TextView
-                    android:id="@+id/range_widget_max"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text="22"
-                    android:textSize="14sp" />
+                <!--<TextView-->
+                    <!--android:id="@+id/range_widget_max"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:gravity="end"-->
+                    <!--android:text="22"-->
+                    <!--android:textSize="14sp" />-->
 
-            </LinearLayout>
-        </RelativeLayout>
-    </RelativeLayout>
+            <!--</LinearLayout>-->
+        <!--</RelativeLayout>-->
+    </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

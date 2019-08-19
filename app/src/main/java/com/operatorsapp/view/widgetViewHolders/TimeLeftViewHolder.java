@@ -1,9 +1,11 @@
 package com.operatorsapp.view.widgetViewHolders;
 
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.operators.machinedatainfra.models.Widget;
@@ -17,8 +19,6 @@ import com.operatorsapp.utils.TimeUtils;
 import java.util.Date;
 import java.util.Locale;
 
-import me.grantland.widget.AutofitTextView;
-
 public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private static final int END_LIMIT = 10;//in minute
     private final int mHeight;
@@ -26,13 +26,13 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
     private final TextView m1EstimatedTv;
     private boolean mShowActivateJobBtn = true;
     private boolean mShowEndSetupBtn = true;
-    private RelativeLayout mParentLayout;
+    private LinearLayout mParentLayout;
     private boolean mEndSetupDisable;
     private TextView mTitle;
     private TextView mSubTitle;
     private View m1Ly;
     private TextView m1TimeTv;
-    private AutofitTextView m1Btn;
+    private TextView m1Btn;
     private View m3Ly;
     private View m2Btn;
     private View m2CountDownLy;
@@ -54,7 +54,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         mEndSetupDisable = endSetupDisable;
         mShowEndSetupBtn = showEndSetupBtn;
         mShowActivateJobBtn =showActivateJobBtn;
-//        mParentLayout = itemView.findViewById(R.id.TLWC_parent_layout);
+        mParentLayout = itemView.findViewById(R.id.widget_parent_layout);
 //        mDivider = itemView.findViewById(R.id.TLWC_divider);
         mTitle = itemView.findViewById(R.id.TLWC_title);
         mSubTitle = itemView.findViewById(R.id.TLWC_subtitle);
@@ -68,6 +68,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         m3CountDownView = itemView.findViewById(R.id.TLWC_countdown);
         m3Text = itemView.findViewById(R.id.TLWC_countdown_text_tv);
         m3Btn = itemView.findViewById(R.id.TLWC_countdown_btn);
+        setSizes(mParentLayout);
     }
 
     public void setData(Widget widget, MachineStatus machineStatus, boolean endSetupDisable, boolean showEndSetupBtn, boolean showActivateJobBtn) {
@@ -140,6 +141,14 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
                 update2LyViews((int) time, endLimit);
             }
         }
+        mTitle.post(new Runnable() {
+            @Override
+            public void run() {
+                TextViewCompat
+                        .setAutoSizeTextTypeUniformWithConfiguration(mTitle,
+                                10, 23, 1, TypedValue.COMPLEX_UNIT_SP);
+            }
+        });
     }
 
     private void update2LyViews(int time, int endLimit) {
@@ -163,9 +172,15 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
                 m3Btn.setVisibility(View.INVISIBLE);
             }
             m3Text.setTextColor(m3Text.getContext().getResources().getColor(R.color.blue1));
-//            mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
-//            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.blue1));
         }
+        m3Text.post(new Runnable() {
+            @Override
+            public void run() {
+                TextViewCompat
+                        .setAutoSizeTextTypeUniformWithConfiguration(m3Text,
+                                10, 18, 1, TypedValue.COMPLEX_UNIT_SP);
+            }
+        });
     }
 
     private void initListener() {
@@ -201,10 +216,10 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         }
     }
 
-    private void setSizes(final RelativeLayout parent) {
+    private void setSizes(final LinearLayout parent) {
         ViewGroup.LayoutParams layoutParams;
         layoutParams = parent.getLayoutParams();
-        layoutParams.height = (int) (mHeight * 0.45);
+        layoutParams.height = (int) (mHeight * 0.5);
         layoutParams.width = (int) (mWidth * 0.325);
         parent.requestLayout();
 

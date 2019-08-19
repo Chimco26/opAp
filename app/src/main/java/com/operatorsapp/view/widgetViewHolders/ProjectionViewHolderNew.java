@@ -3,7 +3,7 @@ package com.operatorsapp.view.widgetViewHolders;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.operators.machinedatainfra.models.Widget;
@@ -16,7 +16,7 @@ import static com.operatorsapp.utils.WidgetAdapterUtils.valueInK;
 
 public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
 
-    private final RelativeLayout mParentLayout;
+    private final LinearLayout mParentLayout;
     private final int mHeight;
     private final int mWidth;
     private final View mProducedView;
@@ -58,7 +58,7 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
         mTargetRl = itemView.findViewById(R.id.PWCN_target_rl);
         mLegendGoodUnitsView = itemView.findViewById(R.id.PWCN_legend_ic);
 
-//        setSizes(mParentLayout);
+        setSizes(mParentLayout);
     }
 
     public void setProjectionItem(final Widget widget) {
@@ -181,10 +181,10 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
         mProducedCompleteTv.setText(valueInK(mCurrentValue));
     }
 
-    private void setSizes(final RelativeLayout parent) {
+    private void setSizes(final LinearLayout parent) {
         ViewGroup.LayoutParams layoutParams;
         layoutParams = parent.getLayoutParams();
-        layoutParams.height = (int) (mHeight * 0.45);
+        layoutParams.height = (int) (mHeight * 0.5);
         layoutParams.width = (int) (mWidth * 0.325);
         parent.requestLayout();
 

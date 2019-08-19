@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,7 +22,7 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
     private final View mFilterShort;
     private final View mReported;
     private final View mNotReported;
-    private final RelativeLayout mCenterLayout;
+    private final LinearLayout mCenterLayout;
     private final View mLegFilterShort;
     private final TextView mLegFilterShortTv;
     private final View mLegReported;
@@ -33,9 +34,9 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
     private final TextView mNotReportedTv;
     private final TextView mNotReportedMinTv;
     private final View mDefault;
-//    private int mHeight;
-//    private int mWidth;
-//    private RelativeLayout mParentLayout;
+    private int mHeight;
+    private int mWidth;
+    private RelativeLayout mParentLayout;
     private TextView mFilterShortTv;
     private TextView mReportedTv;
     //    private final View mNoDataFilterView;
@@ -51,9 +52,9 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         super(itemView);
 
         mListener = listener;
-//        mHeight = height;
-//        mWidth = width;
-//        mParentLayout = itemView.findViewById(R.id.RPWC_parent_layout);
+        mHeight = height;
+        mWidth = width;
+        mParentLayout = itemView.findViewById(R.id.widget_parent_layout);
         mCenterLayout = itemView.findViewById(R.id.RPWC_center_ly);
 //        mDivider = itemView.findViewById(R.id.RPWC_divider);
         mTitle = itemView.findViewById(R.id.RPWC_title);
@@ -84,7 +85,7 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
     }
 
     public void setData(Widget widget) {
-//        setView();
+        setSizes(mParentLayout);
 
         setColors(widget);
         int reportedValue = (int) (WidgetAdapterUtils.tryParse(widget.getCurrentValue(), WidgetAdapterUtils.StringParse.FLOAT));
@@ -263,12 +264,12 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
 //        setSizes(mParentLayout);
 //    }
 //
-//    private void setSizes(final RelativeLayout parent) {
-//        ViewGroup.LayoutParams layoutParams;
-//        layoutParams = parent.getLayoutParams();
-//        layoutParams.height = (int) (mHeight * 0.45);
-//        layoutParams.width = (int) (mWidth * 0.325);
-//        parent.requestLayout();
-//
-//    }
+    private void setSizes(final RelativeLayout parent) {
+        ViewGroup.LayoutParams layoutParams;
+        layoutParams = parent.getLayoutParams();
+        layoutParams.height = (int) (mHeight * 0.5);
+        layoutParams.width = (int) (mWidth * 0.325);
+        parent.requestLayout();
+
+    }
 }

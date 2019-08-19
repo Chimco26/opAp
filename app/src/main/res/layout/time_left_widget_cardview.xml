@@ -1,50 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/widget_parent_layout"
     android:layout_width="@dimen/widget_width"
     android:layout_height="@dimen/widget_height"
     android:layout_centerInParent="true"
     android:background="@drawable/combined_shape"
-    android:padding="15dp">
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:weightSum="260">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/top_rl"
         android:layout_width="match_parent"
-        android:layout_height="65dp">
+        android:layout_height="0dp"
+        android:layout_weight="65"
+        android:orientation="vertical"
+        android:weightSum="10">
 
         <TextView
             android:id="@+id/TLWC_title"
-            android:layout_width="wrap_content"
-            android:layout_height="28dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6"
             android:ellipsize="end"
+            android:gravity="center_vertical"
             android:maxLines="1"
             android:text="Current quantity"
             android:textColor="@android:color/black"
-            android:textSize="23sp" />
+            android:textSize="23sp"
+            app:autoSizeMaxTextSize="23sp"
+            app:autoSizeTextType="uniform" />
 
         <TextView
             android:id="@+id/TLWC_subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/TLWC_title"
-            android:layout_marginTop="4dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textSize="18sp" />
-
-        <View
-            android:id="@+id/divider"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/divider_gray" />
-    </RelativeLayout>
+            android:layout_height="0dp"
+            android:layout_marginTop="4dp"
+            android:layout_weight="4"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textSize="18sp"
+            app:autoSizeMaxTextSize="18sp"
+            app:autoSizeTextType="uniform" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_gray" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/top_rl">
+        android:layout_height="0dp"
+        android:layout_weight="195">
 
         <LinearLayout
             android:id="@+id/TLWC_time_ly"
@@ -52,36 +64,47 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:weightSum="10">
 
             <TextView
                 android:id="@+id/TLWC_time_tv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="7"
                 android:gravity="center"
                 android:textColor="@color/blue1"
-                android:textSize="45sp" />
+                android:textSize="45sp"
+                android:maxLines="1"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMaxTextSize="45sp"/>
 
             <TextView
                 android:id="@+id/TLWC_estimated_tv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textColor="@color/blue1"
+                android:layout_height="0dp"
+                android:layout_weight="7"
                 android:gravity="center"
-                android:visibility="gone"/>
+                android:textColor="@color/blue1"
+                android:textSize="18sp"
+                android:visibility="gone"
+                android:maxLines="1"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMaxTextSize="18sp"/>
 
-            <me.grantland.widget.AutofitTextView
+            <TextView
                 android:id="@+id/TLWC_see_jobs_btn"
                 android:layout_width="150dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
+                android:layout_height="0dp"
+                android:layout_weight="3"
                 android:background="@color/blue1"
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="@string/pending_jobs"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMaxTextSize="20sp"/>
 
         </LinearLayout>
 
@@ -89,15 +112,15 @@
             android:id="@+id/TLWC_end_setup_ly"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_centerVertical="true"
+            android:orientation="vertical"
             android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="70dp"
@@ -107,8 +130,8 @@
                 <me.grantland.widget.AutofitTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginStart="16dp"
                     android:gravity="center_vertical"
                     android:maxLines="1"
                     android:text="@string/you_are_in_setup_mode"
@@ -120,15 +143,15 @@
                 android:id="@+id/TLWC_end_setup_btn"
                 android:layout_width="150dp"
                 android:layout_height="30dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:background="@color/blue1"
                 android:gravity="center"
                 android:maxLines="1"
-                android:layout_marginStart="16dp"
                 android:text="@string/end_setup"
                 android:textColor="@color/white"
                 android:textSize="20sp"
-                android:layout_gravity="center_horizontal"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -139,45 +162,60 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:visibility="visible"
+            android:weightSum="10">
 
             <com.operatorsapp.view.widgetViewHolders.CountDownView
                 android:id="@+id/TLWC_countdown"
-                android:layout_width="135dp"
-                android:layout_height="135dp"
-                android:layout_marginTop="10dp" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="6" />
 
             <LinearLayout
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="16dp"
+                android:layout_weight="4"
                 android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:weightSum="10">
 
                 <TextView
                     android:id="@+id/TLWC_countdown_text_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="6"
                     android:gravity="center_vertical"
+                    android:maxLines="2"
                     android:text="@string/get_ready_for_your_next_job"
                     android:textColor="@color/blue1"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    app:autoSizeMaxTextSize="18sp"
+                    app:autoSizeTextType="uniform" />
 
-                <me.grantland.widget.AutofitTextView
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
                     android:id="@+id/TLWC_countdown_btn"
-                    android:layout_width="117dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
                     android:background="@color/blue1"
                     android:gravity="center"
                     android:maxLines="1"
                     android:text="@string/pending_jobs"
                     android:textColor="@color/white"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="20sp"
+                    app:autoSizeTextType="uniform" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-</RelativeLayout>
+</LinearLayout>
