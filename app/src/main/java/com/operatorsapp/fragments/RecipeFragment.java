@@ -389,10 +389,12 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                         @Override
                         public void onRequestSuccess(StandardResponse response) {
                             mListener.onRefreshRecipe();
+                            new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.RECIPE_EDIT, true, "Recipe edited successfully");
                         }
 
                         @Override
                         public void onRequestFailed(StandardResponse reason) {
+                            new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.RECIPE_EDIT, false, "Error: " + reason.getError().getErrorDesc());
                             ShowCrouton.showSimpleCrouton((DashboardActivity) getActivity(), reason.getError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                             mProgressBar.setVisibility(View.GONE);
                             isUpdating = false;
