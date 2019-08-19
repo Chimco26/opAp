@@ -1,6 +1,8 @@
 package com.operatorsapp.view.widgetViewHolders;
 
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -139,6 +141,14 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
                 update2LyViews((int) time, endLimit);
             }
         }
+        mTitle.post(new Runnable() {
+            @Override
+            public void run() {
+                TextViewCompat
+                        .setAutoSizeTextTypeUniformWithConfiguration(mTitle,
+                                10, 23, 1, TypedValue.COMPLEX_UNIT_SP);
+            }
+        });
     }
 
     private void update2LyViews(int time, int endLimit) {
@@ -162,9 +172,15 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
                 m3Btn.setVisibility(View.INVISIBLE);
             }
             m3Text.setTextColor(m3Text.getContext().getResources().getColor(R.color.blue1));
-//            mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
-//            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.blue1));
         }
+        m3Text.post(new Runnable() {
+            @Override
+            public void run() {
+                TextViewCompat
+                        .setAutoSizeTextTypeUniformWithConfiguration(m3Text,
+                                10, 18, 1, TypedValue.COMPLEX_UNIT_SP);
+            }
+        });
     }
 
     private void initListener() {

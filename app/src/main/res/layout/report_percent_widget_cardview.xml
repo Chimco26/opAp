@@ -72,7 +72,7 @@
                 android:id="@+id/RPWC_graph_rl"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="90"
+                android:layout_weight="100"
                 android:layoutDirection="ltr"
                 android:orientation="horizontal">
 
