@@ -107,7 +107,7 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
         if (mChannelSplits.get(position).getBaseSplits() != null) {
 
             ChannelItemsAdapters channelItemsAdapters = new ChannelItemsAdapters(mContext,
-                    mChannelSplits.get(position).getBaseSplits(), null);
+                    mChannelSplits.get(position).getBaseSplits());
 
             LinearLayoutManager layoutManager
                     = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);

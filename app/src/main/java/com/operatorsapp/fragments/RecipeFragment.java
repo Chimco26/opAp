@@ -92,6 +92,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private ProgressBar mProgressBar;
     private boolean isUpdating;
     private LinearLayoutManager mChannel0ItemsAdaptersLyManager;
+    private boolean mIsEditMode;
 
     public static RecipeFragment newInstance(RecipeResponse recipeResponse) {
         RecipeFragment recipeFragment = new RecipeFragment();
@@ -224,47 +225,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mLayoutChannel0ItemSplitRV = mLayoutChannel0Item.findViewById(R.id.IP_split_rv);
 
-        mChannel0ItemsAdaptersLyManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-
-        mLayoutChannel0ItemSplitRV.setLayoutManager(mChannel0ItemsAdaptersLyManager);
-
-        setChannelAdapter();
-    }
-
-    private void setChannelAdapter() {
-        int position = mChannel0ItemsAdaptersLyManager.findLastVisibleItemPosition();
-        ChannelItemsAdapters.ChannelItemsAdaptersListener listener;
-        if (true) {//todo
-            listener = new ChannelItemsAdapters.ChannelItemsAdaptersListener() {
-                @Override
-                public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
-                    openKeyboard(listener, text, complementChars);
-                }
-
-                @Override
-                public void onCloseKeyboard() {
-                    closeKeyBoard();
-                }
-
-                @Override
-                public void onEditMode(boolean isEditMode) {
-                    if (isEditMode) {
-                        mLayoutChannel0ItemSaveBtn.setVisibility(View.VISIBLE);
-                    } else {
-                        mLayoutChannel0ItemSaveBtn.setVisibility(View.GONE);
-                        closeKeyBoard();
-                    }
-                    setChannelAdapter();
-                }
-
-            };
-        }
-        mChannelItemsAdapters = new ChannelItemsAdapters(getActivity(),
-                mChannel0BaseSplits, listener);
-
-        mLayoutChannel0ItemSplitRV.setAdapter(mChannelItemsAdapters);
-        mLayoutChannel0ItemSplitRV.scrollToPosition(position);
     }
 
     public void closeKeyBoard() {
@@ -388,8 +348,12 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                     simpleRequests.updateRecipe(persistenceManager.getSiteUrl(), recipeUpdateRequest, new SimpleCallback() {
                         @Override
                         public void onRequestSuccess(StandardResponse response) {
-                            mListener.onRefreshRecipe();
-                            new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.RECIPE_EDIT, true, "Recipe edited successfully");
+                            if (response.getError().getErrorDesc() != null) {
+                                onRequestFailed(response);
+                            } else {
+                                mListener.onRefreshRecipe();
+                                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.RECIPE_EDIT, true, "Recipe edited successfully");
+                            }
                         }
 
                         @Override
@@ -426,7 +390,61 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
             mLayoutChannel0NoDataTv.setVisibility(View.VISIBLE);
 
         }
-        setChannelAdapter();
+        setChannel0Adapter();
+    }
+
+    private void setChannel0Adapter() {
+        if (mChannelItemsAdapters == null) {
+            mChannelItemsAdapters = new ChannelItemsAdapters(getActivity(),
+                    mChannel0BaseSplits);
+
+            LinearLayoutManager layoutManager
+                    = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+
+            mLayoutChannel0ItemSplitRV.setLayoutManager(layoutManager);
+
+            if (!mChannelItemsAdapters.hasListener()){
+                addChannelItemsAdapterListener();
+            }
+
+            mLayoutChannel0ItemSplitRV.setAdapter(mChannelItemsAdapters);
+
+        } else {
+            if (!mChannelItemsAdapters.hasListener()){
+                addChannelItemsAdapterListener();
+            }
+            mChannelItemsAdapters.notifyDataSetChanged();
+        }
+    }
+
+    private void addChannelItemsAdapterListener() {
+        ChannelItemsAdapters.ChannelItemsAdaptersListener listener = null;
+        if (mRecipeResponse != null && mRecipeResponse.getCanEditRecipe()) {
+            listener = new ChannelItemsAdapters.ChannelItemsAdaptersListener() {
+                @Override
+                public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
+                    openKeyboard(listener, text, complementChars);
+                }
+
+                @Override
+                public void onCloseKeyboard() {
+                    closeKeyBoard();
+                }
+
+                @Override
+                public void onEditMode(boolean isEditMode) {
+                    mIsEditMode = isEditMode;
+                    if (isEditMode) {
+                        mLayoutChannel0ItemSaveBtn.setVisibility(View.VISIBLE);
+                    } else {
+                        mLayoutChannel0ItemSaveBtn.setVisibility(View.GONE);
+                        closeKeyBoard();
+                    }
+                }
+
+            };
+        }
+        mChannelItemsAdapters.addListener(listener);
     }
 
     private RecipeUpdateRequest createRecipeUpdateRequest() {
@@ -680,6 +698,9 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
     public void updateRecipeResponse(RecipeResponse recipeResponse) {
 
+        if (!isUpdating && mIsEditMode) {
+            return;
+        }
         if (isUpdating) {
             ShowCrouton.showSimpleCrouton((DashboardActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
             mProgressBar.setVisibility(View.GONE);
@@ -690,6 +711,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                 getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
             isUpdating = false;
+            mIsEditMode = false;
         }
         mRecipeResponse = recipeResponse;
         if (mLayoutChannel0MainLayout != null) {

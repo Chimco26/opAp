@@ -60,7 +60,7 @@ public class JobListFragment extends Fragment implements
     private JobListFragmentListener mListener;
     private Header mSelectedHeader;
     private TextView mTitleTv;
-    private String[] orderedHederasKey = new String[6];
+    private String[] orderedHederasKey = new String[7];
 
     public static JobListFragment newInstance(PendingJobStandardResponse mPendingJobsResponse, ArrayList<PendingJob> mPendingJobs, ArrayList<Header> headers) {
 
@@ -149,6 +149,8 @@ public class JobListFragment extends Fragment implements
                 ((TextView) view.findViewById(R.id.FJL_end_time)).setText(mHashMapHeaders.get(orderedHederasKey[4]).getDisplayName());
             if (mHashMapHeaders.get(orderedHederasKey[5]) != null)
                 ((TextView) view.findViewById(R.id.FJL_job_left)).setText(mHashMapHeaders.get(orderedHederasKey[5]).getDisplayName());
+            if (mHashMapHeaders.get(orderedHederasKey[6]) != null)
+                ((TextView) view.findViewById(R.id.FJL_image)).setText(mHashMapHeaders.get(orderedHederasKey[6]).getDisplayName());
         }
     }
 
@@ -192,7 +194,7 @@ public class JobListFragment extends Fragment implements
 
             mPendingJobs.get(0).setSelected(true);
             RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-            mPendingJobsAdapter = new PendingJobsListAdapter(mPendingJobs, mHashMapHeaders, orderedHederasKey, this, getActivity());
+            mPendingJobsAdapter = new PendingJobsListAdapter(mPendingJobs, orderedHederasKey, this, getActivity());
             mPendingJobsRv.setLayoutManager(layoutManager2);
             mPendingJobsRv.setAdapter(mPendingJobsAdapter);
         }
@@ -237,15 +239,14 @@ public class JobListFragment extends Fragment implements
                 public int compare(Header o1, Header o2) {
                     if (o1.getOrder().equals(o2.getOrder())) {
                         return 0;
-                    } else if (o1.getOrder() <
-                            o2.getOrder()) {
+                    } else if (o1.getOrder() < o2.getOrder()) {
                         return -1;
                     }
                     return 1;
                 }
             });
         }
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 7; i++) {
             if (mHeaders != null && mHeaders.size() > i) {
                 orderedHederasKey[i] = mHeaders.get(i).getName();
             }

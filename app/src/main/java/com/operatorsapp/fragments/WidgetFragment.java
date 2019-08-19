@@ -91,12 +91,7 @@ public class WidgetFragment extends Fragment implements
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        ProgressDialogManager.show(getActivity());
         View inflate = inflater.inflate(R.layout.fragment_widgets, container, false);
-
-//        if(getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-//            inflate.setRotationY(180);
-//        }
 
         SoftKeyboardUtil.hideKeyboard(this);
         return inflate;
@@ -122,7 +117,7 @@ public class WidgetFragment extends Fragment implements
                     mWidgetsLayoutWidth = (int) (mWidth * 0.84);
                     mRecyclersHeight = (int) (mHeight * 0.67);
 
-                    mSpanCount = (int) ((view.getWidth()) / (getActivity().getResources().getDimension(R.dimen.widget_width)));
+                    mSpanCount = 3;//(int) ((view.getWidth()) / (getActivity().getResources().getDimension(R.dimen.widget_width)));
                     mSpanCount = Math.max(mSpanCount, 1);
                     ViewGroup mWidgetsLayout = view.findViewById(R.id.fragment_dashboard_widgets_layout);
                     ViewGroup.MarginLayoutParams mWidgetsParams = (ViewGroup.MarginLayoutParams) mWidgetsLayout.getLayoutParams();
@@ -214,10 +209,6 @@ public class WidgetFragment extends Fragment implements
     @Override
     public void onPermissionForMachinePolling(SparseArray<WidgetInfo> permissionResponse) {
         mPermissionResponse = permissionResponse;
-//        if (mWidgetAdapter != null) {
-//            mWidgetAdapter.setNewData(mWidgets, mPermissionResponse);
-//            mWidgetAdapter.notifyDataSetChanged();
-//        }
     }
 
     @Override
@@ -231,11 +222,7 @@ public class WidgetFragment extends Fragment implements
     @Override
     public void onMachineDataReceived(ArrayList<Widget> widgetList) {
 
-
-        // if we can't fill any reports, show no data, client defined this behavior.
         if (mReportFieldsFragmentCallbackListener != null && mReportFieldsFragmentCallbackListener.getReportForMachine() == null) {
-
-//            mNoDataView.setVisibility(View.VISIBLE);
 
             return;
 

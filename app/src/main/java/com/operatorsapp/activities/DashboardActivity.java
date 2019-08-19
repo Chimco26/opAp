@@ -829,8 +829,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onMachinePermissionCallbackSucceeded(PermissionResponse permissionResponse) {
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
-                   permissionForMachineHashMap = new SparseArray<>();
-                    for (WidgetInfo widgetInfo: permissionResponse.getWidgetInfo()){
+                    permissionForMachineHashMap = new SparseArray<>();
+                    for (WidgetInfo widgetInfo : permissionResponse.getWidgetInfo()) {
 //                        widgetInfo.setHaspermission(false); for test
                         permissionForMachineHashMap.put(widgetInfo.getId(), widgetInfo);
                     }
@@ -1048,7 +1048,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void showReportBtn(boolean show) {
         boolean havePermission = true;
-        if (permissionForMachineHashMap != null){
+        if (permissionForMachineHashMap != null) {
             havePermission = WidgetInfo.getWidgetInfo(permissionForMachineHashMap, SHIFT_REPORT.getId()).getHaspermissionBoolean();
         }
         if (show && havePermission) {
@@ -2253,7 +2253,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         simpleRequests.postSplitEvent(persistenceManager.getSiteUrl(), new PostSplitEventCallback() {
             @Override
             public void onPostSplitEventSuccess(StandardResponse response) {
-                new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.SPLIT_STOP_EVENT, true, "Split stop event" );
+                new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.SPLIT_STOP_EVENT, true, "Split stop event");
                 ShowCrouton.jobsLoadingSuccessCrouton(DashboardActivity.this, getString(R.string.split_event_success));
                 dashboardDataStartPolling();
             }
@@ -2297,12 +2297,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Fragment visible = getVisibleFragment();
 
         if (SingleLineKeyboard.isKeyBoardOpen) {
-            if (mRecipeFragment != null){
+            if (mRecipeFragment != null) {
                 mRecipeFragment.closeKeyBoard();
             }
             if (mWidgetFragment != null) {
                 mWidgetFragment.onCloseKeyboard();
             }
+            SingleLineKeyboard.isKeyBoardOpen = false;
         } else if (mReportStopReasonFragment != null || mSelectStopReasonFragment != null) {
 
             if (mReportStopReasonFragment != null && mSelectStopReasonFragment == null) {
@@ -2865,7 +2866,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             ProgressDialogManager.dismiss();
 
             if (response.getFunctionSucceed()) {
-                new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.END_SETUP, true, "End setup" );
+                new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.END_SETUP, true, "End setup");
                 if (mRejectForMultipleRequests != null && mRejectForMultipleRequests.size() > 0) {
                     sendMultipleRejectReport(mRejectForMultipleRequests);
                 } else {
@@ -2873,7 +2874,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     mRejectForMultipleRequests = null;
                 }
             } else {
-                new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.END_SETUP, false, "End setup" );
+                new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.END_SETUP, false, "End setup");
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
                 mRejectForMultipleRequests = null;
             }
@@ -2908,7 +2909,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                 ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
             }
-            new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.END_SETUP, false, "End setup- " + reason.getError().getErrorDesc() );
+            new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.END_SETUP, false, "End setup- " + reason.getError().getErrorDesc());
             SendBroadcast.refreshPolling(DashboardActivity.this);
 
         }
@@ -3192,7 +3193,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void showTimeNextJobDialog(int currentJobID, boolean autoActivateNextJob, final long nextJobID, boolean autoActivateNextJobTimer, String erpJobId, int counter) {
 
-        if (mShowDialogJobId != 0 && mShowDialogJobId == currentJobID){
+        if (mShowDialogJobId != 0 && mShowDialogJobId == currentJobID) {
             return;
         }
         if (autoActivateNextJob && nextJobID > 0) {
@@ -3245,7 +3246,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject);
 
-                }if (((StandardResponse)response).getFunctionSucceed()){
+                }
+                if (((StandardResponse) response).getFunctionSucceed()) {
                     activateJob(Integer.parseInt(activateJobRequest.getJobID()));
                 }
             }

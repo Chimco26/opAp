@@ -1,68 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/widget_parent_layout"
     android:layout_width="@dimen/widget_width"
     android:layout_height="@dimen/widget_height"
     android:layout_centerInParent="true"
     android:background="@drawable/combined_shape"
-    android:padding="15dp">
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:weightSum="260">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/top_rl"
         android:layout_width="match_parent"
-        android:layout_height="65dp">
+        android:layout_height="0dp"
+        android:layout_weight="65"
+        android:orientation="horizontal"
+        android:weightSum="10">
 
-        <TextView
-            android:id="@+id/projection_widget_title"
-            android:layout_width="wrap_content"
-            android:layout_height="28dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Current quantity"
-            android:textColor="@android:color/black"
-            android:textSize="23sp" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            android:orientation="vertical"
+            android:weightSum="10">
 
-        <TextView
-            android:id="@+id/projection_widget_subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/projection_widget_title"
-            android:layout_marginTop="4dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Total required 2k"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/projection_widget_title"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="6"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="Current quantity"
+                android:textColor="@android:color/black"
+                android:textSize="23sp"
+                app:autoSizeMaxTextSize="23sp"
+                app:autoSizeTextType="uniform" />
+
+            <TextView
+                android:id="@+id/projection_widget_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="4dp"
+                android:layout_weight="4"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="Total required 2k"
+                android:textSize="18sp"
+                app:autoSizeMaxTextSize="18sp"
+                app:autoSizeTextType="uniform" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/projection_widget_current_value"
             style="@style/FontStyle_T11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
             android:maxLines="1"
             android:text="1.7k"
             android:textColor="@color/blue1"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            app:autoSizeMaxTextSize="18sp"
+            app:autoSizeTextType="uniform" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="150"
+        android:layoutDirection="ltr"
+        android:orientation="vertical"
+        android:paddingTop="15dp"
+        android:weightSum="150">
 
         <View
-            android:id="@+id/divider"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/divider_gray" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:layout_below="@+id/top_rl"
-        android:layoutDirection="ltr"
-        android:paddingTop="15dp">
+            android:layout_height="0dp"
+            android:layout_weight="7" />
 
         <RelativeLayout
             android:id="@+id/PWCN_projection_rl"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="0dp"
+            android:layout_weight="113">
 
             <RelativeLayout
                 android:id="@+id/PWCN_target_rl"
@@ -159,8 +191,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_alignParentBottom="true"
+            android:layout_height="0dp"
+            android:layout_weight="30"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -176,9 +208,12 @@
                 android:layout_marginStart="5dp"
                 android:gravity="center_vertical"
                 android:maxWidth="120dp"
+                android:maxLines="1"
                 android:text="@string/good_units"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                app:autoSizeMaxTextSize="18sp"
+                app:autoSizeTextType="uniform" />
 
             <View
                 android:layout_width="9dp"
@@ -192,18 +227,21 @@
                 android:layout_marginStart="5dp"
                 android:gravity="center_vertical"
                 android:maxWidth="120dp"
+                android:maxLines="1"
                 android:text="@string/theoretical_units"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                app:autoSizeMaxTextSize="18sp"
+                app:autoSizeTextType="uniform" />
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_alignParentBottom="true"
+        android:layout_height="0dp"
+        android:layout_weight="45"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
@@ -219,10 +257,13 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:gravity="center"
+            android:maxLines="1"
             android:text="@string/you_ve_reached_the_production_target"
             android:textColor="@color/red_line"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:autoSizeMaxTextSize="18sp"
+            app:autoSizeTextType="uniform" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

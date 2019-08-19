@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.operators.machinedatainfra.models.Widget;
@@ -17,8 +16,6 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.utils.WidgetAdapterUtils;
 import com.operatorsapp.view.RangeView;
 import com.operatorsapp.view.RangeView2;
-
-import me.grantland.widget.AutofitTextView;
 
 public class RangeViewHolder extends RecyclerView.ViewHolder {
 
@@ -29,7 +26,7 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
     private final ImageView mAverageImg;
     private LinearLayout mCycleTimeLy;
     private RangeView2 mCycleRange;
-    private RelativeLayout mParentLayout;
+    private LinearLayout mParentLayout;
     private View mDivider;
     private TextView mTitle;
     private TextView mSubtitle;
@@ -82,17 +79,8 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setRangeItem(final Widget widget) {
-//        mDivider.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                ViewGroup.MarginLayoutParams mItemViewParams3;
-//                mItemViewParams3 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-//                mItemViewParams3.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
-//                mDivider.requestLayout();
-//            }
-//        });
 
-//        setSizes(mParentLayout);
+        setSizes(mParentLayout);
         String nameByLang3 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         mTitle.setText(nameByLang3);
         mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));
@@ -106,7 +94,6 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
 
         mRangeViewRed.setCurrentLine(true);
         mRangeViewBlue.setCurrentLine(false);
-//                    if (mRangeCapsuleWidth == 0) {
         mCapsule.post(new Runnable() {
             @Override
             public void run() {
@@ -114,10 +101,7 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
                 setRangeData(widget);
             }
         });
-//                    } else {
-//                        mRangeCapsuleWidth = mCapsule.getWidth();
-//                        setRangeData(widget, rangeViewHolder);
-//                    }
+
         mMin.setText(String.valueOf(widget.getLowLimit()));
         mStandard.setText(String.valueOf(widget.getStandardValue()));
         mMax.setText(String.valueOf(widget.getHighLimit()));
@@ -167,10 +151,11 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void setSizes(final RelativeLayout parent) {
+    private void setSizes(final LinearLayout parent) {
+
         ViewGroup.LayoutParams layoutParams;
         layoutParams = parent.getLayoutParams();
-        layoutParams.height = (int) (mHeight * 0.45);
+        layoutParams.height = (int) (mHeight * 0.5);
         layoutParams.width = (int) (mWidth * 0.325);
         parent.requestLayout();
 
@@ -188,7 +173,7 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
 
                 if (!widget.getCurrentValue().equals("--")) {
                     mCycleRange.setCurrentValue(Float.valueOf(widget.getCurrentValue()));
-                }else {
+                } else {
                     mCycleRange.setCurrentValue(0);
                 }
                 mCycleRange.setHighLimit(widget.getHighLimit());
@@ -201,13 +186,13 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
                 mStandardTv.setText(String.format("%s%s", mContext.getString(R.string.standard), widget.getStandardValue()));
                 mAverageTv.setVisibility(View.GONE);
                 mAverageImg.setVisibility(View.GONE);
-                if (widget.getCycleTimeAvg() != null){
+                if (widget.getCycleTimeAvg() != null) {
                     try {
-                        if (Float.parseFloat(widget.getCycleTimeAvg()) > 0){
+                        if (Float.parseFloat(widget.getCycleTimeAvg()) > 0) {
                             mAverageTv.setVisibility(View.VISIBLE);
                             mAverageImg.setVisibility(View.VISIBLE);
                         }
-                    }catch (Exception ignored){
+                    } catch (Exception ignored) {
 
                     }
                 }
