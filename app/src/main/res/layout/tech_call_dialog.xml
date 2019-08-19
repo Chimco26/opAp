@@ -31,6 +31,8 @@
             android:layout_height="0dp"
             android:layout_weight="10"
             android:layout_gravity="end"
+            android:minWidth="25dp"
+            android:minHeight="25dp"
             android:src="@drawable/close"/>
 
         <TextView
@@ -44,7 +46,9 @@
             android:textColor="@color/blue1"
             android:text="@string/service_calls"
             android:maxLines="1"
-            android:layout_width="wrap_content"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
             app:autoSizeTextType="uniform"/>
@@ -223,7 +227,8 @@
             android:layout_marginBottom="30dp"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarFadeDuration="10000"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"
+            android:paddingBottom="5dp"/>
 
         <!--<FrameLayout-->
             <!--android:layout_gravity="center_horizontal"-->
