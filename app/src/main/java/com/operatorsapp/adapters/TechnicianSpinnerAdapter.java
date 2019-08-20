@@ -58,7 +58,7 @@ public class TechnicianSpinnerAdapter extends ArrayAdapter<Technician> {
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
-            row = inflater.inflate(R.layout.base_spinner_item, parent, false);
+            row = inflater.inflate(R.layout.base_spinner_item_dropdown, parent, false);
         }
         Technician item = mSpinnerItems.get(position);
         String technicianName = OperatorApplication.isEnglishLang() ? item.getEName() : item.getLName();
