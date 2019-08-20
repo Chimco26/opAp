@@ -226,10 +226,10 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                 childLayout.findViewById(R.id.TF_name).setVisibility(View.GONE);
             }
             if (percentage != null && !percentage.isEmpty()) {
-                childLayout.findViewById(R.id.TF_percentage).setVisibility(View.VISIBLE);
+                childLayout.findViewById(R.id.TF_percentage_ly).setVisibility(View.VISIBLE);
                 ((TextView) childLayout.findViewById(R.id.TF_percentage)).setText(percentage);
             } else {
-                childLayout.findViewById(R.id.TF_percentage).setVisibility(View.GONE);
+                childLayout.findViewById(R.id.TF_percentage_ly).setVisibility(View.GONE);
             }
             if (value != null && !value.isEmpty()) {
                 childLayout.findViewById(R.id.TF_values).setVisibility(View.VISIBLE);
@@ -293,7 +293,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             mPieChart.setTouchEnabled(false);
             mPieChart.getDescription().setEnabled(false);
             mPieChart.getLegend().setTextSize(14f);
-            mPieChart.setExtraOffsets(0, 5, 0, 5);
+            mPieChart.setExtraOffsets(15, 5, 15, 5);
 
             mPieChart.setData(data);
             mPieChart.invalidate();

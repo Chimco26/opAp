@@ -28,7 +28,8 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="@string/enter_with_your_id"
-            android:textSize="30sp"/>
+            android:textSize="30sp"
+            android:textStyle="bold"/>
 
         <View
             android:layout_width="1dp"

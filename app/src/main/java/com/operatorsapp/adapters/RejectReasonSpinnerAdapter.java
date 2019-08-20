@@ -57,7 +57,7 @@ public class RejectReasonSpinnerAdapter extends ArrayAdapter<RejectReasons> {
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
-            row = inflater.inflate(R.layout.base_spinner_item, parent, false);
+            row = inflater.inflate(R.layout.base_spinner_item_dropdown, parent, false);
         }
         String item = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getLName();
         if (item != null) {

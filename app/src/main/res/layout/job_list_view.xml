@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/combined_shape"
     android:orientation="vertical"
     android:padding="15dp">
@@ -13,12 +14,14 @@
         android:layout_height="64dp"
         android:ellipsize="end"
         android:gravity="center_vertical|start"
-        android:maxLines="2"
+        android:maxLines="1"
         android:paddingBottom="5dp"
         android:text="@string/jobs_on_this_shift"
         android:textColor="@color/black"
         android:textSize="25sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:autoSizeMaxTextSize="25sp"
+        app:autoSizeTextType="uniform"/>
 
     <View
         android:layout_width="match_parent"

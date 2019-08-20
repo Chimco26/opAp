@@ -5,20 +5,23 @@
     android:layout_width="@dimen/widget_width"
     android:layout_height="@dimen/widget_height"
     android:layout_centerInParent="true"
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp"
+    android:paddingBottom="15dp"
+    android:paddingTop="5dp"
     android:background="@drawable/combined_shape">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="15dp"
         android:weightSum="260">
 
         <LinearLayout
             android:id="@+id/top_rl"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="65"
+            android:layout_weight="70"
             android:orientation="vertical"
             android:weightSum="10">
 
@@ -40,7 +43,6 @@
                 android:id="@+id/RPWC_subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="4dp"
                 android:layout_weight="4"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
@@ -62,7 +64,7 @@
             android:id="@+id/RPWC_center_ly"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="150"
+            android:layout_weight="145"
             android:layoutDirection="ltr"
             android:orientation="vertical"
             android:paddingTop="15dp"

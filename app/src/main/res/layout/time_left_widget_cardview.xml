@@ -7,14 +7,17 @@
     android:layout_centerInParent="true"
     android:background="@drawable/combined_shape"
     android:orientation="vertical"
-    android:padding="15dp"
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp"
+    android:paddingBottom="15dp"
+    android:paddingTop="5dp"
     android:weightSum="260">
 
     <LinearLayout
         android:id="@+id/top_rl"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="65"
+        android:layout_weight="70"
         android:orientation="vertical"
         android:weightSum="10">
 
@@ -36,7 +39,6 @@
             android:id="@+id/TLWC_subtitle"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="4dp"
             android:layout_weight="4"
             android:ellipsize="end"
             android:gravity="center_vertical"
@@ -56,7 +58,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="195">
+        android:layout_weight="190">
 
         <LinearLayout
             android:id="@+id/TLWC_time_ly"
@@ -162,8 +164,6 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
             android:visibility="visible"
             android:weightSum="10">
 
@@ -171,17 +171,18 @@
                 android:id="@+id/TLWC_countdown"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="6" />
+                android:layout_weight="5.5"
+                android:paddingTop="10dp" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="4"
+                android:layout_weight="4.5"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:weightSum="10">
+                android:weightSum="10"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp">
 
                 <TextView
                     android:id="@+id/TLWC_countdown_text_tv"

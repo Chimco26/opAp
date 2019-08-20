@@ -30,7 +30,8 @@
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5" />
+
         <LinearLayout
             android:id="@+id/TF_values"
             android:layout_width="0dp"
@@ -61,9 +62,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:maxWidth="75dp"
                 android:maxLines="1"
-                android:gravity="center"
                 android:text="@string/minutes_long"
                 android:textColor="@color/black"
                 android:textSize="14sp"
@@ -71,28 +72,57 @@
                 app:autoSizeMaxTextSize="20sp"
                 app:autoSizeTextType="uniform" />
         </LinearLayout>
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.25"/>
-        <TextView
-            android:id="@+id/TF_percentage"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.75"
-            android:gravity="center"
-            android:maxWidth="75dp"
-            android:maxLines="1"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:autoSizeMaxTextSize="20sp"
-            app:autoSizeTextType="uniform" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.25"/>
+            android:layout_weight="0.25" />
+
+        <LinearLayout
+            android:id="@+id/TF_percentage_ly"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.75"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/TF_percentage"
+                style="@style/ProximaNovaSemiBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:maxWidth="75dp"
+                android:maxLines="1"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeTextType="uniform" />
+
+            <TextView
+                style="@style/ProximaNovaSemiBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:maxWidth="75dp"
+                android:maxLines="1"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeTextType="uniform" />
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25" />
+
         <LinearLayout
             android:id="@+id/TF_events"
             android:layout_width="0dp"
@@ -108,9 +138,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:maxWidth="75dp"
                 android:maxLines="1"
-                android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -123,8 +153,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:maxWidth="75dp"
                 android:gravity="center"
+                android:maxWidth="75dp"
                 android:maxLines="1"
                 android:text="@string/events"
                 android:textColor="@color/black"

@@ -283,7 +283,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         if (mReportFieldsForMachine != null) {
 
             final RejectReasonSpinnerAdapter reasonSpinnerArrayAdapter = new RejectReasonSpinnerAdapter(mContext, R.layout.base_spinner_item, mReportFieldsForMachine.getRejectReasons());
-            reasonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            reasonSpinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
             mSpinner1.setAdapter(reasonSpinnerArrayAdapter);
             mSpinner1.getBackground().setColorFilter(ContextCompat.getColor(mContext, R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
@@ -302,7 +302,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
             if (PersistenceManager.getInstance().getDisplayRejectFactor()) {
                 final RejectCauseSpinnerAdapter causeSpinnerArrayAdapter = new RejectCauseSpinnerAdapter(mContext, R.layout.base_spinner_item, mReportFieldsForMachine.getRejectCauses());
-                causeSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                causeSpinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
                 mSpinner2.setAdapter(causeSpinnerArrayAdapter);
                 mSpinner2.getBackground().setColorFilter(ContextCompat.getColor(mContext, R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 

@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.operatorsapp.R;
 import com.operatorsapp.utils.StringUtil;
+import com.operatorsapp.utils.TextPaintCanvasUtils;
 
 public class CountDownView extends View {
 
@@ -165,8 +166,9 @@ public class CountDownView extends View {
         canvas.drawCircle(getPercentArcEndPoint(percentAngle).x, getPercentArcEndPoint(percentAngle).y, indicatorRadius, mIndicatorPaint);
         canvas.drawCircle(getPercentArcEndPoint(percentAngle).x, getPercentArcEndPoint(percentAngle).y, indicatorRadius, mIndicatorStrokePaint);
 
-        mTextPaint.setTextAlign(Paint.Align.CENTER);
         text = text == null ? "" : text;
+        textSize = TextPaintCanvasUtils.setTextSizeForWidth(mTextPaint, radius - strokeWidth - padding, text);
+        mTextPaint.setTextAlign(Paint.Align.CENTER);
         canvas.drawText(text, centerX, centerY + textSize / 2, mTextPaint);
     }
 

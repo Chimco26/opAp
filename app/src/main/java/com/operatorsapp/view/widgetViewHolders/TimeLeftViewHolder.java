@@ -181,6 +181,14 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
                                 10, 18, 1, TypedValue.COMPLEX_UNIT_SP);
             }
         });
+        m3Btn.post(new Runnable() {
+            @Override
+            public void run() {
+                TextViewCompat
+                        .setAutoSizeTextTypeUniformWithConfiguration(m3Btn,
+                                10, 20, 1, TypedValue.COMPLEX_UNIT_SP);
+            }
+        });
     }
 
     private void initListener() {
