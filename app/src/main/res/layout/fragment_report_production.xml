@@ -12,11 +12,13 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="10">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:background="@drawable/rectangle_11_copy_2"
             android:gravity="center_vertical">
 
@@ -91,7 +93,8 @@
         <FrameLayout
             android:id="@+id/report_inventory_crouton_root"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="9">
 
             <LinearLayout
 
@@ -107,36 +110,60 @@
                     android:gravity="center_vertical">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="10">
 
 
-                        <ImageView
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="3" />
+
+                        <com.operatorsapp.view.SquareImageView
                             android:id="@+id/imageView2"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
                             android:layout_marginStart="20dp"
+                            android:layout_weight="1.5"
                             android:background="@drawable/ic_cardbox" />
 
                         <View
-                            android:layout_width="69dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.25" />
+
+                        <View
+                            android:layout_width="match_parent"
                             android:layout_height="2dp"
-                            android:layout_marginStart="30dp"
-                            android:layout_marginTop="17dp"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="20dp"
                             android:background="@color/divider_gray" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.25" />
 
                         <TextView
                             style="@style/FontStyle_T120"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
                             android:layout_marginStart="20dp"
-                            android:layout_marginTop="18dp"
+                            android:layout_weight="2"
+                            android:maxLines="2"
                             android:text="@string/report_inventory_nitem_production"
                             android:textSize="30sp"
-                            android:maxLines="1"
-                            app:autoSizeTextType="uniform"
-                            app:autoSizeMaxTextSize="30sp"/>
+                            app:autoSizeMaxTextSize="30sp"
+                            app:autoSizeTextType="uniform" />
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="3" />
                     </LinearLayout>
 
 
@@ -152,12 +179,12 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="0.5" />
+                        android:layout_weight="0.25" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.75"
+                        android:layout_weight="2.25"
                         android:orientation="horizontal"
                         android:weightSum="3">
 
@@ -199,8 +226,7 @@
                                 <Spinner
                                     android:id="@+id/package_type_spinner"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:dropDownVerticalOffset="45dp" />
+                                    android:layout_height="match_parent"/>
                             </RelativeLayout>
 
                             <View
@@ -345,7 +371,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1" />
+                        android:layout_weight="0.5" />
                 </LinearLayout>
 
 
