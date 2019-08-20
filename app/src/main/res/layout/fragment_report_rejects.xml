@@ -10,11 +10,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="10">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:background="@drawable/rectangle_11_copy_2"
             android:gravity="center_vertical">
 
@@ -26,9 +28,12 @@
                 android:layout_marginStart="20dp"
                 android:gravity="center_vertical"
                 android:maxLength="50"
+                android:maxLines="1"
                 android:text="@string/id"
                 android:textColor="@color/status_bar"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:autoSizeMaxTextSize="16sp"
+                app:autoSizeTextType="uniform" />
 
             <TextView
                 android:id="@+id/report_cycle_id_text_view"
@@ -40,8 +45,11 @@
                 android:layout_toEndOf="@+id/ID_title"
                 android:gravity="center_vertical"
                 android:maxEms="50"
+                android:maxLines="1"
                 android:text="@string/product_id"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:autoSizeMaxTextSize="16sp"
+                app:autoSizeTextType="uniform" />
 
             <FrameLayout
                 android:id="@+id/report_job_spinner_frame"
@@ -56,7 +64,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="23dp"
                     android:layout_gravity="center_vertical"
-                    android:dropDownVerticalOffset="55dp"
                     android:visibility="gone" />
 
                 <ProgressBar
@@ -80,15 +87,19 @@
                 android:layout_marginEnd="10dp"
                 android:layout_toEndOf="@+id/report_cycle_id_text_view"
                 android:gravity="center_vertical"
+                android:maxLines="1"
                 android:text="@string/josh"
                 android:textColor="@color/status_bar"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:autoSizeMaxTextSize="16sp"
+                app:autoSizeTextType="uniform" />
 
         </RelativeLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="9">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -103,37 +114,60 @@
                     android:gravity="center_vertical">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
-                        android:orientation="vertical">
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="10">
 
 
-                        <ImageView
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="3" />
+
+                        <com.operatorsapp.view.SquareImageView
                             android:id="@+id/imageView2"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
                             android:layout_marginStart="20dp"
+                            android:layout_weight="1.5"
                             android:background="@drawable/group_x" />
 
                         <View
-                            android:layout_width="69dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.25" />
+
+                        <View
+                            android:layout_width="match_parent"
                             android:layout_height="2dp"
                             android:layout_marginStart="20dp"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginEnd="20dp"
                             android:background="@color/divider_gray" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.25" />
 
                         <TextView
                             style="@style/FontStyle_T120"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
                             android:layout_marginStart="20dp"
-                            android:layout_marginTop="18dp"
+                            android:layout_weight="2"
                             android:maxLines="2"
                             android:text="@string/report_reject_nreason"
                             android:textSize="30sp"
                             app:autoSizeMaxTextSize="30sp"
                             app:autoSizeTextType="uniform" />
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="3" />
                     </LinearLayout>
 
 
@@ -172,14 +206,13 @@
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
-                                    android:layout_marginBottom="7dp"
                                     android:layout_weight="1.5"
                                     android:gravity="center_vertical"
                                     android:text="@string/reject_reason"
                                     android:textColor="@color/black"
                                     android:textSize="22sp"
-                                    app:autoSizeTextType="uniform"
-                                    app:autoSizeMaxTextSize="22sp"/>
+                                    app:autoSizeMaxTextSize="22sp"
+                                    app:autoSizeTextType="uniform" />
 
                                 <RelativeLayout
                                     android:id="@+id/reject_reason_rl"
@@ -191,8 +224,7 @@
                                     <Spinner
                                         android:id="@+id/reject_reason_spinner"
                                         android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:dropDownVerticalOffset="55dp" />
+                                        android:layout_height="match_parent" />
 
                                 </RelativeLayout>
 
@@ -214,14 +246,13 @@
                                     android:id="@+id/cause_tv"
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
-                                    android:layout_marginBottom="7dp"
                                     android:layout_weight="1.5"
                                     android:gravity="center_vertical"
                                     android:text="@string/cause"
                                     android:textColor="@color/black"
                                     android:textSize="22sp"
-                                    app:autoSizeTextType="uniform"
-                                    app:autoSizeMaxTextSize="22sp"/>
+                                    app:autoSizeMaxTextSize="22sp"
+                                    app:autoSizeTextType="uniform" />
 
                                 <RelativeLayout
                                     android:id="@+id/cause_rl"
@@ -245,14 +276,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginBottom="5dp"
-                            android:layout_weight="0.5"
+                            android:layout_weight="0.8"
                             android:gravity="start|center_vertical"
                             android:text="@string/fill_units_or_weight"
                             android:textAlignment="gravity"
                             android:textSize="16sp"
                             android:textStyle="bold"
-                            app:autoSizeTextType="uniform"
-                            app:autoSizeMaxTextSize="16sp"/>
+                            app:autoSizeMaxTextSize="16sp"
+                            app:autoSizeTextType="uniform" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -278,8 +309,8 @@
                                     android:text="@string/units"
                                     android:textColor="@color/black"
                                     android:textSize="22sp"
-                                    app:autoSizeTextType="uniform"
-                                    app:autoSizeMaxTextSize="22sp"/>
+                                    app:autoSizeMaxTextSize="22sp"
+                                    app:autoSizeTextType="uniform" />
 
                                 <android.support.design.widget.TextInputEditText
                                     android:id="@+id/units_edit_text"
@@ -294,8 +325,8 @@
                                     android:singleLine="true"
                                     android:textDirection="ltr"
                                     android:textSize="22sp"
-                                    app:autoSizeTextType="uniform"
-                                    app:autoSizeMaxTextSize="22sp"/>
+                                    app:autoSizeMaxTextSize="22sp"
+                                    app:autoSizeTextType="uniform" />
                             </LinearLayout>
 
                             <View
@@ -320,8 +351,8 @@
                                     android:text="@string/weight"
                                     android:textColor="@color/black"
                                     android:textSize="22sp"
-                                    app:autoSizeTextType="uniform"
-                                    app:autoSizeMaxTextSize="22sp"/>
+                                    app:autoSizeMaxTextSize="22sp"
+                                    app:autoSizeTextType="uniform" />
 
                                 <android.support.design.widget.TextInputEditText
                                     android:id="@+id/weight_edit_text"
@@ -336,8 +367,8 @@
                                     android:singleLine="true"
                                     android:textDirection="ltr"
                                     android:textSize="22sp"
-                                    app:autoSizeTextType="uniform"
-                                    app:autoSizeMaxTextSize="22sp"/>
+                                    app:autoSizeMaxTextSize="22sp"
+                                    app:autoSizeTextType="uniform" />
 
                             </LinearLayout>
 
@@ -346,8 +377,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_weight="1"
                             android:layout_marginTop="10dp"
+                            android:layout_weight="1"
                             android:gravity="bottom"
                             android:orientation="vertical">
 
@@ -363,16 +394,16 @@
                                     style="@style/FontStyle_Button"
                                     android:layout_width="0dp"
                                     android:layout_height="34dp"
-                                    android:padding="5dp"
                                     android:layout_marginEnd="5dp"
                                     android:layout_weight="1"
                                     android:gravity="center"
+                                    android:padding="5dp"
                                     android:text="@string/cancel"
                                     android:textAllCaps="true"
                                     android:textColor="@drawable/button_cancel_text_selector"
                                     android:textSize="22sp"
-                                    app:autoSizeTextType="uniform"
-                                    app:autoSizeMaxTextSize="22sp"/>
+                                    app:autoSizeMaxTextSize="22sp"
+                                    app:autoSizeTextType="uniform" />
 
                                 <Button
                                     android:id="@+id/button_approve"
@@ -380,13 +411,13 @@
                                     android:layout_width="0dp"
                                     android:layout_height="34dp"
                                     android:layout_weight="1"
-                                    android:padding="5dp"
                                     android:background="@drawable/buttons_selector"
+                                    android:padding="5dp"
                                     android:text="@string/report"
                                     android:textColor="@drawable/button_text_color_selector"
                                     android:textSize="22sp"
-                                    app:autoSizeTextType="uniform"
-                                    app:autoSizeMaxTextSize="22sp"/>
+                                    app:autoSizeMaxTextSize="22sp"
+                                    app:autoSizeTextType="uniform" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -394,7 +425,7 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_weight="0.3" />
+                            android:layout_weight="0.1" />
 
                     </LinearLayout>
 
