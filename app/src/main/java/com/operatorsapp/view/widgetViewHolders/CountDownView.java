@@ -408,6 +408,7 @@ public class CountDownView extends View {
         this.endModeTimeInMinute = endModeTimeInMinute;
     }
 
+    //for arc center correct position
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int min = Math.min(widthMeasureSpec, heightMeasureSpec);

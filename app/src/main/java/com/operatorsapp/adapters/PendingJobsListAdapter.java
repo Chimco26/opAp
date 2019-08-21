@@ -51,37 +51,51 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
 
         if (mOrderedHederasKey[0] != null && mOrderedHederasKey[0].toLowerCase().equals("ProductImagePath".toLowerCase())) {
             ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[0]), viewHolder.m1Img);
+            viewHolder.m1Tv.setText("");
         } else {
+            ImageLoader.getInstance().displayImage("", viewHolder.m1Img);
             viewHolder.m1Tv.setText(propertiesHashMap.get(mOrderedHederasKey[0]));
         }
         if (mOrderedHederasKey[1] != null && mOrderedHederasKey[1].toLowerCase().equals("ProductImagePath".toLowerCase())) {
             ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[1]), viewHolder.m2Img);
+            viewHolder.m2Tv.setText("");
         } else {
+            ImageLoader.getInstance().displayImage("", viewHolder.m2Img);
             viewHolder.m2Tv.setText(propertiesHashMap.get(mOrderedHederasKey[1]));
         }
         if (mOrderedHederasKey[2] != null && mOrderedHederasKey[2].toLowerCase().equals("ProductImagePath".toLowerCase())) {
             ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[2]), viewHolder.m3Img);
+            viewHolder.m3Tv.setText("");
         } else {
+            ImageLoader.getInstance().displayImage("", viewHolder.m3Img);
             viewHolder.m3Tv.setText(propertiesHashMap.get(mOrderedHederasKey[2]));
         }
         if (mOrderedHederasKey[3] != null && mOrderedHederasKey[3].toLowerCase().equals("ProductImagePath".toLowerCase())) {
             ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[3]), viewHolder.m4Img);
+            viewHolder.m4Tv.setText("");
         } else {
+            ImageLoader.getInstance().displayImage("", viewHolder.m4Img);
             viewHolder.m4Tv.setText(propertiesHashMap.get(mOrderedHederasKey[3]));
         }
         if (mOrderedHederasKey[4] != null && mOrderedHederasKey[4].toLowerCase().equals("ProductImagePath".toLowerCase())) {
             ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[4]), viewHolder.m5Img);
+            viewHolder.m5Tv.setText("");
         } else {
+            ImageLoader.getInstance().displayImage("", viewHolder.m5Img);
             viewHolder.m5Tv.setText(propertiesHashMap.get(mOrderedHederasKey[4]));
         }
         if (mOrderedHederasKey[5] != null && mOrderedHederasKey[5].toLowerCase().equals("ProductImagePath".toLowerCase())) {
             ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[5]), viewHolder.m6Img);
+            viewHolder.m6Tv.setText("");
         } else {
+            ImageLoader.getInstance().displayImage("", viewHolder.m6Img);
             viewHolder.m6Tv.setText(propertiesHashMap.get(mOrderedHederasKey[5]));
         }
         if (mOrderedHederasKey[6] != null && mOrderedHederasKey[6].toLowerCase().equals("ProductImagePath".toLowerCase())) {
             ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[6]), viewHolder.m7Img);
+            viewHolder.m7Tv.setText("");
         } else {
+            ImageLoader.getInstance().displayImage("", viewHolder.m7Img);
             viewHolder.m7Tv.setText(propertiesHashMap.get(mOrderedHederasKey[6]));
         }
 
