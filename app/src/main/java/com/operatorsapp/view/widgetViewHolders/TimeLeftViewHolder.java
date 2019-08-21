@@ -123,16 +123,13 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
                             TimeUtils.convertMillisecondDateTo(new Date().getTime() + time * 60 * 1000)));
                     m1TimeTv.setText(String.format(Locale.getDefault(), "%s %s", ((int) (time / 60)),
                             m1TimeTv.getContext().getString(R.string.hr2)));
-//                    m1TimeTv.setTextSize(2, 18);
                 } else {
                     m1EstimatedTv.setVisibility(View.GONE);
                     m1TimeTv.setText(String.format(Locale.getDefault(), "%s %s %s %s", ((int) (time / 60)),
                             m1TimeTv.getContext().getString(R.string.hr2),
                             StringUtil.add0ToNumber((int) (time % 60)),
                             m1TimeTv.getContext().getString(R.string.min)));
-//                    m1TimeTv.setTextSize(2, 45);
                 }
-//                mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
             } else {
                 m1Ly.setVisibility(View.GONE);
                 m2CountDownLy.setVisibility(View.VISIBLE);

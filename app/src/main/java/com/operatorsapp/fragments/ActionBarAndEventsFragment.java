@@ -1904,6 +1904,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
                 ProgressDialogManager.dismiss();
                 //Analytics
+                //todo close dialog
+                if (mPopUpDialog != null && mPopUpDialog.isShowing()){
+                    mPopUpDialog.dismiss();
+                }
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.SEND_NOTIFICATION, true, "Send New Notification");
             }
 

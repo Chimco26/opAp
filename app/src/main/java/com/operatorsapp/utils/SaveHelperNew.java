@@ -39,7 +39,6 @@ public class SaveHelperNew {
             events = new ArrayList<>();
         }
 
-//        removeOldUpdatedExtras(events, actualBarExtraResponse);
         ArrayList<WorkingEvent> workingEvents = actualBarExtraResponse.getWorkingEvents();
         Collections.reverse(workingEvents);
 
@@ -326,7 +325,6 @@ public class SaveHelperNew {
             }
             if (jobDataItemArrayList != null) {
                 event.setJobDataItems(jobDataItemArrayList);
-//                jobDataItems.removeAll(toDelete);
                 if (jobDataItems.size() == 0) {
                     jobDataItems = null;
                 }

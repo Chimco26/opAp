@@ -24,10 +24,7 @@
         android:layout_marginEnd="20dp"
         android:src="@drawable/x" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5" />
+
 
     <com.operatorsapp.view.SquareImageView
         android:id="@+id/basic_dialog_header_icon_iv"
@@ -71,7 +68,7 @@
         android:paddingStart="25dp"
         android:paddingEnd="25dp"
         app:autoSizeTextType="uniform"
-        app:autoSizeMaxTextSize="40sp"
+        app:autoSizeMaxTextSize="25sp"
         android:maxLines="1"/>
 
     <View
@@ -82,9 +79,8 @@
         android:id="@+id/basic_dialog_action_lil"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1.5"
+        android:layout_weight="1"
         android:orientation="horizontal"
-        android:padding="25dp"
         android:gravity="center"
         android:layout_gravity="center">
 
@@ -93,13 +89,15 @@
             style="@style/ProximaNovaSemiBold"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:maxWidth="100dp"
+            android:maxWidth="150dp"
             android:background="@color/blue1"
             android:textSize="25sp"
             android:textStyle="bold"
             android:visibility="gone"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             app:autoSizeTextType="uniform"
-            app:autoSizeMaxTextSize="40sp"
+            app:autoSizeMaxTextSize="25sp"
             android:maxLines="1"/>
 
 
@@ -108,13 +106,15 @@
             style="@style/ProximaNovaSemiBold"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:maxWidth="100dp"
+            android:maxWidth="150dp"
             android:background="@color/blue1"
             android:textSize="25sp"
             android:textStyle="bold"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:visibility="gone"
             app:autoSizeTextType="uniform"
-            app:autoSizeMaxTextSize="40sp"
+            app:autoSizeMaxTextSize="25sp"
             android:maxLines="1"/>
 
 
@@ -123,15 +123,20 @@
             style="@style/ProximaNovaSemiBold"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:maxWidth="100dp"
+            android:maxWidth="150dp"
             android:background="@color/blue1"
             android:textColor="@color/white"
             android:textSize="25sp"
             android:textStyle="bold"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             app:autoSizeTextType="uniform"
-            app:autoSizeMaxTextSize="40sp"
+            app:autoSizeMaxTextSize="25sp"
             android:maxLines="1"/>
     </LinearLayout>
 
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 </LinearLayout>

@@ -6,12 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.operators.reportfieldsformachineinfra.Technician;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.application.OperatorApplication;
 
 import java.util.List;
@@ -41,10 +39,10 @@ public class TechnicianAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final TechViewHolder techViewHolder = (TechViewHolder) holder;
-        if (OperatorApplication.isEnglishLang()){
+        if (OperatorApplication.isEnglishLang()) {
 
             techViewHolder.mTechNameTv.setText(mTechList.get(position).getEName());
-        }else {
+        } else {
             techViewHolder.mTechNameTv.setText(mTechList.get(position).getEName());
         }
         techViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +50,8 @@ public class TechnicianAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             public void onClick(View v) {
                 mListener.onTechnicianSelected(mTechList.get(position));
             }
-        });    }
+        });
+    }
 
     @Override
     public int getItemCount() {
@@ -68,7 +67,7 @@ public class TechnicianAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public interface TechItemListener{
+    public interface TechItemListener {
         void onTechnicianSelected(Technician technician);
     }
 

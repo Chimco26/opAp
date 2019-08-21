@@ -19,7 +19,9 @@ public class CountDownView extends View {
     private Paint mBasePaint, mDegreesPaint, mCenterPaint, mBackgroundPaint,
             mIndicatorPaint, mIndicatorStrokePaint, mTextPaint;
     private RectF mRect;
-    private int centerX, centerY, radius;
+    private float centerX;
+    private float centerY;
+    private float radius;
     private float padding;
     private float percentAngle;
     private float indicatorRadius;
@@ -27,7 +29,7 @@ public class CountDownView extends View {
     private String text;
     private float startAngle;
     private int totalTimeInMinute;
-    private int strokeWidth;
+    private float strokeWidth;
     private boolean isReverse;
     private int backgroundColor;
     private int centerColor;
@@ -43,6 +45,7 @@ public class CountDownView extends View {
     private int textEndColor;
     private int endModeTimeInMinute;
     private TypedArray typedArray;
+    private float density;
 
     public CountDownView(Context context) {
         super(context);
@@ -65,17 +68,17 @@ public class CountDownView extends View {
     }
 
     private void initVars(Context context, AttributeSet attributeSet) {
-        float density = getResources().getDisplayMetrics().density;
+        density = getResources().getDisplayMetrics().density;
         typedArray = context.getTheme().obtainStyledAttributes(attributeSet, R.styleable.CountDownView, 0, 0);
         if (typedArray != null) {
-            padding = typedArray.getInteger(R.styleable.CountDownView_padding, 7);
+            padding = typedArray.getInteger(R.styleable.CountDownView_padding, 7) * density;
             startAngle = typedArray.getInteger(R.styleable.CountDownView_startAngle, 0) - 90;//because arc start at 90 degrees and need be in radians for trigonometric functions
             percentAngle = typedArray.getInteger(R.styleable.CountDownView_percentAngle, 0);
             indicatorRadius = typedArray.getInteger(R.styleable.CountDownView_indicatorRadius, 6) * density;
             textSize = typedArray.getInteger(R.styleable.CountDownView_textSize, 28) * density;
             text = typedArray.getString(R.styleable.CountDownView_text);
             totalTimeInMinute = typedArray.getInteger(R.styleable.CountDownView_totalTimeInMinute, 60);
-            strokeWidth = typedArray.getInteger(R.styleable.CountDownView_strokeWidth_2, 5);
+            strokeWidth = typedArray.getInteger(R.styleable.CountDownView_strokeWidth_2, 5) * density;
             backgroundColor = typedArray.getColor(R.styleable.CountDownView_backgroundColor, ContextCompat.getColor(getContext(), R.color.divider_gray));
             centerColor = typedArray.getColor(R.styleable.CountDownView_centerColor, ContextCompat.getColor(getContext(), R.color.white));
             initPercentAndPercentBackgroundColors();
@@ -151,7 +154,7 @@ public class CountDownView extends View {
             centerY = getMeasuredHeight() / 2;
             radius = Math.min(centerX, centerY);
 
-            float start = strokeWidth / 2f + padding;
+            float start = strokeWidth / 2 + padding;
             float end = 2 * radius - start;
 
             mRect = new RectF(start, start, end, end);
@@ -292,7 +295,7 @@ public class CountDownView extends View {
         this.totalTimeInMinute = totalTimeInMinute;
     }
 
-    public int getStrokeWidth() {
+    public float getStrokeWidth() {
         return strokeWidth;
     }
 
@@ -403,5 +406,11 @@ public class CountDownView extends View {
 
     public void setEndModeTimeInMinute(int endModeTimeInMinute) {
         this.endModeTimeInMinute = endModeTimeInMinute;
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int min = Math.min(widthMeasureSpec, heightMeasureSpec);
+        super.onMeasure(min, min);
     }
 }

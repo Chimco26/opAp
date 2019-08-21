@@ -51,7 +51,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
-            app:autoSizeTextType="uniform"/>
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="35sp"/>
 
         <TextView
             android:id="@+id/tech_dialog_subtitle_tv"
@@ -67,7 +68,8 @@
             android:layout_height="0dp"
             android:maxLines="2"
             android:layout_weight="15"
-            app:autoSizeTextType="uniform"/>
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="20sp"/>
 
 
         <LinearLayout
