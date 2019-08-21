@@ -1,35 +1,30 @@
 package com.operatorsapp.dialogs;
 
-import android.app.Dialog;
-import android.content.Context;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.operatorsapp.R;
-import com.operatorsapp.model.TechCallInfo;
-import com.operatorsapp.utils.Consts;
 
 /**
  * Created by alex on 15/01/2019.
  */
 
-public class GenericDialog extends Dialog implements View.OnClickListener {
+public class GenericDialog implements View.OnClickListener {
 
 
     private static final String DIALOG_BODY = "body";
     private static final String DIALOG_TITLE = "title";
-    private final Context mContext;
+    private Activity mContext;
     private final String mActionYesStr;
     private final boolean mIsError;
     private String mBodyStr;
@@ -43,31 +38,33 @@ public class GenericDialog extends Dialog implements View.OnClickListener {
     private Button mActionNoBtn;
     private Button mActionAnotherBtn;
     private OnGenericDialogListener mListener;
+    private AlertDialog mAlertDialog;
 
-    public GenericDialog(Context context, String body, String title, String actionYes, boolean isError) {
-        super(context);
+    public GenericDialog(Activity context, String body, String title, String actionYes, boolean isError) {
         mContext = context;
         mBodyStr = body;
         mTitleStr = title;
         mActionYesStr = actionYes;
         mIsError = isError;
+        mContext.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public AlertDialog showNoProductionAlarm() {
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.basic_message_dialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 
-        mCloseIv = findViewById(R.id.basic_dialog_close_iv);
-        mHeaderIconIv = findViewById(R.id.basic_dialog_header_icon_iv);
-        mTitleTv = findViewById(R.id.basic_dialog_header_tv);
-        mBodyTv = findViewById(R.id.basic_dialog_body_tv);
-        mActionButtonsLil = findViewById(R.id.basic_dialog_action_lil);
-        mActionYesBtn = findViewById(R.id.basic_dialog_action_yes_btn);
-        mActionNoBtn = findViewById(R.id.basic_dialog_action_no_btn);
-        mActionAnotherBtn = findViewById(R.id.basic_dialog_action_another_btn);
+        LayoutInflater inflater = mContext.getLayoutInflater();
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.basic_message_dialog, null);
+        builder.setView(view);
+        mCloseIv = view.findViewById(R.id.basic_dialog_close_iv);
+        mHeaderIconIv = view.findViewById(R.id.basic_dialog_header_icon_iv);
+        mTitleTv = view.findViewById(R.id.basic_dialog_header_tv);
+        mBodyTv = view.findViewById(R.id.basic_dialog_body_tv);
+        mActionButtonsLil = view.findViewById(R.id.basic_dialog_action_lil);
+        mActionYesBtn = view.findViewById(R.id.basic_dialog_action_yes_btn);
+        mActionNoBtn = view.findViewById(R.id.basic_dialog_action_no_btn);
+        mActionAnotherBtn = view.findViewById(R.id.basic_dialog_action_another_btn);
 
         mCloseIv.setOnClickListener(this);
         mActionYesBtn.setOnClickListener(this);
@@ -83,8 +80,16 @@ public class GenericDialog extends Dialog implements View.OnClickListener {
             mActionYesBtn.setBackgroundColor(Color.RED);
             mHeaderIconIv.setImageResource(R.drawable.attention_red);
         }
-
-
+        builder.setCancelable(true);
+        mAlertDialog = builder.create();
+        mAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                mContext.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+            }
+        });
+        mAlertDialog.show();
+        return mAlertDialog;
     }
 
     @Override
@@ -92,7 +97,7 @@ public class GenericDialog extends Dialog implements View.OnClickListener {
         switch (v.getId()){
 
             case R.id.basic_dialog_close_iv:
-                this.dismiss();
+                mAlertDialog.dismiss();
                 break;
             case R.id.basic_dialog_action_no_btn:
                 if (mListener != null){

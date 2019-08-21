@@ -22,6 +22,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -198,7 +199,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private JobsSpinnerAdapter mJobsSpinnerAdapter;
     private List<JobActionsSpinnerItem> mJobActionsSpinnerItems;
     private int mApproveItemID;
-//    private ViewGroup mMachineStatusLayout;
+    //    private ViewGroup mMachineStatusLayout;
     public static final int REASON_UNREPORTED = 0;
     private SelectStopReasonBroadcast mReasonBroadcast = null;
     private boolean thereAlreadyRequest = false;
@@ -461,7 +462,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mIsTimeLine = isChecked;
                 if (isChecked) {
-                    new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TOGGLE_SHIFT_LOG_VIEW, true, "Change shift log view- Events View" );
+                    new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TOGGLE_SHIFT_LOG_VIEW, true, "Change shift log view- Events View");
                     mEventsRecycler.setVisibility(View.VISIBLE);
                     mShiftLogRecycler.setVisibility(View.GONE);
                     mShowAlarmCheckBoxLy.setVisibility(View.GONE);
@@ -478,7 +479,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                    }
                     PersistenceManager.getInstance().setIsNewShiftLog(true);
                 } else {
-                    new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TOGGLE_SHIFT_LOG_VIEW, true, "Change shift log view- Alarms View" );
+                    new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TOGGLE_SHIFT_LOG_VIEW, true, "Change shift log view- Alarms View");
                     mEventsRecycler.setVisibility(View.GONE);
                     mShiftLogRecycler.setVisibility(View.VISIBLE);
                     mFilterLy.setVisibility(View.GONE);
@@ -728,7 +729,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             if (notification != null) {
                 //check if notification was sent to self
-                if (notification.getmTargetUserId() == notification.getmSourceUserID()){
+                if (notification.getmTargetUserId() == notification.getmSourceUserID()) {
                     if (mPopUpDialog != null && mPopUpDialog instanceof NotificationsDialog && mPopUpDialog.isShowing()) {
                         openNotificationsList();
                     }
@@ -1463,10 +1464,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                        .build());
 
                 final GenericDialog dialog = new GenericDialog(getActivity(), t.getMessage(), getString(R.string.call_technician_title), getString(R.string.ok), true);
+                final AlertDialog alertDialog = dialog.showNoProductionAlarm();
                 dialog.setListener(new GenericDialog.OnGenericDialogListener() {
                     @Override
                     public void onActionYes() {
-                        dialog.cancel();
+                        alertDialog.cancel();
                     }
 
                     @Override
@@ -1477,7 +1479,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     public void onActionAnother() {
                     }
                 });
-                dialog.show();
                 mPopUpDialog.dismiss();
                 //ShowCrouton.showSimpleCrouton(((DashboardActivity) getActivity()), "Call for Technician failed", CroutonCreator.CroutonType.ALERT_DIALOG);
             }
@@ -1538,21 +1539,21 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (permissionResponse == null) {
             return;
         }
-        displayTechnicianView(WidgetInfo.getWidgetInfo(permissionResponse,WidgetInfo.PermissionId.SERVICE_CALLS.getId()).getHaspermission());
-        displayOperatorView(WidgetInfo.getWidgetInfo(permissionResponse,WidgetInfo.PermissionId.OPERATOR_SIGN_IN.getId()).getHaspermission());
+        displayTechnicianView(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.SERVICE_CALLS.getId()).getHaspermission());
+        displayOperatorView(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.OPERATOR_SIGN_IN.getId()).getHaspermission());
         if (getView() != null) {
-        getView().findViewById(R.id.FAAE_bottom_msg_fl).setVisibility(WidgetInfo.getWidgetInfo(permissionResponse,WidgetInfo.PermissionId.MESSAGES.getId()).getHaspermission());
+            getView().findViewById(R.id.FAAE_bottom_msg_fl).setVisibility(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.MESSAGES.getId()).getHaspermission());
         }
         if (mToolBarView != null) {
-            mToolBarView.findViewById(R.id.toolbar_production_status_rl).setVisibility(WidgetInfo.getWidgetInfo(permissionResponse,WidgetInfo.PermissionId.PRODUCTION_STATUS.getId()).getHaspermission());
+            mToolBarView.findViewById(R.id.toolbar_production_status_rl).setVisibility(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.PRODUCTION_STATUS.getId()).getHaspermission());
         }
         if (mTimeLineType != null) {
-            if (WidgetInfo.getWidgetInfo(permissionResponse,WidgetInfo.PermissionId.EVENT_LIST.getId()).getHaspermissionBoolean()
-                    && WidgetInfo.getWidgetInfo(permissionResponse,WidgetInfo.PermissionId.SHIFT_LOG.getId()).getHaspermissionBoolean()) {
+            if (WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.EVENT_LIST.getId()).getHaspermissionBoolean()
+                    && WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.SHIFT_LOG.getId()).getHaspermissionBoolean()) {
                 mTimeLineType.setVisibility(View.VISIBLE);
             } else {
                 mTimeLineType.setVisibility(View.GONE);
-                mTimeLineType.setChecked(WidgetInfo.getWidgetInfo(permissionResponse,WidgetInfo.PermissionId.SHIFT_LOG.getId()).getHaspermissionBoolean());//id only one is true
+                mTimeLineType.setChecked(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.SHIFT_LOG.getId()).getHaspermissionBoolean());//id only one is true
             }
         }
     }
@@ -1745,10 +1746,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                                .build());
 
                         final GenericDialog dialog = new GenericDialog(getActivity(), t.getMessage(), getString(R.string.call_technician_title), getString(R.string.ok), true);
+                        final AlertDialog alertDialog = dialog.showNoProductionAlarm();
                         dialog.setListener(new GenericDialog.OnGenericDialogListener() {
                             @Override
                             public void onActionYes() {
-                                dialog.cancel();
+                                alertDialog.cancel();
                             }
 
                             @Override
@@ -1759,7 +1761,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             public void onActionAnother() {
                             }
                         });
-                        dialog.show();
 
                         //ShowCrouton.showSimpleCrouton(((DashboardActivity) getActivity()), "Call for Technician failed", CroutonCreator.CroutonType.ALERT_DIALOG);
                     }
@@ -1903,6 +1904,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
                 ProgressDialogManager.dismiss();
                 //Analytics
+                //todo close dialog
+                if (mPopUpDialog != null && mPopUpDialog.isShowing()){
+                    mPopUpDialog.dismiss();
+                }
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.SEND_NOTIFICATION, true, "Send New Notification");
             }
 
@@ -2361,18 +2366,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void enableActionSpinner() {
-        disableActionInSpinner(WidgetInfo.getWidgetInfo(permissionResponseHashmap,WidgetInfo.PermissionId.ACTIVATE_JOB.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(0).getUniqueID());
+        disableActionInSpinner(WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.ACTIVATE_JOB.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(0).getUniqueID());
         disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                && WidgetInfo.getWidgetInfo(permissionResponseHashmap,WidgetInfo.PermissionId.REPORT_PRODUCTION.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(1).getUniqueID());
+                && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.REPORT_PRODUCTION.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(1).getUniqueID());
         disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                && WidgetInfo.getWidgetInfo(permissionResponseHashmap,WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(2).getUniqueID());
+                && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(2).getUniqueID());
         disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                && WidgetInfo.getWidgetInfo(permissionResponseHashmap,WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(3).getUniqueID());
+                && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(3).getUniqueID());
 
         if (!mEndSetupDisable) {
             disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
                             && mCurrentMachineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()
-                            && WidgetInfo.getWidgetInfo(permissionResponseHashmap,WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean()
+                            && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean()
                     , mJobActionsSpinnerItems.get(4).getUniqueID());
         } else {
             mEndSetupDisable = false;
@@ -2832,7 +2837,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onApproveFirstItemEnabledChanged(boolean enabled) {
         disableActionInSpinner(enabled
-                && WidgetInfo.getWidgetInfo(permissionResponseHashmap,WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean(), mApproveItemID);
+                && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean(), mApproveItemID);
         mEndSetupDisable = true;
 
     }
@@ -3354,7 +3359,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                         techList.set(i, tech);
                                     } else if (tech.getmTechnicianId() == not.getmTargetUserId() && not.getmNotificationID() > tech.getmNotificationId()) {
                                         techList.remove(i);
-                                    }else if(tech.getmNotificationId() == not.getmNotificationID() && not.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED){
+                                    } else if (tech.getmNotificationId() == not.getmNotificationID() && not.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED) {
                                         techList.remove(i);
                                     }
                                 }

@@ -158,7 +158,7 @@ public class ApproveFirstItemFragment extends DialogFragment implements View.OnC
 //            if (PersistenceManager.getInstance().getAddRejectsOnSetupEnd() && getActivity() != null) {
 //                Spinner rejectReasonSpinner = view.findViewById(R.id.reject_reason_spinner);
 //
-//                final RejectReasonSpinnerAdapter reasonSpinnerArrayAdapter = new RejectReasonSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getRejectReasons());
+//                final RejectReasonSpinnerAdapter reasonSpinnerArrayAdapter = new RejectReasonSpinnerAdapter(getActivity(), R.layout.base_spinner_item_dropdown, mReportFieldsForMachine.getRejectReasons());
 //                reasonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //                rejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
 //                rejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);

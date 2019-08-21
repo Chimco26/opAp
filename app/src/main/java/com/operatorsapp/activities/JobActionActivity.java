@@ -302,11 +302,12 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                 } else {
                     ProgressDialogManager.dismiss();
-                    final GenericDialog dialog = new GenericDialog(JobActionActivity.this, getString(R.string.empty_job_list_msg), getString(R.string.attention), getString(R.string.ok), false);
+                    final GenericDialog dialog = new GenericDialog(JobActionActivity.this, getString(R.string.empty_job_list_msg), getString(R.string.attention), getString(R.string.ok), true);
+                    final AlertDialog alertDialog = dialog.showNoProductionAlarm();
                     dialog.setListener(new GenericDialog.OnGenericDialogListener() {
                         @Override
                         public void onActionYes() {
-                            dialog.dismiss();
+                            alertDialog.dismiss();
                         }
 
                         @Override
@@ -319,7 +320,6 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                         }
                     });
-                    dialog.show();
                 }
 
             }

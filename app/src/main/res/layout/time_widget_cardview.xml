@@ -7,14 +7,16 @@
     android:layout_centerInParent="true"
     android:background="@drawable/combined_shape"
     android:orientation="vertical"
-    android:padding="15dp"
-    android:weightSum="260">
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp"
+    android:paddingBottom="15dp"
+    android:paddingTop="5dp"    android:weightSum="260">
 
     <LinearLayout
         android:id="@+id/top_rl"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="65"
+        android:layout_weight="70"
         android:orientation="horizontal"
         android:weightSum="10">
 
@@ -45,7 +47,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="4"
-                android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:gravity="center_vertical"
@@ -80,7 +81,7 @@
         android:id="@+id/lineChart_time"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="195"
+        android:layout_weight="190"
         android:layout_below="@id/top_rl"
         android:layout_marginTop="3dp" />
 

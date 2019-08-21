@@ -125,7 +125,6 @@ public class JobListFragment extends Fragment implements
             mTitleTv.setText(String.format(Locale.getDefault(), "%s %d %s",
                     getString(R.string.you_have), mPendingJobsResponse.getPendingJobs().size(), getString(R.string.pending_jobs)));
         }
-        initTitleViews(view);
         initVarsSearch(view);
         initRecyclerViews(view);
         initListener(view);
@@ -249,7 +248,12 @@ public class JobListFragment extends Fragment implements
         for (int i = 0; i < 7; i++) {
             if (mHeaders != null && mHeaders.size() > i) {
                 orderedHederasKey[i] = mHeaders.get(i).getName();
+            }else {
+                orderedHederasKey[i] = null;
             }
+        }
+        if (getView() != null) {
+            initTitleViews(getView());
         }
     }
 

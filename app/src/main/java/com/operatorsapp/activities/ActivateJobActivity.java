@@ -3,6 +3,7 @@ package com.operatorsapp.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.view.View;
@@ -188,7 +189,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
             @Override
             public void onGetPendingJobListSuccess(Object response) {
-                if (!isActive){
+                if (!isActive) {
                     return;
                 }
                 mPendingJobsResponse = ((PendingJobStandardResponse) response);
@@ -226,7 +227,8 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
                 } else {
                     ProgressDialogManager.dismiss();
-                    final GenericDialog dialog = new GenericDialog(ActivateJobActivity.this, getString(R.string.empty_job_list_msg), getString(R.string.attention), getString(R.string.ok), false);
+                    final GenericDialog dialog = new GenericDialog(ActivateJobActivity.this, getString(R.string.empty_job_list_msg), getString(R.string.attention), getString(R.string.ok), true);
+                    final AlertDialog alertDialog = dialog.showNoProductionAlarm();
                     dialog.setListener(new GenericDialog.OnGenericDialogListener() {
                         @Override
                         public void onActionYes() {
@@ -243,20 +245,19 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
                         }
                     });
-                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialogInterface) {
                             finish();
                         }
                     });
-                    dialog.show();
                 }
 
             }
 
             @Override
             public void onGetPendingJobListFailed(StandardResponse reason) {
-                if (!isActive){
+                if (!isActive) {
                     return;
                 }
                 ProgressDialogManager.dismiss();
@@ -282,7 +283,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
             @Override
             public void onGetJobDetailsSuccess(Object response) {
-                if (!isActive){
+                if (!isActive) {
                     return;
                 }
                 ProgressDialogManager.dismiss();
@@ -308,7 +309,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
             @Override
             public void onGetJobDetailsFailed(StandardResponse reason) {
-                if (!isActive){
+                if (!isActive) {
                     return;
                 }
                 ProgressDialogManager.dismiss();
@@ -332,7 +333,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
         ActionsUpdateRequest actionsUpdateRequest = new ActionsUpdateRequest(persistanceManager.getSessionId(), null);
 
-        String operatorId = persistanceManager.getOperatorId() != null? persistanceManager.getOperatorId() : "0";
+        String operatorId = persistanceManager.getOperatorId() != null ? persistanceManager.getOperatorId() : "0";
         actionsUpdateRequest.setActions(new ActionsByJob(currentJobId, operatorId, null));
 
         actionsUpdateRequest.getActions().setActions(actions);
@@ -367,7 +368,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
             @Override
             public void onPostActivateJobSuccess(StandardResponse response) {
-                if (!isActive){
+                if (!isActive) {
                     return;
                 }
                 ProgressDialogManager.dismiss();
@@ -390,7 +391,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
             @Override
             public void onPostActivateJobFailed(StandardResponse reason) {
-                if (!isActive){
+                if (!isActive) {
                     return;
                 }
                 ProgressDialogManager.dismiss();
@@ -436,7 +437,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
         try {
             RecipeFragment mRecipefragment = RecipeFragment.newInstance(mCurrentJobDetails.getJobs().get(0).getRecipe());
             getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, mRecipefragment).addToBackStack(RecipeFragment.TAG).commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             findViewById(R.id.AJA_no_data_tv).setVisibility(View.VISIBLE);
         }
     }
@@ -446,7 +447,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
         try {
             JobListFragment jobListFragment = JobListFragment.newInstance(mPendingJobsResponse, mPendingJobs, headers);
             getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, jobListFragment).addToBackStack(JobListFragment.class.getSimpleName()).commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             findViewById(R.id.AJA_no_data_tv).setVisibility(View.VISIBLE);
         }
     }
@@ -456,7 +457,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
         try {
             JobDetailsFragment jobDetailsFragment = JobDetailsFragment.newInstance(jobDetailsResponse, (ArrayList<Header>) mPendingJobsResponse.getHeaders(), mCurrentPendingJob);
             getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, jobDetailsFragment).addToBackStack(JobDetailsFragment.class.getSimpleName()).commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             findViewById(R.id.AJA_no_data_tv).setVisibility(View.VISIBLE);
         }
     }

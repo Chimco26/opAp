@@ -1,100 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:weightSum="10"
+    android:clickable="true">
 
-    <ImageView
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5" />
+
+    <com.operatorsapp.view.SquareImageView
         android:id="@+id/basic_dialog_close_iv"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:padding="25dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/x"/>
+        android:layout_height="0dp"
+        android:layout_gravity="end"
+        android:layout_weight="1"
+        android:minWidth="25dp"
+        android:minHeight="25dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/x" />
 
 
-    <ImageView
+
+    <com.operatorsapp.view.SquareImageView
         android:id="@+id/basic_dialog_header_icon_iv"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:padding="25dp"
-        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/attention"/>
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="2"
+        android:src="@drawable/attention" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5" />
 
     <TextView
         android:id="@+id/basic_dialog_header_tv"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/basic_dialog_header_icon_iv"
-        android:padding="25dp"
-        android:textStyle="bold"
         style="@style/ProximaNovaSemiBold"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:gravity="center"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
         android:textSize="40sp"
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
+        android:textStyle="bold"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMaxTextSize="40sp"
+        android:maxLines="1"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5" />
 
     <TextView
         android:id="@+id/basic_dialog_body_tv"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/basic_dialog_header_tv"
-        android:padding="25dp"
         style="@style/ProximaNovaSemiBold"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
         android:textSize="25sp"
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMaxTextSize="25sp"
+        android:maxLines="1"/>
 
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5" />
     <LinearLayout
-        android:orientation="horizontal"
         android:id="@+id/basic_dialog_action_lil"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/basic_dialog_body_tv"
-        android:padding="25dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_gravity="center">
 
         <Button
             android:id="@+id/basic_dialog_action_no_btn"
-            android:padding="25dp"
-            android:textStyle="bold"
             style="@style/ProximaNovaSemiBold"
-            android:textSize="25sp"
-            android:background="@color/blue1"
-            android:layout_margin="20dp"
-            android:visibility="gone"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:maxWidth="150dp"
+            android:background="@color/blue1"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="25sp"
+            android:maxLines="1"/>
 
 
         <Button
             android:id="@+id/basic_dialog_action_another_btn"
-            android:padding="25dp"
-            android:textStyle="bold"
             style="@style/ProximaNovaSemiBold"
-            android:layout_margin="20dp"
-            android:textSize="25sp"
-            android:visibility="gone"
-            android:background="@color/blue1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:maxWidth="150dp"
+            android:background="@color/blue1"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:visibility="gone"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="25sp"
+            android:maxLines="1"/>
 
 
         <Button
             android:id="@+id/basic_dialog_action_yes_btn"
-            android:padding="25dp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:layout_margin="20dp"
             style="@style/ProximaNovaSemiBold"
-            android:textSize="25sp"
-            android:background="@color/blue1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:maxWidth="150dp"
+            android:background="@color/blue1"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="25sp"
+            android:maxLines="1"/>
     </LinearLayout>
 
-
-</RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>
