@@ -87,7 +87,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="190"
-        android:paddingTop="15dp"
         android:orientation="vertical"
         android:weightSum="195">
 
@@ -95,27 +94,34 @@
             android:id="@+id/RWC_cycleTime"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="100"
+            android:layout_weight="150"
             android:visibility="visible" />
 
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="20"/>-->
         <LinearLayout
             android:id="@+id/RWC_cycleTime_ly"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="35"
+            android:layout_weight="45"
             android:gravity="center_vertical"
             android:layoutDirection="ltr"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="10">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <com.operatorsapp.view.SquareImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
                 android:src="@drawable/baseline_clear_black_18" />
 
             <TextView
                 android:id="@+id/RWC_standard_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="match_parent"
                 android:textColor="@color/black"
                 tools:text="Standard: 10.2"
                 android:gravity="center_vertical"
@@ -125,14 +131,16 @@
 
             <ImageView
                 android:id="@+id/RWC_average_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/baseline_arrow_drop_up_black_36" />
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:src="@drawable/avga" />
 
             <TextView
                 android:id="@+id/RWC_average_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="match_parent"
                 android:textColor="@color/black"
                 tools:text="Average: 10.0"
                 android:gravity="center_vertical"

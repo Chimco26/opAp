@@ -36,7 +36,7 @@
             android:layout_weight="2"
             android:gravity="center_vertical"
             android:text="@string/enter_with_your_id"
-            android:textColor="@color/blue1"
+            android:textColor="@color/black"
             android:textSize="30sp"
             android:maxLines="2"
             android:textStyle="bold"
