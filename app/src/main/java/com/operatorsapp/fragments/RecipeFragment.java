@@ -568,7 +568,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
     private void initChanne1_1_99_View() {
 
-        if (mRecipeResponse != null && mRecipeResponse.getRecipe() != null) {
+        if (mRecipeResponse != null && mRecipeResponse.getRecipe() != null && mRecipeResponse.getRecipe().getChannels() != null) {
             List<Channel> recipeResponse_1_99 = new ArrayList<>(mRecipeResponse.getRecipe().getChannels());
 
             if (mRecipeResponse.getRecipe().getChannels() != null && mRecipeResponse.getRecipe().getChannels().size() > 0 &&

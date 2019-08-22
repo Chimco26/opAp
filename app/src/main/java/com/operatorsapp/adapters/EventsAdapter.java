@@ -394,7 +394,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     detailsTV.setBackgroundColor(detailsTV.getContext().getResources().getColor(R.color.transparentColor));
                     serviceImgAndTextLy.setBackgroundColor(detailsTV.getContext().getResources().getColor(R.color.transparentColor));
 
-                    params1.setMargins(0, margin - 5, 0, 0);// -5 to push it a little up hardcoded
+                    params1.setMargins(0, margin - 3, 0, 0);// -3 to push it a little up hardcoded
                     params1.setMarginStart(4);
 
                     view.setLayoutParams(params1);

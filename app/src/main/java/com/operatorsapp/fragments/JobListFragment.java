@@ -136,20 +136,41 @@ public class JobListFragment extends Fragment implements
 
     private void initTitleViews(View view) {
         if (mHashMapHeaders != null) {
-            if (mHashMapHeaders.get(orderedHederasKey[0]) != null)
+            if (mHashMapHeaders.get(orderedHederasKey[0]) != null) {
                 ((TextView) view.findViewById(R.id.FJL_index)).setText(mHashMapHeaders.get(orderedHederasKey[0]).getDisplayName());
-            if (mHashMapHeaders.get(orderedHederasKey[1]) != null)
+            } else {
+                ((TextView) view.findViewById(R.id.FJL_index)).setText("");
+            }
+            if (mHashMapHeaders.get(orderedHederasKey[1]) != null) {
                 ((TextView) view.findViewById(R.id.FJL_catalog)).setText(mHashMapHeaders.get(orderedHederasKey[1]).getDisplayName());
-            if (mHashMapHeaders.get(orderedHederasKey[2]) != null)
+            } else {
+                ((TextView) view.findViewById(R.id.FJL_catalog)).setText("");
+            }
+            if (mHashMapHeaders.get(orderedHederasKey[2]) != null) {
                 ((TextView) view.findViewById(R.id.FJL_target)).setText(mHashMapHeaders.get(orderedHederasKey[2]).getDisplayName());
-            if (mHashMapHeaders.get(orderedHederasKey[3]) != null)
+            } else {
+                ((TextView) view.findViewById(R.id.FJL_target)).setText("");
+            }
+            if (mHashMapHeaders.get(orderedHederasKey[3]) != null) {
                 ((TextView) view.findViewById(R.id.FJL_produced)).setText(mHashMapHeaders.get(orderedHederasKey[3]).getDisplayName());
-            if (mHashMapHeaders.get(orderedHederasKey[4]) != null)
+            } else {
+                ((TextView) view.findViewById(R.id.FJL_produced)).setText("");
+            }
+            if (mHashMapHeaders.get(orderedHederasKey[4]) != null) {
                 ((TextView) view.findViewById(R.id.FJL_end_time)).setText(mHashMapHeaders.get(orderedHederasKey[4]).getDisplayName());
-            if (mHashMapHeaders.get(orderedHederasKey[5]) != null)
+            } else {
+                ((TextView) view.findViewById(R.id.FJL_end_time)).setText("");
+            }
+            if (mHashMapHeaders.get(orderedHederasKey[5]) != null) {
                 ((TextView) view.findViewById(R.id.FJL_job_left)).setText(mHashMapHeaders.get(orderedHederasKey[5]).getDisplayName());
-            if (mHashMapHeaders.get(orderedHederasKey[6]) != null)
+            } else {
+                ((TextView) view.findViewById(R.id.FJL_job_left)).setText("");
+            }
+            if (mHashMapHeaders.get(orderedHederasKey[6]) != null) {
                 ((TextView) view.findViewById(R.id.FJL_image)).setText(mHashMapHeaders.get(orderedHederasKey[6]).getDisplayName());
+            } else {
+                ((TextView) view.findViewById(R.id.FJL_image)).setText("");
+            }
         }
     }
 
@@ -232,6 +253,11 @@ public class JobListFragment extends Fragment implements
 
     private void sortHeaders() {
 
+        for (int i = 0; i < mHeaders.size(); i++){
+            if (!mHeaders.get(i).getShowOnHeader()){
+                mHeaders.get(i).setOrder(50 + i);
+            }
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             mHeaders.sort(new Comparator<Header>() {
                 @Override
@@ -246,9 +272,9 @@ public class JobListFragment extends Fragment implements
             });
         }
         for (int i = 0; i < 7; i++) {
-            if (mHeaders != null && mHeaders.size() > i) {
+            if (mHeaders != null && mHeaders.size() > i && mHeaders.get(i).getShowOnHeader()) {
                 orderedHederasKey[i] = mHeaders.get(i).getName();
-            }else {
+            } else {
                 orderedHederasKey[i] = null;
             }
         }
@@ -257,7 +283,8 @@ public class JobListFragment extends Fragment implements
         }
     }
 
-    private HashMap<String, Header> headerListToHashMap(List<Header> headers) {
+    private HashMap<String, Header> headerListToHashMap
+            (List<Header> headers) {
 
         HashMap<String, Header> hashMapHeaders = new HashMap<>();
 
@@ -322,7 +349,9 @@ public class JobListFragment extends Fragment implements
 
                 for (Property property : pendingJob.getProperties()) {
 
-                    if (property.getValue() != null && property.getValue().toLowerCase().contains(mSearchViewEt.getText().toString().toLowerCase())) {
+                    if (mHashMapHeaders.containsKey(property.getKey()) &&
+                            mHashMapHeaders.get(property.getKey()).getShowOnHeader()
+                            && property.getValue() != null && property.getValue().toLowerCase().contains(mSearchViewEt.getText().toString().toLowerCase())) {
 
                         if (!mPendingJobs.contains(pendingJob)) {
                             mPendingJobs.add(pendingJob);
