@@ -62,9 +62,9 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
     }
 
     public void setProjectionItem(final Widget widget) {
-//        widget.setCurrentValue(String.valueOf(2050)); //for test
-//        widget.setProjection(2350f);
-//        widget.setTarget(8000f);
+        widget.setCurrentValue(String.valueOf(2050)); //for test
+        widget.setProjection(2350f);
+        widget.setTarget(8000f);//
         mCurrentValue = WidgetAdapterUtils.tryParse(widget.getCurrentValue(), WidgetAdapterUtils.StringParse.FLOAT);
         mTargetRl.post(new Runnable() {
             @Override

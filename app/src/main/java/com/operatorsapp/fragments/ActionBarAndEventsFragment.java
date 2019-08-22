@@ -3291,8 +3291,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //        if ((wasShow && mCycleWarningView.getVisibility() == View.GONE)) {
 //            mListener.resetCycleWarningView(false);
 //        } else {
-        mListener.resetCycleWarningView(wasShow, show);
+        if (mListener != null) {
+            mListener.resetCycleWarningView(wasShow, show);
 //        }
+        }
     }
 
     private void sendTokenWithSessionIdToServer() {

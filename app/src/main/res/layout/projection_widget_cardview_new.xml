@@ -8,9 +8,9 @@
     android:background="@drawable/combined_shape"
     android:orientation="vertical"
     android:paddingStart="15dp"
+    android:paddingTop="5dp"
     android:paddingEnd="15dp"
     android:paddingBottom="15dp"
-    android:paddingTop="5dp"
     android:weightSum="260">
 
     <LinearLayout
@@ -78,20 +78,24 @@
         android:layout_height="1dp"
         android:background="@color/divider_gray" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="145"
+        android:layout_weight="138"
         android:layoutDirection="ltr"
         android:orientation="vertical"
-        android:paddingTop="15dp"
         android:weightSum="150">
 
         <RelativeLayout
             android:id="@+id/PWCN_projection_rl"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="100">
+            android:layout_weight="120">
 
             <RelativeLayout
                 android:id="@+id/PWCN_target_rl"
@@ -118,37 +122,62 @@
             <TextView
                 android:id="@+id/FCNW_produced_tv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/PWCN_target_rl"
+                android:layout_centerHorizontal="true"
                 android:layout_toEndOf="@+id/PWCN_produced_view"
+                android:gravity="center_vertical"
+                android:maxLines="1"
                 android:text="72"
-                android:textColor="@color/C7" />
+                android:textColor="@color/C7"
+                android:textSize="14sp"
+                app:autoSizeMaxTextSize="14sp"
+                app:autoSizeTextType="uniform" />
 
             <TextView
                 android:id="@+id/FCNW_theorical_tv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/PWCN_target_rl"
+                android:layout_centerHorizontal="true"
                 android:layout_toEndOf="@+id/PWCN_theorical_view"
+                android:gravity="center_vertical"
+                android:maxLines="1"
                 android:text="72"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:autoSizeMaxTextSize="14sp"
+                app:autoSizeTextType="uniform" />
 
             <TextView
                 android:id="@+id/PWCN_target_value_tv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/PWCN_target_rl"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_vertical"
                 android:layout_marginEnd="50dp"
-                android:text="59"
-                android:textColor="@color/black" />
+                android:maxLines="1"
+                android:text="72"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:autoSizeMaxTextSize="14sp"
+                app:autoSizeTextType="uniform" />
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/PWCN_target_rl"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_vertical"
+                android:layout_alignParentStart="true"
+                android:maxLines="1"
                 android:text="0"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:autoSizeMaxTextSize="14sp"
+                app:autoSizeTextType="uniform" />
 
             <View
                 android:layout_width="50dp"
@@ -178,12 +207,18 @@
             <TextView
                 android:id="@+id/FCNW_unit_produced_completed"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/PWCN_target_rl"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_vertical"
                 android:layout_marginEnd="25dp"
+                android:maxLines="1"
                 android:text="72"
-                android:textColor="@color/new_green" />
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/new_green"
+                android:textSize="14sp"
+                app:autoSizeMaxTextSize="14sp"
+                app:autoSizeTextType="uniform" />
         </RelativeLayout>
 
         <LinearLayout
@@ -191,20 +226,26 @@
             android:layout_height="0dp"
             android:layout_weight="30"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="10">
 
-            <View
+            <com.operatorsapp.view.SquareImageView
                 android:id="@+id/PWCN_legend_ic"
-                android:layout_width="9dp"
-                android:layout_height="9dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
                 android:background="@color/C7" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <View
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
+                android:layout_weight="0.2" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
                 android:gravity="center_vertical"
-                android:maxWidth="120dp"
                 android:maxLines="1"
                 android:text="@string/good_units"
                 android:textColor="@color/black"
@@ -213,17 +254,26 @@
                 app:autoSizeTextType="uniform" />
 
             <View
-                android:layout_width="9dp"
-                android:layout_height="9dp"
-                android:layout_marginStart="16dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5" />
+
+            <com.operatorsapp.view.SquareImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
                 android:background="@color/grey_lite" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <View
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
+                android:layout_weight="0.2" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
                 android:gravity="center_vertical"
-                android:maxWidth="120dp"
                 android:maxLines="1"
                 android:text="@string/theoretical_units"
                 android:textColor="@color/black"

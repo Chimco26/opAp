@@ -134,7 +134,7 @@
 
                 <com.operatorsapp.view.SquareImageView
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:src="@drawable/ic_end_setup" />
 
