@@ -599,7 +599,7 @@
                 android:gravity="start"
                 android:textAlignment="textStart"
                 android:textColor="@color/blue1"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/bottom_notification_tv"
@@ -611,7 +611,7 @@
                 android:gravity="start"
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/bottom_notification_time_tv"
@@ -623,7 +623,7 @@
                 android:gravity="start"
                 android:textAlignment="textStart"
                 android:textColor="@color/blue1"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <ImageView
                 android:layout_width="20dp"

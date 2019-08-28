@@ -3,6 +3,7 @@ package com.operatorsapp.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -729,7 +730,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             if (notification != null) {
                 //check if notification was sent to self
-                if (notification.getmTargetUserId() == notification.getmSourceUserID()) {
+//                if (notification.getmTargetUserId() == notification.getmSourceUserID()) {
+                if (PersistenceManager.getInstance().isSelfNotification(notificationId + "")) {
                     if (mPopUpDialog != null && mPopUpDialog instanceof NotificationsDialog && mPopUpDialog.isShowing()) {
                         openNotificationsList();
                     }
@@ -1899,10 +1901,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         String title = "notification from opapp";
         SendNotificationRequest request = new SendNotificationRequest(machineId, text, title, sessionId);
         ProgressDialogManager.show(getActivity());
-        PersistenceManager.getInstance().getOperatorId();
-        PersistenceManager.getInstance().getOperatorName();
-        PersistenceManager.getInstance().getUserId();
-        PersistenceManager.getInstance().getUserName();
 
         NetworkManager.getInstance().postSendNotification(request, new Callback<NotificationHistoryResponse>() {
             @Override
@@ -1911,6 +1909,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 if (mPopUpDialog != null && mPopUpDialog.isShowing()){
                     mPopUpDialog.dismiss();
                 }
+                PersistenceManager.getInstance().setSelfNotificationsId(response.body().getLeaderRecordID() + "");
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.SEND_NOTIFICATION, true, "Send New Notification");
             }
 
