@@ -1,6 +1,7 @@
 package com.operatorsapp.server.requests;
 
 import com.google.gson.annotations.SerializedName;
+import com.operatorsapp.managers.PersistenceManager;
 
 public class SendNotificationRequest {
 
@@ -16,11 +17,15 @@ public class SendNotificationRequest {
     @SerializedName("SessionID")
     private String sessionID;
 
+    @SerializedName("workerID")
+    private String workerID;
+
     public SendNotificationRequest(int sourceMachineID, String text, String title, String sessionID) {
         this.sourceMachineID = sourceMachineID;
         this.text = text;
         this.title = title;
         this.sessionID = sessionID;
+        workerID= PersistenceManager.getInstance().getOperatorId() + "";
     }
 
     public void setSourceMachineID(int sourceMachineID){
