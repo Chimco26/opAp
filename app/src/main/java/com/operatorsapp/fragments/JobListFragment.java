@@ -90,6 +90,13 @@ public class JobListFragment extends Fragment implements
             if (getArguments().containsKey(Header.TAG)) {
                 mHeaders = getArguments().getParcelableArrayList(Header.TAG);
                 sortHeaders();
+                for (int i = 0; i < 7; i++) {
+                    if (mHeaders != null && mHeaders.size() > i && mHeaders.get(i).getShowOnHeader()) {
+                        orderedHederasKey[i] = mHeaders.get(i).getName();
+                    } else {
+                        orderedHederasKey[i] = null;
+                    }
+                }
                 mHashMapHeaders = headerListToHashMap(mPendingJobsResponse.getHeaders());
             }
         }
@@ -126,7 +133,8 @@ public class JobListFragment extends Fragment implements
                     getString(R.string.you_have), mPendingJobsResponse.getPendingJobs().size(), getString(R.string.pending_jobs)));
         }
         initVarsSearch(view);
-        initRecyclerViews(view);
+        initTitleViews(view);
+        initRecyclerViews();
         initListener(view);
 
         if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
@@ -182,7 +190,7 @@ public class JobListFragment extends Fragment implements
 
     }
 
-    private void initRecyclerViews(View view) {
+    private void initRecyclerViews() {
 
         if (mPendingJobs != null && mPendingJobs.size() > 0) {
             sortHeaders();
@@ -253,8 +261,8 @@ public class JobListFragment extends Fragment implements
 
     private void sortHeaders() {
 
-        for (int i = 0; i < mHeaders.size(); i++){
-            if (!mHeaders.get(i).getShowOnHeader()){
+        for (int i = 0; i < mHeaders.size(); i++) {
+            if (!mHeaders.get(i).getShowOnHeader()) {
                 mHeaders.get(i).setOrder(50 + i);
             }
         }
@@ -271,16 +279,7 @@ public class JobListFragment extends Fragment implements
                 }
             });
         }
-        for (int i = 0; i < 7; i++) {
-            if (mHeaders != null && mHeaders.size() > i && mHeaders.get(i).getShowOnHeader()) {
-                orderedHederasKey[i] = mHeaders.get(i).getName();
-            } else {
-                orderedHederasKey[i] = null;
-            }
-        }
-        if (getView() != null) {
-            initTitleViews(getView());
-        }
+
     }
 
     private HashMap<String, Header> headerListToHashMap
