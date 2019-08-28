@@ -113,10 +113,14 @@
 
             <com.operatorsapp.view.SquareImageView
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight="0.6"
                 android:layout_height="match_parent"
                 android:src="@drawable/baseline_clear_black_18" />
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"/>
             <TextView
                 android:id="@+id/RWC_standard_tv"
                 android:layout_width="0dp"
@@ -129,17 +133,25 @@
                 app:autoSizeMaxTextSize="18sp"
                 app:autoSizeTextType="uniform"/>
 
-            <ImageView
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"/>
+            <com.operatorsapp.view.SquareImageView
                 android:id="@+id/RWC_average_img"
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight="0.6"
                 android:layout_height="match_parent"
                 android:src="@drawable/avga" />
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"/>
             <TextView
                 android:id="@+id/RWC_average_tv"
                 android:layout_width="0dp"
-                android:layout_weight="4"
+                android:layout_weight="4.2"
                 android:layout_height="match_parent"
                 android:textColor="@color/black"
                 tools:text="Average: 10.0"
