@@ -43,6 +43,14 @@
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
+                <com.operatorsapp.view.SquareImageView
+                    android:id="@+id/FRS_close_btn"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/close_btn"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"/>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"

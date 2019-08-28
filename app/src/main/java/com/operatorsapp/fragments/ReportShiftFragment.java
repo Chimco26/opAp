@@ -149,6 +149,14 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         initTopFiveStopsVars(view);
         initTopFiveRejects(view);
         getData();
+        view.findViewById(R.id.FRS_close_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (getActivity() != null) {
+                    getActivity().onBackPressed();
+                }
+            }
+        });
         new GoogleAnalyticsHelper().trackScreen(getActivity(), "Shift Report");
     }
 

@@ -15,7 +15,7 @@
     <string name="login_screen_save">Save</string>
     <string name="login_fields_factory_name_hint">Factory eName</string>URL de l'usine
     <string name="login_fields_factory_url_hint">Factory URL</string>
-    <string name="login_fields_user_name_hint">User eName</string>
+    <string name="login_fields_user_name_hint">User Name</string>
     <string name="login_fields_password_hint">Password</string>
     <string name="login_dialog_dismiss">DISMISS</string>
     <string name="login_dialog_dismiss_all">DISMISS FOR THIS SHIFT</string>
@@ -206,7 +206,7 @@
     <string name="search">Search</string>
     <string name="activate">Activate</string>
     <string name="no_available_image">No Available Image</string>
-    <string name="name">eName</string>
+    <string name="name">Name</string>
     <string name="catalog">Catalog</string>
     <string name="amount">Amount</string>
     <string name="materials">Materials</string>

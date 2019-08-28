@@ -1529,8 +1529,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         NetworkManager.getInstance().clearPollingRequest();
 
-//        mAllDashboardDataCore.startPolling(null);
-
         dashboardDataStartPolling();
 
         PersistenceManager.getInstance().setJobId(mSelectJobId);
@@ -2573,7 +2571,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         ShowCrouton.jobsLoadingSuccessCrouton(DashboardActivity.this, getString(R.string.start_job_success));
 
-        dashboardDataStartPolling();
+//        dashboardDataStartPolling();
     }
 
     @Override
