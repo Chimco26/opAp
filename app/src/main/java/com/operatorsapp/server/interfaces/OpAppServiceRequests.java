@@ -69,7 +69,7 @@ public interface OpAppServiceRequests {
     Call<ResponseBody> getNewVersionFile();
 
     //    @GET("/LeaderMESApi/GetApplicationVersion")
-    @GET("https://s3-eu-west-1.amazonaws.com/release.leadermes.com/OpApp/versions.json")
+    @GET("https://s3-eu-west-1.amazonaws.com/release.leadermes.com/OpApp/versions1.json")
     Call<AppVersionResponse> GetApplicationVersion();
 
     @POST("/LeaderMESApi/SendNotificationToOpApp")

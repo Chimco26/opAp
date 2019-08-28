@@ -1899,12 +1899,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         String title = "notification from opapp";
         SendNotificationRequest request = new SendNotificationRequest(machineId, text, title, sessionId);
         ProgressDialogManager.show(getActivity());
+        PersistenceManager.getInstance().getOperatorId();
+        PersistenceManager.getInstance().getOperatorName();
+        PersistenceManager.getInstance().getUserId();
+        PersistenceManager.getInstance().getUserName();
+
         NetworkManager.getInstance().postSendNotification(request, new Callback<NotificationHistoryResponse>() {
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
                 ProgressDialogManager.dismiss();
-                //Analytics
-                //todo close dialog
                 if (mPopUpDialog != null && mPopUpDialog.isShowing()){
                     mPopUpDialog.dismiss();
                 }
