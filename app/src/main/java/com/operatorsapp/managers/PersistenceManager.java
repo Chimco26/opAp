@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface,
         ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
@@ -95,6 +96,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_DEPARTMENT_ID = "PREF_DEPARTMENT_ID";
     private static final String PREF_REPORT_SHIFT_BTN_X = "PREF_REPORT_SHIFT_BTN_X";
     private static final String PREF_REPORT_SHIFT_BTN_Y = "PREF_REPORT_SHIFT_BTN_Y";
+    private static final String PREF_SELF_NOTIFICATION_ID_MAP = "PREF_SELF_NOTIFICATION_ID_MAP";
+    private static final long ONE_DAY = 1000 * 60 * 60 * 24;
 
 
     private static PersistenceManager msInstance;
@@ -757,4 +760,34 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         return SecurePreferences.getInstance().getFloat(PREF_REPORT_SHIFT_BTN_Y);
     }
 
+    public void setSelfNotificationsId(String id) {
+
+        String selfIdMap = SecurePreferences.getInstance().getString(PREF_SELF_NOTIFICATION_ID_MAP, mGson.toJson(new ArrayList<>()));
+        Type listType = new TypeToken<HashMap<String, String>>() {
+        }.getType();
+
+        HashMap map = mGson.fromJson(selfIdMap, listType);
+        map.put(id, new Date().getTime());
+        SecurePreferences.getInstance().setString(PREF_SELF_NOTIFICATION_ID_MAP, mGson.toJson(map));
+    }
+
+    public boolean isSelfNotification(String id){
+
+
+        String selfIdMap = SecurePreferences.getInstance().getString(PREF_SELF_NOTIFICATION_ID_MAP, mGson.toJson(new ArrayList<>()));
+        Type listType = new TypeToken<HashMap<String, String>>() {
+        }.getType();
+
+        HashMap map = mGson.fromJson(selfIdMap, listType);
+
+        Iterator<String> iter = map.keySet().iterator();
+        while (iter.hasNext()){
+            String str = iter.next();
+            if (Long.valueOf((String) map.get(str)) + ONE_DAY < new Date().getTime()){
+                iter.remove();
+            }
+        }
+
+        return map.containsKey(id);
+    }
 }
