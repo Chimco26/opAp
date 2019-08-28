@@ -3,6 +3,12 @@ package com.operatorsapp.server;
 import android.util.Base64;
 import android.util.Log;
 
+import com.example.common.QCModels.SaveTestDetailsResponse;
+import com.example.common.QCModels.TestDetailsRequest;
+import com.example.common.QCModels.TestDetailsResponse;
+import com.example.common.QCModels.TestOrderRequest;
+import com.example.common.QCModels.TestOrderResponse;
+import com.example.common.QCModels.TestOrderSendRequest;
 import com.example.common.StandardResponse;
 import com.example.common.permissions.PermissionResponse;
 import com.example.common.reportShift.DepartmentShiftGraphRequest;
@@ -51,7 +57,6 @@ import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportCycle
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportInventory;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportReject;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendStopReport;
-import com.operators.reportrejectnetworkbridge.interfaces.RecipeNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.GetDepartmentNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetIntervalAndTimeOutNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetJobDetailsNetworkManager;
@@ -62,6 +67,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.PostActivateJobNetwork
 import com.operators.reportrejectnetworkbridge.interfaces.PostSplitEventNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostUpdateNotesForJobNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostUpdtaeActionsNetworkManager;
+import com.operators.reportrejectnetworkbridge.interfaces.RecipeNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportCycleUnitsNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportInventoryNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkManagerInterface;
@@ -1067,7 +1073,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         call.enqueue(callback);
     }
 
-    public void postSendNotification(SendNotificationRequest request, final  Callback<NotificationHistoryResponse> callback){
+    public void postSendNotification(SendNotificationRequest request, final Callback<NotificationHistoryResponse> callback) {
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
         Call<NotificationHistoryResponse> call = mRetrofit.create(OpAppServiceRequests.class).sendNotification(request);
         call.enqueue(callback);
@@ -1082,6 +1088,30 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     public void getPermissionForMachine(MachineIdRequest request, final Callback<PermissionResponse> callback) {
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
         Call<PermissionResponse> call = mRetrofit.create(OpAppServiceRequests.class).getPermissionForMachine(request);
+        call.enqueue(callback);
+    }
+
+    public void getQCTestOrder(TestOrderRequest request, final Callback<TestOrderResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<TestOrderResponse> call = mRetrofit.create(OpAppServiceRequests.class).getQCTestOrder(request);
+        call.enqueue(callback);
+    }
+
+    public void postQCSendTestOrder(TestOrderSendRequest request, final Callback<StandardResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<StandardResponse> call = mRetrofit.create(OpAppServiceRequests.class).postQCSendTestOrder(request);
+        call.enqueue(callback);
+    }
+
+    public void getQCTestDetails(TestDetailsRequest request, final Callback<TestDetailsResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<TestDetailsResponse> call = mRetrofit.create(OpAppServiceRequests.class).getQCTestDetails(request);
+        call.enqueue(callback);
+    }
+
+    public void postQCSaveTestDetails(TestDetailsResponse request, final Callback<SaveTestDetailsResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<SaveTestDetailsResponse> call = mRetrofit.create(OpAppServiceRequests.class).postQCSaveTestDetails(request);
         call.enqueue(callback);
     }
 
