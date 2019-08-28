@@ -53,7 +53,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         mMachineStatus = machineStatus;
         mEndSetupDisable = endSetupDisable;
         mShowEndSetupBtn = showEndSetupBtn;
-        mShowActivateJobBtn =showActivateJobBtn;
+        mShowActivateJobBtn = showActivateJobBtn;
         mParentLayout = itemView.findViewById(R.id.widget_parent_layout);
 //        mDivider = itemView.findViewById(R.id.TLWC_divider);
         mTitle = itemView.findViewById(R.id.TLWC_title);
@@ -113,7 +113,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
                 if (mShowActivateJobBtn) {
                     m1Btn.setVisibility(View.VISIBLE);
                 }else {
-                    m1Btn.setVisibility(View.INVISIBLE);
+                    m1Btn.setVisibility(View.GONE);
                 }
                 m2CountDownLy.setVisibility(View.GONE);
                 m3Ly.setVisibility(View.GONE);

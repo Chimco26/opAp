@@ -177,7 +177,8 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <View
                 android:layout_width="0dp"
@@ -192,7 +193,8 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <View
                 android:layout_width="0dp"
@@ -207,7 +209,8 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <View
                 android:layout_width="0dp"
@@ -222,7 +225,8 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <View
                 android:layout_width="0dp"
@@ -237,7 +241,8 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <View
                 android:layout_width="0dp"
@@ -252,7 +257,8 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <View
                 android:layout_width="0dp"
@@ -267,7 +273,8 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <View
                 android:layout_width="0dp"
