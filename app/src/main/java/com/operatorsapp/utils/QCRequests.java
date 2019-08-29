@@ -18,7 +18,7 @@ import retrofit2.Response;
 public class QCRequests {
     private static final String TAG = QCRequests.class.getSimpleName();
 
-    private void getQCTestOrder(TestOrderRequest request, final QCTestOrderCallback callback) {
+    public void getQCTestOrder(TestOrderRequest request, final QCTestOrderCallback callback) {
         NetworkManager.getInstance().getQCTestOrder(request, new Callback<TestOrderResponse>() {
             @Override
             public void onResponse(Call<TestOrderResponse> call, Response<TestOrderResponse> response) {
@@ -43,12 +43,12 @@ public class QCRequests {
         });
     }
 
-    private interface QCTestOrderCallback {
-        void onSuccess(TestOrderResponse testOrderRequest);
+    public interface QCTestOrderCallback {
+        void onSuccess(TestOrderResponse testOrderResponse);
         void onFailure(StandardResponse standardResponse);
     }
 
-    private void postQCSendTestOrder(TestOrderSendRequest request, final QCTestSendOrderCallback callback) {
+    public void postQCSendTestOrder(TestOrderSendRequest request, final QCTestSendOrderCallback callback) {
         NetworkManager.getInstance().postQCSendTestOrder(request, new Callback<StandardResponse>() {
             @Override
             public void onResponse(Call<StandardResponse> call, Response<StandardResponse> response) {
@@ -73,12 +73,12 @@ public class QCRequests {
         });
     }
 
-    private interface QCTestSendOrderCallback {
+    public interface QCTestSendOrderCallback {
         void onSuccess(StandardResponse standardResponse);
         void onFailure(StandardResponse standardResponse);
     }
 
-    private void getQCTestDetails(TestDetailsRequest request, final getQCTestDetailsCallback callback) {
+    public void getQCTestDetails(TestDetailsRequest request, final getQCTestDetailsCallback callback) {
         NetworkManager.getInstance().getQCTestDetails(request, new Callback<TestDetailsResponse>() {
             @Override
             public void onResponse(Call<TestDetailsResponse> call, Response<TestDetailsResponse> response) {
@@ -103,12 +103,12 @@ public class QCRequests {
         });
     }
 
-    private interface getQCTestDetailsCallback {
-        void onSuccess(TestDetailsResponse standardResponse);
+    public interface getQCTestDetailsCallback {
+        void onSuccess(TestDetailsResponse testDetailsResponse);
         void onFailure(StandardResponse standardResponse);
     }
 
-    private void postQCSaveTestDetails(TestDetailsResponse request, final postQCSaveTestDetailsCallback callback) {
+    public void postQCSaveTestDetails(TestDetailsResponse request, final postQCSaveTestDetailsCallback callback) {
         NetworkManager.getInstance().postQCSaveTestDetails(request, new Callback<SaveTestDetailsResponse>() {
             @Override
             public void onResponse(Call<SaveTestDetailsResponse> call, Response<SaveTestDetailsResponse> response) {
@@ -133,8 +133,8 @@ public class QCRequests {
         });
     }
 
-    private interface postQCSaveTestDetailsCallback {
-        void onSuccess(SaveTestDetailsResponse standardResponse);
+    public interface postQCSaveTestDetailsCallback {
+        void onSuccess(SaveTestDetailsResponse saveTestDetailsResponse);
         void onFailure(StandardResponse standardResponse);
     }
 }

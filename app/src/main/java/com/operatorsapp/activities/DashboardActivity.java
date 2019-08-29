@@ -346,7 +346,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onClick(View v) {
                 new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.SHIFT_REPORT, true, "Shift Report pressed");
-                initTopFiveFragment();
+                initReportShiftFragment();
             }
         });
         final float[] downX = new float[1];
@@ -597,7 +597,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     }
 
-    private void initTopFiveFragment() {
+    private void initReportShiftFragment() {
 
         mReportShiftFragment = ReportShiftFragment.newInstance(mIsTimeLineOpen);
 
@@ -1695,6 +1695,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         myIntent.putExtra(MainActivity.GO_TO_SELECT_MACHINE_FRAGMENT, true);
         startActivity(myIntent);
         finish();
+    }
+
+    @Override
+    public void onOpenQCActivity() {
+        Intent intent = new Intent(this, QCActivity.class);
+        startActivity(intent);
     }
 
 

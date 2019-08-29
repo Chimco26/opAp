@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.QCActivity">
+    tools:context=".activities.QCActivity"
+    android:id="@+id/AQC_main_ly">
 
     <FrameLayout
         android:id="@+id/AQC_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
+        android:layout_height="match_parent"/>
 
 </android.support.constraint.ConstraintLayout>

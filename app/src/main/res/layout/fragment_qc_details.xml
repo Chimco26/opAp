@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/FQCD_test_tv"
+        android:layout_width="150dp"
+        android:layout_height="100dp" />
+
+    <EditText
+        android:id="@+id/FQCD_test_samples_et"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_centerVertical="true"
+        android:hint="samples"
+        />
+
+    <Button
+        android:id="@+id/FQCD_test_run_btn"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+        android:text="run"
+        />
+
+    <TextView
+        android:id="@+id/FQCD_no_data_tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/loading_error"
+        android:textSize="35sp"
+        android:visibility="gone"
+        android:textColor="@color/blue1"
+        android:gravity="center"/>
+
+    <ProgressBar
+        android:id="@+id/FQCD_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>

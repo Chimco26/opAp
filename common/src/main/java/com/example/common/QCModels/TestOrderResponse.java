@@ -1,5 +1,6 @@
 package com.example.common.QCModels;
 
+import com.example.common.ErrorResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -23,7 +24,7 @@ public class TestOrderResponse {
     private Integer subType;
     @SerializedName("error")
     @Expose
-    private Object error;
+    private ErrorResponse error;
     @SerializedName("Data")
     @Expose
     private List<Object> data = null;
@@ -86,11 +87,11 @@ public class TestOrderResponse {
         this.subType = subType;
     }
 
-    public Object getError() {
+    public ErrorResponse getError() {
         return error;
     }
 
-    public void setError(Object error) {
+    public void setError(ErrorResponse error) {
         this.error = error;
     }
 

@@ -153,6 +153,7 @@
         <item>اضافة مردودات</item>
         <item>تغيير عدد الوحدات في الدورة</item>
         <item>تقرير الإنتاج</item>
+        <item>QC</item>
     </array>
 
     <string name="approve_first_item">نهاية الإعداد</string>
