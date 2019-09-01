@@ -164,6 +164,7 @@
         <item>Add Rejects</item>
         <item>Change Units In Cycle</item>
         <item>Report Production</item>
+        <item>QC</item>
     </array>
 
     <array name="shiftlog_spinner_items">
@@ -421,7 +422,7 @@
         <item>#ff6b6b</item>
         <item>#5aca96</item>
         <item>#599abe</item>
-    </string-array >
+    </string-array>
     <string name="cycle_time">Cycle time</string>
     <string name="jobs_on_this_shift">Jobs on this shift</string>
     <string name="report_cycle_failed_but_max_reported">the value you set to report cycle unit is over max value, the max value was reported</string>

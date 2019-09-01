@@ -1,5 +1,11 @@
 package com.operatorsapp.server.interfaces;
 
+import com.example.common.QCModels.SaveTestDetailsResponse;
+import com.example.common.QCModels.TestDetailsRequest;
+import com.example.common.QCModels.TestDetailsResponse;
+import com.example.common.QCModels.TestOrderRequest;
+import com.example.common.QCModels.TestOrderResponse;
+import com.example.common.QCModels.TestOrderSendRequest;
 import com.example.common.StandardResponse;
 import com.example.common.permissions.PermissionResponse;
 import com.example.common.reportShift.DepartmentShiftGraphRequest;
@@ -80,4 +86,16 @@ public interface OpAppServiceRequests {
 
     @POST("/LeaderMESApi/GetOperatorPermissionsForMachine")
     Call<PermissionResponse> getPermissionForMachine(@Body MachineIdRequest machineIdRequest);
+
+    @POST("/LeaderMESApi/GetTestOrder")
+    Call<TestOrderResponse> getQCTestOrder(@Body TestOrderRequest testOrderRequest);
+
+    @POST("/LeaderMESApi/SendTestOrder")
+    Call<StandardResponse> postQCSendTestOrder(@Body TestOrderSendRequest testOrderSendRequest);
+
+    @POST("/LeaderMESApi/GetTestDetails")
+    Call<TestDetailsResponse> getQCTestDetails(@Body TestDetailsRequest testDetailsRequest);
+
+    @POST("/LeaderMESApi/SaveTestDetails")
+    Call<SaveTestDetailsResponse> postQCSaveTestDetails(@Body TestDetailsResponse testDetailsResponse);
 }

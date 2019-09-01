@@ -3,13 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.operatorsapp">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Log recorder -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- Log recorder -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
-    <!-- Connectivity -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /> <!-- Connectivity -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CLEAR_APP_CACHE" />
     <uses-permission android:name="android.permission.READ_LOGS" />
@@ -21,8 +18,9 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        tools:ignore = "GoogleAppIndexingWarning"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".activities.QCActivity"></activity>
         <activity
             android:name=".activities.MainActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -30,6 +28,7 @@
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -43,16 +42,16 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustNothing" />
-
-        <activity android:name=".activities.JobActionActivity"
+        <activity
+            android:name=".activities.JobActionActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
-
-        <activity android:name=".activities.ActivateJobActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".activities.ActivateJobActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <receiver
             android:name=".utils.broadcast.SelectStopReasonBroadcast"
@@ -71,37 +70,34 @@
             android:enabled="true"
             android:exported="true" />
 
-
         <provider
             android:name=".utils.GenericFileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
-
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
-
         </provider>
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="14901f99212291ad01bd6ae5fb3af77ed3114173" />
 
-
-        <service
-            android:name="com.operatorsapp.firebase.MyFirebaseMessagingService">
+        <service android:name=".firebase.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
+
             <meta-data
                 android:name="com.google.firebase.messaging.default_notification_icon"
                 android:resource="@mipmap/ic_launcher" />
-            <!--<meta-data
+            <!--
+            <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="@string/manager_app_notification_channel_id"/>-->
+            android:value="@string/manager_app_notification_channel_id"/>
+            -->
         </service>
-
     </application>
 
 </manifest>
