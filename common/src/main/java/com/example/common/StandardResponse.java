@@ -14,7 +14,7 @@ public class StandardResponse implements Parcelable {
     private Boolean isSucceed;
     @SerializedName("error")
     @Expose
-    private ErrorResponse error;
+    protected ErrorResponse error;
     @SerializedName("LeaderRecordID")
     @Expose
     private Integer leaderRecordID;

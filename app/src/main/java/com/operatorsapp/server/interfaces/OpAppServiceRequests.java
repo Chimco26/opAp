@@ -1,5 +1,6 @@
 package com.operatorsapp.server.interfaces;
 
+import com.example.common.QCModels.SaveTestDetailsRequest;
 import com.example.common.QCModels.SaveTestDetailsResponse;
 import com.example.common.QCModels.TestDetailsRequest;
 import com.example.common.QCModels.TestDetailsResponse;
@@ -97,5 +98,5 @@ public interface OpAppServiceRequests {
     Call<TestDetailsResponse> getQCTestDetails(@Body TestDetailsRequest testDetailsRequest);
 
     @POST("/LeaderMESApi/SaveTestDetails")
-    Call<SaveTestDetailsResponse> postQCSaveTestDetails(@Body TestDetailsResponse testDetailsResponse);
+    Call<SaveTestDetailsResponse> postQCSaveTestDetails(@Body SaveTestDetailsRequest testDetailsResponse);
 }

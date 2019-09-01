@@ -19,13 +19,15 @@ import com.example.common.QCModels.TestOrderSendRequest;
 import com.example.common.StandardResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.QCActivity;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.QCRequests;
 import com.operatorsapp.utils.ShowCrouton;
 
 
-public class QCTestOrderFragment extends Fragment {
+public class QCTestOrderFragment extends Fragment implements
+        CroutonRootProvider {
 
     public static final String TAG = QCTestOrderFragment.class.getSimpleName();
     private QCRequests mQcRequests;
@@ -91,17 +93,17 @@ public class QCTestOrderFragment extends Fragment {
         view.findViewById(R.id.FQCTO_test_refresh_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mTestOrder.setProductID(mTestOrder.getProductGroupID() + 1);
-                mTestOrderRequest.setQualityGroupID(mTestOrder.getResponseDictionaryDT().getQualityGroups().get(2).getId());
+                mTestOrderRequest.setQualityGroupID(mTestOrder.getResponseDictionaryDT().getQualityGroups().get(0).getId());
+                mTestOrderRequest.setSubType(mTestOrder.getResponseDictionaryDT().getSubTypes().get(0).getId());
                 getTestOrder(mTestOrderRequest);
             }
         });
         view.findViewById(R.id.FQCTO_test_run_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendTestOrder(new TestOrderSendRequest(mTestOrder.getJoshID(), mTestOrder.getJoshID(),
+                sendTestOrder(new TestOrderSendRequest(mTestOrderRequest.getJobID(), mTestOrder.getJoshID(),
                         mTestOrder.getProductID(), mTestOrder.getSubType(),
-                        Integer.parseInt(mTestEt.getText().toString())));
+                        Integer.parseInt(mTestEt.getText().toString() + "")));
             }
         });
     }
@@ -154,6 +156,11 @@ public class QCTestOrderFragment extends Fragment {
                 ShowCrouton.showSimpleCrouton((QCActivity)getActivity(), standardResponse);
             }
         });
+    }
+
+    @Override
+    public int getCroutonRoot() {
+        return R.id.parent_layouts;
     }
 
     public interface QCTestOrderFragmentListener{

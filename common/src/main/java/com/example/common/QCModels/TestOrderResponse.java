@@ -1,12 +1,13 @@
 package com.example.common.QCModels;
 
 import com.example.common.ErrorResponse;
+import com.example.common.StandardResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class TestOrderResponse {
+public class TestOrderResponse extends StandardResponse {
     @SerializedName("JoshID")
     @Expose
     private Integer joshID;
@@ -22,9 +23,6 @@ public class TestOrderResponse {
     @SerializedName("SubType")
     @Expose
     private Integer subType;
-    @SerializedName("error")
-    @Expose
-    private ErrorResponse error;
     @SerializedName("Data")
     @Expose
     private List<Object> data = null;

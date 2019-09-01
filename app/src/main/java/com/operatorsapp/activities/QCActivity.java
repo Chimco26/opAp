@@ -1,6 +1,7 @@
 package com.operatorsapp.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 
@@ -8,7 +9,10 @@ import com.operatorsapp.R;
 import com.operatorsapp.fragments.QCDetailsFragment;
 import com.operatorsapp.fragments.QCTestOrderFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.CroutonCreator;
+
+import java.util.List;
 
 public class QCActivity extends AppCompatActivity implements OnCroutonRequestListener,
         CroutonCreator.CroutonListener,
@@ -60,9 +64,31 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
     @Override
     public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
         if (mCroutonCreator != null) {
-            mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, R.id.AQC_main_ly, croutonType, this);
+            mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, getCroutonRoot(), croutonType, this);
 
         }
+    }
+
+    public int getCroutonRoot() {
+        Fragment currentFragment = getVisibleFragment();
+        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
+            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
+        }
+        return R.id.parent_layouts;
+    }
+
+    public Fragment getVisibleFragment() {
+        Fragment f = null;
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if (fragments != null) {
+            for (Fragment fragment : fragments) {
+                if (fragment != null && fragment.isVisible()) {
+                    f = fragment;
+                }
+            }
+        }
+        return f;
     }
 
     @Override

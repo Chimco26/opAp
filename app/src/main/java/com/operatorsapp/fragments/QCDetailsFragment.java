@@ -9,20 +9,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.example.common.QCModels.SaveTestDetailsRequest;
 import com.example.common.QCModels.SaveTestDetailsResponse;
 import com.example.common.QCModels.TestDetailsRequest;
 import com.example.common.QCModels.TestDetailsResponse;
 import com.example.common.StandardResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.QCActivity;
+import com.operatorsapp.interfaces.CroutonRootProvider;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.QCRequests;
 import com.operatorsapp.utils.ShowCrouton;
 
-public class QCDetailsFragment extends Fragment {
+public class QCDetailsFragment extends Fragment implements CroutonRootProvider {
     public static final String TAG = QCDetailsFragment.class.getSimpleName();
     private static final String EXTRA_TEST_ID = "EXTRA_TEST_ID";
     private TestDetailsRequest mTestDetailsRequest;
@@ -30,7 +33,7 @@ public class QCDetailsFragment extends Fragment {
     private View mNoDataTv;
     private ProgressBar mProgressBar;
     private QCDetailsFragmentListener mListener;
-    private EditText mTestTv;
+    private TextView mTestTv;
     private TestDetailsResponse mTestOrderDetails;
 
     public static QCDetailsFragment newInstance(int testId) {
@@ -110,19 +113,27 @@ public class QCDetailsFragment extends Fragment {
     }
 
     private void saveTestOrderDetails(TestDetailsResponse testDetailsResponse) {
+
+        SaveTestDetailsRequest saveTestDetailsRequest = new SaveTestDetailsRequest(testDetailsResponse.getTestSampleFieldsData(),
+                testDetailsResponse.getTestFieldsData(), testDetailsResponse.getTestDetails().get(0).getSamples(), mTestDetailsRequest.getTestId());
         mProgressBar.setVisibility(View.VISIBLE);
-        mQcRequests.postQCSaveTestDetails(testDetailsResponse, new QCRequests.postQCSaveTestDetailsCallback() {
+        mQcRequests.postQCSaveTestDetails(saveTestDetailsRequest, new QCRequests.postQCSaveTestDetailsCallback() {
             @Override
             public void onSuccess(SaveTestDetailsResponse saveTestDetailsResponse) {
                 //todo
-                getActivity().finish();
+                ShowCrouton.showSimpleCrouton((QCActivity) getActivity(), null, CroutonCreator.CroutonType.SUCCESS);
             }
 
             @Override
             public void onFailure(StandardResponse standardResponse) {
-                ShowCrouton.showSimpleCrouton((QCActivity)getActivity(), standardResponse);
+                ShowCrouton.showSimpleCrouton((QCActivity) getActivity(), standardResponse);
             }
         });
+    }
+
+    @Override
+    public int getCroutonRoot() {
+        return R.id.parent_layouts;
     }
 
     public interface QCDetailsFragmentListener {

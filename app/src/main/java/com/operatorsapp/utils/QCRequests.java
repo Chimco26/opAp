@@ -1,6 +1,7 @@
 package com.operatorsapp.utils;
 
 import com.example.common.ErrorResponse;
+import com.example.common.QCModels.SaveTestDetailsRequest;
 import com.example.common.QCModels.SaveTestDetailsResponse;
 import com.example.common.QCModels.TestDetailsRequest;
 import com.example.common.QCModels.TestDetailsResponse;
@@ -18,16 +19,16 @@ import retrofit2.Response;
 public class QCRequests {
     private static final String TAG = QCRequests.class.getSimpleName();
 
-    public void getQCTestOrder(TestOrderRequest request, final QCTestOrderCallback callback) {
+    public void getQCTestOrder(final TestOrderRequest request, final QCTestOrderCallback callback) {
         NetworkManager.getInstance().getQCTestOrder(request, new Callback<TestOrderResponse>() {
             @Override
             public void onResponse(Call<TestOrderResponse> call, Response<TestOrderResponse> response) {
 
                 if (callback != null) {
-                    if (response.body() != null) {
+                    if (response.body() != null && (response.body().getError() == null || response.body().getError().getErrorDesc() == null)) {
                         callback.onSuccess(response.body());
                     } else {
-                        onFailure(call, new Throwable("getQCTestOrder() failed"));
+                        onFailure(call, new Throwable(getErrorMessage(response.body(), "getQCTestOrder() failed")));
                     }
                 }else {
                     OppAppLogger.getInstance().w(TAG, "getQCTestOrder() failed");
@@ -54,10 +55,11 @@ public class QCRequests {
             public void onResponse(Call<StandardResponse> call, Response<StandardResponse> response) {
 
                 if (callback != null) {
-                    if (response.body() != null && response.body().getLeaderRecordID() != null && response.body().getLeaderRecordID() > 0) {
+                    if (response.body() != null && (response.body().getError() == null || response.body().getError().getErrorDesc() == null)
+                && response.body().getLeaderRecordID() != null && response.body().getLeaderRecordID() > 0) {
                         callback.onSuccess(response.body());
                     } else {
-                        onFailure(call, new Throwable("postQCSendTestOrder() failed"));
+                        onFailure(call, new Throwable(getErrorMessage(response.body(),"postQCSendTestOrder() failed")));
                     }
                 }else {
                     OppAppLogger.getInstance().w(TAG, "postQCSendTestOrder() failed");
@@ -84,10 +86,10 @@ public class QCRequests {
             public void onResponse(Call<TestDetailsResponse> call, Response<TestDetailsResponse> response) {
 
                 if (callback != null) {
-                    if (response.body() != null) {
+                    if (response.body() != null && (response.body().getError() == null || response.body().getError().getErrorDesc() == null)) {
                         callback.onSuccess(response.body());
                     } else {
-                        onFailure(call, new Throwable("getQCTestDetails() failed"));
+                        onFailure(call, new Throwable(getErrorMessage(response.body(),"getQCTestDetails() failed")));
                     }
                 }else {
                     OppAppLogger.getInstance().w(TAG, "getQCTestDetails() failed");
@@ -108,16 +110,16 @@ public class QCRequests {
         void onFailure(StandardResponse standardResponse);
     }
 
-    public void postQCSaveTestDetails(TestDetailsResponse request, final postQCSaveTestDetailsCallback callback) {
+    public void postQCSaveTestDetails(SaveTestDetailsRequest request, final postQCSaveTestDetailsCallback callback) {
         NetworkManager.getInstance().postQCSaveTestDetails(request, new Callback<SaveTestDetailsResponse>() {
             @Override
             public void onResponse(Call<SaveTestDetailsResponse> call, Response<SaveTestDetailsResponse> response) {
 
                 if (callback != null) {
-                    if (response.body() != null) {
+                    if (response.body() != null && (response.body().getError() == null || response.body().getError().getErrorDesc() == null)) {
                         callback.onSuccess(response.body());
                     } else {
-                        onFailure(call, new Throwable("postQCSaveTestDetails() failed"));
+                        onFailure(call, new Throwable(getErrorMessage(response.body(), "postQCSaveTestDetails() failed")));
                     }
                 }else {
                     OppAppLogger.getInstance().w(TAG, "postQCSaveTestDetails() failed");
@@ -131,6 +133,13 @@ public class QCRequests {
                 callback.onFailure(errorResponse);
             }
         });
+    }
+
+    private String getErrorMessage(StandardResponse response, String s) {
+        if (response != null && response.getError() != null && response.getError().getErrorDesc() != null && !response.getError().getErrorDesc().isEmpty()){
+            return response.getError().getErrorDesc();
+        }
+        return s;
     }
 
     public interface postQCSaveTestDetailsCallback {

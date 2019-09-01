@@ -3,6 +3,7 @@ package com.operatorsapp.server;
 import android.util.Base64;
 import android.util.Log;
 
+import com.example.common.QCModels.SaveTestDetailsRequest;
 import com.example.common.QCModels.SaveTestDetailsResponse;
 import com.example.common.QCModels.TestDetailsRequest;
 import com.example.common.QCModels.TestDetailsResponse;
@@ -1109,7 +1110,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         call.enqueue(callback);
     }
 
-    public void postQCSaveTestDetails(TestDetailsResponse request, final Callback<SaveTestDetailsResponse> callback) {
+    public void postQCSaveTestDetails(SaveTestDetailsRequest request, final Callback<SaveTestDetailsResponse> callback) {
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
         Call<SaveTestDetailsResponse> call = mRetrofit.create(OpAppServiceRequests.class).postQCSaveTestDetails(request);
         call.enqueue(callback);
