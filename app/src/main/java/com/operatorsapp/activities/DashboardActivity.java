@@ -323,7 +323,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
         OppAppLogger.getInstance().d(TAG, "onCreate(), end ");
 
-//        setupVersionCheck(); todo uncomment
+        setupVersionCheck(); //todo uncomment
 
         setReportBtnListener();
 
