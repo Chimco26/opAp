@@ -218,6 +218,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private static final float MINIMUM_VERSION_FOR_INTERVAL_AND_TIME_OUT_FROM_API = 1.9f;
     private static final int CHECK_APP_VERSION_INTERVAL = 1000 * 60 * 60 * 12; //check every 12 hours
     private static final int REQUEST_WRITE_PERMISSION = 786;
+    private static final int QC_ACTIVITY_RESULT_CODE = 2506;
     private boolean ignoreFromOnPause = false;
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private CroutonCreator mCroutonCreator;
@@ -322,7 +323,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
         OppAppLogger.getInstance().d(TAG, "onCreate(), end ");
 
-        setupVersionCheck();
+        setupVersionCheck(); //todo uncomment
 
         setReportBtnListener();
 
@@ -1700,7 +1701,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onOpenQCActivity() {
         Intent intent = new Intent(this, QCActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, QC_ACTIVITY_RESULT_CODE);
     }
 
 

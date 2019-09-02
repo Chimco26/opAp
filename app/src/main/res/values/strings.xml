@@ -164,7 +164,7 @@
         <item>Add Rejects</item>
         <item>Change Units In Cycle</item>
         <item>Report Production</item>
-        <item>QC</item>
+        <!--<item>QC</item>-->
     </array>
 
     <array name="shiftlog_spinner_items">
