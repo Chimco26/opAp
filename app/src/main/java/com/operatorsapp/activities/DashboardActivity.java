@@ -3086,7 +3086,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             super.onPreExecute();
             this.progressDialog = new ProgressDialog(DashboardActivity.this);
             this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            this.progressDialog.setCancelable(false);
+            this.progressDialog.setCancelable(true);
             this.progressDialog.setTitle(getResources().getString(R.string.update_version_title));
             this.progressDialog.setMessage(getResources().getString(R.string.update_version_messege));
             this.progressDialog.setIcon(getResources().getDrawable(R.drawable.logo));
