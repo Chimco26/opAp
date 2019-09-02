@@ -147,7 +147,7 @@
         <item>Добавить брак</item>
         <item>Изменить количество единиц в цикле</item>
         <item>Производственный отчет</item>
-        <!--<item>QC</item>-->
+        <item>Order Test</item>
     </array>
     <string name="approve_first_item">Окончание настройки</string>
     <string name="welcome">Добро пожаловать</string>

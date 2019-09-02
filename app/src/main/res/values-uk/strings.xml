@@ -147,7 +147,7 @@
         <item>Додати брак</item>
         <item>Змінити кількість одиниць в циклі</item>
         <item>Виробничий звіт</item>
-        <!--<item>QC</item>-->
+        <item>Order Test</item>
     </array>
     <string name="approve_first_item">Завершення налаштування</string>
     <string name="welcome">Welcome</string>

@@ -1286,18 +1286,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 }
                                 break;
                             }
-                            case 4: {
-                                openSetupEndFragment();
-                                break;
-                            }
 //                            case 4: {
-//                                mListener.onOpenQCActivity();
-//                                break;
-//                            }
-//                            case 5: {
 //                                openSetupEndFragment();
 //                                break;
 //                            }
+                            case 4: {
+                                mListener.onOpenQCActivity();
+                                break;
+                            }
+                            case 5: {
+                                openSetupEndFragment();
+                                break;
+                            }
                         }
                     }
 

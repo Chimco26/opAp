@@ -145,7 +145,7 @@
         <item>添加不良品</item>
         <item>转换周期单位</item>
         <item>报告产品</item>
-        <!--<item>QC</item>-->
+        <item>Order Test</item>
     </array>
     <string name="approve_first_item">結束安裝</string>
     <string name="welcome">歡迎</string>
