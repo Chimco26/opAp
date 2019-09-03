@@ -33,8 +33,15 @@
                         </option>
                         <option name="values">
                           <map>
+<<<<<<< HEAD
                             <entry key="outputName" value="ic_remove_circle_black_24dp" />
                             <entry key="sourceFile" value="C:\Users\alex\Downloads\OppApp pics\SVG\operator_copy_5.svg" />
+=======
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="outputName" value="drag_handle" />
+                            <entry key="sourceFile" value="C:\Users\alex\Downloads\OppApp pics\SVG\black\black\drag-handle.svg" />
+>>>>>>> e2978d887ec0f14dfb833942a439dc2d2a658585
                           </map>
                         </option>
                       </PersistentState>

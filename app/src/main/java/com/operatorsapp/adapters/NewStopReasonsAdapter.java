@@ -131,7 +131,7 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
                 icon = mImgId;
             }
 
-            holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(mImgId));
+            holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(icon));
 //            holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(mVerticalList.get(position).getEventIcon(mContext)));
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

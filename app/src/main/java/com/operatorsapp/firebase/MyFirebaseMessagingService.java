@@ -172,6 +172,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
             }
 
             notification.setmResponseDate(time);
+
+            if (PersistenceManager.getInstance().isSelfNotification(id+"") &&
+                    PersistenceManager.getInstance().getOperatorName() != null &&
+                    PersistenceManager.getInstance().getOperatorName().length() > 0)
+            {
+                        notification.setmOriginalSenderName(PersistenceManager.getInstance().getOperatorName());
+                        notification.setmOriginalSenderHName(PersistenceManager.getInstance().getOperatorName());
+            }
             ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
 
             notificationList.add(notification);
