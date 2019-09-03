@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.example.common.QCModels.SaveTestDetailsRequest;
 import com.example.common.QCModels.SaveTestDetailsResponse;
@@ -19,6 +20,7 @@ import com.example.common.QCModels.TestDetailsResponse;
 import com.example.common.StandardResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.QCActivity;
+import com.operatorsapp.adapters.QCParametersHorizontalAdapter;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
@@ -33,8 +35,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider {
     private View mNoDataTv;
     private ProgressBar mProgressBar;
     private QCDetailsFragmentListener mListener;
-    private TextView mTestTv;
     private TestDetailsResponse mTestOrderDetails;
+    private RecyclerView mSamplesTestRV;
 
     public static QCDetailsFragment newInstance(int testId) {
 
@@ -53,6 +55,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider {
 
         if (getArguments() != null && getArguments().containsKey(EXTRA_TEST_ID)) {
             mTestDetailsRequest = new TestDetailsRequest(getArguments().getInt(EXTRA_TEST_ID));
+            mTestDetailsRequest.setTestId(494);
         }
     }
 
@@ -75,13 +78,21 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider {
     private void initVars(View view) {
         mNoDataTv = view.findViewById(R.id.FQCD_no_data_tv);
         mProgressBar = view.findViewById(R.id.FQCD_progress);
-        mTestTv = view.findViewById(R.id.FQCD_test_tv);
-        view.findViewById(R.id.FQCD_test_run_btn).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.FQCD_save_tv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 saveTestOrderDetails(mTestOrderDetails);
             }
         });
+        mSamplesTestRV = view.findViewById(R.id.FQCD_paramters_rv);
+    }
+
+    private void initView(){
+        initSamplesTestRv();
+    }
+    private void initSamplesTestRv() {
+        mSamplesTestRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        mSamplesTestRV.setAdapter(new QCParametersHorizontalAdapter(mTestOrderDetails.getTestDetails().get(0).getSamples(), mTestOrderDetails.getTestSampleFieldsData()));
     }
 
     @Override
@@ -102,6 +113,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider {
                 mProgressBar.setVisibility(View.GONE);
                 mTestOrderDetails = testDetailsResponse;
                 //todo
+                initView();
             }
 
             @Override

@@ -1,44 +1,271 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent_layouts"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:id="@+id/parent_layouts">
+    android:paddingStart="25dp"
+    android:paddingEnd="25dp">
 
-    <TextView
-        android:id="@+id/FQCD_test_tv"
-        android:layout_width="150dp"
-        android:layout_height="100dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/FQCD_test_samples_et"
-        android:layout_width="150dp"
-        android:layout_height="100dp"
-        android:layout_centerVertical="true"
-        android:hint="samples"
-        />
+        <LinearLayout
+            android:id="@+id/FQCD_top_rl"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="10"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
 
-    <Button
-        android:id="@+id/FQCD_test_run_btn"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_centerInParent="true"
-        android:text="run"
-        />
+            <TextView
+                android:id="@+id/FQCD_title_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center_vertical"
+                android:text="@string/shift_report"
+                android:textColor="@color/blue1"
+                android:textSize="35sp"
+                android:textStyle="bold"
+                app:autoSizeMaxTextSize="35sp"
+                app:autoSizeTextType="uniform" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5" />
+
+            <LinearLayout
+                android:id="@+id/FQCD_passed_ly"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:orientation="horizontal"
+                android:padding="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:weightSum="5"
+                android:background="@color/new_green">
+
+                <com.operatorsapp.view.SquareImageView
+                    android:id="@+id/FQCD_passed_ic"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.5"
+                    android:layout_height="wrap_content"
+                     />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5" />
+
+                <TextView
+                    android:id="@+id/FQCD_passed_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="25sp"
+                    app:autoSizeTextType="uniform" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2.5" />
+
+            <TextView
+                android:id="@+id/FQCD_save_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:padding="2dp"
+                android:layout_margin="2dp"
+                android:background="@color/blue1"
+                android:gravity="center_vertical"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:autoSizeMaxTextSize="25sp"
+                app:autoSizeTextType="uniform" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5" />
+
+            <com.operatorsapp.view.SquareImageView
+                android:id="@+id/FQCD_close_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:src="@drawable/close_btn" />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_gray" />
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/grey_transparent">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
+
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/test_results"
+                    android:textStyle="bold"
+                    android:textSize="22sp"
+                    android:textColor="@color/black"/>
+                
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider_gray" />
+                
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/FQCD_paramters_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/samples"
+                        android:textStyle="bold"
+                        android:textSize="22sp"
+                        android:textColor="@color/black"/>
+
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent" />
+
+                    <LinearLayout
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/white"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="5">
+
+                        <ImageView
+                            android:id="@+id/FQCD_button_minus"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:src="@drawable/button_minus_selector" />
+
+                        <TextView
+                            android:id="@+id/FQCD_units_text_view"
+                            style="@style/FontStyle_T6"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:background="@android:color/transparent"
+                            android:gravity="center"
+                            android:text="@string/one"
+                            android:textColor="@color/status_bar"
+                            android:textSize="22sp"
+                            android:maxLines="1"
+                            app:autoSizeTextType="uniform"
+                            app:autoSizeMaxTextSize="22sp"/>
+
+                        <ImageView
+                            android:id="@+id/FQCD_button_plus"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:src="@drawable/button_plus_selector" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider_gray" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/FQCD_fields_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/FQCD_no_data_tv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
         android:text="@string/loading_error"
-        android:textSize="35sp"
-        android:visibility="gone"
         android:textColor="@color/blue1"
-        android:gravity="center"/>
+        android:textSize="35sp"
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/FQCD_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+        android:layout_below="@+id/FQCD_no_data_tv"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:visibility="gone" />
 </RelativeLayout>
