@@ -143,6 +143,9 @@
         <attr name="current_value" />
         <attr name="avg_value" />
         <attr name="standard_value" />
+        <attr name="show_standard" format="boolean"/>
+        <attr name="show_avg" format="boolean"/>
+
     </declare-styleable>
 
 </resources>

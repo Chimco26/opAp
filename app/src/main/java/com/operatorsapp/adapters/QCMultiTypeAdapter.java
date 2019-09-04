@@ -9,30 +9,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.common.QCModels.SamplesDatum;
+import com.example.common.QCModels.TestFieldsDatum;
 import com.operatorsapp.R;
 import com.operatorsapp.view.SingleLineKeyboard;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_BOOLEAN;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_DATE;
+import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_INTERVAL;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_NUM;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_TEXT;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_TIME;
+import static com.operatorsapp.adapters.QCSamplesMultiTypeAdapter.LAST;
 
 public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
-    public static final int LAST = -1;
-    private final Integer mInputType;
-    private ArrayList<SamplesDatum> list;
+    private List<TestFieldsDatum> list;
     private ChannelItemsAdapters.ChannelItemsAdaptersListener mOnKeyboardManagerListener;
 
-    public QCMultiTypeAdapter(Integer inputType, ArrayList<SamplesDatum> list) {
-        mInputType = inputType;
+    public QCMultiTypeAdapter(List<TestFieldsDatum> list) {
         this.list = list;
     }
 
@@ -47,16 +45,16 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                 return new QCMultiTypeAdapter.BooleanViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_boolean, parent, false));
             case FIELD_TYPE_NUM:
                 return new QCMultiTypeAdapter.NumViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_num, parent, false));
+            case FIELD_TYPE_INTERVAL:
+                return new QCMultiTypeAdapter.IntervalViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_interval, parent, false));
             case FIELD_TYPE_TEXT:
                 return new QCMultiTypeAdapter.TextViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_text, parent, false));
             case FIELD_TYPE_TIME:
                 return new QCMultiTypeAdapter.TimeTextViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_time, parent, false));
             case FIELD_TYPE_DATE:
                 return new QCMultiTypeAdapter.DateViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_time, parent, false));
-            case LAST:
-                return new QCMultiTypeAdapter.LastMinusViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_last, parent, false));
             default:
-                return new QCMultiTypeAdapter.TimeTextViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_time, parent, false));
+                return new QCMultiTypeAdapter.TextViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_text, parent, false));
         }
     }
 
@@ -69,6 +67,8 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             case FIELD_TYPE_BOOLEAN:
                 break;
             case FIELD_TYPE_NUM:
+                break;
+            case FIELD_TYPE_INTERVAL:
                 break;
             case FIELD_TYPE_TEXT:
                 break;
@@ -91,10 +91,13 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        switch (mInputType) {
+        switch (list.get(position).getInputType()) {
             case FIELD_TYPE_BOOLEAN:
                 return FIELD_TYPE_BOOLEAN;
             case FIELD_TYPE_NUM:
+                if (list.get(position).getHValue() != null) {
+                    return FIELD_TYPE_INTERVAL;
+                }
                 return FIELD_TYPE_NUM;
             case FIELD_TYPE_TEXT:
                 return FIELD_TYPE_TEXT;
@@ -117,6 +120,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
         TextViewHolder(View itemView) {
             super(itemView);
 
+            itemView.findViewById(R.id.QCP_parameter_txt).setVisibility(View.VISIBLE);
             mTextEt = itemView.findViewById(R.id.IQCPHT_et);
         }
 
@@ -130,6 +134,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             super(itemView);
 
             mBooleanCheckBox = itemView.findViewById(R.id.IQCPHB_check_box);
+            itemView.findViewById(R.id.QCP_parameter_txt).setVisibility(View.VISIBLE);
 
         }
 
@@ -141,6 +146,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
         NumViewHolder(View itemView) {
             super(itemView);
+            itemView.findViewById(R.id.QCP_parameter_txt).setVisibility(View.VISIBLE);
 
             mEditNumberEt = itemView.findViewById(R.id.IQCPHN_et);
             mEditNumberEt.setOnTouchListener(new View.OnTouchListener() {
@@ -156,22 +162,57 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             });
         }
 
-        private void setKeyBoard(final EditText editText, String[] complementChars) {
-            if (mOnKeyboardManagerListener != null) {
-                mOnKeyboardManagerListener.onOpenKeyboard(new SingleLineKeyboard.OnKeyboardClickListener() {
-                    @Override
-                    public void onKeyboardClick(String text) {
-                        editText.setText(text);
-                    }
-                }, editText.getText().toString(), complementChars);
-            }
+    }
+
+    public class IntervalViewHolder extends RecyclerView.ViewHolder {
+
+        private EditText mEditMaxEt;
+        private EditText mEditMinEt;
+
+        IntervalViewHolder(View itemView) {
+            super(itemView);
+            itemView.findViewById(R.id.QCP_parameter_txt).setVisibility(View.VISIBLE);
+
+            mEditMinEt = itemView.findViewById(R.id.IQCPI_min_et);
+            setOnTouchListener(mEditMinEt);
+            mEditMaxEt = itemView.findViewById(R.id.IQCPI_max_et);
+            setOnTouchListener(mEditMaxEt);
+
         }
 
-        private void closeKeyboard(int editStop) {
-            if (editStop != 1) {
-                if (mOnKeyboardManagerListener != null)
-                    mOnKeyboardManagerListener.onCloseKeyboard();
-            }
+        private void setOnTouchListener(final EditText editText) {
+            editText.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    int inType = editText.getInputType(); // backup the input type
+                    editText.setInputType(InputType.TYPE_NULL); // disable soft input
+                    editText.onTouchEvent(event); // call native handler
+                    editText.setInputType(inType); // restore input type
+                    setKeyBoard(editText, new String[]{".", "-"});
+                    return false; // consume touch event
+                }
+            });
+            itemView.findViewById(R.id.QCP_parameter_txt).setVisibility(View.VISIBLE);
+
+        }
+
+    }
+
+    private void setKeyBoard(final EditText editText, String[] complementChars) {
+        if (mOnKeyboardManagerListener != null) {
+            mOnKeyboardManagerListener.onOpenKeyboard(new SingleLineKeyboard.OnKeyboardClickListener() {
+                @Override
+                public void onKeyboardClick(String text) {
+                    editText.setText(text);
+                }
+            }, editText.getText().toString(), complementChars);
+        }
+    }
+
+    private void closeKeyboard(int editStop) {
+        if (editStop != 1) {
+            if (mOnKeyboardManagerListener != null)
+                mOnKeyboardManagerListener.onCloseKeyboard();
         }
     }
 
@@ -182,6 +223,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
         TimeTextViewHolder(View itemView) {
             super(itemView);
             mTextTimeTv = itemView.findViewById(R.id.IQCPHTime_tv);
+            itemView.findViewById(R.id.QCP_parameter_txt).setVisibility(View.VISIBLE);
 
         }
 
@@ -195,19 +237,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             super(itemView);
 
             mTextDateTv = itemView.findViewById(R.id.IQCPHTime_tv);
-
-        }
-
-    }
-
-    public class LastMinusViewHolder extends RecyclerView.ViewHolder {
-
-        private ImageView mLastMinusTv;
-
-        LastMinusViewHolder(View itemView) {
-            super(itemView);
-
-            mLastMinusTv = itemView.findViewById(R.id.IQCPHL_minus_btn);
+            itemView.findViewById(R.id.QCP_parameter_txt).setVisibility(View.VISIBLE);
 
         }
 

@@ -13,6 +13,7 @@ public class TestDetailsResponse extends StandardResponse {
     public static final int FIELD_TYPE_NUM = 3;
     public static final int FIELD_TYPE_TEXT = 4;
     public static final int FIELD_TYPE_TIME = 5;
+    public static final int FIELD_TYPE_INTERVAL = 6;
 
     @SerializedName("StatusList")
     @Expose

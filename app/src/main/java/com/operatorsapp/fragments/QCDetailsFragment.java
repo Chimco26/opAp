@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.example.common.QCModels.TestDetailsResponse;
 import com.example.common.StandardResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.QCActivity;
+import com.operatorsapp.adapters.QCMultiTypeAdapter;
 import com.operatorsapp.adapters.QCParametersHorizontalAdapter;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.CroutonCreator;
@@ -37,6 +39,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider {
     private QCDetailsFragmentListener mListener;
     private TestDetailsResponse mTestOrderDetails;
     private RecyclerView mSamplesTestRV;
+    private RecyclerView mTestRV;
 
     public static QCDetailsFragment newInstance(int testId) {
 
@@ -85,14 +88,23 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider {
             }
         });
         mSamplesTestRV = view.findViewById(R.id.FQCD_paramters_rv);
+        mTestRV = view.findViewById(R.id.FQCD_fields_rv);
     }
 
     private void initView(){
         initSamplesTestRv();
+        initTestRv();
     }
+
     private void initSamplesTestRv() {
         mSamplesTestRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mSamplesTestRV.setAdapter(new QCParametersHorizontalAdapter(mTestOrderDetails.getTestDetails().get(0).getSamples(), mTestOrderDetails.getTestSampleFieldsData()));
+    }
+
+    private void initTestRv() {
+        mTestRV.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        mTestRV.setHasFixedSize(false);
+        mTestRV.setAdapter(new QCMultiTypeAdapter(mTestOrderDetails.getTestFieldsData()));
     }
 
     @Override

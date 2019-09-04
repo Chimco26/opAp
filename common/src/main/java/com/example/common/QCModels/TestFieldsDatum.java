@@ -39,10 +39,10 @@ public class TestFieldsDatum {
     private Boolean autoUpdateProperty;
     @SerializedName("LValue")
     @Expose
-    private Object lValue;
+    private Float lValue;
     @SerializedName("HValue")
     @Expose
-    private Object hValue;
+    private Float hValue;
     @SerializedName("BeginNewLine")
     @Expose
     private Boolean beginNewLine;
@@ -150,19 +150,19 @@ public class TestFieldsDatum {
         this.autoUpdateProperty = autoUpdateProperty;
     }
 
-    public Object getLValue() {
+    public Float getLValue() {
         return lValue;
     }
 
-    public void setLValue(Object lValue) {
+    public void setLValue(Float lValue) {
         this.lValue = lValue;
     }
 
-    public Object getHValue() {
+    public Float getHValue() {
         return hValue;
     }
 
-    public void setHValue(Object hValue) {
+    public void setHValue(Float hValue) {
         this.hValue = hValue;
     }
 

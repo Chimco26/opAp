@@ -437,5 +437,7 @@
     <string name="updating">Updating</string>
     <string name="test_results">Test Results</string>
     <string name="samples">Samples</string>
+    <string name="parameter">Parameter</string>
+    <string name="max">max</string>
 
 </resources>

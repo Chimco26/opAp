@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.common.QCModels.SamplesDatum;
@@ -16,7 +15,7 @@ import com.operatorsapp.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.operatorsapp.adapters.QCMultiTypeAdapter.LAST;
+import static com.operatorsapp.adapters.QCSamplesMultiTypeAdapter.LAST;
 
 public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParametersHorizontalAdapter.ViewHolder> {
 
@@ -45,7 +44,7 @@ public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParame
 
         viewHolder.mTitleTv.setText(list.get(position).getLName());
         viewHolder.mRv.setLayoutManager(new LinearLayoutManager(viewHolder.mRv.getContext()));
-        viewHolder.mRv.setAdapter(new QCMultiTypeAdapter(list.get(position).getInputType(), (ArrayList<SamplesDatum>) list.get(position).getSamplesData()));
+        viewHolder.mRv.setAdapter(new QCSamplesMultiTypeAdapter(list.get(position).getInputType(), (ArrayList<SamplesDatum>) list.get(position).getSamplesData()));
 
     }
 
@@ -81,20 +80,6 @@ public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParame
         }
 
     }
-
-    public class LastMinusViewHolder extends RecyclerView.ViewHolder {
-
-        private ImageView mLastMinusTv;
-
-        LastMinusViewHolder(View itemView) {
-            super(itemView);
-
-            mLastMinusTv = itemView.findViewById(R.id.IQCPHL_minus_btn);
-
-        }
-
-    }
-
 
     public interface QCParametersHorizontalAdapterListener {
         void onItemCheck();

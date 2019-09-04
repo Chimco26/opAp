@@ -50,10 +50,14 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getFragments().size() < 2){
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+        if (count <= 1) {
             finish();
+            //additional code
+        } else {
+            getSupportFragmentManager().popBackStack();
         }
-        super.onBackPressed();
     }
 
     @Override

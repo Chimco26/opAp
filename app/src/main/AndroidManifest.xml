@@ -20,7 +20,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.QCActivity"></activity>
         <activity
             android:name=".activities.MainActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -49,6 +48,11 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activities.ActivateJobActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".activities.QCActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysHidden" />
