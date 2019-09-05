@@ -1834,10 +1834,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     public int getCroutonRoot() {
-        Fragment currentFragment = getCurrentFragment();
-        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
-            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
-        }
+//        Fragment currentFragment = getCurrentFragment();
+//        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
+//            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
+//        }
 //        Fragment currentFragment = getCurrentFragment();
 //        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
 //            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
