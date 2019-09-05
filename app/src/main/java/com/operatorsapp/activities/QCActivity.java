@@ -53,11 +53,13 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
         if (count <= 1) {
+            setResult(RESULT_OK, getIntent());
             finish();
             //additional code
         } else {
             getSupportFragmentManager().popBackStack();
         }
+
     }
 
     @Override

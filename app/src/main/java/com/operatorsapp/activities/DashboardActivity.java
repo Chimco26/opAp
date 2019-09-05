@@ -1700,7 +1700,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onOpenQCActivity() {
-        Intent intent = new Intent(this, QCActivity.class);
+        Intent intent = new Intent(DashboardActivity.this, QCActivity.class);
+        ignoreFromOnPause = true;
+
+        if (mActionBarAndEventsFragment != null) {
+
+            mActionBarAndEventsFragment.setFromAnotherActivity(true);
+        }
         startActivityForResult(intent, QC_ACTIVITY_RESULT_CODE);
     }
 
@@ -2551,15 +2557,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Log.d(TAG, "ChangeLang: ");
         ChangeLang.changeLanguage(this);
 
+        ignoreFromOnPause = true;
         if (resultCode == RESULT_OK && requestCode == GalleryActivity.EXTRA_GALLERY_CODE) {
-            ignoreFromOnPause = true;
 
             mPdfList = data.getParcelableArrayListExtra(GalleryActivity.EXTRA_RECIPE_PDF_FILES);
 
         }
 
         if (resultCode == RESULT_OK && requestCode == ActivateJobActivity.EXTRA_ACTIVATE_JOB_CODE) {
-            ignoreFromOnPause = true;
+
             Object response = data.getParcelableExtra(ActivateJobActivity.EXTRA_ACTIVATE_JOB_RESPONSE);
 
             if (((StandardResponse) response).getError().getErrorDesc() == null) {

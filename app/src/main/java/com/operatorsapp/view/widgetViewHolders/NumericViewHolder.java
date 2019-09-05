@@ -22,6 +22,7 @@ import com.operatorsapp.adapters.RejectCauseSpinnerAdapter;
 import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
+import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.view.SingleLineKeyboard;
 
@@ -467,9 +468,4 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public interface OnKeyboardManagerListener {
-        void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars);
-
-        void onCloseKeyboard();
-    }
 }

@@ -18,6 +18,7 @@ import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
+import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.view.widgetViewHolders.CounterViewHolder;
 import com.operatorsapp.view.widgetViewHolders.GenericTimeViewHolder;
 import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
@@ -36,7 +37,7 @@ import static android.support.v7.widget.RecyclerView.ViewHolder;
 public class WidgetAdapter extends Adapter {
     private static final long TEN_HOURS = 60000L * 60 * 10;
     private final DashboardCentralContainerListener mDashboardCentralContainerListener;
-    private final NumericViewHolder.OnKeyboardManagerListener mOnKeyboardManagerListener;
+    private final OnKeyboardManagerListener mOnKeyboardManagerListener;
     private Activity mContext;
     private List<Widget> mWidgets;
     private final int NUMERIC = 0;
@@ -65,7 +66,7 @@ public class WidgetAdapter extends Adapter {
                          boolean closedState, int height, int width,
                          DashboardCentralContainerListener dashboardCentralContainerListener,
                          ReportFieldsForMachine reportFieldsForMachine, MachineStatus machineStatus,
-                         NumericViewHolder.OnKeyboardManagerListener onKeyboardManagerListener, SparseArray<WidgetInfo> permissionResponse) {
+                         OnKeyboardManagerListener onKeyboardManagerListener, SparseArray<WidgetInfo> permissionResponse) {
         mWidgets = widgets;
         mContext = context;
         mGoToScreenListener = goToScreenListener;

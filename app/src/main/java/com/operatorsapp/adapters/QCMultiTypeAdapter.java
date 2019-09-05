@@ -2,7 +2,9 @@ package com.operatorsapp.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,24 +15,30 @@ import android.widget.TextView;
 
 import com.example.common.QCModels.TestFieldsDatum;
 import com.operatorsapp.R;
+import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.util.List;
 
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_BOOLEAN;
+import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_BOOLEAN_INT;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_DATE;
-import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_INTERVAL;
+import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_DATE_INT;
+import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_INTERVAL_INT;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_NUM;
+import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_NUM_INT;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_TEXT;
+import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_TEXT_INT;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_TIME;
-import static com.operatorsapp.adapters.QCSamplesMultiTypeAdapter.LAST;
+import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_TIME_INT;
 
 public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
+    private final OnKeyboardManagerListener mOnKeyboardManagerListener;
     private List<TestFieldsDatum> list;
-    private ChannelItemsAdapters.ChannelItemsAdaptersListener mOnKeyboardManagerListener;
 
-    public QCMultiTypeAdapter(List<TestFieldsDatum> list) {
+    public QCMultiTypeAdapter(List<TestFieldsDatum> list, OnKeyboardManagerListener onKeyboardManagerListener) {
+        mOnKeyboardManagerListener = onKeyboardManagerListener;
         this.list = list;
     }
 
@@ -41,20 +49,20 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
         switch (viewType) {
 
-            case FIELD_TYPE_BOOLEAN:
+            case FIELD_TYPE_BOOLEAN_INT:
                 return new QCMultiTypeAdapter.BooleanViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_boolean, parent, false));
-            case FIELD_TYPE_NUM:
-                return new QCMultiTypeAdapter.NumViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_num, parent, false));
-            case FIELD_TYPE_INTERVAL:
+            case FIELD_TYPE_NUM_INT:
+                return new QCMultiTypeAdapter.NumViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_num_parameter, parent, false));
+            case FIELD_TYPE_INTERVAL_INT:
                 return new QCMultiTypeAdapter.IntervalViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_interval, parent, false));
-            case FIELD_TYPE_TEXT:
-                return new QCMultiTypeAdapter.TextViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_text, parent, false));
-            case FIELD_TYPE_TIME:
+            case FIELD_TYPE_TEXT_INT:
+                return new QCMultiTypeAdapter.TextViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_text_parameter, parent, false));
+            case FIELD_TYPE_TIME_INT:
                 return new QCMultiTypeAdapter.TimeTextViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_time, parent, false));
-            case FIELD_TYPE_DATE:
+            case FIELD_TYPE_DATE_INT:
                 return new QCMultiTypeAdapter.DateViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_time, parent, false));
             default:
-                return new QCMultiTypeAdapter.TextViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_text, parent, false));
+                return new QCMultiTypeAdapter.TextViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_text_parameter, parent, false));
         }
     }
 
@@ -64,19 +72,34 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
         switch (type) {
 
-            case FIELD_TYPE_BOOLEAN:
+            case FIELD_TYPE_BOOLEAN_INT:
                 break;
-            case FIELD_TYPE_NUM:
+            case FIELD_TYPE_NUM_INT:
+                ((NumViewHolder)viewHolder).mEditNumberEt.setText(list.get(position).getCurrentValue());
+                ((NumViewHolder)viewHolder).mEditNumberEt.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        list.get(position).setCurrentValue(charSequence.toString());
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                });
                 break;
-            case FIELD_TYPE_INTERVAL:
+            case FIELD_TYPE_INTERVAL_INT:
                 break;
-            case FIELD_TYPE_TEXT:
+            case FIELD_TYPE_TEXT_INT:
                 break;
-            case FIELD_TYPE_TIME:
+            case FIELD_TYPE_TIME_INT:
                 break;
-            case FIELD_TYPE_DATE:
-                break;
-            case LAST:
+            case FIELD_TYPE_DATE_INT:
                 break;
 
         }
@@ -91,24 +114,22 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        switch (list.get(position).getInputType()) {
+        switch (list.get(position).getFieldType()) {
             case FIELD_TYPE_BOOLEAN:
-                return FIELD_TYPE_BOOLEAN;
+                return FIELD_TYPE_BOOLEAN_INT;
             case FIELD_TYPE_NUM:
                 if (list.get(position).getHValue() != null) {
-                    return FIELD_TYPE_INTERVAL;
+                    return FIELD_TYPE_INTERVAL_INT;
                 }
-                return FIELD_TYPE_NUM;
+                return FIELD_TYPE_NUM_INT;
             case FIELD_TYPE_TEXT:
-                return FIELD_TYPE_TEXT;
+                return FIELD_TYPE_TEXT_INT;
             case FIELD_TYPE_TIME:
-                return FIELD_TYPE_TIME;
+                return FIELD_TYPE_TIME_INT;
             case FIELD_TYPE_DATE:
-                return FIELD_TYPE_DATE;
-            case LAST:
-                return LAST;
+                return FIELD_TYPE_DATE_INT;
             default:
-                return FIELD_TYPE_TEXT;
+                return FIELD_TYPE_TEXT_INT;
 
         }
     }
@@ -243,7 +264,4 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
     }
 
-    public interface QCMultiTypeAdapterListener {
-        void onItemCheck();
-    }
 }

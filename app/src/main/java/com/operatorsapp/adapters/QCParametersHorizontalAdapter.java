@@ -11,21 +11,28 @@ import android.widget.TextView;
 import com.example.common.QCModels.SamplesDatum;
 import com.example.common.QCModels.TestSampleFieldsDatum;
 import com.operatorsapp.R;
+import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.operatorsapp.adapters.QCSamplesMultiTypeAdapter.LAST;
+import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_LAST;
+
 
 public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParametersHorizontalAdapter.ViewHolder> {
 
+    private final QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener mQcSamplesMultiTypeAdapterListener;
+    private final OnKeyboardManagerListener mOnKeyboardManagerListener;
     private Integer samples;
     private ArrayList<TestSampleFieldsDatum> list;
 
-    public QCParametersHorizontalAdapter(Integer samples, List<TestSampleFieldsDatum> testSampleFieldsData) {
+    public QCParametersHorizontalAdapter(Integer samples, List<TestSampleFieldsDatum> testSampleFieldsData,
+                                         OnKeyboardManagerListener onKeyboardManagerListener,
+                                         QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener qcSamplesMultiTypeAdapterListener) {
         list = (ArrayList<TestSampleFieldsDatum>) testSampleFieldsData;
+        mQcSamplesMultiTypeAdapterListener = qcSamplesMultiTypeAdapterListener;
+        mOnKeyboardManagerListener = onKeyboardManagerListener;
         this.samples = samples;
-        this.samples = 3;
         updateMinusLastColumn();
     }
 
@@ -44,7 +51,8 @@ public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParame
 
         viewHolder.mTitleTv.setText(list.get(position).getLName());
         viewHolder.mRv.setLayoutManager(new LinearLayoutManager(viewHolder.mRv.getContext()));
-        viewHolder.mRv.setAdapter(new QCSamplesMultiTypeAdapter(list.get(position).getInputType(), (ArrayList<SamplesDatum>) list.get(position).getSamplesData()));
+        viewHolder.mRv.setAdapter(new QCSamplesMultiTypeAdapter(list.get(position).getFieldType(),
+                (ArrayList<SamplesDatum>) list.get(position).getSamplesData(), mOnKeyboardManagerListener, mQcSamplesMultiTypeAdapterListener));
 
     }
 
@@ -52,7 +60,7 @@ public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParame
         TestSampleFieldsDatum testSampleFieldsDatum = new TestSampleFieldsDatum();
 
         testSampleFieldsDatum.setSamplesData(new ArrayList<SamplesDatum>());
-        testSampleFieldsDatum.setInputType(LAST);
+        testSampleFieldsDatum.setFieldType(FIELD_TYPE_LAST);
 
         for (int i = 0; i < samples; i++) {
             testSampleFieldsDatum.getSamplesData().add(new SamplesDatum());
@@ -82,6 +90,5 @@ public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParame
     }
 
     public interface QCParametersHorizontalAdapterListener {
-        void onItemCheck();
     }
 }

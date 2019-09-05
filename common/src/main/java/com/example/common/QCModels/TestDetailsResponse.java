@@ -8,12 +8,19 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class TestDetailsResponse extends StandardResponse {
-    public static final int FIELD_TYPE_BOOLEAN = 1;
-    public static final int FIELD_TYPE_DATE = 2;
-    public static final int FIELD_TYPE_NUM = 3;
-    public static final int FIELD_TYPE_TEXT = 4;
-    public static final int FIELD_TYPE_TIME = 5;
-    public static final int FIELD_TYPE_INTERVAL = 6;
+    public static final String FIELD_TYPE_BOOLEAN = "Boolean";
+    public static final int FIELD_TYPE_BOOLEAN_INT = 0;
+    public static final String FIELD_TYPE_DATE = "date";
+    public static final int FIELD_TYPE_DATE_INT = 1;
+    public static final String FIELD_TYPE_NUM = "num";
+    public static final int FIELD_TYPE_NUM_INT = 2;
+    public static final String FIELD_TYPE_TEXT = "text";
+    public static final int FIELD_TYPE_TEXT_INT = 3;
+    public static final String FIELD_TYPE_TIME = "time";
+    public static final int FIELD_TYPE_TIME_INT = 4;
+    public static final int FIELD_TYPE_INTERVAL_INT = 5;
+    public static final String FIELD_TYPE_LAST = "last";
+    public static final int FIELD_TYPE_LAST_INT = 6;
 
     @SerializedName("StatusList")
     @Expose
@@ -33,6 +40,7 @@ public class TestDetailsResponse extends StandardResponse {
     @SerializedName("Files")
     @Expose
     private List<String> files = null;
+    private List<TestSampleFieldsDatum> originalSampleFields;
 
     public ErrorResponse getError() {
         return error;
@@ -88,5 +96,17 @@ public class TestDetailsResponse extends StandardResponse {
 
     public void setFiles(List<String> files) {
         this.files = files;
+    }
+
+    public void setOriginalSampleFields(List<TestSampleFieldsDatum> originalSampleFields) {
+        this.originalSampleFields = originalSampleFields;
+    }
+
+    public List<TestSampleFieldsDatum> getOriginalSampleFields() {
+        if (originalSampleFields != null) {
+            return originalSampleFields;
+        }else {
+            return getTestSampleFieldsData();
+        }
     }
 }

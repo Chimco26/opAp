@@ -2,7 +2,9 @@ package com.operatorsapp.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,23 +15,33 @@ import android.widget.ImageView;
 
 import com.example.common.QCModels.SamplesDatum;
 import com.operatorsapp.R;
+import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.util.ArrayList;
 
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_BOOLEAN;
+import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_BOOLEAN_INT;
+import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_LAST;
+import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_LAST_INT;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_NUM;
+import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_NUM_INT;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_TEXT;
+import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_TEXT_INT;
 
 public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
 
-    public static final int LAST = -1;
-    private final Integer mInputType;
+    private final String mInputType;
+    private final OnKeyboardManagerListener mOnKeyboardManagerListener;
+    private final QCSamplesMultiTypeAdapterListener mQcSamplesMultiTypeAdapterListener;
     private ArrayList<SamplesDatum> list;
-    private ChannelItemsAdapters.ChannelItemsAdaptersListener mOnKeyboardManagerListener;
 
-    public QCSamplesMultiTypeAdapter(Integer inputType, ArrayList<SamplesDatum> list) {
+    public QCSamplesMultiTypeAdapter(String inputType, ArrayList<SamplesDatum> list,
+                                     OnKeyboardManagerListener onKeyboardManagerListener,
+                                     QCSamplesMultiTypeAdapterListener qcSamplesMultiTypeAdapterListener) {
         mInputType = inputType;
+        mOnKeyboardManagerListener = onKeyboardManagerListener;
+        mQcSamplesMultiTypeAdapterListener = qcSamplesMultiTypeAdapterListener;
         this.list = list;
     }
 
@@ -40,13 +52,13 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
 
         switch (viewType) {
 
-            case FIELD_TYPE_BOOLEAN:
+            case FIELD_TYPE_BOOLEAN_INT:
                 return new QCSamplesMultiTypeAdapter.BooleanViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_boolean, parent, false));
-            case FIELD_TYPE_NUM:
+            case FIELD_TYPE_NUM_INT:
                 return new QCSamplesMultiTypeAdapter.NumViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_num, parent, false));
-            case FIELD_TYPE_TEXT:
+            case FIELD_TYPE_TEXT_INT:
                 return new QCSamplesMultiTypeAdapter.TextViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_text, parent, false));
-            case LAST:
+            case FIELD_TYPE_LAST_INT:
                 return new QCSamplesMultiTypeAdapter.LastMinusViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_last, parent, false));
             default:
                 return new QCSamplesMultiTypeAdapter.TextViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_text, parent, false));
@@ -59,13 +71,37 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
 
         switch (type) {
 
-            case FIELD_TYPE_BOOLEAN:
+            case FIELD_TYPE_BOOLEAN_INT:
                 break;
-            case FIELD_TYPE_NUM:
+            case FIELD_TYPE_NUM_INT:
+                ((NumViewHolder)viewHolder).mEditNumberEt.setText(list.get(position).getValue());
+                ((NumViewHolder)viewHolder).mEditNumberEt.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        list.get(position).setValue(charSequence.toString());
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                });
                 break;
-            case FIELD_TYPE_TEXT:
+            case FIELD_TYPE_TEXT_INT:
                 break;
-            case LAST:
+            case FIELD_TYPE_LAST_INT:
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mOnKeyboardManagerListener.onCloseKeyboard();
+                        mQcSamplesMultiTypeAdapterListener.onDeleteLine(position);
+                    }
+                });
                 break;
 
         }
@@ -82,15 +118,15 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         switch (mInputType) {
             case FIELD_TYPE_BOOLEAN:
-                return FIELD_TYPE_BOOLEAN;
+                return FIELD_TYPE_BOOLEAN_INT;
             case FIELD_TYPE_NUM:
-                return FIELD_TYPE_NUM;
+                return FIELD_TYPE_NUM_INT;
             case FIELD_TYPE_TEXT:
-                return FIELD_TYPE_TEXT;
-            case LAST:
-                return LAST;
+                return FIELD_TYPE_TEXT_INT;
+            case FIELD_TYPE_LAST:
+                return FIELD_TYPE_LAST_INT;
             default:
-                return FIELD_TYPE_TEXT;
+                return FIELD_TYPE_TEXT_INT;
 
         }
     }
@@ -173,7 +209,8 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
 
     }
 
-    public interface QCMultiTypeAdapterListener {
-        void onItemCheck();
+    public interface QCSamplesMultiTypeAdapterListener {
+
+        void onDeleteLine(int position);
     }
 }

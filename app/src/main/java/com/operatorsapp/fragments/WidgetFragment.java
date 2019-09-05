@@ -31,13 +31,13 @@ import com.operatorsapp.adapters.WidgetAdapter;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
+import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.SingleLineKeyboard;
-import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,7 +51,7 @@ import static org.acra.ACRA.LOG_TAG;
  */
 
 public class WidgetFragment extends Fragment implements
-        DashboardUICallbackListener, NumericViewHolder.OnKeyboardManagerListener {
+        DashboardUICallbackListener, OnKeyboardManagerListener {
 
     private static final int CHART_POINTS_LIST_LIMIT_SIZE = 1500;
     private boolean mIsOpen;
@@ -132,7 +132,7 @@ public class WidgetFragment extends Fragment implements
                     mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
                     mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener,
                             true, mRecyclersHeight, mWidgetsLayoutWidth,
-                            mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus, new NumericViewHolder.OnKeyboardManagerListener() {
+                            mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus, new OnKeyboardManagerListener() {
                         @Override
                         public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
                             if (mKeyBoardLayout != null) {
