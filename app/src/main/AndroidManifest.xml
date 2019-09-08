@@ -55,7 +55,7 @@
             android:name=".activities.QCActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustPan" />
 
         <receiver
             android:name=".utils.broadcast.SelectStopReasonBroadcast"

@@ -2284,13 +2284,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void enableActionSpinner() {
+        //Attention mJobActionsSpinnerItems.get(0).getUniqueID() is dependant to  R.array.jobs_spinner_array order
         disableActionInSpinner(WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.ACTIVATE_JOB.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(0).getUniqueID());
         disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.REPORT_PRODUCTION.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(1).getUniqueID());
+                && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(1).getUniqueID());
         disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(2).getUniqueID());
+                && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(2).getUniqueID());
         disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(3).getUniqueID());
+                && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.REPORT_PRODUCTION.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(3).getUniqueID());
 
         if (!mEndSetupDisable) {
             disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1

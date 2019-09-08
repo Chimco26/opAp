@@ -81,8 +81,13 @@ public class StopReasons implements Parcelable {
         return icon;
     }
 
-    public int getGroupColor(Context context){
-        return Color.parseColor(getEventGroupColorID());
+    public int getGroupColor(){
+        try {
+
+            return Color.parseColor(getEventGroupColorID());
+        }catch (IllegalArgumentException e){
+            return Color.parseColor("#bababa");
+        }
 //        return context.getResources().getIdentifier(getEventGroupColorID(), "color", context.getPackageName());
     }
 

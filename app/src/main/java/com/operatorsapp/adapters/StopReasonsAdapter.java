@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -69,7 +68,7 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
                 imgId = ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
             }
             holder.mReasonImage.setImageResource(imgId);
-            holder.mReasonImage.setBackgroundColor(mStopItemsList.get(position).getGroupColor(mContext));
+            holder.mReasonImage.setBackgroundColor(mStopItemsList.get(position).getGroupColor());
 //            holder.mReasonImage.setBackground(mContext.getResources().getDrawable(imgId));
 //            holder.mReasonImage.setBackground(mContext.getResources().getDrawable(ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId())));
 //            holder.mReasonImage.setBackground(mContext.getResources().getDrawable(ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getEventGroupIconID())));

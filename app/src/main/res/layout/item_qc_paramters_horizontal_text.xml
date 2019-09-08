@@ -20,7 +20,7 @@
         android:id="@+id/IQCPHT_et"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:background="@color/white" />
 
 </LinearLayout>

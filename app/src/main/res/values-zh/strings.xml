@@ -8,7 +8,7 @@
     <string name="screen_title">Matics</string>
     <string name="login_fields_error">填寫所有欄位</string>
     <string name="login">登錄</string>
-    <string name="login_screen_save">保存</string>
+    <string name="save">保存</string>
     <string name="login_fields_factory_name_hint">工廠名稱</string>
     <string name="login_fields_factory_url_hint">工廠網址</string>
     <string name="login_fields_user_name_hint">用戶名</string>

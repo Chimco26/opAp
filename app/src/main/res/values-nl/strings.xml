@@ -9,7 +9,7 @@
     <string name="screen_title">Matics</string>
     <string name="login_fields_error">Vul in alle velden</string>
     <string name="login">Inloggen</string>
-    <string name="login_screen_save">Opslaan</string>
+    <string name="save">Opslaan</string>
     <string name="login_fields_factory_name_hint">Bedrijfnaam</string>
     <string name="login_fields_factory_url_hint">Bedrijf URL</string>
     <string name="login_fields_user_name_hint">Gebruikersnaam</string>

@@ -8,7 +8,7 @@
     <string name="screen_title">Matics</string>
     <string name="login_fields_error">Все поля должны быть заполнены</string>
     <string name="login">Авторизоваться</string>
-    <string name="login_screen_save">Сохранить</string>
+    <string name="save">Сохранить</string>
     <string name="login_fields_factory_name_hint">Название завода</string>
     <string name="login_fields_factory_url_hint">URL завода</string>
     <string name="login_fields_user_name_hint">Имя пользователя</string>

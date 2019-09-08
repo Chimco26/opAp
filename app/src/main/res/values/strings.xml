@@ -12,7 +12,7 @@
     <string name="screen_title">Matics</string>
     <string name="login_fields_error">Fill in all fields</string>
     <string name="login">Log In</string>
-    <string name="login_screen_save">Save</string>
+    <string name="save">Save</string>
     <string name="login_fields_factory_name_hint">Factory eName</string>URL de l'usine
     <string name="login_fields_factory_url_hint">Factory URL</string>
     <string name="login_fields_user_name_hint">User Name</string>
@@ -439,5 +439,8 @@
     <string name="samples">Samples</string>
     <string name="parameter">Parameter</string>
     <string name="max">max</string>
+    <string name="quality_test">Quality Test</string>
+    <string name="passed">Passed</string>
+    <string name="failed">Failed</string>
 
 </resources>

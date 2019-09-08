@@ -97,7 +97,7 @@
                         android:textStyle="bold"
                         android:gravity="center"
                         android:background="@drawable/buttons_selector"
-                        android:text="@string/login_screen_save"
+                        android:text="@string/save"
                         android:textColor="@drawable/button_text_color_selector"
                         android:textSize="22sp"/>
 

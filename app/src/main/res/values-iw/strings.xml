@@ -9,7 +9,7 @@
     <string name="screen_title">Matics</string>
     <string name="login_fields_error">מלא את כל השדות</string>
     <string name="login">התחבר</string>
-    <string name="login_screen_save">שמירה</string>
+    <string name="save">שמירה</string>
     <string name="login_fields_factory_name_hint">שם המפעל</string>
     <string name="login_fields_factory_url_hint">כתובת שרת</string>
     <string name="login_fields_user_name_hint">שם משתמש</string>

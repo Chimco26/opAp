@@ -12,7 +12,7 @@
     <string name="screen_title">Matics</string>
     <string name="login_fields_error">Fill in all fields</string>
     <string name="login">Belépés</string>
-    <string name="login_screen_save">Mentés</string>
+    <string name="save">Mentés</string>
     <string name="login_fields_factory_name_hint">Gyári név</string>
     <string name="login_fields_factory_url_hint">Gyári URL</string>
     <string name="login_fields_user_name_hint">Felhasználónév</string>

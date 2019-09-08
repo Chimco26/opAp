@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,6 +42,7 @@ import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Locale;
 
 public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener,
@@ -61,6 +63,9 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private QCParametersHorizontalAdapter mSamplesAdapter;
     private QCMultiTypeAdapter mTestAdapter;
     private TextView mSamplesNumerEt;
+    private View mPassedLy;
+    private ImageView mPassedIc;
+    private TextView mPassedTv;
 
     public static QCDetailsFragment newInstance(int testId) {
 
@@ -79,7 +84,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
         if (getArguments() != null && getArguments().containsKey(EXTRA_TEST_ID)) {
             mTestDetailsRequest = new TestDetailsRequest(getArguments().getInt(EXTRA_TEST_ID));
-            mTestDetailsRequest.setTestId(494);
+            mTestDetailsRequest.setTestId(342);
         }
     }
 
@@ -95,6 +100,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initVars(view);
+        ((TextView)view.findViewById(R.id.FQCD_title_tv)).setText(String.format(Locale.getDefault(),
+                "%s- %d", getString(R.string.quality_test), mTestDetailsRequest.getTestId()));
         mQcRequests = new QCRequests();
         getTestOrderDetails();
     }
@@ -112,6 +119,13 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         mSamplesTestRV = view.findViewById(R.id.FQCD_paramters_rv);
         mTestRV = view.findViewById(R.id.FQCD_fields_rv);
         initIncrementSamplesView(view);
+        initPassedVars(view);
+    }
+
+    private void initPassedVars(View view) {
+        mPassedLy = view.findViewById(R.id.FQCD_passed_ly);
+        mPassedIc = view.findViewById(R.id.FQCD_passed_ic);
+        mPassedTv = view.findViewById(R.id.FQCD_passed_tv);
     }
 
     private void initIncrementSamplesView(View view) {
@@ -152,12 +166,31 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
     private void initView() {
         mSamplesNumerEt.setText(mSamplesCount + "");
+        initPassedView();
         initSamplesTestRv();
         initTestRv();
     }
 
+    private void initPassedView() {
+        Boolean status = mTestOrderDetails.getTestDetails().get(0).getPassed();
+        if (status == null){
+            mPassedLy.setVisibility(View.INVISIBLE);
+        }else if (status){
+            mPassedLy.setVisibility(View.VISIBLE);
+            mPassedLy.setBackgroundColor(getContext().getResources().getColor(R.color.new_green));
+            mPassedIc.setImageDrawable(getContext().getResources().getDrawable(R.drawable.passed));
+            mPassedTv.setText(getString(R.string.passed));
+        }else {
+            mPassedLy.setVisibility(View.VISIBLE);
+            mPassedLy.setBackgroundColor(getContext().getResources().getColor(R.color.red_dark));
+            mPassedIc.setImageDrawable(getContext().getResources().getDrawable(R.drawable.close_white));
+            mPassedTv.setText(getString(R.string.failed));
+        }
+    }
+
     private void initSamplesTestRv() {
         mSamplesTestRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        mSamplesTestRV.setHasFixedSize(false);
         mSamplesAdapter = new QCParametersHorizontalAdapter(mTestOrderDetails.getTestDetails().get(0).getSamples(),
                 mTestOrderDetails.getTestSampleFieldsData(), this, this);
         mSamplesTestRV.setAdapter(mSamplesAdapter);

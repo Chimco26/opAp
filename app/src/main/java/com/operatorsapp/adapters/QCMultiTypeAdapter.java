@@ -9,13 +9,16 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.common.QCModels.TestFieldsDatum;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.OnKeyboardManagerListener;
+import com.operatorsapp.view.RangeView2;
 import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.util.List;
@@ -69,33 +72,32 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int position) {
         int type = getItemViewType(position);
-
+        TestFieldsDatum item = list.get(position);
         switch (type) {
 
             case FIELD_TYPE_BOOLEAN_INT:
-                break;
-            case FIELD_TYPE_NUM_INT:
-                ((NumViewHolder)viewHolder).mEditNumberEt.setText(list.get(position).getCurrentValue());
-                ((NumViewHolder)viewHolder).mEditNumberEt.addTextChangedListener(new TextWatcher() {
+                ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        list.get(position).setCurrentValue(charSequence.toString());
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        list.get(position).setCurrentValue(Boolean.toString(b));
                     }
                 });
                 break;
-            case FIELD_TYPE_INTERVAL_INT:
+            case FIELD_TYPE_NUM_INT:
+                ((NumViewHolder) viewHolder).mEditNumberEt.setText(item.getCurrentValue());
+                setTextWatcher(position, ((NumViewHolder) viewHolder).mEditNumberEt);
                 break;
             case FIELD_TYPE_TEXT_INT:
+                ((TextViewHolder) viewHolder).mTextEt.setText(item.getCurrentValue());
+                setTextWatcher(position, ((TextViewHolder) viewHolder).mTextEt);
+                break;
+            case FIELD_TYPE_INTERVAL_INT:
+                ((IntervalViewHolder) viewHolder).mEditMinEt.setText(String.valueOf(item.getLValue()));
+                ((IntervalViewHolder) viewHolder).mEditMaxEt.setText(String.valueOf(item.getHValue()));
+                setRangeView(item, ((IntervalViewHolder) viewHolder).mRangeView);
+                ((IntervalViewHolder) viewHolder).mRangeView.setLowLimit(1);
+                ((IntervalViewHolder) viewHolder).mRangeView.setHighLimit(5);
+
                 break;
             case FIELD_TYPE_TIME_INT:
                 break;
@@ -103,6 +105,65 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                 break;
 
         }
+    }
+    private void setRangeView(final TestFieldsDatum item, final RangeView2 mRangeView) {
+
+
+        mRangeView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                mRangeView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
+                    mRangeView.setCurrentValue(Float.parseFloat(item.getCurrentValue()));
+                }else {
+                    mRangeView.setCurrentValue(3);
+                }
+//                mRangeView.setHighLimit(widget.getHighLimit());
+//                mRangeView.setLowLimit(widget.getLowLimit());
+//                mRangeView.setmStandardValue(widget.getStandardValue());
+//                mRangeView.setWidth((int) (mParentLayout.getWidth()));
+//
+//                mCycleTimeLy.setVisibility(View.VISIBLE);
+//                mCycleRange.setAvgValue(Float.parseFloat(widget.getCycleTimeAvg()));
+//                mStandardTv.setText(String.format("%s%s", mContext.getString(R.string.standard), widget.getStandardValue()));
+//                mAverageTv.setVisibility(View.GONE);
+//                mAverageImg.setVisibility(View.GONE);
+//                if (widget.getCycleTimeAvg() != null) {
+//                    try {
+//                        if (Float.parseFloat(widget.getCycleTimeAvg()) > 0) {
+//                            mAverageTv.setVisibility(View.VISIBLE);
+//                            mAverageImg.setVisibility(View.VISIBLE);
+//                        }
+//                    } catch (Exception ignored) {
+//
+//                    }
+//                }
+//                mAverageTv.setText(String.format("%s%s", mRangeView.getContext().getString(R.string.average), widget.getCycleTimeAvg()));
+//                mRangeView.postInvalidate();
+            }
+        });
+
+    }
+
+    public void setTextWatcher(final int position, EditText mTextEt) {
+        mTextEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                list.get(position).setCurrentValue(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     @Override
@@ -187,6 +248,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
     public class IntervalViewHolder extends RecyclerView.ViewHolder {
 
+        private final RangeView2 mRangeView;
         private EditText mEditMaxEt;
         private EditText mEditMinEt;
 
@@ -198,6 +260,8 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             setOnTouchListener(mEditMinEt);
             mEditMaxEt = itemView.findViewById(R.id.IQCPI_max_et);
             setOnTouchListener(mEditMaxEt);
+            itemView.findViewById(R.id.QCP_parameter_txt).setVisibility(View.VISIBLE);
+            mRangeView = itemView.findViewById(R.id.IQCPI_range);
 
         }
 
@@ -213,7 +277,6 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                     return false; // consume touch event
                 }
             });
-            itemView.findViewById(R.id.QCP_parameter_txt).setVisibility(View.VISIBLE);
 
         }
 

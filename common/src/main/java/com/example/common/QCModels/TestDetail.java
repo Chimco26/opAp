@@ -81,7 +81,7 @@ public class TestDetail {
     private Integer moldID;
     @SerializedName("Passed")
     @Expose
-    private Object passed;
+    private Boolean passed;
 
     public Integer getID() {
         return iD;
@@ -283,11 +283,11 @@ public class TestDetail {
         this.moldID = moldID;
     }
 
-    public Object getPassed() {
+    public Boolean getPassed() {
         return passed;
     }
 
-    public void setPassed(Object passed) {
+    public void setPassed(Boolean passed) {
         this.passed = passed;
     }
 }

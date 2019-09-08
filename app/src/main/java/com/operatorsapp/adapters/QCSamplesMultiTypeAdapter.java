@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -53,7 +54,7 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
         switch (viewType) {
 
             case FIELD_TYPE_BOOLEAN_INT:
-                return new QCSamplesMultiTypeAdapter.BooleanViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_boolean, parent, false));
+                return new QCSamplesMultiTypeAdapter.BooleanViewHolder(inflater.inflate(R.layout.item_qc_horizontal_boolean, parent, false));
             case FIELD_TYPE_NUM_INT:
                 return new QCSamplesMultiTypeAdapter.NumViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_num, parent, false));
             case FIELD_TYPE_TEXT_INT:
@@ -72,27 +73,20 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
         switch (type) {
 
             case FIELD_TYPE_BOOLEAN_INT:
-                break;
-            case FIELD_TYPE_NUM_INT:
-                ((NumViewHolder)viewHolder).mEditNumberEt.setText(list.get(position).getValue());
-                ((NumViewHolder)viewHolder).mEditNumberEt.addTextChangedListener(new TextWatcher() {
+                ((BooleanViewHolder)viewHolder).mBooleanCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        list.get(position).setValue(charSequence.toString());
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        list.get(position).setValue(Boolean.toString(b));
                     }
                 });
                 break;
+            case FIELD_TYPE_NUM_INT:
+                ((NumViewHolder)viewHolder).mEditNumberEt.setText(list.get(position).getValue());
+                setTextWatcher(position, ((NumViewHolder)viewHolder).mEditNumberEt);
+                break;
             case FIELD_TYPE_TEXT_INT:
+                ((TextViewHolder)viewHolder).mTextEt.setText(list.get(position).getValue());
+                setTextWatcher(position, ((TextViewHolder) viewHolder).mTextEt);
                 break;
             case FIELD_TYPE_LAST_INT:
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +99,25 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
                 break;
 
         }
+    }
+
+    public void setTextWatcher(final int position, EditText mTextEt) {
+        mTextEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                list.get(position).setValue(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     @Override
