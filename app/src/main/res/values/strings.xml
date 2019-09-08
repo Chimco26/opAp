@@ -442,5 +442,6 @@
     <string name="quality_test">Quality Test</string>
     <string name="passed">Passed</string>
     <string name="failed">Failed</string>
+    <string name="min_minimum">min</string>
 
 </resources>
