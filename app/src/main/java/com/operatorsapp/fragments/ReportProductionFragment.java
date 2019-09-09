@@ -41,7 +41,6 @@ import com.operatorsapp.adapters.RejectProductionSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
-import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
@@ -325,35 +324,25 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
 
 
             StandardResponse response = objectToNewError(o);
-            SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
 
             if (response.getFunctionSucceed()) {
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, true, "Report Production- units: " + mUnitsCounter + ", type: " + mSelectedPackageTypeName);
-                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+//                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+                mDashboardCroutonListener.onShowCrouton(o.getError().getErrorDesc(), false);
+
             } else {
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, false, "Report Production- units: " + mUnitsCounter + ", type: " + mSelectedPackageTypeName);
-                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+//                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+                mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + o.getError().getErrorDesc(), true);
             }
+            SendBroadcast.refreshPolling(getContext());
 
             if (getFragmentManager() != null){
 
-                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                getFragmentManager().popBackStack(null, getChildFragmentManager().POP_BACK_STACK_INCLUSIVE);
             }
-//
-//            SendBroadcast.refreshPolling(getContext());
-//            dismissProgressDialog();
-//            OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
-//            mReportCore.unregisterListener();
-//
-//            if (o != null){
-//
-//                mDashboardCroutonListener.onShowCrouton(((ErrorResponse) o).getErrorDesc());
-//            }
-//            if (getFragmentManager() != null){
-//
-//                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//            }
+
 
         }
 
@@ -364,6 +353,13 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportFailure() reason: " + reason.getError().getErrorDesc());
             mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getError().getErrorDesc(), true);
             SendBroadcast.refreshPolling(getContext());
+
+            if (getFragmentManager() != null) {
+
+                getFragmentManager().popBackStack(null, getChildFragmentManager().POP_BACK_STACK_INCLUSIVE);
+
+            }
+
         }
     };
 

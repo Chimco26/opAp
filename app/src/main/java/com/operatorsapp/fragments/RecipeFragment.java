@@ -726,7 +726,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         mListener.onImageProductClick(arrayList, name);
     }
 
-    public interface OnRecipeFragmentListener {
+        public interface OnRecipeFragmentListener {
 
         void onImageProductClick(List<String> fileUrl, String name);
 

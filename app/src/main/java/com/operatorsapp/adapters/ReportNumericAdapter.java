@@ -17,18 +17,18 @@ import android.widget.TextView;
 
 import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operatorsapp.R;
+import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.view.SingleLineKeyboard;
-import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
 
 import java.util.List;
 import java.util.Locale;
 
 public class ReportNumericAdapter extends PagerAdapter {
-    private final NumericViewHolder.OnKeyboardManagerListener mKeyboardListener;
+    private final OnKeyboardManagerListener mKeyboardListener;
     private List<ActiveJob> mActiveJobs;
     private boolean isReject;
 
-    public ReportNumericAdapter(List<ActiveJob> activeJobs, boolean isRejects, NumericViewHolder.OnKeyboardManagerListener onKeyboardManagerListener) {
+    public ReportNumericAdapter(List<ActiveJob> activeJobs, boolean isRejects, OnKeyboardManagerListener onKeyboardManagerListener) {
         mActiveJobs = activeJobs;
         this.isReject = isRejects;
         mKeyboardListener = onKeyboardManagerListener;

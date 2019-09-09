@@ -10,7 +10,7 @@
     <string name="screen_title">Matics</string>
     <string name="login_fields_error">Alle Felder muessen ausgefuellt werden</string>
     <string name="login">Einloggen</string>
-    <string name="login_screen_save">Speichern</string>
+    <string name="save">Speichern</string>
     <string name="login_fields_factory_name_hint">eName des Betriebs</string>
     <string name="login_fields_factory_url_hint">URL des Betriebs</string>
     <string name="login_fields_user_name_hint">Benutzername</string>
@@ -152,6 +152,7 @@
         <item>Ausschussteile hinzufügen</item>
         <item>Kavität ändern</item>
         <item>Produktions-Report</item>
+        <item>Order Test</item>
     </array>
 
     <string name="approve_first_item">Setup Ende</string>

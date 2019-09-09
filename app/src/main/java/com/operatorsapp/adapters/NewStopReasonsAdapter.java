@@ -61,7 +61,7 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
                 imgId = ReasonImage.getImageForNewStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
             }
         }
-        int color = (mStopItemsList.get(position).getGroupColor(mContext));
+        int color = (mStopItemsList.get(position).getGroupColor());
         if (color == 0){
             color = ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
         }

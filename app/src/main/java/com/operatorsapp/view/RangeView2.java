@@ -39,6 +39,8 @@ public class RangeView2 extends View {
     private Bitmap avgImage;
     private Bitmap mStandardImage;
     private int mWidth = 1;
+    private boolean mShowStandardIc;
+    private boolean mShowAvgdIc;
 
     public void setAvgValue(float avgValue) {
         this.mAvgValue = avgValue;
@@ -95,6 +97,8 @@ public class RangeView2 extends View {
         mCurrentValue = a.getFloat(R.styleable.RangeView2_current_value, 5);
         mAvgValue = a.getFloat(R.styleable.RangeView2_avg_value, 0);
         mStandardValue = a.getFloat(R.styleable.RangeView2_standard_value, 0);
+        mShowStandardIc = a.getBoolean(R.styleable.RangeView2_show_standard, true);
+        mShowAvgdIc = a.getBoolean(R.styleable.RangeView2_show_avg, true);
         avgImage = BitmapFactory.decodeResource(getResources(), R.drawable.avga);
         mStandardImage = BitmapFactory.decodeResource(getResources(), R.drawable.standarda);
 
@@ -175,7 +179,7 @@ public class RangeView2 extends View {
 
         }
 
-        if (mAvgValue != 0) {
+        if (mShowAvgdIc && mAvgValue != 0) {
             if (mAvgValue >= mLowLimit && mAvgValue <= mHighLimit) {
                 canvas.drawBitmap(avgImage, (((mAvgValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20) - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
             } else if (mAvgValue < mLowLimit && mAvgValue != 0) {
@@ -184,7 +188,7 @@ public class RangeView2 extends View {
                 canvas.drawBitmap(avgImage, percent * 90 - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
             }
         }
-        if (mStandardValue >= mLowLimit && mStandardValue <= mHighLimit && mStandardValue != 0) {
+        if (mShowStandardIc && mStandardValue >= mLowLimit && mStandardValue <= mHighLimit && mStandardValue != 0) {
             canvas.drawBitmap(mStandardImage, (((mStandardValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20) - mStandardImage.getWidth() / 2, getHeight() / 2 - mStandardImage.getHeight() / 2, emptyPaint);
         }
 

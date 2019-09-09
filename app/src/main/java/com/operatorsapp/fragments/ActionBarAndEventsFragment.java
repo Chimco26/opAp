@@ -3,7 +3,6 @@ package com.operatorsapp.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -1287,7 +1286,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 }
                                 break;
                             }
+//                            case 4: {
+//                                openSetupEndFragment();
+//                                break;
+//                            }
                             case 4: {
+                                mListener.onOpenQCActivity();
+                                break;
+                            }
+                            case 5: {
                                 openSetupEndFragment();
                                 break;
                             }
@@ -2277,19 +2284,20 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void enableActionSpinner() {
+        //Attention mJobActionsSpinnerItems.get(0).getUniqueID() is dependant to  R.array.jobs_spinner_array order
         disableActionInSpinner(WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.ACTIVATE_JOB.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(0).getUniqueID());
         disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.REPORT_PRODUCTION.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(1).getUniqueID());
+                && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(1).getUniqueID());
         disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(2).getUniqueID());
+                && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(2).getUniqueID());
         disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(3).getUniqueID());
+                && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.REPORT_PRODUCTION.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(3).getUniqueID());
 
         if (!mEndSetupDisable) {
             disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
                             && mCurrentMachineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()
                             && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean()
-                    , mJobActionsSpinnerItems.get(4).getUniqueID());
+                    , mJobActionsSpinnerItems.get(mJobActionsSpinnerItems.size() - 1).getUniqueID());
         } else {
             mEndSetupDisable = false;
         }
@@ -3356,6 +3364,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void resetCycleWarningView(boolean wasShow, boolean show);
 
         void onChangeMachineRequest();
+
+        void onOpenQCActivity();
     }
 
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="120dp"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingEnd="20dp">
+    
+    <TextView
+        android:id="@+id/IQCPH_title"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        android:gravity="center_vertical"
+        app:autoSizeMaxTextSize="22sp"
+        app:autoSizeTextType="uniform"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/IQCPH_rv"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

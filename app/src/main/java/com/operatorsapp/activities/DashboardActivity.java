@@ -218,6 +218,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private static final float MINIMUM_VERSION_FOR_INTERVAL_AND_TIME_OUT_FROM_API = 1.9f;
     private static final int CHECK_APP_VERSION_INTERVAL = 1000 * 60 * 60 * 12; //check every 12 hours
     private static final int REQUEST_WRITE_PERMISSION = 786;
+    private static final int QC_ACTIVITY_RESULT_CODE = 2506;
     private boolean ignoreFromOnPause = false;
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private CroutonCreator mCroutonCreator;
@@ -322,7 +323,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
         OppAppLogger.getInstance().d(TAG, "onCreate(), end ");
 
-        setupVersionCheck();
+//        setupVersionCheck(); //todo uncomment
 
         setReportBtnListener();
 
@@ -346,7 +347,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onClick(View v) {
                 new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.SHIFT_REPORT, true, "Shift Report pressed");
-                initTopFiveFragment();
+                initReportShiftFragment();
             }
         });
         final float[] downX = new float[1];
@@ -597,7 +598,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     }
 
-    private void initTopFiveFragment() {
+    private void initReportShiftFragment() {
 
         mReportShiftFragment = ReportShiftFragment.newInstance(mIsTimeLineOpen);
 
@@ -1697,6 +1698,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         finish();
     }
 
+    @Override
+    public void onOpenQCActivity() {
+        Intent intent = new Intent(DashboardActivity.this, QCActivity.class);
+        ignoreFromOnPause = true;
+
+        if (mActionBarAndEventsFragment != null) {
+
+            mActionBarAndEventsFragment.setFromAnotherActivity(true);
+        }
+        startActivityForResult(intent, QC_ACTIVITY_RESULT_CODE);
+    }
+
 
     private void clearData() {
 
@@ -1827,10 +1840,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     public int getCroutonRoot() {
-        Fragment currentFragment = getCurrentFragment();
-        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
-            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
-        }
+//        Fragment currentFragment = getCurrentFragment();
+//        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
+//            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
+//        }
 //        Fragment currentFragment = getCurrentFragment();
 //        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
 //            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
@@ -2544,15 +2557,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Log.d(TAG, "ChangeLang: ");
         ChangeLang.changeLanguage(this);
 
+        ignoreFromOnPause = true;
         if (resultCode == RESULT_OK && requestCode == GalleryActivity.EXTRA_GALLERY_CODE) {
-            ignoreFromOnPause = true;
 
             mPdfList = data.getParcelableArrayListExtra(GalleryActivity.EXTRA_RECIPE_PDF_FILES);
 
         }
 
         if (resultCode == RESULT_OK && requestCode == ActivateJobActivity.EXTRA_ACTIVATE_JOB_CODE) {
-            ignoreFromOnPause = true;
+
             Object response = data.getParcelableExtra(ActivateJobActivity.EXTRA_ACTIVATE_JOB_RESPONSE);
 
             if (((StandardResponse) response).getError().getErrorDesc() == null) {
@@ -2583,14 +2596,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onShowCrouton(String errorResponse, boolean isError) {
 
-        if (errorResponse == null || errorResponse.length() == 0) {
-            errorResponse = " ";
-        }
         if (isError) {
+            if (errorResponse == null || errorResponse.length() == 0) {
+                errorResponse = " ";
+            }
             StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, errorResponse);
             ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject);
         } else {
-            mCroutonCreator.showCrouton(DashboardActivity.this, errorResponse, 0, getCroutonRoot(), CroutonCreator.CroutonType.SUCCESS);
+            if (errorResponse == null || errorResponse.length() == 0) {
+                errorResponse = getString(R.string.success);
+            }
+            ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorResponse, CroutonCreator.CroutonType.SUCCESS);
         }
 
 
@@ -3080,7 +3096,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             super.onPreExecute();
             this.progressDialog = new ProgressDialog(DashboardActivity.this);
             this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            this.progressDialog.setCancelable(false);
+            this.progressDialog.setCancelable(true);
             this.progressDialog.setTitle(getResources().getString(R.string.update_version_title));
             this.progressDialog.setMessage(getResources().getString(R.string.update_version_messege));
             this.progressDialog.setIcon(getResources().getDrawable(R.drawable.logo));

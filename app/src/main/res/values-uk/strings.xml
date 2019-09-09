@@ -8,7 +8,7 @@
     <string name="screen_title">LeaderMES</string>
     <string name="login_fields_error">Всі поля повинні бути заповнені</string>
     <string name="login">Авторизація</string>
-    <string name="login_screen_save">Зберегти</string>
+    <string name="save">Зберегти</string>
     <string name="login_fields_factory_name_hint">Найменування заводу</string>
     <string name="login_fields_factory_url_hint">URL заводу</string>
     <string name="login_fields_user_name_hint">Ім\'я коритувача</string>
@@ -147,6 +147,7 @@
         <item>Додати брак</item>
         <item>Змінити кількість одиниць в циклі</item>
         <item>Виробничий звіт</item>
+        <item>Order Test</item>
     </array>
     <string name="approve_first_item">Завершення налаштування</string>
     <string name="welcome">Welcome</string>
