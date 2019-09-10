@@ -117,7 +117,7 @@
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:orientation="vertical"
-            android:visibility="visible"
+            android:visibility="gone"
             android:weightSum="10">
 
             <View
@@ -188,7 +188,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:visibility="gone"
+            android:visibility="visible"
             android:weightSum="10">
 
             <com.operatorsapp.view.widgetViewHolders.CountDownView

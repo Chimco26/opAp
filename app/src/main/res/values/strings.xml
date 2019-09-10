@@ -443,5 +443,6 @@
     <string name="passed">Passed</string>
     <string name="failed">Failed</string>
     <string name="min_minimum">min</string>
+    <string name="order_test">Order Test</string>
 
 </resources>
