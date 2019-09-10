@@ -73,7 +73,10 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="@color/blue1"
-                android:textSize="45sp" />
+                android:textSize="45sp"
+                android:maxLines="1"
+                app:autoSizeMaxTextSize="45sp"
+                app:autoSizeTextType="uniform"/>
 
             <TextView
                 android:id="@+id/HGT_estimated_tv"
@@ -83,7 +86,10 @@
                 android:gravity="center"
                 android:textColor="@color/blue1"
                 android:textSize="18sp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:maxLines="1"
+                app:autoSizeMaxTextSize="18sp"
+                app:autoSizeTextType="uniform"/>
 
         </LinearLayout>
 
