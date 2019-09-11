@@ -98,6 +98,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_REPORT_SHIFT_BTN_Y = "PREF_REPORT_SHIFT_BTN_Y";
     private static final String PREF_SELF_NOTIFICATION_ID_MAP = "PREF_SELF_NOTIFICATION_ID_MAP";
     private static final long ONE_DAY = 1000 * 60 * 60 * 24;
+    private static final String PREF_IS_STATUS_BAR_LOCKED = "PREF_IS_STATUS_BAR_LOCKED";
 
 
     private static PersistenceManager msInstance;
@@ -789,5 +790,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         }
 
         return map.containsKey(id);
+    }
+
+    public boolean isStatusBarLocked() {
+        return SecurePreferences.getInstance().getBoolean(PREF_IS_STATUS_BAR_LOCKED, true);
+    }
+
+    public void setStatusBarLocked(boolean isLocked) {
+        SecurePreferences.getInstance().setBoolean(PREF_IS_STATUS_BAR_LOCKED, isLocked);
     }
 }

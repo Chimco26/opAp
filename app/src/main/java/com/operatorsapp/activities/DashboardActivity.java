@@ -166,6 +166,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
@@ -282,11 +284,100 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private SparseArray<WidgetInfo> permissionForMachineHashMap;
     private NextJobTimerDialog mNextJobTimerDialog;
     private int mShowDialogJobId;
+    Handler collapseNotificationHandler;
+    private boolean mIsCollapse = true;
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+
+        if (!hasFocus && PersistenceManager.getInstance().isStatusBarLocked()) {
+            mIsCollapse = true;
+            collapseNow(true);
+        }else if (collapseNotificationHandler != null){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // cancel collapse loop after 1 minute
+                    collapseNotificationHandler.removeCallbacks(null);
+                    mIsCollapse = false;
+                }
+            }, 1000 * 60);
+        }
+
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return true;
+    }
+
+    public void collapseNow(final boolean isCollapse) {
+
+        try {
+            // Initialize 'collapseNotificationHandler'
+            if (collapseNotificationHandler == null) {
+                collapseNotificationHandler = new Handler();
+            }
+
+            // Post a Runnable with some delay - currently set to 300 ms
+            collapseNotificationHandler.postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+
+                    // Use reflection to trigger a method from 'StatusBarManager'
+                    Object statusBarService = getSystemService("statusbar");
+                    Class<?> statusBarManager = null;
+
+                    try {
+                        statusBarManager = Class.forName("android.app.StatusBarManager");
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    Method collapseStatusBar = null;
+                    try {
+                        // Prior to API 17, the method to call is 'collapse()'
+                        // API 17 onwards, the method to call is `collapsePanels()`
+                        if (Build.VERSION.SDK_INT > 16) {
+                            collapseStatusBar = statusBarManager.getMethod(isCollapse ? "collapsePanels" : "expandNotificationsPanel");
+                        } else {
+                            collapseStatusBar = statusBarManager.getMethod(isCollapse ? "collapse" : "expand");
+                        }
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
+
+                    collapseStatusBar.setAccessible(true);
+
+                    try {
+                        collapseStatusBar.invoke(statusBarService);
+                    } catch (IllegalArgumentException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                    // Currently, the delay is 10 ms. You can change this
+                    // value to suit your needs.
+                    if (mIsCollapse) {
+                        collapseNotificationHandler.postDelayed(this, 10L);
+                    }
+                }
+            }, 10L);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         OppAppLogger.getInstance().d(TAG, "onCreate(), start ");
+
         setContentView(R.layout.activity_dashboard);
         updateAndroidSecurityProvider(this);
 
@@ -323,7 +414,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
         OppAppLogger.getInstance().d(TAG, "onCreate(), end ");
 
-//        setupVersionCheck(); //todo uncomment
+//        setupVersionCheck();
 
         setReportBtnListener();
 
@@ -793,6 +884,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         super.onDestroy();
 
         removeBroadcasts();
+
+
+        mIsCollapse = false;
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
 

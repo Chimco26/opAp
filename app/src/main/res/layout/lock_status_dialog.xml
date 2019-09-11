@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_margin="20dp"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:layout_width="450dp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ProximaNovaSemiBold"
+        android:textSize="24sp"
+        android:text="@string/enter_pass_unlock_statusbar"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp">
+
+        <EditText
+            android:id="@+id/lock_status_dialog_password"
+            style="@style/FontStyle_T6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_background_selector"
+            android:hint="@string/login_fields_password_hint"
+            android:inputType="textPassword"
+            android:paddingStart="14dp"
+            android:paddingEnd="40dp"
+            android:singleLine="true"
+            android:textColorHint="@color/T4_color"
+            android:textSize="26sp" />
+
+        <ImageView
+            android:id="@+id/lock_status_dialog_show_hide_pass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/icn_password_disabled" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/lock_status_dialog_unlock_btn"
+        android:text="@string/unlock"
+        android:layout_margin="30dp"
+        android:textSize="30sp"
+        style="@style/FontStyle_T9"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/button_bg_disabled"
+        android:foregroundGravity="center"
+        android:gravity="center"
+        android:textColor="@color/white"/>
+
+</LinearLayout>

@@ -154,20 +154,6 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
         mLeftTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
         mSubtitleTv.setVisibility(View.GONE);
         mTabsLil.setVisibility(View.GONE);
-
-        if (mTechniciansList != null && mTechniciansList.size() > 0) {
-            Collections.sort(mTechniciansList, new Comparator<Technician>() {
-                @Override
-                public int compare(Technician o1, Technician o2) {
-                    if (OperatorApplication.isEnglishLang()) {
-                        return o1.getEName().compareTo(o2.getEName());
-                    } else {
-                        return o1.getLName().compareTo(o2.getLName());
-                    }
-                }
-            });
-
-        }
         setRecyclerViewParams(85.0f);
         mRecyclerView.setAdapter(new TechnicianAdapter(getContext(), mTechniciansList, this));
     }

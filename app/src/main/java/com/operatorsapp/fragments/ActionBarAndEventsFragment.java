@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -80,6 +81,7 @@ import com.operators.reportfieldsformachineinfra.Technician;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
+import com.operatorsapp.activities.MainActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.EventsAdapter;
@@ -94,7 +96,9 @@ import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.dialogs.GenericDialog;
+import com.operatorsapp.dialogs.LauncherDialog;
 import com.operatorsapp.dialogs.LegendDialog;
+import com.operatorsapp.dialogs.LockStatusBarDialog;
 import com.operatorsapp.dialogs.NotificationsDialog;
 import com.operatorsapp.dialogs.TechCallDialog;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -1154,6 +1158,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
+
+
     @SuppressLint("InflateParams")
     public void setActionBar() {
 
@@ -1177,6 +1183,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             // TODO: 08/07/2018 update to new toolbar
             mToolBarView = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
 
+            final ImageView statusLock = mToolBarView.findViewById(R.id.toolbar_status_lock_iv);
             ImageView notificationIv = mToolBarView.findViewById(R.id.toolbar_notification_button);
             technicianRl = mToolBarView.findViewById(R.id.toolbar_technician_button);
             ImageView tutorialIv = mToolBarView.findViewById(R.id.toolbar_tutorial_iv);
@@ -1192,12 +1199,33 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
             });
 
+            statusLock.setImageDrawable(getResources().getDrawable(PersistenceManager.getInstance().isStatusBarLocked() ? R.drawable.ic_lock : R.drawable.ic_lock_open));
+            statusLock.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (PersistenceManager.getInstance().isStatusBarLocked()){
+                        final LockStatusBarDialog dialog = new LockStatusBarDialog(getActivity(), new LockStatusBarDialog.LockStatusBarListener() {
+                            @Override
+                            public void unlockSuccess() {
+                                PersistenceManager.getInstance().setStatusBarLocked(false);
+                                statusLock.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_open));
+                            }
+                        });
+                        dialog.show();
+                    }else {
+                        PersistenceManager.getInstance().setStatusBarLocked(true);
+                        statusLock.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock));
+                    }
+                }
+            });
+
             getNotificationsFromServer(false);
             setTechnicianCallStatus();
 
             tutorialIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    openOtherApps();
 //                    startToolbarTutorial();
                 }
             });
@@ -1350,6 +1378,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (permissionResponseHashmap != null) {
             displayViewByServerSettings(permissionResponseHashmap);
         }
+    }
+
+    private void openOtherApps() {
+        LauncherDialog dialog = new LauncherDialog(getActivity());
+        dialog.show();
     }
 
     public void openSetupEndFragment() {
@@ -1633,17 +1666,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
 
         final List<Technician> techniciansList = ((DashboardActivity) getActivity()).getReportForMachine().getTechnicians();
-
-        Collections.sort(techniciansList, new Comparator<Technician>() {
-            @Override
-            public int compare(Technician o1, Technician o2) {
-                if (OperatorApplication.isEnglishLang()) {
-                    return o1.getEName().compareTo(o2.getEName());
-                } else {
-                    return o1.getLName().compareTo(o2.getLName());
-                }
-            }
-        });
 
         if (mPopUpDialog != null && mPopUpDialog.isShowing()) {
             mPopUpDialog.dismiss();

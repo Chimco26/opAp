@@ -443,5 +443,8 @@
     <string name="passed">Passed</string>
     <string name="failed">Failed</string>
     <string name="min_minimum">min</string>
+    <string name="enter_pass_unlock_statusbar">Enter Your User Password To Unlock The Status Bar</string>
+    <string name="unlock">Unlock</string>
+    <string name="password_incorect">This password is incorect. try again</string>
 
 </resources>
