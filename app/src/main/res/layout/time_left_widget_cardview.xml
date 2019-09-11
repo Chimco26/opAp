@@ -78,8 +78,8 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:textColor="@color/blue1"
-                android:textSize="45sp"
-                app:autoSizeMaxTextSize="45sp"
+                android:textSize="40sp"
+                app:autoSizeMaxTextSize="40sp"
                 app:autoSizeTextType="uniform" />
 
             <TextView
@@ -149,7 +149,7 @@
                     android:text="@string/you_are_in_setup_mode"
                     android:textColor="@color/blue1"
                     android:textSize="18sp"
-                    app:autoSizeMaxTextSize="18sp"
+                    app:autoSizeMaxTextSize="20sp"
                     app:autoSizeTextType="uniform" />
             </LinearLayout>
 

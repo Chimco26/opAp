@@ -105,27 +105,27 @@
                         android:id="@+id/RPWC_filter_short_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_above="@+id/RPWC_filter_short"
                         android:layout_centerHorizontal="true"
+                        android:gravity="center_vertical"
                         android:maxLines="1"
                         android:textColor="@color/red_line"
                         android:textSize="14sp"
-                        app:autoSizeTextType="uniform"
                         app:autoSizeMaxTextSize="14sp"
-                        android:layout_above="@+id/RPWC_filter_short"
-                        android:gravity="center_vertical"/>
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/RPWC_filter_short_min_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/RPWC_filter_short"
                         android:layout_centerHorizontal="true"
+                        android:gravity="center_vertical"
                         android:maxLines="1"
                         android:textColor="@color/red_line"
                         android:textSize="14sp"
-                        app:autoSizeTextType="uniform"
                         app:autoSizeMaxTextSize="14sp"
-                        android:layout_below="@+id/RPWC_filter_short"
-                        android:gravity="center_vertical"/>
+                        app:autoSizeTextType="uniform" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -143,27 +143,27 @@
                         android:id="@+id/RPWC_reported_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_above="@+id/RPWC_reported"
                         android:layout_centerHorizontal="true"
+                        android:gravity="center_vertical"
                         android:maxLines="1"
                         android:textColor="#850f16"
                         android:textSize="14sp"
-                        app:autoSizeTextType="uniform"
                         app:autoSizeMaxTextSize="14sp"
-                        android:layout_above="@+id/RPWC_reported"
-                        android:gravity="center_vertical"/>
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/RPWC_reported_min_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/RPWC_reported"
                         android:layout_centerHorizontal="true"
+                        android:gravity="center_vertical"
                         android:maxLines="1"
                         android:textColor="#850f16"
                         android:textSize="14sp"
-                        app:autoSizeTextType="uniform"
                         app:autoSizeMaxTextSize="14sp"
-                        android:layout_below="@+id/RPWC_reported"
-                        android:gravity="center_vertical"/>
+                        app:autoSizeTextType="uniform" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -181,27 +181,27 @@
                         android:id="@+id/RPWC_not_reported_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_above="@+id/RPWC_not_reported"
                         android:layout_centerHorizontal="true"
+                        android:gravity="center_vertical"
                         android:maxLines="1"
                         android:textColor="#850f16"
                         android:textSize="14sp"
-                        app:autoSizeTextType="uniform"
                         app:autoSizeMaxTextSize="14sp"
-                        android:layout_above="@+id/RPWC_not_reported"
-                        android:gravity="center_vertical"/>
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/RPWC_not_reported_min_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/RPWC_not_reported"
                         android:layout_centerHorizontal="true"
+                        android:gravity="center_vertical"
                         android:maxLines="1"
                         android:textColor="#850f16"
                         android:textSize="14sp"
-                        app:autoSizeTextType="uniform"
                         app:autoSizeMaxTextSize="14sp"
-                        android:layout_below="@+id/RPWC_not_reported"
-                        android:gravity="center_vertical"/>
+                        app:autoSizeTextType="uniform" />
                 </RelativeLayout>
             </LinearLayout>
 
@@ -221,20 +221,25 @@
                     android:layout_weight="0.3"
                     android:background="@color/red_line" />
 
-                <TextView
-                    android:id="@+id/filter_square_tv"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="3.6"
-                    android:paddingStart="1dp"
-                    android:paddingEnd="1dp"
-                    android:gravity="center_vertical"
-                    android:maxLines="1"
-                    android:text="@string/filter_short"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    app:autoSizeMaxTextSize="16sp"
-                    app:autoSizeTextType="uniform" />
+                    android:layout_weight="3.6">
+
+                    <TextView
+                        android:id="@+id/filter_square_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:paddingStart="1dp"
+                        android:paddingEnd="1dp"
+                        android:text="@string/filter_short"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:autoSizeMaxTextSize="16sp"
+                        app:autoSizeTextType="uniform" />
+                </LinearLayout>
 
                 <com.operatorsapp.view.SquareImageView
                     android:id="@+id/reported_square"
@@ -243,20 +248,25 @@
                     android:layout_weight="0.3"
                     android:background="@color/red_dark" />
 
-                <TextView
-                    android:id="@+id/reported_square_tv"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2.7"
-                    android:gravity="center_vertical"
-                    android:maxLines="1"
-                    android:paddingStart="1dp"
-                    android:paddingEnd="1dp"
-                    android:text="@string/reported"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    app:autoSizeMaxTextSize="16sp"
-                    app:autoSizeTextType="uniform" />
+                    android:layout_weight="2.7">
+
+                    <TextView
+                        android:id="@+id/reported_square_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:paddingStart="1dp"
+                        android:paddingEnd="1dp"
+                        android:text="@string/reported"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:autoSizeMaxTextSize="16sp"
+                        app:autoSizeTextType="uniform" />
+                </LinearLayout>
 
                 <com.operatorsapp.view.SquareImageView
                     android:id="@+id/no_reported_square"
@@ -265,21 +275,25 @@
                     android:layout_weight="0.3"
                     android:background="@color/black" />
 
-                <TextView
-                    android:id="@+id/no_reported_square_tv"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2.7"
-                    android:paddingStart="1dp"
-                    android:paddingEnd="1dp"
-                    android:gravity="center_vertical"
-                    android:maxLines="1"
-                    android:text="@string/unreported"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    app:autoSizeMaxTextSize="16sp"
-                    app:autoSizeTextType="uniform" />
+                    android:layout_weight="2.7">
 
+                    <TextView
+                        android:id="@+id/no_reported_square_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:paddingStart="1dp"
+                        android:paddingEnd="1dp"
+                        android:text="@string/unreported"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:autoSizeMaxTextSize="16sp"
+                        app:autoSizeTextType="uniform" />
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
@@ -314,8 +328,8 @@
                     android:maxLines="1"
                     android:text="@string/report_events_reason"
                     android:textColor="@color/blue1"
-                    android:textSize="16sp"
-                    app:autoSizeMaxTextSize="16sp"
+                    android:textSize="25sp"
+                    app:autoSizeMaxTextSize="25sp"
                     app:autoSizeTextType="uniform" />
 
                 <View

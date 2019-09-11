@@ -426,6 +426,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mReportBtn.post(new Runnable() {
             @Override
             public void run() {
+                ViewGroup.LayoutParams params = mReportBtn.getLayoutParams();
+                params.height = (int) (getResources().getDisplayMetrics().heightPixels * 0.15);
+                params.width = params.height;
+                mReportBtn.setLayoutParams(params);
                 if (PersistenceManager.getInstance().getReportShiftBtnPositionX() > 0) {
                     mReportBtn.setX(PersistenceManager.getInstance().getReportShiftBtnPositionX());
                 }
