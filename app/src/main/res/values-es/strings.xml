@@ -9,7 +9,7 @@
     <string name="screen_title">LeaderMES</string>
     <string name="login_fields_error">Todos los campos deben ser rellenados</string>
     <string name="login">Acceder</string>
-    <string name="login_screen_save">Guardar</string>
+    <string name="save">Guardar</string>
     <string name="login_fields_factory_name_hint">Nombre de Fabrica</string>
     <string name="login_fields_factory_url_hint">URL de Fabrica</string>
     <string name="login_fields_user_name_hint">Nombre de Usuario</string>
@@ -151,6 +151,7 @@
         <item>Aniadir Rechazados</item>
         <item>Cambiar unidades del ciclo</item>
         <item>Informar Inventario</item>
+        <item>Order Test</item>
     </array>
 
     <string name="approve_first_item">Final de Preparacion</string>

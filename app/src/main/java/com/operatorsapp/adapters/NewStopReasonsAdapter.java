@@ -61,7 +61,7 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
                 imgId = ReasonImage.getImageForNewStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
             }
         }
-        int color = (mStopItemsList.get(position).getGroupColor(mContext));
+        int color = (mStopItemsList.get(position).getGroupColor());
         if (color == 0){
             color = ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
         }
@@ -131,7 +131,7 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
                 icon = mImgId;
             }
 
-            holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(mImgId));
+            holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(icon));
 //            holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(mVerticalList.get(position).getEventIcon(mContext)));
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

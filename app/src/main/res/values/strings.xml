@@ -12,7 +12,7 @@
     <string name="screen_title">Matics</string>
     <string name="login_fields_error">Fill in all fields</string>
     <string name="login">Log In</string>
-    <string name="login_screen_save">Save</string>
+    <string name="save">Save</string>
     <string name="login_fields_factory_name_hint">Factory eName</string>URL de l'usine
     <string name="login_fields_factory_url_hint">Factory URL</string>
     <string name="login_fields_user_name_hint">User Name</string>
@@ -164,6 +164,7 @@
         <item>Add Rejects</item>
         <item>Change Units In Cycle</item>
         <item>Report Production</item>
+        <item>Order Test</item>
     </array>
 
     <array name="shiftlog_spinner_items">
@@ -421,7 +422,7 @@
         <item>#ff6b6b</item>
         <item>#5aca96</item>
         <item>#599abe</item>
-    </string-array >
+    </string-array>
     <string name="cycle_time">Cycle time</string>
     <string name="jobs_on_this_shift">Jobs on this shift</string>
     <string name="report_cycle_failed_but_max_reported">the value you set to report cycle unit is over max value, the max value was reported</string>
@@ -434,5 +435,17 @@
     <string name="success">Success</string>
     <string name="save_changes">Save changes</string>
     <string name="updating">Updating</string>
+    <string name="test_results">Test Results</string>
+    <string name="samples">Samples</string>
+    <string name="parameter">Parameter</string>
+    <string name="max">max</string>
+    <string name="quality_test">Quality Test</string>
+    <string name="passed">Passed</string>
+    <string name="failed">Failed</string>
+    <string name="min_minimum">min</string>
+    <string name="enter_pass_unlock_statusbar">Enter Your User Password To Unlock The Status Bar</string>
+    <string name="unlock">Unlock</string>
+    <string name="password_incorect">This password is incorect. try again</string>
+    <string name="order_test">Order Test</string>
 
 </resources>

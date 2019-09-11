@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
+import android.view.View;
 
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -71,6 +72,16 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        findViewById(R.id.main_restart_app_iv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
 
         initLoggerAndDataStorage();
 
@@ -92,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         updateAndroidSecurityProvider(this);
 
         checkFlavor();
+
+
 
     }
 

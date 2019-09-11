@@ -39,12 +39,10 @@ import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
-import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
-import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 
 import java.text.NumberFormat;
@@ -358,12 +356,6 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
         mReportCore.sendCycleUnitsReport(mUnitsCounter, mJobId);
 
-        if (getFragmentManager() != null) {
-
-            getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-        }
-
 //        SendBroadcast.refreshPolling(getContext());
     }
 
@@ -372,16 +364,15 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         public void sendReportSuccess(StandardResponse o) {
 
             StandardResponse response = objectToNewError(o);
-            SendBroadcast.refreshPolling(getContext());
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
-            mReportCore.unregisterListener();
 
             dismissProgressDialog();
-            if (response.getFunctionSucceed()){
-                 ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+            if (response.getFunctionSucceed()) {
+//                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+                mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), false);
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.CHANGE_UNIT_IN_CYCLE, true, "Change unit in cycle");
                 //mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc());
-            }else {
+            } else {
                 mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), true);
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.CHANGE_UNIT_IN_CYCLE, false, "Change unit in cycle- " + response.getError().getErrorDesc());
             }
@@ -393,6 +384,16 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
                 }
             }, REFRESH_DELAY_MILLIS);
 
+            SendBroadcast.refreshPolling(getContext());
+            mReportCore.unregisterListener();
+
+            if (getFragmentManager() != null) {
+
+                getFragmentManager().popBackStack(null, getFragmentManager().POP_BACK_STACK_INCLUSIVE);
+
+            }
+
+
         }
 
         @Override
@@ -402,21 +403,27 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
             new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.CHANGE_UNIT_IN_CYCLE, false, "Change unit in cycle- " + reason.getError().getErrorDesc());
             dismissProgressDialog();
             SendBroadcast.refreshPolling(getContext());
+            if (getFragmentManager() != null) {
+
+                getFragmentManager().popBackStack(null, getFragmentManager().POP_BACK_STACK_INCLUSIVE);
+
+            }
+
         }
 
     };
 
     private StandardResponse objectToNewError(Object o) {
         StandardResponse responseNewVersion;
-        if (o instanceof StandardResponse){
-            responseNewVersion = (StandardResponse)o;
-        }else {
+        if (o instanceof StandardResponse) {
+            responseNewVersion = (StandardResponse) o;
+        } else {
             Gson gson = new GsonBuilder().create();
 
             ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
 
             responseNewVersion = new StandardResponse(true, 0, er);
-            if (responseNewVersion.getError().getErrorCode() != 0){
+            if (responseNewVersion.getError().getErrorCode() != 0) {
                 responseNewVersion.setFunctionSucceed(false);
             }
         }

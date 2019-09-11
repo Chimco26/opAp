@@ -22,14 +22,14 @@ import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.ReportNumericAdapter;
 import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
+import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.view.SingleLineKeyboard;
-import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListener {
+public class SetupEndDialog implements OnKeyboardManagerListener {
 
     private static final int STATIC_REASON_ID = 100;
     private final Activity mContext;

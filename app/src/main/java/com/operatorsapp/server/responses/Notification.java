@@ -158,6 +158,14 @@ public class Notification {
         return mOriginalSenderHName;
     }
 
+    public void setmOriginalSenderName(String mOriginalSenderName) {
+        this.mOriginalSenderName = mOriginalSenderName;
+    }
+
+    public void setmOriginalSenderHName(String mOriginalSenderHName) {
+        this.mOriginalSenderHName = mOriginalSenderHName;
+    }
+
     public void setmBody(String mBody) {
         this.mBody = mBody;
     }

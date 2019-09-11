@@ -119,10 +119,13 @@ public class CroutonCreator {
         }
         Configuration configuration = new Configuration.Builder().setDuration(croutonDurationInMilliseconds).build();
         View croutonView;
+        TextView croutonText;
         switch (croutonType) {
             case ALERT_DIALOG:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.crouton_alert_view, null);
                 setOnClickListener(croutonView);
+                 croutonText = croutonView.findViewById(R.id.crouton_text);
+                croutonText.setText(croutonMessage);
                 setProgressCountDown(croutonView, PersistenceManager.getInstance().getTimeToDownParameterDialog());
                 break;
 
@@ -131,26 +134,30 @@ public class CroutonCreator {
             case URL_ERROR:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.crouton_error_view, null);
                 Log.d(LOG_TAG, "createCrouton: " + ((FrameLayout) croutonView).getChildCount());
+                croutonText = croutonView.findViewById(R.id.crouton_text);
+                croutonText.setText(croutonMessage);
                 setProgressCountDown(croutonView, DEFAULT_CROUTON_TIME);
                 break;
             case CONNECTIVITY:
 
             case NETWORK_ERROR:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.cruton_network_error_view, null);
+                croutonText = croutonView.findViewById(R.id.crouton_text);
+                croutonText.setText(croutonMessage);
                 setProgressCountDown(croutonView, DEFAULT_CROUTON_TIME);
                 break;
             case SUCCESS:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.crouton_success, null);
+                croutonText = croutonView.findViewById(R.id.crouton_text);
+                croutonText.setText(croutonMessage);
                 setProgressCountDown(croutonView, DEFAULT_CROUTON_TIME);
                 break;
             default:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.cruton_network_error_view, null);
+                croutonText = croutonView.findViewById(R.id.crouton_text);
+                croutonText.setText(croutonMessage);
                 setProgressCountDown(croutonView, DEFAULT_CROUTON_TIME);
         }
-        TextView croutonText = croutonView.findViewById(R.id.crouton_text);
-        croutonText.setText(croutonMessage);
-
-        setProgressCountDown(croutonView, DEFAULT_CROUTON_TIME);
 
         return Crouton.make(activity, croutonView, viewGroup, configuration);
     }
@@ -181,7 +188,6 @@ public class CroutonCreator {
         ProgressBar mProgressBar = view.findViewById(R.id.PT_progressbar_time_left);
 
         mProgressBar.setMax(croutonTime);
-
 
         ObjectAnimator animation = ObjectAnimator.ofInt(mProgressBar, "progress", 0, croutonTime);
 

@@ -9,7 +9,7 @@
     <string name="screen_title">Matics</string>
     <string name="login_fields_error">Remplissez tous les champs</string>
     <string name="login">Identification</string>
-    <string name="login_screen_save">Sauvegarde</string>
+    <string name="save">Sauvegarde</string>
     <string name="login_fields_factory_name_hint">Nom de l\'usine</string>
     <string name="login_fields_factory_url_hint">URL de l\'usine</string>
     <string name="login_fields_user_name_hint">Nom d\'utilisateur</string>
@@ -152,6 +152,7 @@
         <item>Mettre les rebuts</item>
         <item>Changement d\'unité de cycle</item>
         <item>Compte rendu de la production</item>
+        <item>Order Test</item>
     </array>
 
     <string name="approve_first_item">Fin de Préparation</string>

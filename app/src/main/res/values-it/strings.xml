@@ -218,7 +218,7 @@
     <string name="request_timeout_range_error">La richiesta timeout deve essere nel range 20-120 secondi</string>
     <string name="respond_notification_title">Rispondi alla Notifica</string>
     <string name="retry">Riprova</string>
-    <string name="login_screen_save">Salva</string>
+    <string name="save">Salva</string>
     <string name="search">Cerca</string>
     <string name="search_job_id_or_product_name">Cerca ID Lavoro o Nome Prodotto</string>
     <string name="see_job">Vedi lavoro</string>

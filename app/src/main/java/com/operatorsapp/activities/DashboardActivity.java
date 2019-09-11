@@ -166,6 +166,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
@@ -218,6 +220,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private static final float MINIMUM_VERSION_FOR_INTERVAL_AND_TIME_OUT_FROM_API = 1.9f;
     private static final int CHECK_APP_VERSION_INTERVAL = 1000 * 60 * 60 * 12; //check every 12 hours
     private static final int REQUEST_WRITE_PERMISSION = 786;
+    private static final int QC_ACTIVITY_RESULT_CODE = 2506;
     private boolean ignoreFromOnPause = false;
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private CroutonCreator mCroutonCreator;
@@ -281,11 +284,100 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private SparseArray<WidgetInfo> permissionForMachineHashMap;
     private NextJobTimerDialog mNextJobTimerDialog;
     private int mShowDialogJobId;
+    Handler collapseNotificationHandler;
+    private boolean mIsCollapse = true;
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+
+        if (!hasFocus && PersistenceManager.getInstance().isStatusBarLocked()) {
+            mIsCollapse = true;
+            collapseNow(true);
+        }else if (collapseNotificationHandler != null){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // cancel collapse loop after 1 minute
+                    collapseNotificationHandler.removeCallbacks(null);
+                    mIsCollapse = false;
+                }
+            }, 1000 * 60);
+        }
+
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return true;
+    }
+
+    public void collapseNow(final boolean isCollapse) {
+
+        try {
+            // Initialize 'collapseNotificationHandler'
+            if (collapseNotificationHandler == null) {
+                collapseNotificationHandler = new Handler();
+            }
+
+            // Post a Runnable with some delay - currently set to 300 ms
+            collapseNotificationHandler.postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+
+                    // Use reflection to trigger a method from 'StatusBarManager'
+                    Object statusBarService = getSystemService("statusbar");
+                    Class<?> statusBarManager = null;
+
+                    try {
+                        statusBarManager = Class.forName("android.app.StatusBarManager");
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    Method collapseStatusBar = null;
+                    try {
+                        // Prior to API 17, the method to call is 'collapse()'
+                        // API 17 onwards, the method to call is `collapsePanels()`
+                        if (Build.VERSION.SDK_INT > 16) {
+                            collapseStatusBar = statusBarManager.getMethod(isCollapse ? "collapsePanels" : "expandNotificationsPanel");
+                        } else {
+                            collapseStatusBar = statusBarManager.getMethod(isCollapse ? "collapse" : "expand");
+                        }
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
+
+                    collapseStatusBar.setAccessible(true);
+
+                    try {
+                        collapseStatusBar.invoke(statusBarService);
+                    } catch (IllegalArgumentException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                    // Currently, the delay is 10 ms. You can change this
+                    // value to suit your needs.
+                    if (mIsCollapse) {
+                        collapseNotificationHandler.postDelayed(this, 10L);
+                    }
+                }
+            }, 10L);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         OppAppLogger.getInstance().d(TAG, "onCreate(), start ");
+
         setContentView(R.layout.activity_dashboard);
         updateAndroidSecurityProvider(this);
 
@@ -322,7 +414,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
         OppAppLogger.getInstance().d(TAG, "onCreate(), end ");
 
-        setupVersionCheck();
+//        setupVersionCheck();
 
         setReportBtnListener();
 
@@ -346,7 +438,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onClick(View v) {
                 new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.SHIFT_REPORT, true, "Shift Report pressed");
-                initTopFiveFragment();
+                initReportShiftFragment();
             }
         });
         final float[] downX = new float[1];
@@ -597,7 +689,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     }
 
-    private void initTopFiveFragment() {
+    private void initReportShiftFragment() {
 
         mReportShiftFragment = ReportShiftFragment.newInstance(mIsTimeLineOpen);
 
@@ -792,6 +884,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         super.onDestroy();
 
         removeBroadcasts();
+
+
+        mIsCollapse = false;
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
 
@@ -1697,6 +1796,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         finish();
     }
 
+    @Override
+    public void onOpenQCActivity() {
+        Intent intent = new Intent(DashboardActivity.this, QCActivity.class);
+        ignoreFromOnPause = true;
+
+        if (mActionBarAndEventsFragment != null) {
+
+            mActionBarAndEventsFragment.setFromAnotherActivity(true);
+        }
+        startActivityForResult(intent, QC_ACTIVITY_RESULT_CODE);
+    }
+
 
     private void clearData() {
 
@@ -1827,10 +1938,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     public int getCroutonRoot() {
-        Fragment currentFragment = getCurrentFragment();
-        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
-            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
-        }
+//        Fragment currentFragment = getCurrentFragment();
+//        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
+//            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
+//        }
 //        Fragment currentFragment = getCurrentFragment();
 //        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
 //            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
@@ -2544,15 +2655,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Log.d(TAG, "ChangeLang: ");
         ChangeLang.changeLanguage(this);
 
+        ignoreFromOnPause = true;
         if (resultCode == RESULT_OK && requestCode == GalleryActivity.EXTRA_GALLERY_CODE) {
-            ignoreFromOnPause = true;
 
             mPdfList = data.getParcelableArrayListExtra(GalleryActivity.EXTRA_RECIPE_PDF_FILES);
 
         }
 
         if (resultCode == RESULT_OK && requestCode == ActivateJobActivity.EXTRA_ACTIVATE_JOB_CODE) {
-            ignoreFromOnPause = true;
+
             Object response = data.getParcelableExtra(ActivateJobActivity.EXTRA_ACTIVATE_JOB_RESPONSE);
 
             if (((StandardResponse) response).getError().getErrorDesc() == null) {
@@ -2583,14 +2694,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onShowCrouton(String errorResponse, boolean isError) {
 
-        if (errorResponse == null || errorResponse.length() == 0) {
-            errorResponse = " ";
-        }
         if (isError) {
+            if (errorResponse == null || errorResponse.length() == 0) {
+                errorResponse = " ";
+            }
             StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, errorResponse);
             ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject);
         } else {
-            mCroutonCreator.showCrouton(DashboardActivity.this, errorResponse, 0, getCroutonRoot(), CroutonCreator.CroutonType.SUCCESS);
+            if (errorResponse == null || errorResponse.length() == 0) {
+                errorResponse = getString(R.string.success);
+            }
+            ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorResponse, CroutonCreator.CroutonType.SUCCESS);
         }
 
 
@@ -3080,7 +3194,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             super.onPreExecute();
             this.progressDialog = new ProgressDialog(DashboardActivity.this);
             this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            this.progressDialog.setCancelable(false);
+            this.progressDialog.setCancelable(true);
             this.progressDialog.setTitle(getResources().getString(R.string.update_version_title));
             this.progressDialog.setMessage(getResources().getString(R.string.update_version_messege));
             this.progressDialog.setIcon(getResources().getDrawable(R.drawable.logo));

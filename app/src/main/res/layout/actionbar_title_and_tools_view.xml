@@ -46,6 +46,19 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/toolbar_status_lock_iv"
+            android:layout_width="39dp"
+            android:layout_height="39dp"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="31dp"
+            android:layout_toEndOf="@+id/linearLayout"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="8dp"
+            android:src="@drawable/ic_lock" />
+
         <com.operatorsapp.view.EmeraldSpinner
             android:id="@+id/ATATV_language_spinner"
             android:layout_width="wrap_content"

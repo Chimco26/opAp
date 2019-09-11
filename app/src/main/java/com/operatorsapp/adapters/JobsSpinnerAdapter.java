@@ -53,9 +53,9 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
         setIcon(mSpinnerItems.get(position).getUniqueID(), (ImageView) row.findViewById(R.id.SJID_image));
         ((ImageView) row.findViewById(R.id.SJID_image)).setBackground(getContext().getResources().getDrawable(R.drawable.circle_white));
 
-        if (mSpinnerItems.get(position).isEnabled()){
+        if (mSpinnerItems.get(position).isEnabled()) {
             name.setTextColor(mContext.getResources().getColor(R.color.white));
-        }else {
+        } else {
             name.setTextColor(mContext.getResources().getColor(R.color.dialog_text_gray));
         }
 
@@ -65,8 +65,11 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
     private void setIcon(int id, ImageView imageView) {
 
         switch (id) {
-            case 4:
+            case 5:
                 imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.end_setup));
+                break;
+            case 4:
+                imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.order_test));
                 break;
             case 3:
                 imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production_dark_blue));
