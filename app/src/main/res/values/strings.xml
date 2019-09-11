@@ -446,5 +446,6 @@
     <string name="enter_pass_unlock_statusbar">Enter Your User Password To Unlock The Status Bar</string>
     <string name="unlock">Unlock</string>
     <string name="password_incorect">This password is incorect. try again</string>
+    <string name="order_test">Order Test</string>
 
 </resources>

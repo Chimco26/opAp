@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_layouts"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.QCActivity"
-    android:id="@+id/parent_layouts">
+    android:orientation="vertical"
+    tools:context=".activities.QCActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/AQC_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/dark_blue_two"
+        app:titleTextColor="@color/white"
+        app:title="csasc"
+        >
+
+    </android.support.v7.widget.Toolbar>
 
     <FrameLayout
         android:id="@+id/AQC_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

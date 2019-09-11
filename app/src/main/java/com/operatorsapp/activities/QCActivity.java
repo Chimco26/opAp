@@ -3,7 +3,9 @@ package com.operatorsapp.activities;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
+import android.view.View;
 
 import com.operatorsapp.R;
 import com.operatorsapp.fragments.QCDetailsFragment;
@@ -11,6 +13,7 @@ import com.operatorsapp.fragments.QCTestOrderFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.CroutonCreator;
+import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.util.List;
 
@@ -20,20 +23,38 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         QCDetailsFragment.QCDetailsFragmentListener {
 
     private CroutonCreator mCroutonCreator;
+    private QCDetailsFragment mQcDetailsFragment;
+    private QCTestOrderFragment mQcTestOrderFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qc);
+        this.configureToolbar();
         mCroutonCreator = new CroutonCreator();
         showQCTestOrderFragment();
+    }
+
+    private void configureToolbar(){
+        // Get the toolbar view inside the activity layout
+        Toolbar toolbar = findViewById(R.id.AQC_toolbar);
+        toolbar.setTitle(R.string.order_test);
+        toolbar.setNavigationIcon(R.drawable.arrow_back);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setResult(RESULT_OK, getIntent());
+                finish();            }
+        });
+        // Sets the Toolbar
     }
 
     private void showQCTestOrderFragment() {
 
         try {
-            QCTestOrderFragment qcTestOrderFragment = QCTestOrderFragment.newInstance();
-            getSupportFragmentManager().beginTransaction().add(R.id.AQC_container, qcTestOrderFragment).addToBackStack(QCTestOrderFragment.TAG).commit();
+            mQcTestOrderFragment = QCTestOrderFragment.newInstance();
+            getSupportFragmentManager().beginTransaction().add(R.id.AQC_container, mQcTestOrderFragment).addToBackStack(QCTestOrderFragment.TAG).commit();
         } catch (Exception e) {
             //todo
         }
@@ -41,8 +62,8 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
     private void showQCDetailsFragment(int testId) {
 
         try {
-            QCDetailsFragment qcDetailsFragment = QCDetailsFragment.newInstance(testId);
-            getSupportFragmentManager().beginTransaction().add(R.id.AQC_container, qcDetailsFragment).addToBackStack(QCDetailsFragment.TAG).commit();
+            mQcDetailsFragment = QCDetailsFragment.newInstance(testId);
+            getSupportFragmentManager().beginTransaction().add(R.id.AQC_container, mQcDetailsFragment).addToBackStack(QCDetailsFragment.TAG).commit();
         } catch (Exception e) {
             //todo
         }
@@ -52,6 +73,16 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
     public void onBackPressed() {
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
+        if (SingleLineKeyboard.isKeyBoardOpen) {
+//            if (mQcTestOrderFragment != null) {
+//                mQcTestOrderFragment.onCloseKeyboard();
+//            }
+            if (mQcDetailsFragment != null) {
+                mQcDetailsFragment.onCloseKeyboard();
+            }
+            SingleLineKeyboard.isKeyBoardOpen = false;
+            return;
+        }
         if (count <= 1) {
             setResult(RESULT_OK, getIntent());
             finish();

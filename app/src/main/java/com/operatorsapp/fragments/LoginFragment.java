@@ -193,7 +193,7 @@ public class LoginFragment extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (mLoginButton != null) {
+            if (isAdded() && mLoginButton != null) {
                 mLoginButton.setEnabled(isAllFieldsAreValid());
                 if (isAllFieldsAreValid()) {
                     mLoginButton.setBackground(getResources().getDrawable(R.drawable.login_button_selector));

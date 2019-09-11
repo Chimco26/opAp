@@ -83,7 +83,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2.5" />
+                android:layout_weight="3.5" />
 
             <TextView
                 android:id="@+id/FQCD_save_tv"
@@ -100,18 +100,6 @@
                 android:textStyle="bold"
                 app:autoSizeMaxTextSize="25sp"
                 app:autoSizeTextType="uniform" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5" />
-
-            <com.operatorsapp.view.SquareImageView
-                android:id="@+id/FQCD_close_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:src="@drawable/close_btn" />
 
 
         </LinearLayout>

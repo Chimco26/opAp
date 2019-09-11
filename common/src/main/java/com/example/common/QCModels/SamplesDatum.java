@@ -15,6 +15,14 @@ public class SamplesDatum {
     @Expose
     private Integer upsertType;
 
+    public SamplesDatum() {
+    }
+
+    public SamplesDatum(int upsertType, int id) {
+        this.upsertType = upsertType;
+        this.iD = id;
+    }
+
     public Integer getID() {
         return iD;
     }
