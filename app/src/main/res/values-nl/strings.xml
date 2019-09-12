@@ -150,7 +150,7 @@
         <item>Voeg uitval toe</item>
         <item>Veranderen stuks per rotatie</item>
         <item>Productie Rapport</item>
-        <item>Order Test</item>
+        <!--<item>Order Test</item>-->
     </array>
 
     <string name="approve_first_item">Einde Ombouw</string>
