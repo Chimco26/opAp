@@ -57,9 +57,9 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
             imgId = ReasonImageLenox.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
         } else {
             imgId = mStopItemsList.get(position).getGroupIcon(mContext);
-            if (imgId == 0){
-                imgId = ReasonImage.getImageForNewStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
-            }
+//            if (imgId == 0){
+//                imgId = ReasonImage.getImageForNewStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
+//            }
         }
         int color = (mStopItemsList.get(position).getGroupColor());
         if (color == 0){
@@ -68,7 +68,13 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
         holder.mTitleLil.setBackgroundColor(color);
 //        holder.mTitleLil.setBackgroundColor(ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId()));
 //        holder.mTitleLil.setBackgroundColor(ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getEventGroupColorID()));
-        holder.mReasonImage.setBackground(mContext.getResources().getDrawable(imgId));
+
+        if (imgId == 0){
+            holder.mReasonImage.setVisibility(View.INVISIBLE);
+        }else {
+            holder.mReasonImage.setVisibility(View.VISIBLE);
+            holder.mReasonImage.setBackground(mContext.getResources().getDrawable(imgId));
+        }
         holder.mHorizontalRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL,false));
         holder.mHorizontalRv.setAdapter(new VerticalAdapter(position, mStopItemsList.get(position).getSubReasons(), imgId));
 //        int color = new Random().nextInt(4);
@@ -128,10 +134,12 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
 
             int icon = mVerticalList.get(position).getEventIcon(mContext);
             if (icon == 0){
-                icon = mImgId;
+//                icon = mImgId;
+                holder.mVerticalImage.setVisibility(View.INVISIBLE);
+            }else {
+                holder.mVerticalImage.setVisibility(View.VISIBLE);
+                holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(icon));
             }
-
-            holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(icon));
 //            holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(mVerticalList.get(position).getEventIcon(mContext)));
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
