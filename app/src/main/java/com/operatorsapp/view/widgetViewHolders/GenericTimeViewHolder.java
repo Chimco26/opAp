@@ -1,6 +1,7 @@
 package com.operatorsapp.view.widgetViewHolders;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -61,15 +62,15 @@ public class GenericTimeViewHolder extends RecyclerView.ViewHolder {
                 m1EstimatedDate.setVisibility(View.VISIBLE);
                 m1EstimatedDate.setText(String.format("%s: %s", m1TimeTv.getContext().getString(R.string.estimated_date),
                         TimeUtils.convertMillisecondDateTo(new Date().getTime() + time * 60 * 1000)));
-                m1TimeTv.setText(String.format(Locale.getDefault(), "%s %s", ((int) (time / 60)),
-                        m1TimeTv.getContext().getString(R.string.hr2)));
+                m1TimeTv.setText(Html.fromHtml(String.format(Locale.getDefault(), "<b>%s %s</b>", ((int) (time / 60)),
+                        m1TimeTv.getContext().getString(R.string.hr2))));
 //                m1TimeTv.setTextSize(2, 18);
             } else {
                 m1EstimatedDate.setVisibility(View.GONE);
-                m1TimeTv.setText(String.format(Locale.getDefault(), "%s %s %s %s", ((int) (time / 60)),
+                m1TimeTv.setText(Html.fromHtml(String.format(Locale.getDefault(), "<b>%s %s %s %s</b>", ((int) (time / 60)),
                         m1TimeTv.getContext().getString(R.string.hr2),
                         StringUtil.add0ToNumber((int) (time % 60)),
-                        m1TimeTv.getContext().getString(R.string.min)));
+                        m1TimeTv.getContext().getString(R.string.min))));
 //                m1TimeTv.setTextSize(2, 45);
             }
 //            mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));

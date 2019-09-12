@@ -65,7 +65,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="gone"
+            android:visibility="visible"
             android:weightSum="10">
 
             <LinearLayout
@@ -81,20 +81,52 @@
                     style="@style/FontStyle_T11"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="7"
+                    android:layout_weight="10"
                     android:gravity="center"
                     android:maxLines="1"
                     android:text="33,33850"
                     android:textColor="@color/C16"
-                    android:textSize="45sp"
-                    app:autoSizeMaxTextSize="45sp"
+                    android:textSize="40sp"
+                    app:autoSizeMaxTextSize="40sp"
                     app:autoSizeTextType="uniform" />
                 <!--autofit:minTextSize="25sp"/>-->
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/NWC_edit_ly"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:weightSum="10"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.5" />
+                    android:layout_weight="2.5" />
+
+                <TextView
+                    android:id="@+id/NWC_edit_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:background="@color/blue1"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:autoSizeMaxTextSize="20sp"
+                    app:autoSizeTextType="uniform" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
 
                 <ImageView
                     android:id="@+id/numeric_widget_edit_ic"
@@ -103,25 +135,14 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:src="@drawable/edit"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5" />
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/NWC_edit_btn"
-                android:layout_width="166dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="20dp"
-                android:layout_weight="3"
-                android:background="@color/blue1"
-                android:gravity="center"
-                android:maxLines="1"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                app:autoSizeMaxTextSize="15sp"
-                app:autoSizeTextType="uniform" />
 
             <View
                 android:layout_width="match_parent"
@@ -334,7 +355,7 @@
                     <Spinner
                         android:id="@+id/NWC_reason_spinner"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent" />
 
                 </RelativeLayout>
 
@@ -349,7 +370,7 @@
                     <Spinner
                         android:id="@+id/NWC_reason2_spinner"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent" />
 
                 </RelativeLayout>
 

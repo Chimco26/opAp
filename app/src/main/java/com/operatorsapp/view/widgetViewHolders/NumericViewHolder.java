@@ -43,6 +43,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
     private final EditText mEditCycleEt;
     private final View mEditCycleCancelBtn;
     private final View mEditCycleReportBtn;
+    private final View mEditLy;
     private boolean mShowAddRejectsBtn = true;
     private boolean mShowChangeUnitInCycle = true;
     private View mEditIc;
@@ -88,6 +89,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mSubtitle = itemView.findViewById(R.id.numeric_widget_subtitle);
         mValue = itemView.findViewById(R.id.numeric_widget_value);
         mEditBtn = itemView.findViewById(R.id.NWC_edit_btn);
+        mEditLy = itemView.findViewById(R.id.NWC_edit_ly);
         mEditIc = itemView.findViewById(R.id.numeric_widget_edit_ic);
         mDisplayLy = itemView.findViewById(R.id.NWC_display_ly);
 
@@ -386,30 +388,25 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
         if (widget.getTargetScreen() != null && widget.getTargetScreen().length() > 0) {
 
-            mEditIc.setVisibility(View.VISIBLE);
-            mEditBtn.setVisibility(View.VISIBLE);
+            mEditLy.setVisibility(View.VISIBLE);
 
             switch (widget.getTargetScreen()) {
                 case REPORT_REJECT_TAG:
                     if (mShowAddRejectsBtn) {
                         addEditClickListener(widget);
-                        mEditBtn.setVisibility(View.VISIBLE);
-                        mEditIc.setVisibility(View.VISIBLE);
+                        mEditLy.setVisibility(View.VISIBLE);
                         mEditBtn.setText(mEditBtn.getContext().getResources().getString(R.string.add_rejects));
                     }else {
-                        mEditBtn.setVisibility(View.INVISIBLE);
-                        mEditIc.setVisibility(View.GONE);
+                        mEditLy.setVisibility(View.GONE);
                     }
                     break;
                 case REPORT_UNIT_CYCLE_TAG:
                     if (mShowChangeUnitInCycle) {
-                        mEditBtn.setVisibility(View.VISIBLE);
-                        mEditIc.setVisibility(View.VISIBLE);
+                        mEditLy.setVisibility(View.VISIBLE);
                         mEditBtn.setText(mEditBtn.getContext().getResources().getString(R.string.report_cycle_units));
                         addEditClickListener(widget);
                     }else {
-                        mEditBtn.setVisibility(View.INVISIBLE);
-                        mEditIc.setVisibility(View.GONE);
+                        mEditLy.setVisibility(View.GONE);
                     }break;
             }
 
@@ -418,8 +415,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
         } else {
 
-            mEditIc.setVisibility(View.GONE);
-            mEditBtn.setVisibility(View.GONE);
+            mEditLy.setVisibility(View.GONE);
         }
     }
 
