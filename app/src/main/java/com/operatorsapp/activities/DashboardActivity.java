@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -218,7 +219,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private static final String INTERVAL_KEY = "OpAppPollingInterval";
     private static final String TIME_OUT_KEY = "OpAppRequestTimeout";
     private static final float MINIMUM_VERSION_FOR_INTERVAL_AND_TIME_OUT_FROM_API = 1.9f;
-    private static final int CHECK_APP_VERSION_INTERVAL = 1000 * 60 * 60 * 12; //check every 12 hours
+    private static final int CHECK_APP_VERSION_INTERVAL = 1000 * 60 * 60 * 3; //check every 3 hours
     private static final int REQUEST_WRITE_PERMISSION = 786;
     private static final int QC_ACTIVITY_RESULT_CODE = 2506;
     private boolean ignoreFromOnPause = false;
@@ -286,6 +287,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private int mShowDialogJobId;
     Handler collapseNotificationHandler;
     private boolean mIsCollapse = true;
+    private boolean mIsUpgrading = false;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -414,7 +416,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
         OppAppLogger.getInstance().d(TAG, "onCreate(), end ");
 
-//        setupVersionCheck();
+        setupVersionCheck();
 
         setReportBtnListener();
 
@@ -855,15 +857,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             super.onResume();
 
         }
-//
-//        mTracker.setScreenName(this.getLocalClassName());
-//        PersistenceManager pm = PersistenceManager.getInstance();
-//        mTracker.setScreenName(LOG_TAG);
-//        mTracker.setClientId("machine id: " + pm.getMachineId());
-//        mTracker.setAppVersion(pm.getVersion() + "");
-//        mTracker.setHostname(pm.getSiteName());
-//        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-
     }
 
     private void registerReceiver() {
@@ -887,10 +880,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
 
         mIsCollapse = false;
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        if (!mIsUpgrading) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
     }
 
 
@@ -3181,7 +3176,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         private ProgressDialog progressDialog;
         private String fileName;
         private String folder;
-        private boolean isDownloaded;
+        private boolean isCancelled = false;
         private File directory;
 
         /**
@@ -3198,6 +3193,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             this.progressDialog.setTitle(getResources().getString(R.string.update_version_title));
             this.progressDialog.setMessage(getResources().getString(R.string.update_version_messege));
             this.progressDialog.setIcon(getResources().getDrawable(R.drawable.logo));
+            this.progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    isCancelled = true;
+                }
+            });
             this.progressDialog.show();
         }
 
@@ -3281,25 +3282,29 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         @Override
         protected void onPostExecute(String message) {
+            if (isCancelled){
+                return;
+            }
             Log.d(TAG, "DownloadFile- onPostExecute - " + message);
             // dismiss the dialog after the file was downloaded
-            this.progressDialog.dismiss();
+//            this.progressDialog.dismiss();
 
             // Display File path after downloading
             Toast.makeText(DashboardActivity.this, message, Toast.LENGTH_LONG).show();
             try {
                 Uri apkUri = FileProvider.getUriForFile(DashboardActivity.this, BuildConfig.APPLICATION_ID + ".provider", outputFile);
-
+                mIsUpgrading = true;
                 Intent install = new Intent(Intent.ACTION_VIEW);
                 install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 install.setDataAndType(apkUri, "application/vnd.android.package-archive");
                 install.normalizeMimeType("application/vnd.android.package-archive");
                 startActivity(install);
-                finish();
+//                finish();
             } catch (NullPointerException e) {
 
             }
+            this.progressDialog.dismiss();
         }
     }
 
