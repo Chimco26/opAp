@@ -394,7 +394,7 @@
     <string name="go_to_setup">Go to Setup</string>
     <string name="setup_mode">Setup mode</string>
     <string name="rejects_quantity">Rejects quantity</string>
-    <string name="there_are_no_stop_event">There are no stop evens to report</string>
+    <string name="there_are_no_stop_event">There are no stop events to report</string>
     <string name="theoretical_units">Theoretical units</string>
     <string name="average">Average:</string>
     <string name="add_rejects">Add Rejects</string>

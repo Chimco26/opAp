@@ -65,30 +65,33 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:weightSum="10">
 
             <TextView
                 android:id="@+id/HGT_time_tv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="6"
                 android:gravity="center"
                 android:textColor="@color/blue1"
-                android:textSize="45sp"
+                android:textSize="35sp"
                 android:maxLines="1"
-                app:autoSizeMaxTextSize="45sp"
+                android:textStyle="bold"
+                app:autoSizeMaxTextSize="40sp"
                 app:autoSizeTextType="uniform"/>
 
             <TextView
                 android:id="@+id/HGT_estimated_tv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_height="0dp"
+                android:layout_weight="4"
                 android:gravity="center"
                 android:textColor="@color/blue1"
                 android:textSize="18sp"
                 android:visibility="gone"
                 android:maxLines="1"
-                app:autoSizeMaxTextSize="18sp"
+                app:autoSizeMaxTextSize="20sp"
                 app:autoSizeTextType="uniform"/>
 
         </LinearLayout>
@@ -99,7 +102,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="15dp"
+            android:padding="5dp"
             android:visibility="visible">
 
             <com.operatorsapp.view.widgetViewHolders.CountDownView
