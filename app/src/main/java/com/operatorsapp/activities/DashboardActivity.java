@@ -365,7 +365,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     }
                     // Currently, the delay is 10 ms. You can change this
                     // value to suit your needs.
-                    if (mIsCollapse) {
+                    if (mIsCollapse && PersistenceManager.getInstance().isStatusBarLocked()) {
                         collapseNotificationHandler.postDelayed(this, 10L);
                     }
                 }
