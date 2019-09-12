@@ -76,9 +76,10 @@
                 android:gravity="center"
                 android:textColor="@color/blue1"
                 android:textSize="35sp"
+                android:text="33,33850"
                 android:maxLines="1"
                 android:textStyle="bold"
-                app:autoSizeMaxTextSize="40sp"
+                app:autoSizeMaxTextSize="35sp"
                 app:autoSizeTextType="uniform"/>
 
             <TextView
