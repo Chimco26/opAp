@@ -884,7 +884,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
 
         mIsCollapse = false;
-        if (!mIsUpgrading) {
+        if (!mIsUpgrading && PersistenceManager.getInstance().isStatusBarLocked()) {
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -3135,7 +3135,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
         };
 
-        mVersionCheckHandler.post(mCheckAppVersionRunnable);
+        mVersionCheckHandler.postDelayed(mCheckAppVersionRunnable, CHECK_APP_VERSION_INTERVAL);
     }
 
     private void getFile(String url) {
