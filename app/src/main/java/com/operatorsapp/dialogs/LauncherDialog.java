@@ -3,13 +3,9 @@ package com.operatorsapp.dialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,19 +14,14 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.operatorsapp.R;
-import com.operatorsapp.adapters.NotificationHistoryAdapter;
 
 import java.util.List;
 
 public class LauncherDialog extends Dialog {
 
     private final Context mContext;
-    private final String calculator = "";
-    private final String anyDesk = "";
     private ImageView mCalc;
     private ImageView mAnyDesk;
-    private ApplicationInfo anyDeskApp;
-    private ApplicationInfo calcApp;
     private ResolveInfo anyDeskApp_ri;
     private ResolveInfo calcApp_ri;
 
@@ -61,7 +52,6 @@ public class LauncherDialog extends Dialog {
 
 
         PackageManager pm = mContext.getPackageManager();
-        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -81,27 +71,8 @@ public class LauncherDialog extends Dialog {
                 calcApp_ri = ri;
                 mCalc.setImageDrawable(ri.activityInfo.loadIcon(pm));
             }
-
-
         }
 
-        
-//        for (ApplicationInfo app : packages) {
-//
-//            if (app.packageName.contains("anydesk")){
-//                anyDeskApp = app;
-//
-//                Intent i = new Intent(Intent.ACTION_MAIN, null);
-//                i.addCategory(Intent.CATEGORY_LAUNCHER);
-//
-//
-//                Drawable drawable = anyDeskApp.icon;
-//                mAnyDesk.setImageDrawable(anyDeskApp.icon);
-//            }else if (app.packageName.contains("calc")) {
-//                calcApp = app;
-//                mCalc.setImageDrawable(calcApp.icon);
-//            }
-//        }
 
         mCalc.setOnClickListener(new View.OnClickListener() {
             @Override

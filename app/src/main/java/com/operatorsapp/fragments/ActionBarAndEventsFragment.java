@@ -56,6 +56,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.operatorinfra.Operator;
 import com.example.common.Event;
@@ -1225,7 +1226,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             tutorialIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    openOtherApps();
+                    if (PersistenceManager.getInstance().isStatusBarLocked()){
+                        Toast.makeText(getActivity(), "Please unlock app...", Toast.LENGTH_SHORT).show();
+                    }else {
+                        openOtherApps();
+                    }
 //                    startToolbarTutorial();
                 }
             });
