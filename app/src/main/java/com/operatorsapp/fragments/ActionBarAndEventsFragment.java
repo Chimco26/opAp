@@ -12,7 +12,6 @@ import android.database.Cursor;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -82,7 +81,6 @@ import com.operators.reportfieldsformachineinfra.Technician;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
-import com.operatorsapp.activities.MainActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.EventsAdapter;
@@ -140,8 +138,6 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -1319,18 +1315,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 }
                                 break;
                             }
-//                            case 4: {
-//                                openSetupEndFragment();
-//                                break;
-//                            }
                             case 4: {
-                                mListener.onOpenQCActivity();
-                                break;
-                            }
-                            case 5: {
                                 openSetupEndFragment();
                                 break;
                             }
+//                            case 4: {
+//                                mListener.onOpenQCActivity();
+//                                break;
+//                            }
+//                            case 5: {
+//                                openSetupEndFragment();
+//                                break;
+//                            }
                         }
                     }
 

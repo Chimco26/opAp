@@ -151,7 +151,7 @@
         <item>Aniadir Rechazados</item>
         <item>Cambiar unidades del ciclo</item>
         <item>Informar Inventario</item>
-        <item>Order Test</item>
+        <!--<item>Order Test</item>-->
     </array>
 
     <string name="approve_first_item">Final de Preparacion</string>

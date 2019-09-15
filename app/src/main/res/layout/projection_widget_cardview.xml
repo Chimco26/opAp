@@ -59,7 +59,7 @@
                 android:maxLines="1"
                 android:text="1.7k"
                 android:textColor="@color/blue1"
-                android:textSize="40sp" />
+                android:textSize="33sp" />
 
             <!--  <TextView
                   style="@style/FontStyle_T11"

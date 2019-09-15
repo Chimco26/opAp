@@ -83,7 +83,6 @@ public class StopReasons implements Parcelable {
 
     public int getGroupColor(){
         try {
-
             return Color.parseColor(getEventGroupColorID());
         }catch (IllegalArgumentException e){
             return Color.parseColor("#bababa");

@@ -152,7 +152,7 @@
         <item>Ausschussteile hinzufügen</item>
         <item>Kavität ändern</item>
         <item>Produktions-Report</item>
-        <item>Order Test</item>
+        <!--<item>Order Test</item>-->
     </array>
 
     <string name="approve_first_item">Setup Ende</string>
