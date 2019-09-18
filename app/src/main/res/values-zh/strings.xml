@@ -391,6 +391,20 @@
     <string name="cancel_job">取消工作</string>
     <string name="graph">圖形</string>
     <string name="success">成功</string>
-
+    <string name="save_changes">保存更改</string>
+    <string name="updating">更新中</string>
+    <string name="test_results">检测结果</string>
+    <string name="samples">样品</string>
+    <string name="parameter">参数</string>
+    <string name="max">最大</string>
+    <string name="quality_test">品质测试</string>
+    <string name="passed">通过</string>
+    <string name="failed">失败</string>
+    <string name="min_minimum">最小</string>
+    <string name="enter_pass_unlock_statusbar">请输入您的用户密码以解锁状态栏</string>
+    <string name="unlock">解锁</string>
+    <string name="password_incorrect">此密码不正确。请重试</string>
+    <string name="order_test">订单测试</string>
+    <string name="installed_apps">应用快捷方式</string>
 
 </resources>
