@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -25,10 +26,6 @@ import java.util.List;
 public class LauncherDialog extends Dialog {
 
     private final Context mContext;
-    private ImageView mCalc;
-    private ImageView mAnyDesk;
-    private ResolveInfo anyDeskApp_ri;
-    private ResolveInfo calcApp_ri;
     private RecyclerView mRecycler;
 
     public LauncherDialog(Context context) {
@@ -52,14 +49,7 @@ public class LauncherDialog extends Dialog {
         getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-
-        PackageManager pm = mContext.getPackageManager();
-
-        Intent i = new Intent(Intent.ACTION_MAIN, null);
-        i.addCategory(Intent.CATEGORY_LAUNCHER);
-
         initRecycler();
-
     }
 
     private void initRecycler() {
@@ -81,17 +71,15 @@ public class LauncherDialog extends Dialog {
                     ri.activityInfo.packageName.contains("zoom") ||
                     ri.activityInfo.packageName.contains("acrobat") ||
                     ri.activityInfo.packageName.contains("vending") ||
+                    ri.activityInfo.packageName.contains("file") ||
                     ri.activityInfo.packageName.contains("chrome"))
             {
                 selectedApps.add(ri);
             }
-
-
         }
 
         mRecycler = findViewById(R.id.launcher_dialog_rv);
-        mRecycler.setLayoutManager(new GridLayoutManager(mContext, selectedApps.size()));
+        mRecycler.setLayoutManager(new GridLayoutManager(mContext, 3));
         mRecycler.setAdapter(new LauncherAdapter(mContext, selectedApps));
-
     }
 }
