@@ -33,7 +33,7 @@ public class LauncherAdapter extends RecyclerView.Adapter<LauncherAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
-//        viewHolder.name.setText(mSelectedApps.get(position).activityInfo.name);
+        viewHolder.name.setText(getAppName(mSelectedApps.get(position).activityInfo.packageName));
         viewHolder.app.setImageDrawable(mSelectedApps.get(position).activityInfo.loadIcon( mContext.getPackageManager()));
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,6 +44,30 @@ public class LauncherAdapter extends RecyclerView.Adapter<LauncherAdapter.ViewHo
         });
     }
 
+    private String getAppName(String name) {
+
+        if (name.contains("anydesk")){
+            name = "AnyDesk";
+        }else if (name.contains("calculator")){
+            name = "Calculator";
+        }else if (name.contains("teamviewer")){
+            name = "TeamViewer";
+        }else if (name.contains("zoom")){
+            name = "Zoom";
+        }else if (name.contains("acrobat")){
+            name = "Acrtobat";
+        }else if (name.contains("vending")){
+            name = "Play Store";
+        }else if (name.contains("file")){
+            name = "File Manager";
+        }else if (name.contains("chrome")){
+            name = "Chrome";
+        }else if (name.contains("pdf")){
+            name = "PDF";
+        }
+        return name;
+    }
+
     @Override
     public int getItemCount() {
         return mSelectedApps.size();
@@ -52,13 +76,12 @@ public class LauncherAdapter extends RecyclerView.Adapter<LauncherAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView app;
-//        private TextView name;
+        private TextView name;
 
         public ViewHolder(View itemView) {
             super(itemView);
             app = itemView.findViewById(R.id.launcher_adapter_item_iv);
-//            name = itemView.findViewById(R.id.launcher_adapter_item_name_tv);
-
+            name = itemView.findViewById(R.id.launcher_adapter_item_name_tv);
         }
     }
 }

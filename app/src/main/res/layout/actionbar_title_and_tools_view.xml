@@ -83,7 +83,7 @@
             android:paddingTop="8dp"
             android:paddingEnd="8dp"
             android:paddingBottom="8dp"
-            android:src="@drawable/info" />
+            android:src="@drawable/apps_white" />
 
         <ImageView
             android:id="@+id/settings_button"
