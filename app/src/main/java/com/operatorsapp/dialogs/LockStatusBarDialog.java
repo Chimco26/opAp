@@ -84,7 +84,7 @@ public class LockStatusBarDialog extends Dialog {
             mListener.unlockSuccess();
             this.dismiss();
         }else {
-            Toast.makeText(mContext, R.string.password_incorect, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, R.string.password_incorrect, Toast.LENGTH_SHORT).show();
         }
     }
 

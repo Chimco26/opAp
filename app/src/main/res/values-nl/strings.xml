@@ -404,5 +404,20 @@
     <string name="cancel_job">Opdracht annuleren</string>
     <string name="graph">Grafiek</string>
     <string name="success">Succes</string>
+    <string name="save_changes">Wijzigingen opslaan</string>
+    <string name="updating">Bezig met updaten</string>
+    <string name="test_results">Testresultaten</string>
+    <string name="samples">Monsters</string>
+    <string name="parameter">Parameter</string>
+    <string name="max">maximaal</string>
+    <string name="quality_test">Kwaliteitstest</string>
+    <string name="passed">Geslaagd</string>
+    <string name="failed">Gezakt</string>
+    <string name="min_minimum">minimaal</string>
+    <string name="enter_pass_unlock_statusbar">Voer uw gebruikerswachtwoord in om de statusbalk te ontgrendelen</string>
+    <string name="unlock">Ontgrendelen</string>
+    <string name="password_incorrect">Dit wachtwoord is onjuist. Probeer het opnieuw</string>
+    <string name="order_test">Besteltest</string>
+    <string name="installed_apps">Applicaties snelkoppelingen</string>
 
 </resources>

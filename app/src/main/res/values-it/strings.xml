@@ -341,4 +341,19 @@
     <string name="cancel_job">Annulla il lavoro</string>
     <string name="graph">Grafico</string>
     <string name="success">Riuscito</string>
+    <string name="save_changes">Salva le modifiche</string>
+    <string name="updating">In aggiornamento</string>
+    <string name="test_results">Risultati del test</string>
+    <string name="samples">Campioni</string>
+    <string name="parameter">Parametro</string>
+    <string name="max">max</string>
+    <string name="quality_test">Test di qualità</string>
+    <string name="passed">Passato</string>
+    <string name="failed">Fallito</string>
+    <string name="min_minimum">min</string>
+    <string name="enter_pass_unlock_statusbar">Inserisci la tua password utente per sbloccare la barra di stato</string>
+    <string name="unlock">Sblocca</string>
+    <string name="password_incorrect">Questa password non è corretta, riprova</string>
+    <string name="order_test">Test dell\'ordine</string>
+    <string name="installed_apps">Collegamenti alle applicazioni</string>
 </resources>

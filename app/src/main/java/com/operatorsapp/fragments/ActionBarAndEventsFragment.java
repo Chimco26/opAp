@@ -55,6 +55,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.operatorinfra.Operator;
 import com.example.common.Event;
@@ -1195,7 +1196,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
             });
 
-            statusLock.setImageDrawable(getResources().getDrawable(PersistenceManager.getInstance().isStatusBarLocked() ? R.drawable.ic_lock : R.drawable.ic_lock_open));
+            statusLock.setImageDrawable(getResources().getDrawable(PersistenceManager.getInstance().isStatusBarLocked() ? R.drawable.lock : R.drawable.lock_open));
             statusLock.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -1204,13 +1205,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             @Override
                             public void unlockSuccess() {
                                 PersistenceManager.getInstance().setStatusBarLocked(false);
-                                statusLock.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_open));
+                                statusLock.setImageDrawable(getResources().getDrawable(R.drawable.lock_open));
                             }
                         });
                         dialog.show();
                     }else {
                         PersistenceManager.getInstance().setStatusBarLocked(true);
-                        statusLock.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock));
+                        statusLock.setImageDrawable(getResources().getDrawable(R.drawable.lock));
                     }
                 }
             });
@@ -1221,7 +1222,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             tutorialIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    openOtherApps();
+                    if (PersistenceManager.getInstance().isStatusBarLocked()){
+                        Toast.makeText(getActivity(), "Please unlock app...", Toast.LENGTH_SHORT).show();
+                    }else {
+                        openOtherApps();
+                    }
 //                    startToolbarTutorial();
                 }
             });

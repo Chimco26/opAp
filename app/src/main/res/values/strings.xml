@@ -445,7 +445,8 @@
     <string name="min_minimum">min</string>
     <string name="enter_pass_unlock_statusbar">Enter Your User Password To Unlock The Status Bar</string>
     <string name="unlock">Unlock</string>
-    <string name="password_incorect">This password is incorect. try again</string>
+    <string name="password_incorrect">This password is incorrect. try again</string>
     <string name="order_test">Order Test</string>
+    <string name="installed_apps">Applications Shortcuts</string>
 
 </resources>

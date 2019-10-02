@@ -395,6 +395,20 @@
     <string name="cancel_job">إلغاء العمل</string>
     <string name="graph">المخطط</string>
     <string name="success">النجاح</string>
-
+    <string name="save_changes">حفظ التغييرات</string>
+    <string name="updating">التحديث</string>
+    <string name="test_results">نتائج الاختبار</string>
+    <string name="samples">العينات</string>
+    <string name="parameter">المعيار</string>
+    <string name="max">الأقصى</string>
+    <string name="quality_test">اختبار الجودة</string>
+    <string name="passed">تجاوز</string>
+    <string name="failed">فشل</string>
+    <string name="min_minimum">دقيقة</string>
+    <string name="enter_pass_unlock_statusbar">أدخل كلمة مرور المستخدم لفك القفل عن شريط الحالة</string>
+    <string name="unlock">فك القفل</string>
+    <string name="password_incorrect">كلمة المرور هذه غير صحيحة، يرجى المحاولة من جديد</string>
+    <string name="order_test">طلب الاختبار</string>
+    <string name="installed_apps">اختصارات التطبيقات</string>
 
 </resources>

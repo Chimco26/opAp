@@ -57,7 +57,7 @@
             android:paddingTop="8dp"
             android:paddingEnd="8dp"
             android:paddingBottom="8dp"
-            android:src="@drawable/ic_lock" />
+            android:src="@drawable/lock" />
 
         <com.operatorsapp.view.EmeraldSpinner
             android:id="@+id/ATATV_language_spinner"
@@ -83,7 +83,7 @@
             android:paddingTop="8dp"
             android:paddingEnd="8dp"
             android:paddingBottom="8dp"
-            android:src="@drawable/info" />
+            android:src="@drawable/apps_white" />
 
         <ImageView
             android:id="@+id/settings_button"

@@ -3,13 +3,13 @@ package com.operatorsapp.dialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,21 +18,15 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.operatorsapp.R;
-import com.operatorsapp.adapters.NotificationHistoryAdapter;
+import com.operatorsapp.adapters.LauncherAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LauncherDialog extends Dialog {
 
     private final Context mContext;
-    private final String calculator = "";
-    private final String anyDesk = "";
-    private ImageView mCalc;
-    private ImageView mAnyDesk;
-    private ApplicationInfo anyDeskApp;
-    private ApplicationInfo calcApp;
-    private ResolveInfo anyDeskApp_ri;
-    private ResolveInfo calcApp_ri;
+    private RecyclerView mRecycler;
 
     public LauncherDialog(Context context) {
         super(context);
@@ -52,72 +46,40 @@ public class LauncherDialog extends Dialog {
 
         setContentView(R.layout.launcher_dialog);
 
-        mCalc = findViewById(R.id.launcher_dialog_calculator);
-        mAnyDesk = findViewById(R.id.launcher_dialog_anydesk);
-
-
         getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        initRecycler();
+    }
+
+    private void initRecycler() {
 
         PackageManager pm = mContext.getPackageManager();
-        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
         List<ResolveInfo> allApps = pm.queryIntentActivities(i, 0);
 
+        List<ResolveInfo> selectedApps  = new ArrayList<>();
+
 
         for(ResolveInfo ri:allApps) {
 
-            if (ri.activityInfo.packageName.contains("anydesk")){
-                anyDeskApp_ri = ri;
-
-
-                mAnyDesk.setImageDrawable(ri.activityInfo.loadIcon(pm));
-
-
-            }else if (ri.activityInfo.packageName.contains("calc")) {
-                calcApp_ri = ri;
-                mCalc.setImageDrawable(ri.activityInfo.loadIcon(pm));
+            if (ri.activityInfo.packageName.contains("anydesk") ||
+                    ri.activityInfo.packageName.contains("calc") ||
+                    ri.activityInfo.packageName.contains("teamviewer") ||
+                    ri.activityInfo.packageName.contains("zoom") ||
+                    ri.activityInfo.packageName.contains("acrobat") ||
+                    ri.activityInfo.packageName.contains("vending") ||
+                    ri.activityInfo.packageName.contains("file") ||
+                    ri.activityInfo.packageName.contains("chrome"))
+            {
+                selectedApps.add(ri);
             }
-
-
         }
 
-        
-//        for (ApplicationInfo app : packages) {
-//
-//            if (app.packageName.contains("anydesk")){
-//                anyDeskApp = app;
-//
-//                Intent i = new Intent(Intent.ACTION_MAIN, null);
-//                i.addCategory(Intent.CATEGORY_LAUNCHER);
-//
-//
-//                Drawable drawable = anyDeskApp.icon;
-//                mAnyDesk.setImageDrawable(anyDeskApp.icon);
-//            }else if (app.packageName.contains("calc")) {
-//                calcApp = app;
-//                mCalc.setImageDrawable(calcApp.icon);
-//            }
-//        }
-
-        mCalc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent launchIntent = mContext.getPackageManager().getLaunchIntentForPackage(calcApp_ri.activityInfo.packageName);
-                mContext.startActivity(launchIntent);
-            }
-        });
-
-        mAnyDesk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent launchIntent = mContext.getPackageManager().getLaunchIntentForPackage(anyDeskApp_ri.activityInfo.packageName);
-                mContext.startActivity(launchIntent);
-            }
-        });
-
+        mRecycler = findViewById(R.id.launcher_dialog_rv);
+        mRecycler.setLayoutManager(new GridLayoutManager(mContext, 3));
+        mRecycler.setAdapter(new LauncherAdapter(mContext, selectedApps));
     }
 }

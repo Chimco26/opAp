@@ -398,4 +398,19 @@
     <string name="cancel_job">Job abbrechen</string>
     <string name="graph">Graph</string>
     <string name="success">Erfolg</string>
+    <string name="save_changes">Änderungen speichern</string>
+    <string name="updating">Aktualisierung</string>
+    <string name="test_results">Testergebnisse</string>
+    <string name="samples">Beispiele</string>
+    <string name="parameter">Parameter</string>
+    <string name="max">max</string>
+    <string name="quality_test">Qualitätstest</string>
+    <string name="passed">Bestanden</string>
+    <string name="failed">Fehlgeschlagen</string>
+    <string name="min_minimum">min</string>
+    <string name="enter_pass_unlock_statusbar">Geben Sie Ihr Benutzerpasswort ein, um die Statusleiste zu entsperren</string>
+    <string name="unlock">Freischalten</string>
+    <string name="password_incorrect">Dieses Passwort ist falsch. Versuchen Sie es nochmal</string>
+    <string name="order_test">Test bestellen</string>
+    <string name="installed_apps">Anwendungsverknüpfungen</string>
 </resources>

@@ -15,8 +15,8 @@
                           <map>
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_lock_open" />
-                            <entry key="sourceFile" value="C:\Users\alex\Downloads\OppApp pics\lock_open.svg" />
+                            <entry key="outputName" value="apps" />
+                            <entry key="sourceFile" value="C:\Users\alex\Downloads\OppApp pics\apps.svg" />
                           </map>
                         </option>
                       </PersistentState>
