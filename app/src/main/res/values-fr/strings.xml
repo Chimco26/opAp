@@ -152,7 +152,7 @@
         <item>Mettre les rebuts</item>
         <item>Changement d\'unité de cycle</item>
         <item>Compte rendu de la production</item>
-        <!--<item>Order Test</item>-->
+        <item>Order Test</item>
     </array>
 
     <string name="approve_first_item">Fin de Préparation</string>

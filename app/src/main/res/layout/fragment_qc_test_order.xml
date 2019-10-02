@@ -1,50 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent_layouts"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/parent_layouts">
+    android:gravity="center">
 
-    <TextView
-        android:id="@+id/FQCTO_test_tv"
-        android:layout_width="150dp"
-        android:layout_height="100dp" />
-
-    <EditText
-        android:id="@+id/FQCTO_test_samples_et"
-        android:layout_width="150dp"
-        android:layout_height="100dp"
-        android:layout_centerVertical="true"
-        android:hint="samples"
-        />
-
-    <Button
-        android:id="@+id/FQCTO_test_run_btn"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_centerInParent="true"
-        android:text="run"
-        />
-
-    <Button
-        android:id="@+id/FQCTO_test_refresh_btn"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_centerHorizontal="true"
-        android:text="refresh"/>
-
-    <TextView
-        android:id="@+id/FQCTO_no_data_tv"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/loading_error"
-        android:textSize="35sp"
-        android:visibility="gone"
-        android:textColor="@color/blue1"
-        android:gravity="center"/>
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/FQCTO_test_tv"
+            android:layout_width="150dp"
+            android:layout_height="100dp" />
+
+        <EditText
+            android:id="@+id/FQCTO_test_samples_et"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:layout_centerVertical="true"
+            android:hint="samples" />
+
+        <Button
+            android:id="@+id/FQCTO_test_run_btn"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:text="run" />
+
+        <Button
+            android:id="@+id/FQCTO_test_refresh_btn"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:text="refresh" />
+
+        <TextView
+            android:id="@+id/FQCTO_no_data_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/loading_error"
+            android:textColor="@color/blue1"
+            android:textSize="35sp"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp" />
+
+                <Spinner
+                    android:id="@+id/FQCTO_spin_josh"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp" />
+
+                <Spinner
+                    android:id="@+id/FQCTO_spin_quality"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp" />
+
+                <Spinner
+                    android:id="@+id/FQCTO_spin_product_spin"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp" />
+
+                <Spinner
+                    android:id="@+id/FQCTO_spin_test"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp" />
+
+                <EditText
+                    android:id="@+id/FQCTO_samples_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:background="@drawable/box_strok_grey"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp" />
+
+                <TextView
+                    android:id="@+id/FQCTO_run_btn"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:background="@color/blue1"
+                    android:gravity="center"
+                    android:text="Run"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="35sp"
+                    app:autoSizeTextType="uniform" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
     <ProgressBar
         android:id="@+id/FQCTO_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true" />
 </RelativeLayout>
