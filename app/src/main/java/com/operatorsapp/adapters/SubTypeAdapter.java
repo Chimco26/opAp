@@ -9,18 +9,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.common.QCModels.ResponseDictionnaryItemsBaseModel;
+import com.example.common.QCModels.SubType;
 import com.operatorsapp.R;
 
 import java.util.List;
 
-public class DictionarySpinnerAdapter extends ArrayAdapter<ResponseDictionnaryItemsBaseModel> {
+public class SubTypeAdapter extends ArrayAdapter<SubType> {
     private Activity mContext;
-    private List<ResponseDictionnaryItemsBaseModel> mSpinnerItems;
+    private List<SubType> mSpinnerItems;
     private TextView mRowName;
     private View mView;
 
-    public DictionarySpinnerAdapter(Activity context, int resource, List<ResponseDictionnaryItemsBaseModel> models) {
+    public SubTypeAdapter(Activity context, int resource, List<SubType> models) {
         super(context, resource, models);
         mSpinnerItems = models;
         mContext = context;
