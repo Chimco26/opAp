@@ -2661,6 +2661,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         }
 
+        if (resultCode == RESULT_OK && requestCode == QC_ACTIVITY_RESULT_CODE) {
+
+            ShowCrouton.showSimpleCrouton(this, getString(R.string.send_test_success), CroutonCreator.CroutonType.SUCCESS);
+
+        }
+
         if (resultCode == RESULT_OK && requestCode == ActivateJobActivity.EXTRA_ACTIVATE_JOB_CODE) {
 
             Object response = data.getParcelableExtra(ActivateJobActivity.EXTRA_ACTIVATE_JOB_RESPONSE);

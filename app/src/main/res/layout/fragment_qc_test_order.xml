@@ -26,7 +26,15 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="25dp" />
+                    android:layout_height="10dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:text="@string/josh"
+                    android:textColor="@color/black"
+                    app:autoSizeMaxTextSize="25sp"
+                    app:autoSizeTextType="uniform" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -41,7 +49,15 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="25dp" />
+                    android:layout_height="10dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:text="@string/quality_group"
+                    android:textColor="@color/black"
+                    app:autoSizeMaxTextSize="25sp"
+                    app:autoSizeTextType="uniform" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -56,7 +72,15 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="25dp" />
+                    android:layout_height="10dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:text="@string/product_group"
+                    android:textColor="@color/black"
+                    app:autoSizeMaxTextSize="25sp"
+                    app:autoSizeTextType="uniform" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -71,7 +95,15 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="25dp" />
+                    android:layout_height="10dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:text="@string/product"
+                    android:textColor="@color/black"
+                    app:autoSizeMaxTextSize="25sp"
+                    app:autoSizeTextType="uniform" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -86,7 +118,15 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="25dp" />
+                    android:layout_height="10dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:text="@string/test"
+                    android:textColor="@color/black"
+                    app:autoSizeMaxTextSize="25sp"
+                    app:autoSizeTextType="uniform" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -99,19 +139,35 @@
                         android:layout_height="match_parent" />
                 </RelativeLayout>
 
-                <View
+                <LinearLayout
+                    android:id="@+id/FQCTO_samples_ly"
                     android:layout_width="match_parent"
-                    android:layout_height="25dp" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/FQCTO_samples_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:background="@drawable/box_strok_grey"
-                    android:gravity="center"
-                    app:autoSizeMaxTextSize="35sp"
-                    app:autoSizeTextType="uniform"
-                    android:inputType="number"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:text="@string/samples"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="25sp"
+                        app:autoSizeTextType="uniform" />
+
+                    <EditText
+                        android:id="@+id/FQCTO_samples_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="@drawable/box_strok_grey"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:text="0"
+                        app:autoSizeMaxTextSize="35sp"
+                        app:autoSizeTextType="uniform" />
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"

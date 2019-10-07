@@ -53,6 +53,7 @@ public class QCTestOrderFragment extends Fragment implements
     private Spinner mProductGroupSpinner;
     private Spinner mProductsSpinner;
     private Spinner mTestSpinner;
+    private View mSamplesLy;
 
     public static QCTestOrderFragment newInstance() {
 
@@ -100,38 +101,108 @@ public class QCTestOrderFragment extends Fragment implements
         getTestOrder(mTestOrderRequest);
     }
 
-    private void initSpinner(Spinner spinner, final List<ResponseDictionnaryItemsBaseModel> models, final int type) {
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    private void initVars(View view) {
+        mProgressBar = view.findViewById(R.id.FQCTO_progress);
+        mSamplesEt = view.findViewById(R.id.FQCTO_samples_et);
+        mSamplesLy = view.findViewById(R.id.FQCTO_samples_ly);
+        view.findViewById(R.id.FQCTO_run_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int samples = 0;
+                try {
+                    samples = Integer.parseInt(mSamplesEt.getText().toString() + "");
+                } catch (Exception ignored) {
+                }
+                sendTestOrder(new TestOrderSendRequest(mTestOrderRequest.getJobID(), mTestOrderRequest.getJoshID(),
+                        mTestOrderRequest.getProductID(), mTestOrderRequest.getSubType(), samples));
+            }
+        });
+        mJoshSpinner = view.findViewById(R.id.FQCTO_spin_josh);
+        mQualitySpinner = view.findViewById(R.id.FQCTO_spin_quality);
+        mProductGroupSpinner = view.findViewById(R.id.FQCTO_spin_product_spin);
+        mProductsSpinner = view.findViewById(R.id.FQCTO_spin_products);
+        mTestSpinner = view.findViewById(R.id.FQCTO_spin_test);
+    }
+
+    private void getTestOrder(final TestOrderRequest testOrderRequest) {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mQcRequests.getQCTestOrder(testOrderRequest, new QCRequests.QCTestOrderCallback() {
+            @Override
+            public void onSuccess(TestOrderResponse testOrderResponse) {
+                mProgressBar.setVisibility(View.GONE);
+                if (mTestOrder == null) {
+                    initTestSpinner(testOrderResponse);
+                }
+                mTestOrder = testOrderResponse;
+                if (mTestOrderRequest.getSubType() == -1) {
+                    mTestOrderRequest.setSubType(mTestOrder.getResponseDictionaryDT().getSubTypes().get(0).getId());
+                }
+                mTestOrderRequest.setJoshID(mTestOrder.getJoshID());
+                mTestOrderRequest.setProductGroupID(mTestOrder.getProductGroupID());
+                mTestOrderRequest.setQualityGroupID(mTestOrder.getQualityGroupID());
+                mTestOrderRequest.setProductID(mTestOrder.getProductID());
+                initSpinner(mJoshSpinner, mTestOrder.getResponseDictionaryDT().getJoshIDs(), TYPE_JOSH);
+                initSpinner(mQualitySpinner, mTestOrder.getResponseDictionaryDT().getQualityGroups(), TYPE_QUALITY);
+                initSpinner(mProductGroupSpinner, mTestOrder.getResponseDictionaryDT().getProductGroups(), TYPE_PRODUCT_GROUP);
+                initSpinner(mProductsSpinner, mTestOrder.getResponseDictionaryDT().getProducts(), TYPE_PRODUCTS);
+            }
+
+            @Override
+            public void onFailure(StandardResponse standardResponse) {
+                mProgressBar.setVisibility(View.GONE);
+                if (mTestOrder != null) {
+                    ShowCrouton.showSimpleCrouton((QCActivity) getActivity(), standardResponse);
+                } else {
+                }
+            }
+        });
+    }
+
+    private void initSpinner(final Spinner spinner, final List<ResponseDictionnaryItemsBaseModel> models, final int type) {
 
         if (models != null && getActivity() != null) {
             final DictionarySpinnerAdapter dictionarySpinnerAdapter = new DictionarySpinnerAdapter(getActivity(), R.layout.base_spinner_item, models);
             dictionarySpinnerAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
-            spinner.setAdapter(dictionarySpinnerAdapter);
             spinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+            spinner.setAdapter(dictionarySpinnerAdapter);
 
-            final boolean[] isFirst = {true};
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     dictionarySpinnerAdapter.setTitle(position);
-                    if (isFirst[0]) {
-                        isFirst[0] = false;
-                        return;
-                    }
+
                     switch (type) {
                         case TYPE_JOSH:
-                            mTestOrderRequest.setJoshID(mTestOrder.getResponseDictionaryDT().getJoshIDs().get(position).getId());
+                            if (mTestOrderRequest.getJoshID() != mTestOrder.getResponseDictionaryDT().getJoshIDs().get(position).getId()) {
+                                mTestOrderRequest.setJoshID(mTestOrder.getResponseDictionaryDT().getJoshIDs().get(position).getId());
+                                getTestOrder(mTestOrderRequest);
+                            }
                             break;
                         case TYPE_QUALITY:
-                            mTestOrderRequest.setQualityGroupID(mTestOrder.getResponseDictionaryDT().getQualityGroups().get(position).getId());
+                            if (mTestOrderRequest.getQualityGroupID() != mTestOrder.getResponseDictionaryDT().getQualityGroups().get(position).getId()) {
+                                mTestOrderRequest.setQualityGroupID(mTestOrder.getResponseDictionaryDT().getQualityGroups().get(position).getId());
+                                getTestOrder(mTestOrderRequest);
+                            }
                             break;
                         case TYPE_PRODUCT_GROUP:
-                            mTestOrderRequest.setProductGroupID(mTestOrder.getResponseDictionaryDT().getProductGroups().get(position).getId());
+                            if (mTestOrderRequest.getProductGroupID() != mTestOrder.getResponseDictionaryDT().getQualityGroups().get(position).getId()) {
+                                mTestOrderRequest.setProductGroupID(mTestOrder.getResponseDictionaryDT().getProductGroups().get(position).getId());
+                                getTestOrder(mTestOrderRequest);
+                            }
                             break;
                         case TYPE_PRODUCTS:
-                            mTestOrderRequest.setSubType(mTestOrder.getResponseDictionaryDT().getSubTypes().get(position).getId());
+                            if (mTestOrderRequest.getProductID() != mTestOrder.getResponseDictionaryDT().getProducts().get(position).getId()) {
+                                mTestOrderRequest.setSubType(mTestOrder.getResponseDictionaryDT().getSubTypes().get(position).getId());
+                                getTestOrder(mTestOrderRequest);
+                            }
                             break;
                     }
-                    getTestOrder(mTestOrderRequest);
+
                 }
 
                 @Override
@@ -139,7 +210,13 @@ public class QCTestOrderFragment extends Fragment implements
 
                 }
             });
-            spinner.setSelection(getPositionForSelectedItem(models, type));
+            spinner.post(new Runnable() {
+                @Override
+                public void run() {
+                    spinner.setSelection(getPositionForSelectedItem(models, type), false);
+                }
+            });
+
         }
     }
 
@@ -171,61 +248,6 @@ public class QCTestOrderFragment extends Fragment implements
         return 0;
     }
 
-    private void initVars(View view) {
-        mProgressBar = view.findViewById(R.id.FQCTO_progress);
-        mSamplesEt = view.findViewById(R.id.FQCTO_samples_et);
-        view.findViewById(R.id.FQCTO_run_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int samples = 0;
-                try {
-                    samples = Integer.parseInt(mSamplesEt.getText().toString() + "");
-                } catch (Exception ignored) {
-                }
-                sendTestOrder(new TestOrderSendRequest(mTestOrderRequest.getJobID(), mTestOrder.getJoshID(),
-                        mTestOrder.getProductID(), mTestOrder.getSubType(), samples));
-            }
-        });
-        mJoshSpinner = view.findViewById(R.id.FQCTO_spin_josh);
-        mQualitySpinner = view.findViewById(R.id.FQCTO_spin_quality);
-        mProductGroupSpinner = view.findViewById(R.id.FQCTO_spin_product_spin);
-        mProductsSpinner = view.findViewById(R.id.FQCTO_spin_products);
-        mTestSpinner = view.findViewById(R.id.FQCTO_spin_test);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    private void getTestOrder(final TestOrderRequest testOrderRequest) {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mQcRequests.getQCTestOrder(testOrderRequest, new QCRequests.QCTestOrderCallback() {
-            @Override
-            public void onSuccess(TestOrderResponse testOrderResponse) {
-                mProgressBar.setVisibility(View.GONE);
-                if (mTestOrder == null) {
-                    initTestSpinner(testOrderResponse);
-                }
-                mTestOrder = testOrderResponse;
-                mTestOrderRequest.setJoshID(mTestOrder.getJoshID());
-                initSpinner(mJoshSpinner, mTestOrder.getResponseDictionaryDT().getJoshIDs(), TYPE_JOSH);
-                initSpinner(mQualitySpinner, mTestOrder.getResponseDictionaryDT().getQualityGroups(), TYPE_QUALITY);
-                initSpinner(mProductGroupSpinner, mTestOrder.getResponseDictionaryDT().getProductGroups(), TYPE_PRODUCT_GROUP);
-                initSpinner(mProductsSpinner, mTestOrder.getResponseDictionaryDT().getProducts(), TYPE_PRODUCTS);
-            }
-
-            @Override
-            public void onFailure(StandardResponse standardResponse) {
-                mProgressBar.setVisibility(View.GONE);
-                if (mTestOrder != null) {
-                    ShowCrouton.showSimpleCrouton((QCActivity) getActivity(), standardResponse);
-                } else {
-                }
-            }
-        });
-    }
-
     public void initTestSpinner(final TestOrderResponse testOrderResponse) {
         if (testOrderResponse.getResponseDictionaryDT().getSubTypes() != null && getActivity() != null) {
             final SubTypeAdapter subTypeAdapter = new SubTypeAdapter(getActivity(), R.layout.base_spinner_item, testOrderResponse.getResponseDictionaryDT().getSubTypes());
@@ -240,9 +262,10 @@ public class QCTestOrderFragment extends Fragment implements
                     subTypeAdapter.setTitle(position);
                     mTestOrderRequest.setSubType(testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position).getId());
                     if (testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position).getHasSamples()){
-                        mSamplesEt.setVisibility(View.VISIBLE);
+                        mSamplesLy.setVisibility(View.VISIBLE);
                     }else {
-                        mSamplesEt.setVisibility(View.GONE);
+                        mSamplesLy.setVisibility(View.GONE);
+                        mSamplesEt.setText("0");
                     }
                 }
 

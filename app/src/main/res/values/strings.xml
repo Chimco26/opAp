@@ -448,5 +448,9 @@
     <string name="password_incorrect">This password is incorrect. try again</string>
     <string name="order_test">Order Test</string>
     <string name="installed_apps">Applications Shortcuts</string>
+    <string name="quality_group">Quality Group</string>
+    <string name="product_group">Product Group</string>
+    <string name="test">Test</string>
+    <string name="send_test_success">Send Test Success</string>
 
 </resources>
