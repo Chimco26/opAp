@@ -3,7 +3,7 @@ package com.example.common.QCModels;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ProductGroup {
+public class ResponseDictionnaryItemsBaseModel {
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -27,3 +27,4 @@ public class ProductGroup {
         this.name = name;
     }
 }
+

@@ -1316,17 +1316,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 break;
                             }
                             case 4: {
+                                mListener.onOpenQCActivity();
+                                break;
+                            }
+                            case 5: {
                                 openSetupEndFragment();
                                 break;
                             }
-//                            case 4: {
-//                                mListener.onOpenQCActivity();
-//                                break;
-//                            }
-//                            case 5: {
-//                                openSetupEndFragment();
-//                                break;
-//                            }
                         }
                     }
 
@@ -2315,7 +2311,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(2).getUniqueID());
         disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
                 && WidgetInfo.getWidgetInfo(permissionResponseHashmap, WidgetInfo.PermissionId.REPORT_PRODUCTION.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(3).getUniqueID());
-
+        //todo test order
         if (!mEndSetupDisable) {
             disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
                             && mCurrentMachineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()

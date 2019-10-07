@@ -111,6 +111,9 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
                 @Override
                 public void onPageSelected(int position) {
+                    if (mFragmentList.get(position) instanceof RecipeFragment){
+                        mListener.onRecipeFragmentShown();
+                    }
                 }
 
                 @Override
@@ -277,6 +280,8 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
         void onViewPagerCreated();
 
         void onJobActionItemClick();
+
+        void onRecipeFragmentShown();
     }
 
     @Override

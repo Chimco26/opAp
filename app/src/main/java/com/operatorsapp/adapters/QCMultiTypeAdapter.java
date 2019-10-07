@@ -13,10 +13,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -63,7 +63,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
         switch (viewType) {
 
             case FIELD_TYPE_BOOLEAN_INT:
-                return new QCMultiTypeAdapter.BooleanViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_boolean, parent, false));
+                return new QCMultiTypeAdapter.BooleanViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_boolean_custom_radio, parent, false));
             case FIELD_TYPE_NUM_INT:
                 return new QCMultiTypeAdapter.NumViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_num_parameter, parent, false));
             case FIELD_TYPE_INTERVAL_INT:
@@ -88,11 +88,13 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             case FIELD_TYPE_BOOLEAN_INT:
                 ((BooleanViewHolder) viewHolder).title.setText(item.getLName());
                 if (item.getCurrentValue().toLowerCase().equals("true")){
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setChecked(true);
+                    ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(true);
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(false);
                 }else {
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setChecked(false);
+                    ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(false);
+                                        ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(true);
                 }
-                ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                         list.get(position).setCurrentValue(Boolean.toString(b));
@@ -237,14 +239,16 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
     public class BooleanViewHolder extends RecyclerView.ViewHolder {
 
+        private RadioButton mRadioPassed;
+        private RadioButton mRadioFailed;
         private TextView title;
-        private CheckBox mBooleanCheckBox;
 
         BooleanViewHolder(View itemView) {
             super(itemView);
 
             title = itemView.findViewById(R.id.QCP_parameter_txt);
-            mBooleanCheckBox = itemView.findViewById(R.id.IQCPHB_check_box);
+            mRadioPassed = itemView.findViewById(R.id.QCP_parameter_radio_passed);
+            mRadioFailed = itemView.findViewById(R.id.QCP_parameter_radio_failed);
             title.setVisibility(View.VISIBLE);
 
         }

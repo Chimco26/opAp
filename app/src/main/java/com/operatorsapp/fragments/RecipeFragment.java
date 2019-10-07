@@ -701,9 +701,10 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         if (!isUpdating && mIsEditMode) {
             return;
         }
+        mProgressBar.setVisibility(View.GONE);
         if (isUpdating) {
             ShowCrouton.showSimpleCrouton((DashboardActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
-            mProgressBar.setVisibility(View.GONE);
+//            mProgressBar.setVisibility(View.GONE);
             mChannel0BaseSplits.clear();
             mLayoutChannel0ItemSaveBtn.setVisibility(View.GONE);
             closeKeyBoard();
@@ -726,7 +727,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         mListener.onImageProductClick(arrayList, name);
     }
 
-        public interface OnRecipeFragmentListener {
+    public void showProgress(boolean showProgress) {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    public interface OnRecipeFragmentListener {
 
         void onImageProductClick(List<String> fileUrl, String name);
 

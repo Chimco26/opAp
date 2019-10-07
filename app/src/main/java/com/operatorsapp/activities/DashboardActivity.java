@@ -297,7 +297,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (!hasFocus && PersistenceManager.getInstance().isStatusBarLocked()) {
             mIsCollapse = true;
             collapseNow(true);
-        }else if (collapseNotificationHandler != null){
+        } else if (collapseNotificationHandler != null) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -636,7 +636,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     }
 
-    private void openWidgetFragment() {
+    private void initWidgetFragment() {
 
         mWidgetFragment = WidgetFragment.newInstance(mReportFieldsForMachine);
 
@@ -646,7 +646,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         if (BuildConfig.FLAVOR.equals(getString(R.string.emerald_flavor_name))) {
 
-            openWidgetFragment();
+            initWidgetFragment();
 
             initViewPagerFragment();
 
@@ -1076,7 +1076,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             PersistenceManager.getInstance().setOperatorId("");
                         }
 
-                        getAllRecipes(machineStatus.getAllMachinesData().get(0).getCurrentJobID(), true);
+//                        getAllRecipes(machineStatus.getAllMachinesData().get(0).getCurrentJobID(), true);
 
                         pollingBackup(true);
                     }
@@ -2203,6 +2203,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         startPendingJobsActivity();
     }
 
+
     public void startPendingJobsActivity() {
         Intent intent = new Intent(DashboardActivity.this, ActivateJobActivity.class);
 
@@ -2478,13 +2479,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onViewPagerCreated() {
 
-        initRecipeFragment();
+        getAllRecipes(PersistenceManager.getInstance().getJobId(), false);
     }
 
-    private void initRecipeFragment() {
-
-        getAllRecipes(PersistenceManager.getInstance().getJobId(), false);
-//        getAllRecipes(2, false);
+    @Override
+    public void onRecipeFragmentShown() {
+        if (mRecipeFragment != null){
+            mRecipeFragment.showProgress(true);
+        }
+        getAllRecipes(PersistenceManager.getInstance().getJobId(), true);
     }
 
     private void getAllRecipes(Integer jobId, final boolean isUpdate) {
@@ -2658,6 +2661,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (resultCode == RESULT_OK && requestCode == GalleryActivity.EXTRA_GALLERY_CODE) {
 
             mPdfList = data.getParcelableArrayListExtra(GalleryActivity.EXTRA_RECIPE_PDF_FILES);
+
+        }
+
+        if (resultCode == RESULT_OK && requestCode == QC_ACTIVITY_RESULT_CODE) {
+
+            ShowCrouton.showSimpleCrouton(this, getString(R.string.send_test_success), CroutonCreator.CroutonType.SUCCESS);
 
         }
 
@@ -3286,7 +3295,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         @Override
         protected void onPostExecute(String message) {
-            if (isCancelled){
+            if (isCancelled) {
                 return;
             }
             Log.d(TAG, "DownloadFile- onPostExecute - " + message);
