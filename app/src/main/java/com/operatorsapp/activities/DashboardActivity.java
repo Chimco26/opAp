@@ -1633,7 +1633,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         if (mRecipeFragment != null) {
 
-            getAllRecipes(mSelectJobId, true);
+            getAllRecipes(mSelectJobId, true, false);
 
             mPdfList = new ArrayList<>();
 
@@ -2479,7 +2479,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onViewPagerCreated() {
 
-        getAllRecipes(PersistenceManager.getInstance().getJobId(), false);
+        getAllRecipes(PersistenceManager.getInstance().getJobId(), false, false);
     }
 
     @Override
@@ -2487,10 +2487,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (mRecipeFragment != null){
             mRecipeFragment.showProgress(true);
         }
-        getAllRecipes(PersistenceManager.getInstance().getJobId(), true);
+        getAllRecipes(PersistenceManager.getInstance().getJobId(), true, false);
     }
 
-    private void getAllRecipes(Integer jobId, final boolean isUpdate) {
+    private void getAllRecipes(Integer jobId, final boolean isUpdate, final boolean isRefresh) {
 
         PersistenceManager persistanceManager = PersistenceManager.getInstance();
 
@@ -2517,6 +2517,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                         if (!isUpdate) {
                             addFragmentsToViewPager(null);
+                        }else if (isRefresh && mRecipeFragment != null){
+                            mRecipeFragment.updateRecipeResponse(null, reason);
                         }
                     }
                 }, NetworkManager.getInstance(), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
@@ -2609,7 +2611,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             } else {
 
-                mRecipeFragment.updateRecipeResponse(recipeResponse);
+                mRecipeFragment.updateRecipeResponse(recipeResponse, null);
             }
         }
     }
@@ -2623,6 +2625,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onRefreshRecipe() {
         dashboardDataStartPolling();
+        getAllRecipes(PersistenceManager.getInstance().getJobId(), true, true);
     }
 
     private void startGalleryActivity(List<String> fileUrl, String name) {

@@ -19,7 +19,7 @@
     <string name="credentials_error">Неверный логин или пароль </string>
     <string name="url_error">Неверный URL сайта</string>
     <string name="could_not_log_in">Вход невозможен -</string>
-    <string name="could_not_get_data">Невозможно получить данные -</string>
+    <string name="could_not_get_data">Невозможно получить данные</string>
     <string name="could_not_reach_server_error">Ошибка - сервер недоступен</string>
     <string name="unrecognized_operator">Нераспознанный оператор</string>
     <!--Select machine screen -->

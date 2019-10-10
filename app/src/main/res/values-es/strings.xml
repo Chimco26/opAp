@@ -20,7 +20,7 @@
     <string name="credentials_error">Error de Credenciales</string>
     <string name="url_error">Sitio URL Incorrecto</string>
     <string name="could_not_log_in">No puede Acceder -</string>
-    <string name="could_not_get_data">No puede obtener datos -</string>
+    <string name="could_not_get_data">No puede obtener datos</string>
     <string name="could_not_reach_server_error">Error - No encuentra el servidor</string>
     <string name="unrecognized_operator">Operador Desconocido</string>
 

@@ -19,7 +19,7 @@
     <string name="credentials_error">Невірний логін чи пароль</string>
     <string name="url_error">Невірний URL сайту</string>
     <string name="could_not_log_in">Вхід неможливий -</string>
-    <string name="could_not_get_data">Неможливо отримати відомості -</string>
+    <string name="could_not_get_data">Неможливо отримати відомості</string>
     <string name="could_not_reach_server_error">Помилка - сервер недоступний</string>
     <string name="unrecognized_operator">Нерозпізнаний оператор</string>
     <!--Select machine screen -->

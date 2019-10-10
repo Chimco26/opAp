@@ -20,7 +20,7 @@
     <string name="credentials_error">בעיית אימות</string>
     <string name="url_error">קישור לא חוקי</string>
     <string name="could_not_log_in">לא ניתן להתחבר -</string>
-    <string name="could_not_get_data">תקלה - לא ניתן לייבא מידע -</string>
+    <string name="could_not_get_data">תקלה - לא ניתן לייבא מידע</string>
     <string name="could_not_reach_server_error">תקלה - לא ניתן ליצור קשר עם השרת</string>
     <string name="unrecognized_operator">מפעיל לא ידוע</string>
     <string name="alarm">"התראה"</string>
