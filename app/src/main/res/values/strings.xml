@@ -452,5 +452,7 @@
     <string name="product_group">Product Group</string>
     <string name="test">Test</string>
     <string name="send_test_success">Send Test Success</string>
+    <string name="you_need_to_select_the_test">You need to select the test you want to run</string>
+    <string name="you_need_to_select_the_test_field">You need to select the test you want to run</string>
 
 </resources>

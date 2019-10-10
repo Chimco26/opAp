@@ -15,8 +15,10 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.common.QCModels.ResponseDictionnaryItemsBaseModel;
+import com.example.common.QCModels.SubType;
 import com.example.common.QCModels.TestOrderRequest;
 import com.example.common.QCModels.TestOrderResponse;
 import com.example.common.QCModels.TestOrderSendRequest;
@@ -113,13 +115,17 @@ public class QCTestOrderFragment extends Fragment implements
         view.findViewById(R.id.FQCTO_run_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int samples = 0;
-                try {
-                    samples = Integer.parseInt(mSamplesEt.getText().toString() + "");
-                } catch (Exception ignored) {
+                if (mTestOrderRequest.getSubType() != 0) {
+                    int samples = 0;
+                    try {
+                        samples = Integer.parseInt(mSamplesEt.getText().toString() + "");
+                    } catch (Exception ignored) {
+                    }
+                    sendTestOrder(new TestOrderSendRequest(mTestOrderRequest.getJobID(), mTestOrder.getJoshID(),
+                            mTestOrder.getProductID(), mTestOrderRequest.getSubType(), samples));
+                }else {
+                    Toast.makeText(getActivity(), getString(R.string.you_need_to_select_the_test_field), Toast.LENGTH_SHORT).show();
                 }
-                sendTestOrder(new TestOrderSendRequest(mTestOrderRequest.getJobID(), mTestOrderRequest.getJoshID(),
-                        mTestOrderRequest.getProductID(), mTestOrderRequest.getSubType(), samples));
             }
         });
         mJoshSpinner = view.findViewById(R.id.FQCTO_spin_josh);
@@ -136,6 +142,7 @@ public class QCTestOrderFragment extends Fragment implements
             public void onSuccess(TestOrderResponse testOrderResponse) {
                 mProgressBar.setVisibility(View.GONE);
                 if (mTestOrder == null) {
+                    testOrderResponse.getResponseDictionaryDT().getSubTypes().add(0, new SubType());
                     initTestSpinner(testOrderResponse);
                 }
                 mTestOrder = testOrderResponse;
@@ -146,6 +153,8 @@ public class QCTestOrderFragment extends Fragment implements
                 mTestOrderRequest.setProductGroupID(mTestOrder.getProductGroupID());
                 mTestOrderRequest.setQualityGroupID(mTestOrder.getQualityGroupID());
                 mTestOrderRequest.setProductID(mTestOrder.getProductID());
+                mTestOrder.getResponseDictionaryDT().getQualityGroups().add(0, new ResponseDictionnaryItemsBaseModel());
+                mTestOrder.getResponseDictionaryDT().getProductGroups().add(0, new ResponseDictionnaryItemsBaseModel());
                 initSpinner(mJoshSpinner, mTestOrder.getResponseDictionaryDT().getJoshIDs(), TYPE_JOSH);
                 initSpinner(mQualitySpinner, mTestOrder.getResponseDictionaryDT().getQualityGroups(), TYPE_QUALITY);
                 initSpinner(mProductGroupSpinner, mTestOrder.getResponseDictionaryDT().getProductGroups(), TYPE_PRODUCT_GROUP);
@@ -261,11 +270,12 @@ public class QCTestOrderFragment extends Fragment implements
 
                     subTypeAdapter.setTitle(position);
                     mTestOrderRequest.setSubType(testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position).getId());
-                    if (testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position).getHasSamples()){
+                    if (testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position).getHasSamples() != null &&
+                            testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position).getHasSamples()){
                         mSamplesLy.setVisibility(View.VISIBLE);
                     }else {
                         mSamplesLy.setVisibility(View.GONE);
-                        mSamplesEt.setText("0");
+                        mSamplesEt.setHint("0");
                     }
                 }
 
