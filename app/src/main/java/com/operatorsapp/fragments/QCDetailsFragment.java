@@ -87,7 +87,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
         if (getArguments() != null && getArguments().containsKey(EXTRA_TEST_ID)) {
             mTestDetailsRequest = new TestDetailsRequest(getArguments().getInt(EXTRA_TEST_ID));
-            mTestDetailsRequest.setTestId(342);
+//            mTestDetailsRequest.setTestId(342); for test
         }
     }
 

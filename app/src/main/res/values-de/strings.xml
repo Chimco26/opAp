@@ -21,7 +21,7 @@
     <string name="credentials_error">Fehler in den Anmeldedaten</string>
     <string name="url_error">Website URL fehlerhaft</string>
     <string name="could_not_log_in">Einloggen nicht moeglich-</string>
-    <string name="could_not_get_data">Daten koennen nicht erfasst werden -</string>
+    <string name="could_not_get_data">Daten koennen nicht erfasst werden</string>
     <string name="could_not_reach_server_error">Fehler - Server nicht erreichbar</string>
     <string name="unrecognized_operator">Werker unbekannt</string>
 

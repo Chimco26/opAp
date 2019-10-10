@@ -18,7 +18,7 @@ public class ShowCrouton {
 
     public static void jobsLoadingErrorCrouton(OnCroutonRequestListener onCroutonRequestListener, StandardResponse reason) {
         if (reason == null) {
-            String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
+            String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" - ");
             String credentialsError = OperatorApplication.getAppContext().getString(R.string.could_not_reach_server_error);
             createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.NETWORK_ERROR,prefix,credentialsError);
         } else if (reason.getError() == null || reason.getError().getErrorDesc() == null || reason.getError().getErrorDesc().length() < 1){
@@ -27,23 +27,23 @@ public class ShowCrouton {
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.url_error);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.URL_ERROR,prefix,credentialsError);
             } else if (ErrorResponse.ErrorCode.Credentials_mismatch.equals(reason.getError().getErrorCodeConstant())) {
-                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
+                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" - ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.credentials_error);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError);
             } else if (ErrorResponse.ErrorCode.No_data.equals(reason.getError().getErrorCodeConstant())) {
-                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
+                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" - ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.no_data);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError);
             } else if (ErrorResponse.ErrorCode.Retrofit.equals(reason.getError().getErrorCodeConstant())) {
-                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
+                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" - ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.could_not_reach_server_error);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError);
             } else if (ErrorResponse.ErrorCode.Server.equals(reason.getError().getErrorCodeConstant())) {
-                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
+                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" - ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.error_rest);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError);
             } else if (ErrorResponse.ErrorCode.Missing_reports.equals(reason.getError().getErrorCodeConstant())) {
-                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
+                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" - ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.no_reasons);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError);
 
@@ -134,7 +134,6 @@ public class ShowCrouton {
             onCroutonRequestListener.onShowCroutonRequest(str, CROUTON_DURATION, R.id.parent_layouts, credentialsError);
         }
     }
-
 
     private static void showJobsCrouton(final OnCroutonRequestListener onCroutonRequestListener, final SpannableStringBuilder str, final CroutonCreator.CroutonType credentialsError) {
         if (onCroutonRequestListener != null) {
