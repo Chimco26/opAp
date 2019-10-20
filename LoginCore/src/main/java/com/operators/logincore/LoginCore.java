@@ -3,6 +3,7 @@ package com.operators.logincore;
 import android.util.Base64;
 
 import com.example.common.StandardResponse;
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.infra.GetMachinesCallback;
 import com.operators.infra.GetMachinesNetworkBridgeInterface;
@@ -36,6 +37,11 @@ public class LoginCore {
     }
 
     public void login(final String siteUrl, final String username, final String password, final LoginUICallback<Machine> loginUICallback) {
+        if (password == null){
+            loginUICallback.onLoginFailed(new StandardResponse(ErrorObjectInterface.ErrorCode.SessionInvalid, "Empty Password"));
+            return;
+        }
+
         final String EncryptedPassword = Base64.encodeToString(password.getBytes(), Base64.NO_WRAP);
             mLoginNetworkBridgeInterface.login(siteUrl, username, EncryptedPassword, mLoginPersistenceManagerInterface.getCurrentLang(),  new LoginCoreCallback() {
             @Override

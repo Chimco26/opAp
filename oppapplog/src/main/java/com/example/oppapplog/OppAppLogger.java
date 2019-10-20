@@ -2,6 +2,7 @@ package com.example.oppapplog;
 
 
 import android.content.Context;
+import android.content.ReceiverCallNotAllowedException;
 import android.util.Log;
 
 import com.zemingo.logrecorder.LogRecorder;
@@ -17,12 +18,16 @@ public class OppAppLogger {
 
     private OppAppLogger(Context context) {
 
-        LogRecorder.initInstance(context);
+        try {
+            LogRecorder.initInstance(context);
 
-        mGranted = context.getSharedPreferences("user_preferences", Context.MODE_PRIVATE).getBoolean(PREF_STORAGE_PERMISSION_GRANTED, false);
+            mGranted = context.getSharedPreferences("user_preferences", Context.MODE_PRIVATE).getBoolean(PREF_STORAGE_PERMISSION_GRANTED, false);
 
-        if (BuildConfig.DEBUG) {
-            ZLogger.DEBUG = true;
+            if (BuildConfig.DEBUG) {
+                ZLogger.DEBUG = true;
+            }
+        }catch (ReceiverCallNotAllowedException e){
+
         }
     }
 

@@ -290,8 +290,10 @@ public class LoginFragment extends Fragment {
             @Override
             public void onLoginFailed(final StandardResponse reason) {
                 dismissProgressDialog();
-                mCroutonCallback.onHideConnectivityCroutonRequest();
-                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
+                if (mCroutonCallback != null) {
+                    mCroutonCallback.onHideConnectivityCroutonRequest();
+                    ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
+                }
                 mNavigationCallback.isTryToLogin(false);
             }
         });

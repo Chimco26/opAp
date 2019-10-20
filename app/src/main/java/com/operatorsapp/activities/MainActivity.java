@@ -145,12 +145,17 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     @Override
     public void goToFragment(Fragment fragment, boolean centralContainer, boolean addToBackStack) {
-        OppAppLogger.getInstance().d(TAG, "goToFragment(), " + fragment.getClass().getSimpleName());
-        mCurrentFragment = fragment;
-        if (addToBackStack) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).addToBackStack("").commit();
-        } else {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).commit();
+        try {
+
+            OppAppLogger.getInstance().d(TAG, "goToFragment(), " + fragment.getClass().getSimpleName());
+            mCurrentFragment = fragment;
+            if (addToBackStack) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).addToBackStack("").commit();
+            } else {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).commit();
+            }
+        }catch (Exception e){
+
         }
     }
 

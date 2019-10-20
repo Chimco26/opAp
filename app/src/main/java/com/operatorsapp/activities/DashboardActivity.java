@@ -33,6 +33,7 @@ import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.common.ErrorResponse;
@@ -2679,7 +2680,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             if (((StandardResponse) response).getError().getErrorDesc() == null) {
 
-                activateJob(data.getIntExtra(ActivateJobActivity.EXTRA_ACTIVATE_JOB_ID, PersistenceManager.getInstance().getJobId()));
+                activateJob(Integer.parseInt(data.getStringExtra(ActivateJobActivity.EXTRA_ACTIVATE_JOB_ID)));
             }
 
         }
@@ -2820,10 +2821,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         reportNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportRejectsCallbackListener);
-        if (isUnit) {
-            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value), (double) 0, mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition).getJoshID());
-        } else {
-            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, (double) 0, Double.parseDouble(value), mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition).getJoshID());
+        try {
+            if (isUnit) {
+                mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value), (double) 0, mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition).getJoshID());
+            } else {
+                mReportCore.sendReportReject(selectedReasonId, selectedCauseId, (double) 0, Double.parseDouble(value), mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition).getJoshID());
+            }
+        }catch (NumberFormatException e){
+
         }
 //        SendBroadcast.refreshPolling(getContext());
     }
@@ -3329,28 +3334,32 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (mShowDialogJobId != 0 && mShowDialogJobId == currentJobID) {
             return;
         }
-        if (autoActivateNextJob && nextJobID > 0) {
-            mShowDialogJobId = currentJobID;
-            mNextJobTimerDialog = new NextJobTimerDialog(this,
-                    new NextJobTimerDialog.NextJobTimerDialogListener() {
-                        @Override
-                        public void onClickPositiveBtn() {
-                            PersistenceManager persistenceManager = PersistenceManager.getInstance();
-                            postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
-                                    String.valueOf(persistenceManager.getMachineId()),
-                                    String.valueOf(nextJobID),
-                                    persistenceManager.getOperatorId(),
-                                    false));
-                        }
+        try {
+            if (autoActivateNextJob && nextJobID > 0) {
+                mShowDialogJobId = currentJobID;
+                mNextJobTimerDialog = new NextJobTimerDialog(this,
+                        new NextJobTimerDialog.NextJobTimerDialogListener() {
+                            @Override
+                            public void onClickPositiveBtn() {
+                                PersistenceManager persistenceManager = PersistenceManager.getInstance();
+                                postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
+                                        String.valueOf(persistenceManager.getMachineId()),
+                                        String.valueOf(nextJobID),
+                                        persistenceManager.getOperatorId(),
+                                        false));
+                            }
 
-                        @Override
-                        public void onClickNegativeBtn() {
-                        }
-                    }, getString(R.string.you_ve_reached_the_production_target), getString(R.string.next_job_will_start_in),
-                    erpJobId, getString(R.string.start_job_now), getString(R.string.cancel_job), counter, autoActivateNextJobTimer
-            );
+                            @Override
+                            public void onClickNegativeBtn() {
+                            }
+                        }, getString(R.string.you_ve_reached_the_production_target), getString(R.string.next_job_will_start_in),
+                        erpJobId, getString(R.string.start_job_now), getString(R.string.cancel_job), counter, autoActivateNextJobTimer
+                );
 
-            mNextJobTimerDialog.showNextJobTimerDialog().show();
+                mNextJobTimerDialog.showNextJobTimerDialog().show();
+            }
+        }catch (Exception e){
+
         }
     }
 

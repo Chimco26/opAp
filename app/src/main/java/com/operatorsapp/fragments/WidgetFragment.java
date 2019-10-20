@@ -108,6 +108,9 @@ public class WidgetFragment extends Fragment implements
             view.post(new Runnable() {
                 @Override
                 public void run() {
+                    if (getActivity() != null){
+                        return;
+                    }
                     Display display = getActivity().getWindowManager().getDefaultDisplay();
                     Point size = new Point();
                     display.getSize(size);
@@ -143,7 +146,9 @@ public class WidgetFragment extends Fragment implements
                                 mKeyBoard.setChars(complementChars);
                                 mKeyBoard.openKeyBoard(text);
                                 mKeyBoard.setListener(listener);
-                                mDashboardCentralContainerListener.onKeyboardEvent(true);
+                                if (mDashboardCentralContainerListener != null) {
+                                    mDashboardCentralContainerListener.onKeyboardEvent(true);
+                                }
                             }
                         }
 
@@ -155,7 +160,9 @@ public class WidgetFragment extends Fragment implements
                             if (mKeyBoard != null) {
                                 mKeyBoard.setListener(null);
                             }
-                            mDashboardCentralContainerListener.onKeyboardEvent(false);
+                            if (mDashboardCentralContainerListener != null) {
+                                mDashboardCentralContainerListener.onKeyboardEvent(false);
+                            }
                         }
 
                     }, mPermissionResponse);
@@ -416,7 +423,9 @@ public class WidgetFragment extends Fragment implements
             mKeyBoard.setChars(complementChars);
             mKeyBoard.openKeyBoard(text);
             mKeyBoard.setListener(listener);
-            mDashboardCentralContainerListener.onKeyboardEvent(true);
+            if (mDashboardCentralContainerListener != null) {
+                mDashboardCentralContainerListener.onKeyboardEvent(true);
+            }
         }
     }
 
@@ -429,7 +438,9 @@ public class WidgetFragment extends Fragment implements
             mKeyBoard.setListener(null);
             mKeyBoard.closeKeyBoard();
         }
-        mDashboardCentralContainerListener.onKeyboardEvent(false);
+        if (mDashboardCentralContainerListener != null) {
+            mDashboardCentralContainerListener.onKeyboardEvent(false);
+        }
     }
 
 }
