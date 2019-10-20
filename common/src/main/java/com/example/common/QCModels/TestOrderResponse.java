@@ -77,7 +77,7 @@ public class TestOrderResponse extends StandardResponse {
         this.productID = productID;
     }
 
-    public Integer getSubType() {
+    public int getSubType() {
         return subType;
     }
 

@@ -8,49 +8,49 @@ import java.util.List;
 public class ResponseDictionaryDT {
     @SerializedName("JoshIDs")
     @Expose
-    private List<JoshID> joshIDs = null;
+    private List<ResponseDictionnaryItemsBaseModel> joshIDs = null;
     @SerializedName("QualityGroups")
     @Expose
-    private List<QualityGroup> qualityGroups = null;
+    private List<ResponseDictionnaryItemsBaseModel> qualityGroups = null;
     @SerializedName("ProductGroups")
     @Expose
-    private List<ProductGroup> productGroups = null;
+    private List<ResponseDictionnaryItemsBaseModel> productGroups = null;
     @SerializedName("Products")
     @Expose
-    private List<Product> products = null;
+    private List<ResponseDictionnaryItemsBaseModel> products = null;
     @SerializedName("SubTypes")
     @Expose
     private List<SubType> subTypes = null;
 
-    public List<JoshID> getJoshIDs() {
+    public List<ResponseDictionnaryItemsBaseModel> getJoshIDs() {
         return joshIDs;
     }
 
-    public void setJoshIDs(List<JoshID> joshIDs) {
+    public void setJoshIDs(List<ResponseDictionnaryItemsBaseModel> joshIDs) {
         this.joshIDs = joshIDs;
     }
 
-    public List<QualityGroup> getQualityGroups() {
+    public List<ResponseDictionnaryItemsBaseModel> getQualityGroups() {
         return qualityGroups;
     }
 
-    public void setQualityGroups(List<QualityGroup> qualityGroups) {
+    public void setQualityGroups(List<ResponseDictionnaryItemsBaseModel> qualityGroups) {
         this.qualityGroups = qualityGroups;
     }
 
-    public List<ProductGroup> getProductGroups() {
+    public List<ResponseDictionnaryItemsBaseModel> getProductGroups() {
         return productGroups;
     }
 
-    public void setProductGroups(List<ProductGroup> productGroups) {
+    public void setProductGroups(List<ResponseDictionnaryItemsBaseModel> productGroups) {
         this.productGroups = productGroups;
     }
 
-    public List<Product> getProducts() {
+    public List<ResponseDictionnaryItemsBaseModel> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(List<ResponseDictionnaryItemsBaseModel> products) {
         this.products = products;
     }
 

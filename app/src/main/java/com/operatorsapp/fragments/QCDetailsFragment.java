@@ -34,7 +34,6 @@ import com.operatorsapp.adapters.QCParametersHorizontalAdapter;
 import com.operatorsapp.adapters.QCSamplesMultiTypeAdapter;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.OnKeyboardManagerListener;
-import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.QCRequests;
 import com.operatorsapp.utils.ShowCrouton;
@@ -45,6 +44,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_LAST;
 
 public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
@@ -65,7 +65,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private int mSamplesCount;
     private QCParametersHorizontalAdapter mSamplesAdapter;
     private QCMultiTypeAdapter mTestAdapter;
-    private TextView mSamplesNumerEt;
+    private TextView mSamplesNumberEt;
     private View mPassedLy;
     private ImageView mPassedIc;
     private TextView mPassedTv;
@@ -87,7 +87,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
         if (getArguments() != null && getArguments().containsKey(EXTRA_TEST_ID)) {
             mTestDetailsRequest = new TestDetailsRequest(getArguments().getInt(EXTRA_TEST_ID));
-            mTestDetailsRequest.setTestId(342);
+//            mTestDetailsRequest.setTestId(342); for test
         }
     }
 
@@ -132,12 +132,12 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     }
 
     private void initIncrementSamplesView(View view) {
-        mSamplesNumerEt = view.findViewById(R.id.FQCD_units_text_view);
+        mSamplesNumberEt = view.findViewById(R.id.FQCD_units_text_view);
         view.findViewById(R.id.FQCD_button_minus).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Integer.parseInt(mSamplesNumerEt.getText().toString()) > 0) {
-                    mSamplesCount = Integer.parseInt(mSamplesNumerEt.getText().toString()) - 1;
+                if (Integer.parseInt(mSamplesNumberEt.getText().toString()) > 0) {
+                    mSamplesCount = Integer.parseInt(mSamplesNumberEt.getText().toString()) - 1;
                     updateSamples(false, mSamplesCount - 1);
                 }
             }
@@ -145,14 +145,14 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         view.findViewById(R.id.FQCD_button_plus).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSamplesCount = Integer.parseInt(mSamplesNumerEt.getText().toString()) + 1;
+                mSamplesCount = Integer.parseInt(mSamplesNumberEt.getText().toString()) + 1;
                 updateSamples(true, mSamplesCount - 1);
             }
         });
     }
 
     private void updateSamples(boolean isIncrement, int position) {
-        mSamplesNumerEt.setText(mSamplesCount + "");
+        mSamplesNumberEt.setText(mSamplesCount + "");
         List<TestSampleFieldsDatum> samples = mTestOrderDetails.getTestSampleFieldsData();
         int counter = 0;
         for (TestSampleFieldsDatum testSampleFieldsDatum : samples) {
@@ -195,7 +195,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     }
 
     private void initView() {
-        mSamplesNumerEt.setText(mSamplesCount + "");
+        mSamplesNumberEt.setText(mSamplesCount + "");
         initPassedView();
         initSamplesTestRv();
         initTestRv();
@@ -290,7 +290,9 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             public void onSuccess(SaveTestDetailsResponse saveTestDetailsResponse) {
                 //todo
                 mProgressBar.setVisibility(View.GONE);
-                ShowCrouton.showSimpleCrouton((QCActivity) getActivity(), null, CroutonCreator.CroutonType.SUCCESS);
+//                ShowCrouton.showSimpleCrouton((QCActivity) getActivity(), null, CroutonCreator.CroutonType.SUCCESS);
+                getActivity().setResult(RESULT_OK);
+                getActivity().finish();
             }
 
             @Override
@@ -341,7 +343,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
     @Override
     public void onDeleteLine(int position) {
-        mSamplesCount = Integer.parseInt(mSamplesNumerEt.getText().toString()) - 1;
+        mSamplesCount = Integer.parseInt(mSamplesNumberEt.getText().toString()) - 1;
         updateSamples(false, position);
     }
 

@@ -103,6 +103,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         final View rootView = inflater.inflate(R.layout.fragment_select_machine, container, false);
+        setActionBar();
 
 //        Collections.sort(mDepartmentMachine, new Comparator<Machine>() {
 //            @Override
@@ -116,10 +117,29 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 //        });
 
         rootView.findViewById(R.id.FSM_change_factory_btn).setOnClickListener(this);
-        initDepartmentRv(rootView);
 
         mSearchField = rootView.findViewById(R.id.machine_id_name);
-        mSearchField.addTextChangedListener(mTextWatcher);
+        mGoButton = rootView.findViewById(R.id.goBtn);
+        if (mDepartmentMachine != null && mDepartmentMachine.getDepartmentMachine() != null && mDepartmentMachine.getDepartmentMachine().size() > 0) {
+            initDepartmentRv(rootView);
+            mSearchField.addTextChangedListener(mTextWatcher);
+            mGoButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+//                if(mGoButton.isEnabled())
+//                {
+//                    setMachineData();
+//                }
+                    KeyboardUtils.closeKeyboard(getActivity());
+                }
+            });
+        }else {
+            mSearchField.setVisibility(View.GONE);
+            mGoButton.setVisibility(View.GONE);
+            rootView.findViewById(R.id.FSM_no_data_tv).setVisibility(View.VISIBLE);
+        }
 //        mAutoCompleteAdapter = new AutoCompleteAdapter(getActivity(), mDepartmentMachine);
 //        mSearchField.setAdapter(mAutoCompleteAdapter);
 //        mSearchField.setOnItemClickListener(this);
@@ -149,22 +169,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 //            }
 //        });
 
-        mGoButton = rootView.findViewById(R.id.goBtn);
 //        mGoButton.setEnabled(false);
-        mGoButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-//                if(mGoButton.isEnabled())
-//                {
-//                    setMachineData();
-//                }
-                KeyboardUtils.closeKeyboard(getActivity());
-            }
-        });
 
-        setActionBar();
 //        if (getActivity() != null) {
 //            SoftKeyboardUtil.showKeyboard(getActivity());
 //        }
@@ -182,16 +188,17 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
     private void initDepartmentRv(View rootView) {
 
-        mDepartmentAdapter = new DepartmentAdapter(mDepartmentMachine.getDepartmentMachine(), this);
+        if (mDepartmentMachine.getDepartmentMachine() != null && mDepartmentMachine.getDepartmentMachine().size() > 0) {
+            mDepartmentAdapter = new DepartmentAdapter(mDepartmentMachine.getDepartmentMachine(), this);
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.FSM_department_rv);
+            RecyclerView recyclerView = rootView.findViewById(R.id.FSM_department_rv);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
-        recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setLayoutManager(layoutManager);
 
-        recyclerView.setAdapter(mDepartmentAdapter);
-
+            recyclerView.setAdapter(mDepartmentAdapter);
+        }
     }
 
     protected void setActionBar()

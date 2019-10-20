@@ -22,6 +22,13 @@ public class TestOrderSendRequest {
         this.samples = samples;
     }
 
+    public TestOrderSendRequest(long jobID, long joshID, long productID, long subType) {
+        this.jobID = jobID;
+        this.joshID = joshID;
+        this.productID = productID;
+        this.subType = subType;
+
+    }
     public long getJobID() {
         return jobID;
     }

@@ -19,7 +19,7 @@
     <string name="credentials_error">用戶名/密碼不匹配</string>
     <string name="url_error">網站網址不正確</string>
     <string name="could_not_log_in">無法登錄 -</string>
-    <string name="could_not_get_data">無法獲取資料 -</string>
+    <string name="could_not_get_data">無法獲取資料</string>
     <string name="could_not_reach_server_error">錯誤 - 無法連接伺服器</string>
     <string name="unrecognized_operator">無法識別的操作員</string>
     <!--Select machine screen -->
@@ -145,7 +145,7 @@
         <item>添加不良品</item>
         <item>转换周期单位</item>
         <item>报告产品</item>
-        <!--<item>Order Test</item>-->
+        <item>Order Test</item>
     </array>
     <string name="approve_first_item">結束安裝</string>
     <string name="welcome">歡迎</string>

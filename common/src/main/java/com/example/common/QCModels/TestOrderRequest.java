@@ -15,7 +15,7 @@ public class TestOrderRequest {
     @SerializedName("ProductID")
     private long productID;
     @SerializedName("SubType")
-    private long subType;
+    private long subType = -1;
 
     public TestOrderRequest(long jobID) {
         this.jobID = jobID;

@@ -696,24 +696,30 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
     }
 
-    public void updateRecipeResponse(RecipeResponse recipeResponse) {
+    public void updateRecipeResponse(RecipeResponse recipeResponse, StandardResponse reason) {
 
         if (!isUpdating && mIsEditMode) {
             return;
         }
+        mProgressBar.setVisibility(View.GONE);
         if (isUpdating) {
-            ShowCrouton.showSimpleCrouton((DashboardActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
-            mProgressBar.setVisibility(View.GONE);
-            mChannel0BaseSplits.clear();
-            mLayoutChannel0ItemSaveBtn.setVisibility(View.GONE);
             closeKeyBoard();
             if (getActivity() != null && getActivity().getWindow() != null) {
                 getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
             isUpdating = false;
             mIsEditMode = false;
+            mChannel0BaseSplits.clear();
+            mLayoutChannel0ItemSaveBtn.setVisibility(View.GONE);
+            if (recipeResponse != null) {
+                ShowCrouton.showSimpleCrouton((DashboardActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
+            }else {
+                ShowCrouton.showSimpleCrouton((DashboardActivity) getActivity(), reason.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+            }
         }
-        mRecipeResponse = recipeResponse;
+        if (recipeResponse != null) {
+            mRecipeResponse = recipeResponse;
+        }
         if (mLayoutChannel0MainLayout != null) {
             initView();
         }
@@ -726,7 +732,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         mListener.onImageProductClick(arrayList, name);
     }
 
-        public interface OnRecipeFragmentListener {
+    public void showProgress(boolean showProgress) {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    public interface OnRecipeFragmentListener {
 
         void onImageProductClick(List<String> fileUrl, String name);
 

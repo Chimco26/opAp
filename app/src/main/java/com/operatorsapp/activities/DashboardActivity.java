@@ -298,7 +298,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (!hasFocus && PersistenceManager.getInstance().isStatusBarLocked()) {
             mIsCollapse = true;
             collapseNow(true);
-        }else if (collapseNotificationHandler != null){
+        } else if (collapseNotificationHandler != null) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -637,7 +637,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     }
 
-    private void openWidgetFragment() {
+    private void initWidgetFragment() {
 
         mWidgetFragment = WidgetFragment.newInstance(mReportFieldsForMachine);
 
@@ -647,7 +647,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         if (BuildConfig.FLAVOR.equals(getString(R.string.emerald_flavor_name))) {
 
-            openWidgetFragment();
+            initWidgetFragment();
 
             initViewPagerFragment();
 
@@ -1077,7 +1077,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             PersistenceManager.getInstance().setOperatorId("");
                         }
 
-                        getAllRecipes(machineStatus.getAllMachinesData().get(0).getCurrentJobID(), true);
+//                        getAllRecipes(machineStatus.getAllMachinesData().get(0).getCurrentJobID(), true);
 
                         pollingBackup(true);
                     }
@@ -1634,7 +1634,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         if (mRecipeFragment != null) {
 
-            getAllRecipes(mSelectJobId, true);
+            getAllRecipes(mSelectJobId, true, false);
 
             mPdfList = new ArrayList<>();
 
@@ -2204,6 +2204,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         startPendingJobsActivity();
     }
 
+
     public void startPendingJobsActivity() {
         Intent intent = new Intent(DashboardActivity.this, ActivateJobActivity.class);
 
@@ -2479,16 +2480,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onViewPagerCreated() {
 
-        initRecipeFragment();
+        getAllRecipes(PersistenceManager.getInstance().getJobId(), false, false);
     }
 
-    private void initRecipeFragment() {
-
-        getAllRecipes(PersistenceManager.getInstance().getJobId(), false);
-//        getAllRecipes(2, false);
+    @Override
+    public void onRecipeFragmentShown() {
+        if (mRecipeFragment != null){
+            mRecipeFragment.showProgress(true);
+        }
+        getAllRecipes(PersistenceManager.getInstance().getJobId(), true, false);
     }
 
-    private void getAllRecipes(Integer jobId, final boolean isUpdate) {
+    private void getAllRecipes(Integer jobId, final boolean isUpdate, final boolean isRefresh) {
 
         PersistenceManager persistanceManager = PersistenceManager.getInstance();
 
@@ -2515,6 +2518,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                         if (!isUpdate) {
                             addFragmentsToViewPager(null);
+                        }else if (isRefresh && mRecipeFragment != null){
+                            mRecipeFragment.updateRecipeResponse(null, reason);
                         }
                     }
                 }, NetworkManager.getInstance(), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
@@ -2607,7 +2612,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             } else {
 
-                mRecipeFragment.updateRecipeResponse(recipeResponse);
+                mRecipeFragment.updateRecipeResponse(recipeResponse, null);
             }
         }
     }
@@ -2621,6 +2626,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onRefreshRecipe() {
         dashboardDataStartPolling();
+        getAllRecipes(PersistenceManager.getInstance().getJobId(), true, true);
     }
 
     private void startGalleryActivity(List<String> fileUrl, String name) {
@@ -2659,6 +2665,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (resultCode == RESULT_OK && requestCode == GalleryActivity.EXTRA_GALLERY_CODE) {
 
             mPdfList = data.getParcelableArrayListExtra(GalleryActivity.EXTRA_RECIPE_PDF_FILES);
+
+        }
+
+        if (resultCode == RESULT_OK && requestCode == QC_ACTIVITY_RESULT_CODE) {
+
+            ShowCrouton.showSimpleCrouton(this, getString(R.string.send_test_success), CroutonCreator.CroutonType.SUCCESS);
 
         }
 
@@ -3291,7 +3303,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         @Override
         protected void onPostExecute(String message) {
-            if (isCancelled){
+            if (isCancelled) {
                 return;
             }
             Log.d(TAG, "DownloadFile- onPostExecute - " + message);

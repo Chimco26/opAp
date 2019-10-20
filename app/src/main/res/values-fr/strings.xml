@@ -20,7 +20,7 @@
     <string name="credentials_error">Erreur d\'identification - Le nom d\'utilisateur et le mot de passe ne correspondent pas</string>
     <string name="url_error">L\'URL du site n\'est pas correcte</string>
     <string name="could_not_log_in">Vous ne pouvez pas vous connecter -</string>
-    <string name="could_not_get_data">Impossible d\'obtenir les données -</string>
+    <string name="could_not_get_data">Impossible d\'obtenir les données</string>
     <string name="could_not_reach_server_error">Erreur - impossible d\'accéder au serveur</string>
     <string name="unrecognized_operator">Opérateur non reconnu</string>
 
@@ -152,7 +152,7 @@
         <item>Mettre les rebuts</item>
         <item>Changement d\'unité de cycle</item>
         <item>Compte rendu de la production</item>
-        <!--<item>Order Test</item>-->
+        <item>Order Test</item>
     </array>
 
     <string name="approve_first_item">Fin de Préparation</string>

@@ -20,7 +20,7 @@
     <string name="credentials_error">Gebruikersnaam of wachtwoord kloppen niet</string>
     <string name="url_error">Site URL niet correct</string>
     <string name="could_not_log_in">Kan niet inloggen -</string>
-    <string name="could_not_get_data">Kan geen data krijgen -</string>
+    <string name="could_not_get_data">Kan geen data krijgen</string>
     <string name="could_not_reach_server_error">Fout - Kan niet bij de server komen</string>
     <string name="unrecognized_operator">Onherkenbare Operator</string>
     <string name="alarm">"Alarm"</string>
@@ -150,7 +150,7 @@
         <item>Voeg uitval toe</item>
         <item>Veranderen stuks per rotatie</item>
         <item>Productie Rapport</item>
-        <!--<item>Order Test</item>-->
+        <item>Order Test</item>
     </array>
 
     <string name="approve_first_item">Einde Ombouw</string>
