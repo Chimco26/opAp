@@ -1396,7 +1396,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void openDeleteTechCallDialog(ArrayList<TechCallInfo> tech) {
-        final List<Technician> techniciansList = ((DashboardActivity) getActivity()).getReportForMachine().getTechnicians();
+        List<Technician> techniciansList = new ArrayList<Technician>();
+        if (((DashboardActivity) getActivity()).getReportForMachine() != null && ((DashboardActivity) getActivity()).getReportForMachine().getTechnicians() != null){
+            techniciansList = ((DashboardActivity) getActivity()).getReportForMachine().getTechnicians();
+        }
         mPopUpDialog = new TechCallDialog(getActivity(), tech, techniciansList, new TechCallDialog.TechDialogListener() {
             @Override
             public void onNewCallPressed() {

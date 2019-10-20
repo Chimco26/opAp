@@ -12,38 +12,45 @@ public class GoogleAnalyticsHelper {
 
     public Tracker getTracker(Context context){
 
-        return ((OperatorApplication)context.getApplicationContext()).getDefaultTracker();
+        try {
+            return ((OperatorApplication)context.getApplicationContext()).getDefaultTracker();
+        }catch (NullPointerException e){
+            return null;
+        }
 
     }
 
     public void trackScreen(Context context, String screenName){
 
         Tracker tracker = getTracker(context);
-        PersistenceManager pm = PersistenceManager.getInstance();
+        if (tracker != null) {
+            PersistenceManager pm = PersistenceManager.getInstance();
 
-        tracker.setClientId("machine name + id: " + pm.getMachineName() + ", " + pm.getMachineId());
-        tracker.setAppVersion(pm.getVersion() + "");
-        tracker.setHostname(pm.getSiteName());
-        tracker.setScreenName(screenName);
-        tracker.set("Machine Name + Id", pm.getMachineName() + ", " + pm.getMachineId());
-        tracker.send(new HitBuilders.ScreenViewBuilder().build());
-
+            tracker.setClientId("machine name + id: " + pm.getMachineName() + ", " + pm.getMachineId());
+            tracker.setAppVersion(pm.getVersion() + "");
+            tracker.setHostname(pm.getSiteName());
+            tracker.setScreenName(screenName);
+            tracker.set("Machine Name + Id", pm.getMachineName() + ", " + pm.getMachineId());
+            tracker.send(new HitBuilders.ScreenViewBuilder().build());
+        }
     }
 
     public void trackEvent(Context context, EventCategory category, boolean isSucceed , String label){
 
         Tracker tracker = getTracker(context);
-        PersistenceManager pm = PersistenceManager.getInstance();
+        if (tracker != null) {
+            PersistenceManager pm = PersistenceManager.getInstance();
 
-        tracker.setClientId("machine name + id: " + pm.getMachineName() + ", " + pm.getMachineId());
-        tracker.setAppVersion(pm.getVersion() + "");
-        tracker.setHostname(pm.getSiteName());
-        tracker.set("Machine Name + Id", pm.getMachineName() + ", " + pm.getMachineId());
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory(getCategory(category))
-                .setAction(isSucceed ? "Action was preformed successfully" : "Action has failed")
-                .setLabel(label)
-                .build());
+            tracker.setClientId("machine name + id: " + pm.getMachineName() + ", " + pm.getMachineId());
+            tracker.setAppVersion(pm.getVersion() + "");
+            tracker.setHostname(pm.getSiteName());
+            tracker.set("Machine Name + Id", pm.getMachineName() + ", " + pm.getMachineId());
+            tracker.send(new HitBuilders.EventBuilder()
+                    .setCategory(getCategory(category))
+                    .setAction(isSucceed ? "Action was preformed successfully" : "Action has failed")
+                    .setLabel(label)
+                    .build());
+        }
 
     }
 

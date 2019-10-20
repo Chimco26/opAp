@@ -503,6 +503,12 @@ public class ActivateJobActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isActive = false;
+    }
+
+    @Override
     public void onBackPressed() {
         int count = getSupportFragmentManager().getBackStackEntryCount();
 

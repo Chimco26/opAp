@@ -296,21 +296,28 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
             dismissProgressDialog();
 
             if (response.getFunctionSucceed()) {
-                // TODO: 17/07/2018 add crouton for success
-                // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
-                mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), false);
-                OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
-                Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
 
-                //Analytics
-                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.STOP_REASON_REPORT, true,
-                        "Stop Reason: " + mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName() + ", Subreason: " + mSelectedSubreason.getEName());
+                try{
+                    // TODO: 17/07/2018 add crouton for success
+                    // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+                    mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), false);
+                    OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
+                    Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
+                    //Analytics
+                    new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.STOP_REASON_REPORT, true,
+                            "Stop Reason: " + mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName() + ", Subreason: " + mSelectedSubreason.getEName());
+                }catch (NullPointerException e){
+
+                }
 
             } else {
-                mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), true);
-                //Analytics
-                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.STOP_REASON_REPORT, false, "Error: " + response.getError().getErrorDesc());
+                try{
+                    mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), true);
+                    //Analytics
+                    new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.STOP_REASON_REPORT, false, "Error: " + response.getError().getErrorDesc());
+                }catch (NullPointerException e){
 
+                }
             }
 
             try {
