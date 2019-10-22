@@ -1076,7 +1076,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             PersistenceManager.getInstance().setOperatorId("");
                         }
 
-//                        getAllRecipes(machineStatus.getAllMachinesData().get(0).getCurrentJobID(), true);
+                        if (mViewPagerFragment != null && mViewPagerFragment.isRecipeShown()) {
+                            getAllRecipes(machineStatus.getAllMachinesData().get(0).getCurrentJobID(), true, true);
+                        }
 
                         pollingBackup(true);
                     }
