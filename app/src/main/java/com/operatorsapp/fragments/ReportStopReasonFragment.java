@@ -456,6 +456,14 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         return responseNewVersion;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mReportCallbackListener = null;
+        mDashboardCroutonListener= null;
+        mOnCroutonRequestListener= null;
+        mListener= null;
+    }
 
     public interface ReportStopReasonFragmentListener {
 
