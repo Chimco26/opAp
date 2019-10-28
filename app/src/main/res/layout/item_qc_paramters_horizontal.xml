@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/IQCPH_title"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="30dp"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="22sp"
@@ -17,9 +17,12 @@
         app:autoSizeMaxTextSize="22sp"
         app:autoSizeTextType="uniform"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/IQCPH_rv"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>

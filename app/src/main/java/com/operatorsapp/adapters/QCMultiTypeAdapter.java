@@ -83,16 +83,22 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int position) {
         int type = getItemViewType(position);
         final TestFieldsDatum item = list.get(position);
+
+        if (item.isFailed()){
+            ((CustomViewHolder)viewHolder).title.setTextColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
+        }else {
+            ((CustomViewHolder)viewHolder).title.setTextColor(viewHolder.itemView.getResources().getColor(R.color.black));
+        }
         switch (type) {
 
             case FIELD_TYPE_BOOLEAN_INT:
                 ((BooleanViewHolder) viewHolder).title.setText(item.getLName());
-                if (item.getCurrentValue().toLowerCase().equals("true")){
+                if (item.getCurrentValue().toLowerCase().equals("true")) {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(true);
                     ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(false);
-                }else {
+                } else {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(false);
-                                        ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(true);
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(true);
                 }
                 ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
@@ -104,12 +110,12 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             case FIELD_TYPE_NUM_INT:
                 ((NumViewHolder) viewHolder).title.setText(item.getLName());
                 ((NumViewHolder) viewHolder).mEditNumberEt.setText(item.getCurrentValue());
-                setTextWatcher(position, ((NumViewHolder) viewHolder).mEditNumberEt);
+                setTextWatcher(position, ((NumViewHolder) viewHolder).mEditNumberEt, 0);
                 break;
             case FIELD_TYPE_TEXT_INT:
                 ((TextViewHolder) viewHolder).title.setText(item.getLName());
                 ((TextViewHolder) viewHolder).mTextEt.setText(item.getCurrentValue());
-                setTextWatcher(position, ((TextViewHolder) viewHolder).mTextEt);
+                setTextWatcher(position, ((TextViewHolder) viewHolder).mTextEt, 0);
                 break;
             case FIELD_TYPE_INTERVAL_INT:
                 ((IntervalViewHolder) viewHolder).title.setText(item.getLName());
@@ -118,6 +124,8 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                 setRangeView(item, ((IntervalViewHolder) viewHolder).mRangeView);
                 ((IntervalViewHolder) viewHolder).mRangeView.setLowLimit(1);
                 ((IntervalViewHolder) viewHolder).mRangeView.setHighLimit(5);
+                setTextWatcher(position, ((IntervalViewHolder) viewHolder).mEditMinEt, 1);
+                setTextWatcher(position, ((IntervalViewHolder) viewHolder).mEditMaxEt, 2);
 
                 break;
 //            case FIELD_TYPE_TIME_INT:
@@ -126,8 +134,8 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 //                break;
             case FIELD_TYPE_DATE_INT:
                 ((DateViewHolder) viewHolder).title.setText(item.getLName());
-                ((DateViewHolder)viewHolder).mTextDateTv.setText(item.getCurrentValue());
-                ((DateViewHolder)viewHolder).itemView.setOnClickListener(new View.OnClickListener() {
+                ((DateViewHolder) viewHolder).mTextDateTv.setText(item.getCurrentValue());
+                ((DateViewHolder) viewHolder).itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         showDatePicker(viewHolder, item);
@@ -162,7 +170,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
                 if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
                     mRangeView.setCurrentValue(Float.parseFloat(item.getCurrentValue()));
-                }else {
+                } else {
                     mRangeView.setCurrentValue(0);
                 }
                 mRangeView.setHighLimit(item.getHValue());
@@ -173,7 +181,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
     }
 
-    public void setTextWatcher(final int position, EditText mTextEt) {
+    public void setTextWatcher(final int position, EditText mTextEt, final int type) {
         mTextEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -182,7 +190,29 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                list.get(position).setCurrentValue(charSequence.toString());
+                if (type == 0) {
+                    list.get(position).setCurrentValue(charSequence.toString());
+                } else if (type == 1) {
+                    try {
+                        list.get(position).setLValue(Float.valueOf(charSequence.toString()));
+                    } catch (NumberFormatException e) {
+                        try {
+                            list.get(position).setLValue(Integer.valueOf(charSequence.toString()) * 1f);
+                        } catch (NumberFormatException e1) {
+                            list.get(position).setLValue(0f);
+                        }
+                    }
+                } else if (type == 2) {
+                    try {
+                        list.get(position).setHValue(Float.valueOf(charSequence.toString()));
+                    } catch (NumberFormatException e) {
+                        try {
+                            list.get(position).setHValue(Integer.valueOf(charSequence.toString()) * 1f);
+                        } catch (NumberFormatException e1) {
+                            list.get(position).setLValue(0f);
+                        }
+                    }
+                }
             }
 
             @Override
@@ -222,31 +252,37 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public class TextViewHolder extends RecyclerView.ViewHolder {
+    public class CustomViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView title;
+        protected TextView title;
+
+        public CustomViewHolder(@NonNull View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.QCP_parameter_txt);
+        }
+    }
+
+    public class TextViewHolder extends CustomViewHolder {
+
         private EditText mTextEt;
 
         TextViewHolder(View itemView) {
             super(itemView);
 
-            title = itemView.findViewById(R.id.QCP_parameter_txt);
             title.setVisibility(View.VISIBLE);
             mTextEt = itemView.findViewById(R.id.IQCPHT_et);
         }
 
     }
 
-    public class BooleanViewHolder extends RecyclerView.ViewHolder {
+    public class BooleanViewHolder extends CustomViewHolder {
 
         private RadioButton mRadioPassed;
         private RadioButton mRadioFailed;
-        private TextView title;
 
         BooleanViewHolder(View itemView) {
             super(itemView);
 
-            title = itemView.findViewById(R.id.QCP_parameter_txt);
             mRadioPassed = itemView.findViewById(R.id.QCP_parameter_radio_passed);
             mRadioFailed = itemView.findViewById(R.id.QCP_parameter_radio_failed);
             title.setVisibility(View.VISIBLE);
@@ -255,14 +291,12 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
     }
 
-    public class NumViewHolder extends RecyclerView.ViewHolder {
+    public class NumViewHolder extends CustomViewHolder {
 
         private EditText mEditNumberEt;
-        private TextView title;
 
         NumViewHolder(View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.QCP_parameter_txt);
             title.setVisibility(View.VISIBLE);
 
             mEditNumberEt = itemView.findViewById(R.id.IQCPHN_et);
@@ -281,16 +315,14 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
     }
 
-    public class IntervalViewHolder extends RecyclerView.ViewHolder {
+    public class IntervalViewHolder extends CustomViewHolder {
 
         private final RangeView2 mRangeView;
         private EditText mEditMaxEt;
         private EditText mEditMinEt;
-        private TextView title;
 
         IntervalViewHolder(View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.QCP_parameter_txt);
             title.setVisibility(View.VISIBLE);
 
             mEditMinEt = itemView.findViewById(R.id.IQCPI_min_et);
@@ -314,6 +346,20 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                     return false; // consume touch event
                 }
             });
+
+        }
+
+    }
+
+    public class DateViewHolder extends CustomViewHolder {
+
+        private TextView mTextDateTv;
+
+        DateViewHolder(View itemView) {
+            super(itemView);
+
+            mTextDateTv = itemView.findViewById(R.id.IQCPHTime_tv);
+            title.setVisibility(View.VISIBLE);
 
         }
 
@@ -372,21 +418,4 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             timePickerDialog.show();
         }
     }
-
-    public class DateViewHolder extends RecyclerView.ViewHolder {
-
-        private TextView mTextDateTv;
-        private TextView title;
-
-        DateViewHolder(View itemView) {
-            super(itemView);
-
-            mTextDateTv = itemView.findViewById(R.id.IQCPHTime_tv);
-            title = itemView.findViewById(R.id.QCP_parameter_txt);
-            title.setVisibility(View.VISIBLE);
-
-        }
-
-    }
-
 }

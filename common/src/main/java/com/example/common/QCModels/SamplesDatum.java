@@ -14,6 +14,7 @@ public class SamplesDatum {
     @SerializedName("UpsertType")
     @Expose
     private Integer upsertType;
+    private boolean failed;
 
     public SamplesDatum() {
     }
@@ -33,6 +34,14 @@ public class SamplesDatum {
 
     public String getValue() {
         return value;
+    }
+
+    public boolean isFailed() {
+        return failed;
+    }
+
+    public void setFailed(boolean failed) {
+        this.failed = failed;
     }
 
     public void setValue(String value) {

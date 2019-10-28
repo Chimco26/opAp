@@ -224,7 +224,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 selectorBackground.setColor(mCircleSelector.getContext().getResources().getColor(R.color.white));
             }
 
-            if (event.getEventReasonID() != 0 && event.getEventReasonID() != 18 && event.getEventGroupID() != 20) {
+            if (event.getEventReasonID() != 0 && event.getEventGroupID() != 20) {//&& event.getEventReasonID() != 18
                 mCheckIc.setVisibility(View.VISIBLE);
                 mCheckIc.setColorFilter(Color.parseColor(event.getColor()));
             } else {

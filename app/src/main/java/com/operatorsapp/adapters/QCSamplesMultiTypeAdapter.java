@@ -69,25 +69,48 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int position) {
         int type = getItemViewType(position);
+        final SamplesDatum item = list.get(position);
 
         switch (type) {
 
             case FIELD_TYPE_BOOLEAN_INT:
+                if (item.getValue() != null && item.getValue().equals(Boolean.toString(true))){
+                    ((BooleanViewHolder)viewHolder).mBooleanCheckBox.setChecked(true);
+                }else {
+                    ((BooleanViewHolder)viewHolder).mBooleanCheckBox.setChecked(false);
+                }
                 ((BooleanViewHolder)viewHolder).mBooleanCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        list.get(position).setValue(Boolean.toString(b));
-                        list.get(position).setUpsertType(3);
+                        item.setValue(Boolean.toString(b));
+                        if (item.getUpsertType() != 2) {
+                            item.setUpsertType(3);
+                        }
                     }
                 });
+                if (item.isFailed()){
+                    ((BooleanViewHolder)viewHolder).mBooleanCheckBox.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
+                }else {
+                    ((BooleanViewHolder)viewHolder).mBooleanCheckBox.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.transparentColor));
+                }
                 break;
             case FIELD_TYPE_NUM_INT:
-                ((NumViewHolder)viewHolder).mEditNumberEt.setText(list.get(position).getValue());
+                ((NumViewHolder)viewHolder).mEditNumberEt.setText(item.getValue());
                 setTextWatcher(position, ((NumViewHolder)viewHolder).mEditNumberEt);
+                if (item.isFailed()){
+                    ((NumViewHolder)viewHolder).mEditNumberEt.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
+                }else {
+                    ((NumViewHolder)viewHolder).mEditNumberEt.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.white));
+                }
                 break;
             case FIELD_TYPE_TEXT_INT:
-                ((TextViewHolder)viewHolder).mTextEt.setText(list.get(position).getValue());
+                ((TextViewHolder)viewHolder).mTextEt.setText(item.getValue());
                 setTextWatcher(position, ((TextViewHolder) viewHolder).mTextEt);
+                if (item.isFailed()){
+                    ((TextViewHolder)viewHolder).mTextEt.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
+                }else {
+                    ((TextViewHolder)viewHolder).mTextEt.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.white));
+                }
                 break;
             case FIELD_TYPE_LAST_INT:
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +134,9 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 list.get(position).setValue(charSequence.toString());
-                list.get(position).setUpsertType(3);
+                if (list.get(position).getUpsertType() != 2) {
+                    list.get(position).setUpsertType(3);
+                }
             }
 
             @Override

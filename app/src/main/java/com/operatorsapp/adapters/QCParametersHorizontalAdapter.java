@@ -88,7 +88,4 @@ public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParame
         }
 
     }
-
-    public interface QCParametersHorizontalAdapterListener {
-    }
 }
