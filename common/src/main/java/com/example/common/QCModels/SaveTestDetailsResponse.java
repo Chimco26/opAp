@@ -23,7 +23,7 @@ public class SaveTestDetailsResponse extends StandardResponse {
         this.failedTestFieldsData = failedTestFieldsData;
     }
 
-    public Boolean getPassed() {
+    public Boolean isPassed() {
         return passed;
     }
 

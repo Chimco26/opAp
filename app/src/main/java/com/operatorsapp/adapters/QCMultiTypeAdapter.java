@@ -83,6 +83,12 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int position) {
         int type = getItemViewType(position);
         final TestFieldsDatum item = list.get(position);
+
+        if (item.isFailed()){
+            ((CustomViewHolder)viewHolder).title.setTextColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
+        }else {
+            ((CustomViewHolder)viewHolder).title.setTextColor(viewHolder.itemView.getResources().getColor(R.color.black));
+        }
         switch (type) {
 
             case FIELD_TYPE_BOOLEAN_INT:
@@ -246,31 +252,37 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public class TextViewHolder extends RecyclerView.ViewHolder {
+    public class CustomViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView title;
+        protected TextView title;
+
+        public CustomViewHolder(@NonNull View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.QCP_parameter_txt);
+        }
+    }
+
+    public class TextViewHolder extends CustomViewHolder {
+
         private EditText mTextEt;
 
         TextViewHolder(View itemView) {
             super(itemView);
 
-            title = itemView.findViewById(R.id.QCP_parameter_txt);
             title.setVisibility(View.VISIBLE);
             mTextEt = itemView.findViewById(R.id.IQCPHT_et);
         }
 
     }
 
-    public class BooleanViewHolder extends RecyclerView.ViewHolder {
+    public class BooleanViewHolder extends CustomViewHolder {
 
         private RadioButton mRadioPassed;
         private RadioButton mRadioFailed;
-        private TextView title;
 
         BooleanViewHolder(View itemView) {
             super(itemView);
 
-            title = itemView.findViewById(R.id.QCP_parameter_txt);
             mRadioPassed = itemView.findViewById(R.id.QCP_parameter_radio_passed);
             mRadioFailed = itemView.findViewById(R.id.QCP_parameter_radio_failed);
             title.setVisibility(View.VISIBLE);
@@ -279,14 +291,12 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
     }
 
-    public class NumViewHolder extends RecyclerView.ViewHolder {
+    public class NumViewHolder extends CustomViewHolder {
 
         private EditText mEditNumberEt;
-        private TextView title;
 
         NumViewHolder(View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.QCP_parameter_txt);
             title.setVisibility(View.VISIBLE);
 
             mEditNumberEt = itemView.findViewById(R.id.IQCPHN_et);
@@ -305,16 +315,14 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
     }
 
-    public class IntervalViewHolder extends RecyclerView.ViewHolder {
+    public class IntervalViewHolder extends CustomViewHolder {
 
         private final RangeView2 mRangeView;
         private EditText mEditMaxEt;
         private EditText mEditMinEt;
-        private TextView title;
 
         IntervalViewHolder(View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.QCP_parameter_txt);
             title.setVisibility(View.VISIBLE);
 
             mEditMinEt = itemView.findViewById(R.id.IQCPI_min_et);
@@ -338,6 +346,20 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                     return false; // consume touch event
                 }
             });
+
+        }
+
+    }
+
+    public class DateViewHolder extends CustomViewHolder {
+
+        private TextView mTextDateTv;
+
+        DateViewHolder(View itemView) {
+            super(itemView);
+
+            mTextDateTv = itemView.findViewById(R.id.IQCPHTime_tv);
+            title.setVisibility(View.VISIBLE);
 
         }
 
@@ -396,21 +418,4 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             timePickerDialog.show();
         }
     }
-
-    public class DateViewHolder extends RecyclerView.ViewHolder {
-
-        private TextView mTextDateTv;
-        private TextView title;
-
-        DateViewHolder(View itemView) {
-            super(itemView);
-
-            mTextDateTv = itemView.findViewById(R.id.IQCPHTime_tv);
-            title = itemView.findViewById(R.id.QCP_parameter_txt);
-            title.setVisibility(View.VISIBLE);
-
-        }
-
-    }
-
 }

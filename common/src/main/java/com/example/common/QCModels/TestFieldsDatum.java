@@ -61,6 +61,7 @@ public class TestFieldsDatum {
     @SerializedName("UpsertType")
     @Expose
     private Integer upsertType;
+    private boolean failed;
 
     public Integer getID() {
         return iD;
@@ -212,6 +213,14 @@ public class TestFieldsDatum {
 
     public void setUpsertType(Integer upsertType) {
         this.upsertType = upsertType;
+    }
+
+    public boolean isFailed() {
+        return failed;
+    }
+
+    public void setFailed(boolean failed) {
+        this.failed = failed;
     }
 
 }
