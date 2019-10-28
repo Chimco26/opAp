@@ -73,6 +73,11 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
         switch (type) {
 
             case FIELD_TYPE_BOOLEAN_INT:
+                if (list.get(position).getValue() != null && list.get(position).getValue().equals(Boolean.toString(true))){
+                    ((BooleanViewHolder)viewHolder).mBooleanCheckBox.setChecked(true);
+                }else {
+                    ((BooleanViewHolder)viewHolder).mBooleanCheckBox.setChecked(false);
+                }
                 ((BooleanViewHolder)viewHolder).mBooleanCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

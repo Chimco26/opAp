@@ -37,6 +37,7 @@ import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.QCRequests;
 import com.operatorsapp.utils.ShowCrouton;
+import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.lang.reflect.Type;
@@ -228,6 +229,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
     private void initTestRv() {
         mTestRV.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(2, 15, true, 0);
+        mTestRV.addItemDecoration(gridSpacingItemDecoration);
         mTestRV.setHasFixedSize(false);
         mTestAdapter = new QCMultiTypeAdapter(mTestOrderDetails.getTestFieldsData(), this);
         mTestRV.setAdapter(mTestAdapter);
@@ -251,7 +254,6 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                 mProgressBar.setVisibility(View.GONE);
                 mTestOrderDetails = testDetailsResponse;
                 initSamplesData();
-                //todo
                 initView();
             }
 
