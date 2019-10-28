@@ -290,9 +290,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         mQcRequests.postQCSaveTestDetails(saveTestDetailsRequest, new QCRequests.postQCSaveTestDetailsCallback() {
             @Override
             public void onSuccess(SaveTestDetailsResponse saveTestDetailsResponse) {
-                //todo
                 mProgressBar.setVisibility(View.GONE);
-//                ShowCrouton.showSimpleCrouton((QCActivity) getActivity(), null, CroutonCreator.CroutonType.SUCCESS);
                 getActivity().setResult(RESULT_OK);
                 getActivity().finish();
             }
