@@ -82,7 +82,9 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                         list.get(position).setValue(Boolean.toString(b));
-                        list.get(position).setUpsertType(3);
+                        if (list.get(position).getUpsertType() != 2) {
+                            list.get(position).setUpsertType(3);
+                        }
                     }
                 });
                 break;
@@ -116,7 +118,9 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 list.get(position).setValue(charSequence.toString());
-                list.get(position).setUpsertType(3);
+                if (list.get(position).getUpsertType() != 2) {
+                    list.get(position).setUpsertType(3);
+                }
             }
 
             @Override

@@ -139,7 +139,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             public void onClick(View view) {
                 if (Integer.parseInt(mSamplesNumberEt.getText().toString()) > 0) {
                     mSamplesCount = Integer.parseInt(mSamplesNumberEt.getText().toString()) - 1;
-                    updateSamples(false, mSamplesCount - 1);
+                    updateSamples(false, mSamplesCount);
                 }
             }
         });
@@ -284,7 +284,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private void saveTestOrderDetails(TestDetailsResponse testDetailsResponse) {
 
         updateOriginalSamples();
-        SaveTestDetailsRequest saveTestDetailsRequest = new SaveTestDetailsRequest(testDetailsResponse.getOriginalSampleFields(),
+        SaveTestDetailsRequest saveTestDetailsRequest = new SaveTestDetailsRequest(testDetailsResponse.getTestSampleFieldsData(),
                 testDetailsResponse.getTestFieldsData(), testDetailsResponse.getTestDetails().get(0).getSamples(), mTestDetailsRequest.getTestId());
         mProgressBar.setVisibility(View.VISIBLE);
         mQcRequests.postQCSaveTestDetails(saveTestDetailsRequest, new QCRequests.postQCSaveTestDetailsCallback() {
