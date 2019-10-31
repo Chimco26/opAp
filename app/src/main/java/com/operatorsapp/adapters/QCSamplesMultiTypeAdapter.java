@@ -74,7 +74,7 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
         switch (type) {
 
             case FIELD_TYPE_BOOLEAN_INT:
-                if (item.getValue() != null && item.getValue().equals(Boolean.toString(true))){
+                if (item.getValue() != null && item.getValue().toLowerCase().equals(Boolean.toString(true))){
                     ((BooleanViewHolder)viewHolder).mBooleanCheckBox.setChecked(true);
                 }else {
                     ((BooleanViewHolder)viewHolder).mBooleanCheckBox.setChecked(false);

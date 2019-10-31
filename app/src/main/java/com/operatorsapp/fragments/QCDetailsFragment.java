@@ -42,7 +42,6 @@ import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.lang.reflect.Type;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -165,9 +164,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                 break;
             }
             if (isIncrement) {
-                testSampleFieldsDatum.getSamplesData().add(
-                        new SamplesDatum(2, Integer.parseInt(String.valueOf(new Date().getTime())
-                                .substring(String.valueOf(new Date().getTime()).length() - 5, String.valueOf(new Date().getTime()).length() - 1)) + counter));
+                testSampleFieldsDatum.getSamplesData().add(new SamplesDatum(2, 0));
             } else if (testSampleFieldsDatum.getSamplesData().size() > 0) {
                 Integer id = testSampleFieldsDatum.getSamplesData().get(position).getID();
                 testSampleFieldsDatum.getSamplesData().remove(position);
@@ -303,14 +300,14 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                 if (samplesDatum.getID() == null || samplesDatum.getID().equals(0)) {
                     samplesDatum.setID(counter++);
                 }
-                if (haveFailed) {
-                    List<Integer> failed = mSaveTestDetailsResponse.getFailedTestSampleFieldsData();
-                    for (Integer integer : failed) {
-                        if (integer.equals(samplesDatum.getID())) {
-                            samplesDatum.setFailed(true);
-                        } else {
-                            samplesDatum.setFailed(false);
-                        }
+            }
+            if (haveFailed) {
+                List<Integer> failed = mSaveTestDetailsResponse.getFailedTestSampleFieldsData();
+                for (Integer integer : failed) {
+                    if (integer.equals(testSampleFieldsDatum.getID())) {
+                        testSampleFieldsDatum.setFailed(true);
+                    } else {
+                        testSampleFieldsDatum.setFailed(false);
                     }
                 }
             }
@@ -328,7 +325,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
         updateSamplesRelativeToOriginal();
         final SaveTestDetailsRequest saveTestDetailsRequest = new SaveTestDetailsRequest(testDetailsResponse.getTestSampleFieldsData(),
-                testDetailsResponse.getTestFieldsData(), testDetailsResponse.getTestDetails().get(0).getSamples(), mTestDetailsRequest.getTestId());
+                testDetailsResponse.getTestFieldsData(), mSamplesCount, mTestDetailsRequest.getTestId());
         mProgressBar.setVisibility(View.VISIBLE);
         mQcRequests.postQCSaveTestDetails(saveTestDetailsRequest, new QCRequests.postQCSaveTestDetailsCallback() {
             @Override
