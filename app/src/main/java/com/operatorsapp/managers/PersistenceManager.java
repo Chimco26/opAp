@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.app.operatorinfra.OperatorPersistenceManagerInterface;
 import com.example.common.Event;
+import com.example.common.SelectableString;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -54,6 +55,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_TOTAL_RETRIES = "pref.PREF_TOTAL_RETRIES";
     private static final String PREF_REQUEST_TIMEOUT = "pref.PREF_REQUEST_TIMEOUT";
     private static final String PREF_ARRAY_SHIFT_LOGS = "pref.PREF_ARRAY_SHIFT_LOGS";
+    private static final String PREF_ARRAY_CHECKED_SHIFT_GRAPH_CATEGORIES = "pref.PREF_ARRAY_CHECKED_SHIFT_GRAPH_CATEGORIES";
     private static final String PREF_ARRAY_CHART_HISTORIC_DATA = "pref.PREF_ARRAY_CHART_HISTORIC_DATA";
     private static final String PREF_JOB_ID = "pref.PREF_JOB_ID";
     private static final String PREF_OPERATOR_ID = "pref.PREF_OPERATOR_ID";
@@ -798,5 +800,19 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public void setStatusBarLocked(boolean isLocked) {
         SecurePreferences.getInstance().setBoolean(PREF_IS_STATUS_BAR_LOCKED, isLocked);
+    }
+
+    public ArrayList<SelectableString> getShiftGraphCategories() {
+        String selectableString = SecurePreferences.getInstance()
+                .getString(PREF_ARRAY_CHECKED_SHIFT_GRAPH_CATEGORIES, mGson.toJson(new ArrayList<>()));
+        Type listType = new TypeToken<ArrayList<SelectableString>>() {
+        }.getType();
+
+        return ((ArrayList<SelectableString>) mGson.fromJson(selectableString, listType));
+
+    }
+
+    public void setShiftGraphCategories(ArrayList<SelectableString> selectableStrings) {
+        SecurePreferences.getInstance().setString(PREF_ARRAY_CHECKED_SHIFT_GRAPH_CATEGORIES, mGson.toJson(selectableStrings));
     }
 }
