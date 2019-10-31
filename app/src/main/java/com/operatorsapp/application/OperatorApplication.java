@@ -8,7 +8,7 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -59,6 +59,7 @@ public class OperatorApplication extends MultiDexApplication {
 
     private static Context msApplicationContext;
     private GoogleAnalytics sAnalytics;
+    private FirebaseAnalytics firebaseAnalytics;
     private Tracker sTracker;
 
     @Override
@@ -74,7 +75,9 @@ public class OperatorApplication extends MultiDexApplication {
         msApplicationContext = getApplicationContext();
 //        LeakCanary.install(this);
 
-        sAnalytics = GoogleAnalytics.getInstance(this);
+//        sAnalytics = GoogleAnalytics.getInstance(this);
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/DroidSans.ttf").setFontAttrId(R.attr.fontPath).build());
 
@@ -99,13 +102,16 @@ public class OperatorApplication extends MultiDexApplication {
     }
 
 
-    synchronized public Tracker getDefaultTracker() {
-        // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
-        if (sTracker == null) {
-            sTracker = sAnalytics.newTracker(R.xml.global_tracker);
-        }
+    synchronized public FirebaseAnalytics getDefaultTracker() {
 
-        return sTracker;
+        return firebaseAnalytics;
+
+//        // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+//        if (sTracker == null) {
+//            sTracker = sAnalytics.newTracker(R.xml.global_tracker);
+//        }
+//
+//        return sTracker;
     }
 
     private void initImageLoading() {
