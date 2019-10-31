@@ -1,6 +1,9 @@
 package com.operatorsapp.adapters;
 
+import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,14 +34,15 @@ public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final CheckBoxFilterAdapter.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
         viewHolder.mCheckBox.setText(mFilterList.get(position).getString());
         viewHolder.mCheckBox.setTextColor(mFilterList.get(position).getColor());
+        setCheckBoxColor(viewHolder.mCheckBox, mFilterList.get(position).getColor(), mFilterList.get(position).getColor());
         viewHolder.mCheckBox.setChecked(mFilterList.get(position).isSelected());
         viewHolder.mCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean check = ((CheckBox)view).isChecked();
+                boolean check = ((CheckBox) view).isChecked();
                 mFilterList.get(position).setSelected(check);
                 if (mFilterList.get(position).getId().equals(SelectableString.SELECT_ALL_ID)) {
                     updateAll(check);
@@ -51,21 +55,37 @@ public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAd
         });
     }
 
+    @SuppressLint("RestrictedApi")
+    private static void setCheckBoxColor(AppCompatCheckBox checkBox, int uncheckedColor, int checkedColor) {
+        ColorStateList colorStateList = new ColorStateList(
+                new int[][]{
+                        new int[]{-android.R.attr.state_checked}, // unchecked
+                        new int[]{android.R.attr.state_checked}  // checked
+                },
+                new int[]{
+                        uncheckedColor,
+                        checkedColor
+                }
+        );
+        checkBox.setSupportButtonTintList(colorStateList);
+
+    }
+
     private void updateSelectAllItem(ArrayList<SelectableString> selectableStrings) {
         boolean b = selectableStrings.get(1).isSelected();
         int counter = 0;
         boolean onlyOneUnselected = false;
         for (SelectableString selectableStrings1 : selectableStrings.subList(1, selectableStrings.size())) {
-            if (selectableStrings1.isSelected() && b){
+            if (selectableStrings1.isSelected() && b) {
                 counter++;
-            }else {
+            } else {
                 onlyOneUnselected = true;
                 break;
             }
         }
-        if (counter == selectableStrings.size() - 1){
+        if (counter == selectableStrings.size() - 1) {
             selectableStrings.get(0).setSelected(b);
-        }else if (onlyOneUnselected){
+        } else if (onlyOneUnselected) {
             selectableStrings.get(0).setSelected(false);
         }
     }
@@ -85,7 +105,7 @@ public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAd
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final CheckBox mCheckBox;
+        private final AppCompatCheckBox mCheckBox;
 
         ViewHolder(View itemView) {
             super(itemView);

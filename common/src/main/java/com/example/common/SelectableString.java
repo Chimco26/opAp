@@ -1,6 +1,7 @@
 package com.example.common;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SelectableString {
     public static final String SELECT_ALL_ID = "SELECT_ALL_ID";
@@ -69,5 +70,24 @@ public class SelectableString {
         }
 
         return newList;
+    }
+
+    public static boolean setPrefCheck(ArrayList<SelectableString> selectableStrings, ArrayList<SelectableString> prefChecks){
+        if (selectableStrings.size() != prefChecks.size()){
+            return false;
+        }
+        HashMap<String,SelectableString> prefHashMap = new HashMap<>();
+        for (SelectableString prefCheck: prefChecks){
+            prefHashMap.put(prefCheck.getId(), prefCheck);
+        }
+        for (SelectableString selectableString: selectableStrings) {
+            if (!prefHashMap.containsKey(selectableString.getId())){
+                return false;
+            }
+        }
+        for (SelectableString selectableString: selectableStrings){
+            selectableString.setSelected(prefHashMap.get(selectableString.getId()).isSelected());
+        }
+        return true;
     }
 }

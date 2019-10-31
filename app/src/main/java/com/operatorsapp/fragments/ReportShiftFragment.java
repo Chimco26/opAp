@@ -175,6 +175,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                             selectableString1.setSelected(selectableString.isSelected());
                         }
                     }
+                    PersistenceManager.getInstance().setShiftGraphCategories(selectableStrings);
                     mGraphRv.post(new Runnable() {
                         @Override
                         public void run() {
@@ -345,7 +346,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
                             if (date != null) {
 
-                                values.add(new Entry((float) date.getTime(), (float) (Math.round(items.get(i).getY().floatValue()))));
+                                values.add(new Entry((float) date.getTime(), (float) (items.get(i).getY().floatValue())));
                             }
 
 
@@ -535,11 +536,16 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                             }
                         }
                         if (mSelectableStrings == null) {
-                            mSelectableStrings = new ArrayList<>();
+                            mSelectableStrings = selectableStrings;
+                            boolean isSameCategories = SelectableString.setPrefCheck(mSelectableStrings, PersistenceManager.getInstance().getShiftGraphCategories());
+                            if (!isSameCategories){
+                                PersistenceManager.getInstance().setShiftGraphCategories(new ArrayList<SelectableString>());
+                            }
+                        }else {
+                            ArrayList<SelectableString> arrayList = SelectableString.updateList(mSelectableStrings, selectableStrings);
+                            mSelectableStrings.clear();
+                            mSelectableStrings.addAll(arrayList);
                         }
-                        ArrayList<SelectableString> arrayList = SelectableString.updateList(mSelectableStrings, selectableStrings);
-                        mSelectableStrings.clear();
-                        mSelectableStrings.addAll(arrayList);
                         if (mGraphs == null) {
                             mGraphs = new ArrayList<>();
                         }
