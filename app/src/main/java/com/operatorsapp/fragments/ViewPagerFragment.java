@@ -126,6 +126,13 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
         return view;
     }
 
+    public boolean isRecipeShown(){
+        try {
+            return mFragmentList.get(mPager.getCurrentItem()) instanceof RecipeFragment;
+        }catch (Exception e){
+            return false;
+        }
+    }
     private void initCycleAlarmView(View view) {
         mCycleWarningView = view.findViewById(R.id.FAAE_cycle_alarm_view);
         view.findViewById(R.id.FAAE_cycle_alarm_view).findViewById(R.id.NPAD_btn).setOnClickListener(new View.OnClickListener() {

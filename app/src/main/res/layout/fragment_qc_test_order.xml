@@ -164,9 +164,10 @@
                         android:background="@drawable/box_strok_grey"
                         android:gravity="center"
                         android:inputType="number"
-                        android:text="0"
+                        android:hint="0"
                         app:autoSizeMaxTextSize="35sp"
-                        app:autoSizeTextType="uniform" />
+                        app:autoSizeTextType="uniform"
+                        />
                 </LinearLayout>
 
                 <View

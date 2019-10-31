@@ -2145,6 +2145,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void openDialog(Event event) {
 
+        if (getContext() == null){return;}
         String message;
 
         if (PersistenceManager.getInstance().getCurrentLang().equals("en")) {
@@ -2929,6 +2930,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         super.onDestroy();
 
         removeBroadcasts();
+        if (mAsyncTask != null) {
+            mAsyncTask.cancel(true);
+        }
         if (mHandlerTechnicianCall != null) {
             mHandlerTechnicianCall.removeCallbacksAndMessages(null);
         }

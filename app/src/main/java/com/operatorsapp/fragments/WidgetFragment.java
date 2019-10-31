@@ -103,14 +103,14 @@ public class WidgetFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
 
         mIsOpen = false;
-        // get screen parameters
+//        // get screen parameters
         if (getActivity() != null) {
-            view.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (getActivity() != null){
-                        return;
-                    }
+//            view.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (getActivity() == null) {
+//                        return;
+//                    }
                     Display display = getActivity().getWindowManager().getDefaultDisplay();
                     Point size = new Point();
                     display.getSize(size);
@@ -173,9 +173,9 @@ public class WidgetFragment extends Fragment implements
                     mKeyBoardLayout = view.findViewById(R.id.FW_keyboard);
 
                 }
-            });
-
-        }
+//            });
+//
+//        }
 
     }
 
@@ -221,7 +221,7 @@ public class WidgetFragment extends Fragment implements
     @Override
     public void onDeviceStatusChanged(MachineStatus machineStatus) {
         this.mMachineStatus = machineStatus;
-        if (mWidgetAdapter != null){
+        if (mWidgetAdapter != null) {
             mWidgetAdapter.setMachineStatus(mMachineStatus);
         }
     }
@@ -229,7 +229,8 @@ public class WidgetFragment extends Fragment implements
     @Override
     public void onMachineDataReceived(ArrayList<Widget> widgetList) {
 
-        if (mReportFieldsFragmentCallbackListener != null && mReportFieldsFragmentCallbackListener.getReportForMachine() == null) {
+        if (mReportFieldsFragmentCallbackListener == null || mReportFieldsFragmentCallbackListener.getReportForMachine() == null
+                || mLoadingDataView == null) {
 
             return;
 
@@ -263,7 +264,7 @@ public class WidgetFragment extends Fragment implements
         if (mGridLayoutManager != null) {
             if (open) {
                 mGridLayoutManager.setSpanCount(Math.max(mSpanCount, 1));
-            }else {
+            } else {
                 mGridLayoutManager.setSpanCount(Math.max(mSpanCount - 1, 1));
             }
         }
@@ -294,7 +295,7 @@ public class WidgetFragment extends Fragment implements
 
     @Override
     public void onApproveFirstItemEnabledChanged(boolean enabled) {
-        if (mWidgetAdapter != null){
+        if (mWidgetAdapter != null) {
             mWidgetAdapter.setApproveFirstItemFeedBack();
         }
     }

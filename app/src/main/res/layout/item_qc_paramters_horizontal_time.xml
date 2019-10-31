@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="60dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_vertical"
-    android:paddingBottom="23dp">
+    android:paddingBottom="23dp"
+    android:weightSum="10">
 
     <TextView
         android:id="@+id/QCP_parameter_txt"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="5"
         android:layout_height="match_parent"
         android:text="@string/parameter"
         android:gravity="center_vertical"
@@ -15,13 +18,24 @@
         android:textColor="@color/black"
         android:textSize="22sp"
         android:visibility="gone"
+        android:maxLines="2"
+        app:autoSizeMaxTextSize="22sp"
+        app:autoSizeTextType="uniform"
         />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"/>
 
     <TextView
         android:id="@+id/IQCPHTime_tv"
-        android:layout_width="180dp"
+        android:layout_width="0dp"
+        android:layout_weight="4"
         android:gravity="center"
         android:layout_height="match_parent"
-        android:background="@color/white"/>
+        android:background="@color/white"
+        app:autoSizeMaxTextSize="22sp"
+        app:autoSizeTextType="uniform"/>
 
 </LinearLayout>
