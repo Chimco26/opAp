@@ -93,7 +93,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
             case FIELD_TYPE_BOOLEAN_INT:
                 ((BooleanViewHolder) viewHolder).title.setText(item.getLName());
-                if (item.getCurrentValue().toLowerCase().equals("true")) {
+                if (item.getCurrentValue().toLowerCase().equals(Boolean.toString(true))) {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(true);
                     ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(false);
                 } else {
