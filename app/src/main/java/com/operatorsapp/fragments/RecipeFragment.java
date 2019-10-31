@@ -698,7 +698,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
     public void updateRecipeResponse(RecipeResponse recipeResponse, StandardResponse reason) {
 
-        if (!isUpdating && mIsEditMode) {
+        if (!isUpdating && mIsEditMode && mProgressBar != null) {
             return;
         }
         mProgressBar.setVisibility(View.GONE);

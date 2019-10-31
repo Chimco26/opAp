@@ -138,7 +138,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                 ((DateViewHolder) viewHolder).itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        showDatePicker(viewHolder, item);
+                        showDatePicker(((DateViewHolder) viewHolder), item);
                     }
                 });
                 break;
@@ -146,14 +146,19 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void showDatePicker(@NonNull RecyclerView.ViewHolder viewHolder, final TestFieldsDatum item) {
+    public void showDatePicker(final DateViewHolder viewHolder, final TestFieldsDatum item) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date(TimeUtils.getLongFromDateString(item.getCurrentValue(), ONLY_DATE_FORMAT)));
+        if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()){
+            calendar.setTime(new Date(TimeUtils.getLongFromDateString(item.getCurrentValue(), ONLY_DATE_FORMAT)));
+        }else {
+            calendar.setTime(new Date());
+        }
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 viewHolder.itemView.getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                item.setCurrentValue(String.format(Locale.US, "%d/%d/%d", i, i1, i2));
+                item.setCurrentValue(String.format(Locale.US, "%d/%d/%d", i2, i1, i));
+                viewHolder.mTextDateTv.setText(item.getCurrentValue());
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();

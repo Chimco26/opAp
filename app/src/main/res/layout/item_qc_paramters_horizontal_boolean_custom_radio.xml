@@ -16,6 +16,8 @@
         android:textColor="@color/black"
         android:textSize="22sp"
         android:visibility="gone"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMaxTextSize="22sp"
         />
 
     <RadioGroup
