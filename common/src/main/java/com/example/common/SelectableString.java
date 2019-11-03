@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 public class SelectableString {
     public static final String SELECT_ALL_ID = "SELECT_ALL_ID";
+    public static final String STANDARD_VARIATION_ID = "STANDARD_VARIATION_ID";
     private int color;
     private String id;
     String string;
