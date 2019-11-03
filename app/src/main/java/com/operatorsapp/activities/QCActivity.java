@@ -1,5 +1,6 @@
 package com.operatorsapp.activities;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -41,10 +42,15 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         toolbar.setTitle(R.string.order_test);
         toolbar.setNavigationIcon(R.drawable.arrow_back);
         setSupportActionBar(toolbar);
+        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                toolbar.getNavigationIcon().setAutoMirrored(true);
+            }
+        }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setResult(RESULT_OK, getIntent());
+                setResult(RESULT_CANCELED, getIntent());
                 finish();            }
         });
         // Sets the Toolbar
@@ -84,7 +90,7 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
             return;
         }
         if (count <= 1) {
-            setResult(RESULT_OK, getIntent());
+            setResult(RESULT_CANCELED, getIntent());
             finish();
             //additional code
         } else {

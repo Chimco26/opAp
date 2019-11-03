@@ -52,7 +52,7 @@ public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParame
         if (list.get(position).isFailed()){
             (viewHolder).mTitleTv.setTextColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
         }else {
-            (viewHolder).mTitleTv.setTextColor(viewHolder.itemView.getResources().getColor(R.color.transparentColor));
+            (viewHolder).mTitleTv.setTextColor(viewHolder.itemView.getResources().getColor(R.color.black));
         }
         viewHolder.mTitleTv.setText(list.get(position).getLName());
         viewHolder.mRv.setLayoutManager(new LinearLayoutManager(viewHolder.mRv.getContext()));
