@@ -108,9 +108,8 @@ public class GraphSeries {
         }
     }
 
-    private static List<List<Item>> splitAndReturn(ArrayList<Item> numbers,
-                                                   int size) {
-        List<List<Item>> smallList = new ArrayList<List<Item>>();
+    private static List<List<Item>> splitAndReturn(ArrayList<Item> numbers, int size) {
+        List<List<Item>> smallList = new ArrayList<>();
         int i = 0;
         while (i + size < numbers.size()) {
             smallList.add(numbers.subList(i, i + size));
@@ -123,28 +122,36 @@ public class GraphSeries {
     public static double calculateStandardDeviation(List<Item> sd, double mean) {
 
         double newSum = 0;
-
+        int counter = 0;
         for (int j = 0; j < sd.size(); j++) {
-            // put the calculation right in there
             if (sd.get(j).getY() != null) {
-                newSum = newSum + ((sd.get(j).getY() - mean) * (sd.get(j).getY() - mean));
+                newSum += ((sd.get(j).getY() - mean) * (sd.get(j).getY() - mean));
+                counter++;
             }
         }
-        double squaredDiffMean = (newSum) / (sd.size());
-        double standardDev = (Math.sqrt(squaredDiffMean));
-
-        return standardDev;
+        try {
+            double squaredDiffMean = newSum / counter;
+            double standardDev = (Math.sqrt(squaredDiffMean));
+            return standardDev;
+        }catch (Exception e){
+            return 0;
+        }
     }
 
     public static double getMean(List<Item> sd) {
         double sum = 0;
-
+        int counter = 0;
         for (int i = 0; i < sd.size(); i++) {
             if (sd.get(i).getY() != null) {
                 sum = sum + sd.get(i).getY();
+                counter++;
             }
         }
-        return (sum) / (sd.size());
+        try {
+            return sum / counter;
+        }catch (Exception e){
+            return sd.get(0).getY();
+        }
     }
 }
 

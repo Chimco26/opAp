@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Date;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.operatorsapp.utils.EntryUtils.getAveragedPoints;
 
 public class TimeViewHolder extends RecyclerView.ViewHolder {
 
@@ -133,7 +134,7 @@ public class TimeViewHolder extends RecyclerView.ViewHolder {
                 fourHoursList.add(fourHoursValues);
                 tenHoursList.add(tenHoursValues);
             }
-            mChart.setData(fourHoursList, xValues, widget.getLowLimit(), widget.getHighLimit());
+            mChart.setData(getAveragedPoints(fourHoursList), xValues, widget.getLowLimit(), widget.getHighLimit());
             mChart.setLimitLines(widget.getLowLimit(), widget.getHighLimit(), widget.getStandardValue(), midnightLimit);
             final float midnightFinal = midnightLimit;
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +142,7 @@ public class TimeViewHolder extends RecyclerView.ViewHolder {
                 public void onClick(View v) {
                     if (tenHoursList.size() > 0) {
                         String nameByLang = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
-                        mGoToScreenListener.goToFragment(ChartFragment.newInstance(tenHoursList, widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit(), xValues, nameByLang, midnightFinal), true, false);
+                        mGoToScreenListener.goToFragment(ChartFragment.newInstance(getAveragedPoints(tenHoursList), tenHoursList, widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit(), xValues, nameByLang, midnightFinal), true, false);
                     }
                 }
             });
