@@ -18,6 +18,7 @@
         android:textColor="@color/black"
         android:textSize="22sp"
         android:visibility="visible"
+        android:maxLines="1"
         app:autoSizeMaxTextSize="22sp"
         app:autoSizeTextType="uniform" />
 
@@ -61,7 +62,8 @@
                 android:gravity="center"
                 android:background="@color/white"
                 android:focusable="false"
-                android:focusableInTouchMode="false" />
+                android:focusableInTouchMode="false"
+                android:maxLines="1"/>
         </LinearLayout>
 
         <View
@@ -96,7 +98,8 @@
                 android:gravity="center"
                 android:background="@color/white"
                 android:focusable="false"
-                android:focusableInTouchMode="false" />
+                android:focusableInTouchMode="false"
+                android:maxLines="1"/>
         </LinearLayout>
 
         <View

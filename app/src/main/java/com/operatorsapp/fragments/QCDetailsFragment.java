@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.example.common.QCModels.SaveTestDetailsResponse;
 import com.example.common.QCModels.TestDetailsRequest;
 import com.example.common.QCModels.TestDetailsResponse;
 import com.example.common.QCModels.TestFieldsDatum;
+import com.example.common.QCModels.TestFieldsGroup;
 import com.example.common.QCModels.TestSampleFieldsDatum;
 import com.example.common.StandardResponse;
 import com.example.common.utils.GsonHelper;
@@ -42,6 +44,8 @@ import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -60,12 +64,11 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private QCDetailsFragmentListener mListener;
     private TestDetailsResponse mTestOrderDetails;
     private RecyclerView mSamplesTestRV;
-    private RecyclerView mTestRV;
+    private LinearLayout mTestContainer;
     private SingleLineKeyboard mKeyBoard;
     private LinearLayout mKeyBoardLayout;
     private int mSamplesCount;
     private QCParametersHorizontalAdapter mSamplesAdapter;
-    private QCMultiTypeAdapter mTestAdapter;
     private TextView mSamplesNumberEt;
     private View mPassedLy;
     private ImageView mPassedIc;
@@ -108,7 +111,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         ((TextView) view.findViewById(R.id.FQCD_title_tv)).setText(String.format(Locale.getDefault(),
                 "%s- %d", getString(R.string.quality_test), mTestDetailsRequest.getTestId()));
         mQcRequests = new QCRequests();
-        initTestRvView();
+//        initTestRvView();
         initSampleRvView();
         getTestOrderDetails();
     }
@@ -124,7 +127,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             }
         });
         mSamplesTestRV = view.findViewById(R.id.FQCD_paramters_rv);
-        mTestRV = view.findViewById(R.id.FQCD_fields_rv);
+        mTestContainer = view.findViewById(R.id.FQCD_fields_ll);
         initIncrementSamplesView(view);
         initPassedVars(view);
     }
@@ -158,7 +161,6 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private void updateSamples(boolean isIncrement, int position) {
         mSamplesNumberEt.setText(mSamplesCount + "");
         List<TestSampleFieldsDatum> samples = mTestOrderDetails.getTestSampleFieldsData();
-        int counter = 1000;
         for (TestSampleFieldsDatum testSampleFieldsDatum : samples) {
             if (testSampleFieldsDatum.getSamplesData() == null) {
                 break;
@@ -220,9 +222,13 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     }
 
     private void initSamplesTestRv() {
-        mSamplesAdapter = new QCParametersHorizontalAdapter(mTestOrderDetails.getTestDetails().get(0).getSamples(),
-                mTestOrderDetails.getTestSampleFieldsData(), this, this);
-        mSamplesTestRV.setAdapter(mSamplesAdapter);
+        if (getActivity() != null) {
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            mSamplesAdapter = new QCParametersHorizontalAdapter(mTestOrderDetails.getTestDetails().get(0).getSamples(),
+                    mTestOrderDetails.getTestSampleFieldsData(), this, this, displayMetrics.widthPixels);
+            mSamplesTestRV.setAdapter(mSamplesAdapter);
+        }
     }
 
     private void initSampleRvView() {
@@ -231,16 +237,30 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     }
 
     private void initTestRv() {
-        mTestAdapter = new QCMultiTypeAdapter(mTestOrderDetails.getTestFieldsData(), this);
-        mTestRV.setAdapter(mTestAdapter);
+        mTestContainer.removeAllViews();
+        for (ArrayList<TestFieldsDatum> testFieldsData: mTestOrderDetails.getTestFieldsComplete()) {
+            Log.d(TAG, "initTestRv: " + testFieldsData.get(0).getGroupName());
+            QCMultiTypeAdapter testAdapter = new QCMultiTypeAdapter(testFieldsData, this);
+            RecyclerView recyclerView = new RecyclerView(getActivity());
+            recyclerView.setAdapter(testAdapter);
+            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+            GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(2, 30, true, 0);
+            recyclerView.addItemDecoration(gridSpacingItemDecoration);
+            recyclerView.setHasFixedSize(false);
+            mTestContainer.addView(recyclerView);
+            View view = new View(getActivity());
+            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
+            view.setBackgroundColor(getContext().getResources().getColor(R.color.divider_gray));
+            mTestContainer.addView(view);
+        }
     }
 
-    private void initTestRvView() {
-        mTestRV.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(2, 15, true, 0);
-        mTestRV.addItemDecoration(gridSpacingItemDecoration);
-        mTestRV.setHasFixedSize(false);
-    }
+//    private void initTestRvView() {
+//        mTestContainer.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+//        GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(2, 30, true, 0);
+//        mTestContainer.addItemDecoration(gridSpacingItemDecoration);
+//        mTestContainer.setHasFixedSize(false);
+//    }
 
     @Override
     public void onAttach(Context context) {
@@ -276,6 +296,10 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         boolean haveFailed = mSaveTestDetailsResponse != null &&
                 mSaveTestDetailsResponse.getFailedTestFieldsData() != null
                 && mSaveTestDetailsResponse.getFailedTestFieldsData().size() > 0;
+        ArrayList<ArrayList<TestFieldsDatum>> completList = new ArrayList<>();
+        ArrayList<TestFieldsDatum> recipeList = new ArrayList<>();
+        HashMap<Integer, ArrayList<TestFieldsDatum>> testFieldsDatumHashMap = new HashMap<>();
+        int counter = 0;
         for (TestFieldsDatum testFieldsDatum : mTestOrderDetails.getTestFieldsData()) {
             if (haveFailed) {
                 List<Integer> failed = mSaveTestDetailsResponse.getFailedTestFieldsData();
@@ -287,7 +311,44 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                     }
                 }
             }
+            if (testFieldsDatum.getInputType() == 2 || testFieldsDatum.getInputType() == 6) {
+                recipeList.add(testFieldsDatum);
+            } else {
+                if (testFieldsDatum.getGroupId() == null) {
+                    testFieldsDatum.setGroupId(0);
+                }
+                //for test
+//                counter++;
+//                if (counter / 2.0 == (int) counter/2){
+//                    testFieldsDatum.setGroupId(2);
+//                }else {
+//                    testFieldsDatum.setGroupId(1);
+//                }
+                ArrayList<TestFieldsDatum> list = new ArrayList<>();
+                if (testFieldsDatumHashMap.containsKey(testFieldsDatum.getGroupId())
+                        && testFieldsDatumHashMap.get(testFieldsDatum.getGroupId()) != null) {
+                    list = testFieldsDatumHashMap.get(testFieldsDatum.getGroupId());
+                }
+                list.add(testFieldsDatum);
+                testFieldsDatumHashMap.put(testFieldsDatum.getGroupId(), list);
+
+                //for test
+//                ArrayList<TestFieldsGroup> testFieldsGroups = new ArrayList<>();
+//                testFieldsGroups.add(new TestFieldsGroup(1, "1", 0));
+//                testFieldsGroups.add(new TestFieldsGroup(2, "2", 0));
+//                mTestOrderDetails.setTestFieldsGroups(testFieldsGroups);
+                for (TestFieldsGroup testFieldsGroup : mTestOrderDetails.getTestFieldsGroups()) {
+                    if (testFieldsGroup.getId() == testFieldsDatum.getGroupId()) {
+                        testFieldsDatum.setGroupName(testFieldsGroup.getName());
+                    }
+                }
+            }
         }
+        completList.add(recipeList);
+        for (HashMap.Entry<Integer, ArrayList<TestFieldsDatum>> arrayListEntry : testFieldsDatumHashMap.entrySet()) {
+            completList.add(arrayListEntry.getValue());
+        }
+        mTestOrderDetails.setCompleteTestList(completList);
     }
 
     public void initSamplesData() {

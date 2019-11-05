@@ -15,12 +15,11 @@
         android:text="@string/parameter"
         android:gravity="center_vertical"
         android:layout_marginEnd="50dp"
-        android:maxLines="2"
+        android:maxLines="1"
         android:textColor="@color/black"
         android:textSize="22sp"
         android:visibility="gone"
-        app:autoSizeMaxTextSize="22sp"
-        app:autoSizeTextType="uniform"
+        android:ellipsize="end"
         />
     <View
         android:layout_width="0dp"
@@ -36,8 +35,7 @@
         android:gravity="center"
         android:focusableInTouchMode="false"
         android:background="@color/white"
-        app:autoSizeMaxTextSize="22sp"
-        app:autoSizeTextType="uniform"/>
+        android:maxLines="1"/>
 
 </LinearLayout>
 

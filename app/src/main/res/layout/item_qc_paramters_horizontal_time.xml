@@ -18,9 +18,8 @@
         android:textColor="@color/black"
         android:textSize="22sp"
         android:visibility="gone"
-        android:maxLines="2"
-        app:autoSizeMaxTextSize="22sp"
-        app:autoSizeTextType="uniform"
+        android:maxLines="1"
+        android:ellipsize="end"
         />
 
     <View
@@ -35,6 +34,7 @@
         android:gravity="center"
         android:layout_height="match_parent"
         android:background="@color/white"
+        android:maxLines="1"
         app:autoSizeMaxTextSize="22sp"
         app:autoSizeTextType="uniform"/>
 

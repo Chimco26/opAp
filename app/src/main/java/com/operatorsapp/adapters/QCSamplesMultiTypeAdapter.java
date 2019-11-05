@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.common.QCModels.SamplesDatum;
+import com.example.common.QCModels.TestSampleFieldsDatum;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.view.SingleLineKeyboard;
@@ -35,15 +36,17 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
     private final String mInputType;
     private final OnKeyboardManagerListener mOnKeyboardManagerListener;
     private final QCSamplesMultiTypeAdapterListener mQcSamplesMultiTypeAdapterListener;
+    private final TestSampleFieldsDatum mTestSample;
     private ArrayList<SamplesDatum> list;
 
-    public QCSamplesMultiTypeAdapter(String inputType, ArrayList<SamplesDatum> list,
+    public QCSamplesMultiTypeAdapter(String inputType, TestSampleFieldsDatum testSample,
                                      OnKeyboardManagerListener onKeyboardManagerListener,
                                      QCSamplesMultiTypeAdapterListener qcSamplesMultiTypeAdapterListener) {
         mInputType = inputType;
         mOnKeyboardManagerListener = onKeyboardManagerListener;
         mQcSamplesMultiTypeAdapterListener = qcSamplesMultiTypeAdapterListener;
-        this.list = list;
+        mTestSample = testSample;
+        this.list = (ArrayList<SamplesDatum>) testSample.getSamplesData();
     }
 
     @NonNull
@@ -74,43 +77,49 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
         switch (type) {
 
             case FIELD_TYPE_BOOLEAN_INT:
-                if (item.getValue() != null && item.getValue().toLowerCase().equals(Boolean.toString(true))){
-                    ((BooleanViewHolder)viewHolder).mBooleanCheckBox.setChecked(true);
-                }else {
-                    ((BooleanViewHolder)viewHolder).mBooleanCheckBox.setChecked(false);
+                if (item.getValue() != null && item.getValue().toLowerCase().equals(Boolean.toString(true))) {
+                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setChecked(true);
+                } else {
+                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setChecked(false);
                 }
-                ((BooleanViewHolder)viewHolder).mBooleanCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        item.setValue(Boolean.toString(b));
-                        if (item.getUpsertType() != 2) {
-                            item.setUpsertType(3);
+                if (mTestSample.getAllowEntry()) {
+                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setEnabled(true);
+                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            item.setValue(Boolean.toString(b));
+                            if (item.getUpsertType() != 2) {
+                                item.setUpsertType(3);
+                            }
                         }
-                    }
-                });
-                if (item.isFailed()){
-                    ((BooleanViewHolder)viewHolder).mBooleanCheckBox.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
-                }else {
-                    ((BooleanViewHolder)viewHolder).mBooleanCheckBox.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.transparentColor));
+                    });
+                } else {
+                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setOnCheckedChangeListener(null);
+                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setEnabled(false);
+                }
+                if (item.isFailed()) {
+                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
+                } else {
+                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.transparentColor));
                 }
                 break;
             case FIELD_TYPE_NUM_INT:
-                ((NumViewHolder)viewHolder).mEditNumberEt.setText(item.getValue());
-                setTextWatcher(position, ((NumViewHolder)viewHolder).mEditNumberEt);
-                if (item.isFailed()){
-                    ((NumViewHolder)viewHolder).mEditNumberEt.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
-                }else {
-                    ((NumViewHolder)viewHolder).mEditNumberEt.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.white));
+                ((NumViewHolder) viewHolder).mEditNumberEt.setText(item.getValue());
+                if (item.isFailed()) {
+                    ((NumViewHolder) viewHolder).mEditNumberEt.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
+                } else {
+                    ((NumViewHolder) viewHolder).mEditNumberEt.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.white));
                 }
+                setEditableMode(position, item, ((NumViewHolder) viewHolder).mEditNumberEt);
                 break;
             case FIELD_TYPE_TEXT_INT:
-                ((TextViewHolder)viewHolder).mTextEt.setText(item.getValue());
-                setTextWatcher(position, ((TextViewHolder) viewHolder).mTextEt);
-                if (item.isFailed()){
-                    ((TextViewHolder)viewHolder).mTextEt.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
-                }else {
-                    ((TextViewHolder)viewHolder).mTextEt.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.white));
+                ((TextViewHolder) viewHolder).mTextEt.setText(item.getValue());
+                if (item.isFailed()) {
+                    ((TextViewHolder) viewHolder).mTextEt.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
+                } else {
+                    ((TextViewHolder) viewHolder).mTextEt.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.white));
                 }
+                setEditableMode(position, item, ((TextViewHolder) viewHolder).mTextEt);
                 break;
             case FIELD_TYPE_LAST_INT:
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +130,21 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
                     }
                 });
                 break;
+        }
+    }
+
+    public void setEditableMode(int position, SamplesDatum item, EditText mEditNumberEt) {
+        if (mTestSample.getAllowEntry()) {
+            setTextWatcher(position, mEditNumberEt);
+            mEditNumberEt.setEnabled(true);
+            mEditNumberEt.setFocusable(true);
+            mEditNumberEt.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
+            mEditNumberEt.setClickable(true);
+        } else {
+            mEditNumberEt.setEnabled(false);
+            mEditNumberEt.setFocusable(false);
+            mEditNumberEt.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
+            mEditNumberEt.setClickable(false);
         }
     }
 
@@ -211,6 +235,7 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
                     mEditNumberEt.onTouchEvent(event); // call native handler
                     mEditNumberEt.setInputType(inType); // restore input type
                     setKeyBoard(mEditNumberEt, new String[]{".", "-"});
+                    mEditNumberEt.setCursorVisible(true);
                     return false; // consume touch event
                 }
             });

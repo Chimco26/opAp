@@ -206,6 +206,9 @@ public class TestSampleFieldsDatum {
     }
 
     public Boolean getAllowEntry() {
+        if (allowEntry == null){
+            return false;
+        }
         return allowEntry;
     }
 
@@ -214,6 +217,9 @@ public class TestSampleFieldsDatum {
     }
 
     public Boolean getRequiredField() {
+        if (requiredField == null){
+            return false;
+        }
         return requiredField;
     }
 
