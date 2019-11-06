@@ -1,54 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_vertical"
     android:paddingBottom="13dp"
     android:weightSum="10">
 
-    <TextView
-        android:id="@+id/QCP_parameter_txt"
+    <LinearLayout
         android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="3"
-        android:layout_height="match_parent"
-        android:text="@string/parameter"
-        android:gravity="center_vertical"
-        android:maxLines="1"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:visibility="gone"
-        android:ellipsize="end"
-        />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/QCP_parameter_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="@string/parameter"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
     <View
         android:layout_width="0dp"
-        android:layout_weight="0.25"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_weight="0.25" />
 
     <EditText
         android:id="@+id/IQCPHN_et"
         android:layout_width="0dp"
-        android:layout_weight="2.5"
         android:layout_height="37dp"
-        android:focusable="false"
-        android:gravity="center"
-        android:focusableInTouchMode="false"
+        android:layout_weight="2.5"
         android:background="@color/white"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:gravity="center"
         android:maxLines="1"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
 
     <View
         android:layout_width="0dp"
-        android:layout_weight="0.25"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_weight="0.25" />
 
     <com.operatorsapp.view.RangeView2
-    android:id="@+id/IQCPI_range"
-    android:layout_width="0dp"
-    android:layout_height="match_parent"
-    android:layout_weight="4"
-    app:show_avg="false"
-    app:show_standard="false" />
+        android:id="@+id/IQCPI_range"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        app:show_avg="false"
+        app:show_standard="false" />
 
 </LinearLayout>
 

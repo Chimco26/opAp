@@ -261,6 +261,9 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             mTestContainer.addView(view);
             if (testFieldsData.get(0).getGroupId().equals(-1)){
                 addTextViewTitleToSample(getString(R.string.test_fields), getContext().getResources().getColor(R.color.machine_blue));
+                View view1 = new View(getActivity());
+                view1.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 10));
+                mTestContainer.addView(view1);
             }
         }
     }
