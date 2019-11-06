@@ -454,5 +454,7 @@
     <string name="send_test_success">Send Test Success</string>
     <string name="you_need_to_select_the_test">You need to select the test you want to run</string>
     <string name="you_need_to_select_the_test_field">You need to select the test you want to run</string>
+    <string name="recipe_fields">Recipe Fields</string>
+    <string name="test_fields">Test Fields</string>
 
 </resources>

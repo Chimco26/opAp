@@ -42,7 +42,10 @@ import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_NUM_INT
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_TEXT;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_TEXT_INT;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_TIME;
+import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_TIME_INT;
 import static com.operatorsapp.utils.TimeUtils.ONLY_DATE_FORMAT;
+import static com.operatorsapp.utils.TimeUtils.SIMPLE_HM_FORMAT;
+import static com.operatorsapp.utils.TimeUtils.SQL_NO_T_FORMAT;
 
 public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
@@ -70,8 +73,8 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                 return new QCMultiTypeAdapter.IntervalViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_interval, parent, false));
             case FIELD_TYPE_TEXT_INT:
                 return new QCMultiTypeAdapter.TextViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_text_parameter, parent, false));
-//            case FIELD_TYPE_TIME_INT:
-//                return new QCMultiTypeAdapter.TimeTextViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_time, parent, false));
+            case FIELD_TYPE_TIME_INT:
+                return new QCMultiTypeAdapter.TimeTextViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_time, parent, false));
             case FIELD_TYPE_DATE_INT:
                 return new QCMultiTypeAdapter.DateViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_time, parent, false));
             default:
@@ -84,12 +87,12 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
         int type = getItemViewType(position);
         final TestFieldsDatum item = list.get(position);
 
-        if (item.isFailed()){
-            ((CustomViewHolder)viewHolder).title.setTextColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
-        }else if (item.getRequiredField()){
-            ((CustomViewHolder)viewHolder).title.setTextColor(viewHolder.itemView.getResources().getColor(R.color.blue1));
-        }else {
-            ((CustomViewHolder)viewHolder).title.setTextColor(viewHolder.itemView.getResources().getColor(R.color.black));
+        if (item.isFailed()) {
+            ((CustomViewHolder) viewHolder).title.setTextColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
+        } else if (item.getRequiredField()) {
+            ((CustomViewHolder) viewHolder).title.setTextColor(viewHolder.itemView.getResources().getColor(R.color.blue1));
+        } else {
+            ((CustomViewHolder) viewHolder).title.setTextColor(viewHolder.itemView.getResources().getColor(R.color.black));
         }
         switch (type) {
 
@@ -110,7 +113,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                             list.get(position).setCurrentValue(Boolean.toString(b));
                         }
                     });
-                }else {
+                } else {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(null);
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setEnabled(false);
                 }
@@ -118,28 +121,39 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             case FIELD_TYPE_NUM_INT:
                 ((NumViewHolder) viewHolder).title.setText(item.getLName());
                 ((NumViewHolder) viewHolder).mEditNumberEt.setText(item.getCurrentValue());
-                setEditableMode(position, item, ((NumViewHolder) viewHolder).mEditNumberEt, 0);
+                setEditableMode(position, item, ((NumViewHolder) viewHolder).mEditNumberEt, viewHolder);
                 break;
             case FIELD_TYPE_TEXT_INT:
                 ((TextViewHolder) viewHolder).title.setText(item.getLName());
                 ((TextViewHolder) viewHolder).mTextEt.setText(item.getCurrentValue());
-                setEditableMode(position, item, ((TextViewHolder) viewHolder).mTextEt, 0);
+                setEditableMode(position, item, ((TextViewHolder) viewHolder).mTextEt, viewHolder);
                 break;
             case FIELD_TYPE_INTERVAL_INT:
                 ((IntervalViewHolder) viewHolder).title.setText(item.getLName());
-                ((IntervalViewHolder) viewHolder).mEditMinEt.setText(String.valueOf(item.getLValue()));
-                ((IntervalViewHolder) viewHolder).mEditMaxEt.setText(String.valueOf(item.getHValue()));
+                ((IntervalViewHolder) viewHolder).mValueEt.setText(String.valueOf(item.getCurrentValue()));
                 setRangeView(item, ((IntervalViewHolder) viewHolder).mRangeView);
                 ((IntervalViewHolder) viewHolder).mRangeView.setLowLimit(1);
                 ((IntervalViewHolder) viewHolder).mRangeView.setHighLimit(5);
-                setEditableMode(position, item, ((IntervalViewHolder) viewHolder).mEditMinEt, 1);
-                setEditableMode(position, item, ((IntervalViewHolder) viewHolder).mEditMaxEt, 2);
+                ((IntervalViewHolder) viewHolder).mValueEt.setText(item.getCurrentValue());
+                setEditableMode(position, item, ((IntervalViewHolder) viewHolder).mValueEt, viewHolder);
 
                 break;
-//            case FIELD_TYPE_TIME_INT:
-//                ((TimeTextViewHolder)viewHolder).mTextTimeTv.setText(item.getCurrentValue());
-//                ((TimeTextViewHolder)viewHolder).showHourPicker(viewHolder.itemView.getContext());
-//                break;
+            case FIELD_TYPE_TIME_INT:
+                if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
+                    ((TimeTextViewHolder) viewHolder).mTextTimeTv.setText(TimeUtils.getDateFromFormat(
+                            new Date(TimeUtils.getLongFromDateString(item.getCurrentValue(), SQL_NO_T_FORMAT)),
+                            SIMPLE_HM_FORMAT));
+                }
+                ((TimeTextViewHolder) viewHolder).title.setText(item.getLName());
+                if (item.getAllowEntry()) {
+                    ((TimeTextViewHolder) viewHolder).mTextTimeTv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            ((TimeTextViewHolder) viewHolder).showHourPicker(((TimeTextViewHolder) viewHolder).itemView.getContext(), item);
+                        }
+                    });
+                }
+                break;
             case FIELD_TYPE_DATE_INT:
                 ((DateViewHolder) viewHolder).title.setText(item.getLName());
                 ((DateViewHolder) viewHolder).mTextDateTv.setText(item.getCurrentValue());
@@ -150,7 +164,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                             showDatePicker(((DateViewHolder) viewHolder), item);
                         }
                     });
-                }else {
+                } else {
                     ((DateViewHolder) viewHolder).itemView.setOnClickListener(null);
                 }
                 break;
@@ -158,9 +172,9 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void setEditableMode(int position, TestFieldsDatum item, EditText mEditNumberEt, int type) {
+    public void setEditableMode(int position, TestFieldsDatum item, EditText mEditNumberEt, RecyclerView.ViewHolder viewHolder) {
         if (item.getAllowEntry()) {
-            setTextWatcher(position, mEditNumberEt, type);
+            setTextWatcher(position, mEditNumberEt, viewHolder, item);
             mEditNumberEt.setEnabled(true);
             mEditNumberEt.setFocusable(true);
             mEditNumberEt.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
@@ -175,9 +189,9 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
     public void showDatePicker(final DateViewHolder viewHolder, final TestFieldsDatum item) {
         Calendar calendar = Calendar.getInstance();
-        if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()){
+        if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
             calendar.setTime(new Date(TimeUtils.getLongFromDateString(item.getCurrentValue(), ONLY_DATE_FORMAT)));
-        }else {
+        } else {
             calendar.setTime(new Date());
         }
         DatePickerDialog datePickerDialog = new DatePickerDialog(
@@ -199,21 +213,24 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             public void onGlobalLayout() {
 
                 mRangeView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
-                    mRangeView.setCurrentValue(Float.parseFloat(item.getCurrentValue()));
-                } else {
-                    mRangeView.setCurrentValue(0);
-                }
-                mRangeView.setHighLimit(item.getHValue());
-                mRangeView.setLowLimit(item.getLValue());
-                mRangeView.setWidth((int) (mRangeView.getWidth()));
+                updateRangeView(item, mRangeView);
             }
         });
 
     }
 
-    public void setTextWatcher(final int position, EditText mTextEt, final int type) {
+    public void updateRangeView(TestFieldsDatum item, RangeView2 mRangeView) {
+        if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
+            mRangeView.setCurrentValue(Float.parseFloat(item.getCurrentValue()));
+        } else {
+            mRangeView.setCurrentValue(0);
+        }
+        mRangeView.setHighLimit(item.getHValue());
+        mRangeView.setLowLimit(item.getLValue());
+        mRangeView.setWidth((int) (mRangeView.getWidth()));
+    }
+
+    public void setTextWatcher(final int position, EditText mTextEt, final RecyclerView.ViewHolder viewHolder, final TestFieldsDatum item) {
         mTextEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -222,28 +239,9 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (type == 0) {
-                    list.get(position).setCurrentValue(charSequence.toString());
-                } else if (type == 1) {
-                    try {
-                        list.get(position).setLValue(Float.valueOf(charSequence.toString()));
-                    } catch (NumberFormatException e) {
-                        try {
-                            list.get(position).setLValue(Integer.valueOf(charSequence.toString()) * 1f);
-                        } catch (NumberFormatException e1) {
-                            list.get(position).setLValue(0f);
-                        }
-                    }
-                } else if (type == 2) {
-                    try {
-                        list.get(position).setHValue(Float.valueOf(charSequence.toString()));
-                    } catch (NumberFormatException e) {
-                        try {
-                            list.get(position).setHValue(Integer.valueOf(charSequence.toString()) * 1f);
-                        } catch (NumberFormatException e1) {
-                            list.get(position).setLValue(0f);
-                        }
-                    }
+                list.get(position).setCurrentValue(charSequence.toString());
+                if (viewHolder instanceof IntervalViewHolder) {
+                    updateRangeView(item, ((IntervalViewHolder) viewHolder).mRangeView);
                 }
             }
 
@@ -274,8 +272,8 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             case FIELD_TYPE_TEXT:
                 return FIELD_TYPE_TEXT_INT;
             case FIELD_TYPE_TIME:
-//                return FIELD_TYPE_TIME_INT;
-                return FIELD_TYPE_DATE_INT;
+                return FIELD_TYPE_TIME_INT;
+//                return FIELD_TYPE_DATE_INT;
             case FIELD_TYPE_DATE:
                 return FIELD_TYPE_DATE_INT;
             default:
@@ -284,7 +282,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public class CustomViewHolder extends RecyclerView.ViewHolder{
+    public class CustomViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView title;
 
@@ -351,17 +349,14 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
     public class IntervalViewHolder extends CustomViewHolder {
 
         private final RangeView2 mRangeView;
-        private EditText mEditMaxEt;
-        private EditText mEditMinEt;
+        private EditText mValueEt;
 
         IntervalViewHolder(View itemView) {
             super(itemView);
             title.setVisibility(View.VISIBLE);
 
-            mEditMinEt = itemView.findViewById(R.id.IQCPI_min_et);
-            setOnTouchListener(mEditMinEt);
-            mEditMaxEt = itemView.findViewById(R.id.IQCPI_max_et);
-            setOnTouchListener(mEditMaxEt);
+            mValueEt = itemView.findViewById(R.id.IQCPHN_et);
+            setOnTouchListener(mValueEt);
             itemView.findViewById(R.id.QCP_parameter_txt).setVisibility(View.VISIBLE);
             mRangeView = itemView.findViewById(R.id.IQCPI_range);
 
@@ -417,36 +412,39 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public class TimeTextViewHolder extends RecyclerView.ViewHolder {
+    public class TimeTextViewHolder extends CustomViewHolder {
 
         private TextView mTextTimeTv;
-        private TextView title;
 
         TimeTextViewHolder(View itemView) {
             super(itemView);
             mTextTimeTv = itemView.findViewById(R.id.IQCPHTime_tv);
-            title = itemView.findViewById(R.id.QCP_parameter_txt);
             title.setVisibility(View.VISIBLE);
 
         }
 
-        public void showHourPicker(Context context) {
-            final Calendar myCalender = Calendar.getInstance();
-            int hour = myCalender.get(Calendar.HOUR_OF_DAY);
-            int minute = myCalender.get(Calendar.MINUTE);
-
+        public void showHourPicker(Context context, final TestFieldsDatum item) {
+            final Calendar calendar = Calendar.getInstance();
+            if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
+                calendar.setTime(new Date(TimeUtils.getLongFromDateString(item.getCurrentValue(), SQL_NO_T_FORMAT)));
+            } else {
+                calendar.setTime(new Date());
+            }
 
             TimePickerDialog.OnTimeSetListener myTimeListener = new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     if (view.isShown()) {
-                        myCalender.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                        myCalender.set(Calendar.MINUTE, minute);
-
+                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        calendar.set(Calendar.MINUTE, minute);
+                        item.setCurrentValue(TimeUtils.getDate(calendar.getTime().getTime(), SQL_NO_T_FORMAT));
+                        mTextTimeTv.setText(TimeUtils.getDateFromFormat(
+                                new Date(TimeUtils.getLongFromDateString(item.getCurrentValue(), SQL_NO_T_FORMAT)),
+                                SIMPLE_HM_FORMAT));
                     }
                 }
             };
-            TimePickerDialog timePickerDialog = new TimePickerDialog(context, android.R.style.Theme_Holo_Light_Dialog_NoActionBar, myTimeListener, hour, minute, true);
+            TimePickerDialog timePickerDialog = new TimePickerDialog(context, myTimeListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
             timePickerDialog.setTitle("Choose hour:");
             timePickerDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             timePickerDialog.show();

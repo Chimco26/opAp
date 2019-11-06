@@ -1,6 +1,7 @@
 package com.operatorsapp.fragments;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -50,6 +51,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
+import static android.support.annotation.Dimension.SP;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_LAST;
 
 public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
@@ -240,11 +242,16 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         mTestContainer.removeAllViews();
         for (ArrayList<TestFieldsDatum> testFieldsData: mTestOrderDetails.getTestFieldsComplete()) {
             Log.d(TAG, "initTestRv: " + testFieldsData.get(0).getGroupName());
+            if (testFieldsData.get(0).getGroupId().equals(-1)) {
+                addTextViewTitleToSample(testFieldsData.get(0).getGroupName(), getContext().getResources().getColor(R.color.machine_blue));
+            }else {
+                addTextViewTitleToSample(testFieldsData.get(0).getGroupName(), getContext().getResources().getColor(R.color.black));
+            }
             QCMultiTypeAdapter testAdapter = new QCMultiTypeAdapter(testFieldsData, this);
             RecyclerView recyclerView = new RecyclerView(getActivity());
             recyclerView.setAdapter(testAdapter);
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-            GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(2, 30, true, 0);
+            GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(2, 50, true, 0);
             recyclerView.addItemDecoration(gridSpacingItemDecoration);
             recyclerView.setHasFixedSize(false);
             mTestContainer.addView(recyclerView);
@@ -252,7 +259,20 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
             view.setBackgroundColor(getContext().getResources().getColor(R.color.divider_gray));
             mTestContainer.addView(view);
+            if (testFieldsData.get(0).getGroupId().equals(-1)){
+                addTextViewTitleToSample(getString(R.string.test_fields), getContext().getResources().getColor(R.color.machine_blue));
+            }
         }
+    }
+
+    private void addTextViewTitleToSample(String string, int color) {
+        TextView textView = new TextView(getActivity());
+        textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 30));
+        textView.setTextColor(color);
+        textView.setTextSize(SP, 23);
+        textView.setTypeface(Typeface.DEFAULT_BOLD);
+        textView.setText(string);
+        mTestContainer.addView(textView);
     }
 
 //    private void initTestRvView() {
@@ -312,6 +332,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                 }
             }
             if (testFieldsDatum.getInputType() == 2 || testFieldsDatum.getInputType() == 6) {
+                testFieldsDatum.setGroupId(-1);
+                testFieldsDatum.setGroupName(getString(R.string.recipe_fields));
                 recipeList.add(testFieldsDatum);
             } else {
                 if (testFieldsDatum.getGroupId() == null) {
