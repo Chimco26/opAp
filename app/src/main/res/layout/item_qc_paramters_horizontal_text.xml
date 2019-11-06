@@ -11,6 +11,7 @@
         android:text="@string/parameter"
         android:gravity="center_vertical"
         android:layout_marginEnd="50dp"
+        android:maxLines="1"
         android:textColor="@color/black"
         android:textSize="22sp"
         android:visibility="gone"

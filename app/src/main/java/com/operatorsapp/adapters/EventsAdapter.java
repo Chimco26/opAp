@@ -298,7 +298,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             if (mIsProductionReportChecked && event.getInventories() != null && event.getInventories().size() > 0) {
                 for (Inventory inventory : event.getInventories()) {
-                    setNotification(event, 3, inventory.getTime(), getTextByState(inventory.getAmount() + " " + inventory.getLName(), 6), 0, inventory.getTime());
+                    setNotification(event, 3, inventory.getTime().substring(11, 16), getTextByState(inventory.getAmount() + " " + inventory.getLName(), 6), 0, inventory.getTime());
                 }
             }
 

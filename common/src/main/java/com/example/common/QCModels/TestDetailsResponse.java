@@ -5,6 +5,7 @@ import com.example.common.StandardResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestDetailsResponse extends StandardResponse {
@@ -34,6 +35,9 @@ public class TestDetailsResponse extends StandardResponse {
     @SerializedName("TestSampleFieldsData")
     @Expose
     private List<TestSampleFieldsDatum> testSampleFieldsData = null;
+    @SerializedName("TestFieldsGroups")
+    @Expose
+    private List<TestFieldsGroup> testFieldsGroups = null;
     @SerializedName("TestFieldsData")
     @Expose
     private List<TestFieldsDatum> testFieldsData = null;
@@ -41,6 +45,7 @@ public class TestDetailsResponse extends StandardResponse {
     @Expose
     private List<String> files = null;
     private List<TestSampleFieldsDatum> originalSampleFields;
+    private ArrayList<ArrayList<TestFieldsDatum>> testFieldsSamplesComplete;
 
     public ErrorResponse getError() {
         return error;
@@ -82,6 +87,17 @@ public class TestDetailsResponse extends StandardResponse {
         this.testSampleFieldsData = testSampleFieldsData;
     }
 
+    public List<TestFieldsGroup> getTestFieldsGroups() {
+        if (testFieldsGroups == null){
+            return new ArrayList<>();
+        }
+        return testFieldsGroups;
+    }
+
+    public void setTestFieldsGroups(List<TestFieldsGroup> testFieldsGroups) {
+        this.testFieldsGroups = testFieldsGroups;
+    }
+
     public List<TestFieldsDatum> getTestFieldsData() {
         return testFieldsData;
     }
@@ -108,5 +124,13 @@ public class TestDetailsResponse extends StandardResponse {
         }else {
             return getTestSampleFieldsData();
         }
+    }
+
+    public void setCompleteTestList(ArrayList<ArrayList<TestFieldsDatum>> completeList) {
+        testFieldsSamplesComplete = completeList;
+    }
+
+    public ArrayList<ArrayList<TestFieldsDatum>> getTestFieldsComplete() {
+        return testFieldsSamplesComplete;
     }
 }

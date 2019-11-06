@@ -12,17 +12,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.data.Entry;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operatorsapp.R;
-import com.operatorsapp.application.OperatorApplication;
-import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.view.LineChartTimeLarge;
 
 import java.lang.reflect.Type;
@@ -39,6 +37,7 @@ public class ChartFragment extends BackStackAwareFragment {
     private static final String MIDNIGHT = "MIDNIGHT";
 
     private static final String LOG_TAG = ChartFragment.class.getSimpleName();
+    private static final String STANDARD_VALUES = "STANDARD_VALUES";
 
     private ArrayList<ArrayList<Entry>> mValues;
     private float mMinVal;
@@ -47,11 +46,14 @@ public class ChartFragment extends BackStackAwareFragment {
     private String[] mXValues;
     private String mFieldName;
     private float mMidnightLimit;
+    private ArrayList<ArrayList<Entry>> mStandardValues;
 
-    public static ChartFragment newInstance(ArrayList<ArrayList<Entry>> values, float min, float standard, float max, String[] xValues, String fieldName, float midnightLimit) {
+    public static ChartFragment newInstance(ArrayList<ArrayList<Entry>> standardValues, ArrayList<ArrayList<Entry>> values, float min, float standard, float max, String[] xValues, String fieldName, float midnightLimit) {
         Gson gson = new Gson();
         String valuesString = gson.toJson(values);
+        String valuesStandardString = gson.toJson(standardValues);
         Bundle args = new Bundle();
+        args.putString(STANDARD_VALUES, valuesStandardString);
         args.putString(VALUES, valuesString);
         args.putFloat(MIN, min);
         args.putFloat(STANDARD, standard);
@@ -74,6 +76,7 @@ public class ChartFragment extends BackStackAwareFragment {
             Type listType = new TypeToken<ArrayList<ArrayList<Entry>>>() {
             }.getType();
             mValues = gson.fromJson(getArguments().getString(VALUES), listType);
+            mStandardValues = gson.fromJson(getArguments().getString(STANDARD_VALUES), listType);
             mMinVal = getArguments().getFloat(MIN);
             mStandardVal = getArguments().getFloat(STANDARD);
             mMaxVal = getArguments().getFloat(MAX);
@@ -98,6 +101,7 @@ public class ChartFragment extends BackStackAwareFragment {
         Context context = getContext();
         if(context != null)
         {
+            final CheckBox checkBox = view.findViewById(R.id.FC_check_box);
             TextView mMin = view.findViewById(R.id.fragment_chart_min);
             StringBuilder minText = new StringBuilder(context.getString(R.string.chart_min_)).append(context.getString(R.string.space)).append(String.format(java.util.Locale.US,"%.2f", mMinVal));
 
@@ -107,14 +111,25 @@ public class ChartFragment extends BackStackAwareFragment {
             TextView mMax = view.findViewById(R.id.fragment_chart_max);
             StringBuilder maxText = new StringBuilder(context.getString(R.string.chart_max_)).append(context.getString(R.string.space)).append(String.format(java.util.Locale.US,"%.2f", mMaxVal));
 
-            LineChartTimeLarge mChart = view.findViewById(R.id.fragment_chart_chart);
+            final LineChartTimeLarge mChart = view.findViewById(R.id.fragment_chart_chart);
 
             mMin.setText(minText);
             mStandard.setText(standardText);
             mMax.setText(maxText);
 
-            mChart.setData(mValues, mXValues,mMinVal, mMaxVal);
+            mChart.setData(mStandardValues, mXValues,mMinVal, mMaxVal);
             mChart.setAxis(context, mMinVal, mStandardVal, mMaxVal, mMidnightLimit);
+
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b){
+                        mChart.setData(mStandardValues, mXValues,mMinVal, mMaxVal);
+                    }else {
+                        mChart.setData(mValues, mXValues,mMinVal, mMaxVal);
+                    }
+                }
+            });
         }
 
 //        setActionBar();

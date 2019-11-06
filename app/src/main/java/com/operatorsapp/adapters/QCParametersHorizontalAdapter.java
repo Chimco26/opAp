@@ -23,17 +23,21 @@ public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParame
 
     private final QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener mQcSamplesMultiTypeAdapterListener;
     private final OnKeyboardManagerListener mOnKeyboardManagerListener;
+    private int itemWidth = 120;
     private Integer samples;
     private ArrayList<TestSampleFieldsDatum> list;
 
     public QCParametersHorizontalAdapter(Integer samples, List<TestSampleFieldsDatum> testSampleFieldsData,
                                          OnKeyboardManagerListener onKeyboardManagerListener,
-                                         QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener qcSamplesMultiTypeAdapterListener) {
+                                         QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener qcSamplesMultiTypeAdapterListener, int widthPixels) {
         list = (ArrayList<TestSampleFieldsDatum>) testSampleFieldsData;
         mQcSamplesMultiTypeAdapterListener = qcSamplesMultiTypeAdapterListener;
         mOnKeyboardManagerListener = onKeyboardManagerListener;
         this.samples = samples;
         updateMinusLastColumn();
+        if (widthPixels > 0) {
+            itemWidth = widthPixels / list.size();
+        }
     }
 
 
@@ -51,13 +55,15 @@ public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParame
 
         if (list.get(position).isFailed()){
             (viewHolder).mTitleTv.setTextColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
+        }else if (list.get(position).getRequiredField() && list.get(position).getAllowEntry()){
+            (viewHolder).mTitleTv.setTextColor(viewHolder.itemView.getResources().getColor(R.color.blue1));
         }else {
-            (viewHolder).mTitleTv.setTextColor(viewHolder.itemView.getResources().getColor(R.color.transparentColor));
+            (viewHolder).mTitleTv.setTextColor(viewHolder.itemView.getResources().getColor(R.color.black));
         }
         viewHolder.mTitleTv.setText(list.get(position).getLName());
         viewHolder.mRv.setLayoutManager(new LinearLayoutManager(viewHolder.mRv.getContext()));
         viewHolder.mRv.setAdapter(new QCSamplesMultiTypeAdapter(list.get(position).getFieldType(),
-                (ArrayList<SamplesDatum>) list.get(position).getSamplesData(), mOnKeyboardManagerListener, mQcSamplesMultiTypeAdapterListener));
+                list.get(position), mOnKeyboardManagerListener, mQcSamplesMultiTypeAdapterListener));
 
     }
 
@@ -90,6 +96,9 @@ public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParame
 
             mTitleTv = itemView.findViewById(R.id.IQCPH_title);
             mRv = itemView.findViewById(R.id.IQCPH_rv);
+            ViewGroup.LayoutParams params = itemView.getLayoutParams();
+            params.width = itemWidth;
+            itemView.setLayoutParams(params);
         }
 
     }
