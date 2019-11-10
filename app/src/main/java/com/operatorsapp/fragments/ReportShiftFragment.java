@@ -68,6 +68,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.common.SelectableString.STANDARD_VARIATION_ID;
+import static com.example.common.reportShift.GraphSeries.addAveragedPoints;
 import static com.operatorsapp.utils.LineChartHelper.setXAxisStyle;
 import static com.operatorsapp.utils.LineChartHelper.setYAxisStyle;
 import static com.operatorsapp.utils.LineChartHelper.splitItemsByNull;
@@ -175,6 +177,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                             selectableString1.setSelected(selectableString.isSelected());
                         }
                     }
+                    PersistenceManager.getInstance().setShiftGraphCategories(selectableStrings);
                     mGraphRv.post(new Runnable() {
                         @Override
                         public void run() {
@@ -321,16 +324,24 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
         for (Graph graphItem : graphs) {
             boolean isSelected = false;
+            boolean isStandardV = false;
             for (SelectableString selectableString : selectableStrings) {
                 if (selectableString.getId().equals(graphItem.getId())) {
                     isSelected = selectableString.isSelected();
+                }
+                if (selectableString.getId().equals(STANDARD_VARIATION_ID)) {
+                    isStandardV = selectableString.isSelected();
                 }
             }
             if (!isSelected) {
                 continue;
             }
-            ArrayList<List<Item>> listArrayList = splitItemsByNull(graphItem.getGraphSeries().get(0).getItems());
-
+            ArrayList<List<Item>> listArrayList;
+            if (isStandardV){
+                listArrayList = splitItemsByNull(graphItem.getGraphSeries().get(0).getStandardItems());
+            }else {
+                listArrayList = splitItemsByNull(graphItem.getGraphSeries().get(0).getItems());
+            }
             if (listArrayList.size() > 0) {
 
                 for (List<Item> items : listArrayList) {
@@ -345,7 +356,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
                             if (date != null) {
 
-                                values.add(new Entry((float) date.getTime(), (float) (Math.round(items.get(i).getY().floatValue()))));
+                                values.add(new Entry((float) date.getTime(), (float) (items.get(i).getY().floatValue())));
                             }
 
 
@@ -518,6 +529,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                             get(0).getMachines().get(0).getGraphs().size() > mGraphPosition) {
                         ArrayList<SelectableString> selectableStrings = new ArrayList<>();
                         selectableStrings.add(new SelectableString(getString(R.string.select_all), true, SelectableString.SELECT_ALL_ID, getActivity().getResources().getColor(R.color.black)));
+                        selectableStrings.add(new SelectableString(getString(R.string.standard), true, STANDARD_VARIATION_ID, getActivity().getResources().getColor(R.color.grey_lite)));
                         if (response.body().getDepartments().get(0).getCurrentShift().
                                 get(0).getMachines().get(0).getGraphs() != null) {
                             int[] colors = getActivity().getResources().getIntArray(R.array.colorList);
@@ -535,17 +547,24 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                             }
                         }
                         if (mSelectableStrings == null) {
-                            mSelectableStrings = new ArrayList<>();
+                            mSelectableStrings = selectableStrings;
+                            boolean isSameCategories = SelectableString.setPrefCheck(mSelectableStrings, PersistenceManager.getInstance().getShiftGraphCategories());
+                            if (!isSameCategories) {
+                                PersistenceManager.getInstance().setShiftGraphCategories(new ArrayList<SelectableString>());
+                            }
+                        } else {
+                            ArrayList<SelectableString> arrayList = SelectableString.updateList(mSelectableStrings, selectableStrings);
+                            mSelectableStrings.clear();
+                            mSelectableStrings.addAll(arrayList);
                         }
-                        ArrayList<SelectableString> arrayList = SelectableString.updateList(mSelectableStrings, selectableStrings);
-                        mSelectableStrings.clear();
-                        mSelectableStrings.addAll(arrayList);
                         if (mGraphs == null) {
                             mGraphs = new ArrayList<>();
                         }
                         mGraphs.clear();
-                        mGraphs.addAll(response.body().getDepartments().get(0).getCurrentShift().
-                                get(0).getMachines().get(0).getGraphs());
+                        List<Graph> graphs = response.body().getDepartments().get(0).getCurrentShift().
+                                get(0).getMachines().get(0).getGraphs();
+                        addAveragedPoints(graphs);
+                        mGraphs.addAll(graphs);
                         initGraphFilterRv(mGraphs, mSelectableStrings);
                         setGraphData(mSelectableStrings, mGraphs);
                     }

@@ -67,7 +67,16 @@ public class TestSampleFieldsDatum {
     @SerializedName("SamplesData")
     @Expose
     private List<SamplesDatum> samplesData = null;
+    private boolean failed;
 
+
+    public boolean isFailed() {
+        return failed;
+    }
+
+    public void setFailed(boolean failed) {
+        this.failed = failed;
+    }
     public Integer getID() {
         return iD;
     }
@@ -197,6 +206,9 @@ public class TestSampleFieldsDatum {
     }
 
     public Boolean getAllowEntry() {
+        if (allowEntry == null){
+            return false;
+        }
         return allowEntry;
     }
 
@@ -205,6 +217,9 @@ public class TestSampleFieldsDatum {
     }
 
     public Boolean getRequiredField() {
+        if (requiredField == null){
+            return false;
+        }
         return requiredField;
     }
 

@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:paddingEnd="20dp">
+    android:paddingEnd="20dp"
+    android:gravity="center">
     
     <TextView
         android:id="@+id/IQCPH_title"
@@ -12,10 +13,10 @@
         android:layout_height="30dp"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:textSize="22sp"
-        android:gravity="center_vertical"
-        app:autoSizeMaxTextSize="22sp"
-        app:autoSizeTextType="uniform"/>
+        android:maxLines="1"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:ellipsize="end"/>
 
     <View
         android:layout_width="match_parent"

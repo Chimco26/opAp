@@ -31,6 +31,9 @@ public class TestFieldsDatum {
     @SerializedName("PropertyID")
     @Expose
     private Integer propertyID;
+    @SerializedName("GroupID")
+    @Expose
+    private Integer groupId;
     @SerializedName("AllowNull")
     @Expose
     private Boolean allowNull;
@@ -62,6 +65,15 @@ public class TestFieldsDatum {
     @Expose
     private Integer upsertType;
     private boolean failed;
+    private String groupName;
+
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
 
     public Integer getID() {
         return iD;
@@ -192,6 +204,9 @@ public class TestFieldsDatum {
     }
 
     public Boolean getAllowEntry() {
+        if (allowEntry == null){
+            return false;
+        }
         return allowEntry;
     }
 
@@ -200,6 +215,9 @@ public class TestFieldsDatum {
     }
 
     public Boolean getRequiredField() {
+        if (requiredField == null){
+            return false;
+        }
         return requiredField;
     }
 
@@ -223,4 +241,11 @@ public class TestFieldsDatum {
         this.failed = failed;
     }
 
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
 }
