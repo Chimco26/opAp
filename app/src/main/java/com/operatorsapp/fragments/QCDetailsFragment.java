@@ -241,29 +241,31 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private void initTestRv() {
         mTestContainer.removeAllViews();
         for (ArrayList<TestFieldsDatum> testFieldsData: mTestOrderDetails.getTestFieldsComplete()) {
-            Log.d(TAG, "initTestRv: " + testFieldsData.get(0).getGroupName());
-            if (testFieldsData.get(0).getGroupId().equals(-1)) {
-                addTextViewTitleToSample(testFieldsData.get(0).getGroupName(), getContext().getResources().getColor(R.color.machine_blue));
-            }else {
-                addTextViewTitleToSample(testFieldsData.get(0).getGroupName(), getContext().getResources().getColor(R.color.black));
-            }
-            QCMultiTypeAdapter testAdapter = new QCMultiTypeAdapter(testFieldsData, this);
-            RecyclerView recyclerView = new RecyclerView(getActivity());
-            recyclerView.setAdapter(testAdapter);
-            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-            GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(2, 50, true, 0);
-            recyclerView.addItemDecoration(gridSpacingItemDecoration);
-            recyclerView.setHasFixedSize(false);
-            mTestContainer.addView(recyclerView);
-            View view = new View(getActivity());
-            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
-            view.setBackgroundColor(getContext().getResources().getColor(R.color.divider_gray));
-            mTestContainer.addView(view);
-            if (testFieldsData.get(0).getGroupId().equals(-1)){
-                addTextViewTitleToSample(getString(R.string.test_fields), getContext().getResources().getColor(R.color.machine_blue));
-                View view1 = new View(getActivity());
-                view1.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 10));
-                mTestContainer.addView(view1);
+            if(testFieldsData.size() > 0 && testFieldsData.get(0) != null) {
+                Log.d(TAG, "initTestRv: " + testFieldsData.get(0).getGroupName());
+                if (testFieldsData.get(0).getGroupId().equals(-1)) {
+                    addTextViewTitleToSample(testFieldsData.get(0).getGroupName(), getContext().getResources().getColor(R.color.machine_blue));
+                } else {
+                    addTextViewTitleToSample(testFieldsData.get(0).getGroupName(), getContext().getResources().getColor(R.color.black));
+                }
+                QCMultiTypeAdapter testAdapter = new QCMultiTypeAdapter(testFieldsData, this);
+                RecyclerView recyclerView = new RecyclerView(getActivity());
+                recyclerView.setAdapter(testAdapter);
+                recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(2, 50, true, 0);
+                recyclerView.addItemDecoration(gridSpacingItemDecoration);
+                recyclerView.setHasFixedSize(false);
+                mTestContainer.addView(recyclerView);
+                View view = new View(getActivity());
+                view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
+                view.setBackgroundColor(getContext().getResources().getColor(R.color.divider_gray));
+                mTestContainer.addView(view);
+                if (testFieldsData.get(0).getGroupId().equals(-1)) {
+                    addTextViewTitleToSample(getString(R.string.test_fields), getContext().getResources().getColor(R.color.machine_blue));
+                    View view1 = new View(getActivity());
+                    view1.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 10));
+                    mTestContainer.addView(view1);
+                }
             }
         }
     }

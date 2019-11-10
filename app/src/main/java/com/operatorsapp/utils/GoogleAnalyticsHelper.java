@@ -24,7 +24,7 @@ public class GoogleAnalyticsHelper {
 
     public void trackScreen(Context context, String screenName){
 
-        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(context);
+        FirebaseAnalytics firebaseAnalytics = getTracker(context);
         PersistenceManager pm = PersistenceManager.getInstance();
 
         Bundle params = new Bundle();
@@ -51,7 +51,7 @@ public class GoogleAnalyticsHelper {
 
     public void trackEvent(Context context, EventCategory category, boolean isSucceed , String label){
 
-        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(context);
+        FirebaseAnalytics firebaseAnalytics = getTracker(context);
         PersistenceManager pm = PersistenceManager.getInstance();
 
         Bundle params = new Bundle();
