@@ -75,7 +75,6 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private View mPassedLy;
     private ImageView mPassedIc;
     private TextView mPassedTv;
-    private SaveTestDetailsResponse mSaveTestDetailsResponse;
 
     public static QCDetailsFragment newInstance(int testId) {
 
@@ -318,24 +317,11 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     }
 
     private void initFieldsData() {
-        boolean haveFailed = mSaveTestDetailsResponse != null &&
-                mSaveTestDetailsResponse.getFailedTestFieldsData() != null
-                && mSaveTestDetailsResponse.getFailedTestFieldsData().size() > 0;
         ArrayList<ArrayList<TestFieldsDatum>> completList = new ArrayList<>();
         ArrayList<TestFieldsDatum> recipeList = new ArrayList<>();
         HashMap<Integer, ArrayList<TestFieldsDatum>> testFieldsDatumHashMap = new HashMap<>();
         int counter = 0;
         for (TestFieldsDatum testFieldsDatum : mTestOrderDetails.getTestFieldsData()) {
-            if (haveFailed) {
-                List<Integer> failed = mSaveTestDetailsResponse.getFailedTestFieldsData();
-                for (Integer integer : failed) {
-                    if (integer.equals(testFieldsDatum.getID())) {
-                        testFieldsDatum.setFailed(true);
-                    } else {
-                        testFieldsDatum.setFailed(false);
-                    }
-                }
-            }
             if (testFieldsDatum.getInputType() == 2 || testFieldsDatum.getInputType() == 6) {
                 testFieldsDatum.setGroupId(-1);
                 testFieldsDatum.setGroupName(getString(R.string.recipe_fields));
@@ -380,23 +366,10 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
     public void initSamplesData() {
         int counter = 1000;
-        boolean haveFailed = mSaveTestDetailsResponse != null &&
-                mSaveTestDetailsResponse.getFailedTestSampleFieldsData() != null
-                && mSaveTestDetailsResponse.getFailedTestSampleFieldsData().size() > 0;
         for (TestSampleFieldsDatum testSampleFieldsDatum : mTestOrderDetails.getTestSampleFieldsData()) {
             for (SamplesDatum samplesDatum : testSampleFieldsDatum.getSamplesData()) {
                 if (samplesDatum.getID() == null || samplesDatum.getID().equals(0)) {
                     samplesDatum.setID(counter++);
-                }
-            }
-            if (haveFailed) {
-                List<Integer> failed = mSaveTestDetailsResponse.getFailedTestSampleFieldsData();
-                for (Integer integer : failed) {
-                    if (integer.equals(testSampleFieldsDatum.getID())) {
-                        testSampleFieldsDatum.setFailed(true);
-                    } else {
-                        testSampleFieldsDatum.setFailed(false);
-                    }
                 }
             }
         }
@@ -424,7 +397,6 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                     getActivity().finish();
                 } else {
                     initPassedView(saveTestDetailsResponse.isPassed());
-                    mSaveTestDetailsResponse = saveTestDetailsResponse;
                     getTestOrderDetails();
                 }
             }
