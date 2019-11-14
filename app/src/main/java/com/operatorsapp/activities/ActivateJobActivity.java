@@ -49,6 +49,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import static com.operatorsapp.utils.TimeUtils.SQL_NO_T_FORMAT;
+
 public class ActivateJobActivity extends AppCompatActivity implements
         PendingJobsAdapter.PendingJobsAdapterListener,
         OnCroutonRequestListener,
@@ -196,7 +198,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
                 if (mPendingJobsResponse != null && mPendingJobsResponse.getPendingJobs() != null && mPendingJobsResponse.getPendingJobs().size() > 0) {
 
-                    SimpleDateFormat actualFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    SimpleDateFormat actualFormat = new SimpleDateFormat(SQL_NO_T_FORMAT, Locale.getDefault());
 
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
 

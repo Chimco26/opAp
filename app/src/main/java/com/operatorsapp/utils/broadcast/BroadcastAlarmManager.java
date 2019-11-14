@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.example.oppapplog.OppAppLogger;
 import com.operatorsapp.utils.LogCacheCleaner;
-import com.zemingo.logrecorder.LogRecorder;
 
 public class BroadcastAlarmManager extends BroadcastReceiver {
 
@@ -20,7 +18,7 @@ public class BroadcastAlarmManager extends BroadcastReceiver {
 
         new LogCacheCleaner(context).removeExistingFiles();
 
-        OppAppLogger.initInstance(context);
+//        OppAppLogger.initInstance(context); can't start service from broadcast receiver
 
     }
 }

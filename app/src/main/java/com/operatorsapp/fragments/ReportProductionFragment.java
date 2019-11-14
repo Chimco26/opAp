@@ -113,7 +113,10 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
             mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
             mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
-            mJoshId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+            if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null
+            && mActiveJobsListForMachine.getActiveJobs().size() > 0 && mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition) != null ) {
+                mJoshId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+            }
         }
     }
 

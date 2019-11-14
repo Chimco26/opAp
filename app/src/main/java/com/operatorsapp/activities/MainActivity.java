@@ -41,6 +41,8 @@ import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.BroadcastAlarmManager;
 
+import org.acra.ACRA;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -69,6 +71,10 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
         Log.d(TAG, "ChangeLang: ");
         ChangeLang.changeLanguage(this);
+        try {
+            ACRA.init(getApplication());
+        }catch (IllegalStateException ignored){}
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -145,8 +151,10 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     @Override
     public void goToFragment(Fragment fragment, boolean centralContainer, boolean addToBackStack) {
+        if (isFinishing()){
+            return;
+        }
         try {
-
             OppAppLogger.getInstance().d(TAG, "goToFragment(), " + fragment.getClass().getSimpleName());
             mCurrentFragment = fragment;
             if (addToBackStack) {

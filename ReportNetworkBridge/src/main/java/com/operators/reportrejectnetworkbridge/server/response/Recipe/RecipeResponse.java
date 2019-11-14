@@ -20,9 +20,9 @@ public class RecipeResponse implements Parcelable {
     @SerializedName("error")
     @Expose
     private ErrorResponse error;
-    @SerializedName("FunctionSucceed")
+    @SerializedName("functionSucceed")
     @Expose
-    private Boolean FunctionSucceed;
+    private Boolean functionSucceed;
     @SerializedName("Recipe")
     @Expose
     private com.operators.reportrejectnetworkbridge.server.response.Recipe.Recipe Recipe;
@@ -46,7 +46,7 @@ public class RecipeResponse implements Parcelable {
         this.ProductData = ProductData;
         this.LeaderRecordID = LeaderRecordID;
         this.error = error;
-        this.FunctionSucceed = FunctionSucceed;
+        this.functionSucceed = FunctionSucceed;
         this.Recipe = Recipe;
         this.note = note;
     }
@@ -99,11 +99,11 @@ public class RecipeResponse implements Parcelable {
     }
 
     public void setFunctionSucceed(Boolean FunctionSucceed) {
-        this.FunctionSucceed = FunctionSucceed;
+        this.functionSucceed = FunctionSucceed;
     }
 
     public Boolean getFunctionSucceed() {
-        return FunctionSucceed;
+        return functionSucceed;
     }
 
     public void setRecipe(com.operators.reportrejectnetworkbridge.server.response.Recipe.Recipe Recipe) {
@@ -122,6 +122,7 @@ public class RecipeResponse implements Parcelable {
         this.note = note;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -132,22 +133,24 @@ public class RecipeResponse implements Parcelable {
         dest.writeParcelable(this.ProductData, flags);
         dest.writeValue(this.LeaderRecordID);
         dest.writeParcelable(this.error, flags);
-        dest.writeValue(this.FunctionSucceed);
+        dest.writeValue(this.functionSucceed);
         dest.writeParcelable(this.Recipe, flags);
         dest.writeString(this.note);
         dest.writeValue(this.recipeRefStandardID);
         dest.writeValue(this.recipeRefType);
+        dest.writeByte(this.canEditRecipe ? (byte) 1 : (byte) 0);
     }
 
     protected RecipeResponse(Parcel in) {
         this.ProductData = in.readParcelable(com.operators.reportrejectnetworkbridge.server.response.Recipe.ProductData.class.getClassLoader());
         this.LeaderRecordID = (Integer) in.readValue(Integer.class.getClassLoader());
         this.error = in.readParcelable(ErrorResponse.class.getClassLoader());
-        this.FunctionSucceed = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.functionSucceed = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.Recipe = in.readParcelable(com.operators.reportrejectnetworkbridge.server.response.Recipe.Recipe.class.getClassLoader());
         this.note = in.readString();
         this.recipeRefStandardID = (Integer) in.readValue(Integer.class.getClassLoader());
         this.recipeRefType = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.canEditRecipe = in.readByte() != 0;
     }
 
     public static final Parcelable.Creator<RecipeResponse> CREATOR = new Parcelable.Creator<RecipeResponse>() {

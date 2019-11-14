@@ -348,6 +348,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override
         public void sendReportSuccess(StandardResponse response) {
+            if (!isAdded()){
+                return;
+            }
 //            StandardResponse response = objectToNewError(response);
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
@@ -394,6 +397,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
         @Override
         public void sendReportFailure(StandardResponse reason) {
+            if (!isAdded()){
+                return;
+            }
             dismissProgressDialog();
             OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
             if (reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {

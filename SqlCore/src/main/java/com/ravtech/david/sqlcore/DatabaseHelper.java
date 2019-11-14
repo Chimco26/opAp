@@ -485,7 +485,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Event event = new Event();
 
-        if (c != null) {
+        if (c != null && c.getCount() > 0) {
 
             event.setEventID(c.getFloat(c.getColumnIndex(KEY_EVENT_ID)));
             event.setPriority(c.getInt(c.getColumnIndex(KEY_PRIORITY)));
