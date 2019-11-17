@@ -850,14 +850,17 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void afterTextChanged(Editable s) {
 
-                if (s.length() < 1 && mHashMapHeaders != null) {
-                    for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
-                        mHashMapHeaders.get(headerEntry.getValue().getName()).setSelected(false);
+                if (mHashMapHeaders != null) {
+                    if (s.length() < 1 && mHashMapHeaders != null) {
+                        for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
+                            if (mHashMapHeaders.containsKey(headerEntry.getValue().getName()) && mHashMapHeaders.get(headerEntry.getValue().getName()) != null) {
+                                mHashMapHeaders.get(headerEntry.getValue().getName()).setSelected(false);
+                            }
+                        }
                     }
+
+                    updateRvBySearchResult();
                 }
-
-                updateRvBySearchResult();
-
             }
         });
     }
@@ -902,21 +905,24 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         boolean isSelectedByUser = false;
 
-        for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
+        if (mHashMapHeaders != null) {
 
-            if (headerEntry.getValue().isSelected()) {
+            for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
 
-                isSelectedByUser = true;
+                if (headerEntry.getValue().isSelected()) {
+
+                    isSelectedByUser = true;
+                }
             }
-        }
 
-        if (!isSelectedByUser) {
+            if (!isSelectedByUser) {
 
-            mPendingJobs.clear();
-            mPendingJobs.addAll(mPendingJobsNoHeadersFiltered);
-            mPendingJobsAdapter.notifyDataSetChanged();
+                mPendingJobs.clear();
+                mPendingJobs.addAll(mPendingJobsNoHeadersFiltered);
+                mPendingJobsAdapter.notifyDataSetChanged();
 
-            return;
+                return;
+            }
         }
 
         mPendingJobs.clear();

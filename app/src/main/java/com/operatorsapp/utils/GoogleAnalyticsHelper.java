@@ -3,8 +3,6 @@ package com.operatorsapp.utils;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
@@ -24,6 +22,9 @@ public class GoogleAnalyticsHelper {
 
     public void trackScreen(Context context, String screenName){
 
+        if (context == null){
+            return;
+        }
         FirebaseAnalytics firebaseAnalytics = getTracker(context);
         PersistenceManager pm = PersistenceManager.getInstance();
 
@@ -51,6 +52,9 @@ public class GoogleAnalyticsHelper {
 
     public void trackEvent(Context context, EventCategory category, boolean isSucceed , String label){
 
+        if (context == null){
+            return;
+        }
         FirebaseAnalytics firebaseAnalytics = getTracker(context);
         PersistenceManager pm = PersistenceManager.getInstance();
 

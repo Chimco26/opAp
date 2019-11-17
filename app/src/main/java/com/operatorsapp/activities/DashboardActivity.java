@@ -2033,7 +2033,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         ignoreFromOnPause = false;
 
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
             SendBroadcast.SendEmail(this);
 
@@ -2613,6 +2613,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             if (mRecipeFragment == null) {
 
+//                recipeResponse.setPermission(WidgetInfo.getWidgetInfo(permissionForMachineHashMap,WidgetInfo.PermissionId.ENABLE_EDIT_JOB_RECIPE.getId()).getHaspermissionBoolean());
                 mRecipeFragment = RecipeFragment.newInstance(recipeResponse);
 
                 mViewPagerFragment.addFragment(mRecipeFragment);
@@ -2828,6 +2829,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         reportNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportRejectsCallbackListener);
+        if (value.isEmpty()){
+            ShowCrouton.showSimpleCrouton(DashboardActivity.this, getResources().getString(R.string.invalid_value), CroutonCreator.CroutonType.NETWORK_ERROR);
+            return;
+        }
         try {
             if (isUnit) {
                 mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value), (double) 0, mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition).getJoshID());

@@ -198,7 +198,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                 viewHolder.itemView.getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                item.setCurrentValue(String.format(Locale.US, "%d/%d/%d", i2, i1, i));
+                item.setCurrentValue(String.format(Locale.US, "%d/%d/%d", i2, i1 + 1, i));
                 viewHolder.mTextDateTv.setText(item.getCurrentValue());
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
@@ -446,7 +446,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             };
             TimePickerDialog timePickerDialog = new TimePickerDialog(context, myTimeListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
             timePickerDialog.setTitle("Choose hour:");
-            timePickerDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//            timePickerDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             timePickerDialog.show();
         }
     }

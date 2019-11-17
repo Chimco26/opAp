@@ -18,7 +18,7 @@ public class BroadcastAlarmManager extends BroadcastReceiver {
 
         new LogCacheCleaner(context).removeExistingFiles();
 
-//        OppAppLogger.initInstance(context); can't start service from broadcast receiver
+//        OppAppLogger.initInstance(context); //can't start service from broadcast receiver
 
     }
 }

@@ -1,6 +1,5 @@
 package com.operatorsapp.adapters;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -24,15 +23,13 @@ import java.util.Locale;
 
 public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapters.ViewHolder> {
 
-    private final Context mContext;
     public final List<BaseSplits> baseSplits;
     private View mMainView;
     private ChannelItemsAdaptersListener mListener;
     private float mTitleSize = 15;
 
-    public ChannelItemsAdapters(Context context, List<BaseSplits> channelSplits) {
+    public ChannelItemsAdapters(List<BaseSplits> channelSplits) {
 
-        mContext = context;
         baseSplits = channelSplits;
     }
     public void addListener(ChannelItemsAdaptersListener listener) {

@@ -169,6 +169,9 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     @Override
     public void goToDashboardActivity(int machineId, ArrayList<Machine> machines) {
+        if (isFinishing()){
+            return;
+        }
         //now we have machineID and can get notifications history
         getNotifications();
 

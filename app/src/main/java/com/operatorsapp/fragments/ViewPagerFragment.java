@@ -227,7 +227,6 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
     @Override
     public void onPermissionForMachinePolling(SparseArray<WidgetInfo> permissionResponse) {
-
     }
 
     @Override

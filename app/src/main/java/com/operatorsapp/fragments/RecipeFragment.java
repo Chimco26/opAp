@@ -50,7 +50,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class RecipeFragment extends Fragment implements View.OnClickListener, No0ChannelAdapter.Channel100AdapterListener {
+public class RecipeFragment extends Fragment implements View.OnClickListener,
+        No0ChannelAdapter.Channel100AdapterListener {
 
     public static final String TAG = RecipeFragment.class.getSimpleName();
     private static final String RECIPE_RESPONS_KEY = "RECIPE_RESPONS_KEY";
@@ -320,7 +321,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                 ImageLoader.getInstance().displayImage(mRecipeResponse.getProductData().getFileUrl().get(0), mLayoutChannel0Image);
             }
 
-            if (getActivity().getResources() != null) {
+            if (getActivity() != null && getActivity().getResources() != null) {
                 mLayoutChannel0ItemTitleTv.setText(getActivity().getResources().getString(R.string.production_parameters));
             }
             if (recipeChannel0.getChannelSplits().get(0).getBaseSplits() != null && recipeChannel0.getChannelSplits().get(0).getBaseSplits().size() > 0) {
@@ -395,8 +396,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
     private void setChannel0Adapter() {
         if (mChannelItemsAdapters == null) {
-            mChannelItemsAdapters = new ChannelItemsAdapters(getActivity(),
-                    mChannel0BaseSplits);
+            mChannelItemsAdapters = new ChannelItemsAdapters(mChannel0BaseSplits);
 
             LinearLayoutManager layoutManager
                     = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
