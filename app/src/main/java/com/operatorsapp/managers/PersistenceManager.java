@@ -609,7 +609,11 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     public long getTechnicianCallTime() {
         String time = SecurePreferences.getInstance().getString(PREF_TECHNICIAN_CALL_TIME, "0");
         if (time != null && time.length() > 0 ){
-            return Long.parseLong(time);
+            try {
+                return Long.parseLong(time);
+            }catch (NumberFormatException e){
+                return 0;
+            }
         }else {
             return 0;
         }

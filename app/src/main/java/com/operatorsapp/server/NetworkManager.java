@@ -398,7 +398,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
 
             SendReportUtil.sendAcraExeption(e, "getRetrofit " + s);
 
-            mRetrofit = new Retrofit.Builder().build();
+//            mRetrofit = new Retrofit.Builder().build(); base url required
 
         } catch (RuntimeException e) {
             if (e.getMessage() != null)
@@ -407,7 +407,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
 
             SendReportUtil.sendAcraExeption(e, "getRetrofit " + siteUrl);
 
-            mRetrofit = new Retrofit.Builder().build();
+//            mRetrofit = new Retrofit.Builder().build(); base url required
 
         }
 

@@ -113,7 +113,10 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
             mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
             mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
-            mJoshId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+            if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null
+                    && mActiveJobsListForMachine.getActiveJobs().size() > 0 && mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition) != null) {
+                mJoshId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+            }
         }
     }
 
@@ -146,8 +149,7 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
             mButtonReport.setEnabled(false);
             mMinusButton.setEnabled(false);
             mPlusButton.setEnabled(false);
-        }
-        else {
+        } else {
             mButtonReport.setEnabled(true);
             mMinusButton.setEnabled(true);
             mPlusButton.setEnabled(true);
@@ -167,7 +169,7 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if(s.length()>0){
+                if (s.length() > 0) {
 
                     mUnitsCounter = Integer.valueOf(s.toString());
                 }
@@ -208,7 +210,7 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
             });
         }
 
-        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5,"keyboardIsShown");
+        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "keyboardIsShown");
 
         if (getActivity() != null) {
             KeyboardUtils.keyboardIsShownC(getActivity(), this);
@@ -253,8 +255,8 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
 //                    {
 //                        fragmentManager.popBackStack();
 //                    }
-
-                        getActivity().onBackPressed();
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
                     }
                 });
                 actionBar.setCustomView(view);
@@ -299,8 +301,7 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
         }
         if (mUnitsCounter == 1) {
             mUnitsCounterTextView.setText("1");
-        }
-        else {
+        } else {
             mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
         }
     }
@@ -338,7 +339,7 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
             }
             SendBroadcast.refreshPolling(getContext());
 
-            if (getFragmentManager() != null){
+            if (getFragmentManager() != null) {
 
                 getFragmentManager().popBackStack(null, getChildFragmentManager().POP_BACK_STACK_INCLUSIVE);
             }
@@ -365,15 +366,15 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
 
     private StandardResponse objectToNewError(Object o) {
         StandardResponse responseNewVersion;
-        if (o instanceof StandardResponse){
-            responseNewVersion = (StandardResponse)o;
-        }else {
+        if (o instanceof StandardResponse) {
+            responseNewVersion = (StandardResponse) o;
+        } else {
             Gson gson = new GsonBuilder().create();
 
             ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
 
             responseNewVersion = new StandardResponse(true, 0, er);
-            if (responseNewVersion.getError().getErrorCode() != 0){
+            if (responseNewVersion.getError().getErrorCode() != 0) {
                 responseNewVersion.setFunctionSucceed(false);
             }
         }
@@ -381,15 +382,11 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
     }
 
 
-    private void dismissProgressDialog()
-    {
-        if (getActivity() != null)
-        {
-            getActivity().runOnUiThread(new Runnable()
-            {
+    private void dismissProgressDialog() {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     ProgressDialogManager.dismiss();
                 }
             });
@@ -408,28 +405,23 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
     }
 
     private void initJobsSpinner() {
-        if(getActivity() != null)
-        {
-            if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null)
-            {
+        if (getActivity() != null) {
+            if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null) {
                 mJobsSpinner.setVisibility(View.VISIBLE);
                 final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
                 activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
                 mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
                 mJobsSpinner.setSelection(mSelectedPosition);
-                mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                {
+                mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-                    {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         activeJobsSpinnerAdapter.setTitle(position);
                         mJoshId = mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
                     }
 
                     @Override
-                    public void onNothingSelected(AdapterView<?> parent)
-                    {
+                    public void onNothingSelected(AdapterView<?> parent) {
 
                     }
                 });
@@ -438,17 +430,16 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
     }
 
     @Override
-    public int getCroutonRoot()
-    {
+    public int getCroutonRoot() {
         return R.id.report_inventory_crouton_root;
     }
 
     @Override
     public void onKeyboardShown() {
 
-    //    mTopView.setVisibility(View.GONE);
+        //    mTopView.setVisibility(View.GONE);
 
-        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5,"onKeyboardShown");
+        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "onKeyboardShown");
 
 
     }
@@ -456,9 +447,9 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
     @Override
     public void onKeyboardHidden() {
 
-     //   mTopView.setVisibility(View.VISIBLE);
+        //   mTopView.setVisibility(View.VISIBLE);
 
-        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5,"onKeyboardHidden");
+        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "onKeyboardHidden");
 
 
     }

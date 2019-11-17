@@ -11,10 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.operators.reportrejectnetworkbridge.server.response.Recipe.BaseSplits;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSplits;
 import com.operatorsapp.R;
+import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.ViewHolder> {
 
@@ -106,8 +109,9 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
 
         if (mChannelSplits.get(position).getBaseSplits() != null) {
 
-            ChannelItemsAdapters channelItemsAdapters = new ChannelItemsAdapters(mContext,
+            ChannelItemsAdapters channelItemsAdapters = new ChannelItemsAdapters(
                     mChannelSplits.get(position).getBaseSplits());
+            addChannelItemsAdapterListener(channelItemsAdapters, mChannelSplits.get(position).getBaseSplits());
 
             LinearLayoutManager layoutManager
                     = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
@@ -118,6 +122,30 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
 
         }
 
+    }
+
+    private void addChannelItemsAdapterListener(ChannelItemsAdapters channelItemsAdapters, List<BaseSplits> baseSplits) {
+        ChannelItemsAdapters.ChannelItemsAdaptersListener listener = null;
+        if (baseSplits != null) {
+            listener = new ChannelItemsAdapters.ChannelItemsAdaptersListener() {
+                @Override
+                public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
+                    mListener.onOpenKeyboard(listener, text, complementChars);
+                }
+
+                @Override
+                public void onCloseKeyboard() {
+                    mListener.onCloseKeyboard();
+                }
+
+                @Override
+                public void onEditMode(boolean isEditMode) {
+                    mListener.onEditMode(isEditMode);
+                }
+
+            };
+        }
+        channelItemsAdapters.addListener(listener);
     }
 
     @Override
@@ -149,5 +177,11 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
     public interface Channel100AdapterListener {
 
         void onImageProductClick(String fileUrl, String s);
+
+        void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars);
+
+        void onCloseKeyboard();
+
+        void onEditMode(boolean isEditMode);
     }
 }

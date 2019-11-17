@@ -258,7 +258,7 @@ public class QCTestOrderFragment extends Fragment implements
     }
 
     public void initTestSpinner(final TestOrderResponse testOrderResponse) {
-        if (testOrderResponse.getResponseDictionaryDT().getSubTypes() != null && getActivity() != null) {
+        if (testOrderResponse != null && testOrderResponse.getResponseDictionaryDT().getSubTypes() != null && getActivity() != null) {
             final SubTypeAdapter subTypeAdapter = new SubTypeAdapter(getActivity(), R.layout.base_spinner_item, testOrderResponse.getResponseDictionaryDT().getSubTypes());
             subTypeAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
             mTestSpinner.setAdapter(subTypeAdapter);

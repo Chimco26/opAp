@@ -70,7 +70,9 @@ public class OperatorApplication extends MultiDexApplication {
 
         LitePal.initialize(this);
 
-        ACRA.init(this);
+        try {
+            ACRA.init(this);
+        }catch (IllegalStateException ignored){}
 
         msApplicationContext = getApplicationContext();
 //        LeakCanary.install(this);

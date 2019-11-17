@@ -99,7 +99,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
 
                 String str = "";
                 try {
-                    JSONObject jObject = new JSONObject(response.body().string());
+                    JSONObject jObject = new JSONObject(response.body() != null ? response.body().string() : "");
                     str = jObject.toString();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -109,14 +109,13 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
 
                 StandardResponse newResponse = objectToNewError(str);
 
-                if (newResponse.getFunctionSucceed()){
+                if (newResponse.getFunctionSucceed()) {
                     setOperatorForMachineCallback.onSetOperatorForMachineSuccess();
-                }else {
+                } else {
                     if (newResponse.getError() != null && newResponse.getError().getErrorDesc() != null && newResponse.getError().getErrorDesc() != null) {
                         newResponse.getError().setDefaultErrorCodeConstant(newResponse.getError().getErrorCode());
-                    }else {
+                    } else {
                         newResponse.getError().setDefaultErrorCodeConstant(500);
-
                     }
                     setOperatorForMachineCallback.onSetOperatorForMachineFailed(newResponse);
                 }
@@ -151,13 +150,13 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
         Gson gson = new GsonBuilder().create();
         StandardResponse responseNewVersion;
 
-        if (response.contains("FunctionSucceed")){
+        if (response.contains("FunctionSucceed")) {
             responseNewVersion = gson.fromJson(response, StandardResponse.class);
-        }else{
+        } else {
             ErrorResponse er = gson.fromJson(response, ErrorResponse.class);
             responseNewVersion = new StandardResponse(true, 0, er);
 
-            if (responseNewVersion.getError().getErrorCode() != 0){
+            if (responseNewVersion.getError().getErrorCode() != 0) {
                 responseNewVersion.setFunctionSucceed(false);
             }
         }

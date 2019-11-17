@@ -89,6 +89,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.operatorsapp.utils.TimeUtils.SQL_NO_T_FORMAT;
+
 public class JobActionActivity extends AppCompatActivity implements View.OnClickListener,
         JobHeadersAdapter.JobHeadersAdaperListener,
         PendingJobsAdapter.PendingJobsAdapterListener,
@@ -268,7 +270,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                 if (mPendingJobsResponse != null && mPendingJobsResponse.getPendingJobs() != null && mPendingJobsResponse.getPendingJobs().size() > 0) {
 
-                    SimpleDateFormat actualFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    SimpleDateFormat actualFormat = new SimpleDateFormat(SQL_NO_T_FORMAT, Locale.getDefault());
 
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
 
@@ -848,14 +850,17 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void afterTextChanged(Editable s) {
 
-                if (s.length() < 1 && mHashMapHeaders != null) {
-                    for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
-                        mHashMapHeaders.get(headerEntry.getValue().getName()).setSelected(false);
+                if (mHashMapHeaders != null) {
+                    if (s.length() < 1 && mHashMapHeaders != null) {
+                        for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
+                            if (mHashMapHeaders.containsKey(headerEntry.getValue().getName()) && mHashMapHeaders.get(headerEntry.getValue().getName()) != null) {
+                                mHashMapHeaders.get(headerEntry.getValue().getName()).setSelected(false);
+                            }
+                        }
                     }
+
+                    updateRvBySearchResult();
                 }
-
-                updateRvBySearchResult();
-
             }
         });
     }
@@ -900,21 +905,24 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         boolean isSelectedByUser = false;
 
-        for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
+        if (mHashMapHeaders != null) {
 
-            if (headerEntry.getValue().isSelected()) {
+            for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
 
-                isSelectedByUser = true;
+                if (headerEntry.getValue().isSelected()) {
+
+                    isSelectedByUser = true;
+                }
             }
-        }
 
-        if (!isSelectedByUser) {
+            if (!isSelectedByUser) {
 
-            mPendingJobs.clear();
-            mPendingJobs.addAll(mPendingJobsNoHeadersFiltered);
-            mPendingJobsAdapter.notifyDataSetChanged();
+                mPendingJobs.clear();
+                mPendingJobs.addAll(mPendingJobsNoHeadersFiltered);
+                mPendingJobsAdapter.notifyDataSetChanged();
 
-            return;
+                return;
+            }
         }
 
         mPendingJobs.clear();
@@ -1023,13 +1031,6 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                 break;
 
             case R.id.AJA_img1:
-
-                if (mCurrentJobDetails != null && mCurrentJobDetails.getJobs() != null
-                        && mCurrentJobDetails.getJobs().size() > 0) {
-                    startGalleryActivity(mCurrentJobDetails.getJobs().get(0).getProductFiles(),
-                            String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
-                }
-                break;
 
             case R.id.AJA_img2:
 
@@ -1155,9 +1156,11 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     private void showRecipeFragment() {
 
-        RecipeFragment mRecipefragment = RecipeFragment.newInstance(mCurrentJobDetails.getJobs().get(0).getRecipe());
+        if (mCurrentJobDetails != null) {
+            RecipeFragment mRecipefragment = RecipeFragment.newInstance(mCurrentJobDetails.getJobs().get(0).getRecipe());
 
-        getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, mRecipefragment).addToBackStack(JOB_ACTION_FRAGMENT).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, mRecipefragment).addToBackStack(JOB_ACTION_FRAGMENT).commit();
+        }
     }
 
     @Override

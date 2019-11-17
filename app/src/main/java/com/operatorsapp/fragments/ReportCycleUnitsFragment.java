@@ -169,7 +169,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
                     Character lastCharacter = mUnitsCounterTextView.getText().toString().charAt(mUnitsCounterTextView.getText().toString().length() - 1);
-                    if (!lastCharacter.toString().equals(".")) {
+                    if (!lastCharacter.toString().equals(".") && !s.toString().replaceFirst("\\.", "").contains(".")) {
                         if (Double.valueOf(s.toString()) > 0 && Double.valueOf(s.toString()) <= mMaxUnits) {
                             mButtonReport.setEnabled(true);
                             //                            mButtonReport.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));

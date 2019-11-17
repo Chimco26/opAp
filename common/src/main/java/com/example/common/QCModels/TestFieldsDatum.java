@@ -61,10 +61,12 @@ public class TestFieldsDatum {
     @SerializedName("RequiredField")
     @Expose
     private Boolean requiredField;
+    @SerializedName("Failed")
+    @Expose
+    private boolean failed;
     @SerializedName("UpsertType")
     @Expose
     private Integer upsertType;
-    private boolean failed;
     private String groupName;
 
     public Integer getGroupId() {

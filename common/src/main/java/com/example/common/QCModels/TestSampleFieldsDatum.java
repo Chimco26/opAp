@@ -67,6 +67,8 @@ public class TestSampleFieldsDatum {
     @SerializedName("SamplesData")
     @Expose
     private List<SamplesDatum> samplesData = null;
+    @SerializedName("Failed")
+    @Expose
     private boolean failed;
 
 

@@ -1,6 +1,7 @@
 package com.operatorsapp.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -33,7 +34,6 @@ import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.common.ErrorResponse;
@@ -289,6 +289,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     Handler collapseNotificationHandler;
     private boolean mIsCollapse = true;
     private boolean mIsUpgrading = false;
+    private AsyncTask<String, String, String> mDownloadFile;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -331,7 +332,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 public void run() {
 
                     // Use reflection to trigger a method from 'StatusBarManager'
-                    Object statusBarService = getSystemService("statusbar");
+                    @SuppressLint("WrongConstant") Object statusBarService = getSystemService("statusbar");
                     Class<?> statusBarManager = null;
 
                     try {
@@ -825,6 +826,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mReportFieldsForMachineCore.stopPolling();
 
             mReportFieldsForMachineCore.unregisterListener();
+
+            if (mDownloadFile != null) {
+                mDownloadFile.cancel(true);
+            }
 
             finish();
 
@@ -2028,7 +2033,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         ignoreFromOnPause = false;
 
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
             SendBroadcast.SendEmail(this);
 
@@ -2210,11 +2215,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void startPendingJobsActivity() {
         Intent intent = new Intent(DashboardActivity.this, ActivateJobActivity.class);
 
-        intent.putExtra(EXTRA_LAST_JOB_ID, mCurrentMachineStatus.getAllMachinesData().get(0).getLastJobId());
-        intent.putExtra(EXTRA_LAST_ERP_JOB_ID, mCurrentMachineStatus.getAllMachinesData().get(0).getLastErpJobId());
-        intent.putExtra(EXTRA_LAST_PRODUCT_NAME, mCurrentMachineStatus.getAllMachinesData().get(0).getLastProductName());
         if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData() != null
                 && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
+            intent.putExtra(EXTRA_LAST_JOB_ID, mCurrentMachineStatus.getAllMachinesData().get(0).getLastJobId());
+            intent.putExtra(EXTRA_LAST_ERP_JOB_ID, mCurrentMachineStatus.getAllMachinesData().get(0).getLastErpJobId());
+            intent.putExtra(EXTRA_LAST_PRODUCT_NAME, mCurrentMachineStatus.getAllMachinesData().get(0).getLastProductName());
             intent.putExtra(EXTRA_IS_NO_PRODUCTION, mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
         }
 
@@ -2487,7 +2492,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onRecipeFragmentShown() {
-        if (mRecipeFragment != null){
+        if (mRecipeFragment != null) {
             mRecipeFragment.showProgress(true);
         }
         getAllRecipes(PersistenceManager.getInstance().getJobId(), true, false);
@@ -2520,7 +2525,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                         if (!isUpdate) {
                             addFragmentsToViewPager(null);
-                        }else if (isRefresh && mRecipeFragment != null){
+                        } else if (isRefresh && mRecipeFragment != null) {
                             mRecipeFragment.updateRecipeResponse(null, reason);
                         }
                     }
@@ -2608,6 +2613,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             if (mRecipeFragment == null) {
 
+//                recipeResponse.setPermission(WidgetInfo.getWidgetInfo(permissionForMachineHashMap,WidgetInfo.PermissionId.ENABLE_EDIT_JOB_RECIPE.getId()).getHaspermissionBoolean());
                 mRecipeFragment = RecipeFragment.newInstance(recipeResponse);
 
                 mViewPagerFragment.addFragment(mRecipeFragment);
@@ -2823,14 +2829,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         reportNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportRejectsCallbackListener);
+        if (value.isEmpty()){
+            ShowCrouton.showSimpleCrouton(DashboardActivity.this, getResources().getString(R.string.invalid_value), CroutonCreator.CroutonType.NETWORK_ERROR);
+            return;
+        }
         try {
             if (isUnit) {
                 mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value), (double) 0, mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition).getJoshID());
             } else {
                 mReportCore.sendReportReject(selectedReasonId, selectedCauseId, (double) 0, Double.parseDouble(value), mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition).getJoshID());
             }
-        }catch (NumberFormatException e){
-
+        } catch (NumberFormatException e) {
+            ShowCrouton.showSimpleCrouton(DashboardActivity.this, getResources().getString(R.string.invalid_value), CroutonCreator.CroutonType.NETWORK_ERROR);
         }
 //        SendBroadcast.refreshPolling(getContext());
     }
@@ -3164,7 +3174,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             //check if app has permission to write to the external storage.
             if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 //Get the URL entered
-                new DownloadFile().execute(url);
+                mDownloadFile = new DownloadFile().execute(url);
 
             } else {
                 //If permission is not present request for the same.
@@ -3184,7 +3194,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Log.d(TAG, "onPermissionsGranted- " + requestCode);
         if (requestCode == REQUEST_WRITE_PERMISSION) {
             //String url = "https://s3-eu-west-1.amazonaws.com/leadermes/opapp_35_update_test.apk";
-            new DownloadFile().execute(perms.get(0));
+            mDownloadFile = new DownloadFile().execute(perms.get(0));
         }
     }
 
@@ -3208,21 +3218,23 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
          */
         @Override
         protected void onPreExecute() {
-            Log.d(TAG, "DownloadFile- onPreExecute");
-            super.onPreExecute();
-            this.progressDialog = new ProgressDialog(DashboardActivity.this);
-            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            this.progressDialog.setCancelable(true);
-            this.progressDialog.setTitle(getResources().getString(R.string.update_version_title));
-            this.progressDialog.setMessage(getResources().getString(R.string.update_version_messege));
-            this.progressDialog.setIcon(getResources().getDrawable(R.drawable.logo));
-            this.progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialogInterface) {
-                    isCancelled = true;
-                }
-            });
-            this.progressDialog.show();
+            if (!DashboardActivity.this.isFinishing()) {
+                Log.d(TAG, "DownloadFile- onPreExecute");
+                super.onPreExecute();
+                this.progressDialog = new ProgressDialog(DashboardActivity.this);
+                this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                this.progressDialog.setCancelable(true);
+                this.progressDialog.setTitle(getResources().getString(R.string.update_version_title));
+                this.progressDialog.setMessage(getResources().getString(R.string.update_version_messege));
+                this.progressDialog.setIcon(getResources().getDrawable(R.drawable.logo));
+                this.progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        isCancelled = true;
+                    }
+                });
+                this.progressDialog.show();
+            }
         }
 
         /**
@@ -3230,67 +3242,69 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
          */
         @Override
         protected String doInBackground(String... f_url) {
-            Log.d(TAG, "DownloadFile- doInBackground - " + f_url[0]);
-            int count;
-            try {
-                URL url = new URL(f_url[0]);
-                URLConnection connection = url.openConnection();
-                connection.connect();
-                // getting file length
-                int lengthOfFile = connection.getContentLength();
+            if (!DashboardActivity.this.isFinishing()) {
+                Log.d(TAG, "DownloadFile- doInBackground - " + f_url[0]);
+                int count;
+                try {
+                    URL url = new URL(f_url[0]);
+                    URLConnection connection = url.openConnection();
+                    connection.connect();
+                    // getting file length
+                    int lengthOfFile = connection.getContentLength();
 
 
-                // input stream to read file - with 8k buffer
-                InputStream input = new BufferedInputStream(url.openStream(), 8192);
+                    // input stream to read file - with 8k buffer
+                    InputStream input = new BufferedInputStream(url.openStream(), 8192);
 
-                String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+                    String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 
-                //Extract file name from URL
-                fileName = f_url[0].substring(f_url[0].lastIndexOf('/') + 1, f_url[0].length());
+                    //Extract file name from URL
+                    fileName = f_url[0].substring(f_url[0].lastIndexOf('/') + 1, f_url[0].length());
 
-                //Append timestamp to file name
-                fileName = "bbbbbb.apk";
+                    //Append timestamp to file name
+                    fileName = "bbbbbb.apk";
 
-                //External directory path to save file
-                folder = Environment.getExternalStorageDirectory() + File.separator + "androiddeft/";
+                    //External directory path to save file
+                    folder = Environment.getExternalStorageDirectory() + File.separator + "androiddeft/";
 
-                //Create androiddeft folder if it does not exist
-                directory = new File(folder);
+                    //Create androiddeft folder if it does not exist
+                    directory = new File(folder);
 
-                if (!directory.exists()) {
-                    directory.mkdirs();
+                    if (!directory.exists()) {
+                        directory.mkdirs();
+                    }
+
+                    outputFile = new File(directory, fileName);
+                    // Output stream to write file
+                    OutputStream output = new FileOutputStream(outputFile);
+
+                    byte data[] = new byte[1024];
+
+                    long total = 0;
+
+                    while ((count = input.read(data)) != -1) {
+                        total += count;
+                        // publishing the progress....
+                        // After this onProgressUpdate will be called
+                        publishProgress("" + (int) ((total * 100) / lengthOfFile));
+
+                        // writing data to file
+                        output.write(data, 0, count);
+                    }
+
+                    // flushing output
+                    output.flush();
+
+                    // closing streams
+                    output.close();
+                    input.close();
+                    return "Downloaded at: " + folder + fileName;
+
+                } catch (Exception e) {
+                    Log.e("Error: ", e.getMessage());
                 }
 
-                outputFile = new File(directory, fileName);
-                // Output stream to write file
-                OutputStream output = new FileOutputStream(outputFile);
-
-                byte data[] = new byte[1024];
-
-                long total = 0;
-
-                while ((count = input.read(data)) != -1) {
-                    total += count;
-                    // publishing the progress....
-                    // After this onProgressUpdate will be called
-                    publishProgress("" + (int) ((total * 100) / lengthOfFile));
-
-                    // writing data to file
-                    output.write(data, 0, count);
-                }
-
-                // flushing output
-                output.flush();
-
-                // closing streams
-                output.close();
-                input.close();
-                return "Downloaded at: " + folder + fileName;
-
-            } catch (Exception e) {
-                Log.e("Error: ", e.getMessage());
             }
-
             return "Something went wrong";
         }
 
@@ -3299,13 +3313,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
          */
         protected void onProgressUpdate(String... progress) {
             // setting progress percentage
-            progressDialog.setProgress(Integer.parseInt(progress[0]));
+            if (!DashboardActivity.this.isFinishing()) {
+                progressDialog.setProgress(Integer.parseInt(progress[0]));
+            }
         }
 
 
         @Override
         protected void onPostExecute(String message) {
-            if (isCancelled) {
+            if (isCancelled || DashboardActivity.this.isFinishing()) {
                 return;
             }
             Log.d(TAG, "DownloadFile- onPostExecute - " + message);
@@ -3360,7 +3376,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 mNextJobTimerDialog.showNextJobTimerDialog().show();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
