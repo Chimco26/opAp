@@ -159,8 +159,8 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
         } else return 0;
     }
 
-    public boolean hasListener() {
-        return mListener != null;
+    public boolean hasNotListener() {
+        return mListener == null;
     }
 
 
