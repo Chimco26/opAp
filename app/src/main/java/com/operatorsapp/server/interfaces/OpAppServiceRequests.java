@@ -76,7 +76,7 @@ public interface OpAppServiceRequests {
     Call<ResponseBody> getNewVersionFile();
 
     //    @GET("/LeaderMESApi/GetApplicationVersion")
-    @GET("https://s3-eu-west-1.amazonaws.com/release.leadermes.com/OpApp/versions.json")
+    @GET("https://s3-eu-west-1.amazonaws.com/release.leadermes.com/OpApp/versions.json") /// versions.json is for release; versions1.json is for debug
     Call<AppVersionResponse> GetApplicationVersion();
 
     @POST("/LeaderMESApi/SendNotificationToOpApp")

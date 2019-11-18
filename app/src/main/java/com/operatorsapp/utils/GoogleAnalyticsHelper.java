@@ -1,49 +1,86 @@
 package com.operatorsapp.utils;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
 
 public class GoogleAnalyticsHelper {
 
 
-    public Tracker getTracker(Context context){
+    public FirebaseAnalytics getTracker(Context context){
 
-        return ((OperatorApplication)context.getApplicationContext()).getDefaultTracker();
+        try {
+            return ((OperatorApplication)context.getApplicationContext()).getDefaultTracker();
+        }catch (NullPointerException e){
+            return FirebaseAnalytics.getInstance(context);
+        }
 
     }
 
     public void trackScreen(Context context, String screenName){
 
-        Tracker tracker = getTracker(context);
+        FirebaseAnalytics firebaseAnalytics = getTracker(context);
         PersistenceManager pm = PersistenceManager.getInstance();
 
-        tracker.setClientId("machine name + id: " + pm.getMachineName() + ", " + pm.getMachineId());
-        tracker.setAppVersion(pm.getVersion() + "");
-        tracker.setHostname(pm.getSiteName());
-        tracker.setScreenName(screenName);
-        tracker.set("Machine Name + Id", pm.getMachineName() + ", " + pm.getMachineId());
-        tracker.send(new HitBuilders.ScreenViewBuilder().build());
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "screen");
+        params.putString(FirebaseAnalytics.Param.ITEM_NAME, screenName);
+        params.putString(FirebaseAnalytics.Param.ITEM_ID, "machine name + id: " + pm.getMachineName() + ", " + pm.getMachineId());
+        params.putString(FirebaseAnalytics.Param.ITEM_VARIANT, "version num: " + pm.getVersion());
+        params.putString(FirebaseAnalytics.Param.AFFILIATION, "site name: " + pm.getSiteName());
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params);
 
+
+//        Tracker tracker = getTracker(context);
+//        if (tracker != null) {
+//            PersistenceManager pm = PersistenceManager.getInstance();
+//
+//            tracker.setClientId("machine name + id: " + pm.getMachineName() + ", " + pm.getMachineId());
+//            tracker.setAppVersion(pm.getVersion() + "");
+//            tracker.setHostname(pm.getSiteName());
+//            tracker.setScreenName(screenName);
+//            tracker.set("Machine Name + Id", pm.getMachineName() + ", " + pm.getMachineId());
+//            tracker.send(new HitBuilders.ScreenViewBuilder().build());
+//        }
     }
 
     public void trackEvent(Context context, EventCategory category, boolean isSucceed , String label){
 
-        Tracker tracker = getTracker(context);
+        FirebaseAnalytics firebaseAnalytics = getTracker(context);
         PersistenceManager pm = PersistenceManager.getInstance();
 
-        tracker.setClientId("machine name + id: " + pm.getMachineName() + ", " + pm.getMachineId());
-        tracker.setAppVersion(pm.getVersion() + "");
-        tracker.setHostname(pm.getSiteName());
-        tracker.set("Machine Name + Id", pm.getMachineName() + ", " + pm.getMachineId());
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory(getCategory(category))
-                .setAction(isSucceed ? "Action was preformed successfully" : "Action has failed")
-                .setLabel(label)
-                .build());
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, getCategory(category));
+        params.putLong(FirebaseAnalytics.Param.SUCCESS, isSucceed ? 1 : 0);
+        params.putString(FirebaseAnalytics.Param.ITEM_ID, "machine name + id: " + pm.getMachineName() + ", " + pm.getMachineId());
+        params.putString(FirebaseAnalytics.Param.ITEM_VARIANT, "version num: " + pm.getVersion());
+        params.putString(FirebaseAnalytics.Param.AFFILIATION, "site name: " + pm.getSiteName());
+        params.putString(FirebaseAnalytics.Param.CONTENT, label);
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params);
+
+
+
+
+//
+//        Tracker tracker = getTracker(context);
+//        if (tracker != null) {
+//            PersistenceManager pm = PersistenceManager.getInstance();
+//
+//            tracker.setClientId("machine name + id: " + pm.getMachineName() + ", " + pm.getMachineId());
+//            tracker.setAppVersion(pm.getVersion() + "");
+//            tracker.setHostname(pm.getSiteName());
+//            tracker.set("Machine Name + Id", pm.getMachineName() + ", " + pm.getMachineId());
+//            tracker.send(new HitBuilders.EventBuilder()
+//                    .setCategory(getCategory(category))
+//                    .setAction(isSucceed ? "Action was preformed successfully" : "Action has failed")
+//                    .setLabel(label)
+//                    .build());
+//        }
 
     }
 
@@ -100,3 +137,4 @@ public class GoogleAnalyticsHelper {
         SHIFT_REPORT
     }
 }
+
