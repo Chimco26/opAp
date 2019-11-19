@@ -70,6 +70,7 @@ import retrofit2.Response;
 
 import static com.example.common.SelectableString.STANDARD_VARIATION_ID;
 import static com.example.common.reportShift.GraphSeries.addAveragedPoints;
+import static com.operatorsapp.utils.LineChartHelper.setLimitLine;
 import static com.operatorsapp.utils.LineChartHelper.setXAxisStyle;
 import static com.operatorsapp.utils.LineChartHelper.setYAxisStyle;
 import static com.operatorsapp.utils.LineChartHelper.splitItemsByNull;
@@ -79,6 +80,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
     public static final String TAG = ReportShiftFragment.class.getSimpleName();
     private static final String IS_TIME_LINE_OPEN = "IS_TIME_LINE_OPEN";
+    private static final String SHOW_LIMITS = "SHOW_LIMITS";
     private RecyclerView mTopStops_rv;
     private RecyclerView mTopRejects_rv;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
@@ -312,6 +314,16 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         }
     }
 
+    public class FloatCouple {
+        float a;
+        float b;
+
+        public FloatCouple(float a, float b) {
+            this.a = a;
+            this.b = b;
+        }
+    }
+
     private void setGraphData(ArrayList<SelectableString> selectableStrings, List<Graph> graphs) {
 
         LineChart graph = mCycleTime;
@@ -321,7 +333,9 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         graph.setDrawGridBackground(false);
 
         ArrayList<ILineDataSet> allDataSets = new ArrayList<>();
+        ArrayList<FloatCouple> limits = new ArrayList<>();
 
+        boolean showLimits = false;
         for (Graph graphItem : graphs) {
             boolean isSelected = false;
             boolean isStandardV = false;
@@ -332,10 +346,15 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                 if (selectableString.getId().equals(STANDARD_VARIATION_ID)) {
                     isStandardV = selectableString.isSelected();
                 }
+                if (selectableString.getId().equals(SHOW_LIMITS)) {
+                    showLimits = selectableString.isSelected();
+                }
             }
             if (!isSelected) {
                 continue;
             }
+            limits.add(new FloatCouple(graphItem.getGraphSeries().get(0).getMinValue(), graphItem.getGraphSeries().get(0).getMaxValue()));
+
             ArrayList<List<Item>> listArrayList;
             if (isStandardV){
                 listArrayList = splitItemsByNull(graphItem.getGraphSeries().get(0).getStandardItems());
@@ -384,10 +403,17 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         graph.getLegend().setEnabled(false);
         setXAxisStyle(graph);
         setYAxisStyle(graph);
-//        setLimitLine(graph, graphs.getMinValue(), graphs.getMaxValue());
+        graph.getAxisLeft().removeAllLimitLines();
+        if (showLimits) {
+            for (FloatCouple floatcouple : limits) {
+                setLimitLine(graph, floatcouple.a, floatcouple.b);
+            }
+        }
         graph.notifyDataSetChanged();
         graph.invalidate();
     }
+
+
 
     @Override
     public void onPermissionForMachinePolling(SparseArray<WidgetInfo> permissionResponse) {
@@ -530,6 +556,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                         ArrayList<SelectableString> selectableStrings = new ArrayList<>();
                         selectableStrings.add(new SelectableString(getString(R.string.select_all), true, SelectableString.SELECT_ALL_ID, getActivity().getResources().getColor(R.color.black)));
                         selectableStrings.add(new SelectableString(getString(R.string.standard), true, STANDARD_VARIATION_ID, getActivity().getResources().getColor(R.color.grey_lite)));
+                        selectableStrings.add(new SelectableString(getString(R.string.limits), true, SHOW_LIMITS, getActivity().getResources().getColor(R.color.green_light)));
                         if (response.body().getDepartments().get(0).getCurrentShift().
                                 get(0).getMachines().get(0).getGraphs() != null) {
                             int[] colors = getActivity().getResources().getIntArray(R.array.colorList);

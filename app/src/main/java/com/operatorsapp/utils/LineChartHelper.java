@@ -37,6 +37,7 @@ public class LineChartHelper {
         // add limit lines
         mGraphView.getAxisLeft().addLimitLine(ll1);
         mGraphView.getAxisLeft().addLimitLine(ll2);
+
     }
 
     public static void setXAxisStyle(LineChart graphView) {
