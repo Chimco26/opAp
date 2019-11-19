@@ -108,7 +108,7 @@ public class JobListFragment extends Fragment implements
         final View rootView = inflater.inflate(R.layout.fragment_job_list, container, false);
 
         return rootView;
-    }//@+id/pending_jobs_tv"/>//you have x pending jobs
+    }//@+id/pending_jobs_tv"/>//you have a pending jobs
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

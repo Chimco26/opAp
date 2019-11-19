@@ -457,5 +457,6 @@
     <string name="recipe_fields">Recipe Fields</string>
     <string name="test_fields">Test Fields</string>
     <string name="invalid_value">invalid value</string>
+    <string name="limits">Limits</string>
 
 </resources>

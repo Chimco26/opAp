@@ -156,7 +156,11 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                 break;
             case FIELD_TYPE_DATE_INT:
                 ((DateViewHolder) viewHolder).title.setText(item.getLName());
-                ((DateViewHolder) viewHolder).mTextDateTv.setText(item.getCurrentValue());
+                if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty() && !item.getCurrentValue().equals("0")) {
+                    ((DateViewHolder) viewHolder).mTextDateTv.setText(TimeUtils.getDate(
+                            TimeUtils.convertDateToMillisecond(item.getCurrentValue(), SQL_NO_T_FORMAT),
+                            ONLY_DATE_FORMAT));
+                }
                 if (item.getAllowEntry()) {
                     ((DateViewHolder) viewHolder).itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -189,8 +193,8 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
     public void showDatePicker(final DateViewHolder viewHolder, final TestFieldsDatum item) {
         Calendar calendar = Calendar.getInstance();
-        if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
-            calendar.setTime(new Date(TimeUtils.getLongFromDateString(item.getCurrentValue(), ONLY_DATE_FORMAT)));
+        if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty() && !item.getCurrentValue().equals("0")) {
+            calendar.setTime(new Date(TimeUtils.getLongFromDateString(item.getCurrentValue(), SQL_NO_T_FORMAT)));
         } else {
             calendar.setTime(new Date());
         }
@@ -198,8 +202,10 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                 viewHolder.itemView.getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                item.setCurrentValue(String.format(Locale.US, "%d/%d/%d", i2, i1 + 1, i));
-                viewHolder.mTextDateTv.setText(item.getCurrentValue());
+                item.setCurrentValue(String.format(Locale.US, "%d-%d-%d %d:%d:%d", i, i1 + 1, i2, 0, 0, 0));
+                viewHolder.mTextDateTv.setText(TimeUtils.getDate(
+                        TimeUtils.convertDateToMillisecond(item.getCurrentValue(), SQL_NO_T_FORMAT),
+                        ONLY_DATE_FORMAT));
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
@@ -425,7 +431,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
         public void showHourPicker(Context context, final TestFieldsDatum item) {
             final Calendar calendar = Calendar.getInstance();
-            if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
+            if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty() && !item.getCurrentValue().equals("0")) {
                 calendar.setTime(new Date(TimeUtils.getLongFromDateString(item.getCurrentValue(), SQL_NO_T_FORMAT)));
             } else {
                 calendar.setTime(new Date());
