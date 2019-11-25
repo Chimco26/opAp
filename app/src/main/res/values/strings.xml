@@ -458,5 +458,6 @@
     <string name="test_fields">Test Fields</string>
     <string name="invalid_value">invalid value</string>
     <string name="limits">Limits</string>
+    <string name="you_need_to_complete_all_mandatory_fields">You need to complete all mandatory fields</string>
 
 </resources>

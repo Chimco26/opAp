@@ -8,6 +8,6 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface EmeraldGetDepartment {
-    @POST("/LeaderMESApi/GetDepartmentsMachines")
+    @POST("/LeaderMESApi/GetDepartmentsMachinesOpApp")
     Call<DepartmentsMachinesResponse> getAllDepartmentsRequest(@Body BaseRequest baseRequest);
 }

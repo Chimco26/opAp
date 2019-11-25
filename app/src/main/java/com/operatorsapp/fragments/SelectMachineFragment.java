@@ -284,7 +284,6 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 if (mNavigationCallback != null){
                     ClearData.clearData();
                     mNavigationCallback.goToFragment(LoginFragment.newInstance(false), false, false);
-
                 }
                 break;
         }
