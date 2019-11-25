@@ -101,6 +101,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_SELF_NOTIFICATION_ID_MAP = "PREF_SELF_NOTIFICATION_ID_MAP";
     private static final long ONE_DAY = 1000 * 60 * 60 * 24;
     private static final String PREF_IS_STATUS_BAR_LOCKED = "PREF_IS_STATUS_BAR_LOCKED";
+    private static final String PREF_UNITS_IN_CYCLE_TYPE = "PREF_UNITS_IN_CYCLE_TYPE";
 
 
     private static PersistenceManager msInstance;
@@ -818,5 +819,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public void setShiftGraphCategories(ArrayList<SelectableString> selectableStrings) {
         SecurePreferences.getInstance().setString(PREF_ARRAY_CHECKED_SHIFT_GRAPH_CATEGORIES, mGson.toJson(selectableStrings));
+    }
+
+    public int getUnitsInCycleType() {
+        return SecurePreferences.getInstance().getInt(PREF_UNITS_IN_CYCLE_TYPE, 1);
+    }
+
+    public void setUnitsInCycleType(int unitsInCyleType) {
+        SecurePreferences.getInstance().setInt(PREF_UNITS_IN_CYCLE_TYPE, unitsInCyleType);
     }
 }

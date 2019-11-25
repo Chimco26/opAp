@@ -90,12 +90,17 @@ public class JobListFragment extends Fragment implements
             if (getArguments().containsKey(Header.TAG)) {
                 mHeaders = getArguments().getParcelableArrayList(Header.TAG);
                 sortHeaders();
-                for (int i = 0; i < 7; i++) {
+                int i = 0;
+                int counter = 0;// max 7
+                while (counter <= 7 && i < mHeaders.size()) {
                     if (mHeaders != null && mHeaders.size() > i && mHeaders.get(i).getShowOnHeader()) {
-                        orderedHederasKey[i] = mHeaders.get(i).getName();
-                    } else {
-                        orderedHederasKey[i] = null;
+                        orderedHederasKey[counter] = mHeaders.get(i).getName();
+                        counter++;
                     }
+//                    else {
+//                        orderedHederasKey[i] = null;
+//                    }
+                    i++;
                 }
                 mHashMapHeaders = headerListToHashMap(mPendingJobsResponse.getHeaders());
             }
@@ -282,8 +287,7 @@ public class JobListFragment extends Fragment implements
 
     }
 
-    private HashMap<String, Header> headerListToHashMap
-            (List<Header> headers) {
+    private HashMap<String, Header> headerListToHashMap(List<Header> headers) {
 
         HashMap<String, Header> hashMapHeaders = new HashMap<>();
 

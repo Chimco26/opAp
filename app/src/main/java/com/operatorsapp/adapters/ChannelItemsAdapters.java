@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.BaseSplits;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.util.List;
@@ -49,7 +50,8 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
     @Override
     public void onBindViewHolder(@NonNull final ChannelItemsAdapters.ViewHolder viewHolder, final int position) {
 
-        viewHolder.mTitle.setText(baseSplits.get(position).getPropertyName());
+        String nameByLang = OperatorApplication.isEnglishLang() ? baseSplits.get(position).getPropertyEName() : baseSplits.get(position).getPropertyHName();
+        viewHolder.mTitle.setText(nameByLang);
         viewHolder.mNumber.setText(baseSplits.get(position).getFValue());
         viewHolder.mRange.setText(String.format(Locale.getDefault(), "%s-%s", baseSplits.get(position).getLValue(), baseSplits.get(position).getHValue()));
         setEditCapabilities(viewHolder, baseSplits.get(position));

@@ -17,6 +17,17 @@ public class ErrorResponse implements Parcelable, ErrorObjectInterface {
     @SerializedName("ErrorCode")
     private int mErrorCode;
 
+    @SerializedName("ErrorLine")
+    private int mErrorLine;
+
+
+    public int getmErrorLine() {
+        return mErrorLine;
+    }
+
+    public void setmErrorLine(int mErrorLine) {
+        this.mErrorLine = mErrorLine;
+    }
 
     private ErrorCode errorCodeConstant;
 
@@ -51,6 +62,7 @@ public class ErrorResponse implements Parcelable, ErrorObjectInterface {
         dest.writeString(this.mErrorDesc);
         dest.writeString(this.mErrorMessage);
         dest.writeInt(this.mErrorCode);
+        dest.writeInt(this.mErrorLine);
     }
 
     public ErrorResponse() {
@@ -60,6 +72,7 @@ public class ErrorResponse implements Parcelable, ErrorObjectInterface {
         this.mErrorDesc = in.readString();
         this.mErrorMessage = in.readString();
         this.mErrorCode = in.readInt();
+        this.mErrorLine = in.readInt();
     }
 
     public static final Parcelable.Creator<ErrorResponse> CREATOR = new Parcelable.Creator<ErrorResponse>() {

@@ -30,7 +30,6 @@ import com.operatorsapp.view.SingleLineKeyboard;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_BOOLEAN;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_BOOLEAN_INT;
@@ -111,6 +110,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                             list.get(position).setCurrentValue(Boolean.toString(b));
+                            list.get(position).setUpsertType(3);
                         }
                     });
                 } else {
@@ -192,7 +192,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
     }
 
     public void showDatePicker(final DateViewHolder viewHolder, final TestFieldsDatum item) {
-        Calendar calendar = Calendar.getInstance();
+        final Calendar calendar = Calendar.getInstance();
         if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty() && !item.getCurrentValue().equals("0")) {
             calendar.setTime(new Date(TimeUtils.getLongFromDateString(item.getCurrentValue(), SQL_NO_T_FORMAT)));
         } else {
@@ -202,7 +202,12 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                 viewHolder.itemView.getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                item.setCurrentValue(String.format(Locale.US, "%d-%d-%d %d:%d:%d", i, i1 + 1, i2, 0, 0, 0));
+                calendar.set(Calendar.YEAR, i);
+                calendar.set(Calendar.MONTH, i1 + 1);
+                calendar.set(Calendar.DAY_OF_MONTH, i2);
+                item.setCurrentValue(TimeUtils.getDate(calendar.getTime().getTime(), SQL_NO_T_FORMAT));
+//                item.setCurrentValue(String.format(Locale.US, "%d-%d-%d %d:%d:%d", i, i1 + 1, i2, 0, 0, 0));
+                item.setUpsertType(3);
                 viewHolder.mTextDateTv.setText(TimeUtils.getDate(
                         TimeUtils.convertDateToMillisecond(item.getCurrentValue(), SQL_NO_T_FORMAT),
                         ONLY_DATE_FORMAT));
@@ -246,6 +251,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 list.get(position).setCurrentValue(charSequence.toString());
+                list.get(position).setUpsertType(3);
                 if (viewHolder instanceof IntervalViewHolder) {
                     updateRangeView(item, ((IntervalViewHolder) viewHolder).mRangeView);
                 }
@@ -444,6 +450,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         calendar.set(Calendar.MINUTE, minute);
                         item.setCurrentValue(TimeUtils.getDate(calendar.getTime().getTime(), SQL_NO_T_FORMAT));
+                        item.setUpsertType(3);
                         mTextTimeTv.setText(TimeUtils.getDateFromFormat(
                                 new Date(TimeUtils.getLongFromDateString(item.getCurrentValue(), SQL_NO_T_FORMAT)),
                                 SIMPLE_HM_FORMAT));
