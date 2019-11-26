@@ -460,5 +460,7 @@
     <string name="limits">Limits</string>
     <string name="you_need_to_complete_all_mandatory_fields">You need to complete all mandatory fields</string>
     <string name="choose_hour">Choose hour</string>
+    <string name="update">update</string>
+    <string name="current_value_is">Current value is</string>
 
 </resources>

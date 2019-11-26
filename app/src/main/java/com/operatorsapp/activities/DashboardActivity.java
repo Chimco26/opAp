@@ -2415,9 +2415,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Fragment visible = getVisibleFragment();
 
         if (SingleLineKeyboard.isKeyBoardOpen) {
-            if (mRecipeFragment != null) {
-                mRecipeFragment.closeKeyBoard();
-            }
             if (mWidgetFragment != null) {
                 mWidgetFragment.onCloseKeyboard();
             }
