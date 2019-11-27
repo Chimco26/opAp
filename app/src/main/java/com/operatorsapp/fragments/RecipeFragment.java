@@ -2,6 +2,7 @@ package com.operatorsapp.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -279,7 +281,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onEditMode(BaseSplits item) {
 
-                    item.setEditValue("2");
+                    openEditValue(item);
                 }
             },
                     (ArrayList<ChannelSplits>) mRecipeResponse.getRecipe().getChannels()
@@ -464,14 +466,15 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
 
     private void openEditValue(final BaseSplits splits) {
 
+        if (mIsEditMode){
+            return;
+        }
         mIsEditMode = true;
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = this.getLayoutInflater();
         @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_edit_recipe, null);
         builder.setView(dialogView);
-
-        String nameByLang = OperatorApplication.isEnglishLang() ? splits.getPropertyEName() : splits.getPropertyHName();
 
         TextView titleTv = dialogView.findViewById(R.id.DER_main_title);
         TextView titleValue = dialogView.findViewById(R.id.DER_title_value);
@@ -484,6 +487,9 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
         RadioButton failedBtn = dialogView.findViewById(R.id.DER_parameter_radio_failed);
         ImageButton closeButton = dialogView.findViewById(R.id.DER_close_btn);
 
+        editEtNum.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        String nameByLang = OperatorApplication.isEnglishLang() ? splits.getPropertyEName() : splits.getPropertyHName();
         titleTv.setText(nameByLang);
         titleValue.setText(String.format("%s: %s", getString(R.string.current_value_is), splits.getFValue()));
         rangeTv.setText(String.format("%s-%s", splits.getLValue(), splits.getHValue()));
@@ -494,11 +500,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
             case "text":
                 editEtText.setVisibility(View.VISIBLE);
                 editEtNum.setVisibility(View.GONE);
-                radioGroup.setVisibility(View.GONE);
-                break;
-            case "num":
-                editEtText.setVisibility(View.GONE);
-                editEtNum.setVisibility(View.VISIBLE);
                 radioGroup.setVisibility(View.GONE);
                 break;
             case "Boolean":
@@ -519,6 +520,12 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
                     }
                 });
                 break;
+//            case "num":
+            default:
+                editEtText.setVisibility(View.GONE);
+                editEtNum.setVisibility(View.VISIBLE);
+                radioGroup.setVisibility(View.GONE);
+                break;
 
         }
 
@@ -534,7 +541,10 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
                     case "text":
                         splits.setFValue(editEtText.getText().toString());
                         break;
-                    case "num":
+                    case "Boolean":
+                        break;
+//                    case "num":
+                    default:
                         splits.setFValue(editEtNum.getText().toString());
                         break;
 
@@ -562,7 +572,13 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
                 alert.dismiss();
             }
         });
-        
+        alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                mIsEditMode = false;
+            }
+        });
+
     }
 
     private void updateNotes(final AlertDialog alert, final String note) {
@@ -761,14 +777,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
 
     public void updateRecipeResponse(RecipeResponse recipeResponse, StandardResponse reason) {
 
-        if (!isUpdating && mIsEditMode || mProgressBar == null) {
+        if (mIsEditMode || mProgressBar == null) {
             return;
         }
         mProgressBar.setVisibility(View.GONE);
         if (isUpdating) {
-            if (getActivity() != null && getActivity().getWindow() != null) {
-                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }
             isUpdating = false;
             if (recipeResponse != null) {
                 ShowCrouton.showSimpleCrouton((DashboardActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
