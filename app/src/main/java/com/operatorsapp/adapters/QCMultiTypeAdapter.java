@@ -203,7 +203,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                 calendar.set(Calendar.YEAR, i);
-                calendar.set(Calendar.MONTH, i1 + 1);
+                calendar.set(Calendar.MONTH, i1);
                 calendar.set(Calendar.DAY_OF_MONTH, i2);
                 item.setCurrentValue(TimeUtils.getDate(calendar.getTime().getTime(), SQL_NO_T_FORMAT));
 //                item.setCurrentValue(String.format(Locale.US, "%d-%d-%d %d:%d:%d", i, i1 + 1, i2, 0, 0, 0));

@@ -466,7 +466,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
 
     private void openEditValue(final BaseSplits splits) {
 
-        if (mIsEditMode){
+        if (mIsEditMode) {
             return;
         }
         mIsEditMode = true;
@@ -798,7 +798,14 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     }
 
     public void showProgress(boolean showProgress) {
-        mProgressBar.setVisibility(View.VISIBLE);
+        if (mProgressBar == null) {
+            return;
+        }
+        if (showProgress) {
+            mProgressBar.setVisibility(View.VISIBLE);
+        } else {
+            mProgressBar.setVisibility(View.INVISIBLE);
+        }
     }
 
     public interface OnRecipeFragmentListener {

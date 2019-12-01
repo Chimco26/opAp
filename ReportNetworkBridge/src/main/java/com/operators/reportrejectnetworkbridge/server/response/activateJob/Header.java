@@ -68,7 +68,7 @@ public class Header implements Parcelable {
         this.color = color;
     }
 
-    public Boolean getShowOnHeader() {
+    public Boolean isShowOnHeader() {
         return showOnHeader;
     }
 
@@ -117,6 +117,4 @@ public class Header implements Parcelable {
             return new Header[size];
         }
     };
-
-
 }
