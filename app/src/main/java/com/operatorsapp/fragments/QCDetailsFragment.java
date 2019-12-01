@@ -326,11 +326,13 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         mQcRequests.getQCTestDetails(mTestDetailsRequest, new QCRequests.getQCTestDetailsCallback() {
             @Override
             public void onSuccess(TestDetailsResponse testDetailsResponse) {
-                mProgressBar.setVisibility(View.GONE);
-                mTestOrderDetails = testDetailsResponse;
-                initSamplesData();
-                initFieldsData();
-                initView();
+                if (getActivity() != null) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mTestOrderDetails = testDetailsResponse;
+                    initSamplesData();
+                    initFieldsData();
+                    initView();
+                }
             }
 
             @Override
