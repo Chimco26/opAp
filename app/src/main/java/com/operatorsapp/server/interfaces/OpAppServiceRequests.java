@@ -71,10 +71,6 @@ public interface OpAppServiceRequests {
     @POST("/LeaderMESApi/GetDepartmentShiftGraph")
     Call<DepartmentShiftGraphResponse> getDepartmentShiftGraph(@Body DepartmentShiftGraphRequest request);
 
-    @Streaming
-    @GET("/files/1Mb.dat")
-    Call<ResponseBody> getNewVersionFile();
-
     //    @GET("/LeaderMESApi/GetApplicationVersion")
     @GET("https://s3-eu-west-1.amazonaws.com/release.leadermes.com/OpApp/versions.json")
     Call<AppVersionResponse> GetApplicationVersion();

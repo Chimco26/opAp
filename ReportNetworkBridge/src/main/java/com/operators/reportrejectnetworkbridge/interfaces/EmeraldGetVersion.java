@@ -9,7 +9,7 @@ import retrofit2.http.GET;
 
 public interface EmeraldGetVersion {
 
-    @GET("/LeaderMESApi/ApiVersion")
+    @GET("/LeaderMESApi/ApiVersion/")
     Call<List<VersionResponse>> getAllRecipesRequest();
 
 }
