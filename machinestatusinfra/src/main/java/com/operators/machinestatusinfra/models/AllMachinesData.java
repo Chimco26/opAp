@@ -104,6 +104,17 @@ public class AllMachinesData {
     private Long mNextJobID;
     @SerializedName("NextERPJobID")
     private String mNextERPJobID;
+    @SerializedName("UnitsInCycleType")
+    private int mUnitsInCycleType;
+
+
+    public int getUnitsInCycleType() {
+        return mUnitsInCycleType;
+    }
+
+    public void setUnitsInCycleType(int mUnitsInCycleType) {
+        this.mUnitsInCycleType = mUnitsInCycleType;
+    }
 
     public Boolean getmAutoActivateNextJob() {
         if (mAutoActivateNextJob != null) {

@@ -160,6 +160,7 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
                 list.get(position).setValue(charSequence.toString());
                 if (list.get(position).getUpsertType() != 2) {
                     list.get(position).setUpsertType(3);
+                    mTestSample.setUpsertType(3);
                 }
             }
 

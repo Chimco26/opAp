@@ -242,7 +242,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
             return String.valueOf(1);
         }
         float max = PersistenceManager.getInstance().getMaxUnitReport();
-        if (value > max) {
+        if (value > max && PersistenceManager.getInstance().getUnitsInCycleType() <= 1) {
             return String.valueOf(max);
         }
         return String.valueOf(value);

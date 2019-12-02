@@ -5,9 +5,16 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/dark_blue_two</item>
         <item name="colorPrimaryDark">@color/status_bar</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/blue1</item>
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+    </style>
+
+
+    <style name="TimePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/machine_blue</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="ToolbarTheme" parent="AppTheme">

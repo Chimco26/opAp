@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.common.QCModels.SamplesDatum;
 import com.example.common.QCModels.SaveTestDetailsRequest;
@@ -124,13 +125,37 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         view.findViewById(R.id.FQCD_save_tv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveTestOrderDetails(mTestOrderDetails);
+                if (isMandatoryFieldsCompleted()) {
+                    saveTestOrderDetails(mTestOrderDetails);
+                }else {
+                    Toast.makeText(getActivity(), getString(R.string.you_need_to_complete_all_mandatory_fields), Toast.LENGTH_SHORT).show();
+                }
             }
         });
         mSamplesTestRV = view.findViewById(R.id.FQCD_paramters_rv);
         mTestContainer = view.findViewById(R.id.FQCD_fields_ll);
         initIncrementSamplesView(view);
         initPassedVars(view);
+    }
+
+    private boolean isMandatoryFieldsCompleted() {
+        List<TestFieldsDatum> testFields = mTestOrderDetails.getTestFieldsData();
+        List<TestSampleFieldsDatum> testSamplesFields = mTestOrderDetails.getTestSampleFieldsData();
+
+        for (TestFieldsDatum testFieldsDatum: testFields){
+            if (testFieldsDatum.getRequiredField() && testFieldsDatum.getUpsertType() == 0){
+                return false;
+            }
+        }
+
+        for (TestSampleFieldsDatum testSampleFieldsDatum: testSamplesFields){
+            ArrayList<SamplesDatum> samplesDatum = (ArrayList<SamplesDatum>) testSampleFieldsDatum.getSamplesData();
+            for (SamplesDatum samplesDatum1: samplesDatum)
+            if (testSampleFieldsDatum.getRequiredField() && samplesDatum1.getUpsertType() == 0){
+                return false;
+            }
+        }
+        return true;
     }
 
     private void initPassedVars(View view) {
@@ -301,11 +326,13 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         mQcRequests.getQCTestDetails(mTestDetailsRequest, new QCRequests.getQCTestDetailsCallback() {
             @Override
             public void onSuccess(TestDetailsResponse testDetailsResponse) {
-                mProgressBar.setVisibility(View.GONE);
-                mTestOrderDetails = testDetailsResponse;
-                initSamplesData();
-                initFieldsData();
-                initView();
+                if (getActivity() != null) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mTestOrderDetails = testDetailsResponse;
+                    initSamplesData();
+                    initFieldsData();
+                    initView();
+                }
             }
 
             @Override
@@ -388,7 +415,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         final SaveTestDetailsRequest saveTestDetailsRequest = new SaveTestDetailsRequest(testDetailsResponse.getTestSampleFieldsData(),
                 testDetailsResponse.getTestFieldsData(), mSamplesCount, mTestDetailsRequest.getTestId());
         mProgressBar.setVisibility(View.VISIBLE);
-        mQcRequests.postQCSaveTestDetails(saveTestDetailsRequest, new QCRequests.postQCSaveTestDetailsCallback() {
+         mQcRequests.postQCSaveTestDetails(saveTestDetailsRequest, new QCRequests.postQCSaveTestDetailsCallback() {
             @Override
             public void onSuccess(SaveTestDetailsResponse saveTestDetailsResponse) {
                 mProgressBar.setVisibility(View.GONE);

@@ -90,12 +90,14 @@ public class JobListFragment extends Fragment implements
             if (getArguments().containsKey(Header.TAG)) {
                 mHeaders = getArguments().getParcelableArrayList(Header.TAG);
                 sortHeaders();
-                for (int i = 0; i < 7; i++) {
-                    if (mHeaders != null && mHeaders.size() > i && mHeaders.get(i).getShowOnHeader()) {
-                        orderedHederasKey[i] = mHeaders.get(i).getName();
-                    } else {
-                        orderedHederasKey[i] = null;
+                int i = 0;
+                int counter = 0;// max 7
+                while (counter <= 7 && i < mHeaders.size()) {
+                    if (mHeaders.get(i).isShowOnHeader()) {
+                        orderedHederasKey[counter] = mHeaders.get(i).getName();
+                        counter++;
                     }
+                    i++;
                 }
                 mHashMapHeaders = headerListToHashMap(mPendingJobsResponse.getHeaders());
             }
@@ -108,7 +110,7 @@ public class JobListFragment extends Fragment implements
         final View rootView = inflater.inflate(R.layout.fragment_job_list, container, false);
 
         return rootView;
-    }//@+id/pending_jobs_tv"/>//you have x pending jobs
+    }//@+id/pending_jobs_tv"/>//you have a pending jobs
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -261,11 +263,11 @@ public class JobListFragment extends Fragment implements
 
     private void sortHeaders() {
 
-        for (int i = 0; i < mHeaders.size(); i++) {
-            if (!mHeaders.get(i).getShowOnHeader()) {
-                mHeaders.get(i).setOrder(50 + i);
-            }
-        }
+//        for (int i = 0; i < mHeaders.size(); i++) {
+//            if (!mHeaders.get(i).isShowOnHeader()) {
+//                mHeaders.get(i).setOrder(50 + i);
+//            }
+//        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             mHeaders.sort(new Comparator<Header>() {
                 @Override
@@ -282,8 +284,7 @@ public class JobListFragment extends Fragment implements
 
     }
 
-    private HashMap<String, Header> headerListToHashMap
-            (List<Header> headers) {
+    private HashMap<String, Header> headerListToHashMap(List<Header> headers) {
 
         HashMap<String, Header> hashMapHeaders = new HashMap<>();
 
@@ -349,7 +350,7 @@ public class JobListFragment extends Fragment implements
                 for (Property property : pendingJob.getProperties()) {
 
                     if (mHashMapHeaders.containsKey(property.getKey()) &&
-                            mHashMapHeaders.get(property.getKey()).getShowOnHeader()
+                            mHashMapHeaders.get(property.getKey()).isShowOnHeader()
                             && property.getValue() != null && property.getValue().toLowerCase().contains(mSearchViewEt.getText().toString().toLowerCase())) {
 
                         if (!mPendingJobs.contains(pendingJob)) {

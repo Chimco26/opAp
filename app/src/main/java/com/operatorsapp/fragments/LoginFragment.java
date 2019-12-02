@@ -309,7 +309,7 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onGetDepartmentFailed(StandardResponse reason) {
-
+                dismissProgressDialog();
             }
         }, NetworkManager.getInstance(), PersistenceManager.getInstance().getTotalRetries(), PersistenceManager.getInstance().getRequestTimeout());
 

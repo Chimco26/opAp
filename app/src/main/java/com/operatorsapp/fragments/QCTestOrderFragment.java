@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -123,7 +124,7 @@ public class QCTestOrderFragment extends Fragment implements
                     }
                     sendTestOrder(new TestOrderSendRequest(mTestOrderRequest.getJobID(), mTestOrder.getJoshID(),
                             mTestOrder.getProductID(), mTestOrderRequest.getSubType(), samples));
-                }else {
+                } else {
                     Toast.makeText(getActivity(), getString(R.string.you_need_to_select_the_test_field), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -180,6 +181,7 @@ public class QCTestOrderFragment extends Fragment implements
             spinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
             spinner.setAdapter(dictionarySpinnerAdapter);
 
+            final boolean[] isFirst = {true};
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -189,28 +191,33 @@ public class QCTestOrderFragment extends Fragment implements
                         case TYPE_JOSH:
                             if (mTestOrderRequest.getJoshID() != mTestOrder.getResponseDictionaryDT().getJoshIDs().get(position).getId()) {
                                 mTestOrderRequest.setJoshID(mTestOrder.getResponseDictionaryDT().getJoshIDs().get(position).getId());
-                                getTestOrder(mTestOrderRequest);
+                                if (!isFirst[0])
+                                    getTestOrder(mTestOrderRequest);
                             }
                             break;
                         case TYPE_QUALITY:
                             if (mTestOrderRequest.getQualityGroupID() != mTestOrder.getResponseDictionaryDT().getQualityGroups().get(position).getId()) {
                                 mTestOrderRequest.setQualityGroupID(mTestOrder.getResponseDictionaryDT().getQualityGroups().get(position).getId());
-                                getTestOrder(mTestOrderRequest);
+                                if (!isFirst[0])
+                                    getTestOrder(mTestOrderRequest);
                             }
                             break;
                         case TYPE_PRODUCT_GROUP:
                             if (mTestOrderRequest.getProductGroupID() != mTestOrder.getResponseDictionaryDT().getQualityGroups().get(position).getId()) {
                                 mTestOrderRequest.setProductGroupID(mTestOrder.getResponseDictionaryDT().getProductGroups().get(position).getId());
-                                getTestOrder(mTestOrderRequest);
+                                if (!isFirst[0])
+                                    getTestOrder(mTestOrderRequest);
                             }
                             break;
                         case TYPE_PRODUCTS:
                             if (mTestOrderRequest.getProductID() != mTestOrder.getResponseDictionaryDT().getProducts().get(position).getId()) {
                                 mTestOrderRequest.setSubType(mTestOrder.getResponseDictionaryDT().getSubTypes().get(position).getId());
-                                getTestOrder(mTestOrderRequest);
+                                if (!isFirst[0])
+                                    getTestOrder(mTestOrderRequest);
                             }
                             break;
                     }
+                    isFirst[0] = false;
 
                 }
 
@@ -271,9 +278,9 @@ public class QCTestOrderFragment extends Fragment implements
                     subTypeAdapter.setTitle(position);
                     mTestOrderRequest.setSubType(testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position).getId());
                     if (testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position).getHasSamples() != null &&
-                            testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position).getHasSamples()){
+                            testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position).getHasSamples()) {
                         mSamplesLy.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         mSamplesLy.setVisibility(View.GONE);
                         mSamplesEt.setHint("0");
                     }
@@ -289,9 +296,16 @@ public class QCTestOrderFragment extends Fragment implements
 
     private void sendTestOrder(TestOrderSendRequest testOrderSendRequest) {
         mProgressBar.setVisibility(View.VISIBLE);
+        if (getActivity() != null && getActivity().getWindow() != null) {
+            getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        }
         mQcRequests.postQCSendTestOrder(testOrderSendRequest, new QCRequests.QCTestSendOrderCallback() {
             @Override
             public void onSuccess(StandardResponse standardResponse) {
+                if (getActivity() != null && getActivity().getWindow() != null) {
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
                 mProgressBar.setVisibility(View.GONE);
                 if (standardResponse.getLeaderRecordID() != null && standardResponse.getLeaderRecordID() > 0) {
                     mListener.onSent(standardResponse.getLeaderRecordID());
@@ -302,6 +316,9 @@ public class QCTestOrderFragment extends Fragment implements
 
             @Override
             public void onFailure(StandardResponse standardResponse) {
+                if (getActivity() != null && getActivity().getWindow() != null) {
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
                 mProgressBar.setVisibility(View.GONE);
                 ShowCrouton.showSimpleCrouton((QCActivity) getActivity(), standardResponse);
             }
