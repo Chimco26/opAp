@@ -21,7 +21,6 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
     public final List<BaseSplits> baseSplits;
     private View mMainView;
     private ChannelItemsAdaptersListener mListener;
-    private float mTitleSize = 15;
 
     public ChannelItemsAdapters(List<BaseSplits> channelSplits, ChannelItemsAdaptersListener listener) {
 
@@ -44,9 +43,30 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
 
         String nameByLang = OperatorApplication.isEnglishLang() ? baseSplits.get(position).getPropertyEName() : baseSplits.get(position).getPropertyHName();
         viewHolder.mTitle.setText(nameByLang);
-        viewHolder.mNumber.setText(baseSplits.get(position).getFValue());
-        viewHolder.mRange.setText(String.format(Locale.getDefault(), "%s-%s", baseSplits.get(position).getLValue(), baseSplits.get(position).getHValue()));
+        viewHolder.mValueTv.setText(baseSplits.get(position).getFValue());
+
         setEditModeFun(viewHolder, position);
+
+        switch (baseSplits.get(position).getDisplayType()) {
+            case "text":
+                viewHolder.mRange.setVisibility(View.GONE);
+                break;
+            case "Boolean":
+                viewHolder.mRange.setVisibility(View.GONE);
+                String s = "";
+                if (baseSplits.get(position).getFValue().toLowerCase().equals("true"))
+                    s = viewHolder.mValueTv.getContext().getString(R.string.passed);
+                else
+                    s = viewHolder.mValueTv.getContext().getString(R.string.failed);
+                viewHolder.mValueTv.setText(s);
+                break;
+//                    case "num":
+            default:
+                viewHolder.mRange.setVisibility(View.VISIBLE);
+                viewHolder.mRange.setText(String.format(Locale.getDefault(), "%s-%s", baseSplits.get(position).getLValue(), baseSplits.get(position).getHValue()));
+                break;
+
+        }
     }
 
     public void setEditModeFun(@NonNull final ViewHolder viewHolder, final int position) {
@@ -82,14 +102,14 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
         private EditText mEditEt;
         private View mCancelBtn;
         private TextView mTitle;
-        private TextView mNumber;
+        private TextView mValueTv;
         private TextView mRange;
 
         ViewHolder(View itemView) {
             super(itemView);
 
             mTitle = itemView.findViewById(R.id.IS_tv);
-            mNumber = itemView.findViewById(R.id.IS_tv_2);
+            mValueTv = itemView.findViewById(R.id.IS_tv_2);
             mRange = itemView.findViewById(R.id.IS_range_tv);
             mDisplayOrEditLy = itemView.findViewById(R.id.IS_display_or_edit_ly);
             mDsiplayLy = itemView.findViewById(R.id.IS_number_ly);
