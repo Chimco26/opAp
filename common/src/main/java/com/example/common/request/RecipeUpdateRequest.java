@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeUpdateRequest {
-//    @SerializedName("SessionID")
-//    @Expose
-//    private String sessionID;
+    @SerializedName("SessionID")
+    @Expose
+    private String sessionID;
     @SerializedName("JobID")
     @Expose
     private Integer jobID;
@@ -24,20 +24,20 @@ public class RecipeUpdateRequest {
     private Integer recipeRefType;
 
     public RecipeUpdateRequest(String sessionID, Integer jobID, List<RecipeValue> recipeValue, Integer recipeRefStandardID, Integer recipeRefType) {
-//        this.sessionID = sessionID;
+        this.sessionID = sessionID;
         this.jobID = jobID;
         this.recipeValue = recipeValue;
         this.recipeRefStandardID = recipeRefStandardID;
         this.recipeRefType = recipeRefType;
     }
 
-//    public String getSessionID() {
-//        return sessionID;
-//    }
-//
-//    public void setSessionID(String sessionID) {
-//        this.sessionID = sessionID;
-//    }
+    public String getSessionID() {
+        return sessionID;
+    }
+
+    public void setSessionID(String sessionID) {
+        this.sessionID = sessionID;
+    }
 
     public Integer getJobID() {
         return jobID;

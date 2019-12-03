@@ -515,7 +515,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
                 passedBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        splits.setFValue(Boolean.toString(b));
+                        splits.setEditValue(Boolean.toString(b));
                     }
                 });
                 break;
@@ -540,19 +540,19 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
 
                 switch (splits.getDisplayType()) {
                     case "text":
-                        splits.setFValue(editEtText.getText().toString());
+                        splits.setEditValue(editEtText.getText().toString());
                         break;
                     case "Boolean":
                         break;
 //                    case "num":
                     default:
-                        splits.setFValue(editEtNum.getText().toString());
+                        splits.setEditValue(editEtNum.getText().toString());
                         break;
 
                 }
 
                 ArrayList<RecipeValue> recipeValues = new ArrayList<>();
-                recipeValues.add(new RecipeValue(splits.getProductRecipeID(), splits.getFValue(), splits.getLValue(), splits.getHValue()));
+                recipeValues.add(new RecipeValue(splits.getProductRecipeID(), splits.getEditValue(), splits.getLValue(), splits.getHValue()));
 
                 PersistenceManager persistenceManager = PersistenceManager.getInstance();
 
