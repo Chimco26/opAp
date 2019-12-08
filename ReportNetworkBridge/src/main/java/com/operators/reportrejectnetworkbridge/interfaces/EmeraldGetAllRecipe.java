@@ -11,7 +11,6 @@ import retrofit2.http.POST;
 
 public interface EmeraldGetAllRecipe {
 
-//    @POST("/LeaderMESApi/GetJobRecipe")
     @POST("/LeaderMESApi/GetJobRecipeWithEdit")
     Call<RecipeResponse> getAllRecipesRequest(@Body GetAllRecipesRequest getAllRecipesRequest);
 

@@ -170,7 +170,7 @@ public class SimpleRequests {
             @Override
             public void onResponse(@NonNull Call<List<VersionResponse>> call, @NonNull Response<List<VersionResponse>> response) {
 
-                if (response.isSuccessful()) {
+                 if (response.isSuccessful()) {
                     if (callback != null) {
 
                         callback.onGetVersionSuccess(response.body());

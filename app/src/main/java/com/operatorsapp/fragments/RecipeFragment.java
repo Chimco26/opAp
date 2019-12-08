@@ -491,8 +491,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
 
         String nameByLang = OperatorApplication.isEnglishLang() ? splits.getPropertyEName() : splits.getPropertyHName();
         titleTv.setText(nameByLang);
-        titleValue.setText(String.format("%s: %s", getString(R.string.current_value_is), splits.getFValue()));
-        rangeTv.setText(String.format("%s-%s", splits.getLValue(), splits.getHValue()));
         editEtText.setHint(splits.getFValue());
         editEtNum.setHint(splits.getFValue());
 
@@ -501,6 +499,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
                 editEtText.setVisibility(View.VISIBLE);
                 editEtNum.setVisibility(View.GONE);
                 radioGroup.setVisibility(View.GONE);
+                titleValue.setText(String.format("%s: %s", getString(R.string.current_value_is), splits.getFValue()));
                 break;
             case "Boolean":
                 editEtText.setVisibility(View.GONE);
@@ -516,7 +515,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
                 passedBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        splits.setFValue(Boolean.toString(b));
+                        splits.setEditValue(Boolean.toString(b));
                     }
                 });
                 break;
@@ -525,6 +524,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
                 editEtText.setVisibility(View.GONE);
                 editEtNum.setVisibility(View.VISIBLE);
                 radioGroup.setVisibility(View.GONE);
+                titleValue.setText(String.format("%s: %s", getString(R.string.current_value_is), splits.getFValue()));
+                rangeTv.setText(String.format("%s-%s", splits.getLValue(), splits.getHValue()));
                 break;
 
         }
@@ -539,19 +540,19 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
 
                 switch (splits.getDisplayType()) {
                     case "text":
-                        splits.setFValue(editEtText.getText().toString());
+                        splits.setEditValue(editEtText.getText().toString());
                         break;
                     case "Boolean":
                         break;
 //                    case "num":
                     default:
-                        splits.setFValue(editEtNum.getText().toString());
+                        splits.setEditValue(editEtNum.getText().toString());
                         break;
 
                 }
 
                 ArrayList<RecipeValue> recipeValues = new ArrayList<>();
-                recipeValues.add(new RecipeValue(splits.getProductRecipeID(), splits.getFValue(), splits.getLValue(), splits.getHValue()));
+                recipeValues.add(new RecipeValue(splits.getProductRecipeID(), splits.getEditValue(), splits.getLValue(), splits.getHValue()));
 
                 PersistenceManager persistenceManager = PersistenceManager.getInstance();
 
