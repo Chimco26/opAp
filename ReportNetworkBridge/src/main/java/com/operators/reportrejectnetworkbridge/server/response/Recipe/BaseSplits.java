@@ -28,6 +28,9 @@ public class BaseSplits implements Parcelable {
     @SerializedName("AllowNull")
     @Expose
     private Boolean allowNull;
+    @SerializedName("AllowEdit")
+    @Expose
+    private Boolean allowEdit;
     @SerializedName("CalcUpdateOption")
     @Expose
     private Integer calcUpdateOption;
@@ -240,6 +243,14 @@ public class BaseSplits implements Parcelable {
 
     public void setAllowNull(Boolean allowNull) {
         this.allowNull = allowNull;
+    }
+
+    public Boolean getAllowEdit() {
+        return allowEdit;
+    }
+
+    public void setAllowEdit(Boolean allowEdit) {
+        this.allowEdit = allowEdit;
     }
 
     public Integer getCalcUpdateOption() {
@@ -577,6 +588,7 @@ public class BaseSplits implements Parcelable {
         dest.writeString(this.propertyName);
         dest.writeString(this.range);
         dest.writeValue(this.allowNull);
+        dest.writeValue(this.allowEdit);
         dest.writeValue(this.calcUpdateOption);
         dest.writeString(this.catalogID);
         dest.writeValue(this.channelNum);
@@ -629,6 +641,7 @@ public class BaseSplits implements Parcelable {
         this.propertyName = in.readString();
         this.range = in.readString();
         this.allowNull = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.allowEdit = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.calcUpdateOption = (Integer) in.readValue(Integer.class.getClassLoader());
         this.catalogID = in.readString();
         this.channelNum = (Integer) in.readValue(Integer.class.getClassLoader());
