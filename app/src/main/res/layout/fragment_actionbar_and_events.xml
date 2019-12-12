@@ -379,19 +379,19 @@
 
                                 <TextView
                                     android:layout_width="0dp"
-                                    android:layout_weight="2.5"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="2.5"
                                     android:maxLines="1"
-                                    app:autoSizeTextType="uniform"
-                                    android:textStyle="bold"
+                                    android:text="@string/alarms"
                                     android:textSize="24sp"
-                                    android:text="@string/alarms"/>
+                                    android:textStyle="bold"
+                                    app:autoSizeTextType="uniform" />
 
                                 <Switch
                                     android:id="@+id/FAAE_alarm_chekbox"
                                     android:layout_width="0dp"
-                                    android:layout_weight="2.5"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="2.5"
                                     android:gravity="end|center_vertical"
                                     android:textStyle="bold"
                                     android:thumb="@drawable/drawable_switch"
@@ -445,15 +445,15 @@
                                     style="@style/FontStyle_T7"
                                     android:layout_width="match_parent"
                                     android:layout_height="50dp"
-                                    android:paddingStart="10dp"
                                     android:layout_marginTop="20dp"
-                                    android:paddingEnd="10dp"
                                     android:maxLines="1"
+                                    android:paddingStart="10dp"
+                                    android:paddingEnd="10dp"
                                     android:text="@string/no_notifications"
                                     android:textColor="@color/divider_gray"
                                     android:textSize="30sp"
                                     android:visibility="gone"
-                                    app:autoSizeTextType="uniform"/>
+                                    app:autoSizeTextType="uniform" />
 
                                 <ProgressBar
                                     android:id="@+id/fragment_dashboard_loading_data_shiftlog"
@@ -493,11 +493,11 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_alignParentStart="true"
+                                                android:maxLines="1"
                                                 android:textColor="@color/black"
                                                 android:textSize="18sp"
-                                                android:maxLines="1"
-                                                app:autoSizeTextType="uniform"
-                                                app:autoSizeMaxTextSize="18sp"/>
+                                                app:autoSizeMaxTextSize="18sp"
+                                                app:autoSizeTextType="uniform" />
 
                                         </RelativeLayout>
 
@@ -571,16 +571,17 @@
     <FrameLayout
         android:id="@+id/FAAE_bottom_msg_fl"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="67dp"
         android:background="@color/grey_lite"
         android:padding="1dp">
 
         <LinearLayout
             android:id="@+id/bottom_notification_lil"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="match_parent"
             android:background="@color/white_default"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/bottom_notification_iv"
@@ -634,6 +635,38 @@
 
         </LinearLayout>
 
+        <RelativeLayout
+            android:id="@+id/FAAE_machine_line_ly"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="15dp"
+            android:background="@color/white">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentTop="true"
+                android:background="@color/divider_gray" />
+
+            <TextView
+                android:id="@+id/FAAE_machine_line_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/production_line"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/FAAE_machine_line_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@+id/FAAE_machine_line_tv"
+                android:paddingStart="10dp"/>
+
+        </RelativeLayout>
     </FrameLayout>
 
 </LinearLayout>
