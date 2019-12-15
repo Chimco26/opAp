@@ -110,6 +110,7 @@ import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.JobActionsSpinnerItem;
@@ -121,6 +122,7 @@ import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.requests.SendNotificationRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
+import com.operatorsapp.utils.ClearData;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
@@ -155,6 +157,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.operatorsapp.managers.PersistenceManager.setMachineData;
 import static com.operatorsapp.utils.SimpleRequests.getMachineLine;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 
@@ -274,6 +277,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private Event mOpenEvent;
     private SparseArray<WidgetInfo> permissionResponseHashmap;
     private View mShowAlarmCheckBoxLy;
+    private MachineLineAdapter mMachineLineAdapter;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -311,6 +315,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         SoftKeyboardUtil.hideKeyboard(this);
         return inflate;
     }
+
+
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
@@ -446,7 +452,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         });
 
-        initMachineLineRv((RecyclerView) view.findViewById(R.id.FAAE_machine_line_rv));
+        initMachineLine(view);
 
         //mSwipeToRefresh = view.findViewById(R.id.swipe_refresh_actionbar_events);
         mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
@@ -585,36 +591,51 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         return statusBarParams;
     }
 
-    private void initMachineLineRv(RecyclerView recyclerView) {
+    private void initMachineLine(View view) {
+
+        RecyclerView recyclerView = view.findViewById(R.id.FAAE_machine_line_rv);
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
         recyclerView.setLayoutManager(layoutManager);
 
-        final MachineLineAdapter machineLineAdapter = new MachineLineAdapter(machineLineItems, new MachineLineAdapter.MachineLineAdapterListener() {
+        mMachineLineAdapter = new MachineLineAdapter(machineLineItems, new MachineLineAdapter.MachineLineAdapterListener() {
             @Override
             public void onMachineSelected(MachinesLineDetail departmentMachineValue) {
-//todo change machine
+                ClearData.clearMachineData();
+                setMachineData(departmentMachineValue.getMachineID(), departmentMachineValue.getMachineName());
+                mListener.onRefreshMachineLinePolling();
             }
         });
-        recyclerView.setAdapter(machineLineAdapter);
+        recyclerView.setAdapter(mMachineLineAdapter);
 
+        getMachinesLineData();
+
+        view.findViewById(R.id.FAAE_machine_line_log_btn_ll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnGoToScreenListener.goToFragment(StopEventLogFragment.newInstance(), false, false);
+            }
+        });
+
+    }
+
+    private void getMachinesLineData() {
         PersistenceManager pm = PersistenceManager.getInstance();
         getMachineLine(pm.getSiteUrl(), new GetMachineLineCallback() {
             @Override
             public void onGetDepartmentSuccess(MachineLineResponse response) {
-                machineLineItems = response.getMachinesData();
-                machineLineAdapter.notifyDataSetChanged();
+                machineLineItems.clear();
+                machineLineItems.addAll(response.getMachinesData());
+                mMachineLineAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onGetDepartmentFailed(StandardResponse reason) {
-
+                ShowCrouton.showSimpleCrouton(mCroutonCallback, reason.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
-
-
     }
 
     private void initBottomNotificationLayout(View view) {
@@ -2374,6 +2395,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mShiftLogSwipeRefresh.setRefreshing(false);
         }
         getNotificationsFromServer(false);
+        getMachinesLineData();
     }
 
 
@@ -3433,6 +3455,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onChangeMachineRequest();
 
         void onOpenQCActivity();
+
+        void onRefreshMachineLinePolling();
     }
 
 }

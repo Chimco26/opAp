@@ -36,6 +36,8 @@ import com.operatorsapp.utils.KeyboardUtils;
 
 import java.lang.reflect.Type;
 
+import static com.operatorsapp.managers.PersistenceManager.setMachineData;
+
 public class SelectMachineFragment extends BackStackAwareFragment implements AdapterView.OnItemClickListener, View.OnClickListener, DepartmentAdapter.DepartmentAdapterListener {
     public static final String LOG_TAG = SelectMachineFragment.class.getSimpleName();
     private static final String MACHINES_LIST = "machines_list";
@@ -178,14 +180,6 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         return rootView;
     }
 
-    public void setMachineData() {
-        PersistenceManager.getInstance().setMachineId(mMachineId);
-        PersistenceManager.getInstance().setMachineName(mMachineName);
-        PersistenceManager.getInstance().setSelectedMachine(true);
-        PersistenceManager.getInstance().setNeedUpdateToken(true);
-        mNavigationCallback.goToDashboardActivity(mMachineId, null);
-    }
-
     private void initDepartmentRv(View rootView) {
 
         if (mDepartmentMachine.getDepartmentMachine() != null && mDepartmentMachine.getDepartmentMachine().size() > 0) {
@@ -294,6 +288,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     public void onMachineSelected(DepartmentMachineValue departmentMachineValue) {
         mMachineId = departmentMachineValue.getId();
         mMachineName = departmentMachineValue.getMachineName();
-        setMachineData();
+        setMachineData(departmentMachineValue.getId(), departmentMachineValue.getMachineName());
+        PersistenceManager.getInstance().setMachineLineId(departmentMachineValue.getLineId());
+        mNavigationCallback.goToDashboardActivity(mMachineId, null);
     }
 }

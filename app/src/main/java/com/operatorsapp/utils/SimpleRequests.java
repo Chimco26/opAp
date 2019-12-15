@@ -264,7 +264,7 @@ public class SimpleRequests {
             @Override
             public void onResponse(@NonNull Call<MachineLineResponse> call, @NonNull Response<MachineLineResponse> response) {
 
-                if (response.isSuccessful()) {
+                if (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty()) {
                     if (callback != null) {
 
                         callback.onGetDepartmentSuccess(response.body());

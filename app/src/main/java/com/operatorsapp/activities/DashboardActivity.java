@@ -1816,6 +1816,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         startActivityForResult(intent, QC_ACTIVITY_RESULT_CODE);
     }
 
+    @Override
+    public void onRefreshMachineLinePolling() {
+        dashboardDataStartPolling();
+        ProgressDialogManager.show(this);
+    }
+
 
     private void clearData() {
 

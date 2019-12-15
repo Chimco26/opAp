@@ -29,6 +29,9 @@ public class MachinesLineDetail {
     @SerializedName("Row_Counter")
     @Expose
     private Integer rowCounter;
+    @SerializedName("MachineStatusColor")
+    @Expose
+    private String statusColor;
 
     public Integer getCurrentStatusTimeMin() {
         return currentStatusTimeMin;
@@ -94,4 +97,9 @@ public class MachinesLineDetail {
         this.rowCounter = rowCounter;
     }
 
+    public String getStatusColor() {
+        if (statusColor != null && !statusColor.isEmpty())
+            return statusColor;
+        else return "#ffffff";
+    }
 }

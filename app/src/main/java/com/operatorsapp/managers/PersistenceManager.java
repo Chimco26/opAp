@@ -844,4 +844,11 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     public int getMachineLineId() {
         return SecurePreferences.getInstance().getInt(PREF_MACHINE_LINE_ID);
     }
+
+    public static void setMachineData(int machineID, String machineName) {
+        PersistenceManager.getInstance().setMachineId(machineID);
+        PersistenceManager.getInstance().setMachineName(machineName);
+        PersistenceManager.getInstance().setSelectedMachine(true);
+        PersistenceManager.getInstance().setNeedUpdateToken(true);
+    }
 }
