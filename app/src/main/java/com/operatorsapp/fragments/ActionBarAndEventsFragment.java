@@ -2351,6 +2351,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mMinDurationText.setText(String.format(Locale.getDefault(), "%d %s", machineStatus.getAllMachinesData().get(0).getMinEventDuration(), getString(R.string.minutes)));
 
+        getMachinesLineData();
 
 //        if (mSwipeToRefresh.isRefreshing()){
 //            mSwipeToRefresh.setRefreshing(false);
@@ -2395,7 +2396,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mShiftLogSwipeRefresh.setRefreshing(false);
         }
         getNotificationsFromServer(false);
-        getMachinesLineData();
     }
 
 

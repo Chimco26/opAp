@@ -1,7 +1,6 @@
 package com.operatorsapp.utils;
 
 import android.graphics.Color;
-import android.support.v4.graphics.ColorUtils;
 
 import com.operatorsapp.R;
 
@@ -94,6 +93,7 @@ public class ReasonImage {
 //        }
 //
 //        switch (icon) {
+
     public static int getImageForStopReason(int stopReasonId) {
 
         int imageId;

@@ -106,7 +106,26 @@ public class AllMachinesData {
     private String mNextERPJobID;
     @SerializedName("UnitsInCycleType")
     private int mUnitsInCycleType;
+    @SerializedName("LineID")
+    private int mLineID;
+    @SerializedName("ReportRejectDefaultUnits")
+    private int mReportRejectDefaultUnits;
 
+    public int getReportRejectDefaultUnits() {
+        return mReportRejectDefaultUnits;
+    }
+
+    public void setReportRejectDefaultUnits(int mReportRejectDefaultUnits) {
+        this.mReportRejectDefaultUnits = mReportRejectDefaultUnits;
+    }
+
+    public int getLineID() {
+        return mLineID;
+    }
+
+    public void setLineID(int mLineID) {
+        this.mLineID = mLineID;
+    }
 
     public int getUnitsInCycleType() {
         return mUnitsInCycleType;
