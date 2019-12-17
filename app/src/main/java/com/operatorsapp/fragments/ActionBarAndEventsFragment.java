@@ -62,6 +62,9 @@ import com.example.common.Event;
 import com.example.common.StandardResponse;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.callback.GetMachineLineCallback;
+import com.example.common.department.MachineLineResponse;
+import com.example.common.department.MachinesLineDetail;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.example.common.permissions.WidgetInfo;
 import com.example.oppapplog.OppAppLogger;
@@ -88,6 +91,7 @@ import com.operatorsapp.adapters.JobsSpinnerAdapter;
 import com.operatorsapp.adapters.JoshProductNameSpinnerAdapter;
 import com.operatorsapp.adapters.LanguagesSpinnerAdapterActionBar;
 import com.operatorsapp.adapters.LenoxMachineAdapter;
+import com.operatorsapp.adapters.MachineLineAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ProductionSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogSqlAdapter;
@@ -106,6 +110,7 @@ import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.JobActionsSpinnerItem;
@@ -117,6 +122,7 @@ import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.requests.SendNotificationRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
+import com.operatorsapp.utils.ClearData;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
@@ -151,6 +157,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.operatorsapp.managers.PersistenceManager.setMachineData;
+import static com.operatorsapp.utils.SimpleRequests.getMachineLine;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 
 
@@ -238,6 +246,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mStatusBlackFilter;
     private EmeraldSpinner mLanguagesSpinner;
     private View mStatusWhiteFilter;
+    List<MachinesLineDetail> machineLineItems = new ArrayList<>();
     private RelativeLayout technicianRl;
     private TextView mStatusTimeMinTv;
     private boolean mAutoSelectMode;
@@ -268,6 +277,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private Event mOpenEvent;
     private SparseArray<WidgetInfo> permissionResponseHashmap;
     private View mShowAlarmCheckBoxLy;
+    private MachineLineAdapter mMachineLineAdapter;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -305,6 +315,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         SoftKeyboardUtil.hideKeyboard(this);
         return inflate;
     }
+
+
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
@@ -440,6 +452,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         });
 
+        initMachineLine(view);
 
         //mSwipeToRefresh = view.findViewById(R.id.swipe_refresh_actionbar_events);
         mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
@@ -576,6 +589,53 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //        initCycleAlarmView(view);
 
         return statusBarParams;
+    }
+
+    private void initMachineLine(View view) {
+
+        RecyclerView recyclerView = view.findViewById(R.id.FAAE_machine_line_rv);
+
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+
+        recyclerView.setLayoutManager(layoutManager);
+
+        mMachineLineAdapter = new MachineLineAdapter(machineLineItems, new MachineLineAdapter.MachineLineAdapterListener() {
+            @Override
+            public void onMachineSelected(MachinesLineDetail departmentMachineValue) {
+                ClearData.clearMachineData();
+                setMachineData(departmentMachineValue.getMachineID(), departmentMachineValue.getMachineName());
+                mListener.onRefreshMachineLinePolling();
+            }
+        });
+        recyclerView.setAdapter(mMachineLineAdapter);
+
+        getMachinesLineData();
+
+        view.findViewById(R.id.FAAE_machine_line_log_btn_ll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnGoToScreenListener.goToFragment(StopEventLogFragment.newInstance(), false, false);
+            }
+        });
+
+    }
+
+    private void getMachinesLineData() {
+        PersistenceManager pm = PersistenceManager.getInstance();
+        getMachineLine(pm.getSiteUrl(), new GetMachineLineCallback() {
+            @Override
+            public void onGetDepartmentSuccess(MachineLineResponse response) {
+                machineLineItems.clear();
+                machineLineItems.addAll(response.getMachinesData());
+                mMachineLineAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onGetDepartmentFailed(StandardResponse reason) {
+                ShowCrouton.showSimpleCrouton(mCroutonCallback, reason.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+            }
+        }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
     }
 
     private void initBottomNotificationLayout(View view) {
@@ -1156,7 +1216,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
 
-
     @SuppressLint("InflateParams")
     public void setActionBar() {
 
@@ -1200,7 +1259,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             statusLock.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (PersistenceManager.getInstance().isStatusBarLocked()){
+                    if (PersistenceManager.getInstance().isStatusBarLocked()) {
                         final LockStatusBarDialog dialog = new LockStatusBarDialog(getActivity(), new LockStatusBarDialog.LockStatusBarListener() {
                             @Override
                             public void unlockSuccess() {
@@ -1209,7 +1268,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             }
                         });
                         dialog.show();
-                    }else {
+                    } else {
                         PersistenceManager.getInstance().setStatusBarLocked(true);
                         statusLock.setImageDrawable(getResources().getDrawable(R.drawable.lock));
                     }
@@ -1222,9 +1281,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             tutorialIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (PersistenceManager.getInstance().isStatusBarLocked()){
+                    if (PersistenceManager.getInstance().isStatusBarLocked()) {
                         Toast.makeText(getActivity(), "Please unlock app...", Toast.LENGTH_SHORT).show();
-                    }else {
+                    } else {
                         openOtherApps();
                     }
 //                    startToolbarTutorial();
@@ -1393,7 +1452,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void openDeleteTechCallDialog(ArrayList<TechCallInfo> tech) {
         List<Technician> techniciansList = new ArrayList<Technician>();
-        if (((DashboardActivity) getActivity()).getReportForMachine() != null && ((DashboardActivity) getActivity()).getReportForMachine().getTechnicians() != null){
+        if (((DashboardActivity) getActivity()).getReportForMachine() != null && ((DashboardActivity) getActivity()).getReportForMachine().getTechnicians() != null) {
             techniciansList = ((DashboardActivity) getActivity()).getReportForMachine().getTechnicians();
         }
         mPopUpDialog = new TechCallDialog(getActivity(), tech, techniciansList, new TechCallDialog.TechDialogListener() {
@@ -1844,7 +1903,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
                 ProgressDialogManager.dismiss();
-                if (mPopUpDialog != null && mPopUpDialog.isShowing()){
+                if (mPopUpDialog != null && mPopUpDialog.isShowing()) {
                     mPopUpDialog.dismiss();
                 }
                 PersistenceManager.getInstance().setSelfNotificationsId(response.body().getLeaderRecordID() + "");
@@ -2145,7 +2204,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void openDialog(Event event) {
 
-        if (getContext() == null){return;}
+        if (getContext() == null) {
+            return;
+        }
         String message;
 
         if (PersistenceManager.getInstance().getCurrentLang().equals("en")) {
@@ -2290,6 +2351,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mMinDurationText.setText(String.format(Locale.getDefault(), "%d %s", machineStatus.getAllMachinesData().get(0).getMinEventDuration(), getString(R.string.minutes)));
 
+        getMachinesLineData();
 
 //        if (mSwipeToRefresh.isRefreshing()){
 //            mSwipeToRefresh.setRefreshing(false);
@@ -3393,6 +3455,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onChangeMachineRequest();
 
         void onOpenQCActivity();
+
+        void onRefreshMachineLinePolling();
     }
 
 }

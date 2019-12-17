@@ -102,6 +102,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final long ONE_DAY = 1000 * 60 * 60 * 24;
     private static final String PREF_IS_STATUS_BAR_LOCKED = "PREF_IS_STATUS_BAR_LOCKED";
     private static final String PREF_UNITS_IN_CYCLE_TYPE = "PREF_UNITS_IN_CYCLE_TYPE";
+    private static final String PREF_MACHINE_LINE_ID = "PREF_MACHINE_LINE_ID";
+    private static final String PREF_DEFAULT_REPORT_REJECT_UNIT = "PREF_DEFAULT_REPORT_REJECT_UNIT";
 
 
     private static PersistenceManager msInstance;
@@ -352,7 +354,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     }
 
 
-    public int getUserId(){
+    public int getUserId() {
         return SecurePreferences.getInstance().getInt(PREF_USERID);
     }
 
@@ -419,7 +421,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         String shiftEnd = SecurePreferences.getInstance().getString(PREF_SHIFT_END);
         if (shiftEnd != null && !shiftEnd.isEmpty() && shiftEnd.length() > 0) {
             return shiftEnd;
-        }else {
+        } else {
             return TimeUtils.getDateFromFormat(new Date(), TimeUtils.SQL_NO_T_FORMAT);
         }
     }
@@ -470,7 +472,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
         if (ids != null && ids.length() > 0 && !ids.equals("null")) {
             return mGson.fromJson(ids, listType);
-        }else {
+        } else {
             return new HashMap<>();
         }
     }
@@ -554,7 +556,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public ArrayList<Notification> getNotificationHistoryNoTech() {
         String str = SecurePreferences.getInstance().getString(PREF_NOTIFICATION_HISTORY, "");
-        Type listType = new TypeToken<ArrayList<Notification>>(){}.getType();
+        Type listType = new TypeToken<ArrayList<Notification>>() {
+        }.getType();
         ArrayList<Notification> notificationsList = mGson.fromJson(str, listType);
         ArrayList<Notification> filteredList = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
@@ -576,7 +579,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public ArrayList<Notification> getNotificationHistory() {
         String str = SecurePreferences.getInstance().getString(PREF_NOTIFICATION_HISTORY, "");
-        Type listType = new TypeToken<ArrayList<Notification>>(){}.getType();
+        Type listType = new TypeToken<ArrayList<Notification>>() {
+        }.getType();
         ArrayList<Notification> notificationsList = mGson.fromJson(str, listType);
         ArrayList<Notification> filteredList = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
@@ -588,8 +592,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
                 date = TimeUtils.getDateForNotification(not.getmSentTime());
                 if (date != null && date.after(cal.getTime())) {
                     filteredList.add(not);
-                }else if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN &&
-                        (not.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE || not.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE)){
+                } else if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN &&
+                        (not.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE || not.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE)) {
                     filteredList.add(not);
                 }
             }
@@ -609,13 +613,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public long getTechnicianCallTime() {
         String time = SecurePreferences.getInstance().getString(PREF_TECHNICIAN_CALL_TIME, "0");
-        if (time != null && time.length() > 0 ){
+        if (time != null && time.length() > 0) {
             try {
                 return Long.parseLong(time);
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 return 0;
             }
-        }else {
+        } else {
             return 0;
         }
 
@@ -641,7 +645,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         SecurePreferences.getInstance().setString(PREF_MACHINE_NAME, mMachineName);
     }
 
-    public String getMachineName(){
+    public String getMachineName() {
         return SecurePreferences.getInstance().getString(PREF_MACHINE_NAME, "");
     }
 
@@ -649,7 +653,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         SecurePreferences.getInstance().setString(CALLED_TECHNICIAN_NAME, techName);
     }
 
-    public String getCalledTechnicianName(){
+    public String getCalledTechnicianName() {
         return SecurePreferences.getInstance().getString(CALLED_TECHNICIAN_NAME, "");
     }
 
@@ -659,7 +663,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         listCopy.addAll(list);
 
         for (TechCallInfo call : listCopy) {
-            if (call.getmTechnicianId() == techCallInfo.getmTechnicianId()){
+            if (call.getmTechnicianId() == techCallInfo.getmTechnicianId()) {
                 list.remove(call);
             }
         }
@@ -668,29 +672,29 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, mGson.toJson(list));
     }
 
-    public void clearCalledTechnician(){
+    public void clearCalledTechnician() {
         SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, "");
     }
 
     public void setCalledTechnicianList(ArrayList<TechCallInfo> techCallInfoList) {
-        if (techCallInfoList == null){
+        if (techCallInfoList == null) {
             SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, null);
-        }else {
+        } else {
             SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, mGson.toJson(techCallInfoList));
         }
     }
 
-    public ArrayList<TechCallInfo> getCalledTechnician(){
+    public ArrayList<TechCallInfo> getCalledTechnician() {
 
         String str = SecurePreferences.getInstance().getString(CALLED_TECHNICIAN, "");
         Type listType = new TypeToken<ArrayList<TechCallInfo>>() {
         }.getType();
 
         ArrayList<TechCallInfo> techCallInfoList = new ArrayList<TechCallInfo>();
-        if (str != null && str.length() > 0){
+        if (str != null && str.length() > 0) {
             try {
                 techCallInfoList = mGson.fromJson(str, listType);
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         }
@@ -699,20 +703,20 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 //        if (t == null){
 //            t = new TechCallInfo(-1, "", "", 0);
 //        }
-        if(techCallInfoList != null && techCallInfoList.size() > 0) {
-                Collections.sort(techCallInfoList, new Comparator<TechCallInfo>() {
-                    @Override
-                    public int compare(TechCallInfo o1, TechCallInfo o2) {
+        if (techCallInfoList != null && techCallInfoList.size() > 0) {
+            Collections.sort(techCallInfoList, new Comparator<TechCallInfo>() {
+                @Override
+                public int compare(TechCallInfo o1, TechCallInfo o2) {
 
-                        if (o1.getmCallTime() > o2.getmCallTime()) {
-                            return -1;
-                        } else if (o1.getmCallTime() < o2.getmCallTime()) {
-                            return 1;
-                        } else {
-                            return 0;
-                        }
+                    if (o1.getmCallTime() > o2.getmCallTime()) {
+                        return -1;
+                    } else if (o1.getmCallTime() < o2.getmCallTime()) {
+                        return 1;
+                    } else {
+                        return 0;
                     }
-                });
+                }
+            });
         }
         return techCallInfoList;
     }
@@ -732,6 +736,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     public void setisNewStopReasonDesign(boolean selected) {
         SecurePreferences.getInstance().setBoolean(PREF_STOP_REASON_DESIGN, selected);
     }
+
     public void setMaxUnitReport(float maxUnitReport) {
         SecurePreferences.getInstance().setFloat(PREF_RECENT_MAX_UNIT_REPORT, maxUnitReport);
     }
@@ -743,6 +748,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     public void setIsNewShiftLog(boolean isNewShiftLog) {
         SecurePreferences.getInstance().setBoolean(PREF_IS_NEW_SHIFTLOG_DISPLAY, isNewShiftLog);
     }
+
     public boolean getIsNewShiftLog() {
         return SecurePreferences.getInstance().getBoolean(PREF_IS_NEW_SHIFTLOG_DISPLAY, false);
     }
@@ -750,6 +756,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     public void setDepartmentId(int departmentID) {
         SecurePreferences.getInstance().setInt(PREF_DEPARTMENT_ID, departmentID);
     }
+
     public int getDepartmentId() {
         return SecurePreferences.getInstance().getInt(PREF_DEPARTMENT_ID);
     }
@@ -757,6 +764,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     public void setReportShiftBtnPositionX(float moveToX) {
         SecurePreferences.getInstance().setFloat(PREF_REPORT_SHIFT_BTN_X, moveToX);
     }
+
     public float getReportShiftBtnPositionX() {
         return SecurePreferences.getInstance().getFloat(PREF_REPORT_SHIFT_BTN_X);
     }
@@ -764,6 +772,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     public void setReportShiftBtnPositionY(float moveToY) {
         SecurePreferences.getInstance().setFloat(PREF_REPORT_SHIFT_BTN_Y, moveToY);
     }
+
     public float getReportShiftBtnPositionY() {
         return SecurePreferences.getInstance().getFloat(PREF_REPORT_SHIFT_BTN_Y);
     }
@@ -779,7 +788,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         SecurePreferences.getInstance().setString(PREF_SELF_NOTIFICATION_ID_MAP, mGson.toJson(map));
     }
 
-    public boolean isSelfNotification(String id){
+    public boolean isSelfNotification(String id) {
 
 
         String selfIdMap = SecurePreferences.getInstance().getString(PREF_SELF_NOTIFICATION_ID_MAP, mGson.toJson(new ArrayList<>()));
@@ -789,9 +798,9 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         HashMap map = mGson.fromJson(selfIdMap, listType);
 
         Iterator<String> iter = map.keySet().iterator();
-        while (iter.hasNext()){
+        while (iter.hasNext()) {
             String str = iter.next();
-            if (Long.valueOf((String) map.get(str)) + ONE_DAY < new Date().getTime()){
+            if (Long.valueOf((String) map.get(str)) + ONE_DAY < new Date().getTime()) {
                 iter.remove();
             }
         }
@@ -827,5 +836,28 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public void setUnitsInCycleType(int unitsInCyleType) {
         SecurePreferences.getInstance().setInt(PREF_UNITS_IN_CYCLE_TYPE, unitsInCyleType);
+    }
+
+    public void setMachineLineId(int machineLineId) {
+        SecurePreferences.getInstance().setInt(PREF_MACHINE_LINE_ID, machineLineId);
+    }
+
+    public int getMachineLineId() {
+        return SecurePreferences.getInstance().getInt(PREF_MACHINE_LINE_ID);
+    }
+
+    public void setReportRejectDefaultUnits(int defaultUnit) {
+        SecurePreferences.getInstance().setInt(PREF_DEFAULT_REPORT_REJECT_UNIT, defaultUnit);
+    }
+
+    public int getReportRejectDefaultUnits() {
+        return SecurePreferences.getInstance().getInt(PREF_DEFAULT_REPORT_REJECT_UNIT);
+    }
+
+    public static void setMachineData(int machineID, String machineName) {
+        PersistenceManager.getInstance().setMachineId(machineID);
+        PersistenceManager.getInstance().setMachineName(machineName);
+        PersistenceManager.getInstance().setSelectedMachine(true);
+        PersistenceManager.getInstance().setNeedUpdateToken(true);
     }
 }

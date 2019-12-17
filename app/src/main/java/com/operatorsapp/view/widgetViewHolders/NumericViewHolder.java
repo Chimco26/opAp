@@ -44,6 +44,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
     private final View mEditCycleCancelBtn;
     private final View mEditCycleReportBtn;
     private final View mEditLy;
+    private final RadioButton mWeightRadioBtn;
     private boolean mShowAddRejectsBtn = true;
     private boolean mShowChangeUnitInCycle = true;
     private View mEditIc;
@@ -108,7 +109,9 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
             }
         });
         mUnitRadioBtn = itemView.findViewById(R.id.NWC_edit_unit_btn);
-//        mWeightRadioBtn = itemView.findViewById(R.id.NWC_edit_weight_btn);
+        mUnitRadioBtn.setChecked(PersistenceManager.getInstance().getReportRejectDefaultUnits() == 1);
+        mWeightRadioBtn = itemView.findViewById(R.id.NWC_edit_weight_btn);
+        mWeightRadioBtn.setChecked(PersistenceManager.getInstance().getReportRejectDefaultUnits() != 1);
         mStep1CancelBtn = itemView.findViewById(R.id.NWC_edit_cancel_btn);
 
         mEditStep2Ly = itemView.findViewById(R.id.NWC_edit_step_2_ly);

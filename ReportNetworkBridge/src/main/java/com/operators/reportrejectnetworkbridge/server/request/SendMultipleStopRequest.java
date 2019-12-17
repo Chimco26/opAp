@@ -1,7 +1,5 @@
 package com.operators.reportrejectnetworkbridge.server.request;
 
-import android.support.annotation.Nullable;
-
 import com.google.gson.annotations.SerializedName;
 
 public class SendMultipleStopRequest {
@@ -20,14 +18,20 @@ public class SendMultipleStopRequest {
     private Integer mJoshId;
     @SerializedName("EventID")
     private long[] mEventID;
+    @SerializedName("ByRootEvent")
+    private boolean mByRootEvent;
+    @SerializedName("OnlyUnReported")
+    private boolean mOnlyUnReported;
 
-    public SendMultipleStopRequest(String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, @Nullable Integer jobId, long[] eventId) {
-        mSessionId = sessionId;
-        mMachineId = machineId;
-        mOperatorId = operatorId;
-        mStopReasonId = stopReasonId;
-        mStopSubReasonId = stopSubReasonId;
-        mJoshId = jobId;
-        mEventID = eventId;
+    public SendMultipleStopRequest(String mSessionId, String mMachineId, String mOperatorId, int mStopReasonId, int mStopSubReasonId, Integer mJoshId, long[] mEventID, boolean mByRootEvent, boolean mOnlyUnReported) {
+        this.mSessionId = mSessionId;
+        this.mMachineId = mMachineId;
+        this.mOperatorId = mOperatorId;
+        this.mStopReasonId = mStopReasonId;
+        this.mStopSubReasonId = mStopSubReasonId;
+        this.mJoshId = mJoshId;
+        this.mEventID = mEventID;
+        this.mByRootEvent = mByRootEvent;
+        this.mOnlyUnReported = mOnlyUnReported;
     }
 }

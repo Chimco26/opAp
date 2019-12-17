@@ -70,7 +70,7 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
     }
 
     public void setEditModeFun(@NonNull final ViewHolder viewHolder, final int position) {
-        if (mListener != null && baseSplits.get(position).getIsEditable() && baseSplits.get(position).getIsEnabled()) {
+        if (mListener != null && baseSplits.get(position).getIsEditable() && baseSplits.get(position).getIsEnabled() && baseSplits.get(position).getAllowEdit()) {
 
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

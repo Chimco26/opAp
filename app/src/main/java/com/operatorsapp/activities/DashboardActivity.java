@@ -1070,6 +1070,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         PersistenceManager.getInstance().setMinEventDuration(machineStatus.getAllMachinesData().get(0).getMinEventDuration());
                         PersistenceManager.getInstance().setDepartmentId(machineStatus.getAllMachinesData().get(0).getDepartmentID());
                         PersistenceManager.getInstance().setUnitsInCycleType(machineStatus.getAllMachinesData().get(0).getUnitsInCycleType());
+                        PersistenceManager.getInstance().setMachineLineId(machineStatus.getAllMachinesData().get(0).getLineID());
+                        PersistenceManager.getInstance().setReportRejectDefaultUnits(machineStatus.getAllMachinesData().get(0).getReportRejectDefaultUnits());
 
                         String opName = machineStatus.getAllMachinesData().get(0).getOperatorName();
                         String opId = machineStatus.getAllMachinesData().get(0).getOperatorId();
@@ -1814,6 +1816,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mActionBarAndEventsFragment.setFromAnotherActivity(true);
         }
         startActivityForResult(intent, QC_ACTIVITY_RESULT_CODE);
+    }
+
+    @Override
+    public void onRefreshMachineLinePolling() {
+        dashboardDataStartPolling();
+        ProgressDialogManager.show(this);
     }
 
 

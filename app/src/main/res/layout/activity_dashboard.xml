@@ -33,7 +33,7 @@
                 android:id="@+id/fragments_container_central"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="30dp"/>
+                android:layout_marginBottom="100dp"/>
 
             <FrameLayout
                 android:id="@+id/fragments_container"

@@ -7,7 +7,10 @@ import com.example.common.MultipleRejectRequestModel;
 import com.example.common.StandardResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.callback.GetDepartmentCallback;
+import com.example.common.callback.GetMachineLineCallback;
 import com.example.common.department.DepartmentsMachinesResponse;
+import com.example.common.department.MachineLineRequest;
+import com.example.common.department.MachineLineResponse;
 import com.example.common.request.BaseRequest;
 import com.example.common.request.RecipeUpdateRequest;
 import com.example.oppapplog.OppAppLogger;
@@ -244,6 +247,52 @@ public class SimpleRequests {
                     }
                 } else {
                     OppAppLogger.getInstance().w(LOG_TAG, "getDepartmentsMachines(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    public static void getMachineLine(String siteUrl, final GetMachineLineCallback callback, GetDepartmentNetworkManager getDepartmentNetworkManager, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<MachineLineResponse> call = getDepartmentNetworkManager.emeraldGetDepartment(siteUrl,
+                requestTimeout, TimeUnit.SECONDS).getMachineLineRequest(new MachineLineRequest(PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineLineId()));
+
+        call.enqueue(new Callback<MachineLineResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<MachineLineResponse> call, @NonNull Response<MachineLineResponse> response) {
+
+                if (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty()) {
+                    if (callback != null) {
+
+                        callback.onGetDepartmentSuccess(response.body());
+                    } else {
+
+                        OppAppLogger.getInstance().w(LOG_TAG, "getMachineLine(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<MachineLineResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getMachineLine Error");
+                        callback.onGetDepartmentFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.getInstance().w(LOG_TAG, "getMachineLine(), onFailure() callback is null");
 
                 }
             }
