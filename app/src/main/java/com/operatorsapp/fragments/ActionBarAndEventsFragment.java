@@ -278,6 +278,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private SparseArray<WidgetInfo> permissionResponseHashmap;
     private View mShowAlarmCheckBoxLy;
     private MachineLineAdapter mMachineLineAdapter;
+    private TextView mLineNameTv;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -315,7 +316,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         SoftKeyboardUtil.hideKeyboard(this);
         return inflate;
     }
-
 
 
     @Override
@@ -594,6 +594,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void initMachineLine(View view) {
 
         RecyclerView recyclerView = view.findViewById(R.id.FAAE_machine_line_rv);
+        mLineNameTv = view.findViewById(R.id.FAAE_machine_line_tv);
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -629,6 +630,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 machineLineItems.clear();
                 machineLineItems.addAll(response.getMachinesData());
                 mMachineLineAdapter.notifyDataSetChanged();
+                if (response.getLineName() != null && !response.getLineName().isEmpty()) {
+                    mLineNameTv.setText(response.getLineName());
+                }else {
+                    mLineNameTv.setText(getResources().getString(R.string.production_line));
+                }
             }
 
             @Override
