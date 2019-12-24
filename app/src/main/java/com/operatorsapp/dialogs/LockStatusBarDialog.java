@@ -80,7 +80,7 @@ public class LockStatusBarDialog extends Dialog {
 
     private void checkPassword(){
 
-        if (mPassEt.getText().toString().equals(PersistenceManager.getInstance().getPassword())){
+        if (mPassEt.getText().toString().toLowerCase().equals(PersistenceManager.getInstance().getPassword().toLowerCase())){
             mListener.unlockSuccess();
             this.dismiss();
         }else {
