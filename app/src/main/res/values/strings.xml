@@ -465,5 +465,6 @@
     <string name="production_line">Production Line</string>
     <string name="view_log"><![CDATA[View Log]]></string>
     <string name="stop_events_log">Stop events log</string>
+    <string name="illegal_chars">Illegal characters found, please use: a-zA-Z0-9_/,.-</string>
 
 </resources>

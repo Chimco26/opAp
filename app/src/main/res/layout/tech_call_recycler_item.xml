@@ -14,14 +14,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/tech_call_item_status_iv"
-            android:layout_gravity="center_vertical"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:src="@drawable/call_sent_blue"/>
+            android:orientation="vertical">
+            
+            <ImageView
+                android:id="@+id/tech_call_item_status_iv"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/call_sent_blue"/>
 
+            <TextView
+                android:id="@+id/tech_call_item_subtext_tv"
+                style="@style/ProximaNovaSemiBold"
+                android:layout_width="60dp"
+                android:maxLines="2"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+        
         <TextView
             android:id="@+id/tech_call_item_text_tv"
             style="@style/ProximaNovaSemiBold"
