@@ -52,13 +52,14 @@ import static com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast.REASON_
 
 public class SelectStopReasonFragment extends BackStackAwareFragment implements OnSelectedSubReasonListener, View.OnClickListener {
 
-    public static final String LOG_TAG = SelectStopReasonFragment.class.getSimpleName();
+    public static final String TAG = SelectStopReasonFragment.class.getSimpleName();
     private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
     private static final String CURRENT_JOSH_ID = "current_job_id";
     private static final String IS_OPEN = "IS_OPEN";
 
     private static final int NUMBER_OF_COLUMNS = 5;
     private static final float MINIMUM_VERSION_TO_NEW_API = 1.7f;
+    private static final String EXTRA_VIEW_LOG_REPORT_IS_SUCCESS = "EXTRA_VIEW_LOG_REPORT_IS_SUCCESS";
 
     private ReportFieldsForMachine mReportFieldsForMachine;
     private Integer mJoshId = 0;
@@ -80,6 +81,8 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     private boolean mIsOpen;
     private ShowDashboardCroutonListener mDashboardCroutonListener;
     private int mFlavorSpanDif;
+    private boolean isFromViewLog;
+    private SelectStopReasonFragmentListener mListener;
 
 
     public static SelectStopReasonFragment newInstance(int position, int joshId, int reasonId, String eName, String lName, boolean isOpen) {
@@ -120,6 +123,9 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
         if (context instanceof ShowDashboardCroutonListener) {
             mDashboardCroutonListener = (ShowDashboardCroutonListener) getActivity();
+        }
+        if (context instanceof SelectStopReasonFragmentListener) {
+            mListener = (SelectStopReasonFragmentListener) getActivity();
         }
     }
 
@@ -226,7 +232,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
         if (mSelectedEvents != null && mSelectedEvents.size() > 0) {
 
-            OppAppLogger.getInstance().i(LOG_TAG, "Selected sub reason id: " + subReason.getId());
+            OppAppLogger.getInstance().i(TAG, "Selected sub reason id: " + subReason.getId());
 
             mSelectedSubreason = subReason;
 
@@ -297,25 +303,25 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
             if (response.getFunctionSucceed()) {
 
-                try{
+                try {
                     // TODO: 17/07/2018 add crouton for success
                     // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
                     mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), false);
-                    OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
+                    OppAppLogger.getInstance().i(TAG, "sendReportSuccess()");
                     Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
                     //Analytics
                     new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.STOP_REASON_REPORT, true,
                             "Stop Reason: " + mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName() + ", Subreason: " + mSelectedSubreason.getEName());
-                }catch (NullPointerException e){
+                } catch (NullPointerException e) {
 
                 }
 
             } else {
-                try{
+                try {
                     mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), true);
                     //Analytics
                     new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.STOP_REASON_REPORT, false, "Error: " + response.getError().getErrorDesc());
-                }catch (NullPointerException e){
+                } catch (NullPointerException e) {
 
                 }
             }
@@ -324,6 +330,10 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
                 mReportCore.unregisterListener();
 
+                if (isFromViewLog) {
+                    mListener.onSuccess(response);
+                    return;
+                }
                 close();
 
             } catch (NullPointerException e) {
@@ -339,7 +349,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         @Override
         public void sendReportFailure(StandardResponse reason) {
             dismissProgressDialog();
-            OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
+            OppAppLogger.getInstance().w(TAG, "sendReportFailure()");
 
             //Analytics
             new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.STOP_REASON_REPORT, false, "Error: " + reason.getError().getErrorDesc());
@@ -353,7 +363,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
                     @Override
                     public void onSilentLoginFailed(StandardResponse reason) {
-                        OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
+                        OppAppLogger.getInstance().w(TAG, "Failed silent login");
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                     }
@@ -370,7 +380,9 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     public void close() {
         if (getActivity() != null) {
             getActivity().onBackPressed();
-            getActivity().onBackPressed();
+            if (getActivity() != null) {
+                getActivity().onBackPressed();
+            }
         }
     }
 
@@ -401,10 +413,18 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
             });
         }
     }
+
+    public void setFromViewLog(boolean b) {
+        isFromViewLog = b;
+    }
 //
 //    @Override
 //    public int getCroutonRoot() {
 //        //return R.id.parent_layouts;
 //        return R.id.selected_stop_crouton_root;
 //    }
+
+    public interface SelectStopReasonFragmentListener {
+        void onSuccess(StandardResponse standardResponse);
+    }
 }

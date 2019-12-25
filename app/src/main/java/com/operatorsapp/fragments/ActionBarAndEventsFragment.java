@@ -174,6 +174,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public static final int TYPE_ALERT = 20;
     public static final double MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB = 1.8f;
     private static final int PRODUCTION_ID = 1;
+    public static final String EXTRA_FIELD_FOR_MACHINE = "EXTRA_FIELD_FOR_MACHINE";
 
 
     private View mToolBarView;
@@ -278,6 +279,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private SparseArray<WidgetInfo> permissionResponseHashmap;
     private View mShowAlarmCheckBoxLy;
     private MachineLineAdapter mMachineLineAdapter;
+    private TextView mLineNameTv;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -315,7 +317,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         SoftKeyboardUtil.hideKeyboard(this);
         return inflate;
     }
-
 
 
     @Override
@@ -594,6 +595,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void initMachineLine(View view) {
 
         RecyclerView recyclerView = view.findViewById(R.id.FAAE_machine_line_rv);
+        mLineNameTv = view.findViewById(R.id.FAAE_machine_line_tv);
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -615,7 +617,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         view.findViewById(R.id.FAAE_machine_line_log_btn_ll).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnGoToScreenListener.goToFragment(StopEventLogFragment.newInstance(), false, false);
+
+                mListener.onViewLog();
             }
         });
 
@@ -625,14 +628,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         PersistenceManager pm = PersistenceManager.getInstance();
         getMachineLine(pm.getSiteUrl(), new GetMachineLineCallback() {
             @Override
-            public void onGetDepartmentSuccess(MachineLineResponse response) {
+            public void onGetMachineLineSuccess(MachineLineResponse response) {
                 machineLineItems.clear();
                 machineLineItems.addAll(response.getMachinesData());
                 mMachineLineAdapter.notifyDataSetChanged();
+                if (response.getLineName() != null && !response.getLineName().isEmpty()) {
+                    mLineNameTv.setText(response.getLineName());
+                }else {
+                    mLineNameTv.setText(getResources().getString(R.string.production_line));
+                }
             }
 
             @Override
-            public void onGetDepartmentFailed(StandardResponse reason) {
+            public void onGetMachineLineFailed(StandardResponse reason) {
                 ShowCrouton.showSimpleCrouton(mCroutonCallback, reason.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
@@ -1014,7 +1022,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             SendBroadcast.refreshPolling(getActivity());
             setupOperatorSpinner();
             //            mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
-            //            Zloger.clearPollingRequest(LOG_TAG, "onSetOperatorSuccess() ");
+            //            Zloger.clearPollingRequest(TAG, "onSetOperatorSuccess() ");
         }
 
         @Override
@@ -1116,8 +1124,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mListener.onWidgetChangeState(!isOpen);
 
-        //        OppAppLogger.getInstance().clearPollingRequest(LOG_TAG, "setActionBar(),  " + " toolBar: " + mToolBarView.getHeight() + " -- " + mTollBarsHeight * 0.65);
-        //        OppAppLogger.getInstance().clearPollingRequest(LOG_TAG, "setActionBar(),  " + " status: " + mStatusLayout.getHeight() + " -- " + mTollBarsHeight * 0.35);
+        //        OppAppLogger.getInstance().clearPollingRequest(TAG, "setActionBar(),  " + " toolBar: " + mToolBarView.getHeight() + " -- " + mTollBarsHeight * 0.65);
+        //        OppAppLogger.getInstance().clearPollingRequest(TAG, "setActionBar(),  " + " status: " + mStatusLayout.getHeight() + " -- " + mTollBarsHeight * 0.35);
     }
 
     @Override
@@ -1201,6 +1209,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mJoshProductNameSpinnerAdapter.setTitle(position);
 
                     mSelectedPosition = position;
+
+                    PersistenceManager.getInstance().setJoshID(mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID());
 
                     mListener.onJoshProductSelected(position, mActiveJobs.get(position),
                             mActiveJobs.get(position).getJobName());
@@ -3457,6 +3467,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onOpenQCActivity();
 
         void onRefreshMachineLinePolling();
+
+        void onViewLog();
     }
 
 }

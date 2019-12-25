@@ -5,18 +5,41 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
+import com.example.common.StandardResponse;
+import com.example.common.StopLogs.Event;
+import com.example.common.StopLogs.StopLogsResponse;
+import com.example.common.callback.GetStopLogCallback;
 import com.operatorsapp.R;
+import com.operatorsapp.adapters.StopEventLogAdapter;
+import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 
-public class StopEventLogFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-    private static final String TAG = StopEventLogFragment.class.getSimpleName();
+import static com.operatorsapp.utils.SimpleRequests.GetLineShiftLog;
+
+public class StopEventLogFragment extends Fragment implements StopEventLogAdapter.StopEventLogAdapterListener {
+
+    public static final String TAG = StopEventLogFragment.class.getSimpleName();
     private View mMainView;
     private OnStopEventLogFragmentListener mListener;
+    private RecyclerView mRv;
+    private StopEventLogAdapter mAdapter;
+    private StopLogsResponse mStopLogsResponse;
+    private ArrayList<Event> mStopLogsItems;
+    private ProgressBar mProgressBar;
+    private View mNoDataTv;
+    private HashMap<Integer, Event> rootMap = new HashMap<>();
 
     public static StopEventLogFragment newInstance() {
         StopEventLogFragment stopEventLogFragment = new StopEventLogFragment();
@@ -70,10 +93,75 @@ public class StopEventLogFragment extends Fragment {
         initVars(view);
         initView();
         initListener(view);
+        getMachinesLineData();
     }
 
-    private void initListener(View view) {
+    private void getMachinesLineData() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mNoDataTv.setVisibility(View.GONE);
+        PersistenceManager pm = PersistenceManager.getInstance();
+        GetLineShiftLog(pm.getSiteUrl(), new GetStopLogCallback() {
+            @Override
+            public void onGetStopLogSuccess(StopLogsResponse response) {
+                mProgressBar.setVisibility(View.GONE);
+                mStopLogsResponse = response;
+                mStopLogsItems.clear();
+                mStopLogsItems.addAll(reorderEvents(mStopLogsResponse.getEvents()));
+                mAdapter.getFilter().filter("");
+                if (mStopLogsItems.size() == 0){
+                    mNoDataTv.setVisibility(View.VISIBLE);
+                }else {
+                    mNoDataTv.setVisibility(View.GONE);
+                }
+            }
 
+            @Override
+            public void onGetStopLogFailed(StandardResponse reason) {
+                mProgressBar.setVisibility(View.GONE);
+                mNoDataTv.setVisibility(View.VISIBLE);
+            }
+        }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
+    }
+
+    private ArrayList<Event> reorderEvents(List<Event> events) {
+        ArrayList<Event> toRemove = new ArrayList<>();
+        ArrayList<Event> list = new ArrayList<>();
+        ArrayList<Event> rootList = new ArrayList<>();
+        for (Event event: events){
+            if (event.getRootEventID() == 0){
+                rootList.add(event);
+                toRemove.add(event);
+                rootMap.put(event.getEventID(), event);
+            }
+        }
+        events.removeAll(toRemove);
+
+        for (Event event: rootList){
+            list.add(event);
+            for (Event eventSub: events){
+                if (eventSub.getRootEventID().equals(event.getEventID())){
+                    list.add(eventSub);
+                    toRemove.add(eventSub);
+                }
+            }
+            events.removeAll(toRemove);
+        }
+
+        for (Event event: events){
+            event.setRootEventID(1386430);//0
+            list.add(event);
+        }
+        return list;
+    }
+
+    private void initVars(View view) {
+        mProgressBar = view.findViewById(R.id.FSEL_progressBar);
+        mNoDataTv = view.findViewById(R.id.FSEL_no_data_tv);
+        mRv = view.findViewById(R.id.FSEL_rv);
+        mRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        mStopLogsItems = new ArrayList<>();
+        mAdapter = new StopEventLogAdapter(mStopLogsItems, StopEventLogFragment.this);
+        mRv.setAdapter(mAdapter);
     }
 
     private void initView() {
@@ -81,12 +169,24 @@ public class StopEventLogFragment extends Fragment {
 
     }
 
-    private void initVars(View view) {
+    private void initListener(View view) {
 
+    }
+
+    @Override
+    public void onLogSelected(Event item) {
+        ArrayList<Float> list = new ArrayList<>();
+        list.add(item.getEventID() * 1f);
+        if (rootMap.containsKey(item.getEventID())){
+            //todo root
+        }else {
+            mListener.onReportEvents(list);
+        }
     }
 
     public interface OnStopEventLogFragmentListener{
 
+        void onReportEvents(ArrayList<Float> eventsIds);
     }
 
 }

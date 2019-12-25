@@ -2,11 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="90dp"
+    android:layout_height="110dp"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:weightSum="10">
-
 
     <ImageView
         android:id="@+id/ISEL_expand_img"
@@ -15,28 +14,50 @@
         android:layout_weight="0.5"
         android:src="@drawable/expand_down" />
 
+    <LinearLayout
+        android:id="@+id/ISEL_sub_item_margin"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:weightSum="5">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.2"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="0.3"
+            android:layout_height="match_parent"
+            android:background="@color/grey_lite"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_weight="2.5"
+            android:background="@color/grey_lite"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight=".2" />
 
-    <View
-        android:id="@+id/ISEL_sub_item_margin"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:visibility="gone" />
-
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1.5"
+        android:gravity="center"
         android:orientation="vertical"
         android:weightSum="4">
 
         <ImageView
             android:id="@+id/ISEL_ic"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="3" />
 
@@ -45,8 +66,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:gravity="center"
             android:maxLines="1"
-            android:gravity="center_vertical"
             android:textColor="@color/black"
             app:autoSizeMaxTextSize="16sp"
             app:autoSizeTextType="uniform" />
