@@ -193,6 +193,7 @@ import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_ERP_JOB
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_JOB_ID;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_PRODUCT_NAME;
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_IS_NO_PRODUCTION;
+import static com.operatorsapp.fragments.ActionBarAndEventsFragment.EXTRA_FIELD_FOR_MACHINE;
 import static com.operatorsapp.utils.ClearData.cleanEvents;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
@@ -209,7 +210,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         ShowDashboardCroutonListener, AllDashboardDataCore.AllDashboardDataCoreListener,
         DashboardCentralContainerListener,
         OnReportFieldsUpdatedCallbackListener,
-        EasyPermissions.PermissionCallbacks {
+        EasyPermissions.PermissionCallbacks,
+        SelectStopReasonFragment.SelectStopReasonFragmentListener {
 
     private static final String TAG = DashboardActivity.class.getSimpleName();
 
@@ -1002,6 +1004,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, activeJobsListForMachine.getActiveJobs().get(0).getJobID(),
                         mSelectProductJobId, PersistenceManager.getInstance().getShiftStart());
                 PersistenceManager.getInstance().setMaxUnitReport(mActiveJobsListForMachine.getActiveJobs().get(0).getCavitiesStandard());
+                PersistenceManager.getInstance().setJoshID(mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition).getJoshID());
 
                 mReportFieldsForMachineCore.stopPolling();
                 mReportFieldsForMachineCore.startPolling();
@@ -1822,6 +1825,19 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onRefreshMachineLinePolling() {
         dashboardDataStartPolling();
         ProgressDialogManager.show(this);
+    }
+
+    @Override
+    public void onViewLog() {
+        Intent intent = new Intent(this, StopEventLogActivity.class);
+        intent.putExtra(EXTRA_FIELD_FOR_MACHINE, getReportForMachine());
+        startActivity(intent);
+        ignoreFromOnPause = true;
+
+        if (mActionBarAndEventsFragment != null) {
+
+            mActionBarAndEventsFragment.setFromAnotherActivity(true);
+        }
     }
 
 
@@ -3207,6 +3223,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         Toast.makeText(this, "Permission has been denied", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onSuccess(StandardResponse standardResponse) {
 
     }
 

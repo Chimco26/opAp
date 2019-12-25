@@ -75,28 +75,36 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         });
 
         int icon = R.drawable.technician_blue_svg;
+        String txt = mContext.getResources().getString(R.string.waiting_for_replay);
         switch (mTechList.get(position).getmResponseType()){
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_UNSET:
                 icon = R.drawable.call_recieved;
+                txt = mContext.getResources().getString(R.string.waiting_for_replay);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
                 icon = R.drawable.call_sent_blue;
+                txt = mContext.getResources().getString(R.string.call_approved);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
                 icon = R.drawable.call_declined;
+                txt = mContext.getResources().getString(R.string.call_declined);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
                 icon = R.drawable.cancel_blue;
+                txt = mContext.getResources().getString(R.string.service_call_was_canceled);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
                 icon = R.drawable.at_work_blue;
+                txt = mContext.getResources().getString(R.string.at_work);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
                 icon = R.drawable.service_done;
+                txt = mContext.getResources().getString(R.string.service_completed);
                 break;
         }
         techViewHolder.mStatusIv.setImageResource(icon);
+        techViewHolder.mSubTextTv.setText(txt);
     }
 
     @Override
@@ -105,6 +113,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public class TechViewHolder extends RecyclerView.ViewHolder {
+        private TextView mSubTextTv;
         private TextView mTextTv;
         private TextView mTimeTv;
         private ImageView mRemoveIv;
@@ -116,6 +125,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mTextTv = itemView.findViewById(R.id.tech_call_item_text_tv);
             mTimeTv = itemView.findViewById(R.id.tech_call_item_time_tv);
             mStatusIv = itemView.findViewById(R.id.tech_call_item_status_iv);
+            mSubTextTv = itemView.findViewById(R.id.tech_call_item_subtext_tv);
         }
     }
 

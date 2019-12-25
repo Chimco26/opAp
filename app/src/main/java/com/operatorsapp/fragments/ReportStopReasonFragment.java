@@ -52,7 +52,7 @@ import com.operatorsapp.view.GridSpacingItemDecorationRTL;
 import java.util.ArrayList;
 
 public class ReportStopReasonFragment extends BackStackAwareFragment implements OnStopReasonSelectedCallbackListener {
-    private static final String LOG_TAG = ReportStopReasonFragment.class.getSimpleName();
+    public static final String TAG = ReportStopReasonFragment.class.getSimpleName();
     private static final int NUMBER_OF_COLUMNS = 5;
     private static final String IS_OPEN = "IS_OPEN";
     private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
@@ -112,13 +112,15 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-//            OppAppLogger.getInstance().i(LOG_TAG, "Start " + mStart + " end " + mEnd + " duration " + mDuration);
+//            OppAppLogger.getInstance().i(TAG, "Start " + mStart + " end " + mEnd + " duration " + mDuration);
             mIsOpen = getArguments().getBoolean(IS_OPEN, false);
             ActiveJobsListForMachine mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
             int mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
             if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null
                     && mActiveJobsListForMachine.getActiveJobs().size() > mSelectedPosition) {
                 mJoshId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+            }else {
+                mJoshId = PersistenceManager.getInstance().getJoshId();
             }
         }
 
@@ -148,7 +150,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         }
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
-            OppAppLogger.getInstance().i(LOG_TAG, "No Reasons in list");
+            OppAppLogger.getInstance().i(TAG, "No Reasons in list");
             StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
         } else {
@@ -271,7 +273,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     public void onSubReasonSelected(SubReasons subReason) {
         if (mSelectedEvents != null && mSelectedEvents.size() > 0) {
 
-            OppAppLogger.getInstance().i(LOG_TAG, "Selected sub reason id: " + subReason.getId());
+            OppAppLogger.getInstance().i(TAG, "Selected sub reason id: " + subReason.getId());
 
             mSelectedSubreason = subReason;
 
@@ -362,7 +364,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 }
                 // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
                 mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), false);
-                OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
+                OppAppLogger.getInstance().i(TAG, "sendReportSuccess()");
                 Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
 
                 for (int i = 0; i < mSelectedEvents.size(); i++) {
@@ -401,7 +403,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 return;
             }
             dismissProgressDialog();
-            OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
+            OppAppLogger.getInstance().w(TAG, "sendReportFailure()");
             if (reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
@@ -411,7 +413,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
                     @Override
                     public void onSilentLoginFailed(StandardResponse reason) {
-                        OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
+                        OppAppLogger.getInstance().w(TAG, "Failed silent login");
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                     }

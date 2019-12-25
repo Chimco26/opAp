@@ -378,7 +378,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 ////            startingFrom = getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS");
 //        } catch (java.text.ParseException e) {
 //            if (e.getMessage() != null) {
-//                Log.e(LOG_TAG, e.getMessage());
+//                Log.e(TAG, e.getMessage());
 //            }
 //        }
         String endTime = getTimeForRequest(new Date(), dateFormat);

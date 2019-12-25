@@ -104,6 +104,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_UNITS_IN_CYCLE_TYPE = "PREF_UNITS_IN_CYCLE_TYPE";
     private static final String PREF_MACHINE_LINE_ID = "PREF_MACHINE_LINE_ID";
     private static final String PREF_DEFAULT_REPORT_REJECT_UNIT = "PREF_DEFAULT_REPORT_REJECT_UNIT";
+    private static final String JOSH_ID = "PREF_JOSH_ID";
 
 
     private static PersistenceManager msInstance;
@@ -852,6 +853,14 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public int getReportRejectDefaultUnits() {
         return SecurePreferences.getInstance().getInt(PREF_DEFAULT_REPORT_REJECT_UNIT);
+    }
+
+    public void setJoshID(int joshId) {
+        SecurePreferences.getInstance().setInt(JOSH_ID, joshId);
+    }
+
+    public int getJoshId() {
+        return SecurePreferences.getInstance().getInt(JOSH_ID);
     }
 
     public static void setMachineData(int machineID, String machineName) {

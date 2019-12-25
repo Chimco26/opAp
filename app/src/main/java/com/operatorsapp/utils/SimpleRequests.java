@@ -5,9 +5,11 @@ import android.support.annotation.NonNull;
 import com.example.common.ErrorResponse;
 import com.example.common.MultipleRejectRequestModel;
 import com.example.common.StandardResponse;
+import com.example.common.StopLogs.StopLogsResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.callback.GetDepartmentCallback;
 import com.example.common.callback.GetMachineLineCallback;
+import com.example.common.callback.GetStopLogCallback;
 import com.example.common.department.DepartmentsMachinesResponse;
 import com.example.common.department.MachineLineRequest;
 import com.example.common.department.MachineLineResponse;
@@ -24,8 +26,7 @@ import com.operators.reportrejectinfra.PostActivateJobCallback;
 import com.operators.reportrejectinfra.PostSplitEventCallback;
 import com.operators.reportrejectinfra.PostUpdtaeActionsCallback;
 import com.operators.reportrejectinfra.SimpleCallback;
-import com.operators.reportrejectnetworkbridge.interfaces.RecipeNetworkManagerInterface;
-import com.operators.reportrejectnetworkbridge.interfaces.GetDepartmentNetworkManager;
+import com.operators.reportrejectnetworkbridge.interfaces.GetSimpleNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetIntervalAndTimeOutNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetJobDetailsNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetPendingJobListNetworkManager;
@@ -35,6 +36,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.PostActivateJobNetwork
 import com.operators.reportrejectnetworkbridge.interfaces.PostSplitEventNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostUpdateNotesForJobNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostUpdtaeActionsNetworkManager;
+import com.operators.reportrejectnetworkbridge.interfaces.RecipeNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.server.request.GetAllRecipesRequest;
 import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SessionIdModel;
@@ -173,7 +175,7 @@ public class SimpleRequests {
             @Override
             public void onResponse(@NonNull Call<List<VersionResponse>> call, @NonNull Response<List<VersionResponse>> response) {
 
-                 if (response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     if (callback != null) {
 
                         callback.onGetVersionSuccess(response.body());
@@ -208,11 +210,11 @@ public class SimpleRequests {
         });
     }
 
-    public static void getDepartmentsMachines(String siteUrl, final GetDepartmentCallback callback, GetDepartmentNetworkManager getDepartmentNetworkManager, final int totalRetries, int requestTimeout) {
+    public static void getDepartmentsMachines(String siteUrl, final GetDepartmentCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
 
         final int[] retryCount = {0};
 
-        Call<DepartmentsMachinesResponse> call = getDepartmentNetworkManager.emeraldGetDepartment(siteUrl, requestTimeout, TimeUnit.SECONDS).getAllDepartmentsRequest(new BaseRequest(PersistenceManager.getInstance().getSessionId()));
+        Call<DepartmentsMachinesResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl, requestTimeout, TimeUnit.SECONDS).getAllDepartmentsRequest(new BaseRequest(PersistenceManager.getInstance().getSessionId()));
 
         call.enqueue(new Callback<DepartmentsMachinesResponse>() {
             @Override
@@ -221,7 +223,7 @@ public class SimpleRequests {
                 if (response.isSuccessful()) {
                     if (callback != null) {
 
-                        callback.onGetDepartmentSuccess((DepartmentsMachinesResponse)response.body());
+                        callback.onGetDepartmentSuccess((DepartmentsMachinesResponse) response.body());
                     } else {
 
                         OppAppLogger.getInstance().w(LOG_TAG, "getDepartmentsMachines(), onResponse() callback is null");
@@ -253,11 +255,11 @@ public class SimpleRequests {
         });
     }
 
-    public static void getMachineLine(String siteUrl, final GetMachineLineCallback callback, GetDepartmentNetworkManager getDepartmentNetworkManager, final int totalRetries, int requestTimeout) {
+    public static void getMachineLine(String siteUrl, final GetMachineLineCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
 
         final int[] retryCount = {0};
 
-        Call<MachineLineResponse> call = getDepartmentNetworkManager.emeraldGetDepartment(siteUrl,
+        Call<MachineLineResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
                 requestTimeout, TimeUnit.SECONDS).getMachineLineRequest(new MachineLineRequest(PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineLineId()));
 
         call.enqueue(new Callback<MachineLineResponse>() {
@@ -267,7 +269,7 @@ public class SimpleRequests {
                 if (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty()) {
                     if (callback != null) {
 
-                        callback.onGetDepartmentSuccess(response.body());
+                        callback.onGetMachineLineSuccess(response.body());
                     } else {
 
                         OppAppLogger.getInstance().w(LOG_TAG, "getMachineLine(), onResponse() callback is null");
@@ -289,10 +291,56 @@ public class SimpleRequests {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getMachineLine Error");
-                        callback.onGetDepartmentFailed(errorObject);
+                        callback.onGetMachineLineFailed(errorObject);
                     }
                 } else {
                     OppAppLogger.getInstance().w(LOG_TAG, "getMachineLine(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    public static void GetLineShiftLog(String siteUrl, final GetStopLogCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<StopLogsResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                requestTimeout, TimeUnit.SECONDS).GetLineShiftLog(new MachineLineRequest(PersistenceManager.getInstance().getSessionId(), 1));//PersistenceManager.getInstance().getMachineLineId()
+
+        call.enqueue(new Callback<StopLogsResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<StopLogsResponse> call, @NonNull Response<StopLogsResponse> response) {
+
+                if (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty()) {
+                    if (callback != null) {
+
+                        callback.onGetStopLogSuccess(response.body());
+                    } else {
+
+                        OppAppLogger.getInstance().w(LOG_TAG, "GetLineShiftLog(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<StopLogsResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "GetLineShiftLog Error");
+                        callback.onGetStopLogFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.getInstance().w(LOG_TAG, "GetLineShiftLog(), onFailure() callback is null");
 
                 }
             }
@@ -312,7 +360,7 @@ public class SimpleRequests {
                 if (response.isSuccessful()) {
                     if (callback != null) {
 
-                         callback.onGetVersionSuccess(response.body());
+                        callback.onGetVersionSuccess(response.body());
                     } else {
 
                         OppAppLogger.getInstance().w(LOG_TAG, "getAllRecipesRequest(), onResponse() callback is null");
@@ -345,7 +393,7 @@ public class SimpleRequests {
     }
 
     public void postUpdateNotesForJob(String siteUrl, final PostUpdateNotesForJobCallback callback, PostUpdateNotesForJobNetworkManager postUpdateNotesForJobNetworkManager,
-                                      PostUpdateNotesForJobRequest postUpdateNotesForJobRequest, final int totalRetries, int requestTimeout){
+                                      PostUpdateNotesForJobRequest postUpdateNotesForJobRequest, final int totalRetries, int requestTimeout) {
 
         final int[] retryCount = {0};
 
@@ -367,7 +415,7 @@ public class SimpleRequests {
                     }
                 } else {
 
-                    if (callback != null){
+                    if (callback != null) {
                         StandardResponse errorObject = null;
                         if (response.body() != null) {
                             errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, response.body().getError().getErrorDesc());
@@ -399,7 +447,6 @@ public class SimpleRequests {
                 }
             }
         });
-
 
 
     }
@@ -642,7 +689,7 @@ public class SimpleRequests {
     }
 
     public void postSplitEvent(String siteUrl, final PostSplitEventCallback callback, PostSplitEventNetworkManager postSplitEventNetworkManager,
-                               SplitEventRequest splitEventRequest, final int totalRetries, int requestTimeout){
+                               SplitEventRequest splitEventRequest, final int totalRetries, int requestTimeout) {
 
         final int[] retryCount = {0};
 
@@ -662,7 +709,7 @@ public class SimpleRequests {
                     }
                 } else {
                     String msg = "";
-                    if (response != null && response.body() != null && response.body().getError() != null){
+                    if (response != null && response.body() != null && response.body().getError() != null) {
                         msg = response.body().getError().getErrorDesc();
                     }
                     onFailure(call, new Throwable(msg));
@@ -693,7 +740,7 @@ public class SimpleRequests {
     }
 
     public void postProductionMode(String siteUrl, final PostProductionModeCallback callback, GetMachineStatusNetworkManagerInterface machineStatusNetworkBridge,
-                                   SetProductionModeForMachineRequest productionModeForMachineRequest, final int totalRetries){
+                                   SetProductionModeForMachineRequest productionModeForMachineRequest, final int totalRetries) {
 
         final int[] retryCount = {0};
 
@@ -714,7 +761,7 @@ public class SimpleRequests {
                 } else {
 
                     String msg = "Production Mode Update Failed";
-                    if (response.body() != null && response.body().getError() != null){
+                    if (response.body() != null && response.body().getError() != null) {
                         msg = response.body().getError().getErrorDesc();
                     }
                     StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, msg);

@@ -58,6 +58,11 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
+            android:name=".activities.StopEventLogActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
             android:name=".activities.QCActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape"

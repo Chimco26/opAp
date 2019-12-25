@@ -33,6 +33,7 @@ import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
@@ -256,7 +257,12 @@ public class LoginFragment extends Fragment {
         String factoryUrl = mSiteUrl.getText().toString();
         String userName = mUserName.getText().toString();
         String password = mPassword.getText().toString();
-        return !TextUtils.isEmpty(factoryUrl) && !TextUtils.isEmpty(userName) && !TextUtils.isEmpty(password);
+        String checkUrl = factoryUrl.replaceAll("[^a-zA-Z0-9_/,.-]", "");
+
+        if (!checkUrl.equals(factoryUrl) && mCroutonCallback != null){
+            mCroutonCallback.onShowCroutonRequest(getResources().getString(R.string.illegal_chars), 5000, R.id.parent_layouts, CroutonCreator.CroutonType.URL_ERROR);
+        }
+        return !TextUtils.isEmpty(factoryUrl) && !TextUtils.isEmpty(userName) && !TextUtils.isEmpty(password) && checkUrl.equals(factoryUrl);
     }
 
     private void tryToLogin() {
