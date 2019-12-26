@@ -157,9 +157,9 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
         }
 
         for (Event event : events) {
-            event.setRootEventID(1386430);//0
+            event.setRootEventID(0);
             list.add(event);
-            rootMap.get(1386430).add(event);
+            rootMap.put(event.getEventID(), new ArrayList<Event>());
         }
         return list;
     }

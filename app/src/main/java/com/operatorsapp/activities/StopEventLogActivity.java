@@ -140,6 +140,12 @@ public class StopEventLogActivity extends AppCompatActivity
             Alert2BtnDialog alert2BtnDialog = new Alert2BtnDialog(this, new Alert2BtnDialog.Alert2BtnDialogListener() {
                 @Override
                 public void onClickPositiveBtn() {
+//                    sendReport(position, mSelectedSubreason);
+                    ArrayList<Float> list = new ArrayList<>();
+                    for (Event event: mSubEvents){
+                        list.add(event.getEventID() * 1.0f);
+                    }
+                    mSelectedEvents.addAll(list);
                     sendReport(position, mSelectedSubreason);
                 }
 
@@ -147,8 +153,8 @@ public class StopEventLogActivity extends AppCompatActivity
                 public void onClickNegativeBtn() {
                     mSelectedEvents.addAll(events);
                     sendReport(position, mSelectedSubreason);
-                }//todo set true text not hardcoded
-            }, "Do you want to report the " + events.size() + " sub events unreported?", getString(R.string.this_event_only), getString(R.string.save_all));
+                }
+            }, getString(R.string.update_this_event_to_all_linked), getString(R.string.yes), getString(R.string.only_to_unreported));
 
             alert2BtnDialog.showAlert2BtnDialog().show();
         }else {

@@ -44,6 +44,7 @@ import com.example.common.StandardResponse;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.callback.MachineJoshDataCallback;
+import com.example.common.department.MachinesLineDetail;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.example.common.permissions.PermissionResponse;
 import com.example.common.permissions.WidgetInfo;
@@ -103,6 +104,7 @@ import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.dialogs.NextJobTimerDialog;
 import com.operatorsapp.dialogs.SetupEndDialog;
+import com.operatorsapp.dialogs.TitleAndSubWithSelectableListDialog;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.AdvancedSettingsFragment;
 import com.operatorsapp.fragments.LenoxDashboardFragment;
@@ -2274,7 +2276,49 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onProductionStatusChanged(int id, final String newStatus) {
+    public void onProductionStatusChanged(final int productionModeId, final String newStatus, final List<MachinesLineDetail> machineLineItems) {
+
+        MachinesLineDetail current = null;
+        for (MachinesLineDetail machinesLineDetail: machineLineItems) {
+            if (machinesLineDetail.getMachineID() == PersistenceManager.getInstance().getMachineId()) {
+                current = machinesLineDetail;
+            }
+        }
+        if (current != null){
+            machineLineItems.remove(current);
+        }
+
+        if (machineLineItems != null && machineLineItems.size() > 1) {
+
+            TitleAndSubWithSelectableListDialog titleAndSubWithSelectableListDialog = new TitleAndSubWithSelectableListDialog(
+                    this, new TitleAndSubWithSelectableListDialog.TitleAndSubWithSelectableListDialogListener() {
+                @Override
+                public void onClickPositiveBtn(ArrayList<MachinesLineDetail> machinesLineDetails) {
+                    ProgressDialogManager.show(getParent());
+                    postProductionMode(productionModeId, PersistenceManager.getInstance().getMachineId());
+                    for (MachinesLineDetail machinesLineDetail: machinesLineDetails){
+                        postProductionMode(productionModeId, machinesLineDetail.getMachineID());
+                    }
+                }
+
+                @Override
+                public void onClickNegativeBtn() {
+                    ProgressDialogManager.show(getParent());
+                    postProductionMode(productionModeId, PersistenceManager.getInstance().getMachineId());
+                }
+            }, getString(R.string.production_status),
+                    String.format("%s:", getString(R.string.update_this_production_status_also_to)),
+                    getString(R.string.apply), (ArrayList<MachinesLineDetail>) machineLineItems
+            );
+
+            titleAndSubWithSelectableListDialog.showTitleAndSubWithSelectableListDialog().show();
+        } else {
+            ProgressDialogManager.show(getParent());
+            postProductionMode(productionModeId, PersistenceManager.getInstance().getMachineId());
+        }
+    }
+
+    public void postProductionMode(int productionModeId, int machineId) {
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
         SimpleRequests simpleRequests = new SimpleRequests();
         simpleRequests.postProductionMode(persistenceManager.getSiteUrl(), new PostProductionModeCallback() {
@@ -2282,11 +2326,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onPostProductionModeSuccess(StandardResponse response) {
                 // TODO: 31/07/2018 display crouton
                 dashboardDataStartPolling();
+                ProgressDialogManager.dismiss();
                 if (response.getFunctionSucceed()) {
                     //Analytics
                     new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.PRODUCTION_STATUS, true, "Production Status Changed");
                 } else {
-                    ProgressDialogManager.dismiss();
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
 
                 }
@@ -2301,8 +2345,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.PRODUCTION_STATUS, false, "Error: " + reason.getError().getErrorDesc());
                 dashboardDataStartPolling();
             }
-        }, NetworkManager.getInstance(), new SetProductionModeForMachineRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId(), id), persistenceManager.getTotalRetries());
-
+        }, NetworkManager.getInstance(), new SetProductionModeForMachineRequest(persistenceManager.getSessionId(), machineId, productionModeId), persistenceManager.getTotalRetries());
     }
 
     @Override
@@ -2862,7 +2905,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         reportNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportRejectsCallbackListener);
-        if (value.isEmpty()){
+        if (value.isEmpty()) {
             ShowCrouton.showSimpleCrouton(DashboardActivity.this, getResources().getString(R.string.invalid_value), CroutonCreator.CroutonType.NETWORK_ERROR);
             return;
         }

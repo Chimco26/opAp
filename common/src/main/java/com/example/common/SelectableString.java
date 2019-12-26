@@ -11,6 +11,7 @@ public class SelectableString {
     String string;
     boolean isSelected;
 
+
     public SelectableString(String string, boolean isSelected, String id, int color) {
         this.string = string;
         this.isSelected = isSelected;
@@ -30,6 +31,9 @@ public class SelectableString {
     }
 
     public int getColor() {
+        if (color == 0){
+
+        }
         return color;
     }
 

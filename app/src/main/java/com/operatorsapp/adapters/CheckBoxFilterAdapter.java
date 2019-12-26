@@ -48,7 +48,7 @@ public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAd
                     updateAll(check);
                 } else {
                     mFilterList.get(position).setSelected(check);
-                    updateSelectAllItem(mFilterList);
+//                    updateSelectAllItem(mFilterList);
                 }
                 mCheckBoxFilterAdapterListener.onItemCheck(mFilterList.get(position));
             }
