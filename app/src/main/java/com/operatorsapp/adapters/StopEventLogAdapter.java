@@ -38,29 +38,20 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
     public StopEventLogAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        if (viewType == 0) {
-            return new StopEventLogAdapter.ViewHolder(inflater.inflate(R.layout.item_stop_event_log_titles, parent, false));
-        } else {
-            return new StopEventLogAdapter.ViewHolder(inflater.inflate(R.layout.item_stop_event_log, parent, false));
-        }
+        return new StopEventLogAdapter.ViewHolder(inflater.inflate(R.layout.item_stop_event_log, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull final StopEventLogAdapter.ViewHolder viewHolder, final int position) {
 
-        if (getItemViewType(position) == 0) {
-            return;
-        }
 
         final Event event = itemsFiletered.get(position);
 
-        ViewHolder viewHolderItems = (ViewHolder) viewHolder;
+        initViewSubOrRoot(event, viewHolder);
 
-        initViewSubOrRoot(event, viewHolderItems);
+        setTexts(event, viewHolder);
 
-        setTexts(event, viewHolderItems);
-
-        viewHolderItems.stopIc.setImageDrawable(viewHolder.itemView.getContext().
+        viewHolder.stopIc.setImageDrawable(viewHolder.itemView.getContext().
                 getResources().getDrawable(getImageForStopReason(event.getEventGroupID())));
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -70,13 +61,12 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
             }
         });
 
-        viewHolderItems.expand.setOnClickListener(new View.OnClickListener() {
+        viewHolder.expand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 event.setExpand(!event.isExpand());
                 updateEvents(event);
                 getFilter().filter("");
-//                notifyDataSetChanged(position + 1, updateEvents(event));
             }
         });
     }
@@ -105,7 +95,7 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
         if (event.getRootEventID() != 0) {
             viewHolderItems.subMarginView.setVisibility(View.VISIBLE);
             viewHolderItems.expand.setVisibility(View.GONE);
-        } else {
+        } else if (event.isHaveChild()) {
             viewHolderItems.subMarginView.setVisibility(View.GONE);
             viewHolderItems.expand.setVisibility(View.VISIBLE);
             if (event.isExpand()) {
@@ -113,15 +103,9 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
             } else {
                 viewHolderItems.expand.setRotationX(0);
             }
-        }
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (position == 0) {
-            return 0;
         } else {
-            return 1;
+            viewHolderItems.subMarginView.setVisibility(View.INVISIBLE);
+            viewHolderItems.expand.setVisibility(View.GONE);
         }
     }
 
@@ -204,18 +188,18 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
         ArrayList<Event> toRemove = new ArrayList<>();
         ArrayList<Event> list = new ArrayList<>();
         ArrayList<Event> rootList = new ArrayList<>();
-        for (Event event: events){
-            if (event.getRootEventID() == 0){
+        for (Event event : events) {
+            if (event.getRootEventID() == 0) {
                 rootList.add(event);
                 toRemove.add(event);
             }
         }
         events.removeAll(toRemove);
 
-        for (Event event: rootList){
+        for (Event event : rootList) {
             list.add(event);
-            for (Event eventSub: events){
-                if (eventSub.getRootEventID().equals(event.getEventID())){
+            for (Event eventSub : events) {
+                if (eventSub.getRootEventID().equals(event.getEventID())) {
                     list.add(eventSub);
                     toRemove.add(eventSub);
                 }

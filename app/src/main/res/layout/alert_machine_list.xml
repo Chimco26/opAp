@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/report_reject_screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:gravity="center">
+
+    <RelativeLayout
+        android:layout_width="483dp"
+        android:layout_height="452dp"
+        android:background="@color/white"
+        android:padding="23dp">
+
+        <RelativeLayout
+            android:id="@+id/button_cancel"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/close" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/AML_text_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="100dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="15dp"
+            android:textColor="@color/blue1"
+            android:textSize="20sp"
+            app:autoSizeMaxTextSize="25dp"
+            app:autoSizeTextType="uniform" />
+        
+        <TextView
+            android:id="@+id/AML_subtitle_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_below="@+id/AML_text_tv"
+            android:layout_marginTop="20sp"
+            android:maxLines="1"
+            android:padding="15dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:autoSizeMaxTextSize="25dp"
+            app:autoSizeTextType="uniform" />
+        
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/AML_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/AML_subtitle_tv"
+            android:layout_above="@+id/AML_positive_btn"
+            android:padding="15dp"
+            tools:listitem="@layout/item_check_box" />
+
+        <TextView
+            android:id="@+id/AML_positive_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:background="@color/blue1"
+            android:gravity="center"
+            android:maxWidth="200dp"
+            android:minWidth="150dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/yes"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:autoSizeMaxTextSize="22sp"
+            app:autoSizeTextType="uniform" />
+
+    </RelativeLayout>
+</RelativeLayout>

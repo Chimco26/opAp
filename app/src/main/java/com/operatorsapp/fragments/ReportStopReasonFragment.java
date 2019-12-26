@@ -30,9 +30,7 @@ import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
-import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.NewStopReasonsAdapter;
 import com.operatorsapp.adapters.StopReasonsAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -57,7 +55,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     private static final String IS_OPEN = "IS_OPEN";
     private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
     private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
-    private static final float MINIMUM_VERSION_TO_NEW_API = 1.7f;
+    public static final float MINIMUM_VERSION_TO_NEW_API = 1.7f;
 
     private Integer mJoshId = 0;
 
@@ -76,6 +74,8 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     private int mSelectedPosition;
     private int mFlavorSpanDif;
     private Switch mSwitch;
+    private boolean isFromViewLog;
+    private boolean isFromViewLogRoot;
 
     public static ReportStopReasonFragment newInstance(boolean isOpen, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
         ReportStopReasonFragment reportStopReasonFragment = new ReportStopReasonFragment();
@@ -249,13 +249,16 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 mSelectedPosition = position;
 
                 mSelectedSubreason = mReportFieldsForMachine.getStopReasons().get(position).getSubReasons().get(0);
-                sendReport();
-
+                if (isFromViewLogRoot){
+                    mListener.onReport(position, mSelectedSubreason);
+                }else {
+                    sendReport();
+                }
             } else {
                 mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment.newInstance(position, mJoshId,
                         mReportFieldsForMachine.getStopReasons().get(position).getId(),
                         mReportFieldsForMachine.getStopReasons().get(position).getEName(),
-                        mReportFieldsForMachine.getStopReasons().get(position).getLName(), mIsOpen));
+                        mReportFieldsForMachine.getStopReasons().get(position).getLName(), mIsOpen), isFromViewLogRoot);
             }
         } catch (IllegalStateException e) {
 
@@ -277,8 +280,11 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
             mSelectedSubreason = subReason;
 
-            sendReport();
-
+            if (isFromViewLogRoot){
+                mListener.onReport(mSelectedPosition, mSelectedSubreason);
+            }else {
+                sendReport();
+            }
 //            SendBroadcast.refreshPolling(getContext());
 
         } else {
@@ -366,7 +372,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), false);
                 OppAppLogger.getInstance().i(TAG, "sendReportSuccess()");
                 Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
-
+                mListener.onSuccess();
                 for (int i = 0; i < mSelectedEvents.size(); i++) {
 
                     SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i).intValue(), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId(),
@@ -405,19 +411,19 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             dismissProgressDialog();
             OppAppLogger.getInstance().w(TAG, "sendReportFailure()");
             if (reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
-                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
-                    @Override
-                    public void onSilentLoginSucceeded() {
-                        sendReport();
-                    }
-
-                    @Override
-                    public void onSilentLoginFailed(StandardResponse reason) {
-                        OppAppLogger.getInstance().w(TAG, "Failed silent login");
-                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
-                        ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
-                    }
-                });
+//                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
+//                    @Override
+//                    public void onSilentLoginSucceeded() {
+//                        sendReport();
+//                    }
+//
+//                    @Override
+//                    public void onSilentLoginFailed(StandardResponse reason) {
+//                        OppAppLogger.getInstance().w(TAG, "Failed silent login");
+//                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
+//                        ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
+//                    }
+//                });todo check
             } else {
                 String msg = "missing reports";
                 if (reason != null && reason.getError().getErrorDesc() != null) {
@@ -473,8 +479,20 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         mListener= null;
     }
 
+    public void setFromViewLog(boolean b) {
+        isFromViewLog = b;
+    }
+
+    public void setFromViewLogRoot(boolean b) {
+        isFromViewLogRoot = b;
+    }
+
     public interface ReportStopReasonFragmentListener {
 
-        void onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment selectStopReasonFragment);
+        void onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment selectStopReasonFragment, boolean isFromViewLogRoot);
+
+        void onReport(int position, SubReasons mSelectedSubreason);
+
+        void onSuccess();
     }
 }

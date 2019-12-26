@@ -2058,8 +2058,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     openActivateJobScreen();
 
                 } else if (mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() != finalStatusList.get(position).getId()) {
-                    ProgressDialogManager.show(getActivity());
-                    mListener.onProductionStatusChanged(finalStatusList.get(position).getId(), finalStatusList.get(position).getEName());
+                    mListener.onProductionStatusChanged(finalStatusList.get(position).getId(), finalStatusList.get(position).getEName(), machineLineItems);
                     productionStatusSpinner.setVisibility(View.INVISIBLE);
                     textview.setVisibility(View.INVISIBLE);
                 }
@@ -3442,7 +3441,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         void onJoshProductSelected(Integer spinnerProductPosition, ActiveJob jobID, String jobName);
 
-        void onProductionStatusChanged(int id, String newStatus);
+        void onProductionStatusChanged(int id, String newStatus, List<MachinesLineDetail> machineLineItems);
 
         void onLenoxMachineClicked(Machine machine);
 

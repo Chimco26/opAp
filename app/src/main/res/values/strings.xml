@@ -467,5 +467,14 @@
     <string name="stop_events_log">Stop events log</string>
     <string name="illegal_chars">Illegal characters found, please use: a-zA-Z0-9_/,.-</string>
     <string name="stop_logs">Stop logs</string>
+    <string name="save_all">Save All</string>
+    <string name="this_event_only">This event only</string>
+    <string name="only_to_unreported">Only to the unreported</string>
+    <string name="update_this_event_to_all_linked">Update this stop reason to all linked events?</string>
+    <string name="production_status">Production status</string>
+    <string name="update_this_production_status_also_to">Update this production status also to</string>
+    <string name="apply">Apply</string>
+    <string name="add_to_team">Add to Team</string>
+    <string name="save_and_close"><![CDATA[Save & Close]]></string>
 
 </resources>
