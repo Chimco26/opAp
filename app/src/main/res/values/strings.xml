@@ -474,5 +474,7 @@
     <string name="production_status">Production status</string>
     <string name="update_this_production_status_also_to">Update this production status also to</string>
     <string name="apply">Apply</string>
+    <string name="add_to_team">Add to Team</string>
+    <string name="save_and_close"><![CDATA[Save & Close]]></string>
 
 </resources>

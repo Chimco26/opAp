@@ -1,70 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/operator_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:clickable="true">
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:paddingTop="60dp"
+    android:paddingStart="60dp"
+    android:paddingEnd="20dp"
+    android:weightSum="6">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/bg_factory">
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="67dp"
-        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_weight="3"
+        android:orientation="vertical"
         android:weightSum="10">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2.5"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="@string/operator_sign_in_action_bar"
+            android:textColor="@color/blue1"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:autoSizeMaxTextSize="30sp"
+            app:autoSizeTextType="uniform" />
+
         <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="0.5" />
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="@string/enter_with_your_id"
+            android:maxLines="1"
+            android:text="@string/operator_id"
             android:textColor="@color/black"
             android:textSize="30sp"
-            android:maxLines="2"
             android:textStyle="bold"
-            app:autoSizeTextType="uniform"
-            app:autoSizeMaxTextSize="30sp"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="120dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:background="@color/C20" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5" />
+            app:autoSizeMaxTextSize="30sp"
+            app:autoSizeTextType="uniform" />
 
         <LinearLayout
             android:id="@+id/linearLayout3"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="6"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:weightSum="10">
@@ -73,44 +63,71 @@
                 android:id="@+id/operator_id_edit_text"
                 style="@style/FontStyle_T6"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="6"
-                android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_background_selector"
-                android:hint="@string/operator_id"
                 android:singleLine="true"
                 android:textSize="22sp"
-                app:autoSizeTextType="uniform"
-                app:autoSizeMaxTextSize="22sp"/>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+                app:autoSizeMaxTextSize="22sp"
+                app:autoSizeTextType="uniform" />
 
             <TextView
                 android:id="@+id/button_operator_signIn"
                 android:layout_width="0dp"
-                android:layout_weight="3"
-                android:layout_height="36dp"
-                android:background="@drawable/button_bg_disabled"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:background="@color/blue1"
                 android:clickable="false"
                 android:gravity="center"
-                android:maxWidth="250dp"
                 android:maxLines="1"
-                android:minWidth="150dp"
-                android:text="@string/common_signin_button_text"
+                android:padding="5dp"
+                android:textStyle="bold"
+                android:text="@string/add_to_team"
                 android:textAllCaps="true"
-                android:textColor="@drawable/button_text_color_selector"
+                android:textColor="@color/white"
                 android:textSize="22sp"
-                app:autoSizeTextType="uniform"
-                app:autoSizeMaxTextSize="22sp"/>
+                app:autoSizeMaxTextSize="22sp"
+                app:autoSizeTextType="uniform" />
         </LinearLayout>
 
         <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5" />
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:gravity="center"
+                android:maxLines="1"
+                android:background="@color/blue1"
+                android:text="@string/save_and_close"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:padding="5dp"
+                android:textStyle="bold"
+                app:autoSizeMaxTextSize="22sp"
+                app:autoSizeTextType="uniform" />
+
+        </LinearLayout>
     </LinearLayout>
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
 
-</RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/FOSI_rv"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"/>
+</LinearLayout>

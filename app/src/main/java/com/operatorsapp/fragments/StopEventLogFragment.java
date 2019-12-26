@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.operatorsapp.utils.SimpleRequests.GetLineShiftLog;
+import static com.operatorsapp.utils.SimpleRequests.getLineShiftLog;
 
 public class StopEventLogFragment extends Fragment implements StopEventLogAdapter.StopEventLogAdapterListener {
 
@@ -108,7 +108,7 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
         mProgressBar.setVisibility(View.VISIBLE);
         mNoDataTv.setVisibility(View.GONE);
         PersistenceManager pm = PersistenceManager.getInstance();
-        GetLineShiftLog(pm.getSiteUrl(), new GetStopLogCallback() {
+        getLineShiftLog(pm.getSiteUrl(), new GetStopLogCallback() {
             @Override
             public void onGetStopLogSuccess(StopLogsResponse response) {
                 mProgressBar.setVisibility(View.GONE);

@@ -5,6 +5,7 @@ import com.example.common.department.DepartmentsMachinesResponse;
 import com.example.common.department.MachineLineRequest;
 import com.example.common.department.MachineLineResponse;
 import com.example.common.request.BaseRequest;
+import com.example.common.request.MachineIdRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -19,5 +20,8 @@ public interface EmeraldGetSimple {
 
     @POST("/LeaderMESApi/GetLineShiftLog")
     Call<StopLogsResponse> GetLineShiftLog(@Body MachineLineRequest request);
+
+    @POST("/LeaderMESApi/GetShiftWorkers")
+    Call<StopLogsResponse> GetShiftWorkers(@Body MachineIdRequest request);
 }
 

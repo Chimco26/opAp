@@ -9,6 +9,7 @@ import com.example.common.StopLogs.StopLogsResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.callback.GetDepartmentCallback;
 import com.example.common.callback.GetMachineLineCallback;
+import com.example.common.callback.GetShiftWorkersCallback;
 import com.example.common.callback.GetStopLogCallback;
 import com.example.common.department.DepartmentsMachinesResponse;
 import com.example.common.department.MachineLineRequest;
@@ -26,11 +27,11 @@ import com.operators.reportrejectinfra.PostActivateJobCallback;
 import com.operators.reportrejectinfra.PostSplitEventCallback;
 import com.operators.reportrejectinfra.PostUpdtaeActionsCallback;
 import com.operators.reportrejectinfra.SimpleCallback;
-import com.operators.reportrejectnetworkbridge.interfaces.GetSimpleNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetIntervalAndTimeOutNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetJobDetailsNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetPendingJobListNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetReportMultipleRequestNetworkManager;
+import com.operators.reportrejectnetworkbridge.interfaces.GetSimpleNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetVersionNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostActivateJobNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostSplitEventNetworkManager;
@@ -301,7 +302,7 @@ public class SimpleRequests {
         });
     }
 
-    public static void GetLineShiftLog(String siteUrl, final GetStopLogCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
+    public static void getLineShiftLog(String siteUrl, final GetStopLogCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
 
         final int[] retryCount = {0};
 
@@ -318,7 +319,7 @@ public class SimpleRequests {
                         callback.onGetStopLogSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "GetLineShiftLog(), onResponse() callback is null");
+                        OppAppLogger.getInstance().w(LOG_TAG, "getLineShiftLog(), onResponse() callback is null");
                     }
                 } else {
 
@@ -336,11 +337,58 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "GetLineShiftLog Error");
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getLineShiftLog Error");
                         callback.onGetStopLogFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "GetLineShiftLog(), onFailure() callback is null");
+                    OppAppLogger.getInstance().w(LOG_TAG, "getLineShiftLog(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+
+    public static void getShiftWorkers(String siteUrl, final GetShiftWorkersCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<StopLogsResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                requestTimeout, TimeUnit.SECONDS).GetLineShiftLog(new MachineLineRequest(PersistenceManager.getInstance().getSessionId(), 1));//PersistenceManager.getInstance().getMachineLineId()
+
+        call.enqueue(new Callback<StopLogsResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<StopLogsResponse> call, @NonNull Response<StopLogsResponse> response) {
+
+                if (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty()) {
+                    if (callback != null) {
+
+                        callback.onGetShiftWorkersSuccess(response.body());
+                    } else {
+
+                        OppAppLogger.getInstance().w(LOG_TAG, "getShiftWorkers(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<StopLogsResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getShiftWorkers Error");
+                        callback.onGetShiftWorkersFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.getInstance().w(LOG_TAG, "getShiftWorkers(), onFailure() callback is null");
 
                 }
             }
