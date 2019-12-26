@@ -26,9 +26,7 @@ import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
-import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.StopSubReasonAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnSelectedSubReasonListener;
@@ -83,6 +81,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     private int mFlavorSpanDif;
     private boolean isFromViewLog;
     private SelectStopReasonFragmentListener mListener;
+    private boolean isFromViewLogRoot;
 
 
     public static SelectStopReasonFragment newInstance(int position, int joshId, int reasonId, String eName, String lName, boolean isOpen) {
@@ -238,8 +237,11 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
             mStopReasonsAdapter.notifyDataSetChanged();
 
-            sendReport();
-
+            if (isFromViewLogRoot) {
+                mListener.onReport(mSelectedPosition, mSelectedSubreason);
+            }else {
+                sendReport();
+            }
 //            SendBroadcast.refreshPolling(getContext());
 
         } else {
@@ -355,19 +357,20 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
             new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.STOP_REASON_REPORT, false, "Error: " + reason.getError().getErrorDesc());
 
             if (reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
-                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
-                    @Override
-                    public void onSilentLoginSucceeded() {
-                        sendReport();
-                    }
-
-                    @Override
-                    public void onSilentLoginFailed(StandardResponse reason) {
-                        OppAppLogger.getInstance().w(TAG, "Failed silent login");
-                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
-                        ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
-                    }
-                });
+//                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
+//                    @Override
+//                    public void onSilentLoginSucceeded() {
+//                        sendReport();
+//                    }
+//
+//                    @Override
+//                    public void onSilentLoginFailed(StandardResponse reason) {
+//                        OppAppLogger.getInstance().w(TAG, "Failed silent login");
+//                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
+//                        ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
+//                    }
+//                });
+                //todo check
             } else {
 
                 StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
@@ -417,6 +420,10 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     public void setFromViewLog(boolean b) {
         isFromViewLog = b;
     }
+
+    public void setFromViewLogRoot(boolean isFromViewLogRoot) {
+        this.isFromViewLogRoot = isFromViewLogRoot;
+    }
 //
 //    @Override
 //    public int getCroutonRoot() {
@@ -426,5 +433,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
     public interface SelectStopReasonFragmentListener {
         void onSuccess(StandardResponse standardResponse);
+
+        void onReport(int mSelectedPosition, SubReasons mSelectedSubreason);
     }
 }

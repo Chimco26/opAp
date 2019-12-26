@@ -80,6 +80,7 @@ import com.operators.operatornetworkbridge.OperatorNetworkBridge;
 import com.operators.reportfieldsformachinecore.ReportFieldsForMachineCore;
 import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
+import com.operators.reportfieldsformachineinfra.SubReasons;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
@@ -2415,7 +2416,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment
-                                                          selectStopReasonFragment) {
+                                                          selectStopReasonFragment, boolean isFromViewLogRoot) {
 
         mSelectStopReasonFragment = selectStopReasonFragment;
 
@@ -2430,6 +2431,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mSelectStopReasonFragment.setSelectedEvents(mSelectedEvents);
 
         }
+
+    }
+
+    @Override
+    public void onReport(int position, SubReasons mSelectedSubreason) {
+
+    }
+
+    @Override
+    public void onSuccess() {
 
     }
 

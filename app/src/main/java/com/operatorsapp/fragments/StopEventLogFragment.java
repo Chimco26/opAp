@@ -39,7 +39,7 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
     private ArrayList<Event> mStopLogsItems;
     private ProgressBar mProgressBar;
     private View mNoDataTv;
-    private HashMap<Integer, Event> rootMap = new HashMap<>();
+    private HashMap<Integer, ArrayList<Event>> rootMap = new HashMap<Integer, ArrayList<Event>>();
 
     public static StopEventLogFragment newInstance() {
         StopEventLogFragment stopEventLogFragment = new StopEventLogFragment();
@@ -89,10 +89,18 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
 
-        initVars(view);
+    @Override
+    public void onResume() {
+        super.onResume();
+        refresh();
+    }
+
+    public void refresh() {
+        initVars(getView());
         initView();
-        initListener(view);
+        initListener(getView());
         getMachinesLineData();
     }
 
@@ -108,9 +116,9 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
                 mStopLogsItems.clear();
                 mStopLogsItems.addAll(reorderEvents(mStopLogsResponse.getEvents()));
                 mAdapter.getFilter().filter("");
-                if (mStopLogsItems.size() == 0){
+                if (mStopLogsItems.size() == 0) {
                     mNoDataTv.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     mNoDataTv.setVisibility(View.GONE);
                 }
             }
@@ -127,29 +135,31 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
         ArrayList<Event> toRemove = new ArrayList<>();
         ArrayList<Event> list = new ArrayList<>();
         ArrayList<Event> rootList = new ArrayList<>();
-        for (Event event: events){
-            if (event.getRootEventID() == 0){
+        for (Event event : events) {
+            if (event.getRootEventID() == 0) {
                 rootList.add(event);
                 toRemove.add(event);
-                rootMap.put(event.getEventID(), event);
+                rootMap.put(event.getEventID(), new ArrayList<Event>());
             }
         }
         events.removeAll(toRemove);
 
-        for (Event event: rootList){
+        for (Event event : rootList) {
             list.add(event);
-            for (Event eventSub: events){
-                if (eventSub.getRootEventID().equals(event.getEventID())){
+            for (Event eventSub : events) {
+                if (eventSub.getRootEventID().equals(event.getEventID())) {
                     list.add(eventSub);
                     toRemove.add(eventSub);
+                    rootMap.get(event.getEventID()).add(eventSub);
                 }
             }
             events.removeAll(toRemove);
         }
 
-        for (Event event: events){
+        for (Event event : events) {
             event.setRootEventID(1386430);//0
             list.add(event);
+            rootMap.get(1386430).add(event);
         }
         return list;
     }
@@ -177,16 +187,16 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
     public void onLogSelected(Event item) {
         ArrayList<Float> list = new ArrayList<>();
         list.add(item.getEventID() * 1f);
-        if (rootMap.containsKey(item.getEventID())){
-            //todo root
-        }else {
-            mListener.onReportEvents(list);
+        if (rootMap.containsKey(item.getEventID()) && rootMap.get(item.getEventID()).size() > 0) {
+            mListener.onReportEvents(rootMap.get(item.getEventID()), list, true);
+        } else {
+            mListener.onReportEvents(mStopLogsItems, list, false);
         }
     }
 
-    public interface OnStopEventLogFragmentListener{
+    public interface OnStopEventLogFragmentListener {
 
-        void onReportEvents(ArrayList<Float> eventsIds);
+        void onReportEvents(ArrayList<Event> subEvents, ArrayList<Float> eventsIds, boolean isRoot);
     }
 
 }

@@ -467,5 +467,7 @@
     <string name="stop_events_log">Stop events log</string>
     <string name="illegal_chars">Illegal characters found, please use: a-zA-Z0-9_/,.-</string>
     <string name="stop_logs">Stop logs</string>
+    <string name="save_all">Save All</string>
+    <string name="this_event_only">This event only</string>
 
 </resources>
