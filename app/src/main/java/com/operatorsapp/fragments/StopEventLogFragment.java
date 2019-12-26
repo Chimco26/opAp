@@ -150,6 +150,7 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
                 if (eventSub.getRootEventID().equals(event.getEventID())) {
                     list.add(eventSub);
                     toRemove.add(eventSub);
+                    event.setHaveChild(true);
                     rootMap.get(event.getEventID()).add(eventSub);
                 }
             }

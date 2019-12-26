@@ -83,6 +83,15 @@ public class Event {
     private String machineName;
     private boolean expand;
     private boolean showSub;
+    private boolean haveChild;
+
+    public boolean isHaveChild() {
+        return haveChild;
+    }
+
+    public void setHaveChild(boolean haveChild) {
+        this.haveChild = haveChild;
+    }
 
     public Integer getMachineId() {
         return machineId;
