@@ -642,7 +642,8 @@
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:background="@color/white"
-            android:paddingStart="15dp">
+            android:paddingStart="15dp"
+            android:layoutDirection="ltr">
 
             <View
                 android:layout_width="match_parent"
@@ -702,6 +703,7 @@
                         android:maxLines="1"/>
 
                     <ImageView
+                        android:id="@+id/FAAE_line_arrow"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:padding="5dp"
@@ -721,6 +723,12 @@
                 android:paddingStart="10dp"
                 tools:listitem="@layout/item_line_machine" />
 
+            <ProgressBar
+                android:id="@+id/FAAE_line_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
         </RelativeLayout>
     </RelativeLayout>
 

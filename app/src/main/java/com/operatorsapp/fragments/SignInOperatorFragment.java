@@ -172,9 +172,6 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                 mWorkersProgressBar.setVisibility(View.GONE);
                 workerItems.clear();
                 workerItems.addAll(response.getWorkers());
-                workerItems.addAll(response.getWorkers());
-                workerItems.addAll(response.getWorkers());
-                workerItems.addAll(response.getWorkers());
                 workersAdapter.notifyDataSetChanged();
                 if (response.getWorkers() != null && response.getWorkers().size() > 0) {
                     mNoDataTv.setVisibility(View.GONE);

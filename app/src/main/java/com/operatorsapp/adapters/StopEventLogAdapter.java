@@ -94,9 +94,9 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
     public void initViewSubOrRoot(Event event, ViewHolder viewHolderItems) {
         if (event.getRootEventID() != 0) {
             viewHolderItems.subMarginView.setVisibility(View.VISIBLE);
-            viewHolderItems.expand.setVisibility(View.GONE);
+            viewHolderItems.expand.setVisibility(View.INVISIBLE);
         } else if (event.isHaveChild()) {
-            viewHolderItems.subMarginView.setVisibility(View.GONE);
+            viewHolderItems.subMarginView.setVisibility(View.INVISIBLE);
             viewHolderItems.expand.setVisibility(View.VISIBLE);
             if (event.isExpand()) {
                 viewHolderItems.expand.setRotationX(180);
@@ -105,7 +105,7 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
             }
         } else {
             viewHolderItems.subMarginView.setVisibility(View.INVISIBLE);
-            viewHolderItems.expand.setVisibility(View.GONE);
+            viewHolderItems.expand.setVisibility(View.INVISIBLE);
         }
     }
 

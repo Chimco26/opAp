@@ -280,6 +280,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mShowAlarmCheckBoxLy;
     private MachineLineAdapter mMachineLineAdapter;
     private TextView mLineNameTv;
+    private View mLineLy;
+    private View mLineProgress;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -595,7 +597,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void initMachineLine(View view) {
 
         RecyclerView recyclerView = view.findViewById(R.id.FAAE_machine_line_rv);
+        mLineLy = view.findViewById(R.id.FAAE_machine_line_ly);
         mLineNameTv = view.findViewById(R.id.FAAE_machine_line_tv);
+        mLineProgress = view.findViewById(R.id.FAAE_line_progress);
+//        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+//            view.findViewById(R.id.FAAE_line_arrow).setRotationY(180);
+//        }
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -608,6 +615,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 ClearData.clearMachineData();
                 setMachineData(departmentMachineValue.getMachineID(), departmentMachineValue.getMachineName());
                 mListener.onRefreshMachineLinePolling();
+                mLineProgress.setVisibility(View.VISIBLE);
             }
         });
         recyclerView.setAdapter(mMachineLineAdapter);
@@ -629,19 +637,26 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         getMachineLine(pm.getSiteUrl(), new GetMachineLineCallback() {
             @Override
             public void onGetMachineLineSuccess(MachineLineResponse response) {
-                machineLineItems.clear();
-                machineLineItems.addAll(response.getMachinesData());
-                mMachineLineAdapter.notifyDataSetChanged();
-                if (response.getLineName() != null && !response.getLineName().isEmpty()) {
-                    mLineNameTv.setText(response.getLineName());
+                mLineProgress.setVisibility(View.GONE);
+                if (response.getLineID() != 0) {
+                    mLineLy.setVisibility(View.VISIBLE);
+                    machineLineItems.clear();
+                    machineLineItems.addAll(response.getMachinesData());
+                    mMachineLineAdapter.notifyDataSetChanged();
+                    if (response.getLineName() != null && !response.getLineName().isEmpty()) {
+                        mLineNameTv.setText(response.getLineName());
+                    } else {
+                        mLineNameTv.setText(getResources().getString(R.string.production_line));
+                    }
                 }else {
-                    mLineNameTv.setText(getResources().getString(R.string.production_line));
+                    mLineLy.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onGetMachineLineFailed(StandardResponse reason) {
                 ShowCrouton.showSimpleCrouton(mCroutonCallback, reason.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+                mLineProgress.setVisibility(View.GONE);
             }
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
     }
