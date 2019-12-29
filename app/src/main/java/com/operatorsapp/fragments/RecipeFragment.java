@@ -489,7 +489,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
 
         editEtNum.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
-        String nameByLang = OperatorApplication.isEnglishLang() ? splits.getPropertyEName() : splits.getPropertyHName();
+        final String nameByLang = OperatorApplication.isEnglishLang() ? splits.getPropertyEName() : splits.getPropertyHName();
         titleTv.setText(nameByLang);
         editEtText.setHint(splits.getFValue());
         editEtNum.setHint(splits.getFValue());
@@ -546,7 +546,24 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
                         break;
 //                    case "num":
                     default:
-                        splits.setEditValue(editEtNum.getText().toString());
+                        if (nameByLang != null && !nameByLang.isEmpty() && nameByLang.contains("%")) {
+                            String s = editEtNum.getText().toString();
+                            try {
+                                if (Integer.parseInt(s) > 100) {
+                                    editEtNum.setText(null);
+                                    editEtNum.setHint(getString(R.string.invalid_value));
+                                    return;
+                                } else {
+                                    splits.setEditValue(s);
+                                }
+                            } catch (Exception e) {
+                                editEtNum.setText(null);
+                                editEtNum.setHint(getString(R.string.invalid_value));
+                                return;
+                            }
+                        } else {
+                            splits.setEditValue(editEtNum.getText().toString());
+                        }
                         break;
 
                 }

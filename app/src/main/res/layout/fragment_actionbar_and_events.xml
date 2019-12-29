@@ -570,16 +570,16 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/FAAE_bottom_msg_fl"
+        android:id="@+id/FAAE_bottom_rl"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:background="@color/grey_lite"
         android:padding="1dp">
 
         <LinearLayout
             android:id="@+id/bottom_notification_lil"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_below="@+id/FAAE_machine_line_ly"
             android:background="@color/white_default"
             android:orientation="horizontal"
@@ -596,7 +596,7 @@
                 android:id="@+id/bottom_notification_sender_tv"
                 style="@style/ToolbarTheme"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="20dp"
                 android:gravity="start"
@@ -640,10 +640,11 @@
         <RelativeLayout
             android:id="@+id/FAAE_machine_line_ly"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_height="60dp"
             android:background="@color/white"
             android:paddingStart="15dp"
-            android:layoutDirection="ltr">
+            android:layoutDirection="ltr"
+            android:visibility="gone">
 
             <View
                 android:layout_width="match_parent"

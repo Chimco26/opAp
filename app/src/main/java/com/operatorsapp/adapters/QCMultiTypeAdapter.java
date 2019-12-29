@@ -240,7 +240,11 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
     public void updateRangeView(TestFieldsDatum item, RangeView2 mRangeView) {
         if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
-            mRangeView.setCurrentValue(Float.parseFloat(item.getCurrentValue()));
+            try {
+                mRangeView.setCurrentValue(Float.parseFloat(item.getCurrentValue()));
+            }catch (Exception e){
+                mRangeView.setCurrentValue(0);
+            }
         } else {
             mRangeView.setCurrentValue(0);
         }

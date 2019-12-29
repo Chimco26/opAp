@@ -40,7 +40,6 @@ import com.operatorsapp.adapters.QCSamplesMultiTypeAdapter;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
-import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.QCRequests;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.view.GridSpacingItemDecoration;
@@ -58,8 +57,7 @@ import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_LAST;
 
 public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener,
-        OnKeyboardManagerListener,
-        KeyboardUtils.KeyboardListener {
+        OnKeyboardManagerListener {
     public static final String TAG = QCDetailsFragment.class.getSimpleName();
     private static final String EXTRA_TEST_ID = "EXTRA_TEST_ID";
     private TestDetailsRequest mTestDetailsRequest;
@@ -118,6 +116,18 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 //        initTestRvView();
         initSampleRvView();
         getTestOrderDetails();
+
+//        KeyboardUtils.keyboardIsShownA(getActivity(), new KeyboardUtils.KeyboardListener() {
+//            @Override
+//            public void onKeyboardShown() {
+//                closeKeyBoard();
+//            }
+//
+//            @Override
+//            public void onKeyboardHidden() {
+//
+//            }
+//        });
     }
 
     private void initVars(View view) {
@@ -129,7 +139,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             public void onClick(View view) {
                 if (isMandatoryFieldsCompleted()) {
                     saveTestOrderDetails(mTestOrderDetails);
-                }else {
+                } else {
                     Toast.makeText(getActivity(), getString(R.string.you_need_to_complete_all_mandatory_fields), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -150,18 +160,18 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         List<TestFieldsDatum> testFields = mTestOrderDetails.getTestFieldsData();
         List<TestSampleFieldsDatum> testSamplesFields = mTestOrderDetails.getTestSampleFieldsData();
 
-        for (TestFieldsDatum testFieldsDatum: testFields){
-            if (testFieldsDatum.getRequiredField() && testFieldsDatum.getUpsertType() == 0){
+        for (TestFieldsDatum testFieldsDatum : testFields) {
+            if (testFieldsDatum.getRequiredField() && testFieldsDatum.getUpsertType() == 0) {
                 return false;
             }
         }
 
-        for (TestSampleFieldsDatum testSampleFieldsDatum: testSamplesFields){
+        for (TestSampleFieldsDatum testSampleFieldsDatum : testSamplesFields) {
             ArrayList<SamplesDatum> samplesDatum = (ArrayList<SamplesDatum>) testSampleFieldsDatum.getSamplesData();
-            for (SamplesDatum samplesDatum1: samplesDatum)
-            if (testSampleFieldsDatum.getRequiredField() && samplesDatum1.getUpsertType() == 0){
-                return false;
-            }
+            for (SamplesDatum samplesDatum1 : samplesDatum)
+                if (testSampleFieldsDatum.getRequiredField() && samplesDatum1.getUpsertType() == 0) {
+                    return false;
+                }
         }
         return true;
     }
@@ -272,8 +282,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
     private void initTestRv() {
         mTestContainer.removeAllViews();
-        for (ArrayList<TestFieldsDatum> testFieldsData: mTestOrderDetails.getTestFieldsComplete()) {
-            if(testFieldsData.size() > 0 && testFieldsData.get(0) != null) {
+        for (ArrayList<TestFieldsDatum> testFieldsData : mTestOrderDetails.getTestFieldsComplete()) {
+            if (testFieldsData.size() > 0 && testFieldsData.get(0) != null) {
                 Log.d(TAG, "initTestRv: " + testFieldsData.get(0).getGroupName());
                 if (testFieldsData.get(0).getGroupId().equals(-1)) {
                     addTextViewTitleToSample(testFieldsData.get(0).getGroupName(), getContext().getResources().getColor(R.color.machine_blue));
@@ -423,7 +433,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         final SaveTestDetailsRequest saveTestDetailsRequest = new SaveTestDetailsRequest(testDetailsResponse.getTestSampleFieldsData(),
                 testDetailsResponse.getTestFieldsData(), mSamplesCount, mTestDetailsRequest.getTestId());
         mProgressBar.setVisibility(View.VISIBLE);
-         mQcRequests.postQCSaveTestDetails(saveTestDetailsRequest, new QCRequests.postQCSaveTestDetailsCallback() {
+        mQcRequests.postQCSaveTestDetails(saveTestDetailsRequest, new QCRequests.postQCSaveTestDetailsCallback() {
             @Override
             public void onSuccess(SaveTestDetailsResponse saveTestDetailsResponse) {
                 mProgressBar.setVisibility(View.GONE);
@@ -464,7 +474,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             mKeyBoard.setChars(complementChars);
             mKeyBoard.openKeyBoard(text);
             mKeyBoard.setListener(listener);
-            KeyboardUtils.closeKeyboard(getContext());
+//            KeyboardUtils.closeKeyboard(getContext());
         }
     }
 
@@ -487,16 +497,6 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     public void onDeleteLine(int position) {
         mSamplesCount = Integer.parseInt(mSamplesNumberEt.getText().toString()) - 1;
         updateSamples(false, position);
-    }
-
-    @Override
-    public void onKeyboardShown() {
-        closeKeyBoard();
-    }
-
-    @Override
-    public void onKeyboardHidden() {
-
     }
 
     public interface QCDetailsFragmentListener {

@@ -81,9 +81,6 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
         if (SingleLineKeyboard.isKeyBoardOpen) {
-//            if (mQcTestOrderFragment != null) {
-//                mQcTestOrderFragment.onCloseKeyboard();
-//            }
             if (mQcDetailsFragment != null) {
                 mQcDetailsFragment.onCloseKeyboard();
             }

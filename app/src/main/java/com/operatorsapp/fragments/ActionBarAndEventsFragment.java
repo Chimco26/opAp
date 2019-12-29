@@ -282,6 +282,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private TextView mLineNameTv;
     private View mLineLy;
     private View mLineProgress;
+    private View mBottomRl;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -456,6 +457,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         });
 
         initMachineLine(view);
+        mBottomRl = getView().findViewById(R.id.FAAE_bottom_rl);
 
         //mSwipeToRefresh = view.findViewById(R.id.swipe_refresh_actionbar_events);
         mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
@@ -648,9 +650,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     } else {
                         mLineNameTv.setText(getResources().getString(R.string.production_line));
                     }
-                }else {
+                } else {
                     mLineLy.setVisibility(View.GONE);
                 }
+                setDashboardContainer3MarginBottom();
             }
 
             @Override
@@ -659,6 +662,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mLineProgress.setVisibility(View.GONE);
             }
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
+    }
+
+    private void setDashboardContainer3MarginBottom() {
+
+        if (mBottomRl != null) {
+
+            mBottomRl.post(new Runnable() {
+                @Override
+                public void run() {
+                    mListener.onResizeBottomMargin(mBottomRl.getHeight());
+                }
+            });
+        }
     }
 
     private void initBottomNotificationLayout(View view) {
@@ -1668,7 +1684,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         displayTechnicianView(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.SERVICE_CALLS.getId()).getHaspermission());
         displayOperatorView(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.OPERATOR_SIGN_IN.getId()).getHaspermission());
         if (getView() != null) {
-            getView().findViewById(R.id.FAAE_bottom_msg_fl).setVisibility(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.MESSAGES.getId()).getHaspermission());
+            getView().findViewById(R.id.bottom_notification_lil).setVisibility(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.MESSAGES.getId()).getHaspermission());
         }
         if (mToolBarView != null) {
             mToolBarView.findViewById(R.id.toolbar_production_status_rl).setVisibility(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.PRODUCTION_STATUS.getId()).getHaspermission());
@@ -3483,6 +3499,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onRefreshMachineLinePolling();
 
         void onViewLog();
+
+        void onResizeBottomMargin(int bottomMargin);
     }
 
 }

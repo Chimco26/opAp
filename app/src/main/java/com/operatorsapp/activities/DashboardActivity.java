@@ -2115,6 +2115,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     }
 
+
+    @Override
+    public void onResizeBottomMargin(int bottomMargin) {
+        ViewGroup.MarginLayoutParams layoutParams3 = (ViewGroup.MarginLayoutParams) mContainer3.getLayoutParams();
+
+        layoutParams3.bottomMargin = bottomMargin;
+
+        mContainer3.setLayoutParams(layoutParams3);
+    }
+
     @Override
     public void onOpenReportStopReasonFragment(ReportStopReasonFragment
                                                        reportStopReasonFragment) {
