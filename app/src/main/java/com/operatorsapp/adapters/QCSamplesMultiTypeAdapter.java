@@ -140,11 +140,14 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
             mEditNumberEt.setFocusable(true);
             mEditNumberEt.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
             mEditNumberEt.setClickable(true);
+            mEditNumberEt.setBackgroundColor(mEditNumberEt.getContext().getResources().getColor(R.color.white));
+
         } else {
             mEditNumberEt.setEnabled(false);
             mEditNumberEt.setFocusable(false);
             mEditNumberEt.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
             mEditNumberEt.setClickable(false);
+            mEditNumberEt.setBackgroundColor(mEditNumberEt.getContext().getResources().getColor(R.color.grey_transparent));
         }
     }
 

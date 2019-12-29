@@ -40,6 +40,7 @@ import com.operatorsapp.adapters.QCSamplesMultiTypeAdapter;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
+import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.QCRequests;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.view.GridSpacingItemDecoration;
@@ -57,7 +58,8 @@ import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_LAST;
 
 public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener,
-        OnKeyboardManagerListener {
+        OnKeyboardManagerListener,
+        KeyboardUtils.KeyboardListener {
     public static final String TAG = QCDetailsFragment.class.getSimpleName();
     private static final String EXTRA_TEST_ID = "EXTRA_TEST_ID";
     private TestDetailsRequest mTestDetailsRequest;
@@ -134,6 +136,12 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         });
         mSamplesTestRV = view.findViewById(R.id.FQCD_paramters_rv);
         mTestContainer = view.findViewById(R.id.FQCD_fields_ll);
+        view.findViewById(R.id.FQCD_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
         initIncrementSamplesView(view);
         initPassedVars(view);
     }
@@ -456,6 +464,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             mKeyBoard.setChars(complementChars);
             mKeyBoard.openKeyBoard(text);
             mKeyBoard.setListener(listener);
+            KeyboardUtils.closeKeyboard(getContext());
         }
     }
 
@@ -478,6 +487,16 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     public void onDeleteLine(int position) {
         mSamplesCount = Integer.parseInt(mSamplesNumberEt.getText().toString()) - 1;
         updateSamples(false, position);
+    }
+
+    @Override
+    public void onKeyboardShown() {
+        closeKeyBoard();
+    }
+
+    @Override
+    public void onKeyboardHidden() {
+
     }
 
     public interface QCDetailsFragmentListener {

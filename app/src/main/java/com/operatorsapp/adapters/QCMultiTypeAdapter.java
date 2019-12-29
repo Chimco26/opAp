@@ -100,7 +100,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                 if (item.getCurrentValue().toLowerCase().equals(Boolean.toString(true))) {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(true);
                     ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(false);
-                } else {
+                } else if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()){
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(false);
                     ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(true);
                 }
@@ -152,6 +152,10 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                             ((TimeTextViewHolder) viewHolder).showHourPicker(((TimeTextViewHolder) viewHolder).itemView.getContext(), item);
                         }
                     });
+                    ((TimeTextViewHolder) viewHolder).mTextTimeTv.setBackgroundColor(((TimeTextViewHolder) viewHolder).mTextTimeTv.getContext().getResources().getColor(R.color.white));
+                }else {
+                    ((TimeTextViewHolder) viewHolder).mTextTimeTv.setOnClickListener(null);
+                    ((TimeTextViewHolder) viewHolder).mTextTimeTv.setBackgroundColor(((TimeTextViewHolder) viewHolder).mTextTimeTv.getContext().getResources().getColor(R.color.grey_transparent));
                 }
                 break;
             case FIELD_TYPE_DATE_INT:
@@ -168,8 +172,10 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                             showDatePicker(((DateViewHolder) viewHolder), item);
                         }
                     });
+                    ((DateViewHolder) viewHolder).mTextDateTv.setBackgroundColor(((DateViewHolder) viewHolder).mTextDateTv.getContext().getResources().getColor(R.color.white));
                 } else {
                     ((DateViewHolder) viewHolder).itemView.setOnClickListener(null);
+                    ((DateViewHolder) viewHolder).mTextDateTv.setBackgroundColor(((DateViewHolder) viewHolder).mTextDateTv.getContext().getResources().getColor(R.color.grey_transparent));
                 }
                 break;
 
@@ -183,11 +189,13 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             mEditNumberEt.setFocusable(true);
             mEditNumberEt.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
             mEditNumberEt.setClickable(true);
+            mEditNumberEt.setBackgroundColor(mEditNumberEt.getContext().getResources().getColor(R.color.white));
         } else {
             mEditNumberEt.setEnabled(false);
             mEditNumberEt.setFocusable(false);
             mEditNumberEt.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
             mEditNumberEt.setClickable(false);
+            mEditNumberEt.setBackgroundColor(mEditNumberEt.getContext().getResources().getColor(R.color.grey_transparent));
         }
     }
 

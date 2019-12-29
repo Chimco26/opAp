@@ -4,63 +4,147 @@
     android:layout_width="match_parent"
     android:layout_height="110dp"
     android:layout_marginBottom="10dp"
-    android:background="@color/grey_transparent"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
     android:weightSum="10">
 
-    <ImageView
-        android:id="@+id/ISEL_expand_img"
+    <RelativeLayout
+        android:id="@+id/ISEL_expand_img_rl"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"
-        android:src="@drawable/expand_down" />
+        android:layout_height="match_parent"
+        android:layout_weight=".5"
+        android:background="@color/grey_transparent">
 
-    <LinearLayout
+        <ImageView
+            android:id="@+id/ISEL_expand_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/expand_down" />
+    </RelativeLayout>
+
+    <View
         android:id="@+id/ISEL_sub_item_margin"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.5"
-        android:orientation="horizontal"
-        android:visibility="visible"
-        android:weightSum="5">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2.2" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.3"
-            android:background="@color/grey_lite" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="2dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="2.5"
-            android:background="@color/grey_lite" />
-
-    </LinearLayout>
+        android:layout_weight=".6"
+        android:background="@color/grey_transparent" />
 
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight=".2" />
+        android:layout_weight=".1"
+        android:background="@color/grey_transparent" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1.45">
+        android:layout_weight="8.8"
+        android:background="@color/grey_transparent"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:weightSum="8.8">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.45">
+
+            <TextView
+                android:id="@+id/ISEL_machine"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeTextType="uniform" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".2" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.45"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:weightSum="4">
+
+                <ImageView
+                    android:id="@+id/ISEL_ic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="3" />
+
+                <TextView
+                    android:id="@+id/ISEL_item_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:textColor="@color/black"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeTextType="uniform" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".2" />
+
 
         <TextView
-            android:id="@+id/ISEL_machine"
-            android:layout_width="wrap_content"
+            android:id="@+id/ISEL_start"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1.45"
+            android:gravity="center_vertical"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:autoSizeMaxTextSize="20sp"
+            app:autoSizeTextType="uniform" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".2" />
+
+        <TextView
+            android:id="@+id/ISEL_end"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.45"
+            android:gravity="center_vertical"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:autoSizeMaxTextSize="20sp"
+            app:autoSizeTextType="uniform" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".2" />
+
+        <TextView
+            android:id="@+id/ISEL_duration"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.45"
             android:gravity="center_vertical"
             android:maxLines="2"
             android:textColor="@color/black"
@@ -68,94 +152,4 @@
             app:autoSizeMaxTextSize="20sp"
             app:autoSizeTextType="uniform" />
     </LinearLayout>
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight=".2" />
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1.45"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="4">
-
-            <ImageView
-                android:id="@+id/ISEL_ic"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="3" />
-
-            <TextView
-                android:id="@+id/ISEL_item_title"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:maxLines="1"
-                android:textColor="@color/black"
-                app:autoSizeMaxTextSize="16sp"
-                app:autoSizeTextType="uniform" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight=".2" />
-
-
-    <TextView
-        android:id="@+id/ISEL_start"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1.45"
-        android:gravity="center_vertical"
-        android:maxLines="2"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:autoSizeMaxTextSize="20sp"
-        app:autoSizeTextType="uniform" />
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight=".2" />
-
-    <TextView
-        android:id="@+id/ISEL_end"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1.45"
-        android:gravity="center_vertical"
-        android:maxLines="2"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:autoSizeMaxTextSize="20sp"
-        app:autoSizeTextType="uniform" />
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight=".2" />
-
-    <TextView
-        android:id="@+id/ISEL_duration"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1.45"
-        android:gravity="center_vertical"
-        android:maxLines="2"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:autoSizeMaxTextSize="20sp"
-        app:autoSizeTextType="uniform" />
-
 </LinearLayout>

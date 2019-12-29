@@ -14,6 +14,7 @@ import com.operatorsapp.fragments.QCTestOrderFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.CroutonCreator;
+import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.util.List;
@@ -146,6 +147,7 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
 
     @Override
     public void onSent(int testId) {
+        KeyboardUtils.closeKeyboard(this);
         showQCDetailsFragment(testId);
     }
 
