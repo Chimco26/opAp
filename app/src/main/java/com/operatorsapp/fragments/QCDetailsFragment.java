@@ -38,7 +38,6 @@ import com.operatorsapp.adapters.QCMultiTypeAdapter;
 import com.operatorsapp.adapters.QCParametersHorizontalAdapter;
 import com.operatorsapp.adapters.QCSamplesMultiTypeAdapter;
 import com.operatorsapp.interfaces.CroutonRootProvider;
-import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.QCRequests;
 import com.operatorsapp.utils.ShowCrouton;
@@ -51,13 +50,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import static android.app.Activity.RESULT_OK;
 import static android.support.annotation.Dimension.SP;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_LAST;
 
 public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
-        QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener,
-        OnKeyboardManagerListener {
+        QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener{
     public static final String TAG = QCDetailsFragment.class.getSimpleName();
     private static final String EXTRA_TEST_ID = "EXTRA_TEST_ID";
     private TestDetailsRequest mTestDetailsRequest;
@@ -76,6 +73,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private View mPassedLy;
     private ImageView mPassedIc;
     private TextView mPassedTv;
+    private TextView mTitleTv;
 
     public static QCDetailsFragment newInstance(int testId) {
 
@@ -94,7 +92,6 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
         if (getArguments() != null && getArguments().containsKey(EXTRA_TEST_ID)) {
             mTestDetailsRequest = new TestDetailsRequest(getArguments().getInt(EXTRA_TEST_ID));
-//            mTestDetailsRequest.setTestId(342); for test
         }
     }
 
@@ -110,24 +107,11 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initVars(view);
-        ((TextView) view.findViewById(R.id.FQCD_title_tv)).setText(String.format(Locale.getDefault(),
-                "%s- %d", getString(R.string.quality_test), mTestDetailsRequest.getTestId()));
+        mTitleTv = view.findViewById(R.id.FQCD_title_tv);
         mQcRequests = new QCRequests();
 //        initTestRvView();
         initSampleRvView();
         getTestOrderDetails();
-
-//        KeyboardUtils.keyboardIsShownA(getActivity(), new KeyboardUtils.KeyboardListener() {
-//            @Override
-//            public void onKeyboardShown() {
-//                closeKeyBoard();
-//            }
-//
-//            @Override
-//            public void onKeyboardHidden() {
-//
-//            }
-//        });
     }
 
     private void initVars(View view) {
@@ -161,7 +145,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         List<TestSampleFieldsDatum> testSamplesFields = mTestOrderDetails.getTestSampleFieldsData();
 
         for (TestFieldsDatum testFieldsDatum : testFields) {
-            if (testFieldsDatum.getRequiredField() && testFieldsDatum.getUpsertType() == 0) {
+            if (testFieldsDatum.getRequiredField() && testFieldsDatum.getAllowEntry()
+                    &&  (testFieldsDatum.getCurrentValue() == null || testFieldsDatum.getCurrentValue().isEmpty())) {
                 return false;
             }
         }
@@ -169,7 +154,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         for (TestSampleFieldsDatum testSampleFieldsDatum : testSamplesFields) {
             ArrayList<SamplesDatum> samplesDatum = (ArrayList<SamplesDatum>) testSampleFieldsDatum.getSamplesData();
             for (SamplesDatum samplesDatum1 : samplesDatum)
-                if (testSampleFieldsDatum.getRequiredField() && samplesDatum1.getUpsertType() == 0) {
+                if (testSampleFieldsDatum.getRequiredField() && testSampleFieldsDatum.getAllowEntry()
+                        && (samplesDatum1.getValue() == null || samplesDatum1.getValue().isEmpty())) {
                     return false;
                 }
         }
@@ -243,6 +229,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     }
 
     private void initView() {
+        mTitleTv.setText(String.format(Locale.getDefault(),
+                "%s - %s - %d", getString(R.string.quality_test), mTestOrderDetails.getTestName(),mTestDetailsRequest.getTestId()));
         mSamplesNumberEt.setText(mSamplesCount + "");
         initPassedView(mTestOrderDetails.getTestDetails().get(0).getPassed());
         initSamplesTestRv();
@@ -270,7 +258,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             mSamplesAdapter = new QCParametersHorizontalAdapter(mTestOrderDetails.getTestDetails().get(0).getSamples(),
-                    mTestOrderDetails.getTestSampleFieldsData(), this, this, displayMetrics.widthPixels);
+                    mTestOrderDetails.getTestSampleFieldsData(), this, displayMetrics.widthPixels);
             mSamplesTestRV.setAdapter(mSamplesAdapter);
         }
     }
@@ -290,7 +278,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                 } else {
                     addTextViewTitleToSample(testFieldsData.get(0).getGroupName(), getContext().getResources().getColor(R.color.black));
                 }
-                QCMultiTypeAdapter testAdapter = new QCMultiTypeAdapter(testFieldsData, this);
+                QCMultiTypeAdapter testAdapter = new QCMultiTypeAdapter(testFieldsData);
                 RecyclerView recyclerView = new RecyclerView(getActivity());
                 recyclerView.setAdapter(testAdapter);
                 recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -314,7 +302,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
     private void addTextViewTitleToSample(String string, int color) {
         TextView textView = new TextView(getActivity());
-        textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 30));
+        textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         textView.setTextColor(color);
         textView.setTextSize(SP, 23);
         textView.setTypeface(Typeface.DEFAULT_BOLD);
@@ -375,13 +363,6 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                 if (testFieldsDatum.getGroupId() == null) {
                     testFieldsDatum.setGroupId(0);
                 }
-                //for test
-//                counter++;
-//                if (counter / 2.0 == (int) counter/2){
-//                    testFieldsDatum.setGroupId(2);
-//                }else {
-//                    testFieldsDatum.setGroupId(1);
-//                }
                 ArrayList<TestFieldsDatum> list = new ArrayList<>();
                 if (testFieldsDatumHashMap.containsKey(testFieldsDatum.getGroupId())
                         && testFieldsDatumHashMap.get(testFieldsDatum.getGroupId()) != null) {
@@ -437,13 +418,13 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             @Override
             public void onSuccess(SaveTestDetailsResponse saveTestDetailsResponse) {
                 mProgressBar.setVisibility(View.GONE);
-                if (saveTestDetailsResponse.isPassed()) {
-                    getActivity().setResult(RESULT_OK);
-                    getActivity().finish();
-                } else {
+//                if (saveTestDetailsResponse.isPassed()) {
+//                    getActivity().setResult(RESULT_OK);
+//                    getActivity().finish();
+//                } else {
                     initPassedView(saveTestDetailsResponse.isPassed());
                     getTestOrderDetails();
-                }
+//                }
             }
 
             @Override
@@ -454,43 +435,33 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         });
     }
 
-    public void closeKeyBoard() {
-        if (mKeyBoardLayout != null) {
-            mKeyBoardLayout.setVisibility(View.GONE);
-        }
-        if (mKeyBoard != null) {
-            mKeyBoard.setListener(null);
-            mKeyBoard.closeKeyBoard();
-        }
-    }
-
-    public void openKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
-        if (mKeyBoardLayout != null) {
-            mKeyBoardLayout.setVisibility(View.VISIBLE);
-            if (mKeyBoard == null) {
-                mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
-            }
-
-            mKeyBoard.setChars(complementChars);
-            mKeyBoard.openKeyBoard(text);
-            mKeyBoard.setListener(listener);
-//            KeyboardUtils.closeKeyboard(getContext());
-        }
-    }
+//    public void closeKeyBoard() {
+//        if (mKeyBoardLayout != null) {
+//            mKeyBoardLayout.setVisibility(View.GONE);
+//        }
+//        if (mKeyBoard != null) {
+//            mKeyBoard.setListener(null);
+//            mKeyBoard.closeKeyBoard();
+//        }
+//    }
+//
+//    public void openKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
+//        if (mKeyBoardLayout != null) {
+//            mKeyBoardLayout.setVisibility(View.VISIBLE);
+//            if (mKeyBoard == null) {
+//                mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
+//            }
+//
+//            mKeyBoard.setChars(complementChars);
+//            mKeyBoard.openKeyBoard(text);
+//            mKeyBoard.setListener(listener);
+////            KeyboardUtils.closeKeyboard(getContext());
+//        }
+//    }
 
     @Override
     public int getCroutonRoot() {
         return R.id.parent_layouts;
-    }
-
-    @Override
-    public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
-        openKeyboard(listener, text, complementChars);
-    }
-
-    @Override
-    public void onCloseKeyboard() {
-        closeKeyBoard();
     }
 
     @Override

@@ -3,10 +3,8 @@ package com.operatorsapp.adapters;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -17,8 +15,6 @@ import android.widget.ImageView;
 import com.example.common.QCModels.SamplesDatum;
 import com.example.common.QCModels.TestSampleFieldsDatum;
 import com.operatorsapp.R;
-import com.operatorsapp.interfaces.OnKeyboardManagerListener;
-import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.util.ArrayList;
 
@@ -34,16 +30,13 @@ import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_TEXT_IN
 public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
 
     private final String mInputType;
-    private final OnKeyboardManagerListener mOnKeyboardManagerListener;
     private final QCSamplesMultiTypeAdapterListener mQcSamplesMultiTypeAdapterListener;
     private final TestSampleFieldsDatum mTestSample;
     private ArrayList<SamplesDatum> list;
 
     public QCSamplesMultiTypeAdapter(String inputType, TestSampleFieldsDatum testSample,
-                                     OnKeyboardManagerListener onKeyboardManagerListener,
                                      QCSamplesMultiTypeAdapterListener qcSamplesMultiTypeAdapterListener) {
         mInputType = inputType;
-        mOnKeyboardManagerListener = onKeyboardManagerListener;
         mQcSamplesMultiTypeAdapterListener = qcSamplesMultiTypeAdapterListener;
         mTestSample = testSample;
         this.list = (ArrayList<SamplesDatum>) testSample.getSamplesData();
@@ -125,7 +118,6 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mOnKeyboardManagerListener.onCloseKeyboard();
                         mQcSamplesMultiTypeAdapterListener.onDeleteLine(position);
                     }
                 });
@@ -231,37 +223,8 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
             super(itemView);
 
             mEditNumberEt = itemView.findViewById(R.id.IQCPHN_et);
-            mEditNumberEt.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    int inType = mEditNumberEt.getInputType(); // backup the input type
-                    mEditNumberEt.setInputType(InputType.TYPE_NULL); // disable soft input
-                    mEditNumberEt.onTouchEvent(event); // call native handler
-                    mEditNumberEt.setInputType(inType); // restore input type
-                    setKeyBoard(mEditNumberEt, new String[]{".", "-"});
-                    mEditNumberEt.setCursorVisible(true);
-                    return false; // consume touch event
-                }
-            });
         }
 
-        private void setKeyBoard(final EditText editText, String[] complementChars) {
-            if (mOnKeyboardManagerListener != null) {
-                mOnKeyboardManagerListener.onOpenKeyboard(new SingleLineKeyboard.OnKeyboardClickListener() {
-                    @Override
-                    public void onKeyboardClick(String text) {
-                        editText.setText(text);
-                    }
-                }, editText.getText().toString(), complementChars);
-            }
-        }
-
-        private void closeKeyboard(int editStop) {
-            if (editStop != 1) {
-                if (mOnKeyboardManagerListener != null)
-                    mOnKeyboardManagerListener.onCloseKeyboard();
-            }
-        }
     }
 
     public class LastMinusViewHolder extends RecyclerView.ViewHolder {

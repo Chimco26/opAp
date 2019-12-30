@@ -44,6 +44,9 @@ public class TestDetailsResponse extends StandardResponse {
     @SerializedName("Files")
     @Expose
     private List<String> files = null;
+    @SerializedName("TestName")
+    @Expose
+    private String testName = null;
     private List<TestSampleFieldsDatum> originalSampleFields;
     private ArrayList<ArrayList<TestFieldsDatum>> testFieldsSamplesComplete;
 
@@ -132,5 +135,13 @@ public class TestDetailsResponse extends StandardResponse {
 
     public ArrayList<ArrayList<TestFieldsDatum>> getTestFieldsComplete() {
         return testFieldsSamplesComplete;
+    }
+
+    public String getTestName() {
+        return testName;
+    }
+
+    public void setTestName(String testName) {
+        this.testName = testName;
     }
 }

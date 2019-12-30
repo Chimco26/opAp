@@ -618,6 +618,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 setMachineData(departmentMachineValue.getMachineID(), departmentMachineValue.getMachineName());
                 mListener.onRefreshMachineLinePolling();
                 mLineProgress.setVisibility(View.VISIBLE);
+                disableSelectMode();
             }
         });
         recyclerView.setAdapter(mMachineLineAdapter);
@@ -639,6 +640,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         getMachineLine(pm.getSiteUrl(), new GetMachineLineCallback() {
             @Override
             public void onGetMachineLineSuccess(MachineLineResponse response) {
+                if (isDetached()){return;}
                 mLineProgress.setVisibility(View.GONE);
                 if (response.getLineID() != 0) {
                     mLineLy.setVisibility(View.VISIBLE);
@@ -658,6 +660,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             @Override
             public void onGetMachineLineFailed(StandardResponse reason) {
+                if (isDetached()){return;}
                 ShowCrouton.showSimpleCrouton(mCroutonCallback, reason.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
                 mLineProgress.setVisibility(View.GONE);
             }
@@ -2978,7 +2981,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void initStatusLayout(MachineStatus machineStatus) {
 
         if (machineStatus == null) {
-
             return;
         }
         AllMachinesData machinesData = machineStatus.getAllMachinesData().get(0);

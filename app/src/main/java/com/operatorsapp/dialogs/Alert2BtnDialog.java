@@ -2,7 +2,6 @@ package com.operatorsapp.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,12 +59,6 @@ public class Alert2BtnDialog implements View.OnClickListener {
         negativeBtn.setOnClickListener(this);
         view.findViewById(R.id.button_cancel).setOnClickListener(this);
 
-        mAlarmAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-            }
-        });
-
         return mAlarmAlertDialog;
     }
 
@@ -73,8 +66,10 @@ public class Alert2BtnDialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
 
-            case R.id.DALJ_negative_btn:
             case R.id.button_cancel:
+                mAlarmAlertDialog.dismiss();
+                break;
+            case R.id.DALJ_negative_btn:
                 mListener.onClickNegativeBtn();
                 mAlarmAlertDialog.dismiss();
                 break;
