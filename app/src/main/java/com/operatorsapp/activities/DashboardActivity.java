@@ -1264,7 +1264,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onDataReceiveFailed(StandardResponse reason) {
                 OppAppLogger.getInstance().i(TAG, "onDataReceivedSuccessfully() reason: " + reason.getError().getErrorDesc());
-                ProgressDialogManager.dismiss();
 
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
@@ -1643,6 +1642,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mAllDashboardDataCore.stopPolling();
 
         NetworkManager.getInstance().clearPollingRequest();
+
+        ProgressDialogManager.show(DashboardActivity.this);
 
         dashboardDataStartPolling();
 
@@ -2050,7 +2051,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //
 //        }
 
-        ProgressDialogManager.dismiss();
+//        ProgressDialogManager.dismiss();
 
     }
 
@@ -2304,7 +2305,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     this, new TitleAndSubWithSelectableListDialog.TitleAndSubWithSelectableListDialogListener() {
                 @Override
                 public void onClickPositiveBtn(ArrayList<MachinesLineDetail> machinesLineDetails) {
-                    ProgressDialogManager.show(getParent());
+                    ProgressDialogManager.show(DashboardActivity.this);
                     postProductionMode(productionModeId, PersistenceManager.getInstance().getMachineId());
                     for (MachinesLineDetail machinesLineDetail: machinesLineDetails){
                         postProductionMode(productionModeId, machinesLineDetail.getMachineID());
@@ -2313,7 +2314,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 @Override
                 public void onClickNegativeBtn() {
-                    ProgressDialogManager.show(getParent());
+                    ProgressDialogManager.show(DashboardActivity.this);
                     postProductionMode(productionModeId, PersistenceManager.getInstance().getMachineId());
                 }
             }, getString(R.string.production_status),
@@ -2323,7 +2324,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             titleAndSubWithSelectableListDialog.showTitleAndSubWithSelectableListDialog().show();
         } else {
-            ProgressDialogManager.show(getParent());
+            ProgressDialogManager.show(DashboardActivity.this);
             postProductionMode(productionModeId, PersistenceManager.getInstance().getMachineId());
         }
     }
@@ -2336,7 +2337,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onPostProductionModeSuccess(StandardResponse response) {
                 // TODO: 31/07/2018 display crouton
                 dashboardDataStartPolling();
-                ProgressDialogManager.dismiss();
                 if (response.getFunctionSucceed()) {
                     //Analytics
                     new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.PRODUCTION_STATUS, true, "Production Status Changed");
@@ -2976,7 +2976,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         @Override
         public void sendReportSuccess(StandardResponse errorResponse) {
             StandardResponse response = objectToNewError(errorResponse);
-            ProgressDialogManager.dismiss();
+//            ProgressDialogManager.dismiss();
             OppAppLogger.getInstance().i(TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
 
@@ -3036,7 +3036,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         @Override
         public void sendReportSuccess(StandardResponse errorResponse) {
             StandardResponse response = objectToNewError(errorResponse);
-            ProgressDialogManager.dismiss();
+//            ProgressDialogManager.dismiss();
             OppAppLogger.getInstance().i(TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
 
@@ -3089,7 +3089,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             StandardResponse response = objectToNewError(o);
 //            SendBroadcast.refreshPolling(DashboardActivity.this);
             dashboardDataStartPolling();
-            ProgressDialogManager.dismiss();
+//            ProgressDialogManager.dismiss();
 
             if (response.getFunctionSucceed()) {
                 new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.END_SETUP, true, "End setup");
@@ -3485,7 +3485,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onPostActivateJobSuccess(StandardResponse response) {
 
-                ProgressDialogManager.dismiss();
+//                ProgressDialogManager.dismiss();
 
                 if (response == null) {
 
