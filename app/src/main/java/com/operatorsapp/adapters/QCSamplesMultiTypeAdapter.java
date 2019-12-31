@@ -7,10 +7,10 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 
 import com.example.common.QCModels.SamplesDatum;
 import com.example.common.QCModels.TestSampleFieldsDatum;
@@ -71,30 +71,44 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
 
             case FIELD_TYPE_BOOLEAN_INT:
                 if (item.getValue() != null && item.getValue().toLowerCase().equals(Boolean.toString(true))) {
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setChecked(true);
-                } else {
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setChecked(false);
+                    ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(true);
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(false);
+                } else if (item.getValue() != null && !item.getValue().isEmpty()){
+                    ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(false);
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(true);
                 }
                 if (mTestSample.getAllowEntry()) {
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setEnabled(true);
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    ((BooleanViewHolder) viewHolder).mRadioPassed.setEnabled(true);
+                    ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                             item.setValue(Boolean.toString(b));
                             if (item.getUpsertType() != 2) {
                                 item.setUpsertType(3);
+                                mTestSample.setUpsertType(3);
+                            }
+                        }
+                    });
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            item.setValue(Boolean.toString(!b));
+                            if (item.getUpsertType() != 2) {
+                                item.setUpsertType(3);
+                                mTestSample.setUpsertType(3);
                             }
                         }
                     });
                 } else {
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setOnCheckedChangeListener(null);
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setEnabled(false);
+                    ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(null);
+                    ((BooleanViewHolder) viewHolder).mRadioPassed.setEnabled(false);
                 }
-                if (item.isFailed()) {
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
-                } else {
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.transparentColor));
-                }
+//                if (item.isFailed()) {
+//                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
+//                } else {
+//                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.transparentColor));
+//                }
+               //
                 break;
             case FIELD_TYPE_NUM_INT:
                 ((NumViewHolder) viewHolder).mEditNumberEt.setText(item.getValue());
@@ -204,12 +218,14 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
 
     public class BooleanViewHolder extends RecyclerView.ViewHolder {
 
-        private CheckBox mBooleanCheckBox;
+        private RadioButton mRadioPassed;
+        private RadioButton mRadioFailed;
 
         BooleanViewHolder(View itemView) {
             super(itemView);
 
-            mBooleanCheckBox = itemView.findViewById(R.id.IQCPHB_check_box);
+            mRadioPassed = itemView.findViewById(R.id.QCP_parameter_radio_passed);
+            mRadioFailed = itemView.findViewById(R.id.QCP_parameter_radio_failed);
 
         }
 

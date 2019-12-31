@@ -1,6 +1,7 @@
 package com.operatorsapp.fragments;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -42,7 +43,6 @@ import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.QCRequests;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.view.GridSpacingItemDecoration;
-import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -65,8 +65,6 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private TestDetailsResponse mTestOrderDetails;
     private RecyclerView mSamplesTestRV;
     private LinearLayout mTestContainer;
-    private SingleLineKeyboard mKeyBoard;
-    private LinearLayout mKeyBoardLayout;
     private int mSamplesCount;
     private QCParametersHorizontalAdapter mSamplesAdapter;
     private TextView mSamplesNumberEt;
@@ -115,7 +113,6 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     }
 
     private void initVars(View view) {
-        mKeyBoardLayout = view.findViewById(R.id.FW_keyboard);
         mNoDataTv = view.findViewById(R.id.FQCD_no_data_tv);
         mProgressBar = view.findViewById(R.id.FQCD_progress);
         view.findViewById(R.id.FQCD_save_tv).setOnClickListener(new View.OnClickListener() {
@@ -264,8 +261,13 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     }
 
     private void initSampleRvView() {
-        mSamplesTestRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        mSamplesTestRV.setHasFixedSize(false);
+        mSamplesTestRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false){
+            @Override
+            public boolean requestChildRectangleOnScreen(RecyclerView parent, View child, Rect rect, boolean immediate, boolean focusedChildVisible) {
+                return false;
+            }
+        });
+        mSamplesTestRV.setHasFixedSize(true);
     }
 
     private void initTestRv() {

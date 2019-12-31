@@ -414,5 +414,13 @@
     <string name="password_incorrect">Ez a jelszó helytelen. Próbálkozzon ismét</string>
     <string name="order_test">Teszt rendelése</string>
     <string name="installed_apps">Alkalmazások billentyűkombinációi</string>
+    <string name="test">Teszt</string>
+    <string name="test_fields">Teszt mezők</string>
+    <string name="you_need_to_select_the_test">Válassza ki a futtatni kívánt tesztet</string>
+    <string name="you_need_to_select_the_test_field">Válassza ki a futtatni kívánt tesztet</string>
+    <string name="end_time_actual">END TIME (ACTUAL)</string>
+    <string name="recipe_fields">Recept mezők</string>
+    <string name="quality_group">Minőségcsoport</string>
+    <string name="product_group">Termékcsoport</string>
 
 </resources>

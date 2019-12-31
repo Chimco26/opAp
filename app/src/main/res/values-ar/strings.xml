@@ -410,5 +410,15 @@
     <string name="password_incorrect">كلمة المرور هذه غير صحيحة، يرجى المحاولة من جديد</string>
     <string name="order_test">طلب الاختبار</string>
     <string name="installed_apps">اختصارات التطبيقات</string>
+    <string name="test">اختبار</string>
+    <string name="test_fields">حقول الاختبار</string>
+    <string name="you_need_to_select_the_test">عليك اختيار الاختبار الذي تود تشغيله</string>
+    <string name="you_need_to_select_the_test_field">عليك اختيار الاختبار الذي تود تشغيله</string>
+    <string name="default_unanswered_technician_call">المشغل %1$s فتح اتصال خدمة. في انتظار التقني ليرد</string>
+    <string name="minutes">دقيقة</string>
+    <string name="name">اسم</string>
+    <string name="recipe_fields">حقول الوصفة</string>
+    <string name="quality_group">مجموعة الجودة</string>
+    <string name="product_group">مجموعة المنتج</string>
 
 </resources>

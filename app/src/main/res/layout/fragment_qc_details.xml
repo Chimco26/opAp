@@ -274,15 +274,4 @@
         android:visibility="gone" />
 
 
-    <LinearLayout
-        android:id="@+id/FW_keyboard"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:background="@color/white"
-        android:visibility="gone"
-        />
-
-
 </RelativeLayout>

@@ -419,5 +419,12 @@
     <string name="password_incorrect">Dit wachtwoord is onjuist. Probeer het opnieuw</string>
     <string name="order_test">Besteltest</string>
     <string name="installed_apps">Applicaties snelkoppelingen</string>
+    <string name="test">Test</string>
+    <string name="test_fields">Testvelden</string>
+    <string name="you_need_to_select_the_test">Selecteer de uit te voeren test</string>
+    <string name="you_need_to_select_the_test_field">Selecteer de uit te voeren test</string>
+    <string name="recipe_fields">Receptvelden</string>
+    <string name="quality_group">Kwaliteitsgroep</string>
+    <string name="product_group">Productgroep</string>
 
 </resources>

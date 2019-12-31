@@ -109,6 +109,13 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                             list.get(position).setUpsertType(3);
                         }
                     });
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            list.get(position).setCurrentValue(Boolean.toString(!b));
+                            list.get(position).setUpsertType(3);
+                        }
+                    });
                 } else {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(null);
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setEnabled(false);

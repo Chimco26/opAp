@@ -414,4 +414,11 @@
     <string name="password_incorrect">Ce mot de passe est incorrect ; veillez réessayer</string>
     <string name="order_test">Commander un test</string>
     <string name="installed_apps">Raccourcis d\'applications</string>
+    <string name="test">Test</string>
+    <string name="test_fields">Champs du test</string>
+    <string name="you_need_to_select_the_test">Vous devez sélectionner le test que vous voulez exécuter</string>
+    <string name="you_need_to_select_the_test_field">Vous devez sélectionner le test que vous voulez exécuter</string>
+    <string name="recipe_fields">Champs de la formule</string>
+    <string name="quality_group">Groupe de qualité</string>
+    <string name="product_group">Groupe de produits</string>
 </resources>
