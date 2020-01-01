@@ -1,4 +1,4 @@
-package com.operators.reportrejectinfra;
+package com.example.common.callback;
 
 import com.example.common.StandardResponse;
 
@@ -8,3 +8,4 @@ public interface SimpleCallback {
 
     void onRequestFailed(StandardResponse reason);
 }
+

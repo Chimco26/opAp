@@ -15,6 +15,7 @@ import com.example.common.department.DepartmentsMachinesResponse;
 import com.example.common.department.MachineLineRequest;
 import com.example.common.department.MachineLineResponse;
 import com.example.common.machineData.ShiftOperatorResponse;
+import com.example.common.operator.SaveShiftWorkersRequest;
 import com.example.common.request.BaseRequest;
 import com.example.common.request.MachineIdRequest;
 import com.example.common.request.RecipeUpdateRequest;
@@ -391,6 +392,52 @@ public class SimpleRequests {
                     }
                 } else {
                     OppAppLogger.getInstance().w(LOG_TAG, "getShiftWorkers(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    public static void saveShiftWorkers(SaveShiftWorkersRequest request, String siteUrl, final com.example.common.callback.SimpleCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<StandardResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                requestTimeout, TimeUnit.SECONDS).saveShiftWorkers(request);
+
+        call.enqueue(new Callback<StandardResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+
+                if (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty()) {
+                    if (callback != null) {
+
+                        callback.onRequestSuccess(response.body());
+                    } else {
+
+                        OppAppLogger.getInstance().w(LOG_TAG, "saveShiftWorkers(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "saveShiftWorkers Error");
+                        callback.onRequestFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.getInstance().w(LOG_TAG, "saveShiftWorkers(), onFailure() callback is null");
 
                 }
             }

@@ -2140,7 +2140,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             operatorTitle.setVisibility(View.GONE);
             operatorsSpinner.setVisibility(View.VISIBLE);
 
-            mOperatorsSpinnerArray.add(getResources().getString(R.string.switch_user));
+            mOperatorsSpinnerArray.add(getResources().getString(R.string.edit_operators));
             mOperatorsSpinnerArray.add(getResources().getString(R.string.sign_out));
 
             final ArrayAdapter<String> operatorSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, mOperatorsSpinnerArray.toArray(new String[mOperatorsSpinnerArray.size()]), PersistenceManager.getInstance().getOperatorName());

@@ -139,20 +139,24 @@
         <TextView
             android:id="@+id/FOSI_no_data_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/blue_stroke"
+            android:gravity="center"
             android:text="@string/no_data"
             android:textColor="@color/blue1"
-            android:autoSizeTextType="uniform"
-            android:autoSizeMaxTextSize="25sp"
-            android:layout_centerInParent="true"
+            android:textStyle="bold"
             android:visibility="gone"
-            android:textStyle="bold"/>
+            app:autoSizeMaxTextSize="25sp"
+            app:autoSizeTextType="uniform"
+            android:scrollbars="vertical"
+            android:scrollbarAlwaysDrawVerticalTrack="true"/>
 
         <ProgressBar
             android:id="@+id/FOSI_list_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true" />
 
     </RelativeLayout>
 </LinearLayout>
