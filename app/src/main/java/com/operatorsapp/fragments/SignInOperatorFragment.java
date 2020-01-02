@@ -175,7 +175,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                         }
                         workerOriginal.setUpsertType(UpsertType.DELETE.getValue());
                         if (workersAdapter.getItemCount() > 1) {
-                            workerOriginal.setSelected(false);
+                            workerOriginal.setHeadWorker(false);
                         }
                         return;
                     }
@@ -198,7 +198,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                 workerItems.clear();
                 workerItemsOriginal.clear();
                 if (response.getWorkers() != null && response.getWorkers().size() > 0) {
-                    response.getWorkers().get(0).setSelected(true);
+                    response.getWorkers().get(0).setHeadWorker(true);
                 }
                 workerItems.addAll(response.getWorkers());
                 workerItemsOriginal.addAll(response.getWorkers());
@@ -226,8 +226,8 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
             @Override
             public void onRequestSuccess(StandardResponse response) {
                 mWorkersProgressBar.setVisibility(View.GONE);
-                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.save) +
-                        getString(R.string.operator) + getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
+                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.save) + " " +
+                        getString(R.string.operator) + " " + getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
                 if (getActivity() != null) {
                     getActivity().onBackPressed();
                 }
@@ -236,7 +236,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
             @Override
             public void onRequestFailed(StandardResponse reason) {
                 mWorkersProgressBar.setVisibility(View.GONE);
-                ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, getString(R.string.save_failed));
+                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.save_failed), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
     }
@@ -244,18 +244,21 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     private List<Worker> getSubWorkers() {
         if (workerItems.size() == 0){
             for (Worker workerOriginal : workerItemsOriginal) {
-                if (workerOriginal.isSelected()){
+                if (workerOriginal.isHeadWorker()){
                     mMainWorker = workerOriginal;
                 }
             }
         }
-        for (Worker workerOriginal : workerItemsOriginal) {
-            for (Worker worker : workerItems) {
-                if (workerOriginal.getWorkerID().equals(worker.getWorkerID())) {
-                    workerOriginal.setUpsertType(worker.getUpsertType());
-                    workerOriginal.setSelected(worker.isSelected());
-                    if (workerOriginal.isSelected()) {
-                        mMainWorker = workerOriginal;
+        if (workerItems.size() > 0) {
+            for (Worker workerOriginal : workerItemsOriginal) {
+                for (Worker worker : workerItems) {
+                    if (workerOriginal.getWorkerID().equals(worker.getWorkerID())
+                            && workerOriginal.getID() == (worker.getID())) {
+                        workerOriginal.setUpsertType(worker.getUpsertType());
+                        workerOriginal.setHeadWorker(worker.isHeadWorker());
+                        if (workerOriginal.isHeadWorker()) {
+                            mMainWorker = workerOriginal;
+                        }
                     }
                 }
             }
@@ -271,7 +274,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
             return mMainWorker;
         }
         for (Worker workerOriginal : workerItemsOriginal) {
-            if (workerOriginal.isSelected()) {
+            if (workerOriginal.isHeadWorker()) {
                 mMainWorker = workerOriginal;
             }
         }
@@ -286,7 +289,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                 if (operator.getOperatorName().equals("")) {
                     OppAppLogger.getInstance().d(LOG_TAG, "Operator data receive failed. Reason : Empty operator name ");
                     removePhoneKeypad();
-                    ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, getString(R.string.no_operator_found));
+                    ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, getString(R.string.no_worker_found));
                 } else {
                     OppAppLogger.getInstance().d(LOG_TAG, "Operator data received: Operator Id is:" + operator.getOperatorId() + " Operator Name Is: " + operator.getOperatorName());
 
@@ -307,7 +310,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
             } else {
                 OppAppLogger.getInstance().d(LOG_TAG, "Operator data receive failed. Reason : ");
                 removePhoneKeypad();
-                ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, getString(R.string.no_operator_found));
+                ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, getString(R.string.no_worker_found));
             }
             dismissProgressDialog();
         }
@@ -387,7 +390,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     }
 
     private boolean isNotInList(String id) {
-        for (Worker worker: workerItemsOriginal){
+        for (Worker worker: workerItems){
             if (worker.getWorkerID().equals(id)){
                 return false;
             }

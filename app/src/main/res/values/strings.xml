@@ -478,7 +478,7 @@
     <string name="add_to_team">Add to Team</string>
     <string name="save_and_close"><![CDATA[Save & Close]]></string>
     <string name="edit_operators">Edit Operators</string>
-    <string name="no_operator_found">No operator found</string>
+    <string name="no_worker_found">No worker found</string>
     <string name="save_failed">Save failed</string>
     <string name="already_in_the_perators_list">Already in the operators list</string>
 

@@ -50,15 +50,15 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.ViewHolder
             viewHolder.numberTv.setTextColor(viewHolder.itemView.getContext().getResources().getColor(R.color.white));
             viewHolder.nameTv.setTextColor(viewHolder.itemView.getContext().getResources().getColor(R.color.white));
             viewHolder.removeBtn.setColorFilter(viewHolder.itemView.getContext().getResources().getColor(R.color.white));
-            if (worker.getUpsertType() != UpsertType.INSERT.getValue() && !worker.isSelected()){
+            if (worker.getUpsertType() != UpsertType.INSERT.getValue() && !worker.isHeadWorker()){
                 worker.setUpsertType(UpsertType.UPDATE.getValue());
             }
-            worker.setSelected(true);
+            worker.setHeadWorker(true);
         } else {
-            if (worker.getUpsertType() != UpsertType.INSERT.getValue() && worker.isSelected()){
+            if (worker.getUpsertType() != UpsertType.INSERT.getValue() && worker.isHeadWorker()){
                 worker.setUpsertType(UpsertType.UPDATE.getValue());
             }
-            worker.setSelected(false);
+            worker.setHeadWorker(false);
             viewHolder.itemView.setBackgroundColor(viewHolder.itemView.getContext().getResources().getColor(R.color.reports_background));
             viewHolder.numberTv.setTextColor(viewHolder.itemView.getContext().getResources().getColor(R.color.black));
             viewHolder.nameTv.setTextColor(viewHolder.itemView.getContext().getResources().getColor(R.color.black));
