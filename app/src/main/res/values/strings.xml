@@ -457,6 +457,7 @@
     <string name="recipe_fields">Recipe Fields</string>
     <string name="test_fields">Test Fields</string>
     <string name="invalid_value">invalid value</string>
+
     <string name="limits">Limits</string>
     <string name="you_need_to_complete_all_mandatory_fields">You need to complete all mandatory fields</string>
     <string name="choose_hour">Choose hour</string>
@@ -476,5 +477,9 @@
     <string name="apply">Apply</string>
     <string name="add_to_team">Add to Team</string>
     <string name="save_and_close"><![CDATA[Save & Close]]></string>
+    <string name="edit_operators">Edit Operators</string>
+    <string name="no_worker_found">No worker found</string>
+    <string name="save_failed">Save failed</string>
+    <string name="already_in_the_perators_list">Already in the operators list</string>
 
 </resources>

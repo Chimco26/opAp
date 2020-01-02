@@ -406,5 +406,12 @@
     <string name="password_incorrect">此密码不正确。请重试</string>
     <string name="order_test">订单测试</string>
     <string name="installed_apps">应用快捷方式</string>
+    <string name="test">测试</string>
+    <string name="test_fields">测试字段</string>
+    <string name="you_need_to_select_the_test">您需要选择希望运行的测试</string>
+    <string name="you_need_to_select_the_test_field">您需要选择希望运行的测试</string>
+    <string name="recipe_fields">配方字段</string>
+    <string name="quality_group">质量组</string>
+    <string name="product_group">产品组</string>
 
 </resources>

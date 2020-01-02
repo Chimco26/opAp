@@ -6,7 +6,9 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -14,25 +16,43 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
 import com.example.common.StandardResponse;
+import com.example.common.UpsertType;
 import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.callback.GetShiftWorkersCallback;
+import com.example.common.callback.SimpleCallback;
+import com.example.common.machineData.ShiftOperatorResponse;
+import com.example.common.machineData.Worker;
+import com.example.common.operator.SaveShiftWorkersRequest;
 import com.example.oppapplog.OppAppLogger;
-import com.google.gson.Gson;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
+import com.operatorsapp.adapters.WorkerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
+import com.operatorsapp.interfaces.OnStartDragListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
+import com.operatorsapp.managers.CroutonCreator;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
+import com.operatorsapp.utils.SimpleItemTouchHelperCallback;
+import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.SoftKeyboardUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.operatorsapp.utils.SimpleRequests.getShiftWorkers;
 
 public class SignInOperatorFragment extends Fragment implements View.OnClickListener, CroutonRootProvider {
 
@@ -46,6 +66,15 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     private GoToScreenListener mOnGoToScreenListener;
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private View view;
+    private ArrayList<Worker> workerItems;
+    private RecyclerView mRv;
+    private ProgressBar mWorkersProgressBar;
+    private View mNoDataTv;
+    private WorkerAdapter workersAdapter;
+    private ItemTouchHelper mItemTouchHelper;
+    private View mSaveBtn;
+    private ArrayList<Worker> workerItemsOriginal;
+    private Worker mMainWorker;
 
 
     @Override
@@ -82,6 +111,13 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         super.onViewCreated(view, savedInstanceState);
         mOperatorIdEditText = view.findViewById(R.id.operator_id_edit_text);
         mSignInButton = view.findViewById(R.id.button_operator_signIn);
+        mSaveBtn = view.findViewById(R.id.FOSI_save_btn);
+        mSaveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveShiftWorkers();
+            }
+        });
         mOperatorIdEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -94,10 +130,10 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                 if (getActivity() != null) {
 
                     if (start + count > 0) {
-                        mSignInButton.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.buttons_selector));
+//                        mSignInButton.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.buttons_selector));
                         mSignInButton.setClickable(true);
                     } else {
-                        mSignInButton.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_bg_disabled));
+//                        mSignInButton.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_bg_disabled));
                         mSignInButton.setClickable(false);
 
                     }
@@ -109,6 +145,140 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
 
             }
         });
+
+        initVars(view);
+        getShiftWorkersData();
+
+    }
+
+    private void initVars(View view) {
+        mWorkersProgressBar = view.findViewById(R.id.FOSI_list_progress);
+        mNoDataTv = view.findViewById(R.id.FOSI_no_data_list);
+        mRv = view.findViewById(R.id.FOSI_rv);
+        mRv.setHasFixedSize(true);
+        mRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        workerItems = new ArrayList<>();
+        workerItemsOriginal = new ArrayList<>();
+        workersAdapter = new WorkerAdapter(workerItems, new OnStartDragListener() {
+            @Override
+            public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+                mItemTouchHelper.startDrag(viewHolder);
+            }
+        }, new WorkerAdapter.WorkerAdapterListener() {
+            @Override
+            public void onRemoveWorker(Worker worker) {
+                for (Worker workerOriginal : workerItemsOriginal) {
+                    if (workerOriginal.equals(worker)) {
+                        if (workerOriginal.getUpsertType() == UpsertType.INSERT.getValue()){
+                            workerItemsOriginal.remove(worker);
+                            return;
+                        }
+                        workerOriginal.setUpsertType(UpsertType.DELETE.getValue());
+                        if (workersAdapter.getItemCount() > 1) {
+                            workerOriginal.setHeadWorker(false);
+                        }
+                        return;
+                    }
+                }
+            }
+        });
+        mRv.setAdapter(workersAdapter);
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(workersAdapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(mRv);
+    }
+
+    private void getShiftWorkersData() {
+        PersistenceManager pm = PersistenceManager.getInstance();
+        mWorkersProgressBar.setVisibility(View.VISIBLE);
+        getShiftWorkers(pm.getSiteUrl(), new GetShiftWorkersCallback() {
+            @Override
+            public void onGetShiftWorkersSuccess(ShiftOperatorResponse response) {
+                mWorkersProgressBar.setVisibility(View.GONE);
+                workerItems.clear();
+                workerItemsOriginal.clear();
+                if (response.getWorkers() != null && response.getWorkers().size() > 0) {
+                    response.getWorkers().get(0).setHeadWorker(true);
+                }
+                workerItems.addAll(response.getWorkers());
+                workerItemsOriginal.addAll(response.getWorkers());
+                workersAdapter.notifyDataSetChanged();
+                if (response.getWorkers() != null && response.getWorkers().size() > 0) {
+                    mNoDataTv.setVisibility(View.GONE);
+                } else {
+                    mNoDataTv.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onGetShiftWorkersFailed(StandardResponse reason) {
+                mWorkersProgressBar.setVisibility(View.GONE);
+                mNoDataTv.setVisibility(View.VISIBLE);
+            }
+        }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
+    }
+
+    private void saveShiftWorkers() {
+        PersistenceManager pm = PersistenceManager.getInstance();
+        mWorkersProgressBar.setVisibility(View.VISIBLE);
+        SimpleRequests.saveShiftWorkers(new SaveShiftWorkersRequest(pm.getMachineId(),
+                pm.getSessionId(), getSubWorkers(), getMainWorker()), pm.getSiteUrl(), new SimpleCallback() {
+            @Override
+            public void onRequestSuccess(StandardResponse response) {
+                mWorkersProgressBar.setVisibility(View.GONE);
+                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.save) + " " +
+                        getString(R.string.operator) + " " + getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
+                if (getActivity() != null) {
+                    getActivity().onBackPressed();
+                }
+            }
+
+            @Override
+            public void onRequestFailed(StandardResponse reason) {
+                mWorkersProgressBar.setVisibility(View.GONE);
+                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.save_failed), CroutonCreator.CroutonType.NETWORK_ERROR);
+            }
+        }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
+    }
+
+    private List<Worker> getSubWorkers() {
+        if (workerItems.size() == 0){
+            for (Worker workerOriginal : workerItemsOriginal) {
+                if (workerOriginal.isHeadWorker()){
+                    mMainWorker = workerOriginal;
+                }
+            }
+        }
+        if (workerItems.size() > 0) {
+            for (Worker workerOriginal : workerItemsOriginal) {
+                for (Worker worker : workerItems) {
+                    if (workerOriginal.getWorkerID().equals(worker.getWorkerID())
+                            && workerOriginal.getID() == (worker.getID())) {
+                        workerOriginal.setUpsertType(worker.getUpsertType());
+                        workerOriginal.setHeadWorker(worker.isHeadWorker());
+                        if (workerOriginal.isHeadWorker()) {
+                            mMainWorker = workerOriginal;
+                        }
+                    }
+                }
+            }
+        }
+        if (mMainWorker != null) {
+            workerItemsOriginal.remove(mMainWorker);
+        }
+        return workerItemsOriginal;
+    }
+
+    private Worker getMainWorker() {
+        if (mMainWorker != null) {
+            return mMainWorker;
+        }
+        for (Worker workerOriginal : workerItemsOriginal) {
+            if (workerOriginal.isHeadWorker()) {
+                mMainWorker = workerOriginal;
+            }
+        }
+        return mMainWorker;
     }
 
     OperatorForMachineUICallbackListener mOperatorForMachineUICallbackListener = new OperatorForMachineUICallbackListener() {
@@ -119,23 +289,28 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                 if (operator.getOperatorName().equals("")) {
                     OppAppLogger.getInstance().d(LOG_TAG, "Operator data receive failed. Reason : Empty operator name ");
                     removePhoneKeypad();
-                    ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "No operator found");
+                    ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, getString(R.string.no_worker_found));
                 } else {
                     OppAppLogger.getInstance().d(LOG_TAG, "Operator data received: Operator Id is:" + operator.getOperatorId() + " Operator Name Is: " + operator.getOperatorName());
 
-                    SelectedOperatorFragment selectedOperatorFragment = new SelectedOperatorFragment();
-                    Bundle bundle = new Bundle();
-                    Gson gson = new Gson();
-                    String jobString = gson.toJson(operator, Operator.class);
-                    bundle.putString(SELECTED_OPERATOR, jobString);
+//                    SelectedOperatorFragment selectedOperatorFragment = new SelectedOperatorFragment();
+//                    Bundle bundle = new Bundle();
+//                    Gson gson = new Gson();
+//                    String jobString = gson.toJson(operator, Operator.class);
+//                    bundle.putString(SELECTED_OPERATOR, jobString);
 
-                    selectedOperatorFragment.setArguments(bundle);
-                    mOnGoToScreenListener.goToFragment(selectedOperatorFragment, true, true);
+//                    selectedOperatorFragment.setArguments(bundle);
+//                    mOnGoToScreenListener.goToFragment(selectedOperatorFragment, true, true);
+
+                    Worker worker = new Worker(operator.getOperatorId(), operator.getOperatorName(), UpsertType.INSERT.getValue());
+                    workerItems.add(worker);
+                    workerItemsOriginal.add(worker);
+                    workersAdapter.notifyItemInserted(workerItems.size() - 1);
                 }
             } else {
                 OppAppLogger.getInstance().d(LOG_TAG, "Operator data receive failed. Reason : ");
                 removePhoneKeypad();
-                ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "No operator found");
+                ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, getString(R.string.no_worker_found));
             }
             dismissProgressDialog();
         }
@@ -196,52 +371,31 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         mSignInButton.setOnClickListener(this);
     }
 
-
-//    protected void setActionBar() {
-//
-//        if (getActivity() != null) {
-//
-//            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-//            if (actionBar != null) {
-//                actionBar.setHomeButtonEnabled(false);
-//                actionBar.setDisplayHomeAsUpEnabled(false);
-//                actionBar.setDisplayShowTitleEnabled(false);
-//                actionBar.setDisplayShowCustomEnabled(true);
-//                actionBar.setDisplayUseLogoEnabled(true);
-//                LayoutInflater inflater = LayoutInflater.from(getActivity());
-//                // rootView null
-//                @SuppressLint("InflateParams")
-//                View view = inflater.inflate(R.layout.sign_in_operator_action_bar, null);
-//
-//                LinearLayout buttonClose = view.findViewById(R.id.close_image);
-//                buttonClose.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-////                    FragmentManager fragmentManager = getFragmentManager();
-////                    if (fragmentManager != null) {
-////                        fragmentManager.popBackStack();
-////                    }
-//
-//                        getActivity().onBackPressed();
-//                    }
-//                });
-//                actionBar.setCustomView(view);
-//            }
-//
-//        }
-//    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_operator_signIn: {
-                ProgressDialogManager.show(getActivity());
                 String id = mOperatorIdEditText.getText().toString();
-                OppAppLogger.getInstance().i(LOG_TAG, "Operator id: " + id);
-                mOperatorCore.getOperatorById(id);
+                if (isNotInList(id)) {
+                    ProgressDialogManager.show(getActivity());
+                    mOperatorIdEditText.setText(null);
+                    OppAppLogger.getInstance().i(LOG_TAG, "Operator id: " + id);
+                    mOperatorCore.getOperatorById(id);
+                }else {
+                    ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, getString(R.string.already_in_the_perators_list));
+                }
                 break;
             }
         }
+    }
+
+    private boolean isNotInList(String id) {
+        for (Worker worker: workerItems){
+            if (worker.getWorkerID().equals(id)){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

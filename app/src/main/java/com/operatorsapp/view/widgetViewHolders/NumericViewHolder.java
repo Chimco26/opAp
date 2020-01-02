@@ -26,6 +26,7 @@ import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.view.SingleLineKeyboard;
 
+import java.text.DecimalFormat;
 import java.util.Locale;
 
 import static com.operatorsapp.activities.DashboardActivity.REPORT_REJECT_TAG;
@@ -388,11 +389,14 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         String nameByLang1 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         mTitle.setText(nameByLang1);
         mSubtitle.setVisibility(View.INVISIBLE);
-        mValue.setText(widget.getCurrentValue());
+        if (widget.getCurrentValue().contains(".")) {
+            new DecimalFormat("#.##").format(Double.parseDouble(widget.getCurrentValue()));
+        } else {
+            mValue.setText(widget.getCurrentValue());
+        }
         mValue.setSelected(true);
 
         if (widget.getTargetScreen() != null && widget.getTargetScreen().length() > 0) {
-
             mEditLy.setVisibility(View.VISIBLE);
 
             switch (widget.getTargetScreen()) {
@@ -401,7 +405,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
                         addEditClickListener(widget);
                         mEditLy.setVisibility(View.VISIBLE);
                         mEditBtn.setText(mEditBtn.getContext().getResources().getString(R.string.add_rejects));
-                    }else {
+                    } else {
                         mEditLy.setVisibility(View.GONE);
                     }
                     break;
@@ -410,9 +414,10 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
                         mEditLy.setVisibility(View.VISIBLE);
                         mEditBtn.setText(mEditBtn.getContext().getResources().getString(R.string.report_cycle_units));
                         addEditClickListener(widget);
-                    }else {
+                    } else {
                         mEditLy.setVisibility(View.GONE);
-                    }break;
+                    }
+                    break;
             }
 
 

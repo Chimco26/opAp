@@ -280,6 +280,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mShowAlarmCheckBoxLy;
     private MachineLineAdapter mMachineLineAdapter;
     private TextView mLineNameTv;
+    private View mLineLy;
+    private View mLineProgress;
+    private View mBottomRl;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -454,6 +457,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         });
 
         initMachineLine(view);
+        mBottomRl = getView().findViewById(R.id.FAAE_bottom_rl);
 
         //mSwipeToRefresh = view.findViewById(R.id.swipe_refresh_actionbar_events);
         mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
@@ -595,7 +599,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void initMachineLine(View view) {
 
         RecyclerView recyclerView = view.findViewById(R.id.FAAE_machine_line_rv);
+        mLineLy = view.findViewById(R.id.FAAE_machine_line_ly);
         mLineNameTv = view.findViewById(R.id.FAAE_machine_line_tv);
+        mLineProgress = view.findViewById(R.id.FAAE_line_progress);
+//        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+//            view.findViewById(R.id.FAAE_line_arrow).setRotationY(180);
+//        }
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -608,6 +617,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 ClearData.clearMachineData();
                 setMachineData(departmentMachineValue.getMachineID(), departmentMachineValue.getMachineName());
                 mListener.onRefreshMachineLinePolling();
+                mLineProgress.setVisibility(View.VISIBLE);
+                disableSelectMode();
             }
         });
         recyclerView.setAdapter(mMachineLineAdapter);
@@ -629,21 +640,44 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         getMachineLine(pm.getSiteUrl(), new GetMachineLineCallback() {
             @Override
             public void onGetMachineLineSuccess(MachineLineResponse response) {
-                machineLineItems.clear();
-                machineLineItems.addAll(response.getMachinesData());
-                mMachineLineAdapter.notifyDataSetChanged();
-                if (response.getLineName() != null && !response.getLineName().isEmpty()) {
-                    mLineNameTv.setText(response.getLineName());
-                }else {
-                    mLineNameTv.setText(getResources().getString(R.string.production_line));
+                if (isDetached()){return;}
+                mLineProgress.setVisibility(View.GONE);
+                if (response.getLineID() != 0) {
+                    mLineLy.setVisibility(View.VISIBLE);
+                    machineLineItems.clear();
+                    machineLineItems.addAll(response.getMachinesData());
+                    mMachineLineAdapter.notifyDataSetChanged();
+                    if (response.getLineName() != null && !response.getLineName().isEmpty()) {
+                        mLineNameTv.setText(response.getLineName());
+                    } else {
+                        mLineNameTv.setText(getResources().getString(R.string.production_line));
+                    }
+                } else {
+                    mLineLy.setVisibility(View.GONE);
                 }
+                setDashboardContainer3MarginBottom();
             }
 
             @Override
             public void onGetMachineLineFailed(StandardResponse reason) {
+                if (isDetached()){return;}
                 ShowCrouton.showSimpleCrouton(mCroutonCallback, reason.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+                mLineProgress.setVisibility(View.GONE);
             }
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
+    }
+
+    private void setDashboardContainer3MarginBottom() {
+
+        if (mBottomRl != null) {
+
+            mBottomRl.post(new Runnable() {
+                @Override
+                public void run() {
+                    mListener.onResizeBottomMargin(mBottomRl.getHeight());
+                }
+            });
+        }
     }
 
     private void initBottomNotificationLayout(View view) {
@@ -1653,7 +1687,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         displayTechnicianView(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.SERVICE_CALLS.getId()).getHaspermission());
         displayOperatorView(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.OPERATOR_SIGN_IN.getId()).getHaspermission());
         if (getView() != null) {
-            getView().findViewById(R.id.FAAE_bottom_msg_fl).setVisibility(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.MESSAGES.getId()).getHaspermission());
+            getView().findViewById(R.id.bottom_notification_lil).setVisibility(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.MESSAGES.getId()).getHaspermission());
         }
         if (mToolBarView != null) {
             mToolBarView.findViewById(R.id.toolbar_production_status_rl).setVisibility(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.PRODUCTION_STATUS.getId()).getHaspermission());
@@ -2106,7 +2140,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             operatorTitle.setVisibility(View.GONE);
             operatorsSpinner.setVisibility(View.VISIBLE);
 
-            mOperatorsSpinnerArray.add(getResources().getString(R.string.switch_user));
+            mOperatorsSpinnerArray.add(getResources().getString(R.string.edit_operators));
             mOperatorsSpinnerArray.add(getResources().getString(R.string.sign_out));
 
             final ArrayAdapter<String> operatorSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, mOperatorsSpinnerArray.toArray(new String[mOperatorsSpinnerArray.size()]), PersistenceManager.getInstance().getOperatorName());
@@ -2947,7 +2981,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void initStatusLayout(MachineStatus machineStatus) {
 
         if (machineStatus == null) {
-
             return;
         }
         AllMachinesData machinesData = machineStatus.getAllMachinesData().get(0);
@@ -3468,6 +3501,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onRefreshMachineLinePolling();
 
         void onViewLog();
+
+        void onResizeBottomMargin(int bottomMargin);
     }
 
 }

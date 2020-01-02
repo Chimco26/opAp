@@ -7,8 +7,8 @@
     android:background="@color/white"
     android:clickable="true"
     android:orientation="horizontal"
-    android:paddingTop="60dp"
     android:paddingStart="60dp"
+    android:paddingTop="60dp"
     android:paddingEnd="20dp"
     android:weightSum="6">
 
@@ -81,11 +81,11 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:padding="5dp"
-                android:textStyle="bold"
                 android:text="@string/add_to_team"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="22sp"
+                android:textStyle="bold"
                 app:autoSizeMaxTextSize="22sp"
                 app:autoSizeTextType="uniform" />
         </LinearLayout>
@@ -103,16 +103,17 @@
             android:weightSum="2">
 
             <TextView
+                android:id="@+id/FOSI_save_btn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.7"
+                android:background="@color/blue1"
                 android:gravity="center"
                 android:maxLines="1"
-                android:background="@color/blue1"
+                android:padding="5dp"
                 android:text="@string/save_and_close"
                 android:textColor="@color/white"
                 android:textSize="22sp"
-                android:padding="5dp"
                 android:textStyle="bold"
                 app:autoSizeMaxTextSize="22sp"
                 app:autoSizeTextType="uniform" />
@@ -123,11 +124,39 @@
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/FOSI_rv"
+    <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2"/>
+        android:layout_weight="2">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/FOSI_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/FOSI_no_data_list"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/blue_stroke"
+            android:gravity="center"
+            android:text="@string/no_data"
+            android:textColor="@color/blue1"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:autoSizeMaxTextSize="25sp"
+            app:autoSizeTextType="uniform"
+            android:scrollbars="vertical"
+            android:scrollbarAlwaysDrawVerticalTrack="true"/>
+
+        <ProgressBar
+            android:id="@+id/FOSI_list_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
 </LinearLayout>

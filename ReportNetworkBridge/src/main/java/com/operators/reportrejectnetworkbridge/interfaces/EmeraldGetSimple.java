@@ -1,9 +1,12 @@
 package com.operators.reportrejectnetworkbridge.interfaces;
 
+import com.example.common.StandardResponse;
 import com.example.common.StopLogs.StopLogsResponse;
 import com.example.common.department.DepartmentsMachinesResponse;
 import com.example.common.department.MachineLineRequest;
 import com.example.common.department.MachineLineResponse;
+import com.example.common.machineData.ShiftOperatorResponse;
+import com.example.common.operator.SaveShiftWorkersRequest;
 import com.example.common.request.BaseRequest;
 import com.example.common.request.MachineIdRequest;
 
@@ -22,6 +25,9 @@ public interface EmeraldGetSimple {
     Call<StopLogsResponse> GetLineShiftLog(@Body MachineLineRequest request);
 
     @POST("/LeaderMESApi/GetShiftWorkers")
-    Call<StopLogsResponse> GetShiftWorkers(@Body MachineIdRequest request);
+    Call<ShiftOperatorResponse> GetShiftWorkers(@Body MachineIdRequest request);
+
+    @POST("/LeaderMESApi/saveShiftWorkers")
+    Call<StandardResponse> saveShiftWorkers(@Body SaveShiftWorkersRequest request);
 }
 

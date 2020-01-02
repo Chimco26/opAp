@@ -2,6 +2,7 @@ package com.operatorsapp.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.TooltipCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,10 +40,11 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ChannelItemsAdapters.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final ChannelItemsAdapters.ViewHolder viewHolder, int position) {
 
         String nameByLang = OperatorApplication.isEnglishLang() ? baseSplits.get(position).getPropertyEName() : baseSplits.get(position).getPropertyHName();
         viewHolder.mTitle.setText(nameByLang);
+        TooltipCompat.setTooltipText(viewHolder.mTitle, nameByLang);
         viewHolder.mValueTv.setText(baseSplits.get(position).getFValue());
 
         setEditModeFun(viewHolder, position);
@@ -65,19 +67,21 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
                 viewHolder.mRange.setVisibility(View.VISIBLE);
                 viewHolder.mRange.setText(String.format(Locale.getDefault(), "%s-%s", baseSplits.get(position).getLValue(), baseSplits.get(position).getHValue()));
                 break;
-
         }
     }
 
     public void setEditModeFun(@NonNull final ViewHolder viewHolder, final int position) {
         if (mListener != null && baseSplits.get(position).getIsEditable() && baseSplits.get(position).getIsEnabled() && baseSplits.get(position).getAllowEdit()) {
+            viewHolder.mEditIc.setVisibility(View.VISIBLE);
 
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onEditMode(baseSplits.get(position));
+                    mListener.onEditMode(baseSplits.get(viewHolder.getAdapterPosition()));
                 }
             });
+        }else {
+            viewHolder.mEditIc.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -97,6 +101,7 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private final RelativeLayout mDisplayOrEditLy;
+        private final View mEditIc;
         private View mDsiplayLy;
         private View mEditLy;
         private EditText mEditEt;
@@ -116,6 +121,7 @@ public class ChannelItemsAdapters extends RecyclerView.Adapter<ChannelItemsAdapt
             mEditLy = itemView.findViewById(R.id.IS_edit_ly);
             mEditEt = itemView.findViewById(R.id.IS_edit_et);
             mCancelBtn = itemView.findViewById(R.id.IS_cancel_btn);
+            mEditIc = itemView.findViewById(R.id.IS_edit_ic);
 
         }
 

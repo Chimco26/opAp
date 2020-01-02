@@ -14,7 +14,7 @@ import com.operatorsapp.fragments.QCTestOrderFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.CroutonCreator;
-import com.operatorsapp.view.SingleLineKeyboard;
+import com.operatorsapp.utils.KeyboardUtils;
 
 import java.util.List;
 
@@ -79,16 +79,13 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
     public void onBackPressed() {
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
-        if (SingleLineKeyboard.isKeyBoardOpen) {
-//            if (mQcTestOrderFragment != null) {
-//                mQcTestOrderFragment.onCloseKeyboard();
+//        if (SingleLineKeyboard.isKeyBoardOpen) {
+//            if (mQcDetailsFragment != null) {
+//                mQcDetailsFragment.onCloseKeyboard();
 //            }
-            if (mQcDetailsFragment != null) {
-                mQcDetailsFragment.onCloseKeyboard();
-            }
-            SingleLineKeyboard.isKeyBoardOpen = false;
-            return;
-        }
+//            SingleLineKeyboard.isKeyBoardOpen = false;
+//            return;
+//        }
         if (count <= 1) {
             setResult(RESULT_CANCELED, getIntent());
             finish();
@@ -146,6 +143,7 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
 
     @Override
     public void onSent(int testId) {
+        KeyboardUtils.closeKeyboard(this);
         showQCDetailsFragment(testId);
     }
 

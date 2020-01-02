@@ -27,11 +27,12 @@
                 android:id="@+id/FQCD_title_tv"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_weight="4.5"
                 android:gravity="center_vertical"
                 android:text="@string/shift_report"
                 android:textColor="@color/blue1"
                 android:textSize="35sp"
+                android:maxLines="1"
                 android:textStyle="bold"
                 app:autoSizeMaxTextSize="35sp"
                 app:autoSizeTextType="uniform" />
@@ -39,7 +40,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.1" />
 
             <LinearLayout
                 android:id="@+id/FQCD_passed_ly"
@@ -54,11 +55,10 @@
                 android:padding="2dp"
                 android:weightSum="5">
 
-                <com.operatorsapp.view.SquareImageView
+                <ImageView
                     android:id="@+id/FQCD_passed_ic"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:padding="4dp"/>
 
                 <View
@@ -83,7 +83,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3.5" />
+                android:layout_weight="1.5" />
 
             <TextView
                 android:id="@+id/FQCD_save_tv"
@@ -100,6 +100,18 @@
                 android:textStyle="bold"
                 app:autoSizeMaxTextSize="25sp"
                 app:autoSizeTextType="uniform" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.35" />
+
+            <ImageView
+                android:id="@+id/FQCD_close"
+                android:layout_width="0dp"
+                android:layout_weight="0.8"
+                android:layout_height="25dp"
+                android:src="@drawable/close"/>
 
 
         </LinearLayout>
@@ -260,17 +272,6 @@
         android:layout_centerInParent="true"
         android:layout_marginTop="20dp"
         android:visibility="gone" />
-
-
-    <LinearLayout
-        android:id="@+id/FW_keyboard"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:background="@color/white"
-        android:visibility="gone"
-        />
 
 
 </RelativeLayout>

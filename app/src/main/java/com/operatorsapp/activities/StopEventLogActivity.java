@@ -136,7 +136,7 @@ public class StopEventLogActivity extends AppCompatActivity
                 events.add(event.getEventID() * 1.0f);
             }
         }
-        if (events.size() > 0) {
+        if (mSubEvents != null && mSubEvents.size() > 0) {
             Alert2BtnDialog alert2BtnDialog = new Alert2BtnDialog(this, new Alert2BtnDialog.Alert2BtnDialogListener() {
                 @Override
                 public void onClickPositiveBtn() {

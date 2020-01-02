@@ -1,5 +1,8 @@
 package com.operatorsapp.utils;
 
+import android.content.Context;
+import android.widget.TextView;
+
 import java.util.Locale;
 
 public class StringUtil {
@@ -22,4 +25,5 @@ public class StringUtil {
             return String.format(Locale.getDefault(), "0%d", number);
         }
     }
+
 }

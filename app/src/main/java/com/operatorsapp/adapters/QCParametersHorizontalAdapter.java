@@ -3,6 +3,7 @@ package com.operatorsapp.adapters;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.TooltipCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,6 @@ import android.widget.TextView;
 import com.example.common.QCModels.SamplesDatum;
 import com.example.common.QCModels.TestSampleFieldsDatum;
 import com.operatorsapp.R;
-import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +22,14 @@ import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_LAST;
 public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParametersHorizontalAdapter.ViewHolder> {
 
     private final QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener mQcSamplesMultiTypeAdapterListener;
-    private final OnKeyboardManagerListener mOnKeyboardManagerListener;
     private int itemWidth = 120;
     private Integer samples;
     private ArrayList<TestSampleFieldsDatum> list;
 
     public QCParametersHorizontalAdapter(Integer samples, List<TestSampleFieldsDatum> testSampleFieldsData,
-                                         OnKeyboardManagerListener onKeyboardManagerListener,
                                          QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener qcSamplesMultiTypeAdapterListener, int widthPixels) {
         list = (ArrayList<TestSampleFieldsDatum>) testSampleFieldsData;
         mQcSamplesMultiTypeAdapterListener = qcSamplesMultiTypeAdapterListener;
-        mOnKeyboardManagerListener = onKeyboardManagerListener;
         this.samples = samples;
         updateMinusLastColumn();
         if (widthPixels > 0) {
@@ -60,10 +57,11 @@ public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParame
         }else {
             (viewHolder).mTitleTv.setTextColor(viewHolder.itemView.getResources().getColor(R.color.black));
         }
+        TooltipCompat.setTooltipText(viewHolder.mTitleTv, list.get(position).getLName());
         viewHolder.mTitleTv.setText(list.get(position).getLName());
         viewHolder.mRv.setLayoutManager(new LinearLayoutManager(viewHolder.mRv.getContext()));
         viewHolder.mRv.setAdapter(new QCSamplesMultiTypeAdapter(list.get(position).getFieldType(),
-                list.get(position), mOnKeyboardManagerListener, mQcSamplesMultiTypeAdapterListener));
+                list.get(position), mQcSamplesMultiTypeAdapterListener));
 
     }
 

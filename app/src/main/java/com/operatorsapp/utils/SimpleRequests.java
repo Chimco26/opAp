@@ -14,7 +14,10 @@ import com.example.common.callback.GetStopLogCallback;
 import com.example.common.department.DepartmentsMachinesResponse;
 import com.example.common.department.MachineLineRequest;
 import com.example.common.department.MachineLineResponse;
+import com.example.common.machineData.ShiftOperatorResponse;
+import com.example.common.operator.SaveShiftWorkersRequest;
 import com.example.common.request.BaseRequest;
+import com.example.common.request.MachineIdRequest;
 import com.example.common.request.RecipeUpdateRequest;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
@@ -307,7 +310,7 @@ public class SimpleRequests {
         final int[] retryCount = {0};
 
         Call<StopLogsResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
-                requestTimeout, TimeUnit.SECONDS).GetLineShiftLog(new MachineLineRequest(PersistenceManager.getInstance().getSessionId(), 1));//PersistenceManager.getInstance().getMachineLineId()
+                requestTimeout, TimeUnit.SECONDS).GetLineShiftLog(new MachineLineRequest(PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineLineId()));
 
         call.enqueue(new Callback<StopLogsResponse>() {
             @Override
@@ -353,12 +356,12 @@ public class SimpleRequests {
 
         final int[] retryCount = {0};
 
-        Call<StopLogsResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
-                requestTimeout, TimeUnit.SECONDS).GetLineShiftLog(new MachineLineRequest(PersistenceManager.getInstance().getSessionId(), 1));//PersistenceManager.getInstance().getMachineLineId()
+        Call<ShiftOperatorResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                requestTimeout, TimeUnit.SECONDS).GetShiftWorkers(new MachineIdRequest(String.valueOf(PersistenceManager.getInstance().getMachineId()), PersistenceManager.getInstance().getSessionId()));
 
-        call.enqueue(new Callback<StopLogsResponse>() {
+        call.enqueue(new Callback<ShiftOperatorResponse>() {
             @Override
-            public void onResponse(@NonNull Call<StopLogsResponse> call, @NonNull Response<StopLogsResponse> response) {
+            public void onResponse(@NonNull Call<ShiftOperatorResponse> call, @NonNull Response<ShiftOperatorResponse> response) {
 
                 if (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty()) {
                     if (callback != null) {
@@ -376,7 +379,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(@NonNull Call<StopLogsResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ShiftOperatorResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -389,6 +392,52 @@ public class SimpleRequests {
                     }
                 } else {
                     OppAppLogger.getInstance().w(LOG_TAG, "getShiftWorkers(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    public static void saveShiftWorkers(SaveShiftWorkersRequest request, String siteUrl, final com.example.common.callback.SimpleCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<StandardResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                requestTimeout, TimeUnit.SECONDS).saveShiftWorkers(request);
+
+        call.enqueue(new Callback<StandardResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+
+                if (response.body() != null && response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty()) {
+                    if (callback != null) {
+
+                        callback.onRequestSuccess(response.body());
+                    } else {
+
+                        OppAppLogger.getInstance().w(LOG_TAG, "saveShiftWorkers(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "saveShiftWorkers Error");
+                        callback.onRequestFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.getInstance().w(LOG_TAG, "saveShiftWorkers(), onFailure() callback is null");
 
                 }
             }
