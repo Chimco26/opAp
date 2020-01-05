@@ -420,5 +420,7 @@
     <string name="recipe_fields">Campos de la receta</string>
     <string name="quality_group">Grupo de calidad</string>
     <string name="product_group">Grupo de productos</string>
+    <string name="invalid_value">valor no válido</string>
+    <string name="send_test_success">Enviar éxito de pruebas</string>
 
 </resources>

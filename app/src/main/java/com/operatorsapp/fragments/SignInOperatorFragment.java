@@ -75,6 +75,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     private View mSaveBtn;
     private ArrayList<Worker> workerItemsOriginal;
     private Worker mMainWorker;
+    private SignInOperatorFragmentListener listener;
 
 
     @Override
@@ -87,6 +88,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         mOnGoToScreenListener = (GoToScreenListener) getActivity();
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
         mOperatorCore.registerListener(mOperatorForMachineUICallbackListener);
+        listener = (SignInOperatorFragmentListener) context;
     }
 
 
@@ -169,7 +171,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
             public void onRemoveWorker(Worker worker) {
                 for (Worker workerOriginal : workerItemsOriginal) {
                     if (workerOriginal.equals(worker)) {
-                        if (workerOriginal.getUpsertType() == UpsertType.INSERT.getValue()){
+                        if (workerOriginal.getUpsertType() == UpsertType.INSERT.getValue()) {
                             workerItemsOriginal.remove(worker);
                             return;
                         }
@@ -228,9 +230,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                 mWorkersProgressBar.setVisibility(View.GONE);
                 ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.save) + " " +
                         getString(R.string.operator) + " " + getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
-                if (getActivity() != null) {
-                    getActivity().onBackPressed();
-                }
+                listener.onSaveWorkers();
             }
 
             @Override
@@ -242,9 +242,9 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     }
 
     private List<Worker> getSubWorkers() {
-        if (workerItems.size() == 0){
+        if (workerItems.size() == 0) {
             for (Worker workerOriginal : workerItemsOriginal) {
-                if (workerOriginal.isHeadWorker()){
+                if (workerOriginal.isHeadWorker()) {
                     mMainWorker = workerOriginal;
                 }
             }
@@ -292,16 +292,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                     ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, getString(R.string.no_worker_found));
                 } else {
                     OppAppLogger.getInstance().d(LOG_TAG, "Operator data received: Operator Id is:" + operator.getOperatorId() + " Operator Name Is: " + operator.getOperatorName());
-
-//                    SelectedOperatorFragment selectedOperatorFragment = new SelectedOperatorFragment();
-//                    Bundle bundle = new Bundle();
-//                    Gson gson = new Gson();
-//                    String jobString = gson.toJson(operator, Operator.class);
-//                    bundle.putString(SELECTED_OPERATOR, jobString);
-
-//                    selectedOperatorFragment.setArguments(bundle);
-//                    mOnGoToScreenListener.goToFragment(selectedOperatorFragment, true, true);
-
+                    mNoDataTv.setVisibility(View.GONE);
                     Worker worker = new Worker(operator.getOperatorId(), operator.getOperatorName(), UpsertType.INSERT.getValue());
                     workerItems.add(worker);
                     workerItemsOriginal.add(worker);
@@ -381,8 +372,8 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                     mOperatorIdEditText.setText(null);
                     OppAppLogger.getInstance().i(LOG_TAG, "Operator id: " + id);
                     mOperatorCore.getOperatorById(id);
-                }else {
-                    ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, getString(R.string.already_in_the_perators_list));
+                } else {
+                    ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.already_in_the_perators_list), CroutonCreator.CroutonType.NETWORK_ERROR);
                 }
                 break;
             }
@@ -390,8 +381,8 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     }
 
     private boolean isNotInList(String id) {
-        for (Worker worker: workerItems){
-            if (worker.getWorkerID().equals(id)){
+        for (Worker worker : workerItems) {
+            if (worker.getWorkerID().equals(id)) {
                 return false;
             }
         }
@@ -431,5 +422,9 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                 }
             });
         }
+    }
+
+    public interface SignInOperatorFragmentListener {
+        void onSaveWorkers();
     }
 }

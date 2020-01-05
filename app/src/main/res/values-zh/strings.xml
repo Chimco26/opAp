@@ -413,5 +413,28 @@
     <string name="recipe_fields">配方字段</string>
     <string name="quality_group">质量组</string>
     <string name="product_group">产品组</string>
+    <string name="already_in_the_perators_list">已在操作员列表中</string>
+    <string name="add_to_team">添加至团队</string>
+    <string name="apply">应用</string>
+    <string name="choose_hour">选择小时</string>
+    <string name="current_value_is">当前值为</string>
+    <string name="edit_operators">编辑操作员</string>
+    <string name="illegal_chars">找到非法字符，请使用：a-zA-Z0-9_/,.-</string>
+    <string name="invalid_value">无效的值</string>
+    <string name="limits">限值</string>
+    <string name="no_worker_found">未找到工人</string>
+    <string name="only_to_unreported">仅至未报告项</string>
+    <string name="production_line">生产线</string>
+    <string name="production_status">生产状态</string>
+    <string name="save_all">全部保存</string>
+    <string name="save_failed">保存失败</string>
+    <string name="stop_events_log">停止事件日志</string>
+    <string name="stop_logs">停止日志</string>
+    <string name="this_event_only">仅此事件</string>
+    <string name="update">更新</string>
+    <string name="update_this_event_to_all_linked">要将此停止原因更新至所有关联的事件吗？</string>
+    <string name="update_this_production_status_also_to">也将此生产状态更新至</string>
+    <string name="you_need_to_complete_all_mandatory_fields">您需要填写全部必填字段</string>
+    <string name="send_test_success">发送测试成功</string>
 
 </resources>
