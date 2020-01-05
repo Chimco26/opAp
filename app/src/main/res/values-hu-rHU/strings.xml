@@ -10,7 +10,7 @@
     <!-- Login screen -->
     <string name="link_machine">Válassza ki a készüléket</string>
     <string name="screen_title">Matics</string>
-    <string name="login_fields_error">Fill in all fields</string>
+    <string name="login_fields_error">Töltse ki az összes mezőt</string>
     <string name="login">Belépés</string>
     <string name="save">Mentés</string>
     <string name="login_fields_factory_name_hint">Gyári név</string>
@@ -422,5 +422,29 @@
     <string name="recipe_fields">Recept mezők</string>
     <string name="quality_group">Minőségcsoport</string>
     <string name="product_group">Termékcsoport</string>
+    <string name="already_in_the_perators_list">Már a kezelők listáján van</string>
+    <string name="add_to_team">Hozzáadás a Csapathoz</string>
+    <string name="apply">Alkalmaz</string>
+    <string name="choose_hour">Válasszon órát</string>
+    <string name="current_value_is">Aktuális érték</string>
+    <string name="edit_operators">Kezelők szerkesztése</string>
+    <string name="illegal_chars">Illegális karaktereket talált; a következőket használja: a-zA-Z0-9_/,.-</string>
+    <string name="invalid_value">érvénytelen érték</string>
+    <string name="limits">Határértékek</string>
+    <string name="no_worker_found">Dolgozó nem található</string>
+    <string name="only_to_unreported">Csak a nem jelentettre</string>
+    <string name="production_line">Gyártósor</string>
+    <string name="production_status">Gyártási státusz</string>
+    <string name="save_all">Összes mentése</string>
+    <string name="save_failed">Mentés sikertelen</string>
+    <string name="stop_events_log">Leállási események naplója</string>
+    <string name="stop_logs">Leállási naplók</string>
+    <string name="this_event_only">Csak ezt az eseményt</string>
+    <string name="update">frissítés</string>
+    <string name="update_this_event_to_all_linked">Frissíti ezt a leállási okot az összes kapcsolódó eseménynél?</string>
+    <string name="update_this_production_status_also_to">Frissítse ezt a gyártási státuszt erre is:</string>
+    <string name="you_need_to_complete_all_mandatory_fields">Az összes kötelezően kitöltendő mezőt ki kell töltenie</string>
+    <string name="send_test_success">Teszt küldése sikeres</string>
+    <string name="job_left_time">JOB LEFT TIME</string>
 
 </resources>

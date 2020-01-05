@@ -421,4 +421,27 @@
     <string name="recipe_fields">Champs de la formule</string>
     <string name="quality_group">Groupe de qualité</string>
     <string name="product_group">Groupe de produits</string>
+    <string name="already_in_the_perators_list">Déjà dans la liste des opérateurs</string>
+    <string name="add_to_team">Ajouter à l\'équipe</string>
+    <string name="apply">Appliquer</string>
+    <string name="choose_hour">Choisir l\'heure</string>
+    <string name="current_value_is">La valeur actuelle est</string>
+    <string name="edit_operators">Modifier les opérateurs</string>
+    <string name="illegal_chars">Caractères non valides trouvés ; veuillez utiliser : a-zA-Z0-9_/,.-</string>
+    <string name="invalid_value">Valeur non valide</string>
+    <string name="limits">Limites</string>
+    <string name="no_worker_found">Aucun ouvrier trouvé</string>
+    <string name="only_to_unreported">Seulement aux non signalés</string>
+    <string name="production_line">Chaîne de production</string>
+    <string name="production_status">Statut de production</string>
+    <string name="save_all">Tout sauvegarder</string>
+    <string name="save_failed">La sauvegarde a échoué</string>
+    <string name="stop_events_log">Journal des événements d\'arrêt</string>
+    <string name="stop_logs">Journaux des arrêts</string>
+    <string name="this_event_only">Cet événement uniquement</string>
+    <string name="update">mise à jour</string>
+    <string name="update_this_event_to_all_linked">Mettre à jour cette raison d\'arrêt à tous les événements liés ?</string>
+    <string name="update_this_production_status_also_to">Mettre également à jour ce statut de production pour</string>
+    <string name="you_need_to_complete_all_mandatory_fields">Vous devez remplir tous les champs obligatoires</string>
+    <string name="send_test_success">Envoyer le test de réussite</string>
 </resources>
