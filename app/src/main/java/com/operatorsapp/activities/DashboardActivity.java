@@ -214,7 +214,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         DashboardCentralContainerListener,
         OnReportFieldsUpdatedCallbackListener,
         EasyPermissions.PermissionCallbacks,
-        SelectStopReasonFragment.SelectStopReasonFragmentListener {
+        SelectStopReasonFragment.SelectStopReasonFragmentListener,
+        SignInOperatorFragment.SignInOperatorFragmentListener {
 
     private static final String TAG = DashboardActivity.class.getSimpleName();
 
@@ -3294,6 +3295,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onSuccess(StandardResponse standardResponse) {
 
+    }
+
+    @Override
+    public void onSaveWorkers() {
+        onBackPressed();
+        ProgressDialogManager.show(this);
+        dashboardDataStartPolling();
     }
 
     private class DownloadFile extends AsyncTask<String, String, String> {

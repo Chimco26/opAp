@@ -415,7 +415,7 @@ public class SimpleRequests {
                         callback.onRequestSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "saveShiftWorkers(), onResponse() callback is null");
+                        onFailure(call, new Exception("response not successful"));
                     }
                 } else {
 
