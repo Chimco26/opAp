@@ -424,4 +424,17 @@
     <string name="no_worker_found"></string>
     <string name="save_failed"></string>
     <string name="already_in_the_perators_list"></string>
+    <!--    <string name="pee_value_null"></string>-->
+    <!--    <string name="default_empty_field"></string>-->
+    <!--    <string name="_100"></string>-->
+    <!--    <string name="gr"></string>-->
+    <!--    <string name="one_hundred_percent"></string>-->
+    <!--    <string name="activate"></string>-->
+    <!--    <string name="smaller_than_symbole"></string>-->
+    <!--    <string name="machine_id"></string>-->
+    <!--    <string name="shift_log_standard"></string>-->
+    <!--    <string name="dashes"></string>-->
+    <!--    <string name="report_stop_start"></string>-->
+    <!--    <string name="report_stop_resume"></string>-->
+    <!--    <string name="space"></string>-->
 </resources>
