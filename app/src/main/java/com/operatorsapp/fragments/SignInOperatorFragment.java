@@ -51,6 +51,7 @@ import com.operatorsapp.utils.SoftKeyboardUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static com.operatorsapp.utils.SimpleRequests.getShiftWorkers;
 
@@ -58,6 +59,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
 
     private static final String LOG_TAG = SignInOperatorFragment.class.getSimpleName();
     private static final String SELECTED_OPERATOR = "selected_operator";
+    private static final int MAX_WORKERS_LIST_SIZE = 5;
     private EditText mOperatorIdEditText;
     private TextView mSignInButton;
 
@@ -367,6 +369,11 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         switch (v.getId()) {
             case R.id.button_operator_signIn: {
                 String id = mOperatorIdEditText.getText().toString();
+                if (workerItems != null && workerItems.size() == MAX_WORKERS_LIST_SIZE) {
+                    ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, String.format(Locale.getDefault(), "%s %d",
+                            getString(R.string.you_cant_add_more_workers_than), MAX_WORKERS_LIST_SIZE), CroutonCreator.CroutonType.NETWORK_ERROR);
+                    return;
+                }
                 if (isNotInList(id)) {
                     ProgressDialogManager.show(getActivity());
                     mOperatorIdEditText.setText(null);
