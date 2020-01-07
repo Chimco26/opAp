@@ -109,7 +109,7 @@ public class TitleAndSubWithSelectableListDialog implements View.OnClickListener
         switch (v.getId()) {
 
             case R.id.button_cancel:
-                mListener.onClickNegativeBtn();
+//                mListener.onClickNegativeBtn();
                 mAlarmAlertDialog.dismiss();
                 break;
             case R.id.AML_positive_btn:

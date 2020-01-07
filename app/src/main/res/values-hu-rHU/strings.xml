@@ -442,7 +442,7 @@
     <string name="this_event_only">Csak ezt az eseményt</string>
     <string name="update">frissítés</string>
     <string name="update_this_event_to_all_linked">Frissíti ezt a leállási okot az összes kapcsolódó eseménynél?</string>
-    <string name="update_this_production_status_also_to">Frissítse ezt a gyártási státuszt erre is:</string>
+    <string name="update_this_production_status_also_to">Frissítse ezt a gyártási státuszt erre is</string>
     <string name="you_need_to_complete_all_mandatory_fields">Az összes kötelezően kitöltendő mezőt ki kell töltenie</string>
     <string name="send_test_success">Teszt küldése sikeres</string>
     <string name="job_left_time">JOB LEFT TIME</string>

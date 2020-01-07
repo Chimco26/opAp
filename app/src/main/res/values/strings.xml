@@ -483,5 +483,6 @@
     <string name="no_worker_found">No worker found</string>
     <string name="save_failed">Save failed</string>
     <string name="already_in_the_perators_list">Already in the operators list</string>
+    <string name="you_cant_add_more_workers_than">you can\'t add more workers than</string>
 
 </resources>

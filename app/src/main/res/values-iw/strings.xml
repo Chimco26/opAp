@@ -455,7 +455,7 @@
     <string name="this_event_only">רק אירוע זה</string>
     <string name="update">עדכן</string>
     <string name="update_this_event_to_all_linked">דווח את סיבת עצירה זו לכל האירועים המקושרים</string>
-    <string name="update_this_production_status_also_to">עדכן את סטטוס היצור גם למכונות:</string>
+    <string name="update_this_production_status_also_to">עדכן את סטטוס היצור גם למכונות</string>
     <string name="you_need_to_complete_all_mandatory_fields">יש למלא שדות חובה</string>
     <string name="send_test_success">בדיקה נשלחה בהצלחה</string>
     <string name="reject_reason_setup">סט-אפ</string>

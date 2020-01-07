@@ -3,37 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    app:corner_radius="15dp"
-    android:layout_marginBottom="15dp"
-    android:layout_height="80dp"
+    app:corner_radius="12dp"
+    android:layout_marginBottom="10dp"
+    android:layout_height="45dp"
     android:background="@color/reports_background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="2"
+        android:orientation="horizontal"
         android:paddingEnd="15dp"
         android:paddingStart="15dp"
         android:layout_toStartOf="@+id/IW_remove_btn">
 
         <TextView
             android:id="@+id/IW_number"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:maxLines="1"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:autoSizeMaxTextSize="16sp"
-            app:autoSizeTextType="uniform" />
+            app:autoSizeTextType="uniform"
+            android:layout_marginEnd="10dp"/>
 
         <TextView
             android:id="@+id/IW_name"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:maxLines="1"
             android:textColor="@color/black"

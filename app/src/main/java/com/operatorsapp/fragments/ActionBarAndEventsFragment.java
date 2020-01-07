@@ -640,7 +640,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         getMachineLine(pm.getSiteUrl(), new GetMachineLineCallback() {
             @Override
             public void onGetMachineLineSuccess(MachineLineResponse response) {
-                if (isDetached()){return;}
+                if (isDetached()) {
+                    return;
+                }
                 mLineProgress.setVisibility(View.GONE);
                 if (response.getLineID() != 0) {
                     mLineLy.setVisibility(View.VISIBLE);
@@ -660,7 +662,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             @Override
             public void onGetMachineLineFailed(StandardResponse reason) {
-                if (isDetached()){return;}
+                if (isDetached()) {
+                    return;
+                }
                 ShowCrouton.showSimpleCrouton(mCroutonCallback, reason.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
                 mLineProgress.setVisibility(View.GONE);
             }
@@ -3329,6 +3333,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             }
         });
+
+        EmeraldSpinner.setSpinnerSize((int) (getResources().getDisplayMetrics().heightPixels * 0.75), mLanguagesSpinner);
     }
 
     public void setCycleWarningViewShow(boolean show) {
