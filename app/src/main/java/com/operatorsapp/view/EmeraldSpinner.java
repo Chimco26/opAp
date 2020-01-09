@@ -8,6 +8,8 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import java.lang.reflect.Field;
+
 
 public class EmeraldSpinner extends android.support.v7.widget.AppCompatSpinner {
     AdapterView.OnItemSelectedListener listener;
@@ -106,6 +108,23 @@ public class EmeraldSpinner extends android.support.v7.widget.AppCompatSpinner {
             super.getWindowVisibleDisplayFrame(outRect);
         }
     }
+
+
+    public static void setSpinnerSize(int height, Spinner spinner) {
+        try {
+            Field popup = Spinner.class.getDeclaredField("mPopup");
+            popup.setAccessible(true);
+
+            // Get private mPopup member variable and try cast to ListPopupWindow
+            android.widget.ListPopupWindow popupWindow = (android.widget.ListPopupWindow) popup.get(spinner);
+
+            // Set popupWindow height to 500px
+            popupWindow.setHeight(height);
+        } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
+            // silently fail...
+        }
+    }
+
 
     public interface OnSpinnerEventsListener {
 

@@ -3,22 +3,18 @@ package com.operatorsapp.adapters;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 
 import com.example.common.QCModels.SamplesDatum;
 import com.example.common.QCModels.TestSampleFieldsDatum;
 import com.operatorsapp.R;
-import com.operatorsapp.interfaces.OnKeyboardManagerListener;
-import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.util.ArrayList;
 
@@ -34,16 +30,13 @@ import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_TEXT_IN
 public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
 
     private final String mInputType;
-    private final OnKeyboardManagerListener mOnKeyboardManagerListener;
     private final QCSamplesMultiTypeAdapterListener mQcSamplesMultiTypeAdapterListener;
     private final TestSampleFieldsDatum mTestSample;
     private ArrayList<SamplesDatum> list;
 
     public QCSamplesMultiTypeAdapter(String inputType, TestSampleFieldsDatum testSample,
-                                     OnKeyboardManagerListener onKeyboardManagerListener,
                                      QCSamplesMultiTypeAdapterListener qcSamplesMultiTypeAdapterListener) {
         mInputType = inputType;
-        mOnKeyboardManagerListener = onKeyboardManagerListener;
         mQcSamplesMultiTypeAdapterListener = qcSamplesMultiTypeAdapterListener;
         mTestSample = testSample;
         this.list = (ArrayList<SamplesDatum>) testSample.getSamplesData();
@@ -78,30 +71,44 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
 
             case FIELD_TYPE_BOOLEAN_INT:
                 if (item.getValue() != null && item.getValue().toLowerCase().equals(Boolean.toString(true))) {
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setChecked(true);
-                } else {
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setChecked(false);
+                    ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(true);
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(false);
+                } else if (item.getValue() != null && !item.getValue().isEmpty()){
+                    ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(false);
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(true);
                 }
                 if (mTestSample.getAllowEntry()) {
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setEnabled(true);
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    ((BooleanViewHolder) viewHolder).mRadioPassed.setEnabled(true);
+                    ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                             item.setValue(Boolean.toString(b));
                             if (item.getUpsertType() != 2) {
                                 item.setUpsertType(3);
+                                mTestSample.setUpsertType(3);
+                            }
+                        }
+                    });
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            item.setValue(Boolean.toString(!b));
+                            if (item.getUpsertType() != 2) {
+                                item.setUpsertType(3);
+                                mTestSample.setUpsertType(3);
                             }
                         }
                     });
                 } else {
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setOnCheckedChangeListener(null);
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setEnabled(false);
+                    ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(null);
+                    ((BooleanViewHolder) viewHolder).mRadioPassed.setEnabled(false);
                 }
-                if (item.isFailed()) {
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
-                } else {
-                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.transparentColor));
-                }
+//                if (item.isFailed()) {
+//                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
+//                } else {
+//                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.transparentColor));
+//                }
+               //
                 break;
             case FIELD_TYPE_NUM_INT:
                 ((NumViewHolder) viewHolder).mEditNumberEt.setText(item.getValue());
@@ -125,7 +132,6 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mOnKeyboardManagerListener.onCloseKeyboard();
                         mQcSamplesMultiTypeAdapterListener.onDeleteLine(position);
                     }
                 });
@@ -140,11 +146,14 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
             mEditNumberEt.setFocusable(true);
             mEditNumberEt.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
             mEditNumberEt.setClickable(true);
+            mEditNumberEt.setBackgroundColor(mEditNumberEt.getContext().getResources().getColor(R.color.white));
+
         } else {
             mEditNumberEt.setEnabled(false);
             mEditNumberEt.setFocusable(false);
             mEditNumberEt.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
             mEditNumberEt.setClickable(false);
+            mEditNumberEt.setBackgroundColor(mEditNumberEt.getContext().getResources().getColor(R.color.grey_transparent));
         }
     }
 
@@ -209,12 +218,14 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
 
     public class BooleanViewHolder extends RecyclerView.ViewHolder {
 
-        private CheckBox mBooleanCheckBox;
+        private RadioButton mRadioPassed;
+        private RadioButton mRadioFailed;
 
         BooleanViewHolder(View itemView) {
             super(itemView);
 
-            mBooleanCheckBox = itemView.findViewById(R.id.IQCPHB_check_box);
+            mRadioPassed = itemView.findViewById(R.id.QCP_parameter_radio_passed);
+            mRadioFailed = itemView.findViewById(R.id.QCP_parameter_radio_failed);
 
         }
 
@@ -228,37 +239,8 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
             super(itemView);
 
             mEditNumberEt = itemView.findViewById(R.id.IQCPHN_et);
-            mEditNumberEt.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    int inType = mEditNumberEt.getInputType(); // backup the input type
-                    mEditNumberEt.setInputType(InputType.TYPE_NULL); // disable soft input
-                    mEditNumberEt.onTouchEvent(event); // call native handler
-                    mEditNumberEt.setInputType(inType); // restore input type
-                    setKeyBoard(mEditNumberEt, new String[]{".", "-"});
-                    mEditNumberEt.setCursorVisible(true);
-                    return false; // consume touch event
-                }
-            });
         }
 
-        private void setKeyBoard(final EditText editText, String[] complementChars) {
-            if (mOnKeyboardManagerListener != null) {
-                mOnKeyboardManagerListener.onOpenKeyboard(new SingleLineKeyboard.OnKeyboardClickListener() {
-                    @Override
-                    public void onKeyboardClick(String text) {
-                        editText.setText(text);
-                    }
-                }, editText.getText().toString(), complementChars);
-            }
-        }
-
-        private void closeKeyboard(int editStop) {
-            if (editStop != 1) {
-                if (mOnKeyboardManagerListener != null)
-                    mOnKeyboardManagerListener.onCloseKeyboard();
-            }
-        }
     }
 
     public class LastMinusViewHolder extends RecyclerView.ViewHolder {

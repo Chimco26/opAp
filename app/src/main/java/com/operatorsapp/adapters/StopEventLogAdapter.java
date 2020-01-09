@@ -91,21 +91,24 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
         viewHolderItems.machine.setText(event.getMachineName());
     }
 
-    public void initViewSubOrRoot(Event event, ViewHolder viewHolderItems) {
-        if (event.getRootEventID() != 0) {
-            viewHolderItems.subMarginView.setVisibility(View.VISIBLE);
-            viewHolderItems.expand.setVisibility(View.GONE);
-        } else if (event.isHaveChild()) {
-            viewHolderItems.subMarginView.setVisibility(View.GONE);
+    private void initViewSubOrRoot(Event event, ViewHolder viewHolderItems) {
+        if (event.isHaveChild()) {
             viewHolderItems.expand.setVisibility(View.VISIBLE);
+            viewHolderItems.expandBackgrnd.setVisibility(View.VISIBLE);
+            viewHolderItems.subMarginView.setVisibility(View.VISIBLE);
             if (event.isExpand()) {
                 viewHolderItems.expand.setRotationX(180);
             } else {
                 viewHolderItems.expand.setRotationX(0);
             }
-        } else {
+        } else if (event.getRootEventID() != 0){
+            viewHolderItems.expand.setVisibility(View.INVISIBLE);
+            viewHolderItems.expandBackgrnd.setVisibility(View.INVISIBLE);
             viewHolderItems.subMarginView.setVisibility(View.INVISIBLE);
-            viewHolderItems.expand.setVisibility(View.GONE);
+        }else {
+            viewHolderItems.expand.setVisibility(View.INVISIBLE);
+            viewHolderItems.expandBackgrnd.setVisibility(View.VISIBLE);
+            viewHolderItems.subMarginView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -132,11 +135,13 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
         private final TextView end;
         private final TextView duration;
         private final TextView machine;
+        private final View expandBackgrnd;
 
         ViewHolder(View itemView) {
             super(itemView);
 
             expand = itemView.findViewById(R.id.ISEL_expand_img);
+            expandBackgrnd = itemView.findViewById(R.id.ISEL_expand_img_rl);
             subMarginView = itemView.findViewById(R.id.ISEL_sub_item_margin);
             stopIc = itemView.findViewById(R.id.ISEL_ic);
             title = itemView.findViewById(R.id.ISEL_item_title);

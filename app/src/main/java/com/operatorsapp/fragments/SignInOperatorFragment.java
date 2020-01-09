@@ -21,12 +21,14 @@ import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
 import com.example.common.StandardResponse;
+import com.example.common.UpsertType;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.callback.GetShiftWorkersCallback;
+import com.example.common.callback.SimpleCallback;
 import com.example.common.machineData.ShiftOperatorResponse;
 import com.example.common.machineData.Worker;
+import com.example.common.operator.SaveShiftWorkersRequest;
 import com.example.oppapplog.OppAppLogger;
-import com.google.gson.Gson;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operatorsapp.R;
@@ -38,14 +40,18 @@ import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.OnStartDragListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleItemTouchHelperCallback;
+import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import static com.operatorsapp.utils.SimpleRequests.getShiftWorkers;
 
@@ -53,6 +59,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
 
     private static final String LOG_TAG = SignInOperatorFragment.class.getSimpleName();
     private static final String SELECTED_OPERATOR = "selected_operator";
+    private static final int MAX_WORKERS_LIST_SIZE = 5;
     private EditText mOperatorIdEditText;
     private TextView mSignInButton;
 
@@ -68,6 +75,9 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     private WorkerAdapter workersAdapter;
     private ItemTouchHelper mItemTouchHelper;
     private View mSaveBtn;
+    private ArrayList<Worker> workerItemsOriginal;
+    private Worker mMainWorker;
+    private SignInOperatorFragmentListener listener;
 
 
     @Override
@@ -80,6 +90,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         mOnGoToScreenListener = (GoToScreenListener) getActivity();
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
         mOperatorCore.registerListener(mOperatorForMachineUICallbackListener);
+        listener = (SignInOperatorFragmentListener) context;
     }
 
 
@@ -108,7 +119,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //todo save request and (close or next fragment?)
+                saveShiftWorkers();
             }
         });
         mOperatorIdEditText.addTextChangedListener(new TextWatcher() {
@@ -151,10 +162,28 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         mRv.setHasFixedSize(true);
         mRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         workerItems = new ArrayList<>();
+        workerItemsOriginal = new ArrayList<>();
         workersAdapter = new WorkerAdapter(workerItems, new OnStartDragListener() {
             @Override
             public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
                 mItemTouchHelper.startDrag(viewHolder);
+            }
+        }, new WorkerAdapter.WorkerAdapterListener() {
+            @Override
+            public void onRemoveWorker(Worker worker) {
+                for (Worker workerOriginal : workerItemsOriginal) {
+                    if (workerOriginal.equals(worker)) {
+                        if (workerOriginal.getUpsertType() == UpsertType.INSERT.getValue()) {
+                            workerItemsOriginal.remove(worker);
+                            return;
+                        }
+                        workerOriginal.setUpsertType(UpsertType.DELETE.getValue());
+                        if (workersAdapter.getItemCount() > 1) {
+                            workerOriginal.setHeadWorker(false);
+                        }
+                        return;
+                    }
+                }
             }
         });
         mRv.setAdapter(workersAdapter);
@@ -171,10 +200,12 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
             public void onGetShiftWorkersSuccess(ShiftOperatorResponse response) {
                 mWorkersProgressBar.setVisibility(View.GONE);
                 workerItems.clear();
+                workerItemsOriginal.clear();
+                if (response.getWorkers() != null && response.getWorkers().size() > 0) {
+                    response.getWorkers().get(0).setHeadWorker(true);
+                }
                 workerItems.addAll(response.getWorkers());
-                workerItems.addAll(response.getWorkers());
-                workerItems.addAll(response.getWorkers());
-                workerItems.addAll(response.getWorkers());
+                workerItemsOriginal.addAll(response.getWorkers());
                 workersAdapter.notifyDataSetChanged();
                 if (response.getWorkers() != null && response.getWorkers().size() > 0) {
                     mNoDataTv.setVisibility(View.GONE);
@@ -191,6 +222,67 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
     }
 
+    private void saveShiftWorkers() {
+        PersistenceManager pm = PersistenceManager.getInstance();
+        mWorkersProgressBar.setVisibility(View.VISIBLE);
+        SimpleRequests.saveShiftWorkers(new SaveShiftWorkersRequest(pm.getMachineId(),
+                pm.getSessionId(), getSubWorkers(), getMainWorker()), pm.getSiteUrl(), new SimpleCallback() {
+            @Override
+            public void onRequestSuccess(StandardResponse response) {
+                mWorkersProgressBar.setVisibility(View.GONE);
+                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.save) + " " +
+                        getString(R.string.operator) + " " + getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
+                listener.onSaveWorkers();
+            }
+
+            @Override
+            public void onRequestFailed(StandardResponse reason) {
+                mWorkersProgressBar.setVisibility(View.GONE);
+                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.save_failed), CroutonCreator.CroutonType.NETWORK_ERROR);
+            }
+        }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
+    }
+
+    private List<Worker> getSubWorkers() {
+        if (workerItems.size() == 0) {
+            for (Worker workerOriginal : workerItemsOriginal) {
+                if (workerOriginal.isHeadWorker()) {
+                    mMainWorker = workerOriginal;
+                }
+            }
+        }
+        if (workerItems.size() > 0) {
+            for (Worker workerOriginal : workerItemsOriginal) {
+                for (Worker worker : workerItems) {
+                    if (workerOriginal.getWorkerID().equals(worker.getWorkerID())
+                            && workerOriginal.getID() == (worker.getID())) {
+                        workerOriginal.setUpsertType(worker.getUpsertType());
+                        workerOriginal.setHeadWorker(worker.isHeadWorker());
+                        if (workerOriginal.isHeadWorker()) {
+                            mMainWorker = workerOriginal;
+                        }
+                    }
+                }
+            }
+        }
+        if (mMainWorker != null) {
+            workerItemsOriginal.remove(mMainWorker);
+        }
+        return workerItemsOriginal;
+    }
+
+    private Worker getMainWorker() {
+        if (mMainWorker != null) {
+            return mMainWorker;
+        }
+        for (Worker workerOriginal : workerItemsOriginal) {
+            if (workerOriginal.isHeadWorker()) {
+                mMainWorker = workerOriginal;
+            }
+        }
+        return mMainWorker;
+    }
+
     OperatorForMachineUICallbackListener mOperatorForMachineUICallbackListener = new OperatorForMachineUICallbackListener() {
         @Override
         public void onOperatorDataReceived(Operator operator) {
@@ -199,23 +291,19 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                 if (operator.getOperatorName().equals("")) {
                     OppAppLogger.getInstance().d(LOG_TAG, "Operator data receive failed. Reason : Empty operator name ");
                     removePhoneKeypad();
-                    ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "No operator found");
+                    ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, getString(R.string.no_worker_found));
                 } else {
                     OppAppLogger.getInstance().d(LOG_TAG, "Operator data received: Operator Id is:" + operator.getOperatorId() + " Operator Name Is: " + operator.getOperatorName());
-
-                    SelectedOperatorFragment selectedOperatorFragment = new SelectedOperatorFragment();
-                    Bundle bundle = new Bundle();
-                    Gson gson = new Gson();
-                    String jobString = gson.toJson(operator, Operator.class);
-                    bundle.putString(SELECTED_OPERATOR, jobString);
-
-                    selectedOperatorFragment.setArguments(bundle);
-                    mOnGoToScreenListener.goToFragment(selectedOperatorFragment, true, true);
+                    mNoDataTv.setVisibility(View.GONE);
+                    Worker worker = new Worker(operator.getOperatorId(), operator.getOperatorName(), UpsertType.INSERT.getValue());
+                    workerItems.add(worker);
+                    workerItemsOriginal.add(worker);
+                    workersAdapter.notifyItemInserted(workerItems.size() - 1);
                 }
             } else {
                 OppAppLogger.getInstance().d(LOG_TAG, "Operator data receive failed. Reason : ");
                 removePhoneKeypad();
-                ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "No operator found");
+                ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, getString(R.string.no_worker_found));
             }
             dismissProgressDialog();
         }
@@ -280,17 +368,32 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_operator_signIn: {
-                ProgressDialogManager.show(getActivity());
                 String id = mOperatorIdEditText.getText().toString();
-                mOperatorIdEditText.setText(null);
-                OppAppLogger.getInstance().i(LOG_TAG, "Operator id: " + id);
-                mOperatorCore.getOperatorById(id);
-                //todo check with request befor add to list
-                workerItems.add(new Worker(id));
-                workersAdapter.notifyItemInserted(workerItems.size() - 1);
+                if (workerItems != null && workerItems.size() == MAX_WORKERS_LIST_SIZE) {
+                    ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, String.format(Locale.getDefault(), "%s %d",
+                            getString(R.string.you_cant_add_more_workers_than), MAX_WORKERS_LIST_SIZE), CroutonCreator.CroutonType.NETWORK_ERROR);
+                    return;
+                }
+                if (isNotInList(id)) {
+                    ProgressDialogManager.show(getActivity());
+                    mOperatorIdEditText.setText(null);
+                    OppAppLogger.getInstance().i(LOG_TAG, "Operator id: " + id);
+                    mOperatorCore.getOperatorById(id);
+                } else {
+                    ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.already_in_the_perators_list), CroutonCreator.CroutonType.NETWORK_ERROR);
+                }
                 break;
             }
         }
+    }
+
+    private boolean isNotInList(String id) {
+        for (Worker worker : workerItems) {
+            if (worker.getWorkerID().equals(id)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -326,5 +429,9 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                 }
             });
         }
+    }
+
+    public interface SignInOperatorFragmentListener {
+        void onSaveWorkers();
     }
 }

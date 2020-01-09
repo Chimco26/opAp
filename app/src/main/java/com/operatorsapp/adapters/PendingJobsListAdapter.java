@@ -107,10 +107,6 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
 
             }
         });
-
-        if (viewHolder.itemView.getContext().getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-            viewHolder.mArrow.setRotationY(180);
-        }
     }
 
     private HashMap<String, String> listToHashMap(ArrayList<Property> properties) {

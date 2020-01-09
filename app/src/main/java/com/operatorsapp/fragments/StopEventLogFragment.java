@@ -89,6 +89,9 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initVars(getView());
+        initView();
+        initListener(getView());
     }
 
     @Override
@@ -98,9 +101,6 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
     }
 
     public void refresh() {
-        initVars(getView());
-        initView();
-        initListener(getView());
         getMachinesLineData();
     }
 

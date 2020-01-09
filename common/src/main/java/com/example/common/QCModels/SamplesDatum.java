@@ -11,7 +11,7 @@ public class SamplesDatum {
     @SerializedName("Value")
     @Expose
     private String value;
-    @SerializedName("UpsertType")
+    @SerializedName("com.example.common.UpsertType")
     @Expose
     private Integer upsertType;
     private boolean failed;

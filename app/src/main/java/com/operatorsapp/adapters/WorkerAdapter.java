@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.common.UpsertType;
 import com.example.common.machineData.Worker;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.ItemTouchHelperAdapter;
@@ -22,10 +23,12 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.ViewHolder
         implements ItemTouchHelperAdapter {
     private final ArrayList<Worker> list;
     private final OnStartDragListener onStartDragListener;
+    private final WorkerAdapterListener listener;
 
-    public WorkerAdapter(ArrayList<Worker> workerItems, OnStartDragListener onStartDragListener) {
+    public WorkerAdapter(ArrayList<Worker> workerItems, OnStartDragListener onStartDragListener, WorkerAdapterListener listener) {
         list = workerItems;
         this.onStartDragListener = onStartDragListener;
+        this.listener = listener;
     }
 
     @NonNull
@@ -39,14 +42,23 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull final WorkerAdapter.ViewHolder viewHolder, int position) {
 
-        viewHolder.numberTv.setText(list.get(position).getWorkerID());
-        viewHolder.nameTv.setText(list.get(position).getWorkerName());
+        Worker worker = list.get(position);
+        viewHolder.numberTv.setText(worker.getWorkerID());
+        viewHolder.nameTv.setText(worker.getWorkerName());
         if (position == 0) {
             viewHolder.itemView.setBackgroundColor(viewHolder.itemView.getContext().getResources().getColor(R.color.blue1));
             viewHolder.numberTv.setTextColor(viewHolder.itemView.getContext().getResources().getColor(R.color.white));
             viewHolder.nameTv.setTextColor(viewHolder.itemView.getContext().getResources().getColor(R.color.white));
             viewHolder.removeBtn.setColorFilter(viewHolder.itemView.getContext().getResources().getColor(R.color.white));
+            if (worker.getUpsertType() != UpsertType.INSERT.getValue() && !worker.isHeadWorker()){
+                worker.setUpsertType(UpsertType.UPDATE.getValue());
+            }
+            worker.setHeadWorker(true);
         } else {
+            if (worker.getUpsertType() != UpsertType.INSERT.getValue() && worker.isHeadWorker()){
+                worker.setUpsertType(UpsertType.UPDATE.getValue());
+            }
+            worker.setHeadWorker(false);
             viewHolder.itemView.setBackgroundColor(viewHolder.itemView.getContext().getResources().getColor(R.color.reports_background));
             viewHolder.numberTv.setTextColor(viewHolder.itemView.getContext().getResources().getColor(R.color.black));
             viewHolder.nameTv.setTextColor(viewHolder.itemView.getContext().getResources().getColor(R.color.black));
@@ -56,6 +68,7 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.ViewHolder
         viewHolder.removeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                listener.onRemoveWorker(list.get(viewHolder.getAdapterPosition()));
                 list.remove(viewHolder.getAdapterPosition());
                 if (viewHolder.getAdapterPosition() == 0) {
                     notifyDataSetChanged();

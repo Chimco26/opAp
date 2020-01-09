@@ -570,16 +570,16 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/FAAE_bottom_msg_fl"
+        android:id="@+id/FAAE_bottom_rl"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:background="@color/grey_lite"
         android:padding="1dp">
 
         <LinearLayout
             android:id="@+id/bottom_notification_lil"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_below="@+id/FAAE_machine_line_ly"
             android:background="@color/white_default"
             android:orientation="horizontal"
@@ -596,7 +596,7 @@
                 android:id="@+id/bottom_notification_sender_tv"
                 style="@style/ToolbarTheme"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="20dp"
                 android:gravity="start"
@@ -640,9 +640,11 @@
         <RelativeLayout
             android:id="@+id/FAAE_machine_line_ly"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_height="60dp"
             android:background="@color/white"
-            android:paddingStart="15dp">
+            android:layoutDirection="ltr"
+            android:paddingStart="15dp"
+            android:visibility="gone">
 
             <View
                 android:layout_width="match_parent"
@@ -663,21 +665,8 @@
                 android:orientation="vertical"
                 android:weightSum="2">
 
-                <TextView
-                    android:id="@+id/FAAE_machine_line_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/production_line"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:maxLines="1"
-                    app:autoSizeMaxTextSize="20sp"
-                    app:autoSizeTextType="uniform" />
-
                 <LinearLayout
+
                     android:id="@+id/FAAE_machine_line_log_btn_ll"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -692,24 +681,39 @@
                         android:layout_height="match_parent"
                         android:layout_weight="4"
                         android:gravity="center"
+                        android:maxLines="1"
                         android:padding="5dp"
                         android:text="@string/view_log"
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:autoSizeMaxTextSize="20sp"
-                        app:autoSizeTextType="uniform"
-                        android:maxLines="1"/>
+                        app:autoSizeTextType="uniform" />
 
                     <ImageView
+                        android:id="@+id/FAAE_line_arrow"
                         android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:padding="5dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/arrow_back"
-                        android:rotation="180"/>
+                        android:rotation="180"
+                        android:src="@drawable/arrow_back" />
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/FAAE_machine_line_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="@string/production_line"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="20sp"
+                    app:autoSizeTextType="uniform" />
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
@@ -721,6 +725,12 @@
                 android:paddingStart="10dp"
                 tools:listitem="@layout/item_line_machine" />
 
+            <ProgressBar
+                android:id="@+id/FAAE_line_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
         </RelativeLayout>
     </RelativeLayout>
 

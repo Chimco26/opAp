@@ -5,11 +5,10 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.TooltipCompat;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -22,10 +21,8 @@ import android.widget.TimePicker;
 
 import com.example.common.QCModels.TestFieldsDatum;
 import com.operatorsapp.R;
-import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.RangeView2;
-import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -49,11 +46,9 @@ import static com.operatorsapp.utils.TimeUtils.SQL_NO_T_FORMAT;
 public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
     private static final String TAG = QCMultiTypeAdapter.class.getSimpleName();
-    private final OnKeyboardManagerListener mOnKeyboardManagerListener;
     private List<TestFieldsDatum> list;
 
-    public QCMultiTypeAdapter(List<TestFieldsDatum> list, OnKeyboardManagerListener onKeyboardManagerListener) {
-        mOnKeyboardManagerListener = onKeyboardManagerListener;
+    public QCMultiTypeAdapter(List<TestFieldsDatum> list) {
         this.list = list;
     }
 
@@ -93,14 +88,15 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
         } else {
             ((CustomViewHolder) viewHolder).title.setTextColor(viewHolder.itemView.getResources().getColor(R.color.black));
         }
-        switch (type) {
+       switch (type) {
 
             case FIELD_TYPE_BOOLEAN_INT:
                 ((BooleanViewHolder) viewHolder).title.setText(item.getLName());
+                TooltipCompat.setTooltipText(((BooleanViewHolder) viewHolder).title, item.getLName());
                 if (item.getCurrentValue().toLowerCase().equals(Boolean.toString(true))) {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(true);
                     ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(false);
-                } else {
+                } else if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()){
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(false);
                     ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(true);
                 }
@@ -113,6 +109,13 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                             list.get(position).setUpsertType(3);
                         }
                     });
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            list.get(position).setCurrentValue(Boolean.toString(!b));
+                            list.get(position).setUpsertType(3);
+                        }
+                    });
                 } else {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(null);
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setEnabled(false);
@@ -120,23 +123,25 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                 break;
             case FIELD_TYPE_NUM_INT:
                 ((NumViewHolder) viewHolder).title.setText(item.getLName());
+                TooltipCompat.setTooltipText(((NumViewHolder) viewHolder).title, item.getLName());
                 ((NumViewHolder) viewHolder).mEditNumberEt.setText(item.getCurrentValue());
                 setEditableMode(position, item, ((NumViewHolder) viewHolder).mEditNumberEt, viewHolder);
                 break;
             case FIELD_TYPE_TEXT_INT:
                 ((TextViewHolder) viewHolder).title.setText(item.getLName());
+                TooltipCompat.setTooltipText(((TextViewHolder) viewHolder).title, item.getLName());
                 ((TextViewHolder) viewHolder).mTextEt.setText(item.getCurrentValue());
                 setEditableMode(position, item, ((TextViewHolder) viewHolder).mTextEt, viewHolder);
                 break;
             case FIELD_TYPE_INTERVAL_INT:
                 ((IntervalViewHolder) viewHolder).title.setText(item.getLName());
+                TooltipCompat.setTooltipText(((IntervalViewHolder) viewHolder).title, item.getLName());
                 ((IntervalViewHolder) viewHolder).mValueEt.setText(String.valueOf(item.getCurrentValue()));
                 setRangeView(item, ((IntervalViewHolder) viewHolder).mRangeView);
                 ((IntervalViewHolder) viewHolder).mRangeView.setLowLimit(1);
                 ((IntervalViewHolder) viewHolder).mRangeView.setHighLimit(5);
                 ((IntervalViewHolder) viewHolder).mValueEt.setText(item.getCurrentValue());
                 setEditableMode(position, item, ((IntervalViewHolder) viewHolder).mValueEt, viewHolder);
-
                 break;
             case FIELD_TYPE_TIME_INT:
                 if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
@@ -145,6 +150,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                             SIMPLE_HM_FORMAT));
                 }
                 ((TimeTextViewHolder) viewHolder).title.setText(item.getLName());
+                TooltipCompat.setTooltipText(((TimeTextViewHolder) viewHolder).title, item.getLName());
                 if (item.getAllowEntry()) {
                     ((TimeTextViewHolder) viewHolder).mTextTimeTv.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -152,10 +158,15 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                             ((TimeTextViewHolder) viewHolder).showHourPicker(((TimeTextViewHolder) viewHolder).itemView.getContext(), item);
                         }
                     });
+                    ((TimeTextViewHolder) viewHolder).mTextTimeTv.setBackgroundColor(((TimeTextViewHolder) viewHolder).mTextTimeTv.getContext().getResources().getColor(R.color.white));
+                }else {
+                    ((TimeTextViewHolder) viewHolder).mTextTimeTv.setOnClickListener(null);
+                    ((TimeTextViewHolder) viewHolder).mTextTimeTv.setBackgroundColor(((TimeTextViewHolder) viewHolder).mTextTimeTv.getContext().getResources().getColor(R.color.grey_transparent));
                 }
                 break;
             case FIELD_TYPE_DATE_INT:
                 ((DateViewHolder) viewHolder).title.setText(item.getLName());
+                TooltipCompat.setTooltipText(((DateViewHolder) viewHolder).title, item.getLName());
                 if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty() && !item.getCurrentValue().equals("0")) {
                     ((DateViewHolder) viewHolder).mTextDateTv.setText(TimeUtils.getDate(
                             TimeUtils.convertDateToMillisecond(item.getCurrentValue(), SQL_NO_T_FORMAT),
@@ -168,8 +179,10 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                             showDatePicker(((DateViewHolder) viewHolder), item);
                         }
                     });
+                    ((DateViewHolder) viewHolder).mTextDateTv.setBackgroundColor(((DateViewHolder) viewHolder).mTextDateTv.getContext().getResources().getColor(R.color.white));
                 } else {
                     ((DateViewHolder) viewHolder).itemView.setOnClickListener(null);
+                    ((DateViewHolder) viewHolder).mTextDateTv.setBackgroundColor(((DateViewHolder) viewHolder).mTextDateTv.getContext().getResources().getColor(R.color.grey_transparent));
                 }
                 break;
 
@@ -183,11 +196,13 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             mEditNumberEt.setFocusable(true);
             mEditNumberEt.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
             mEditNumberEt.setClickable(true);
+            mEditNumberEt.setBackgroundColor(mEditNumberEt.getContext().getResources().getColor(R.color.white));
         } else {
             mEditNumberEt.setEnabled(false);
             mEditNumberEt.setFocusable(false);
             mEditNumberEt.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
             mEditNumberEt.setClickable(false);
+            mEditNumberEt.setBackgroundColor(mEditNumberEt.getContext().getResources().getColor(R.color.grey_transparent));
         }
     }
 
@@ -232,7 +247,11 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
     public void updateRangeView(TestFieldsDatum item, RangeView2 mRangeView) {
         if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
-            mRangeView.setCurrentValue(Float.parseFloat(item.getCurrentValue()));
+            try {
+                mRangeView.setCurrentValue(Float.parseFloat(item.getCurrentValue()));
+            }catch (Exception e){
+                mRangeView.setCurrentValue(0);
+            }
         } else {
             mRangeView.setCurrentValue(0);
         }
@@ -342,18 +361,6 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             title.setVisibility(View.VISIBLE);
 
             mEditNumberEt = itemView.findViewById(R.id.IQCPHN_et);
-            mEditNumberEt.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    int inType = mEditNumberEt.getInputType(); // backup the input type
-                    mEditNumberEt.setInputType(InputType.TYPE_NULL); // disable soft input
-                    mEditNumberEt.onTouchEvent(event); // call native handler
-                    mEditNumberEt.setInputType(inType); // restore input type
-                    setKeyBoard(mEditNumberEt, new String[]{".", "-"});
-                    mEditNumberEt.setCursorVisible(true);
-                    return false; // consume touch event
-                }
-            });
         }
 
     }
@@ -368,25 +375,8 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
             title.setVisibility(View.VISIBLE);
 
             mValueEt = itemView.findViewById(R.id.IQCPHN_et);
-            setOnTouchListener(mValueEt);
             itemView.findViewById(R.id.QCP_parameter_txt).setVisibility(View.VISIBLE);
             mRangeView = itemView.findViewById(R.id.IQCPI_range);
-
-        }
-
-        private void setOnTouchListener(final EditText editText) {
-            editText.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    int inType = editText.getInputType(); // backup the input type
-                    editText.setInputType(InputType.TYPE_NULL); // disable soft input
-                    editText.onTouchEvent(event); // call native handler
-                    editText.setInputType(inType); // restore input type
-                    setKeyBoard(editText, new String[]{".", "-"});
-                    editText.setCursorVisible(true);
-                    return false; // consume touch event
-                }
-            });
 
         }
 
@@ -404,24 +394,6 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
         }
 
-    }
-
-    private void setKeyBoard(final EditText editText, String[] complementChars) {
-        if (mOnKeyboardManagerListener != null) {
-            mOnKeyboardManagerListener.onOpenKeyboard(new SingleLineKeyboard.OnKeyboardClickListener() {
-                @Override
-                public void onKeyboardClick(String text) {
-                    editText.setText(text);
-                }
-            }, editText.getText().toString(), complementChars);
-        }
-    }
-
-    private void closeKeyboard(int editStop) {
-        if (editStop != 1) {
-            if (mOnKeyboardManagerListener != null)
-                mOnKeyboardManagerListener.onCloseKeyboard();
-        }
     }
 
     public class TimeTextViewHolder extends CustomViewHolder {

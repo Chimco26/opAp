@@ -15,7 +15,7 @@
             android:id="@+id/IS_tv"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="7"
+            android:layout_weight="6"
             android:gravity="center_vertical"
             android:maxLines="1"
             android:textColor="@color/black"
@@ -105,7 +105,17 @@
                     android:textStyle="bold"/>
 
             </LinearLayout>
+
         </RelativeLayout>
+
+
+        <ImageView
+            android:id="@+id/IS_edit_ic"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/edit"
+            android:padding="5dp"/>
     </LinearLayout>
 
     <View

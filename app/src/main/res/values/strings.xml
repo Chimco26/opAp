@@ -143,6 +143,7 @@
         <item>Arabic</item>
         <item>Italian</item>
         <item>Hungarian</item>
+        <item>Polish</item>
     </array>
 
     <array name="language_codes_array">
@@ -158,6 +159,7 @@
         <item>ar</item>
         <item>it</item>
         <item>hu</item>
+        <item>pl</item>
     </array>
     <array name="jobs_spinner_array">
         <item>Activate Job</item>
@@ -457,6 +459,7 @@
     <string name="recipe_fields">Recipe Fields</string>
     <string name="test_fields">Test Fields</string>
     <string name="invalid_value">invalid value</string>
+
     <string name="limits">Limits</string>
     <string name="you_need_to_complete_all_mandatory_fields">You need to complete all mandatory fields</string>
     <string name="choose_hour">Choose hour</string>
@@ -476,5 +479,10 @@
     <string name="apply">Apply</string>
     <string name="add_to_team">Add to Team</string>
     <string name="save_and_close"><![CDATA[Save & Close]]></string>
+    <string name="edit_operators">Edit Operators</string>
+    <string name="no_worker_found">No worker found</string>
+    <string name="save_failed">Save failed</string>
+    <string name="already_in_the_perators_list">Already in the operators list</string>
+    <string name="you_cant_add_more_workers_than">you can\'t add more workers than</string>
 
 </resources>

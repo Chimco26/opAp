@@ -411,5 +411,16 @@
     <string name="password_incorrect">Esta contraseña es incorrecta. Inténtelo de nuevo</string>
     <string name="order_test">Probar pedido</string>
     <string name="installed_apps">Accesos directos de aplicaciones</string>
+    <string name="test">Prueba</string>
+    <string name="test_fields">Campos de prueba</string>
+    <string name="you_need_to_select_the_test">Debe seleccionar la prueba que desea ejecutar</string>
+    <string name="you_need_to_select_the_test_field">Debe seleccionar la prueba que desea ejecutar</string>
+    <string name="gr">gr</string>
+    <string name="gram">gr</string>
+    <string name="recipe_fields">Campos de la receta</string>
+    <string name="quality_group">Grupo de calidad</string>
+    <string name="product_group">Grupo de productos</string>
+    <string name="invalid_value">valor no válido</string>
+    <string name="send_test_success">Enviar éxito de pruebas</string>
 
 </resources>

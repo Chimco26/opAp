@@ -64,7 +64,7 @@ public class TestFieldsDatum {
     @SerializedName("Failed")
     @Expose
     private boolean failed;
-    @SerializedName("UpsertType")
+    @SerializedName("com.example.common.UpsertType")
     @Expose
     private Integer upsertType;
     private String groupName;

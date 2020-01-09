@@ -9,10 +9,10 @@ public class Worker {
     private Boolean headWorker;
     @SerializedName("ID")
     @Expose
-    private Integer iD;
+    private int iD;
     @SerializedName("UpsertType")
     @Expose
-    private Integer upsertType;
+    private int upsertType;
     @SerializedName("WorkerID")
     @Expose
     private String workerID;
@@ -24,7 +24,13 @@ public class Worker {
         this.workerID = id;
     }
 
-    public Boolean getHeadWorker() {
+    public Worker(String workerID, String workerName, Integer upsertType) {
+        this.upsertType = upsertType;
+        this.workerID = workerID;
+        this.workerName = workerName;
+    }
+
+    public Boolean isHeadWorker() {
         return headWorker;
     }
 
@@ -32,7 +38,7 @@ public class Worker {
         this.headWorker = headWorker;
     }
 
-    public Integer getID() {
+    public int getID() {
         return iD;
     }
 
@@ -40,7 +46,7 @@ public class Worker {
         this.iD = iD;
     }
 
-    public Integer getUpsertType() {
+    public int getUpsertType() {
         return upsertType;
     }
 
