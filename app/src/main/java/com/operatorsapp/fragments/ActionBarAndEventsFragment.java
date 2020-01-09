@@ -2114,6 +2114,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
+    public void setProductionStatusVisible() {
+        if (mToolBarView != null) {
+            mToolBarView.findViewById(R.id.toolbar_production_spinner).setVisibility(View.VISIBLE);
+            mToolBarView.findViewById(R.id.toolbar_production_text).setVisibility(View.VISIBLE);
+        }
+    }
+
     private void setupOperatorSpinner() {
 
         if (getActivity() == null) {
