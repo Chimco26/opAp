@@ -200,7 +200,7 @@
     <string name="channel_1_99">Canal 1-99</string>
     <string name="channel_100">Canal 100</string>
     <string name="close">Cerrar</string>
-    <string name="default_unanswered_technocian_call">Editar nota</string>
+    <string name="default_unanswered_technician_call_no_name">Editar nota</string>
     <string name="edit_note">Editar nota</string>
     <string name="end_setup_success">Configuración finalizada correctamente</string>
     <string name="enter_note_here">Introduce tu nota aquí</string>

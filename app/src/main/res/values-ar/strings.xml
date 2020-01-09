@@ -195,7 +195,7 @@
     <string name="channel_0">قناه 0</string>
     <string name="channel_100">قناه 100</string>
     <string name="close">اغلق</string>
-    <string name="default_unanswered_technocian_call">في انتظارالتقني للرد</string>
+    <string name="default_unanswered_technician_call_no_name">في انتظارالتقني للرد</string>
     <string name="edit_note">تصحيح التعليق</string>
     <string name="end_setup_success">تم تنفيذ شهادة الإعداد بنجاح</string>
     <string name="enter_note_here">saادخل/ي الملاحظه هنا</string>

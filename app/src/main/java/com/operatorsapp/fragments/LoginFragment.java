@@ -257,7 +257,7 @@ public class LoginFragment extends Fragment {
         String factoryUrl = mSiteUrl.getText().toString();
         String userName = mUserName.getText().toString();
         String password = mPassword.getText().toString();
-        String checkUrl = factoryUrl.replaceAll("[^a-zA-Z0-9_/,.-]", "");
+        String checkUrl = factoryUrl.replaceAll("[^a-zA-Z0-9_/,:.-]", "");
 
         if (!checkUrl.equals(factoryUrl) && mCroutonCallback != null){
             mCroutonCallback.onShowCroutonRequest(getResources().getString(R.string.illegal_chars), 5000, R.id.parent_layouts, CroutonCreator.CroutonType.URL_ERROR);

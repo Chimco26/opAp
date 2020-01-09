@@ -199,7 +199,7 @@
     <string name="channel_1_99">Kanaal 1-99</string>
     <string name="channel_100">Kanaal 100</string>
     <string name="close">Sluiten</string>
-    <string name="default_unanswered_technocian_call">Wachtend op antwoord technicus</string>
+    <string name="default_unanswered_technician_call_no_name">Wachtend op antwoord technicus</string>
     <string name="edit_note">Opmerking bewerken</string>
     <string name="end_setup_success">Eindconfiguratie succesvol</string>
     <string name="enter_note_here">Voer hier uw opmerking in</string>
