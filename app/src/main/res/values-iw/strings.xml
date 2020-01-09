@@ -258,7 +258,7 @@
     <string name="app_name">Matics Operator</string>
     <string name="attention_cycles_detected_in_a_non_production_status">המערכת זיהתה התקדמות מחזורים במצב שאינו ייצורי.  בבקשה אל תשכח להפעיל פק\"ע בזמן.</string>
     <string name="call_for_technician_unresponsive">קריאתך לטכנאי לא נענתה במשך 5 דקות ולכן בוטלה.</string>
-    <string name="default_unanswered_technocian_call">ממתין לתגובת טכנאי</string>
+    <string name="default_unanswered_technician_call_no_name">ממתין לתגובת טכנאי</string>
     <string name="gr">גרם</string>
     <string name="kg">קג</string>
     <string name="machine">מכונה</string>

@@ -194,7 +194,7 @@
     <string name="channel_1_99">Kanal 1-99</string>
     <string name="channel_100">Kanal 100</string>
     <string name="close">Schließen</string>
-    <string name="default_unanswered_technocian_call">Wartet auf Antwort von Einrichter</string>
+    <string name="default_unanswered_technician_call_no_name">Wartet auf Antwort von Einrichter</string>
     <string name="edit_note">Notiz ändern</string>
     <string name="end_setup_success">Rüstvorgang erfolgreich beendet</string>
     <string name="enter_note_here">Hier können Sie eine Notiz eingeben</string>

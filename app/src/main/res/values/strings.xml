@@ -278,7 +278,7 @@
     <string name="service_call_made_new">Service call has been sent by operator %1$s from machine</string>
     <string name="call_for_technician_unresponsive">Your call for technician was unresponsive for 5 Minutes</string>
     <string name="powered_by_leadermes">Powered by Matics</string>
-    <string name="default_unanswered_technocian_call">Waiting for the technician to reply</string>
+    <string name="default_unanswered_technician_call_no_name">Waiting for the technician to reply</string>
     <string name="default_unanswered_technician_call">Operator %1$s opened a service call. Waiting for the technician to reply</string>
     <string name="general">General</string>
     <string name="split_event_success">The Event was Split Successfully</string>

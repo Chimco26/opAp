@@ -290,7 +290,7 @@
     <string name="version">Versione</string>
     <string name="more_details">In attesa di ulteriori dettagli</string>
     <string name="waiting_for_replay">In attesa di risposta</string>
-    <string name="default_unanswered_technocian_call">In attesa di risposta del tecnico</string>
+    <string name="default_unanswered_technician_call_no_name">In attesa di risposta del tecnico</string>
     <string name="weight">Peso</string>
     <string name="welcome">Benvenuto</string>
     <string name="work_comlpeted">Lavoro completato</string>

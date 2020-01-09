@@ -190,7 +190,7 @@
     <string name="channel_1_99">Канал 1-99</string>
     <string name="channel_100">Канал 100</string>
     <string name="close">Закрыть</string>
-    <string name="default_unanswered_technocian_call">Ожидается ответ техника</string>
+    <string name="default_unanswered_technician_call_no_name">Ожидается ответ техника</string>
     <string name="edit_note">Заметки</string>
     <string name="enter_note_here">Введите здесь свои заметки</string>
     <string name="events_selected">Выбраны события:</string>

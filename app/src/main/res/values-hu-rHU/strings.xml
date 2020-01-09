@@ -244,7 +244,7 @@
     <string name="service_call_made_new">A szolgáltatáshívást a %1$s operátor elküldte a géptől</string>
     <string name="call_for_technician_unresponsive">A technikus hívása 5 percig nem reagált</string>
     <string name="powered_by_leadermes">Powered by Matics</string>
-    <string name="default_unanswered_technocian_call">Várakozás a technikus válaszára</string>
+    <string name="default_unanswered_technician_call_no_name">Várakozás a technikus válaszára</string>
     <string name="default_unanswered_technician_call">A (z) %1$s operátor hívást kezdeményezett. Várakozás a technikus válaszára</string>
     <string name="general">Tábornok</string>
     <string name="split_event_success">Az esemény sikeresen megosztott</string>

@@ -194,7 +194,7 @@
     <string name="channel_1_99">Canal 1-99</string>
     <string name="channel_100">Canal 100</string>
     <string name="close">Fermer</string>
-    <string name="default_unanswered_technocian_call">En attente de la réponse du technicien</string>
+    <string name="default_unanswered_technician_call_no_name">En attente de la réponse du technicien</string>
     <string name="edit_note">Modifier la note</string>
     <string name="end_setup_success">Installation terminée avec succès</string>
     <string name="enter_note_here">Saisissez votre remarque ici</string>

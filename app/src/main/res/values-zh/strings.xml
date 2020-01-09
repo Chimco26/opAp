@@ -186,7 +186,7 @@
     <string name="channel_100">頻道100</string>
     <string name="close">關閉</string>
     <string name="common_signin_button_text">登錄</string>
-    <string name="default_unanswered_technocian_call">正等待技術人員回復</string>
+    <string name="default_unanswered_technician_call_no_name">正等待技術人員回復</string>
     <string name="edit_note">編輯備註</string>
     <string name="end_setup_success">成功結束安裝</string>
     <string name="enter_note_here">在此輸入您的備註</string>

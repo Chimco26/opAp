@@ -193,7 +193,7 @@
     <string name="channel_1_99">Канал 1-99</string>
     <string name="channel_100">Канал 100</string>
     <string name="close">Закрити</string>
-    <string name="default_unanswered_technocian_call">Очікується на відповідь техніка</string>
+    <string name="default_unanswered_technician_call_no_name">Очікується на відповідь техніка</string>
     <string name="edit_note">Нотатки</string>
     <string name="end_setup_success">Налаштування завершено успішно</string>
     <string name="enter_note_here">Введить тут свої нотатки</string>
