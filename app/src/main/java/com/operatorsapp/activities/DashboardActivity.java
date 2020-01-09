@@ -2322,8 +2322,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     String.format("%s:", getString(R.string.update_this_production_status_also_to)),
                     getString(R.string.apply), (ArrayList<MachinesLineDetail>) machineLineItems
             );
-
-            titleAndSubWithSelectableListDialog.showTitleAndSubWithSelectableListDialog().show();
+            android.app.AlertDialog dialog = titleAndSubWithSelectableListDialog.showTitleAndSubWithSelectableListDialog();
+            dialog.show();
+            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    if (mActionBarAndEventsFragment != null){
+                        mActionBarAndEventsFragment.setProductionStatusVisible();
+                    }
+                }
+            });
         } else {
             ProgressDialogManager.show(DashboardActivity.this);
             postProductionMode(productionModeId, PersistenceManager.getInstance().getMachineId());
