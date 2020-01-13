@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY placeholder1 "matics_placeholder_matics_number_1">
+    <!ENTITY placeholder2 "matics_placeholder_matics_number_2">
+    ]>
 <resources>
 
 
     <array name="jobs_spinner_array">
-        <item>مهمة جديده</item>
-        <item>اضافة مردودات</item>
-        <item>تغيير عدد الوحدات في الدورة</item>
-        <item>تقرير الإنتاج</item>
-        <item>Order Test</item>
+        <item>Aktywuj zadanie</item>
+        <item>Dodaj odrzucenia</item>
+        <item>Zmień jednostki w cyklu</item>
+        <item>Zgłoś produkcję</item>
+        <item>Test zamówienia</item>
     </array>
 
 
-    <plurals name="days">
-        <item quantity="one">%d يوم</item>
-        <item quantity="other">%d ايام</item>
-    </plurals>
+<!--    <plurals name="days">-->
+<!--        <item quantity="one">%d يوم</item>-->
+<!--        <item quantity="other">%d ايام</item>-->
+<!--    </plurals>-->
 
-    <plurals name="hours">
-        <item quantity="zero">ساعة</item>
-        <item quantity="one">ساعة</item>
-        <item quantity="other">ساعات</item>
-    </plurals>
+<!--    <plurals name="hours">-->
+<!--        <item quantity="zero">ساعة</item>-->
+<!--        <item quantity="one">ساعة</item>-->
+<!--        <item quantity="other">ساعات</item>-->
+<!--    </plurals>-->
 
 
     <string name="app_name">Operator Matics</string>
@@ -215,11 +219,11 @@
     <string name="operator">Operator</string>
     <string name="sent_service_call">wysyłał zgłoszenie serwisowe z urządzenia</string>
     <string name="service_call_made">Zgłoszenie serwisowe zostało wysłane do Ciebie z urządzenia</string>
-    <string name="service_call_made_new">Zgłoszenie serwisowe zostało wysyłane przez operatora %1$s z urządzenia</string>
+    <string name="service_call_made_new">Zgłoszenie serwisowe zostało wysyłane przez operatora &placeholder1; z urządzenia</string>
     <string name="call_for_technician_unresponsive">Na Twoje zgłoszenie do technika nie odpowiedziano od 5 minut</string>
     <string name="powered_by_leadermes">Obsługiwane przez Matics</string>
     <string name="default_unanswered_technocian_call">Oczekiwanie na odpowiedź technika</string>
-    <string name="default_unanswered_technician_call">Operator %1$s utworzył zgłoszenie serwisowe. Oczekiwanie na odpowiedź technika</string>
+    <string name="default_unanswered_technician_call">Operator &placeholder1; utworzył zgłoszenie serwisowe. Oczekiwanie na odpowiedź technika</string>
     <string name="general">Ogólne</string>
     <string name="split_event_success">Pomyślnie podzielono zdarzenie</string>
     <string name="split_event_failed">Nieudane podzielenie zdarzenia</string>
@@ -242,15 +246,15 @@
     <string name="open_new_call">Nowe zgłoszenie serwisowe</string>
     <string name="empty_job_list_msg">Lista zadań w toku jest pusta</string>
     <string name="call_approved">Zgłoszenie zostało przyjęte</string>
-    <string name="call_approved2">Zgłoszenie utworzone przez operatora %1$s zostało przyjęte</string>
+    <string name="call_approved2">Zgłoszenie utworzone przez operatora &placeholder1; zostało przyjęte</string>
     <string name="call_declined">Zgłoszenie zostało odrzucone</string>
-    <string name="call_declined2">Zgłoszenie utworzone przez operatora %1$s zostało odrzucone</string>
+    <string name="call_declined2">Zgłoszenie utworzone przez operatora &placeholder1; zostało odrzucone</string>
     <string name="started_service">Zgłoszenie z uczestnikami</string>
-    <string name="started_service2">Zgłoszenie z uczestnikami utworzone przez operatora %1$s</string>
+    <string name="started_service2">Zgłoszenie z uczestnikami utworzone przez operatora &placeholder1;</string>
     <string name="service_completed">Rozwiązano zgłoszenie</string>
-    <string name="service_completed2">Zgłoszenie serwisowe utworzone przez operatora %1$s zostało rozwiązane</string>
+    <string name="service_completed2">Zgłoszenie serwisowe utworzone przez operatora &placeholder1; zostało rozwiązane</string>
     <string name="call_cancelled">Anulowano zgłoszenie</string>
-    <string name="call_cancelled2">Zgłoszenie utworzone przez operatora %1$s zostało anulowane</string>
+    <string name="call_cancelled2">Zgłoszenie utworzone przez operatora &placeholder1; zostało anulowane</string>
     <string name="waiting_for_replay">Oczekiwanie na odpowiedź</string>
     <string name="more_details">Oczekiwanie na więcej szczegółów</string>
     <string name="technician">Technik</string>
@@ -268,16 +272,16 @@
     <string name="more_info">Więcej informacji</string>
     <string name="max_value_is">maks. wartość to:</string>
     <string name="change_factory">Zmień fabrykę</string>
-    <string name="NoProgressMinFromStartShift">Zmiana trwa od %2$s min., a urządzenie %1$s jeszcze nie zaczęło produkować.</string>
-    <string name="SetupDurationMinActual">Urządzenie %1$s jest w trybie konfiguracji od ponad %2$s min.</string>
-    <string name="SetupInjectionsCount">Urządzenie %1$s wykonało ponad %2$s cykle(-i) w trybie konfiguracji.</string>
-    <string name="UnReportedStopsPC">Urządzenie %1$s: ponad %2$s %% czasu przestoju dla tej zmiany nie podlega żadnej kategorii</string>
-    <string name="RejectsPC">Urządzenie %1$s ma ponad %2$s %% odrzuceń.</string>
-    <string name="OpenEventDuration">Aktualny czas przestoju urządzenia %1$s wynosi ponad %2$s min.</string>
-    <string name="ProductionModeInjectionsCount">Wykryto %2$s nieprodukcyjne(-ych) cykle(-i) na %1$s.</string>
-    <string name="CycleTimeDeviation">Przekroczono normę czasu cyklu o %2$s %% na %1$s.</string>
-    <string name="ShortEventsFromProductionPC">Urządzenie %1$s : całkowita liczba krótkich przestojów w łącznym czasie produkcji przekracza %2$s %%.</string>
-    <string name="WorkerNotSigned">Urządzenie %1$s: nie zalogowano operatora do urządzenia przez %2$s min. od rozpoczęcia zmiany.</string>
+    <string name="NoProgressMinFromStartShift">Zmiana trwa od &placeholder2; min., a urządzenie &placeholder1; jeszcze nie zaczęło produkować.</string>
+    <string name="SetupDurationMinActual">Urządzenie &placeholder1; jest w trybie konfiguracji od ponad &placeholder2; min.</string>
+    <string name="SetupInjectionsCount">Urządzenie &placeholder1; wykonało ponad &placeholder2; cykle(-i) w trybie konfiguracji.</string>
+    <string name="UnReportedStopsPC">Urządzenie &placeholder1;: ponad &placeholder2; %% czasu przestoju dla tej zmiany nie podlega żadnej kategorii</string>
+    <string name="RejectsPC">Urządzenie &placeholder1; ma ponad &placeholder2; %% odrzuceń.</string>
+    <string name="OpenEventDuration">Aktualny czas przestoju urządzenia &placeholder1; wynosi ponad &placeholder2; min.</string>
+    <string name="ProductionModeInjectionsCount">Wykryto &placeholder2; nieprodukcyjne(-ych) cykle(-i) na &placeholder1;.</string>
+    <string name="CycleTimeDeviation">Przekroczono normę czasu cyklu o &placeholder2; %% na &placeholder1;.</string>
+    <string name="ShortEventsFromProductionPC">Urządzenie &placeholder1; : całkowita liczba krótkich przestojów w łącznym czasie produkcji przekracza &placeholder2; %%.</string>
+    <string name="WorkerNotSigned">Urządzenie &placeholder1;: nie zalogowano operatora do urządzenia przez &placeholder2; min. od rozpoczęcia zmiany.</string>
     <string name="open_calls">Otwarte zgłoszenia</string>
     <string name="last_24h">Ostatnie 24 godziny</string>
     <string name="you_ve_reached_the_production_target">Osiągnąłeś/Osiągnęłaś cel produkcyjny!</string>

@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY placeholder1 "matics_placeholder_matics_number_1">
+    <!ENTITY placeholder2 "matics_placeholder_matics_number_2">
+    ]>
 <resources>
 
     <!-- General -->
@@ -153,7 +157,7 @@
         <item>اضافة مردودات</item>
         <item>تغيير عدد الوحدات في الدورة</item>
         <item>تقرير الإنتاج</item>
-        <item>Order Test</item>
+        <item>طلب الاختبار</item>
     </array>
 
     <string name="approve_first_item">نهاية الإعداد</string>
@@ -221,16 +225,16 @@
     <string name="username">اسم المستخدم</string>
     <string name="hr">(ساعة زمنية)</string>
     <string name="hr2">ساعة زمنية</string>
-    <string name="NoProgressMinFromStartShift">عبور %1$s دقائق من بدء الورديه والإنتاج لم يبدا بعد.</string>
-    <string name="SetupDurationMinActual">مدة الإعداد هي أكثر من %1$s دقيقة.</string>
-    <string name="SetupInjectionsCount">أكثر من %1$s دورات تمت في الإعداد.</string>
-    <string name="UnReportedStopsPC">أكثر من٪ %1$s من وقت التوقف هذا التحول غير مصنف.</string>
-    <string name="RejectsPC">الرفض يزيد عن %1$s ٪.</string>
-    <string name="OpenEventDuration">التوقف الحالي هو أكثر من %1$s دقيقة.</string>
-    <string name="ProductionModeInjectionsCount">تم اكتشاف %1$s دورات في حالة عدم الإنتاج.</string>
-    <string name="CycleTimeDeviation">لوحظ انحراف %1$s ٪ نسبة إلى المعيار في وقت الدورة.</string>
-    <string name="ShortEventsFromProductionPC">إجمالي الوقفات القصيرة من إجمالي وقت الإنتاج يتجاوز %1$s ٪.</string>
-    <string name="WorkerNotSigned">لا يوجد تسجيل دخول المشغل إلى الجهاز بعد مرور الدقائق %1$s من بداية الورديه.</string>
+    <string name="NoProgressMinFromStartShift">عبور &placeholder1; دقائق من بدء الورديه والإنتاج لم يبدا بعد.</string>
+    <string name="SetupDurationMinActual">مدة الإعداد هي أكثر من &placeholder1; دقيقة.</string>
+    <string name="SetupInjectionsCount">أكثر من &placeholder1; دورات تمت في الإعداد.</string>
+    <string name="UnReportedStopsPC">أكثر من٪ &placeholder1; من وقت التوقف هذا التحول غير مصنف.</string>
+    <string name="RejectsPC">الرفض يزيد عن &placeholder1; ٪.</string>
+    <string name="OpenEventDuration">التوقف الحالي هو أكثر من &placeholder1; دقيقة.</string>
+    <string name="ProductionModeInjectionsCount">تم اكتشاف &placeholder1; دورات في حالة عدم الإنتاج.</string>
+    <string name="CycleTimeDeviation">لوحظ انحراف &placeholder1; ٪ نسبة إلى المعيار في وقت الدورة.</string>
+    <string name="ShortEventsFromProductionPC">إجمالي الوقفات القصيرة من إجمالي وقت الإنتاج يتجاوز &placeholder1; ٪.</string>
+    <string name="WorkerNotSigned">لا يوجد تسجيل دخول المشغل إلى الجهاز بعد مرور الدقائق &placeholder1; من بداية الورديه.</string>
     <string name="working_setup">يعمل في ظروف اعداد</string>
     <string name="parameter_deviation">انحراف عامل متغير</string>
     <string name="stop">توقف</string>
@@ -414,7 +418,7 @@
     <string name="test_fields">حقول الاختبار</string>
     <string name="you_need_to_select_the_test">عليك اختيار الاختبار الذي تود تشغيله</string>
     <string name="you_need_to_select_the_test_field">عليك اختيار الاختبار الذي تود تشغيله</string>
-    <string name="default_unanswered_technician_call">المشغل %1$s فتح اتصال خدمة. في انتظار التقني ليرد</string>
+    <string name="default_unanswered_technician_call">المشغل &placeholder1; فتح اتصال خدمة. في انتظار التقني ليرد</string>
     <string name="minutes">دقيقة</string>
     <string name="name">اسم</string>
     <string name="recipe_fields">حقول الوصفة</string>

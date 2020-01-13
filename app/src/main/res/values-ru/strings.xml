@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY placeholder1 "matics_placeholder_matics_number_1">
+    <!ENTITY placeholder2 "matics_placeholder_matics_number_2">
+    ]>
 <resources>
     <!-- General -->
     <string name="no_communication">Нет связи</string>
@@ -147,7 +151,7 @@
         <item>Добавить брак</item>
         <item>Изменить количество единиц в цикле</item>
         <item>Производственный отчет</item>
-        <item>Order Test</item>
+        <item>Заказать тест</item>
     </array>
     <string name="approve_first_item">Окончание настройки</string>
     <string name="welcome">Добро пожаловать</string>
@@ -259,8 +263,8 @@
     <string name="pConfig">Настрока</string>
     <string name="events">События</string>
     <string name="gram">r</string>
-    <string name="service_call_made_new">Сервисный звонок отправлен оператором %1$s с машины</string>
-    <string name="default_unanswered_technician_call">Оператор %1$s открыл сервисный звонок. В ожидании ответа техника</string>
+    <string name="service_call_made_new">Сервисный звонок отправлен оператором &placeholder1; с машины</string>
+    <string name="default_unanswered_technician_call">Оператор &placeholder1; открыл сервисный звонок. В ожидании ответа техника</string>
     <string name="midnight">полночь</string>
     <string name="split_event_validation_text">Вы собираетесь разделить событие, \\n Продолжить?</string>
     <string name="split_event_validation_title">Разделить событие</string>
@@ -279,12 +283,12 @@
     <string name="service_call_exists_subtitle">Обнаружены открытые сервисные вызовы, \\ n вы можете удалить открытые вызовы или открыть новый.</string>
     <string name="open_new_call">Новый сервисный вызов</string>
     <string name="empty_job_list_msg">Список ожидающих заданий пуст</string>
-    <string name="call_approved2">Вызов, сделанный оператором %1$s, был одобрен</string>
+    <string name="call_approved2">Вызов, сделанный оператором &placeholder1;, был одобрен</string>
     <string name="call_declined">Вызов был отклонен</string>
-    <string name="call_declined2">Вызов, сделанный оператором %1$s, был отклонен</string>
-    <string name="started_service2">Посещение вызова оператором %1$s</string>
-    <string name="service_completed2">Сервисный вызов от оператора %1$s завершен</string>
-    <string name="call_cancelled2">Вызов, совершенный оператором %1$s, был отменен</string>
+    <string name="call_declined2">Вызов, сделанный оператором &placeholder1;, был отклонен</string>
+    <string name="started_service2">Посещение вызова оператором &placeholder1;</string>
+    <string name="service_completed2">Сервисный вызов от оператора &placeholder1; завершен</string>
+    <string name="call_cancelled2">Вызов, совершенный оператором &placeholder1;, был отменен</string>
     <string name="more_details">Ожидание более подробной информации</string>
     <string name="technician">Техник</string>
     <string name="time_left_to_current_job">Оставшееся время текущей работы</string>
@@ -301,16 +305,16 @@
     <string name="more_info">Больше информации</string>
     <string name="max_value_is">максимальное значение:</string>
     <string name="change_factory">Сменить завод</string>
-    <string name="NoProgressMinFromStartShift">Уже %1$s минут смены, но производство еще не началось.</string>
-    <string name="SetupDurationMinActual">Продолжительность настройки более %1$s минут.</string>
-    <string name="SetupInjectionsCount">Более %1$s циклов было сделано при настройке.</string>
-    <string name="UnReportedStopsPC">Более %1$s % времени смены остановки не классифицированы.</string>
-    <string name="RejectsPC">Брак превышает %1$s %.</string>
-    <string name="OpenEventDuration">Текущая остановка более %1$s минут.</string>
-    <string name="ProductionModeInjectionsCount">%1$s циклов обнаружено в непроизводственном состоянии.</string>
-    <string name="CycleTimeDeviation">Отклонение %1$s % относительно стандарта во времени цикла не наблюдалось.</string>
-    <string name="ShortEventsFromProductionPC">Общее время коротких остановок от общего времени производства превышает %1$s %.</string>
-    <string name="WorkerNotSigned">Оператор не вошел в систему через %1$s минут после начала смены.</string>
+    <string name="NoProgressMinFromStartShift">Уже &placeholder1; минут смены, но производство еще не началось.</string>
+    <string name="SetupDurationMinActual">Продолжительность настройки более &placeholder1; минут.</string>
+    <string name="SetupInjectionsCount">Более &placeholder1; циклов было сделано при настройке.</string>
+    <string name="UnReportedStopsPC">Более &placeholder1; % времени смены остановки не классифицированы.</string>
+    <string name="RejectsPC">Брак превышает &placeholder1; %.</string>
+    <string name="OpenEventDuration">Текущая остановка более &placeholder1; минут.</string>
+    <string name="ProductionModeInjectionsCount">&placeholder1; циклов обнаружено в непроизводственном состоянии.</string>
+    <string name="CycleTimeDeviation">Отклонение &placeholder1; % относительно стандарта во времени цикла не наблюдалось.</string>
+    <string name="ShortEventsFromProductionPC">Общее время коротких остановок от общего времени производства превышает &placeholder1; %.</string>
+    <string name="WorkerNotSigned">Оператор не вошел в систему через &placeholder1; минут после начала смены.</string>
     <string name="open_calls">Открытые вызовы</string>
     <string name="last_24h">Последние 24 часа</string>
     <string name="you_ve_reached_the_production_target">Вы достигли производственной цели!</string>

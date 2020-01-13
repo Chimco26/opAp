@@ -883,30 +883,40 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     switch (notification.getmResponseType()) {
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
-                            str = getResources().getString(R.string.call_approved2);
-                            tvBody.setText(String.format(str, notification.getmSender()));
+//                            str = getResources().getString(R.string.call_approved2);
+//                            tvBody.setText(String.format(str, notification.getmSender()));
+                            str = getActivity().getResources().getString(R.string.call_approved2).replace(getActivity().getResources().getString(R.string.placeholder1), notification.getmSender());
+                            tvBody.setText(str);
                             break;
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
-                            str = getResources().getString(R.string.call_declined2);
-                            tvBody.setText(String.format(str, notification.getmSender()));
+//                            str = getResources().getString(R.string.call_declined2);
+//                            tvBody.setText(String.format(str, notification.getmSender()));
+                            str = getActivity().getResources().getString(R.string.call_cancelled2).replace(getActivity().getResources().getString(R.string.placeholder1), notification.getmSender());
+                            tvBody.setText(str);
                             break;
 
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
-                            str = getResources().getString(R.string.started_service2);
-                            tvBody.setText(String.format(str, notification.getmSender()));
+//                            str = getResources().getString(R.string.started_service2);
+//                            tvBody.setText(String.format(str, notification.getmSender()));
+                            str = getActivity().getResources().getString(R.string.started_service2).replace(getActivity().getResources().getString(R.string.placeholder1), notification.getmSender());
+                            tvBody.setText(str);
                             break;
 
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
-                            str = getResources().getString(R.string.service_completed2);
-                            tvBody.setText(String.format(str, notification.getmSender()));
+//                            str = getResources().getString(R.string.service_completed2);
+//                            tvBody.setText(String.format(str, notification.getmSender()));
+                            str = getActivity().getResources().getString(R.string.service_completed2).replace(getActivity().getResources().getString(R.string.placeholder1), notification.getmSender());
+                            tvBody.setText(str);
                             break;
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
-                            str = getResources().getString(R.string.call_cancelled2);
-                            tvBody.setText(String.format(str, notification.getmSender()));
+//                            str = getResources().getString(R.string.call_cancelled2);
+//                            tvBody.setText(String.format(str, notification.getmSender()));
+                            str = getActivity().getResources().getString(R.string.call_cancelled2).replace(getActivity().getResources().getString(R.string.placeholder1), notification.getmSender());
+                            tvBody.setText(str);
                             break;
 
                         default:
@@ -1543,8 +1553,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         } else {
             operatorName = pm.getUserName();
         }
-        body = getString(R.string.service_call_made_new);
-        body = String.format(body, operatorName);
+//        body = getString(R.string.service_call_made_new);
+//        body = String.format(body, operatorName);
+        body = getActivity().getResources().getString(R.string.service_call_made_new).replace(getActivity().getResources().getString(R.string.placeholder1), operatorName);
         body += " " + pm.getMachineName();
         title += operatorName;
 
@@ -1817,8 +1828,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 } else {
                     operatorName = pm.getUserName();
                 }
-                body = getString(R.string.service_call_made_new);
-                body = String.format(body, operatorName);
+//                body = getString(R.string.service_call_made_new);
+//                body = String.format(body, operatorName);
+                body = getActivity().getResources().getString(R.string.service_call_made_new).replace(getActivity().getResources().getString(R.string.placeholder1), operatorName);
                 body += " " + pm.getMachineName();
                 title += operatorName;
 

@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY placeholder1 "matics_placeholder_matics_number_1">
+    <!ENTITY placeholder2 "matics_placeholder_matics_number_2">
+    ]>
 <resources>
     <string name="app_name">Operatore Matics</string>
     <string name="_100">100%</string>
@@ -23,7 +27,7 @@
     <string name="call_canceled">Chiamata Cancellata</string>
     <string name="call_cancelled">Chiamata Cancellata</string>
     <string name="call_approved">La chiamata è stata approvata</string>
-    <string name="call_cancelled2">La chiamata fatta dall\'operatore %1$s è stata cancellata</string>
+    <string name="call_cancelled2">La chiamata fatta dall\'operatore &placeholder1; è stata cancellata</string>
     <string name="call_decline">La chiamata è stata rifiutata</string>
     <string name="call_declined">La chiamata è stata rifiutata</string>
     <string name="called_technician">Chiamata tecnico</string>
@@ -33,10 +37,10 @@
     <string name="change">Modifica</string>
     <string name="tutorial_job_actions_desc">Inizia preparazione per il prossimo lavoro in anticipo</string>
     <string name="technician_time_out">Attenzione: sono trascorsi 20 minuti senza risposta  da quando hai richiesto un tecnico. Riaprire una chiamata o contattare il tuo supervisore.</string>
-    <string name="started_service2">Chuamata in attesa fatta dall\'operatore %1$s</string>
+    <string name="started_service2">Chuamata in attesa fatta dall\'operatore &placeholder1;</string>
     <string name="started_service">Chiamata in attesa</string>
     <string name="call_declined2">Una chiamata fatta dall\'operatore 51$s è stata rifiutata</string>
-    <string name="call_approved2">Una chiamata fatta dall\'operatore %1$s è stata approvata</string>
+    <string name="call_approved2">Una chiamata fatta dall\'operatore &placeholder1; è stata approvata</string>
     <string name="fill_units_or_weight">* per favore indica Unità o Peso</string>
     <string name="change_factory">Cambio Fabbrica</string>
     <string name="change_material">Cambio materiale</string>
@@ -49,7 +53,7 @@
     <string name="could_not_get_data">Impossibile ottenere dati</string>
     <string name="could_not_log_in">Impossibile accedere</string>
     <string name="could_not_retrieve_job_list">Impossibile recuperare lista lavori</string>
-    <string name="OpenEventDuration">Il fermo attuale della macchina %1$s è di oltre 52$s minuti.</string>
+    <string name="OpenEventDuration">Il fermo attuale della macchina &placeholder1; è di oltre 52$s minuti.</string>
     <string name="attention_cycles_detected_in_a_non_production_status">Cicli rilevati in stato di non produzione.\\ n Si prega di non dimenticare di attivare un lavoro alla volta!</string>
     <string name="login_dialog_dismiss">DISMISS</string>
     <string name="login_dialog_dismiss_all">DISMISS PER QUESTO TURNO</string>
@@ -102,7 +106,7 @@
     <string name="id">ID</string>
     <string name="idle">Inattivo</string>
     <string name="incremented_successfully">Aumentato con successo</string>
-    <string name="NoProgressMinFromStartShift">Sono trascorsi %2$s minuti nel turno e la macchina %1$s non ha ancora iniziato la produzione.</string>
+    <string name="NoProgressMinFromStartShift">Sono trascorsi &placeholder2; minuti nel turno e la macchina &placeholder1; non ha ancora iniziato la produzione.</string>
     <string name="job">Lavoro</string>
     <string name="jobs_actions">Azioni Lavoro</string>
     <string name="tutorial_job_actions">Azioni Lavoro - Nuovo Lavoro</string>
@@ -119,12 +123,12 @@
     <string name="login">Accesso</string>
     <string name="log_in_to_nyour_factory">Log in To\\nTua Fabbrica</string>
     <string name="machine">Macchina</string>
-    <string name="ShortEventsFromProductionPC">Macchina %1$s: Il totale dei fermi brevi sul totale tempo produzione eccede %2$s %%.</string>
-    <string name="SetupInjectionsCount">Macchina %1$s: ha fatto oltre %2$s cicli in settaggio.</string>
-    <string name="RejectsPC">Macchina %1$s ha oltre %2$s %% di scarti.</string>
-    <string name="SetupDurationMinActual">Macchina %1$s è in settaggio da oltre %2$s minuti.</string>
-    <string name="UnReportedStopsPC">Macchina %1$s: oltre %2$s %% di fermo in questo turno  non è classificato.</string>
-    <string name="WorkerNotSigned">Macchina %1$s: Non c\'è accesso operatore alla macchina %2$s minuti dall\'inizio del turno.</string>
+    <string name="ShortEventsFromProductionPC">Macchina &placeholder1;: Il totale dei fermi brevi sul totale tempo produzione eccede &placeholder2; %%.</string>
+    <string name="SetupInjectionsCount">Macchina &placeholder1;: ha fatto oltre &placeholder2; cicli in settaggio.</string>
+    <string name="RejectsPC">Macchina &placeholder1; ha oltre &placeholder2; %% di scarti.</string>
+    <string name="SetupDurationMinActual">Macchina &placeholder1; è in settaggio da oltre &placeholder2; minuti.</string>
+    <string name="UnReportedStopsPC">Macchina &placeholder1;: oltre &placeholder2; %% di fermo in questo turno  non è classificato.</string>
+    <string name="WorkerNotSigned">Macchina &placeholder1;: Non c\'è accesso operatore alla macchina &placeholder2; minuti dall\'inizio del turno.</string>
     <string name="machine_id_name">ID Macchina o Nome</string>
     <string name="machine_status">Stato Macchine</string>
     <string name="material_weight_alarm">Allarme Peso Materiale</string>
@@ -174,7 +178,7 @@
     <string name="service_call_exists">Apri Chiamata di Servizio</string>
     <string name="service_call_exists_subtitle">Chiamata di Servizio aperta trovata, \\n puoi rimuovere la chiamata aperta o aprire una nuova chiamata</string>
     <string name="operator">Operatore</string>
-    <string name="default_unanswered_technician_call">L\'operatore %1$s ha aperto una chiamata di servizio. In attesa di risposta del tecnico</string>
+    <string name="default_unanswered_technician_call">L\'operatore &placeholder1; ha aperto una chiamata di servizio. In attesa di risposta del tecnico</string>
     <string name="operator_id">ID Operatore</string>
     <string name="operator_name">Nome Operatore</string>
     <string name="operator_sign_in_action_bar">Operatore Accedi</string>
@@ -228,9 +232,9 @@
     <string name="link_machine">Seleziona la tua macchina</string>
     <string name="send_logs">Invia Logs</string>
     <string name="sent_service_call">Invia una chiamata di servizio dalla macchina</string>
-    <string name="service_call_made_new">Una chiamata di servizio è stata inviata dall\'operatore %1$s dalla macchina</string>
+    <string name="service_call_made_new">Una chiamata di servizio è stata inviata dall\'operatore &placeholder1; dalla macchina</string>
     <string name="service_call_made">Ti è stata inviata una chiamata di servizio dalla macchina</string>
-    <string name="service_completed2">La chiamata di servizio fatta dall\'operatore %1$s è stata completata</string>
+    <string name="service_completed2">La chiamata di servizio fatta dall\'operatore &placeholder1; è stata completata</string>
     <string name="service_calls">Chiamate di Servizio</string>
     <string name="service_completed">Servizio completato</string>
     <string name="settings">Settaggi</string>
@@ -309,8 +313,8 @@
     <string name="call_for_technician_unresponsive">La tua chiamata per un tecnico è stata senza risposta per 5 minuti</string>
     <string name="credentials_error">Nome Utente/Password non corrispondenti</string>
     <string name="service_call_was_canceled"><b>Service call was canceled</b></string>
-    <string name="CycleTimeDeviation">%2$s %% cicli tempo standard in eccesso su %1$s.</string>
-    <string name="ProductionModeInjectionsCount">Riscontrati %2$s cicli su %1$s in stato di non produzione.</string>
+    <string name="CycleTimeDeviation">&placeholder2; %% cicli tempo standard in eccesso su &placeholder1;.</string>
+    <string name="ProductionModeInjectionsCount">Riscontrati &placeholder2; cicli su &placeholder1; in stato di non produzione.</string>
     <string name="hr">(Ore)</string>
     <string name="one">1</string>
     <string name="active_jobs">Lavori attivi</string>

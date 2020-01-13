@@ -1,3 +1,8 @@
+<?xml version="1.0"?>
+<!DOCTYPE resources [
+    <!ENTITY placeholder1 "matics_placeholder_matics_number_1">
+    <!ENTITY placeholder2 "matics_placeholder_matics_number_2">
+    ]>
 <resources>
 
     <!-- General -->
@@ -148,7 +153,7 @@
         <item>הוספת פסולים</item>
         <item>שינוי יחידות במחזור</item>
         <item>דיווח ייצור</item>
-        <item>Order Test</item>
+        <item>הזמן בדיקה</item>
     </array>
 
 
@@ -353,12 +358,12 @@
     <string name="service_call_exists">פתח קריאת שירות</string>
     <string name="service_call_exists_subtitle">נמצאו קריאות שירות פתוחות, אתה יכול לבטל חלק מהן או לפתוח קריאה חדשה.</string>
     <string name="open_new_call">קריאת שירות חדשה</string>
-    <string name="call_approved2">קריאת השירות שבוצעה ע\"י מפעיל %1$s אושרה.</string>
+    <string name="call_approved2">קריאת השירות שבוצעה ע\"י מפעיל &placeholder1; אושרה.</string>
     <string name="call_declined">הקריאה נדחתה</string>
-    <string name="call_declined2">קריאת השירות שבוצעה ע\"י מפעיל %1$s נדחתה.</string>
-    <string name="started_service2">קריאת השירות שבוצעה ע\"י מפעיל %1$s בטיפול.</string>
-    <string name="service_completed2">קריאת השירות שבוצעה ע\"י מפעיל %1$s הושלמה.</string>
-    <string name="call_cancelled2">קריאת השירות שבוצעה ע\"י מפעיל %1$s בוטלה.</string>
+    <string name="call_declined2">קריאת השירות שבוצעה ע\"י מפעיל &placeholder1; נדחתה.</string>
+    <string name="started_service2">קריאת השירות שבוצעה ע\"י מפעיל &placeholder1; בטיפול.</string>
+    <string name="service_completed2">קריאת השירות שבוצעה ע\"י מפעיל &placeholder1; הושלמה.</string>
+    <string name="call_cancelled2">קריאת השירות שבוצעה ע\"י מפעיל &placeholder1; בוטלה.</string>
     <string name="more_details">ממתין לפרטים נוספים.</string>
     <string name="technician">טכנאי</string>
     <string name="hr">(שע\')</string>
@@ -366,16 +371,16 @@
     <string name="change_material">החלף חומר</string>
     <string name="more_info">מידע נוסף</string>
     <string name="max_value_is">ערך מקסימלי:</string>
-    <string name="NoProgressMinFromStartShift">%1$s דקות מתחילת המשמרת הייצור עוד לא החל</string>
-    <string name="SetupDurationMinActual">משך הסט- אפ מעל %1$s דקות</string>
-    <string name="SetupInjectionsCount">מעל %1$s מחזורים בוצעו במהלך הסט-אפ</string>
-    <string name="UnReportedStopsPC">מעל %1$s % מהעצירות מתחילת המשמרת אינן מדווחות</string>
-    <string name="RejectsPC">מעל %1$s % פסולים</string>
-    <string name="OpenEventDuration">עצירה נוכחית מעל %1$s דקות.</string>
-    <string name="ProductionModeInjectionsCount">%1$s מחזורים זוהו במצב של חוסר ייצור</string>
-    <string name="CycleTimeDeviation">%1$s % חריגה בזמן מחזור ביחס לתקן</string>
-    <string name="ShortEventsFromProductionPC">סה\"כ עצירות קצרות מתוך סה\"כ זמן ייצור מעל %1$s %</string>
-    <string name="WorkerNotSigned">%1$sדקות מתחילת המשמרת ולא בוצעה כניסת מפעיל</string>
+    <string name="NoProgressMinFromStartShift">&placeholder1; דקות מתחילת המשמרת הייצור עוד לא החל</string>
+    <string name="SetupDurationMinActual">משך הסט- אפ מעל &placeholder1; דקות</string>
+    <string name="SetupInjectionsCount">מעל &placeholder1; מחזורים בוצעו במהלך הסט-אפ</string>
+    <string name="UnReportedStopsPC">מעל &placeholder1; % מהעצירות מתחילת המשמרת אינן מדווחות</string>
+    <string name="RejectsPC">מעל &placeholder1; % פסולים</string>
+    <string name="OpenEventDuration">עצירה נוכחית מעל &placeholder1; דקות.</string>
+    <string name="ProductionModeInjectionsCount">&placeholder1; מחזורים זוהו במצב של חוסר ייצור</string>
+    <string name="CycleTimeDeviation">&placeholder1; % חריגה בזמן מחזור ביחס לתקן</string>
+    <string name="ShortEventsFromProductionPC">סה\"כ עצירות קצרות מתוך סה\"כ זמן ייצור מעל &placeholder1; %</string>
+    <string name="WorkerNotSigned">&placeholder1;דקות מתחילת המשמרת ולא בוצעה כניסת מפעיל</string>
     <string name="open_calls">קריאות פתוחות</string>
     <string name="last_24h">24 שעות אחרונות</string>
     <string name="erp_job_id">פק\"ע ERP</string>
@@ -459,6 +464,6 @@
     <string name="you_need_to_complete_all_mandatory_fields">יש למלא שדות חובה</string>
     <string name="send_test_success">בדיקה נשלחה בהצלחה</string>
     <string name="reject_reason_setup">סט-אפ</string>
-    <string name="default_unanswered_technician_call">מפעיל %1$ פתח קריאת שירות חדשה. ממתין שהטכנאי יגיב</string>
+    <string name="default_unanswered_technician_call">מפעיל &placeholder1; פתח קריאת שירות חדשה. ממתין שהטכנאי יגיב</string>
 
 </resources>
