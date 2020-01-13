@@ -1,4 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY placeholder1 "matics_placeholder_matics_number_1">
+    <!ENTITY placeholder2 "matics_placeholder_matics_number_2">
+    ]>
 <resources>
     <!-- General -->
     <string name="no_communication">Pas de communication</string>
@@ -152,7 +156,7 @@
         <item>Mettre les rebuts</item>
         <item>Changement d\'unité de cycle</item>
         <item>Compte rendu de la production</item>
-        <item>Order Test</item>
+        <item>Commander un test</item>
     </array>
 
     <string name="approve_first_item">Fin de Préparation</string>
@@ -270,7 +274,7 @@
     <string name="kg">kg</string>
     <string name="gram">gr</string>
     <string name="service_call_made_new">L\'appel de service a été envoyé par l\'opérateur %1$ de la machine.</string>
-    <string name="default_unanswered_technician_call">L\'opérateur %1$s a émis un appel de service. En attente de la réponse du technicien</string>
+    <string name="default_unanswered_technician_call">L\'opérateur &placeholder1; a émis un appel de service. En attente de la réponse du technicien</string>
     <string name="gr">gr</string>
     <string name="version">Version de l\'application</string>
     <string name="incremented_successfully">Incrémenté avec succès</string>
@@ -285,12 +289,12 @@
     <string name="service_call_exists_subtitle">Des appels de service ouverts ont été trouvés, \\n vous pouvez supprimer les appels ouverts ou en ouvrir un nouveau.</string>
     <string name="open_new_call">Nouvel appel de service</string>
     <string name="empty_job_list_msg">La liste des tâches en attente est vide</string>
-    <string name="call_approved2">Un appel passé par l\'opérateur %1$s a été approuvé.</string>
+    <string name="call_approved2">Un appel passé par l\'opérateur &placeholder1; a été approuvé.</string>
     <string name="call_declined">L\'appel a été refusé</string>
-    <string name="call_declined2">Un appel effectué par l\'opérateur %1$s a été refusé.</string>
-    <string name="started_service2">Répondre à un appel passé par l\'opérateur %1$s</string>
-    <string name="service_completed2">L\'appel de service effectué par l\'opérateur %1$s est terminé</string>
-    <string name="call_cancelled2">L\'appel effectué par l\'opérateur %1$s est annulé.</string>
+    <string name="call_declined2">Un appel effectué par l\'opérateur &placeholder1; a été refusé.</string>
+    <string name="started_service2">Répondre à un appel passé par l\'opérateur &placeholder1;</string>
+    <string name="service_completed2">L\'appel de service effectué par l\'opérateur &placeholder1; est terminé</string>
+    <string name="call_cancelled2">L\'appel effectué par l\'opérateur &placeholder1; est annulé.</string>
     <string name="more_details">En attente de plus de détails</string>
     <string name="technician">Technicien</string>
     <string name="time_left_to_current_job">Temps restant au projet actuel</string>
@@ -307,16 +311,16 @@
     <string name="more_info">Plus d\'informations</string>
     <string name="max_value_is">La valeur maximale est :</string>
     <string name="change_factory">Changer d\'usine</string>
-    <string name="NoProgressMinFromStartShift">Le quart de travail a lancé la tâche depuis %1$s minutes et la production n\\\'a pas encore démarré.</string>
-    <string name="SetupDurationMinActual">La durée des réglages dépasse %1$s minutes.</string>
-    <string name="SetupInjectionsCount">Plus de %1$s cycles ont été consacrés aux réglages.</string>
-    <string name="UnReportedStopsPC">Plus de %1$s % des temps d\\\'arrêt de ce quart de travail ne sont pas classés par catégorie.</string>
-    <string name="RejectsPC">Les rejets dépassent %1$s %.</string>
-    <string name="OpenEventDuration">L\\\'arrêt actuel dépasse %1$s minutes</string>
-    <string name="ProductionModeInjectionsCount">%1$s cycles détectés en état de non-production.</string>
-    <string name="CycleTimeDeviation">Un écart de %1$s % par rapport au temps de cycle standard a été constaté.</string>
-    <string name="ShortEventsFromProductionPC">Le nombre total d\\\'arrêts courts par rapport au temps total de production dépasse %1$s %.</string>
-    <string name="WorkerNotSigned">Aucun opérateur ne s\\\'est connecté à la machine %1$s minutes après le début du quart de travail.</string>
+    <string name="NoProgressMinFromStartShift">Le quart de travail a lancé la tâche depuis &placeholder1; minutes et la production n\\\'a pas encore démarré.</string>
+    <string name="SetupDurationMinActual">La durée des réglages dépasse &placeholder1; minutes.</string>
+    <string name="SetupInjectionsCount">Plus de &placeholder1; cycles ont été consacrés aux réglages.</string>
+    <string name="UnReportedStopsPC">Plus de &placeholder1; % des temps d\\\'arrêt de ce quart de travail ne sont pas classés par catégorie.</string>
+    <string name="RejectsPC">Les rejets dépassent &placeholder1; %.</string>
+    <string name="OpenEventDuration">L\\\'arrêt actuel dépasse &placeholder1; minutes</string>
+    <string name="ProductionModeInjectionsCount">&placeholder1; cycles détectés en état de non-production.</string>
+    <string name="CycleTimeDeviation">Un écart de &placeholder1; % par rapport au temps de cycle standard a été constaté.</string>
+    <string name="ShortEventsFromProductionPC">Le nombre total d\\\'arrêts courts par rapport au temps total de production dépasse &placeholder1; %.</string>
+    <string name="WorkerNotSigned">Aucun opérateur ne s\\\'est connecté à la machine &placeholder1; minutes après le début du quart de travail.</string>
     <string name="open_calls">Appels ouverts</string>
     <string name="last_24h">Dernières 24h</string>
     <string name="you_ve_reached_the_production_target">Vous avez atteint l\'objectif de production !</string>

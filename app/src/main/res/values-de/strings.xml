@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY placeholder1 "matics_placeholder_matics_number_1">
+    <!ENTITY placeholder2 "matics_placeholder_matics_number_2">
+    ]>
 <resources>
 
     <!-- General -->
@@ -152,7 +156,7 @@
         <item>Ausschussteile hinzufügen</item>
         <item>Kavität ändern</item>
         <item>Produktions-Report</item>
-        <item>Order Test</item>
+        <item>Test bestellen</item>
     </array>
 
     <string name="approve_first_item">Setup Ende</string>
@@ -267,8 +271,8 @@
     <string name="machine_status">Maschinenstatus</string>
     <string name="events">Ereignisse</string>
     <string name="gram">g</string>
-    <string name="service_call_made_new">Der Serviceaufruf wurde vom Bediener %1$s von der Maschine gesendet</string>
-    <string name="default_unanswered_technician_call">Der Bediener %1$s hat einen Serviceanruf geöffnet. Warten auf die Antwort des Technikers</string>
+    <string name="service_call_made_new">Der Serviceaufruf wurde vom Bediener &placeholder1; von der Maschine gesendet</string>
+    <string name="default_unanswered_technician_call">Der Bediener &placeholder1; hat einen Serviceanruf geöffnet. Warten auf die Antwort des Technikers</string>
     <string name="midnight">Mitternacht</string>
     <string name="split_event_validation_text">Sie sind dabei, ein Ereignis zu teilen. \\nSind Sie sicher, dass sie fortfahren möchten?</string>
     <string name="version">App-Version</string>
@@ -285,12 +289,12 @@
     <string name="service_call_exists_subtitle">Es wurden offene Serviceanrufe gefunden. \\nSie können die offenen Anrufe entfernen oder einen neuen öffnen.</string>
     <string name="open_new_call">Neuer Serviceanruf</string>
     <string name="empty_job_list_msg">Die Liste der ausstehenden Aufträge ist leer</string>
-    <string name="call_approved2">Ein Anruf des Bedieners %1$s wurde genehmigt</string>
+    <string name="call_approved2">Ein Anruf des Bedieners &placeholder1; wurde genehmigt</string>
     <string name="call_declined">Anruf wurde abgelehnt</string>
-    <string name="call_declined2">Ein Anruf des Bedieners %1$s wurde abgelehnt</string>
-    <string name="started_service2">Teilnehmender Anruf des Bedieners %1$s getätigt</string>
-    <string name="service_completed2">Der Serviceanruf des Bedieners %1$s wurde abgeschlossen</string>
-    <string name="call_cancelled2">Der Anruf des Bedieners %1$s wurde abgebrochen</string>
+    <string name="call_declined2">Ein Anruf des Bedieners &placeholder1; wurde abgelehnt</string>
+    <string name="started_service2">Teilnehmender Anruf des Bedieners &placeholder1; getätigt</string>
+    <string name="service_completed2">Der Serviceanruf des Bedieners &placeholder1; wurde abgeschlossen</string>
+    <string name="call_cancelled2">Der Anruf des Bedieners &placeholder1; wurde abgebrochen</string>
     <string name="more_details">Warten auf weitere Details</string>
     <string name="technician">Techniker</string>
     <string name="time_left_to_current_job">Verbleibende Zeit bis zum aktuellen Auftrag</string>
@@ -307,16 +311,16 @@
     <string name="more_info">Mehr Informationen</string>
     <string name="max_value_is">Maximalwert ist:</string>
     <string name="change_factory">Werk ändern</string>
-    <string name="NoProgressMinFromStartShift">Die Schicht läuft seit %1$s Minuten und die Produktion hat noch nicht begonnen.</string>
-    <string name="SetupDurationMinActual">Die Einrichtungsdauer beträgt über %1$s Minuten.</string>
-    <string name="SetupInjectionsCount">Mehr als %1$s Zyklen wurden im Setup durchgeführt.</string>
-    <string name="UnReportedStopsPC">Über %1$s % der Stoppzeit sind für diese Schicht nicht kategorisiert.</string>
-    <string name="RejectsPC">Der Ausschuss liegt bei über %1$s %.</string>
-    <string name="OpenEventDuration">Der aktuelle Stopp beträgt über %1$s Minuten.</string>
-    <string name="ProductionModeInjectionsCount">%1$s Zyklen im Nicht-Produktionsstatus erkannt.</string>
-    <string name="CycleTimeDeviation">Eine %1$s %ige Abweichung gegenüber dem Standard in der Zykluszeit beobachtet.</string>
-    <string name="ShortEventsFromProductionPC">Die gesamten Kurzstopps der gesamten Produktionszeit überschreiten %1$s %.</string>
-    <string name="WorkerNotSigned">Keine Bedieneranmeldung an der Maschine %1$s Minuten nach Schichtbeginn.</string>
+    <string name="NoProgressMinFromStartShift">Die Schicht läuft seit &placeholder1; Minuten und die Produktion hat noch nicht begonnen.</string>
+    <string name="SetupDurationMinActual">Die Einrichtungsdauer beträgt über &placeholder1; Minuten.</string>
+    <string name="SetupInjectionsCount">Mehr als &placeholder1; Zyklen wurden im Setup durchgeführt.</string>
+    <string name="UnReportedStopsPC">Über &placeholder1; % der Stoppzeit sind für diese Schicht nicht kategorisiert.</string>
+    <string name="RejectsPC">Der Ausschuss liegt bei über &placeholder1; %.</string>
+    <string name="OpenEventDuration">Der aktuelle Stopp beträgt über &placeholder1; Minuten.</string>
+    <string name="ProductionModeInjectionsCount">&placeholder1; Zyklen im Nicht-Produktionsstatus erkannt.</string>
+    <string name="CycleTimeDeviation">Eine &placeholder1; %ige Abweichung gegenüber dem Standard in der Zykluszeit beobachtet.</string>
+    <string name="ShortEventsFromProductionPC">Die gesamten Kurzstopps der gesamten Produktionszeit überschreiten &placeholder1; %.</string>
+    <string name="WorkerNotSigned">Keine Bedieneranmeldung an der Maschine &placeholder1; Minuten nach Schichtbeginn.</string>
     <string name="open_calls">Offene Anrufe</string>
     <string name="last_24h">Letzte 24 Stunden</string>
     <string name="you_ve_reached_the_production_target">Sie haben das Produktionsziel erreicht!</string>

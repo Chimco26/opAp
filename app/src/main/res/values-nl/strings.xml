@@ -1,4 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY placeholder1 "matics_placeholder_matics_number_1">
+    <!ENTITY placeholder2 "matics_placeholder_matics_number_2">
+    ]>
 <resources>
     <!-- General -->
     <string name="no_communication">Geen communicatie</string>
@@ -150,7 +154,7 @@
         <item>Voeg uitval toe</item>
         <item>Veranderen stuks per rotatie</item>
         <item>Productie Rapport</item>
-        <item>Order Test</item>
+        <item>Besteltest</item>
     </array>
 
     <string name="approve_first_item">Einde Ombouw</string>
@@ -269,8 +273,8 @@
     <string name="events">evenementen</string>
     <string name="kg">kg</string>
     <string name="gram">g</string>
-    <string name="service_call_made_new">Dienstoproep werd verzonden door operator %1$s van machine</string>
-    <string name="default_unanswered_technician_call">Operator %1$s opende een dienstoproep. Wachten op antwoord van de technicus</string>
+    <string name="service_call_made_new">Dienstoproep werd verzonden door operator &placeholder1; van machine</string>
+    <string name="default_unanswered_technician_call">Operator &placeholder1; opende een dienstoproep. Wachten op antwoord van de technicus</string>
     <string name="midnight">middernacht</string>
     <string name="split_event_validation_text">U gaat een evenement splitsen, \\n Weet u zeker dat u verder wilt gaan?</string>
     <string name="split_event_validation_title">Splits evenement</string>
@@ -290,12 +294,12 @@
     <string name="service_call_exists_subtitle">Open dienstoproepen werden gevonden, \\n u kunt de open oproepen verwijderen of een nieuwe openen</string>
     <string name="open_new_call">Nieuwe dienstoproep</string>
     <string name="empty_job_list_msg">De lijst van jobs in afwachting is leeg</string>
-    <string name="call_approved2">Een oproep gedaan door operator %1$s werd goedgekeurd</string>
+    <string name="call_approved2">Een oproep gedaan door operator &placeholder1; werd goedgekeurd</string>
     <string name="call_declined">De oproep werd afgewezen</string>
-    <string name="call_declined2">Een oproep gedaan door operator %1$s werd afgewezen</string>
-    <string name="started_service2">Oproep gedaan door operator %1$S beantwoorden</string>
-    <string name="service_completed2">Dienstoproep gedaan door operator %1$s werd afgewerkt</string>
-    <string name="call_cancelled2">Oproep gedaan door operator %1$s werd geannuleerd</string>
+    <string name="call_declined2">Een oproep gedaan door operator &placeholder1; werd afgewezen</string>
+    <string name="started_service2">Oproep gedaan door operator &placeholder1; beantwoorden</string>
+    <string name="service_completed2">Dienstoproep gedaan door operator &placeholder1; werd afgewerkt</string>
+    <string name="call_cancelled2">Oproep gedaan door operator &placeholder1; werd geannuleerd</string>
     <string name="more_details">Wachten op meer details</string>
     <string name="technician">Technicus</string>
     <string name="time_left_to_current_job">Resterende tijd tot huidige job</string>
@@ -312,16 +316,16 @@
     <string name="more_info">Meer informatie</string>
     <string name="max_value_is">maximumwaarde is:</string>
     <string name="change_factory">Fabriek wijzigen</string>
-    <string name="NoProgressMinFromStartShift">Het is %1$s minuten in de dienst en de productie is nog niet gestart.</string>
-    <string name="SetupDurationMinActual">Instelduur is meer dan %1$s minuten.</string>
-    <string name="SetupInjectionsCount">Meer dan %1$s programma\\\'s afgerond tijdens implementatie.</string>
-    <string name="UnReportedStopsPC">Meer dan %1$s % van de stoptijd is niet gecategoriseerd in deze dienst.</string>
-    <string name="RejectsPC">Meer dan %1$s % afgewezen.</string>
-    <string name="OpenEventDuration">Huidige stopzetting duurt meer dan %1$s minuten.</string>
-    <string name="ProductionModeInjectionsCount">%1$s programma\\\'s ontdekt die niet in productie zijn.</string>
-    <string name="CycleTimeDeviation">Een afwijking van %1$s % ten opzichte van de standaard programmatijd is waargenomen.</string>
-    <string name="ShortEventsFromProductionPC">Totale korte stopzettingen van de gehele productietijd overstijgt %1$s %.</string>
-    <string name="WorkerNotSigned">Er is %1$s minuten na de start van de dienst nog geen operator aangemeld.</string>
+    <string name="NoProgressMinFromStartShift">Het is &placeholder1; minuten in de dienst en de productie is nog niet gestart.</string>
+    <string name="SetupDurationMinActual">Instelduur is meer dan &placeholder1; minuten.</string>
+    <string name="SetupInjectionsCount">Meer dan &placeholder1; programma\\\'s afgerond tijdens implementatie.</string>
+    <string name="UnReportedStopsPC">Meer dan &placeholder1; % van de stoptijd is niet gecategoriseerd in deze dienst.</string>
+    <string name="RejectsPC">Meer dan &placeholder1; % afgewezen.</string>
+    <string name="OpenEventDuration">Huidige stopzetting duurt meer dan &placeholder1; minuten.</string>
+    <string name="ProductionModeInjectionsCount">&placeholder1; programma\\\'s ontdekt die niet in productie zijn.</string>
+    <string name="CycleTimeDeviation">Een afwijking van &placeholder1; % ten opzichte van de standaard programmatijd is waargenomen.</string>
+    <string name="ShortEventsFromProductionPC">Totale korte stopzettingen van de gehele productietijd overstijgt &placeholder1; %.</string>
+    <string name="WorkerNotSigned">Er is &placeholder1; minuten na de start van de dienst nog geen operator aangemeld.</string>
     <string name="open_calls">Open oproepen</string>
     <string name="last_24h">Laatste 24 uur</string>
     <string name="you_ve_reached_the_production_target">U hebt het productiedoel gehaald!</string>

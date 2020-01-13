@@ -155,12 +155,14 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                     holder.mSubtextTv.setText(mContext.getResources().getString(R.string.call_approved));
                     holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_sent_blue));
 
-                    if (name.replaceAll("[^a-zA-Z0-9_-]", "").equals(notification.getmOriginalSenderName())) {
-                        body = String.format(mContext.getResources().getString(R.string.call_approved2), name);
-                    } else{
-                        String msg = mContext.getResources().getString(R.string.call_approved2);
-                        body = msg.replace("%1$s", notification.getmOriginalSenderName());
-                    }
+//                    if (name.replaceAll("[^a-zA-Z0-9_-]", "").equals(notification.getmOriginalSenderName())) {
+//                        body = String.format(mContext.getResources().getString(R.string.call_approved2), name);
+//                    } else{
+//                        String msg = mContext.getResources().getString(R.string.call_approved2);
+//                        body = msg.replace("%1$s", notification.getmOriginalSenderName());
+//                    }
+
+                    body = mContext.getResources().getString(R.string.call_approved2).replace(mContext.getResources().getString(R.string.placeholder1), name);
                     holder.mBodyTv.setText(body);
 //                    holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_approved2), notification.getmOriginalSenderName()));
                 }else {
@@ -177,12 +179,13 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                     holder.mSubtextTv.setText(mContext.getResources().getString(R.string.call_declined));
                     holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_declined));
 
-                    if (name.replaceAll("[^a-zA-Z0-9_-]", "").equals(notification.getmOriginalSenderName())) {
-                        body = String.format(mContext.getResources().getString(R.string.call_declined2), name);
-                    } else{
-                        String msg = mContext.getResources().getString(R.string.call_declined2);
-                        body = msg.replace("%1$s", notification.getmOriginalSenderName());
-                    }
+//                    if (name.replaceAll("[^a-zA-Z0-9_-]", "").equals(notification.getmOriginalSenderName())) {
+//                        body = String.format(mContext.getResources().getString(R.string.call_declined2), name);
+//                    } else{
+//                        String msg = mContext.getResources().getString(R.string.call_declined2);
+//                        body = msg.replace("%1$s", notification.getmOriginalSenderName());
+//                    }
+                    body = mContext.getResources().getString(R.string.call_declined2).replace(mContext.getResources().getString(R.string.placeholder1), name);
                     holder.mBodyTv.setText(body);
 //                    holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_declined2), notification.getmOriginalSenderName()));
                 }else {
@@ -195,12 +198,14 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                 holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.at_work_blue));
                 holder.mSubtextTv.setText(mContext.getResources().getString(R.string.at_work));
 
-                if (name.replaceAll("[^a-zA-Z0-9_-]", "").equals(notification.getmOriginalSenderName())) {
-                    body = String.format(mContext.getResources().getString(R.string.started_service2), name);
-                } else{
-                    String msg = mContext.getResources().getString(R.string.started_service2);
-                    body = msg.replace("%1$s", notification.getmOriginalSenderName());
-                }
+//                if (name.replaceAll("[^a-zA-Z0-9_-]", "").equals(notification.getmOriginalSenderName())) {
+//                    body = String.format(mContext.getResources().getString(R.string.started_service2), name);
+//                } else{
+//                    String msg = mContext.getResources().getString(R.string.started_service2);
+//                    body = msg.replace("%1$s", notification.getmOriginalSenderName());
+//                }
+
+                body = mContext.getResources().getString(R.string.started_service2).replace(mContext.getResources().getString(R.string.placeholder1), name);
                 holder.mBodyTv.setText(body);
 //                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.started_service2), notification.getmOriginalSenderName()));
                 break;
@@ -209,12 +214,14 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
             case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
                 holder.mSubtextTv.setText(mContext.getResources().getString(R.string.service_completed));
 
-                if (name.replaceAll("[^a-zA-Z0-9_-]", "").equals(notification.getmOriginalSenderName())) {
-                    body = String.format(mContext.getResources().getString(R.string.service_completed2), name);
-                } else{
-                    String msg = mContext.getResources().getString(R.string.service_completed2);
-                    body = msg.replace("%1$s", notification.getmOriginalSenderName());
-                }
+//                if (name.replaceAll("[^a-zA-Z0-9_-]", "").equals(notification.getmOriginalSenderName())) {
+//                    body = String.format(mContext.getResources().getString(R.string.service_completed2), name);
+//                } else{
+//                    String msg = mContext.getResources().getString(R.string.service_completed2);
+//                    body = msg.replace("%1$s", notification.getmOriginalSenderName());
+//                }
+
+                body = mContext.getResources().getString(R.string.service_completed2).replace(mContext.getResources().getString(R.string.placeholder1), name);
                 holder.mBodyTv.setText(body);
 //                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.service_completed2), notification.getmOriginalSenderName()));
                 holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.service_done));
@@ -224,12 +231,14 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                 holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cancel_blue));
                 holder.mSubtextTv.setText(mContext.getString(R.string.service_call_was_canceled));
 
-                if (name.replaceAll("[^a-zA-Z0-9_-]", "").equals(notification.getmOriginalSenderName())) {
-                    body = String.format(mContext.getResources().getString(R.string.call_cancelled2), name);
-                } else{
-                    String msg = mContext.getResources().getString(R.string.call_cancelled2);
-                    body = msg.replace("%1$s", notification.getmOriginalSenderName());
-                }
+//                if (name.replaceAll("[^a-zA-Z0-9_-]", "").equals(notification.getmOriginalSenderName())) {
+//                    body = String.format(mContext.getResources().getString(R.string.call_cancelled2), name);
+//                } else{
+//                    String msg = mContext.getResources().getString(R.string.call_cancelled2);
+//                    body = msg.replace("%1$s", notification.getmOriginalSenderName());
+//                }
+
+                body = mContext.getResources().getString(R.string.call_cancelled2).replace(mContext.getResources().getString(R.string.placeholder1), name);
                 holder.mBodyTv.setText(body);
 //                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_cancelled2), notification.getmOriginalSenderName()));
                 break;
@@ -257,12 +266,16 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
             holder.mBtnsLil.setVisibility(View.GONE);
             if (notification.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET){
                 name = notification.getmSender();
-                if (name.replaceAll("[^a-zA-Z0-9_-]", "").equals(notification.getmSender())) {
-                    holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.default_unanswered_technician_call), name));
-                } else{
-                    String msg = mContext.getResources().getString(R.string.default_unanswered_technician_call);
-                    holder.mBodyTv.setText(msg.replace("%1$s", notification.getmSender()));
-                }
+//                if (name.replaceAll("[^a-zA-Z0-9_-]", "").equals(notification.getmSender())) {
+//                    String txt = mContext.getResources().getString(R.string.default_unanswered_technician_call);
+//                    holder.mBodyTv.setText(String.format(txt, name));
+//                } else{
+//                    String msg = mContext.getResources().getString(R.string.default_unanswered_technician_call);
+//                    holder.mBodyTv.setText(msg.replace("%1$s", notification.getmSender()));
+//                }
+
+                body = mContext.getResources().getString(R.string.default_unanswered_technician_call).replace(mContext.getResources().getString(R.string.placeholder1), name);
+                holder.mBodyTv.setText(body);
             }
         }else {
 

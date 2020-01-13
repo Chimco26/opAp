@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY placeholder1 "matics_placeholder_matics_number_1">
+    <!ENTITY placeholder2 "matics_placeholder_matics_number_2">
+    ]>
 <resources>
     <!-- General -->
     <string name="no_communication">無通訊</string>
@@ -145,7 +149,7 @@
         <item>添加不良品</item>
         <item>转换周期单位</item>
         <item>报告产品</item>
-        <item>Order Test</item>
+        <item>订单测试</item>
     </array>
     <string name="approve_first_item">結束安裝</string>
     <string name="welcome">歡迎</string>
@@ -262,8 +266,8 @@
     <string name="pConfig">組態</string>
     <string name="events">事件</string>
     <string name="gram">公克</string>
-    <string name="service_call_made_new">服務呼叫已由營運商%1$s從機器送出</string>
-    <string name="default_unanswered_technician_call">營運商%1$s開啟一個服務呼叫。等待技術人員回覆</string>
+    <string name="service_call_made_new">服務呼叫已由營運商&placeholder1;從機器送出</string>
+    <string name="default_unanswered_technician_call">營運商&placeholder1;開啟一個服務呼叫。等待技術人員回覆</string>
     <string name="gr">公克</string>
     <string name="incremented_successfully">成功地擴增</string>
     <string name="incremented_failure">無法擴增</string>
@@ -277,12 +281,12 @@
     <string name="service_call_exists_subtitle">找到了開啓服務呼叫，\\n您可以移除開啟呼叫或者開啓新的呼叫</string>
     <string name="open_new_call">新的服務呼叫</string>
     <string name="empty_job_list_msg">待處理工作列表為空</string>
-    <string name="call_approved2">由營運商%1$s所作出的呼叫獲得核准</string>
+    <string name="call_approved2">由營運商&placeholder1;所作出的呼叫獲得核准</string>
     <string name="call_declined">呼叫被拒絕</string>
-    <string name="call_declined2">由營運商%1$s所作出的呼叫遭到拒絕</string>
-    <string name="started_service2">參加由營運商%1$s所作出的呼叫</string>
-    <string name="service_completed2">由營運商%1$s所作出的服務呼叫已完成</string>
-    <string name="call_cancelled2">由營運商%1$s所作出的呼叫被取消</string>
+    <string name="call_declined2">由營運商&placeholder1;所作出的呼叫遭到拒絕</string>
+    <string name="started_service2">參加由營運商&placeholder1;所作出的呼叫</string>
+    <string name="service_completed2">由營運商&placeholder1;所作出的服務呼叫已完成</string>
+    <string name="call_cancelled2">由營運商&placeholder1;所作出的呼叫被取消</string>
     <string name="more_details">等待更多細節</string>
     <string name="technician">技術人員</string>
     <string name="time_left_to_current_job">留給目前工作的時間</string>
@@ -299,16 +303,16 @@
     <string name="more_info">更多資訊</string>
     <string name="max_value_is">最大值是：</string>
     <string name="change_factory">改變工廠</string>
-    <string name="NoProgressMinFromStartShift">還有 %1$s 分鐘進行切換，生產尚未開始。</string>
-    <string name="SetupDurationMinActual">設定持續時間超過 %1$s 分鐘。</string>
-    <string name="SetupInjectionsCount">在設定中完成了超過 %1$s 次循環。</string>
-    <string name="UnReportedStopsPC">本次切換中有超過 %1$s ％ 的停止時間未被歸類。</string>
-    <string name="RejectsPC">拒絕超過 %1$s ％。</string>
-    <string name="OpenEventDuration">當前停止時間超過 %1$s 分鐘。</string>
-    <string name="ProductionModeInjectionsCount">在非生產狀態下檢測到 %1$s 次循環。</string>
-    <string name="CycleTimeDeviation">相對標準，觀察到 %1$s % 的循環時間偏差。</string>
-    <string name="ShortEventsFromProductionPC">總生產時間中的短暫停止總時間超過 %1$s ％。</string>
-    <string name="WorkerNotSigned">在切換開始後，有 %1$s 分鐘沒有操作員登入機器。</string>
+    <string name="NoProgressMinFromStartShift">還有 &placeholder1; 分鐘進行切換，生產尚未開始。</string>
+    <string name="SetupDurationMinActual">設定持續時間超過 &placeholder1; 分鐘。</string>
+    <string name="SetupInjectionsCount">在設定中完成了超過 &placeholder1; 次循環。</string>
+    <string name="UnReportedStopsPC">本次切換中有超過 &placeholder1; ％ 的停止時間未被歸類。</string>
+    <string name="RejectsPC">拒絕超過 &placeholder1; ％。</string>
+    <string name="OpenEventDuration">當前停止時間超過 &placeholder1; 分鐘。</string>
+    <string name="ProductionModeInjectionsCount">在非生產狀態下檢測到 &placeholder1; 次循環。</string>
+    <string name="CycleTimeDeviation">相對標準，觀察到 &placeholder1; % 的循環時間偏差。</string>
+    <string name="ShortEventsFromProductionPC">總生產時間中的短暫停止總時間超過 &placeholder1; ％。</string>
+    <string name="WorkerNotSigned">在切換開始後，有 &placeholder1; 分鐘沒有操作員登入機器。</string>
     <string name="open_calls">開啟呼叫</string>
     <string name="last_24h">過去24小時</string>
     <string name="you_ve_reached_the_production_target">您已經達到了生產目標！</string>
