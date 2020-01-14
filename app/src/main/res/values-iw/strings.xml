@@ -446,7 +446,7 @@
     <string name="invalid_value">ערך לא חוקי</string>
     <string name="limits">גבולות</string>
     <string name="no_worker_found">לא נמצא עובד</string>
-    <string name="only_to_unreported">כל לאירועים הלא מדווחים</string>
+    <string name="only_to_unreported">כל האירועים הלא מדווחים</string>
     <string name="production_line">קו ייצור</string>
     <string name="production_status">סטטוס ייצור</string>
     <string name="save_all">שמור הכל</string>
