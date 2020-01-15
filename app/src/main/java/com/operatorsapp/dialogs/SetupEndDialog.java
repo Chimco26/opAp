@@ -48,7 +48,7 @@ public class SetupEndDialog implements OnKeyboardManagerListener {
         mContext = activity;
         mReportFieldsForMachine = reportFieldsForMachine;
         mActiveJobs = activeJobsListForMachine.getActiveJobs();
-        filter0Units();
+//        filter0Units();todo
 
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -74,12 +74,6 @@ public class SetupEndDialog implements OnKeyboardManagerListener {
         isRejects = PersistenceManager.getInstance().getAddRejectsOnSetupEnd();
 
         mKeyBoardLayout = view.findViewById(R.id.FAFI_keyboard);
-        mKeyBoardLayout.setVisibility(View.VISIBLE);
-        view.post(new Runnable() {
-            @Override
-            public void run() {
-            }
-        });
         initRv(view);
         builder.setCancelable(true);
         mAlaramAlertDialog = builder.create();
@@ -218,7 +212,6 @@ public class SetupEndDialog implements OnKeyboardManagerListener {
     @Override
     public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
         if (mKeyBoardLayout != null) {
-//            mKeyBoardLayout.setVisibility(View.VISIBLE);
             if (mKeyBoard == null)
                 mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, mContext);
 
@@ -230,9 +223,6 @@ public class SetupEndDialog implements OnKeyboardManagerListener {
 
     @Override
     public void onCloseKeyboard() {
-//        if (mKeyBoardLayout != null) {
-//            mKeyBoardLayout.setVisibility(View.GONE);
-//        }
         if (mKeyBoard != null) {
             mKeyBoard.setListener(null);
         }

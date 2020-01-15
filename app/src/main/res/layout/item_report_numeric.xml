@@ -14,10 +14,10 @@
         android:layout_margin="30dp"
         android:layout_weight="3"
         android:gravity="center"
-        android:maxLines="3"
+        android:maxLines="4"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:autoSizeMaxTextSize="20sp"
+        app:autoSizeMaxTextSize="30sp"
         app:autoSizeTextType="uniform" />
 
     <LinearLayout
