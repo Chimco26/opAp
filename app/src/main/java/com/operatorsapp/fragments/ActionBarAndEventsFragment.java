@@ -3339,11 +3339,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                SaveAlarmsHelper.saveAlarmsCheckedLocaly(getActivity());
-                PersistenceManager.getInstance().setCurrentLang(getResources().getStringArray(R.array.language_codes_array)[position]);
-                PersistenceManager.getInstance().setCurrentLanguageName(languagesNames[position]);
-                mListener.onRefreshApplicationRequest();
-                sendTokenWithSessionIdToServer();
+                sendTokenWithSessionIdToServer(getResources().getStringArray(R.array.language_codes_array)[position],
+                        languagesNames[position] );
 
             }
 
@@ -3372,29 +3369,36 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
-    private void sendTokenWithSessionIdToServer() {
+    private void sendTokenWithSessionIdToServer(final String languageCode, final String languagesName) {
+        ProgressDialogManager.show(getActivity());
         final PersistenceManager pm = PersistenceManager.getInstance();
         final String id = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
         PostNotificationTokenRequest request = new PostNotificationTokenRequest(pm.getSessionId(), pm.getMachineId(), pm.getNotificationToken(), id);
         NetworkManager.getInstance().postNotificationToken(request, new Callback<StandardResponse>() {
             @Override
             public void onResponse(Call<StandardResponse> call, Response<StandardResponse> response) {
+                ProgressDialogManager.dismiss();
                 if (response != null && response.body() != null && response.isSuccessful()) {
                     Log.d(LOG_TAG, "token sent");
                     if (mListener != null) {
+                        SaveAlarmsHelper.saveAlarmsCheckedLocaly(getActivity());
+                        PersistenceManager.getInstance().setCurrentLang(languageCode);
+                        PersistenceManager.getInstance().setCurrentLanguageName(languagesName);
                         mListener.onRefreshApplicationRequest();
                     }
                 } else {
                     Log.d(LOG_TAG, "token failed");
+                    ShowCrouton.showSimpleCrouton(mCroutonCallback, getString(R.string.network_error), CroutonCreator.CroutonType.NETWORK_ERROR);
                 }
             }
 
             @Override
             public void onFailure(Call<StandardResponse> call, Throwable t) {
                 Log.d(LOG_TAG, "token failed");
+                ProgressDialogManager.dismiss();
+                ShowCrouton.showSimpleCrouton(mCroutonCallback, getString(R.string.network_error), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
         });
-
     }
 
 

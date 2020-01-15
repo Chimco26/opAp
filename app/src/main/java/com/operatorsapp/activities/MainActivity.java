@@ -32,6 +32,7 @@ import com.operatorsapp.fragments.LoginFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.responses.Notification;
@@ -102,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         if (mGoToSelectMachine) {
             goToFragment(LoginFragment.newInstance(true), true, false);
         } else {
-
             goToFragment(LoginFragment.newInstance(false), true, false);
         }
 
@@ -192,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     private void getNotifications() {
 
+        ProgressDialogManager.show(this);
         NetworkManager.getInstance().getNotificationHistory(new Callback<NotificationHistoryResponse>() {
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
@@ -225,9 +226,10 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
                     } else {
                         PersistenceManager.getInstance().setRecentTechCallId(0);
                     }
-
+                    ProgressDialogManager.dismiss();
                     finish();
                 } else {
+                    ProgressDialogManager.dismiss();
                     PersistenceManager.getInstance().setNotificationHistory(null);
                     finish();
                 }
@@ -237,6 +239,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
             @Override
             public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
 
+                ProgressDialogManager.dismiss();
                 PersistenceManager.getInstance().setNotificationHistory(null);
                 finish();
 

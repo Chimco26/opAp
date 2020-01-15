@@ -349,14 +349,6 @@ public class LoginFragment extends Fragment {
             @Override
             public void onLoginSucceeded(ArrayList<Machine> machines, String siteName) {
                 OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
-                // getNotifications();
-
-//                if (mGoToSelectMachine) {
-//
-//                    getVersion(machines, true);
-//                } else {
-//
-//                }
                 getDepartmentsMachines(machines, PersistenceManager.getInstance().getSiteUrl(), false);
                 PersistenceManager.getInstance().setSiteName(siteName);
             }
