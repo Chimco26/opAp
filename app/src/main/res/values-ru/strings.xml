@@ -163,11 +163,11 @@
         <item quantity="many">%d д.</item>
     </plurals>
     <plurals name="hours">
-        <item quantity="zero">ч</item>
-        <item quantity="one">ч</item>
-        <item quantity="other">ч</item>
-        <item quantity="few">ч</item>
-        <item quantity="many">ч</item>
+        <item quantity="zero">%d ч</item>
+        <item quantity="one">%d ч</item>
+        <item quantity="other">%d ч</item>
+        <item quantity="few">%d ч</item>
+        <item quantity="many">%d ч</item>
     </plurals>
     <string name="common_signin_button_text">Вход</string>
     <string name="activate">Активировать</string>
