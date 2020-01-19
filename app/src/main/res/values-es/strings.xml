@@ -354,7 +354,6 @@
     <string name="idle">Ocioso</string>
     <string name="working_no_production">Trabajar sin producción</string>
     <string name="no_communication_p">Sin comunicación</string>
-    <string name="_100">100%</string>
     <string name="filter_short">Eventos filtrados</string>
     <string name="reported">Informado</string>
     <string name="unreported">Sin informar</string>

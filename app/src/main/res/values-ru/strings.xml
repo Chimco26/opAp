@@ -351,7 +351,6 @@
     <string name="idle">Вхолостую</string>
     <string name="working_no_production">Работа без производства</string>
     <string name="no_communication_p">Нет связи</string>
-    <string name="_100">100%</string>
     <string name="filter_short">Отфильтрованные события</string>
     <string name="reported">Сообщено</string>
     <string name="unreported">Незарегистрированный</string>

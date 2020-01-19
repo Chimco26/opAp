@@ -349,7 +349,6 @@
     <string name="idle">空閑</string>
     <string name="working_no_production">工作無生產</string>
     <string name="no_communication_p">沒有通訊</string>
-    <string name="_100">100%</string>
     <string name="filter_short">過濾的事件</string>
     <string name="reported">已報告</string>
     <string name="unreported">未報告</string>

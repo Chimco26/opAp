@@ -352,7 +352,6 @@
     <string name="idle">Бездіяльність</string>
     <string name="working_no_production">Без виробництва</string>
     <string name="no_communication_p">Немає зв\\\'язку</string>
-    <string name="_100">100%</string>
     <string name="filter_short">Відфільтровані події</string>
     <string name="reported">Повідомлено</string>
     <string name="unreported">Не повідомлено</string>

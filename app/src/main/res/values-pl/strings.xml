@@ -412,6 +412,13 @@
     <string name="save_failed">Zapisywanie nie powiodło się</string>
     <string name="no_worker_found">Nie znaleziono pracownika</string>
     <string name="edit_operators">Edytuj operatorów</string>
+    <string name="activate">Aktywuj</string>
+    <string name="default_unanswered_technician_call_no_name">Oczekiwanie na odpowiedź technika</string>
+    <string name="gr">gr</string>
+    <string name="report_stop_resume">Zakończenie</string>
+    <string name="report_stop_start">Początek</string>
+    <string name="save">Zapisz zmiany</string>
+    <string name="shift_log_standard">Wg normy</string>
     <!--    <string name="limits"></string>-->
     <!--    <string name="you_need_to_complete_all_mandatory_fields"></string>-->
     <!--    <string name="choose_hour"></string>-->

@@ -242,7 +242,6 @@
     <string name="idle">بطاله</string>
     <string name="working_no_production">عمل بدون انتاج</string>
     <string name="no_communication_p">لا يوجد اتصال</string>
-    <string name="_100">100%</string>
     <string name="setup">تنصيب</string>
     <string name="min">دقيقة</string>
     <string name="average">معدل</string>
