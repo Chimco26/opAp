@@ -362,7 +362,6 @@
     <string name="idle">Inactief</string>
     <string name="working_no_production">Geen productie in werk</string>
     <string name="no_communication_p">Geen communicatie</string>
-    <string name="_100">100%</string>
     <string name="filter_short">Gefilterde evenementen</string>
     <string name="reported">Gerapporteerd</string>
     <string name="unreported">Niet gerapporteerd</string>

@@ -468,5 +468,6 @@
     <string name="view_log">הצג יומן אירועים</string>
     <string name="you_cant_add_more_workers_than">אתה לא יכול להוסיף מספר עבודים גדול מ</string>
     <string name="save_and_close">שמור וסגור</string>
+    <string name="powered_by_leadermes">סופק על ידי מטיקס</string>
 
 </resources>

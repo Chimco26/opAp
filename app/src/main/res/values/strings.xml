@@ -390,7 +390,7 @@
     <string name="working_no_production">Working no production</string>
     <string name="no_communication_p">No Communication</string>
 
-    <string name="_100">100%</string>
+    <string name="_100" translatable="false">100%</string>
     <string name="filter_short">Filtered events</string>
     <string name="min_duration_filter" translatable="false">(less than</string>
     <string name="reported">Reported</string>

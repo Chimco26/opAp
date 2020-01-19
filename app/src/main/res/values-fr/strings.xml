@@ -357,7 +357,6 @@
     <string name="idle">Au ralenti</string>
     <string name="working_no_production">En marche, hors production</string>
     <string name="no_communication_p">Pas de communication</string>
-    <string name="_100">100%</string>
     <string name="filter_short">Événements filtrés</string>
     <string name="reported">Signalé</string>
     <string name="unreported">Non signalé</string>
