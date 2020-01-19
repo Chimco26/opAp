@@ -426,5 +426,27 @@
     <string name="product_group">Grupo de productos</string>
     <string name="invalid_value">valor no válido</string>
     <string name="send_test_success">Enviar éxito de pruebas</string>
+    <string name="limits">Límites</string>
+    <string name="you_need_to_complete_all_mandatory_fields">es necesario completar todos los campos obligatorios</string>
+    <string name="choose_hour">Elegir hora</string>
+    <string name="update">actualizar</string>
+    <string name="current_value_is">El valor actual es</string>
+    <string name="production_line">Línea de producción</string>
+    <string name="view_log">Ver el registro</string>
+    <string name="stop_events_log">Registros de paradas</string>
+    <string name="illegal_chars">Caracteres ilegales encontrados. Use: a-zA-Z0-9_/,.-</string>
+    <string name="save_all">Guardar todo</string>
+    <string name="this_event_only">Este evento solo</string>
+    <string name="update_this_event_to_all_linked">¿Actualizar esta razón de parada a todos los eventos vinculados?</string>
+    <string name="update_this_production_status_also_to">Actualizar este estado de producción también a</string>
+    <string name="only_to_unreported">Solo a los no informados</string>
+    <string name="production_status">Estado de la producción</string>
+    <string name="apply">Aplicar</string>
+    <string name="add_to_team">Añadir al equipo</string>
+    <string name="already_in_the_perators_list">Ya en la lista de operadores</string>
+    <string name="save_and_close">Guardar y cerrar</string>
+    <string name="save_failed">Fallo al guardar</string>
+    <string name="no_worker_found">No se encontró ningún trabajador</string>
+    <string name="edit_operators">Editar operadores</string>
 
 </resources>

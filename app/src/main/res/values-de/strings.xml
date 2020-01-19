@@ -448,4 +448,7 @@
     <string name="powered_by_leadermes">Powered by Matics</string>
     <string name="you_need_to_select_the_test">Sie müssen den Test auswählen, den Sie ausführen möchten</string>
     <string name="you_need_to_select_the_test_field">Sie müssen den Test auswählen, den Sie ausführen möchten</string>
+    <string name="view_log">Protokoll anzeigen</string>
+    <string name="you_cant_add_more_workers_than">Sie können nicht mehr Arbeiter hinzufügen als</string>
+    <string name="save_and_close">Speichern und schließen</string>
 </resources>

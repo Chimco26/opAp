@@ -394,4 +394,7 @@
     <string name="you_need_to_complete_all_mandatory_fields">Devi compilare tutti i campi obbligatori</string>
     <string name="send_test_success">Invio test avvenuto</string>
     <string name="tutorial_event_log_title">Registro Turno</string>
+    <string name="view_log">Visualizza registro</string>
+    <string name="you_cant_add_more_workers_than">non puoi aggiungere più lavoratori di</string>
+    <string name="save_and_close">Salva e chiudi</string>
 </resources>

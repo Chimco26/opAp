@@ -443,4 +443,6 @@
     <string name="update_this_production_status_also_to">Оновіть цей статус виробництва також до</string>
     <string name="you_need_to_complete_all_mandatory_fields">Вам потрібно заповнити всі обов\'язкові поля</string>
     <string name="send_test_success">Успіх з надсиланням тесту</string>
+    <string name="view_log">Переглянути журнал</string>
+    <string name="save_and_close">Зберегти і закрити</string>
 </resources>

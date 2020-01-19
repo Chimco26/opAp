@@ -453,5 +453,7 @@
     <string name="update_this_production_status_also_to">Update deze productiestatus ook naar</string>
     <string name="you_need_to_complete_all_mandatory_fields">U moet alle verplichte velden invullen</string>
     <string name="send_test_success">Test met succes verstuurd</string>
+    <string name="view_log">Logboek inzien</string>
+    <string name="save_and_close">Opslaan en sluiten</string>
 
 </resources>

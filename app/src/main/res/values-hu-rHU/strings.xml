@@ -451,5 +451,8 @@
     <string name="you_need_to_complete_all_mandatory_fields">Az összes kötelezően kitöltendő mezőt ki kell töltenie</string>
     <string name="send_test_success">Teszt küldése sikeres</string>
     <string name="job_left_time">JOB LEFT TIME</string>
+    <string name="view_log">Napló megtekintése</string>
+    <string name="you_cant_add_more_workers_than">nem adhat hozzá több dolgozót, mint</string>
+    <string name="save_and_close">Mentés és bezárás</string>
 
 </resources>
