@@ -465,5 +465,8 @@
     <string name="send_test_success">בדיקה נשלחה בהצלחה</string>
     <string name="reject_reason_setup">סט-אפ</string>
     <string name="default_unanswered_technician_call">מפעיל &placeholder1; פתח קריאת שירות חדשה. ממתין שהטכנאי יגיב</string>
+    <string name="view_log">הצג יומן אירועים</string>
+    <string name="you_cant_add_more_workers_than">אתה לא יכול להוסיף מספר עבודים גדול מ</string>
+    <string name="save_and_close">שמור וסגור</string>
 
 </resources>

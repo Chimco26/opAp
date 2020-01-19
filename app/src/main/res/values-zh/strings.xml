@@ -440,5 +440,8 @@
     <string name="update_this_production_status_also_to">也将此生产状态更新至</string>
     <string name="you_need_to_complete_all_mandatory_fields">您需要填写全部必填字段</string>
     <string name="send_test_success">发送测试成功</string>
+    <string name="view_log">查看日志</string>
+    <string name="you_cant_add_more_workers_than">您不能添加大于此数的工人</string>
+    <string name="save_and_close">保存并关闭</string>
 
 </resources>

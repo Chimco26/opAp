@@ -448,4 +448,7 @@
     <string name="update_this_production_status_also_to">Mettre également à jour ce statut de production pour</string>
     <string name="you_need_to_complete_all_mandatory_fields">Vous devez remplir tous les champs obligatoires</string>
     <string name="send_test_success">Envoyer le test de réussite</string>
+    <string name="view_log">Afficher le journal</string>
+    <string name="you_cant_add_more_workers_than">vous ne pouvez pas ajouter plus d\'ouvriers que</string>
+    <string name="save_and_close">Enregistrer et fermer</string>
 </resources>

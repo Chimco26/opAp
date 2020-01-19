@@ -449,5 +449,7 @@
     <string name="service_calls">اتصالات الخدمة</string>
     <string name="send_test_success">نجح إرسال الاختبار</string>
     <string name="powered_by_leadermes">مدعوم من قبل ماتيكس</string>
+    <string name="view_log">عرض السجل</string>
+    <string name="save_and_close">حفظ وإغلاق</string>
 
 </resources>

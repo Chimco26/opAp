@@ -443,4 +443,7 @@
     <string name="you_need_to_complete_all_mandatory_fields">Вам необходимо заполнить все обязательные поля</string>
     <string name="send_test_success">тест успешно отправлен</string>
     <string name="end_setup_success">Завершить настройку успешно</string>
+    <string name="view_log">Просмотреть журнал</string>
+    <string name="you_cant_add_more_workers_than">вы не можете добавить больше работников, чем</string>
+    <string name="save_and_close">Сохранить и закрыть</string>
 </resources>
