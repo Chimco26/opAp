@@ -469,5 +469,7 @@
     <string name="you_cant_add_more_workers_than">אתה לא יכול להוסיף מספר עבודים גדול מ</string>
     <string name="save_and_close">שמור וסגור</string>
     <string name="powered_by_leadermes">סופק על ידי מטיקס</string>
+    <string name="stop_logs">יומן אירועי עצירה</string>
+    <string name="default_unanswered_technocian_call">ממתין לתגובת טכנאי</string>
 
 </resources>

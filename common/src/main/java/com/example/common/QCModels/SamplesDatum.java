@@ -49,6 +49,9 @@ public class SamplesDatum {
     }
 
     public Integer getUpsertType() {
+        if (upsertType == null){
+            return 0;
+        }
         return upsertType;
     }
 

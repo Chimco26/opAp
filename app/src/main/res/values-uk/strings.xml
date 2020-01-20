@@ -444,4 +444,5 @@
     <string name="send_test_success">Успіх з надсиланням тесту</string>
     <string name="view_log">Переглянути журнал</string>
     <string name="save_and_close">Зберегти і закрити</string>
+    <string name="default_unanswered_technocian_call">Очікується на відповідь техніка</string>
 </resources>

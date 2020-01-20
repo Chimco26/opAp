@@ -397,4 +397,5 @@
     <string name="view_log">Visualizza registro</string>
     <string name="you_cant_add_more_workers_than">non puoi aggiungere più lavoratori di</string>
     <string name="save_and_close">Salva e chiudi</string>
+    <string name="default_unanswered_technocian_call">In attesa di risposta del tecnico</string>
 </resources>

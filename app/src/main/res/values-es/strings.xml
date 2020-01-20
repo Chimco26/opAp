@@ -447,5 +447,7 @@
     <string name="save_failed">Fallo al guardar</string>
     <string name="no_worker_found">No se encontró ningún trabajador</string>
     <string name="edit_operators">Editar operadores</string>
+    <string name="you_cant_add_more_workers_than">no se pueden añadir más trabajadores de</string>
+    <string name="default_unanswered_technocian_call">Editar nota</string>
 
 </resources>

@@ -442,5 +442,6 @@
     <string name="view_log">查看日志</string>
     <string name="you_cant_add_more_workers_than">您不能添加大于此数的工人</string>
     <string name="save_and_close">保存并关闭</string>
+    <string name="default_unanswered_technocian_call">正等待技術人員回復</string>
 
 </resources>

@@ -451,4 +451,5 @@
     <string name="view_log">Protokoll anzeigen</string>
     <string name="you_cant_add_more_workers_than">Sie können nicht mehr Arbeiter hinzufügen als</string>
     <string name="save_and_close">Speichern und schließen</string>
+    <string name="default_unanswered_technocian_call">Wartet auf Antwort von Einrichter</string>
 </resources>

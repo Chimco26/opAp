@@ -450,5 +450,6 @@
     <string name="powered_by_leadermes">مدعوم من قبل ماتيكس</string>
     <string name="view_log">عرض السجل</string>
     <string name="save_and_close">حفظ وإغلاق</string>
+    <string name="default_unanswered_technocian_call">في انتظارالتقني للرد</string>
 
 </resources>
