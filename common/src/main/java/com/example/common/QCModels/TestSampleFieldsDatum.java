@@ -61,7 +61,7 @@ public class TestSampleFieldsDatum {
     @SerializedName("RequiredField")
     @Expose
     private Boolean requiredField;
-    @SerializedName("com.example.common.UpsertType")
+    @SerializedName("UpsertType")
     @Expose
     private Integer upsertType;
     @SerializedName("SamplesData")

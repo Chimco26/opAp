@@ -420,13 +420,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             @Override
             public void onSuccess(SaveTestDetailsResponse saveTestDetailsResponse) {
                 mProgressBar.setVisibility(View.GONE);
-//                if (saveTestDetailsResponse.isPassed()) {
-//                    getActivity().setResult(RESULT_OK);
-//                    getActivity().finish();
-//                } else {
                     initPassedView(saveTestDetailsResponse.isPassed());
                     getTestOrderDetails();
-//                }
             }
 
             @Override
@@ -436,30 +431,6 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             }
         });
     }
-
-//    public void closeKeyBoard() {
-//        if (mKeyBoardLayout != null) {
-//            mKeyBoardLayout.setVisibility(View.GONE);
-//        }
-//        if (mKeyBoard != null) {
-//            mKeyBoard.setListener(null);
-//            mKeyBoard.closeKeyBoard();
-//        }
-//    }
-//
-//    public void openKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
-//        if (mKeyBoardLayout != null) {
-//            mKeyBoardLayout.setVisibility(View.VISIBLE);
-//            if (mKeyBoard == null) {
-//                mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
-//            }
-//
-//            mKeyBoard.setChars(complementChars);
-//            mKeyBoard.openKeyBoard(text);
-//            mKeyBoard.setListener(listener);
-////            KeyboardUtils.closeKeyboard(getContext());
-//        }
-//    }
 
     @Override
     public int getCroutonRoot() {
