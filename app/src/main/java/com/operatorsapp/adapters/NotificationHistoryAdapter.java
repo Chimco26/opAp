@@ -19,6 +19,8 @@ import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -52,29 +54,59 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
 
         Date date;
         Notification notification;
-        Calendar c = Calendar.getInstance();
+        mFirstYesterdayPosition = mNotificationsList.size();
+
+        //order by notification response date
+        Collections.sort(mNotificationsList, new Comparator<Notification>() {
+            @Override
+            public int compare(Notification o1, Notification o2) {
+
+                o1.setmSentTime(TimeUtils.getStringNoTFormatForNotification(o1.getmSentTime()));
+                o1.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(o1.getmResponseDate()));
+                o2.setmSentTime(TimeUtils.getStringNoTFormatForNotification(o2.getmSentTime()));
+                o2.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(o2.getmResponseDate()));
+
+                Date d1 = TimeUtils.getDateForNotification(o1.getmResponseDate());
+                Date d2 = TimeUtils.getDateForNotification(o2.getmResponseDate());
+
+                if (d1 == null) {
+                    return 1;
+                } else if (d2 == null) {
+                    return -1;
+                } else if (d1.after(d2)) {
+                    return -1;
+                } else if(d1.before(d2)) {
+                    return 1;
+                }else {
+                    return 0;
+                }
+            }
+        });
+
+
+        Calendar todayCalendar = Calendar.getInstance();
+        todayCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        todayCalendar.set(Calendar.MINUTE, 0);
+
+        Calendar yesterdayCalendar = Calendar.getInstance();
+        yesterdayCalendar.add(Calendar.DAY_OF_YEAR, -1);
+        yesterdayCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        yesterdayCalendar.set(Calendar.MINUTE, 0);
 
         for (int i = 0; i < mNotificationsList.size(); i++) {
 
             notification = mNotificationsList.get(i);
-            date = TimeUtils.getDateForNotification(notification.getmResponseDate());
-            if (date == null){
+            if (notification.getmResponseDate() != null && notification.getmResponseDate().length() > 0) {
+                date = TimeUtils.getDateForNotification(notification.getmResponseDate());
+            } else {
                 date = TimeUtils.getDateForNotification(notification.getmSentTime());
             }
 
-            if (date != null) {
-                c.setTime(date);
-
-                if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR) && mFirstTodayPosition < 0) {
-                    mFirstTodayPosition = i;
-                }
-
-                if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR) + 1 && mFirstYesterdayPosition < 0) {
-                    mFirstYesterdayPosition = i;
-                }
+            if (date != null && date.after(todayCalendar.getTime()) && i == 0) {
+                mFirstTodayPosition = 0;
+            }else  if (date != null && date.after(yesterdayCalendar.getTime()) && date.before(todayCalendar.getTime()) && i < mFirstYesterdayPosition) {
+                mFirstYesterdayPosition = i;
             }
-
-            if (mFirstTodayPosition >= 0 && mFirstYesterdayPosition >= 0) return;
         }
     }
 
@@ -101,36 +133,32 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
         String body;
 
         if (date != null) {
-            Calendar c = Calendar.getInstance();
-            c.setTime(date);
-            String minutes;
-            String hours;
+            Calendar previousCalendar = Calendar.getInstance();
+            Calendar currentCalendar = Calendar.getInstance();
+            currentCalendar.setTime(date);
+            time = getTime(currentCalendar);
 
-            if (c.get(Calendar.MINUTE) < 10 ){
-                minutes = "0" + c.get(Calendar.MINUTE);
-            }else {
-                minutes = c.get(Calendar.MINUTE) + "";
-            }
-            if (c.get(Calendar.HOUR_OF_DAY) < 10 ){
-                hours = "0" + c.get(Calendar.HOUR_OF_DAY);
-            }else {
-                hours = c.get(Calendar.HOUR_OF_DAY) + "";
-            }
-
-            time = hours + ":" + minutes;
-
-            if (position == mFirstTodayPosition){
-                holder.mDayTitleTv.setText(R.string.today);
+            if (position == 0)
+            {
                 holder.mDayTitleTv.setVisibility(View.VISIBLE);
-            }else if (position == mFirstYesterdayPosition) {
-                holder.mDayTitleTv.setText(R.string.yesterday);
-                holder.mDayTitleTv.setVisibility(View.VISIBLE);
-            }else if (mCalendar.get(Calendar.DAY_OF_YEAR) != c.get(Calendar.DAY_OF_YEAR)){
-                holder.mDayTitleTv.setText(TimeUtils.getDateFromFormat(c.getTime(), TimeUtils.ONLY_DATE_FORMAT));
-                holder.mDayTitleTv.setVisibility(View.VISIBLE);
-                mCalendar = c;
-            }else {
-                holder.mDayTitleTv.setVisibility(View.GONE);
+                if (position == mFirstTodayPosition){
+                    holder.mDayTitleTv.setText(R.string.today);
+                }else {
+                    holder.mDayTitleTv.setText(TimeUtils.getDateFromFormat(currentCalendar.getTime(), TimeUtils.ONLY_DATE_FORMAT));
+                }
+            } else{
+                previousCalendar.setTime(getDate(mNotificationsList.get(position -1)));
+                if (position == mFirstYesterdayPosition)
+                {
+                    holder.mDayTitleTv.setText(R.string.yesterday);
+                    holder.mDayTitleTv.setVisibility(View.VISIBLE);
+                } else if (previousCalendar.get(Calendar.DAY_OF_YEAR) != currentCalendar.get(Calendar.DAY_OF_YEAR))
+                {
+                    holder.mDayTitleTv.setText(TimeUtils.getDateFromFormat(currentCalendar.getTime(), TimeUtils.ONLY_DATE_FORMAT));
+                    holder.mDayTitleTv.setVisibility(View.VISIBLE);
+                } else {
+                    holder.mDayTitleTv.setVisibility(View.GONE);
+                }
             }
         }
 
@@ -310,6 +338,36 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                 }
             });
         }
+    }
+
+    private String getTime(Calendar c) {
+        String time;
+        String minutes;
+        String hours;
+
+        if (c.get(Calendar.MINUTE) < 10) {
+            minutes = "0" + c.get(Calendar.MINUTE);
+        } else {
+            minutes = c.get(Calendar.MINUTE) + "";
+        }
+        if (c.get(Calendar.HOUR_OF_DAY) < 10) {
+            hours = "0" + c.get(Calendar.HOUR_OF_DAY);
+        } else {
+            hours = c.get(Calendar.HOUR_OF_DAY) + "";
+        }
+
+        time = hours + ":" + minutes;
+        return time;
+    }
+
+    private Date getDate(Notification notification) {
+        Date date;
+        if (notification.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET) {
+            date = TimeUtils.getDateForNotification(notification.getmSentTime());
+        } else {
+            date = TimeUtils.getDateForNotification(notification.getmResponseDate());
+        }
+        return date;
     }
 
     @Override
