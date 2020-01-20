@@ -445,4 +445,5 @@
     <string name="view_log">Просмотреть журнал</string>
     <string name="you_cant_add_more_workers_than">вы не можете добавить больше работников, чем</string>
     <string name="save_and_close">Сохранить и закрыть</string>
+    <string name="default_unanswered_technocian_call">Ожидается ответ техника</string>
 </resources>

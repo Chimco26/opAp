@@ -419,6 +419,7 @@
     <string name="report_stop_start">Początek</string>
     <string name="save">Zapisz zmiany</string>
     <string name="shift_log_standard">Wg normy</string>
+    <string name="you_cant_add_more_workers_than">nie możesz dodać więcej pracowników niż</string>
     <!--    <string name="limits"></string>-->
     <!--    <string name="you_need_to_complete_all_mandatory_fields"></string>-->
     <!--    <string name="choose_hour"></string>-->

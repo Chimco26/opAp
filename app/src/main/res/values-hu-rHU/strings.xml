@@ -454,5 +454,6 @@
     <string name="view_log">Napló megtekintése</string>
     <string name="you_cant_add_more_workers_than">nem adhat hozzá több dolgozót, mint</string>
     <string name="save_and_close">Mentés és bezárás</string>
+    <string name="default_unanswered_technocian_call">Várakozás a technikus válaszára</string>
 
 </resources>

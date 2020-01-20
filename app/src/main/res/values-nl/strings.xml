@@ -454,5 +454,6 @@
     <string name="send_test_success">Test met succes verstuurd</string>
     <string name="view_log">Logboek inzien</string>
     <string name="save_and_close">Opslaan en sluiten</string>
+    <string name="default_unanswered_technocian_call">Wachtend op antwoord technicus</string>
 
 </resources>

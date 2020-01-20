@@ -450,4 +450,5 @@
     <string name="view_log">Afficher le journal</string>
     <string name="you_cant_add_more_workers_than">vous ne pouvez pas ajouter plus d\'ouvriers que</string>
     <string name="save_and_close">Enregistrer et fermer</string>
+    <string name="default_unanswered_technocian_call">En attente de la réponse du technicien</string>
 </resources>

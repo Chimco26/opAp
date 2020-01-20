@@ -149,6 +149,11 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         mNextButton = view.findViewById(R.id.button_approve);
         mUnitsEditText = view.findViewById(R.id.units_edit_text);
         mWeightEditText = view.findViewById(R.id.weight_edit_text);
+        if (PersistenceManager.getInstance().getReportRejectDefaultUnits() == 1){
+            mUnitsEditText.requestFocus();
+        }else {
+            mWeightEditText.requestFocus();
+        }
         mJobsSpinner = view.findViewById(R.id.report_job_spinner);
         TextView productIdTextView = view.findViewById(R.id.report_cycle_id_text_view);
         setWeightTitleView(view);
@@ -214,9 +219,6 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         }
 
         productIdTextView.setText(String.valueOf(mCurrentProductId));
-
-        mUnitsEditText.setFocusableInTouchMode(true);
-        mUnitsEditText.requestFocus();
 
         mUnitsEditText.addTextChangedListener(new TextWatcher() {
             @Override
