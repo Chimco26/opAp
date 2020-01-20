@@ -493,5 +493,6 @@
     <string name="save_failed">Save failed</string>
     <string name="already_in_the_perators_list">Already in the operators list</string>
     <string name="you_cant_add_more_workers_than">you can\'t add more workers than</string>
+    <string name="default_unanswered_technocian_call">Waiting for the technician to reply</string>
 
 </resources>
