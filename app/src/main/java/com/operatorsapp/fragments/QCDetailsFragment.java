@@ -54,7 +54,7 @@ import static android.support.annotation.Dimension.SP;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_LAST;
 
 public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
-        QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener{
+        QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener {
     public static final String TAG = QCDetailsFragment.class.getSimpleName();
     private static final String EXTRA_TEST_ID = "EXTRA_TEST_ID";
     private TestDetailsRequest mTestDetailsRequest;
@@ -72,6 +72,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private ImageView mPassedIc;
     private TextView mPassedTv;
     private TextView mTitleTv;
+    private View mMainView;
 
     public static QCDetailsFragment newInstance(int testId) {
 
@@ -104,6 +105,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mMainView = view;
         initVars(view);
         mTitleTv = view.findViewById(R.id.FQCD_title_tv);
         mQcRequests = new QCRequests();
@@ -143,7 +145,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
         for (TestFieldsDatum testFieldsDatum : testFields) {
             if (testFieldsDatum.getRequiredField() && testFieldsDatum.getAllowEntry()
-                    &&  (testFieldsDatum.getCurrentValue() == null || testFieldsDatum.getCurrentValue().isEmpty())) {
+                    && (testFieldsDatum.getCurrentValue() == null || testFieldsDatum.getCurrentValue().isEmpty())) {
                 return false;
             }
         }
@@ -227,7 +229,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
     private void initView() {
         mTitleTv.setText(String.format(Locale.getDefault(),
-                "%s - %s - %d", getString(R.string.quality_test), mTestOrderDetails.getTestName(),mTestDetailsRequest.getTestId()));
+                "%s - %s - %d", getString(R.string.quality_test), mTestOrderDetails.getTestName(), mTestDetailsRequest.getTestId()));
         mSamplesNumberEt.setText(mSamplesCount + "");
         initPassedView(mTestOrderDetails.getTestDetails().get(0).getPassed());
         initSamplesTestRv();
@@ -252,6 +254,14 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
     private void initSamplesTestRv() {
         if (getActivity() != null) {
+            if (mMainView != null) {
+                if (mTestOrderDetails != null && mTestOrderDetails.getTestSampleFieldsData() != null
+                        && mTestOrderDetails.getTestSampleFieldsData().size() > 0) {
+                    mMainView.findViewById(R.id.FQCD_samples_counter_ly).setVisibility(View.VISIBLE);
+                }else {
+                    mMainView.findViewById(R.id.FQCD_samples_counter_ly).setVisibility(View.GONE);
+                }
+            }
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             mSamplesAdapter = new QCParametersHorizontalAdapter(mTestOrderDetails.getTestDetails().get(0).getSamples(),
@@ -261,7 +271,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     }
 
     private void initSampleRvView() {
-        mSamplesTestRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false){
+        mSamplesTestRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false) {
             @Override
             public boolean requestChildRectangleOnScreen(RecyclerView parent, View child, Rect rect, boolean immediate, boolean focusedChildVisible) {
                 return false;
@@ -394,13 +404,19 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
     public void initSamplesData() {
         int counter = 1000;
+        ArrayList<TestSampleFieldsDatum> toRemove = new ArrayList<>();
         for (TestSampleFieldsDatum testSampleFieldsDatum : mTestOrderDetails.getTestSampleFieldsData()) {
-            for (SamplesDatum samplesDatum : testSampleFieldsDatum.getSamplesData()) {
-                if (samplesDatum.getID() == null || samplesDatum.getID().equals(0)) {
-                    samplesDatum.setID(counter++);
+            if (testSampleFieldsDatum.getCurrentValue() == null && testSampleFieldsDatum.getFieldType() == null){
+                toRemove.add(testSampleFieldsDatum);
+            }else {
+                for (SamplesDatum samplesDatum : testSampleFieldsDatum.getSamplesData()) {
+                    if (samplesDatum.getID() == null || samplesDatum.getID().equals(0)) {
+                        samplesDatum.setID(counter++);
+                    }
                 }
             }
         }
+        mTestOrderDetails.getTestSampleFieldsData().removeAll(toRemove);
         try {
             Type listType = new TypeToken<List<TestSampleFieldsDatum>>() {
             }.getType();
@@ -420,8 +436,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             @Override
             public void onSuccess(SaveTestDetailsResponse saveTestDetailsResponse) {
                 mProgressBar.setVisibility(View.GONE);
-                    initPassedView(saveTestDetailsResponse.isPassed());
-                    getTestOrderDetails();
+                initPassedView(saveTestDetailsResponse.isPassed());
+                getTestOrderDetails();
             }
 
             @Override
