@@ -141,42 +141,41 @@
                     android:layout_width="match_parent"
                     android:layout_height="15dp" />
 
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="15dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/samples"
-                    android:textColor="@color/machine_blue"
-                    android:textSize="23sp"
-                    android:textStyle="bold" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="15dp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/divider_gray" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/FQCD_paramters_rv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp" />
-
                 <LinearLayout
-                    android:id="@+id/FQCD_samples_counter_ly"
+                    android:id="@+id/FQCD_samples_ly"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/samples"
+                        android:textColor="@color/machine_blue"
+                        android:textSize="23sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/divider_gray" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/FQCD_paramters_rv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

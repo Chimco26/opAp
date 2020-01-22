@@ -257,9 +257,9 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             if (mMainView != null) {
                 if (mTestOrderDetails != null && mTestOrderDetails.getTestSampleFieldsData() != null
                         && mTestOrderDetails.getTestSampleFieldsData().size() > 0) {
-                    mMainView.findViewById(R.id.FQCD_samples_counter_ly).setVisibility(View.VISIBLE);
+                    mMainView.findViewById(R.id.FQCD_samples_ly).setVisibility(View.VISIBLE);
                 }else {
-                    mMainView.findViewById(R.id.FQCD_samples_counter_ly).setVisibility(View.GONE);
+                    mMainView.findViewById(R.id.FQCD_samples_ly).setVisibility(View.GONE);
                 }
             }
             DisplayMetrics displayMetrics = new DisplayMetrics();
