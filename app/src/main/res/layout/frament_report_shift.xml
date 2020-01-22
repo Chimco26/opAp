@@ -96,7 +96,7 @@
                 android:layout_height="414dp"
                 android:layout_marginTop="25dp"
                 android:weightSum="1"
-                android:gravity="center">
+                android:gravity="start">
 
                 <include
                     android:id="@+id/FRS_service_calls_view"
