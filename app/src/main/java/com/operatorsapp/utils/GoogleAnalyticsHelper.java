@@ -3,6 +3,8 @@ package com.operatorsapp.utils;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
@@ -15,7 +17,7 @@ public class GoogleAnalyticsHelper {
         try {
             return ((OperatorApplication)context.getApplicationContext()).getDefaultTracker();
         }catch (NullPointerException e){
-            return null;
+            return FirebaseAnalytics.getInstance(context);
         }
 
     }
