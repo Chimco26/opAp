@@ -3238,7 +3238,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 NetworkManager.getInstance().GetApplicationVersion(new Callback<AppVersionResponse>() {
                     @Override
                     public void onResponse(Call<AppVersionResponse> call, retrofit2.Response<AppVersionResponse> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().getError().getErrorDesc() == null && response.body().getError().getErrorDesc() == null) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getError().getErrorDesc() == null) {
 
                             // TODO: 07/05/2019 unmark before release
                             for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
