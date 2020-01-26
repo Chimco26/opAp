@@ -29,6 +29,17 @@ public class AppVersionResponse extends StandardResponse {
         @SerializedName("Url")
         String mUrl;
 
+        @SerializedName("Site")
+        String mSite;
+
+        public String getmSite() {
+            return mSite;
+        }
+
+        public void setmSite(String mSite) {
+            this.mSite = mSite;
+        }
+
         public String getmAppName() {
             return mAppName;
         }
