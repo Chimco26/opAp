@@ -678,7 +678,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mBottomRl.post(new Runnable() {
                 @Override
                 public void run() {
-                    mListener.onResizeBottomMargin(mBottomRl.getHeight());
+                    if (mListener != null) {
+                        mListener.onResizeBottomMargin(mBottomRl.getHeight());
+                    }
                 }
             });
         }

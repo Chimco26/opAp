@@ -300,7 +300,9 @@ public class LoginFragment extends Fragment {
                     mCroutonCallback.onHideConnectivityCroutonRequest();
                     ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
                 }
-                mNavigationCallback.isTryToLogin(false);
+                if (mNavigationCallback != null) {
+                    mNavigationCallback.isTryToLogin(false);
+                }
             }
         });
     }
