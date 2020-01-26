@@ -3240,15 +3240,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     public void onResponse(Call<AppVersionResponse> call, retrofit2.Response<AppVersionResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().getError().getErrorDesc() == null) {
 
-                            // TODO: 07/05/2019 unmark before release
                             for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
 
-                                String siteName = item.getmSite() != null ? item.getmSite().toLowerCase() : null;
+//                                String siteName = item.getmSite() != null ? item.getmSite().toLowerCase() : "";
+                                String siteName = item.getmSite();
 
                                 if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE
-                                    && (siteName == null || siteName.equals(PersistenceManager.getInstance().getSiteName().toLowerCase()))) {
-                                    //if (item.getmAppName().equals(Consts.APP_NAME)) {
-                                    //getFile("https://s3-eu-west-1.amazonaws.com/leadermes/opapp_35_update_test.apk");
+                                    && (siteName.isEmpty() || siteName.equals("all") || siteName.equals(PersistenceManager.getInstance().getSiteName().toLowerCase())))
+                                {
                                     getFile(item.getmUrl());
                                 }
                             }
