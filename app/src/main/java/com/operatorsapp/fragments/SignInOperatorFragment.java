@@ -228,7 +228,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         SimpleRequests.saveShiftWorkers(new SaveShiftWorkersRequest(pm.getMachineId(),
                 pm.getSessionId(), getSubWorkers(), getMainWorker()), pm.getSiteUrl(), new SimpleCallback() {
             @Override
-            public void onRequestSuccess(StandardResponse response) {
+            public void onRequestSuccess(StandardResponse response) {//fix 2.2
                 if (isAdded() && getActivity() != null) {
                     mWorkersProgressBar.setVisibility(View.GONE);
                     ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.save) + " " +
