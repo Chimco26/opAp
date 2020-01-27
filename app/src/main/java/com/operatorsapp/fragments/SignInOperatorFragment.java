@@ -228,17 +228,21 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         SimpleRequests.saveShiftWorkers(new SaveShiftWorkersRequest(pm.getMachineId(),
                 pm.getSessionId(), getSubWorkers(), getMainWorker()), pm.getSiteUrl(), new SimpleCallback() {
             @Override
-            public void onRequestSuccess(StandardResponse response) {
-                mWorkersProgressBar.setVisibility(View.GONE);
-                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.save) + " " +
-                        getString(R.string.operator) + " " + getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
-                listener.onSaveWorkers();
+            public void onRequestSuccess(StandardResponse response) {//fix 2.2
+                if (isAdded() && getActivity() != null) {
+                    mWorkersProgressBar.setVisibility(View.GONE);
+                    ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.save) + " " +
+                            getString(R.string.operator) + " " + getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
+                    listener.onSaveWorkers();
+                }
             }
 
             @Override
             public void onRequestFailed(StandardResponse reason) {
-                mWorkersProgressBar.setVisibility(View.GONE);
-                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.save_failed), CroutonCreator.CroutonType.NETWORK_ERROR);
+                if (isAdded() && getActivity() != null) {
+                    mWorkersProgressBar.setVisibility(View.GONE);
+                    ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.save_failed), CroutonCreator.CroutonType.NETWORK_ERROR);
+                }
             }
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
     }

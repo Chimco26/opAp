@@ -1005,11 +1005,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mActiveJobsListForMachine = activeJobsListForMachine;
             if (activeJobsListForMachine != null) {
 
-                mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, activeJobsListForMachine.getActiveJobs().get(0).getJobID(),
-                        mSelectProductJobId, PersistenceManager.getInstance().getShiftStart());
-                PersistenceManager.getInstance().setMaxUnitReport(mActiveJobsListForMachine.getActiveJobs().get(0).getCavitiesStandard());
-                PersistenceManager.getInstance().setJoshID(mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition).getJoshID());
-
+                if (activeJobsListForMachine.getActiveJobs().size() > 0) {
+                    mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, activeJobsListForMachine.getActiveJobs().get(0).getJobID(),
+                            mSelectProductJobId, PersistenceManager.getInstance().getShiftStart());
+                    PersistenceManager.getInstance().setMaxUnitReport(mActiveJobsListForMachine.getActiveJobs().get(0).getCavitiesStandard());
+                    if (activeJobsListForMachine.getActiveJobs().size() > mSpinnerProductPosition) {
+                        PersistenceManager.getInstance().setJoshID(mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition).getJoshID());
+                    }
+                }
                 mReportFieldsForMachineCore.stopPolling();
                 mReportFieldsForMachineCore.startPolling();
 

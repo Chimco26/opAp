@@ -203,7 +203,7 @@ public class QCTestOrderFragment extends Fragment implements
                             }
                             break;
                         case TYPE_PRODUCT_GROUP:
-                            if (mTestOrderRequest.getProductGroupID() != mTestOrder.getResponseDictionaryDT().getQualityGroups().get(position).getId()) {
+                            if (mTestOrderRequest.getProductGroupID() != mTestOrder.getResponseDictionaryDT().getProductGroups().get(position).getId()) {//fix 2.2
                                 mTestOrderRequest.setProductGroupID(mTestOrder.getResponseDictionaryDT().getProductGroups().get(position).getId());
                                 if (!isFirst[0])
                                     getTestOrder(mTestOrderRequest);
@@ -211,7 +211,7 @@ public class QCTestOrderFragment extends Fragment implements
                             break;
                         case TYPE_PRODUCTS:
                             if (mTestOrderRequest.getProductID() != mTestOrder.getResponseDictionaryDT().getProducts().get(position).getId()) {
-                                mTestOrderRequest.setSubType(mTestOrder.getResponseDictionaryDT().getSubTypes().get(position).getId());
+                                mTestOrderRequest.setProductID(mTestOrder.getResponseDictionaryDT().getProducts().get(position).getId());
                                 if (!isFirst[0])
                                     getTestOrder(mTestOrderRequest);
                             }
