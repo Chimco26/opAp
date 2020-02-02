@@ -1573,6 +1573,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         NetworkManager.getInstance().postTechnicianCall(request, new Callback<StandardResponse>() {
             @Override
             public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+                if (isAttachedCheck()) return;
                 if (response.body() != null && response.body().getError().getErrorDesc() == null) {
 
                     PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
@@ -1607,6 +1608,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             @Override
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
+                if (isAttachedCheck()) return;
                 ProgressDialogManager.dismiss();
                 PersistenceManager.getInstance().setCalledTechnicianName("");
 
@@ -1645,6 +1647,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 //ShowCrouton.showSimpleCrouton(((DashboardActivity) getActivity()), "Call for Technician failed", CroutonCreator.CroutonType.ALERT_DIALOG);
             }
         });
+    }
+
+    public boolean isAttachedCheck() {
+        if (!isAdded() || getActivity() == null){
+            return true;
+        }
+        return false;
     }
 
     public void openActivateJobScreen() {
