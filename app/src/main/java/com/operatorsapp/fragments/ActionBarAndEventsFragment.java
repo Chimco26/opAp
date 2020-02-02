@@ -602,9 +602,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mLineLy = view.findViewById(R.id.FAAE_machine_line_ly);
         mLineNameTv = view.findViewById(R.id.FAAE_machine_line_tv);
         mLineProgress = view.findViewById(R.id.FAAE_line_progress);
-//        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-//            view.findViewById(R.id.FAAE_line_arrow).setRotationY(180);
-//        }
+        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            view.findViewById(R.id.FAAE_line_arrow).setRotationY(180);
+        }
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);

@@ -57,7 +57,7 @@ public class MachineLineAdapter extends RecyclerView.Adapter<MachineLineAdapter.
 
 
         if (position == 0) {
-            viewHolder.mBarView.setVisibility(View.GONE);
+            viewHolder.mBarView.setVisibility(View.INVISIBLE);
         } else {
             viewHolder.mBarView.setVisibility(View.VISIBLE);
         }
