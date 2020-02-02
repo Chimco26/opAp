@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         ChangeLang.changeLanguage(this);
         try {
             ACRA.init(getApplication());
-        }catch (IllegalStateException ignored){}
+        }catch (IllegalStateException ignored){}catch (NullPointerException e){}
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
