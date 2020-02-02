@@ -642,9 +642,8 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@color/white"
-            android:layoutDirection="ltr"
             android:paddingStart="15dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <View
                 android:layout_width="match_parent"
@@ -666,7 +665,6 @@
                 android:weightSum="2">
 
                 <LinearLayout
-
                     android:id="@+id/FAAE_machine_line_log_btn_ll"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -682,7 +680,7 @@
                         android:layout_weight="4"
                         android:gravity="center"
                         android:maxLines="1"
-                        android:padding="5dp"
+                        android:padding="1dp"
                         android:text="@string/view_log"
                         android:textColor="@color/white"
                         android:textSize="20sp"

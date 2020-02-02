@@ -259,52 +259,54 @@ public class LoginFragment extends Fragment {
         String password = mPassword.getText().toString();
         String checkUrl = factoryUrl.replaceAll("[^a-zA-Z0-9_/,:.-]", "");
 
-        if (!checkUrl.equals(factoryUrl) && mCroutonCallback != null){
+        if (!checkUrl.equals(factoryUrl) && mCroutonCallback != null) {
             mCroutonCallback.onShowCroutonRequest(getResources().getString(R.string.illegal_chars), 5000, R.id.parent_layouts, CroutonCreator.CroutonType.URL_ERROR);
         }
         return !TextUtils.isEmpty(factoryUrl) && !TextUtils.isEmpty(userName) && !TextUtils.isEmpty(password) && checkUrl.equals(factoryUrl);
     }
 
     private void tryToLogin() {
-        mNavigationCallback.isTryToLogin(true);
-        PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
+        if (mNavigationCallback != null) {
+            mNavigationCallback.isTryToLogin(true);
+            PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
 
-        ProgressDialogManager.show(getActivity());//todo kuti
-        String siteUrl = mSiteUrl.getText().toString();
-        String userName = mUserName.getText().toString().toLowerCase();
-        String password = mPassword.getText().toString().toLowerCase();
+            ProgressDialogManager.show(getActivity());//todo kuti
+            String siteUrl = mSiteUrl.getText().toString();
+            String userName = mUserName.getText().toString().toLowerCase();
+            String password = mPassword.getText().toString().toLowerCase();
 
-        // Ohad change 30/4/17
-        if (!siteUrl.toLowerCase().startsWith("https://")) {
-            siteUrl = String.format("https://api%1$s.my.leadermes.com", siteUrl);
-        }
+            // Ohad change 30/4/17
+            if (!siteUrl.toLowerCase().startsWith("https://")) {
+                siteUrl = String.format("https://api%1$s.my.leadermes.com", siteUrl);
+            }
 
-        final String finalSiteUrl = siteUrl;
-        LoginCore.getInstance().login(siteUrl, userName, password, new LoginUICallback<Machine>() {
-            @Override
-            public void onLoginSucceeded(ArrayList<Machine> machines, String siteName) {
-                OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded() ");
+            final String finalSiteUrl = siteUrl;
+            LoginCore.getInstance().login(siteUrl, userName, password, new LoginUICallback<Machine>() {
+                @Override
+                public void onLoginSucceeded(ArrayList<Machine> machines, String siteName) {
+                    OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded() ");
 
 //                getVersion(machines, true);
-                //getNotifications();
-                PersistenceManager.getInstance().setSiteName(siteName);
+                    //getNotifications();
+                    PersistenceManager.getInstance().setSiteName(siteName);
 
-                getDepartmentsMachines(machines, finalSiteUrl, true);
+                    getDepartmentsMachines(machines, finalSiteUrl, true);
 
-            }
-
-            @Override
-            public void onLoginFailed(final StandardResponse reason) {
-                dismissProgressDialog();
-                if (mCroutonCallback != null) {
-                    mCroutonCallback.onHideConnectivityCroutonRequest();
-                    ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
                 }
-                if (mNavigationCallback != null) {
-                    mNavigationCallback.isTryToLogin(false);
+
+                @Override
+                public void onLoginFailed(final StandardResponse reason) {
+                    dismissProgressDialog();
+                    if (mCroutonCallback != null) {
+                        mCroutonCallback.onHideConnectivityCroutonRequest();
+                        ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
+                    }
+                    if (mNavigationCallback != null) {
+                        mNavigationCallback.isTryToLogin(false);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void getDepartmentsMachines(final ArrayList<Machine> machines, String finalSiteUrl, final boolean isTryToLogin) {
@@ -345,28 +347,30 @@ public class LoginFragment extends Fragment {
 
     // Silent - setUsername & password from preferences, It is only when preferences.isSelectedMachine().
     private void doSilentLogin() {
-        mNavigationCallback.isTryToLogin(true);
-        ProgressDialogManager.show(getActivity());//todo kuti
-        LoginCore.getInstance().login(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getUserName(), PersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
-            @Override
-            public void onLoginSucceeded(ArrayList<Machine> machines, String siteName) {
-                OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
-                getDepartmentsMachines(machines, PersistenceManager.getInstance().getSiteUrl(), false);
-                PersistenceManager.getInstance().setSiteName(siteName);
-            }
+        if (mNavigationCallback != null) {
+            mNavigationCallback.isTryToLogin(true);
+            ProgressDialogManager.show(getActivity());//todo kuti
+            LoginCore.getInstance().login(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getUserName(), PersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
+                @Override
+                public void onLoginSucceeded(ArrayList<Machine> machines, String siteName) {
+                    OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
+                    getDepartmentsMachines(machines, PersistenceManager.getInstance().getSiteUrl(), false);
+                    PersistenceManager.getInstance().setSiteName(siteName);
+                }
 
-            @Override
-            public void onLoginFailed(final StandardResponse reason) {
-                dismissProgressDialog();
-                if (mCroutonCallback != null) {
-                    mCroutonCallback.onHideConnectivityCroutonRequest();
-                    ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
+                @Override
+                public void onLoginFailed(final StandardResponse reason) {
+                    dismissProgressDialog();
+                    if (mCroutonCallback != null) {
+                        mCroutonCallback.onHideConnectivityCroutonRequest();
+                        ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
+                    }
+                    if (mNavigationCallback != null) {
+                        mNavigationCallback.isTryToLogin(false);
+                    }
                 }
-                if (mNavigationCallback != null) {
-                    mNavigationCallback.isTryToLogin(false);
-                }
-            }
-        });
+            });
+        }
     }
 
     private void loginSuccess(ArrayList<Machine> machines, DepartmentsMachinesResponse departmentsMachinesResponse) {

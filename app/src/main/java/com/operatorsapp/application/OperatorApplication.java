@@ -69,7 +69,7 @@ public class OperatorApplication extends MultiDexApplication {
 
         try {
             ACRA.init(this);
-        }catch (IllegalStateException ignored){}
+        }catch (IllegalStateException ignored){}catch (NullPointerException e){}
 
         msApplicationContext = getApplicationContext();
 //        LeakCanary.install(this);
