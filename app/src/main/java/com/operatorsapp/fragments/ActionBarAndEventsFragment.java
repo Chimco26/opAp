@@ -640,7 +640,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         getMachineLine(pm.getSiteUrl(), new GetMachineLineCallback() {
             @Override
             public void onGetMachineLineSuccess(MachineLineResponse response) {
-                if (isDetached()) {
+                if (isDetached() || getActivity() == null) {
                     return;
                 }
                 mLineProgress.setVisibility(View.GONE);
@@ -662,7 +662,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             @Override
             public void onGetMachineLineFailed(StandardResponse reason) {
-                if (isDetached()) {
+                if (isDetached() || getActivity() == null) {
                     return;
                 }
                 ShowCrouton.showSimpleCrouton(mCroutonCallback, reason.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);

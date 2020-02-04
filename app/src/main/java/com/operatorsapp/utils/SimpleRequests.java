@@ -270,7 +270,7 @@ public class SimpleRequests {
             @Override
             public void onResponse(@NonNull Call<MachineLineResponse> call, @NonNull Response<MachineLineResponse> response) {
 
-                if (response.body() != null && response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty()) {
+                if (response.body() != null && (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty())) {
                     if (callback != null) {
 
                         callback.onGetMachineLineSuccess(response.body());

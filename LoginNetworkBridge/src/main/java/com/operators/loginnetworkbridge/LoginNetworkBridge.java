@@ -34,7 +34,13 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
         }
 
         LoginRequest loginRequest = new LoginRequest(userName, password, language);
-        Call<SessionResponse> call = mLoginNetworkManagerInterface.getLoginRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getUserSessionId(loginRequest);
+        Call<SessionResponse> call;
+        try {
+            call = mLoginNetworkManagerInterface.getLoginRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getUserSessionId(loginRequest);
+        }catch (NullPointerException e){
+            loginCoreCallback.onLoginFailed(new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Network error"));
+            return;
+        }
         call.enqueue(new Callback<SessionResponse>() {
             @Override
             public void onResponse(@NonNull Call<SessionResponse> call, @NonNull Response<SessionResponse> response) {
