@@ -253,7 +253,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ReportShiftFragment mReportShiftFragment;
     private RecipeFragment mRecipeFragment;
     private Intent mGalleryIntent;
-    private Integer mSelectJobId;
+    //    private Integer mSelectJobId;
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
     private Integer mSelectProductJobId;
     private JobBase.OnJobFinishedListener mOnJobFinishedListener;
@@ -296,6 +296,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private boolean mIsCollapse = true;
     private boolean mIsUpgrading = false;
     private AsyncTask<String, String, String> mDownloadFile;
+    private boolean isNeedRecipeRefresh;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -1097,6 +1098,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                         if (mViewPagerFragment != null && mViewPagerFragment.isRecipeShown()) {
                             getAllRecipes(machineStatus.getAllMachinesData().get(0).getCurrentJobID(), true, true);
+                        } else if (mViewPagerFragment != null && isNeedRecipeRefresh && mRecipeFragment != null) {
+                            getAllRecipes(PersistenceManager.getInstance().getJobId(), true, false);
+                            mPdfList = new ArrayList<>();
                         }
 
                         pollingBackup(true);
@@ -1248,9 +1252,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onDataReceivedSuccessfully(ArrayList<Widget> widgetList) {
                 ProgressDialogManager.dismiss();
-                if (mSelectJobId != null) {
-                    PersistenceManager.getInstance().setJobId(mSelectJobId);
-                }
+//                if (mSelectJobId != null) {
+//                    PersistenceManager.getInstance().setJobId(mSelectJobId);
+//                }
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
@@ -1651,15 +1655,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         dashboardDataStartPolling();
 
-        PersistenceManager.getInstance().setJobId(mSelectJobId);
+//        PersistenceManager.getInstance().setJobId(mSelectJobId);
 
-        if (mRecipeFragment != null) {
-
-            getAllRecipes(mSelectJobId, true, false);
-
-            mPdfList = new ArrayList<>();
-
-        }
+        isNeedRecipeRefresh = true;
     }
 
     @Override
@@ -1677,9 +1675,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void startJobForMachine(int jobId) {
         Log.i(TAG, "startJobForMachine(), Job Id: " + jobId);
-        PersistenceManager.getInstance().setJobId(jobId);
+//        PersistenceManager.getInstance().setJobId(jobId);
 
-        mSelectJobId = jobId;
+//        mSelectJobId = jobId;
 
         mJobsCore.startJobForMachine(jobId);
 
@@ -2294,12 +2292,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onProductionStatusChanged(final int productionModeId, final String newStatus, final List<MachinesLineDetail> machineLineItems) {
 
         MachinesLineDetail current = null;
-        for (MachinesLineDetail machinesLineDetail: machineLineItems) {
+        for (MachinesLineDetail machinesLineDetail : machineLineItems) {
             if (machinesLineDetail.getMachineID() == PersistenceManager.getInstance().getMachineId()) {
                 current = machinesLineDetail;
             }
         }
-        if (current != null){
+        if (current != null) {
             machineLineItems.remove(current);
         }
 
@@ -2311,7 +2309,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 public void onClickPositiveBtn(ArrayList<MachinesLineDetail> machinesLineDetails) {
                     ProgressDialogManager.show(DashboardActivity.this);
                     postProductionMode(productionModeId, PersistenceManager.getInstance().getMachineId());
-                    for (MachinesLineDetail machinesLineDetail: machinesLineDetails){
+                    for (MachinesLineDetail machinesLineDetail : machinesLineDetails) {
                         postProductionMode(productionModeId, machinesLineDetail.getMachineID());
                     }
                 }
@@ -2330,7 +2328,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialogInterface) {
-                    if (mActionBarAndEventsFragment != null){
+                    if (mActionBarAndEventsFragment != null) {
                         mActionBarAndEventsFragment.setProductionStatusVisible();
                     }
                 }
@@ -2599,6 +2597,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void getAllRecipes(Integer jobId, final boolean isUpdate, final boolean isRefresh) {
 
+        isNeedRecipeRefresh = false;
         PersistenceManager persistanceManager = PersistenceManager.getInstance();
 
         SimpleRequests simpleRequests = new SimpleRequests();
@@ -2795,7 +2794,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void activateJob(int jobId) {
-        mSelectJobId = jobId;
+//        mSelectJobId = jobId;
 
         startJob();
 
@@ -3249,8 +3248,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                                 String siteName = item.getmSite();
 
                                 if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE
-                                    && (siteName.isEmpty() || siteName.equals("all") || siteName.equals(PersistenceManager.getInstance().getSiteName().toLowerCase())))
-                                {
+                                        && (siteName.isEmpty() || siteName.equals("all") || siteName.equals(PersistenceManager.getInstance().getSiteName().toLowerCase()))) {
                                     getFile(item.getmUrl());
                                 }
                             }

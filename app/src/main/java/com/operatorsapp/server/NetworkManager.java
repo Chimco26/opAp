@@ -177,13 +177,8 @@ public class NetworkManager implements LoginNetworkManagerInterface,
             return mEmeraldServiceRequestsHashMap.get(siteUrl);
         } else {
             mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
-
             EmeraldLoginServiceRequests emeraldLoginServiceRequests = mRetrofit.create(EmeraldLoginServiceRequests.class);
-
-
             mEmeraldServiceRequestsHashMap.put(siteUrl, emeraldLoginServiceRequests);
-
-
             return emeraldLoginServiceRequests;
         }
     }
