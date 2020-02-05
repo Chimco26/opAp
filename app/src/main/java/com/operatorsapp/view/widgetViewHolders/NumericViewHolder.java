@@ -390,7 +390,11 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mTitle.setText(nameByLang1);
         mSubtitle.setVisibility(View.INVISIBLE);
         if (widget.getCurrentValue().contains(".")) {
-            new DecimalFormat("#.##").format(Double.parseDouble(widget.getCurrentValue()));
+            try {
+                mValue.setText(new DecimalFormat("#.##").format(Double.parseDouble(widget.getCurrentValue())));
+            }catch (Exception e){
+                mValue.setText(widget.getCurrentValue());
+            }
         } else {
             mValue.setText(widget.getCurrentValue());
         }
