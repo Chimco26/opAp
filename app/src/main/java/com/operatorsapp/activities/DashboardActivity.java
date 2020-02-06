@@ -3450,9 +3450,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 install.setDataAndType(apkUri, "application/vnd.android.package-archive");
                 install.normalizeMimeType("application/vnd.android.package-archive");
-                startActivity(install);
+
+                if(install.resolveActivity(getPackageManager()) != null) {
+                    startActivity(install);
+                }else {
+                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, getString(R.string.install_activity_not_found), CroutonCreator.CroutonType.NETWORK_ERROR);
+                }
+
 //                finish();
-            } catch (NullPointerException e) {
+            } catch (Exception e) {
 
             }
             this.progressDialog.dismiss();
