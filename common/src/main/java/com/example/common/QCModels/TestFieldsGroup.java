@@ -11,7 +11,7 @@ public class TestFieldsGroup {
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("displayorder")
+    @SerializedName("DisplayOrder")
     @Expose
     private int displayOrder;
 

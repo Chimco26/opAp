@@ -73,6 +73,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private TextView mPassedTv;
     private TextView mTitleTv;
     private View mMainView;
+    private View mMinusSamplesBtn;
+    private View mPlusSamplesBtn;
 
     public static QCDetailsFragment newInstance(int testId) {
 
@@ -169,22 +171,34 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
     private void initIncrementSamplesView(View view) {
         mSamplesNumberEt = view.findViewById(R.id.FQCD_units_text_view);
-        view.findViewById(R.id.FQCD_button_minus).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Integer.parseInt(mSamplesNumberEt.getText().toString()) > 0) {
-                    mSamplesCount = Integer.parseInt(mSamplesNumberEt.getText().toString()) - 1;
-                    updateSamples(false, mSamplesCount);
+        mMinusSamplesBtn = view.findViewById(R.id.FQCD_button_minus);
+        mPlusSamplesBtn = view.findViewById(R.id.FQCD_button_plus);
+    }
+
+    private void initIncrementSamples(boolean enable){
+        if (enable) {
+            mMinusSamplesBtn.setVisibility(View.VISIBLE);
+            mPlusSamplesBtn.setVisibility(View.VISIBLE);
+            mMinusSamplesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (Integer.parseInt(mSamplesNumberEt.getText().toString()) > 0) {
+                        mSamplesCount = Integer.parseInt(mSamplesNumberEt.getText().toString()) - 1;
+                        updateSamples(false, mSamplesCount);
+                    }
                 }
-            }
-        });
-        view.findViewById(R.id.FQCD_button_plus).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSamplesCount = Integer.parseInt(mSamplesNumberEt.getText().toString()) + 1;
-                updateSamples(true, mSamplesCount - 1);
-            }
-        });
+            });
+            mPlusSamplesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mSamplesCount = Integer.parseInt(mSamplesNumberEt.getText().toString()) + 1;
+                    updateSamples(true, mSamplesCount - 1);
+                }
+            });
+        }else {
+            mMinusSamplesBtn.setVisibility(View.GONE);
+            mPlusSamplesBtn.setVisibility(View.GONE);
+        }
     }
 
     private void updateSamples(boolean isIncrement, int position) {
@@ -350,6 +364,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                     initSamplesData();
                     initFieldsData();
                     initView();
+                    initIncrementSamples(testDetailsResponse.getTestDetails().get(0).getAllowEditSamples());
                 }
             }
 

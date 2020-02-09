@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:ellipsize="end"
             android:gravity="center_vertical"
-            android:maxLines="1"
+            android:maxLines="2"
             android:text="@string/parameter"
             android:textColor="@color/black"
             android:textSize="20sp"

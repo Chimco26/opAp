@@ -82,6 +82,16 @@ public class TestDetail {
     @SerializedName("Passed")
     @Expose
     private Boolean passed;
+    @SerializedName("AllowEditSamplesCount")
+    @Expose
+    private Boolean allowEditSamples;
+
+    public Boolean getAllowEditSamples() {
+        if (allowEditSamples == null){
+            return false;
+        }
+        return allowEditSamples;
+    }
 
     public Integer getID() {
         return iD;

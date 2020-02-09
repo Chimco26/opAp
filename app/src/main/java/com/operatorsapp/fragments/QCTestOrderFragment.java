@@ -276,13 +276,23 @@ public class QCTestOrderFragment extends Fragment implements
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                     subTypeAdapter.setTitle(position);
-                    mTestOrderRequest.setSubType(testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position).getId());
-                    if (testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position).getHasSamples() != null &&
-                            testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position).getHasSamples()) {
+                    SubType subType = testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position);
+                    mTestOrderRequest.setSubType(subType.getId());
+                    if (subType.getHasSamples()) {
                         mSamplesLy.setVisibility(View.VISIBLE);
+                        if (subType.getDefaultSamplesCount() != null){
+                            mSamplesEt.setText(String.valueOf(subType.getDefaultSamplesCount()));
+                        }else {
+                            mSamplesEt.setText(null);
+                        }
+                        if (subType.getAllowEdit()){
+                            mSamplesEt.setEnabled(true);
+                        }else {
+                            mSamplesEt.setEnabled(false);
+                        }
                     } else {
                         mSamplesLy.setVisibility(View.GONE);
-                        mSamplesEt.setHint("0");
+                        mSamplesEt.setText(null);
                     }
                 }
 

@@ -232,12 +232,9 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
     }
 
     private void setRangeView(final TestFieldsDatum item, final RangeView2 mRangeView) {
-
-
         mRangeView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-
                 mRangeView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 updateRangeView(item, mRangeView);
             }
@@ -249,11 +246,14 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
         if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
             try {
                 mRangeView.setCurrentValue(Float.parseFloat(item.getCurrentValue()));
+                mRangeView.setDefaultMode(false);
             }catch (Exception e){
                 mRangeView.setCurrentValue(0);
+                mRangeView.setDefaultMode(true);
             }
         } else {
             mRangeView.setCurrentValue(0);
+            mRangeView.setDefaultMode(true);
         }
         mRangeView.setHighLimit(item.getHValue());
         mRangeView.setLowLimit(item.getLValue());
