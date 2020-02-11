@@ -55,6 +55,8 @@ public class TaskBoardFragment extends Fragment {
         initBoardListener();
         initColumns();
         initColumns();
+        initColumns();
+        initColumns();
     }
 
     private void initColumns() {

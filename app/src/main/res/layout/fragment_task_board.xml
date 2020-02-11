@@ -1,10 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
+
+    <LinearLayout
+        android:id="@+id/FTB_title_ly"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/FTB_title_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:textColor="@color/blue1"
+            android:layout_weight="0.5"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="25sp"
+            android:textStyle="bold"
+            android:gravity="center_vertical"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"/>
+
+        <LinearLayout
+            android:id="@+id/FTB_create_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/blue1"
+            android:layout_weight="0.3"
+            android:padding="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/btn_plus_copy"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMaxTextSize="25sp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:gravity="center_vertical"
+                android:text="@string/add_new_task"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_gray" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
 
     <com.woxthebox.draglistview.BoardView
         android:id="@+id/FTB_board_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</RelativeLayout>
+        android:layout_height="match_parent" />
+</LinearLayout>

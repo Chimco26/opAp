@@ -8,10 +8,10 @@ public class SubType extends ResponseDictionnaryItemsBaseModel {
     @SerializedName("hassamples")
     @Expose
     private Boolean hasSamples;
-    @SerializedName("DefaultSamplesCount")
+    @SerializedName("defaultsamplescount")
     @Expose
     private Integer defaultSamplesCount;
-    @SerializedName("AllowEditSamplesCount")
+    @SerializedName("alloweditsamplescount")
     @Expose
     private Boolean allowEdit;
 

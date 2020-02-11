@@ -170,10 +170,15 @@ public class RangeView2 extends View {
             canvas.drawLine(percent * 20, getHeight() / 2f, percent * 80, getHeight() / 2f, mGreenPaint);
             canvas.drawLine(((mCurrentValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20, getHeight() / 2 - border, percent * 20 + ((mCurrentValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent, getHeight() / 2 + mHeight / 2, mCurrentPaint);
             canvas.drawText(currentValueTxt, (((mCurrentValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20) - mTextPaint.measureText(currentValueTxt) / 2, getHeight() / 2 - border - textPadding, mTextPaint);
-        } else if (mCurrentValue < mLowLimit && !mIsDefaultMode) {
-            canvas.drawLine(0, getHeight() / 2f, percent * 20, getHeight() / 2f, mGreenPaint);
-            canvas.drawLine(percent * 10, getHeight() / 2 - border, percent * 10, getHeight() / 2 + mHeight / 2, mCurrentPaint);
-            canvas.drawText(currentValueTxt, percent * 10 - mTextPaint.measureText(currentValueTxt) / 2, getHeight() / 2 - border - textPadding, mTextPaint);
+        } else if (mCurrentValue < mLowLimit) {
+            if (!mIsDefaultMode){
+                canvas.drawLine(0, getHeight() / 2f, percent * 20, getHeight() / 2f, mGreenPaint);
+                canvas.drawLine(percent * 10, getHeight() / 2 - border, percent * 10, getHeight() / 2 + mHeight / 2, mCurrentPaint);
+                canvas.drawText(currentValueTxt, percent * 10 - mTextPaint.measureText(currentValueTxt) / 2, getHeight() / 2 - border - textPadding, mTextPaint);
+            }else {
+                canvas.drawLine(percent * 10, getHeight() / 2 - border, percent * 10, getHeight() / 2 + mHeight / 2, mGrayPaint);
+                canvas.drawText(currentValueTxt, percent * 10 - mTextPaint.measureText(currentValueTxt) / 2, getHeight() / 2 - border - textPadding, mGrayPaint);
+            }
         } else {
             canvas.drawLine(percent * 80, getHeight() / 2f, percent * 100, getHeight() / 2f, mGreenPaint);
             canvas.drawLine(percent * 90, getHeight() / 2 - border, percent * 90, getHeight() / 2 + mHeight / 2, mCurrentPaint);
