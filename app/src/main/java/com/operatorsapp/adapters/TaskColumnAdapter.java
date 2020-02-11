@@ -41,8 +41,8 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
         super.onBindViewHolder(holder, position);
         holder.mTitle.setText(String.valueOf(list.get(holder.getAdapterPosition()).getTaskID()));
         holder.mText.setText(list.get(holder.getAdapterPosition()).getText());
-        holder.mAuthor.setText(list.get(holder.getAdapterPosition()).getTaskCreateUser());
-        setPriorityViews(holder.mPriorityIc, holder.mPriorityMarge, list.get(holder.getAdapterPosition()));
+        holder.mAuthor.setText(list.get(holder.getAdapterPosition()).getHistoryUser());
+//        setPriorityViews(holder.mPriorityIc, holder.mPriorityMarge, list.get(holder.getAdapterPosition()));
     }
 
     private void setPriorityViews(ImageView mPriorityIc, View mPriorityMarge, TaskProgress taskProgress) {
