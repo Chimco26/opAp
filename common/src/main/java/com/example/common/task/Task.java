@@ -6,13 +6,12 @@ import com.google.gson.annotations.SerializedName;
 public class Task {
 
     public enum TaskStatus {
-        OPEN(1),
         TODO(2),
-        InProgress(3),
+        IN_PROGRESS(3),
         DONE(4),
         CANCELLED(5);
 
-        private int mValue;
+        private final int mValue;
 
         TaskStatus(int value) {
             mValue = value;

@@ -504,5 +504,10 @@
         sed do eiusmod tempor incidLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidLorem ipsum dolor sit amet,
         consectetur adipiscing elit, sed do eiusmod tempor incid</string>
     <string name="add_new_task">Add New Task</string>
+    <string name="todo">To do</string>
+    <string name="in_progress">In Progress</string>
+    <string name="done_for_task">Done</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="task_manager">Task Manager</string>
 
 </resources>

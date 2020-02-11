@@ -1818,16 +1818,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onOpenQCActivity() {
-        Intent intent = new Intent(DashboardActivity.this, QCActivity.class);
-        ignoreFromOnPause = true;
-
-        if (mActionBarAndEventsFragment != null) {
-
-            mActionBarAndEventsFragment.setFromAnotherActivity(true);
-        }
-        startActivityForResult(intent, QC_ACTIVITY_RESULT_CODE);
-
-//        Intent intent = new Intent(DashboardActivity.this, TaskActivity.class);
+//        Intent intent = new Intent(DashboardActivity.this, QCActivity.class);
 //        ignoreFromOnPause = true;
 //
 //        if (mActionBarAndEventsFragment != null) {
@@ -1835,6 +1826,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //            mActionBarAndEventsFragment.setFromAnotherActivity(true);
 //        }
 //        startActivityForResult(intent, QC_ACTIVITY_RESULT_CODE);
+//
+        Intent intent = new Intent(DashboardActivity.this, TaskActivity.class);
+        ignoreFromOnPause = true;
+
+        if (mActionBarAndEventsFragment != null) {
+
+            mActionBarAndEventsFragment.setFromAnotherActivity(true);
+        }
+        startActivityForResult(intent, QC_ACTIVITY_RESULT_CODE);
     }
 
     @Override

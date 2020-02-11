@@ -40,9 +40,9 @@ public class TaskActivity extends AppCompatActivity {
 
     private void createTask() {
         PersistenceManager pm = PersistenceManager.getInstance();
-        SimpleRequests.createTask(new Task("a"), pm.getSiteUrl(), new CreateTaskCallback() {
+        SimpleRequests.createOrUpdateTask(new Task("a"), pm.getSiteUrl(), new CreateTaskCallback() {
             @Override
-            public void onCreateTaskCallbackSuccess(Object response) {
+            public void onCreateTaskCallbackSuccess(StandardResponse response) {
 
             }
 

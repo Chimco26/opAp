@@ -28,6 +28,7 @@
             app:autoSizeTextType="uniform"
             app:autoSizeMaxTextSize="25sp"
             android:textStyle="bold"
+            android:maxLines="1"
             android:gravity="center_vertical"/>
 
         <View
@@ -59,6 +60,7 @@
                 app:autoSizeMaxTextSize="25sp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
+                android:maxLines="1"
                 android:gravity="center_vertical"
                 android:text="@string/add_new_task"/>
 
@@ -82,5 +84,6 @@
     <com.woxthebox.draglistview.BoardView
         android:id="@+id/FTB_board_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:columnSpacing="30dp"/>
 </LinearLayout>

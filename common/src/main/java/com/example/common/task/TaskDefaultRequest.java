@@ -3,7 +3,7 @@ package com.example.common.task;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TaskListRequest {
+public class TaskDefaultRequest {
     @SerializedName("SourceTaskCreationPlatform")
     @Expose
     private Integer sourceTaskCreationPlatform = 3;
@@ -11,7 +11,7 @@ public class TaskListRequest {
     @Expose
     private String sessionID;
 
-    public TaskListRequest(String sessionId) {
+    public TaskDefaultRequest(String sessionId) {
         this.sessionID = sessionId;
     }
 
