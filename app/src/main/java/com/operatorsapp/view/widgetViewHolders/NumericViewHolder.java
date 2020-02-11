@@ -2,8 +2,8 @@ package com.operatorsapp.view.widgetViewHolders;
 
 import android.app.Activity;
 import android.graphics.PorterDuff;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.InputType;
 import android.view.MotionEvent;
 import android.view.View;

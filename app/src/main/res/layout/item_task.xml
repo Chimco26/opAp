@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="288dp"
+    android:layout_height="124dp"
+    android:id="@+id/ITask_ly">
+
+    <View
+        android:id="@+id/ITask_priority_view"
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:background="@color/red_dark"/>
+
+    <TextView
+        android:id="@+id/ITask_title"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/ITask_text"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/ITask_title"
+        android:maxLines="2"
+        app:autoSizeTextType="uniform"
+        android:gravity="center_vertical"
+        android:textColor="@color/black"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="7dp"
+        android:text="@string/lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incid"/>
+
+    <ImageView
+        android:id="@+id/ITask_priority_ic"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/ic_priority"
+        />
+
+    <TextView
+        android:id="@+id/ITask_author"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/circle_blue"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/ITask_priority_ic"
+        android:layout_marginEnd="5dp"
+        android:text="ML"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:layout_marginBottom="5dp"/>
+
+</RelativeLayout>

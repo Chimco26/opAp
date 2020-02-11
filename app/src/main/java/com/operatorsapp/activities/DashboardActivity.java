@@ -18,16 +18,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.util.SparseArray;
@@ -35,6 +25,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.common.ErrorResponse;
 import com.example.common.Event;
@@ -722,7 +723,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             try {
 
-                android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+                FragmentManager fm = getSupportFragmentManager();
                 fm.beginTransaction().remove(mWidgetFragment).commit();
             } catch (IllegalStateException ignored) {
             }
@@ -731,7 +732,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             try {
 
-                android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+                FragmentManager fm = getSupportFragmentManager();
                 fm.beginTransaction().remove(mActionBarAndEventsFragment).commit();
             } catch (IllegalStateException ignored) {
             }
@@ -745,7 +746,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     boolean first = false;
 
-    private android.support.v4.app.FragmentManager.OnBackStackChangedListener getListener() {
+    private FragmentManager.OnBackStackChangedListener getListener() {
 
         return new FragmentManager.OnBackStackChangedListener() {
             public void onBackStackChanged() {
@@ -1767,7 +1768,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     public Fragment getVisibleFragment() {
         Fragment f = null;
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         List<Fragment> fragments = fragmentManager.getFragments();
         if (fragments != null) {
             for (Fragment fragment : fragments) {
@@ -1817,7 +1818,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onOpenQCActivity() {
-        Intent intent = new Intent(DashboardActivity.this, QCActivity.class);
+//        Intent intent = new Intent(DashboardActivity.this, QCActivity.class);
+//        ignoreFromOnPause = true;
+//
+//        if (mActionBarAndEventsFragment != null) {
+//
+//            mActionBarAndEventsFragment.setFromAnotherActivity(true);
+//        }
+//        startActivityForResult(intent, QC_ACTIVITY_RESULT_CODE);
+//
+        Intent intent = new Intent(DashboardActivity.this, TaskActivity.class);
         ignoreFromOnPause = true;
 
         if (mActionBarAndEventsFragment != null) {

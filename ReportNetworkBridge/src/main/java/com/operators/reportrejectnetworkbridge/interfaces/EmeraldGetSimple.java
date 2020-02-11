@@ -9,6 +9,8 @@ import com.example.common.machineData.ShiftOperatorResponse;
 import com.example.common.operator.SaveShiftWorkersRequest;
 import com.example.common.request.BaseRequest;
 import com.example.common.request.MachineIdRequest;
+import com.example.common.task.CreateTaskRequest;
+import com.example.common.task.TaskListRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -29,5 +31,11 @@ public interface EmeraldGetSimple {
 
     @POST("/LeaderMESApi/saveShiftWorkers")
     Call<StandardResponse> saveShiftWorkers(@Body SaveShiftWorkersRequest request);
+
+    @POST("/LeaderMESApi/GetTaskObjects")
+    Call<StandardResponse> getTaskObjects(@Body TaskListRequest request);
+
+    @POST("/LeaderMESApi/CreateTask")
+    Call<StandardResponse> createTaskObjects(@Body CreateTaskRequest request);
 }
 

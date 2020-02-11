@@ -59,7 +59,7 @@
             android:orientation="horizontal"
             app:corner_radius="3dp">
 
-            <android.support.v7.widget.AppCompatAutoCompleteTextView
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                 android:id="@+id/machine_id_name"
                 style="@style/FontStyle_T6"
                 android:layout_width="329dp"
@@ -106,7 +106,7 @@
         android:layout_height="0dp"
         android:layout_weight="6.75">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/FSM_department_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

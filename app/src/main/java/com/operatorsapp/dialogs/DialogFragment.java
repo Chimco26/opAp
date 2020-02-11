@@ -9,7 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +28,7 @@ import com.operatorsapp.utils.TimeUtils;
 
 import java.lang.reflect.Type;
 
-public class DialogFragment extends android.support.v4.app.DialogFragment {
+public class DialogFragment extends androidx.fragment.app.DialogFragment {
     private final static String TYPE = "type";
     private final static String EVENT = "event";
     //    public static final int DAY_MILLIS = 86400000;

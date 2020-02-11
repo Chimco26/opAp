@@ -1,7 +1,7 @@
 package com.operatorsapp.view;
 
 import android.content.Context;
-import android.support.v4.widget.TextViewCompat;
+import androidx.core.widget.TextViewCompat;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;

@@ -495,5 +495,13 @@
     <string name="you_cant_add_more_workers_than">you can\'t add more workers than</string>
     <string name="default_unanswered_technocian_call">Waiting for the technician to reply</string>
     <string name="install_activity_not_found">Could not find installation application, try and reinstall "Google Play Store"</string>
+    <string name="lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incid"  translatable="false">Lorem ipsum dolor sit amet,
+        consectetur adipiscing elit, sed do eiusmod tempor incidLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+        eiusmod tempor incidLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidLorem ipsum dolor
+        sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidLorem ipsum dolor sit amet, consectetur adipiscing elit,
+        sed do eiusmod tempor incidLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidLorem ipsum
+        dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidLorem ipsum dolor sit amet, consectetur adipiscing elit,
+        sed do eiusmod tempor incidLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidLorem ipsum dolor sit amet,
+        consectetur adipiscing elit, sed do eiusmod tempor incid</string>
 
 </resources>
