@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.example.common.StandardResponse;
 import com.example.common.callback.CreateTaskCallback;
@@ -15,6 +16,8 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.SimpleRequests;
 
+import java.util.List;
+
 public class TaskActivity extends AppCompatActivity {
 
     private CroutonCreator mCroutonCreator;
@@ -23,7 +26,6 @@ public class TaskActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.task_activity);
-
         mCroutonCreator = new CroutonCreator();
         showTaskBoardFragment();
 
@@ -51,5 +53,14 @@ public class TaskActivity extends AppCompatActivity {
 
             }
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
+    }
+
+    @Override
+    public void onBackPressed() {
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+        if (fragmentList.get(fragmentList.size() - 1) instanceof TaskBoardFragment){
+            finish();
+        }
+        super.onBackPressed();
     }
 }

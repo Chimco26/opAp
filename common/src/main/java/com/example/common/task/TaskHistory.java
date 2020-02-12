@@ -16,7 +16,13 @@ public class TaskHistory {
     private Integer assignee;
     @SerializedName("SourceTaskCreationPlatform")
     @Expose
-    private Integer sourceTaskCreationPlatform;
+    private final Integer sourceTaskCreationPlatform = 3;
+
+    public TaskHistory(Integer taskID, Integer status, Integer assignee) {
+        this.taskID = taskID;
+        this.status = status;
+        this.assignee = assignee;
+    }
 
     public Integer getTaskID() {
         return taskID;
@@ -46,7 +52,4 @@ public class TaskHistory {
         return sourceTaskCreationPlatform;
     }
 
-    public void setSourceTaskCreationPlatform(Integer sourceTaskCreationPlatform) {
-        this.sourceTaskCreationPlatform = sourceTaskCreationPlatform;
-    }
 }

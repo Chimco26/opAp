@@ -41,7 +41,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@color/blue1"
-            android:layout_weight="0.3"
+            android:layout_weight="0.2"
             android:padding="5dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -65,6 +65,18 @@
                 android:text="@string/add_new_task"/>
 
         </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.05"/>
+
+        <ImageView
+            android:id="@+id/FTB_close_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.05"
+            android:src="@drawable/close_btn"/>
 
     </LinearLayout>
 

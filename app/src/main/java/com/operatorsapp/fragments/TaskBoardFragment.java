@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +21,7 @@ import com.example.common.callback.GetTaskListCallback;
 import com.example.common.task.TaskHistory;
 import com.example.common.task.TaskListResponse;
 import com.example.common.task.TaskProgress;
+import com.example.common.utils.TimeUtils;
 import com.operators.reportrejectnetworkbridge.interfaces.UpdateTaskStatusCallback;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.TaskColumnAdapter;
@@ -35,9 +35,13 @@ import com.woxthebox.draglistview.ColumnProperties;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static androidx.annotation.Dimension.SP;
 
 public class TaskBoardFragment extends Fragment {
@@ -46,6 +50,8 @@ public class TaskBoardFragment extends Fragment {
     private ArrayList<TaskProgress> mInProgressList;
     private ArrayList<TaskProgress> mDoneList;
     private ArrayList<TaskProgress> mCancelledList;
+    private ArrayList<ColumnObject> mColumnsObjectList = new ArrayList<>();
+    private boolean isOrderByDate = true;
 
     public static TaskBoardFragment newInstance() {
         return new TaskBoardFragment();
@@ -65,24 +71,35 @@ public class TaskBoardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ProgressDialogManager.show(getActivity());
         initVars(view);
+        initParams();
         configBoard();
         initBoardListener();
         getTaskList();
     }
 
-    public void initVars(@NonNull View view) {
-        mBoardView = view.findViewById(R.id.FTB_board_view);
-        ((TextView)view.findViewById(R.id.FTB_title_tv)).setText(String.format(Locale.getDefault(),
-                "%s - %d", getString(R.string.task_manager), PersistenceManager.getInstance().getMachineId()));
+    private void initParams() {
+        isOrderByDate = PersistenceManager.getInstance().getTasksOrderByDate();
     }
 
-    private void initColumns(String name, List<TaskProgress> taskProgress) {
+    public void initVars(@NonNull View view) {
+        mBoardView = view.findViewById(R.id.FTB_board_view);
+        ((TextView) view.findViewById(R.id.FTB_title_tv)).setText(String.format(Locale.getDefault(),
+                "%s - %d", getString(R.string.task_manager), PersistenceManager.getInstance().getMachineId()));
+        view.findViewById(R.id.FTB_close_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (getActivity() != null) {
+                    getActivity().finish();
+                }
+            }
+        });
+    }
+
+    private void initColumns(String name, List<TaskProgress> taskProgress, int id) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         int backgroundColor = ContextCompat.getColor(getContext(), R.color.white);
 
-//        initTestList(taskProgress);
         TaskColumnAdapter listAdapter = new TaskColumnAdapter(taskProgress);
 
         LinearLayout view = initHeaderListView(name, taskProgress);
@@ -97,6 +114,8 @@ public class TaskBoardFragment extends Fragment {
                 .build();
 
         mBoardView.addColumn(columnProperties);
+
+        mColumnsObjectList.add(new ColumnObject(name, id, taskProgress, listAdapter));
     }
 
     @NotNull
@@ -106,52 +125,43 @@ public class TaskBoardFragment extends Fragment {
         view.setOrientation(LinearLayout.HORIZONTAL);
         view.setGravity(Gravity.CENTER_VERTICAL);
         view.setPadding(10, 0, 10, 0);
-        view.setBackgroundColor(getContext().getResources().getColor(R.color.black));
-        TextView textView = new TextView(getContext());
-        textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        textView.setText(name);
-        textView.setTextColor(getContext().getResources().getColor(R.color.white));
-        textView.setTextSize(SP, 25);
-        view.addView(textView);
+        view.setBackgroundColor(getContext().getResources().getColor(R.color.default_gray));
+        TextView columnName = new TextView(getContext());
+        columnName.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        columnName.setText(name);
+        columnName.setTextColor(getContext().getResources().getColor(R.color.white));
+        columnName.setTextSize(SP, 25);
+        view.addView(columnName);
         View marginView = new View(getContext());
         marginView.setLayoutParams(new LinearLayout.LayoutParams(20, ViewGroup.LayoutParams.MATCH_PARENT));
         view.addView(marginView);
-        TextView textView1 = new TextView(getContext());
-        textView1.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        textView1.setId(R.id.TCH_count_generated);
-        textView1.setText(String.valueOf(taskProgress.size()));
-        textView1.setTextColor(getContext().getResources().getColor(R.color.blue2));
-        textView1.setTextSize(SP, 25);
-        view.addView(textView1);
+        TextView columnCounter = new TextView(getContext());
+        columnCounter.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        columnCounter.setId(R.id.TCH_count_generated);
+        columnCounter.setText(String.valueOf(taskProgress.size()));
+        columnCounter.setTextColor(getContext().getResources().getColor(R.color.white));
+        columnCounter.setTextSize(SP, 25);
+        view.addView(columnCounter);
         return view;
-    }
-
-    private void initTestList(List<TaskProgress> taskProgress) {
-        taskProgress.clear();
-        taskProgress.add(new TaskProgress(1));
-        taskProgress.add(new TaskProgress(2));
-        taskProgress.add(new TaskProgress(3));
-        taskProgress.add(new TaskProgress(4));
-        taskProgress.add(new TaskProgress(5));
     }
 
     private void initBoardListener() {
         mBoardView.setBoardListener(new BoardView.BoardListener() {
             @Override
             public void onItemDragStarted(int column, int row) {
-//                Toast.makeText(getActivity(), "Start - column: " + column + " row: " + row, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onItemDragEnded(int fromColumn, int fromRow, int toColumn, int toRow) {
-                if (fromColumn != toColumn || fromRow != toRow) {
-                    Toast.makeText(getActivity(), "End - column: " + toColumn + " row: " + toRow, Toast.LENGTH_SHORT).show();
+                if (fromColumn == toColumn) {
+                    mBoardView.moveItem(toColumn, toRow, fromColumn, fromRow, false);
+                } else {
+                    updateTaskStatus(mColumnsObjectList.get(toColumn).getList().get(toRow), fromColumn, fromRow, toColumn, toRow);
                 }
             }
 
             @Override
             public void onItemChangedPosition(int oldColumn, int oldRow, int newColumn, int newRow) {
-                Toast.makeText(mBoardView.getContext(), "Position changed - column: " + newColumn + " row: " + newRow, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -164,22 +174,18 @@ public class TaskBoardFragment extends Fragment {
 
             @Override
             public void onFocusedColumnChanged(int oldColumn, int newColumn) {
-//                Toast.makeText(getContext(), "Focused column changed from " + oldColumn + " to " + newColumn, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onColumnDragStarted(int position) {
-//                Toast.makeText(getContext(), "Column drag started from " + position, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onColumnDragChangedPosition(int oldPosition, int newPosition) {
-//                Toast.makeText(getContext(), "Column changed from " + oldPosition + " to " + newPosition, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onColumnDragEnded(int position) {
-//                Toast.makeText(getContext(), "Column drag ended at " + position, Toast.LENGTH_SHORT).show();
             }
         });
         mBoardView.setBoardCallback(new BoardView.BoardCallback() {
@@ -208,6 +214,7 @@ public class TaskBoardFragment extends Fragment {
     }
 
     private void getTaskList() {
+        ProgressDialogManager.show(getActivity());
         PersistenceManager pm = PersistenceManager.getInstance();
         SimpleRequests.getTaskList(pm.getSiteUrl(), new GetTaskListCallback() {
             @Override
@@ -216,10 +223,11 @@ public class TaskBoardFragment extends Fragment {
                 List<TaskProgress> taskList = response.getResponseDictionaryDT().getTaskProgress();
                 initColumnLists();
                 createColumnsLists(taskList);
-                initColumns(getString(R.string.todo), mTodoList);
-                initColumns(getString(R.string.in_progress), mInProgressList);
-                initColumns(getString(R.string.done_for_task), mDoneList);
-                initColumns(getString(R.string.cancelled), mCancelledList);
+                initColumns(getString(R.string.todo), mTodoList, TaskProgress.TaskStatus.TODO.getValue());
+                initColumns(getString(R.string.in_progress), mInProgressList, TaskProgress.TaskStatus.IN_PROGRESS.getValue());
+                initColumns(getString(R.string.done_for_task), mDoneList, TaskProgress.TaskStatus.DONE.getValue());
+                initColumns(getString(R.string.cancelled), mCancelledList, TaskProgress.TaskStatus.CANCELLED.getValue());
+                orderAll();
             }
 
             @Override
@@ -233,7 +241,7 @@ public class TaskBoardFragment extends Fragment {
     private void initColumnLists() {
         if (mTodoList == null) {
             mTodoList = new ArrayList<>();
-        }else {
+        } else {
             mTodoList.clear();
         }
         if (mInProgressList == null) {
@@ -243,18 +251,19 @@ public class TaskBoardFragment extends Fragment {
         }
         if (mDoneList == null) {
             mDoneList = new ArrayList<>();
-        }else {
+        } else {
             mDoneList.clear();
         }
         if (mCancelledList == null) {
             mCancelledList = new ArrayList<>();
-        }else {
+        } else {
             mCancelledList.clear();
         }
     }
 
     private void createColumnsLists(List<TaskProgress> taskList) {
         for (TaskProgress task : taskList) {
+            long taskStatusUpdateTime = TimeUtils.convertDateToMillisecond(task.getHistoryCreateDate(), TimeUtils.SQL_T_FORMAT_NO_SECOND);
             switch (task.getTaskStatus()) {
                 case 2:
                     mTodoList.add(task);
@@ -263,28 +272,106 @@ public class TaskBoardFragment extends Fragment {
                     mInProgressList.add(task);
                     break;
                 case 4:
-                    mDoneList.add(task);
+                    if (taskStatusUpdateTime >= new Date().getTime() - DAY_IN_MILLIS) {
+                        mDoneList.add(task);
+                    }
                     break;
                 case 5:
-                    mCancelledList.add(task);
+                    if (taskStatusUpdateTime >= new Date().getTime() - DAY_IN_MILLIS) {
+                        mCancelledList.add(task);
+                    }
                     break;
             }
         }
     }
 
-    private void updateTaskStatus(TaskHistory taskHistory) {
+    private void updateTaskStatus(TaskProgress taskProgress, final int fromColumn, final int fromRow, final int toColumn, final int toRow) {
         ProgressDialogManager.show(getActivity());
         PersistenceManager pm = PersistenceManager.getInstance();
-        SimpleRequests.updateTaskStatus(taskHistory, pm.getSiteUrl(), new UpdateTaskStatusCallback() {
+        SimpleRequests.updateTaskStatus(createHistoryObject(taskProgress, toColumn), pm.getSiteUrl(), new UpdateTaskStatusCallback() {
             @Override
             public void onUpdateTaskStatusCallbackSuccess(StandardResponse response) {
                 ProgressDialogManager.dismiss();
+                orderList(mColumnsObjectList.get(toColumn));
             }
 
             @Override
             public void onUpdateTaskStatusCallbackFailed(StandardResponse reason) {
                 ProgressDialogManager.dismiss();
+                mBoardView.moveItem(toColumn, toRow, fromColumn, fromRow, false);
             }
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
+    }
+
+    private void orderAll() {
+        for (ColumnObject columnObject : mColumnsObjectList) {
+            orderList(columnObject);
+        }
+    }
+
+    private void orderList(ColumnObject columnObject) {
+        if (isOrderByDate) {
+            orderByDate(columnObject.getList());
+        } else {
+            orderByPriority(columnObject.getList());
+        }
+        columnObject.getAdapter().notifyDataSetChanged();
+    }
+
+    private void orderByPriority(List<TaskProgress> list) {
+        if (list.size() > 0) {
+            Collections.sort(list, new Comparator<TaskProgress>() {
+                @Override
+                public int compare(TaskProgress o1, TaskProgress o2) {
+                    return Integer.valueOf(o2.getTaskPriorityID()).compareTo(o1.getTaskPriorityID());
+                }
+            });
+        }
+    }
+
+    private void orderByDate(List<TaskProgress> list) {
+        if (list.size() > 0) {
+            Collections.sort(list, new Comparator<TaskProgress>() {
+                @Override
+                public int compare(TaskProgress o1, TaskProgress o2) {
+                    return TimeUtils.convertDateToMillisecond(o2.getTaskStartTimeTarget(), TimeUtils.SQL_T_FORMAT_NO_SECOND)
+                            .compareTo(TimeUtils.convertDateToMillisecond(o1.getTaskStartTimeTarget(), TimeUtils.SQL_T_FORMAT_NO_SECOND));
+                }
+            });
+        }
+    }
+
+    private TaskHistory createHistoryObject(TaskProgress taskProgress, int toColumn) {
+        return new TaskHistory(taskProgress.getTaskID(), mColumnsObjectList.get(toColumn).getId(), taskProgress.getAssignee());
+    }
+
+    private class ColumnObject {
+        List<TaskProgress> list;
+        TaskColumnAdapter adapter;
+        String name;
+        private int id;
+
+        public ColumnObject(String name, int id, List<TaskProgress> list, TaskColumnAdapter adapter) {
+            this.list = list;
+            this.adapter = adapter;
+            this.name = name;
+            this.id = id;
+        }
+
+        public List<TaskProgress> getList() {
+            return list;
+        }
+
+        public TaskColumnAdapter getAdapter() {
+            return adapter;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Integer getId() {
+            return id;
+        }
     }
 }

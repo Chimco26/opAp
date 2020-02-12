@@ -1,13 +1,8 @@
-package com.operatorsapp.utils;
+package com.example.common.utils;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.net.ParseException;
 import android.util.Log;
-
-import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
-import com.operatorsapp.R;
-import com.operatorsapp.managers.PersistenceManager;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -57,20 +52,7 @@ public class TimeUtils {
 
     }
 
-    public static String updateDateForRtl(Property property, SimpleDateFormat actualFormat, SimpleDateFormat newFormat) {
 
-        if (property.getKey().contains("Time") && property.getValue() != null && property.getValue().length() > 0) {
-
-            try {
-                Date date = actualFormat.parse(property.getValue());
-                return newFormat.format(date);
-
-            } catch (java.text.ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        return property.getValue();
-    }
 
     public static String getDate(long milliSeconds, String dateFormat) {
         // Create a DateFormatter object for displaying date in specified format.
@@ -82,39 +64,6 @@ public class TimeUtils {
         return formatter.format(calendar.getTime());
     }
 
-    public static String getDurationTime(Context context, long millis) {
-        if (millis < 0) {
-//            throw new IllegalArgumentException("Duration must be greater than zero!");
-            return " ";
-        }
-
-        long days = TimeUnit.MILLISECONDS.toDays(millis);
-        millis -= TimeUnit.DAYS.toMillis(days);
-        long hours = TimeUnit.MILLISECONDS.toHours(millis);
-        millis -= TimeUnit.HOURS.toMillis(hours);
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
-//        millis -= TimeUnit.MINUTES.toMillis(minutes);
-//        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
-
-        if (days > 0) {
-            return /*days + " " +*/ context.getResources().getQuantityString(R.plurals.days, (int) days, (int) days) + " " + String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + " " + context.getResources().getQuantityString(R.plurals.hours, (int) hours);
-        } else {
-            String h;
-            if (hours == 0) {
-
-                if (PersistenceManager.getInstance().getCurrentLang().equals("en")) {
-                    h = "Hour";
-                } else {
-                    // Ohad change 6/6/17
-                    h = context.getResources().getQuantityString(R.plurals.hours, 1);
-                    //h = "שעה";
-                }
-            } else {
-                h = context.getResources().getQuantityString(R.plurals.hours, (int) hours);
-            }
-            return String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + " " + h;
-        }
-    }
 
     @SuppressLint("SimpleDateFormat")
     public static String getTimeFromString(String time) {

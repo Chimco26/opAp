@@ -1,9 +1,46 @@
 package com.example.common.task;
 
+import com.example.common.utils.TimeUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 public class TaskProgress {
+
+    public enum TaskStatus {
+        TODO(2),
+        IN_PROGRESS(3),
+        DONE(4),
+        CANCELLED(5);
+
+        private final int mValue;
+
+        TaskStatus(int value) {
+            mValue = value;
+        }
+
+        public int getValue() {
+            return mValue;
+        }
+    }
+
+    public enum TaskPriority {
+        LOW(1),
+        MEDIUM(2),
+        HIGH(3),
+        VERY_HIGH(4);
+
+        private final int mValue;
+
+        TaskPriority(int value) {
+            mValue = value;
+        }
+
+        public int getValue() {
+            return mValue;
+        }
+    }
 
     @SerializedName("TaskID")
     @Expose
@@ -229,4 +266,44 @@ public class TaskProgress {
     public void setEName(String eName) {
         this.eName = eName;
     }
+
+    public String getHistoryDisplayName2Chars() {
+        if (historyDisplayName.contains(" ")) {
+            String[] strings = historyDisplayName.split(" ");
+            String result = "";
+            if (strings[0] != null && strings[0].length() > 0) {
+                result += String.valueOf(strings[0].charAt(0)).toUpperCase();
+            }
+            if (strings[1] != null && strings[1].length() > 0) {
+                result += String.valueOf(strings[1].charAt(0)).toUpperCase();
+            }
+            return result;
+        } else {
+            return String.valueOf(historyDisplayName.charAt(0));
+        }
+    }
+
+    public boolean isAlertState() {
+
+        int status = taskStatus;
+        long timeStamp = new Date().getTime();
+        long taskStartTime = TimeUtils.convertDateToMillisecond(taskStartTimeTarget, TimeUtils.SQL_T_FORMAT_NO_SECOND);
+        long taskEndTime = TimeUtils.convertDateToMillisecond(taskEndTimeTarget, TimeUtils.SQL_T_FORMAT_NO_SECOND);
+        switch (status) {
+            case 2:
+                if (taskStartTime <= timeStamp) {
+                    return true;
+                }
+                break;
+            case 3:
+            case 4:
+                if (taskEndTime <= timeStamp) {
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+
 }

@@ -5,23 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class Task {
 
-    public enum TaskStatus {
-        TODO(2),
-        IN_PROGRESS(3),
-        DONE(4),
-        CANCELLED(5);
-
-        private final int mValue;
-
-        TaskStatus(int value) {
-            mValue = value;
-        }
-
-        public int getValue() {
-            return mValue;
-        }
-    }
-
     @SerializedName("HistoryID")
     @Expose
     private Integer historyID;

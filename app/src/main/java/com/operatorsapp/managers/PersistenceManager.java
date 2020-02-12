@@ -105,6 +105,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_MACHINE_LINE_ID = "PREF_MACHINE_LINE_ID";
     private static final String PREF_DEFAULT_REPORT_REJECT_UNIT = "PREF_DEFAULT_REPORT_REJECT_UNIT";
     private static final String JOSH_ID = "PREF_JOSH_ID";
+    private static final String TASKS_ORDER_BY = "TASKS_ORDER_BY";
 
 
     private static PersistenceManager msInstance;
@@ -868,5 +869,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         PersistenceManager.getInstance().setMachineName(machineName);
         PersistenceManager.getInstance().setSelectedMachine(true);
         PersistenceManager.getInstance().setNeedUpdateToken(true);
+    }
+
+    public void setTasksOrderByDate(boolean orderByDate) {
+        SecurePreferences.getInstance().setBoolean(TASKS_ORDER_BY, orderByDate);
+    }
+
+    public boolean getTasksOrderByDate() {
+        return SecurePreferences.getInstance().getBoolean(TASKS_ORDER_BY, true);
     }
 }
