@@ -80,6 +80,10 @@ public class TaskBoardFragment extends Fragment {
 
     private void initParams() {
         isOrderByDate = PersistenceManager.getInstance().getTasksOrderByDate();
+//        ArrayList<Integer> integers = new ArrayList<Integer>();
+//        integers.add(1);
+//        PersistenceManager.getInstance().setTaskFilterPriorityToShow(integers);
+//        PersistenceManager.getInstance().setTaskFilterOnlyCritical(true);
     }
 
     public void initVars(@NonNull View view) {
@@ -96,13 +100,13 @@ public class TaskBoardFragment extends Fragment {
         });
     }
 
-    private void initColumns(String name, List<TaskProgress> taskProgress, int id) {
+    private void initColumns(String name, List<TaskProgress> taskProgress, int id, long minDateToShow) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         int backgroundColor = ContextCompat.getColor(getContext(), R.color.white);
 
-        TaskColumnAdapter listAdapter = new TaskColumnAdapter(taskProgress);
+        LinearLayout view = initHeaderListView(name);
 
-        LinearLayout view = initHeaderListView(name, taskProgress);
+        TaskColumnAdapter listAdapter = new TaskColumnAdapter(taskProgress, minDateToShow, view);
 
         ColumnProperties columnProperties = ColumnProperties.Builder.newBuilder(listAdapter)
                 .setLayoutManager(layoutManager)
@@ -115,11 +119,11 @@ public class TaskBoardFragment extends Fragment {
 
         mBoardView.addColumn(columnProperties);
 
-        mColumnsObjectList.add(new ColumnObject(name, id, taskProgress, listAdapter));
+        mColumnsObjectList.add(new ColumnObject(name, id, listAdapter));
     }
 
     @NotNull
-    private LinearLayout initHeaderListView(String name, List<TaskProgress> taskProgress) {
+    private LinearLayout initHeaderListView(String name) {
         LinearLayout view = new LinearLayout(getContext());
         view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 50));
         view.setOrientation(LinearLayout.HORIZONTAL);
@@ -138,7 +142,7 @@ public class TaskBoardFragment extends Fragment {
         TextView columnCounter = new TextView(getContext());
         columnCounter.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         columnCounter.setId(R.id.TCH_count_generated);
-        columnCounter.setText(String.valueOf(taskProgress.size()));
+//        columnCounter.setText(String.valueOf(taskProgress.size()));
         columnCounter.setTextColor(getContext().getResources().getColor(R.color.white));
         columnCounter.setTextSize(SP, 25);
         view.addView(columnCounter);
@@ -156,7 +160,7 @@ public class TaskBoardFragment extends Fragment {
                 if (fromColumn == toColumn) {
                     mBoardView.moveItem(toColumn, toRow, fromColumn, fromRow, false);
                 } else {
-                    updateTaskStatus(mColumnsObjectList.get(toColumn).getList().get(toRow), fromColumn, fromRow, toColumn, toRow);
+                    updateTaskStatus(mColumnsObjectList.get(toColumn).getAdapter().getListFiltered().get(toRow), fromColumn, fromRow, toColumn, toRow);
                 }
             }
 
@@ -166,10 +170,6 @@ public class TaskBoardFragment extends Fragment {
 
             @Override
             public void onItemChangedColumn(int oldColumn, int newColumn) {
-                TextView itemCount1 = (TextView) mBoardView.getHeaderView(oldColumn).findViewById(R.id.TCH_count_generated);
-                itemCount1.setText("" + mBoardView.getAdapter(oldColumn).getItemCount());
-                TextView itemCount2 = (TextView) mBoardView.getHeaderView(newColumn).findViewById(R.id.TCH_count_generated);
-                itemCount2.setText("" + mBoardView.getAdapter(newColumn).getItemCount());
             }
 
             @Override
@@ -223,10 +223,10 @@ public class TaskBoardFragment extends Fragment {
                 List<TaskProgress> taskList = response.getResponseDictionaryDT().getTaskProgress();
                 initColumnLists();
                 createColumnsLists(taskList);
-                initColumns(getString(R.string.todo), mTodoList, TaskProgress.TaskStatus.TODO.getValue());
-                initColumns(getString(R.string.in_progress), mInProgressList, TaskProgress.TaskStatus.IN_PROGRESS.getValue());
-                initColumns(getString(R.string.done_for_task), mDoneList, TaskProgress.TaskStatus.DONE.getValue());
-                initColumns(getString(R.string.cancelled), mCancelledList, TaskProgress.TaskStatus.CANCELLED.getValue());
+                initColumns(getString(R.string.todo), mTodoList, TaskProgress.TaskStatus.TODO.getValue(), 0);
+                initColumns(getString(R.string.in_progress), mInProgressList, TaskProgress.TaskStatus.IN_PROGRESS.getValue(), 0);
+                initColumns(getString(R.string.done_for_task), mDoneList, TaskProgress.TaskStatus.DONE.getValue(), new Date().getTime() - DAY_IN_MILLIS);
+                initColumns(getString(R.string.cancelled), mCancelledList, TaskProgress.TaskStatus.CANCELLED.getValue(), new Date().getTime() - DAY_IN_MILLIS);
                 orderAll();
             }
 
@@ -239,31 +239,23 @@ public class TaskBoardFragment extends Fragment {
     }
 
     private void initColumnLists() {
-        if (mTodoList == null) {
-            mTodoList = new ArrayList<>();
+        mTodoList = initList(mTodoList);
+        mInProgressList = initList(mInProgressList);
+        mDoneList = initList(mDoneList);
+        mCancelledList = initList(mCancelledList);
+    }
+
+    private ArrayList<TaskProgress> initList(ArrayList<TaskProgress> list) {
+        if (list == null) {
+            list = new ArrayList<>();
         } else {
-            mTodoList.clear();
+            list.clear();
         }
-        if (mInProgressList == null) {
-            mInProgressList = new ArrayList<>();
-        } else {
-            mInProgressList.clear();
-        }
-        if (mDoneList == null) {
-            mDoneList = new ArrayList<>();
-        } else {
-            mDoneList.clear();
-        }
-        if (mCancelledList == null) {
-            mCancelledList = new ArrayList<>();
-        } else {
-            mCancelledList.clear();
-        }
+        return list;
     }
 
     private void createColumnsLists(List<TaskProgress> taskList) {
         for (TaskProgress task : taskList) {
-            long taskStatusUpdateTime = TimeUtils.convertDateToMillisecond(task.getHistoryCreateDate(), TimeUtils.SQL_T_FORMAT_NO_SECOND);
             switch (task.getTaskStatus()) {
                 case 2:
                     mTodoList.add(task);
@@ -272,26 +264,27 @@ public class TaskBoardFragment extends Fragment {
                     mInProgressList.add(task);
                     break;
                 case 4:
-                    if (taskStatusUpdateTime >= new Date().getTime() - DAY_IN_MILLIS) {
-                        mDoneList.add(task);
-                    }
+                    mDoneList.add(task);
                     break;
                 case 5:
-                    if (taskStatusUpdateTime >= new Date().getTime() - DAY_IN_MILLIS) {
-                        mCancelledList.add(task);
-                    }
+                    mCancelledList.add(task);
                     break;
             }
         }
     }
 
-    private void updateTaskStatus(TaskProgress taskProgress, final int fromColumn, final int fromRow, final int toColumn, final int toRow) {
+    private void updateTaskStatus(final TaskProgress taskProgress, final int fromColumn, final int fromRow, final int toColumn, final int toRow) {
         ProgressDialogManager.show(getActivity());
         PersistenceManager pm = PersistenceManager.getInstance();
         SimpleRequests.updateTaskStatus(createHistoryObject(taskProgress, toColumn), pm.getSiteUrl(), new UpdateTaskStatusCallback() {
             @Override
             public void onUpdateTaskStatusCallbackSuccess(StandardResponse response) {
                 ProgressDialogManager.dismiss();
+                //update original list to perform filtering
+                mColumnsObjectList.get(fromColumn).getAdapter().getList().remove(taskProgress);
+                mColumnsObjectList.get(toColumn).getAdapter().getList().add(taskProgress);
+                //reorder
+                orderList(mColumnsObjectList.get(fromColumn));
                 orderList(mColumnsObjectList.get(toColumn));
             }
 
@@ -311,11 +304,11 @@ public class TaskBoardFragment extends Fragment {
 
     private void orderList(ColumnObject columnObject) {
         if (isOrderByDate) {
-            orderByDate(columnObject.getList());
+            orderByDate(columnObject.getAdapter().getListFiltered());
         } else {
-            orderByPriority(columnObject.getList());
+            orderByPriority(columnObject.getAdapter().getListFiltered());
         }
-        columnObject.getAdapter().notifyDataSetChanged();
+        columnObject.getAdapter().getFilter().filter("");
     }
 
     private void orderByPriority(List<TaskProgress> list) {
@@ -346,20 +339,14 @@ public class TaskBoardFragment extends Fragment {
     }
 
     private class ColumnObject {
-        List<TaskProgress> list;
         TaskColumnAdapter adapter;
         String name;
         private int id;
 
-        public ColumnObject(String name, int id, List<TaskProgress> list, TaskColumnAdapter adapter) {
-            this.list = list;
+        public ColumnObject(String name, int id, TaskColumnAdapter adapter) {
             this.adapter = adapter;
             this.name = name;
             this.id = id;
-        }
-
-        public List<TaskProgress> getList() {
-            return list;
         }
 
         public TaskColumnAdapter getAdapter() {

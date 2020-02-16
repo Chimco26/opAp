@@ -2,8 +2,6 @@ package com.operatorsapp.view.widgetViewHolders;
 
 import android.app.Activity;
 import android.graphics.PorterDuff;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.InputType;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;

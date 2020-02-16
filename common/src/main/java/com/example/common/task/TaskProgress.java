@@ -283,7 +283,7 @@ public class TaskProgress {
         }
     }
 
-    public boolean isAlertState() {
+    public boolean isCriticalState() {
 
         int status = taskStatus;
         long timeStamp = new Date().getTime();

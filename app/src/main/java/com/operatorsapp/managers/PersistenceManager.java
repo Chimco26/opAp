@@ -36,6 +36,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface,
         ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
@@ -106,6 +107,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_DEFAULT_REPORT_REJECT_UNIT = "PREF_DEFAULT_REPORT_REJECT_UNIT";
     private static final String JOSH_ID = "PREF_JOSH_ID";
     private static final String TASKS_ORDER_BY = "TASKS_ORDER_BY";
+    private static final String TASKS_FILTER_ONLY_CRITICAL = "TASKS_FILTER_ONLY_CRITICAL";
+    private static final String TASKS_FILTER_PRIORITY_TO_SHOW = "TASKS_FILTER_PRIORITY_TO_SHOW";
 
 
     private static PersistenceManager msInstance;
@@ -878,4 +881,27 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     public boolean getTasksOrderByDate() {
         return SecurePreferences.getInstance().getBoolean(TASKS_ORDER_BY, true);
     }
+
+    public void setTaskFilterOnlyCritical(boolean onlyCritical) {
+        SecurePreferences.getInstance().setBoolean(TASKS_FILTER_ONLY_CRITICAL, onlyCritical);
+    }
+
+    public boolean getTaskFilterOnlyCritical() {
+        return SecurePreferences.getInstance().getBoolean(TASKS_ORDER_BY, false);
+    }
+
+    public void setTaskFilterPriorityToShow(List<Integer> priorityToShow) {
+        SecurePreferences.getInstance().setString(TASKS_FILTER_PRIORITY_TO_SHOW, mGson.toJson(priorityToShow));
+    }
+
+    public List<Integer> getTaskFilterPriorityToShow() {
+        Type listType = new TypeToken<List<Integer>>() {}.getType();
+        List<Integer> list = mGson.fromJson(SecurePreferences.getInstance().getString(TASKS_FILTER_PRIORITY_TO_SHOW), listType);
+        if (list == null){
+            list = new ArrayList<Integer>();
+            list.add(1);list.add(2);list.add(3);list.add(4);
+        }
+        return list;
+    }
+
 }

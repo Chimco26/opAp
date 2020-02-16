@@ -509,5 +509,6 @@
     <string name="done_for_task">Done</string>
     <string name="cancelled">Cancelled</string>
     <string name="task_manager">Task Manager</string>
+    <string name="order_by">Order By</string>
 
 </resources>

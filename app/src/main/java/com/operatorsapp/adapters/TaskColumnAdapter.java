@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,24 +15,42 @@ import androidx.core.content.ContextCompat;
 
 import com.example.common.task.TaskProgress;
 import com.operatorsapp.R;
+import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.utils.TimeUtils;
 import com.woxthebox.draglistview.DragItemAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnAdapter.ViewHolder>
         implements Filterable {
 
+    private LinearLayout headerView;
+    private String mSearchExpression = "";
     private List<TaskProgress> list;
     private TaskFilter mFilter = new TaskFilter();
     private List<TaskProgress> mListFiltered = new ArrayList<>();
+    private Long minDateToShow;
 
-    public TaskColumnAdapter(List<TaskProgress> tasks) {
+    public TaskColumnAdapter(List<TaskProgress> tasks, long minDateToShow, LinearLayout view) {
+        this.minDateToShow = minDateToShow;
+        headerView = view;
         list = tasks;
         mListFiltered.addAll(list);
-        setItemList(mListFiltered);
     }
 
+    public String getSearchExpression() {
+        return mSearchExpression;
+    }
+
+    public List<TaskProgress> getList() {
+        return list;
+    }
+
+    public List<TaskProgress> getListFiltered() {
+        return mListFiltered;
+    }
 
     @Override
     public long getUniqueItemId(int position) {
@@ -49,19 +68,19 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        holder.mTitle.setText(String.valueOf(list.get(holder.getAdapterPosition()).getSubjectTrans()));
-        holder.mText.setText(list.get(holder.getAdapterPosition()).getText());
-        String delegate = list.get(holder.getAdapterPosition()).getHistoryDisplayName();
+        holder.mTitle.setText(String.valueOf(mListFiltered.get(position).getSubjectTrans()));
+        holder.mText.setText(mListFiltered.get(position).getText());
+        String delegate = mListFiltered.get(position).getHistoryDisplayName();
         if (delegate == null || delegate.isEmpty()) {
             holder.mDelegate.setVisibility(View.INVISIBLE);
         } else {
             holder.mDelegate.setVisibility(View.VISIBLE);
-            holder.mDelegate.setText(list.get(holder.getAdapterPosition()).getHistoryDisplayName2Chars());
+            holder.mDelegate.setText(mListFiltered.get(position).getHistoryDisplayName2Chars());
         }
 
-        holder.mPriorityIc.setColorFilter(getPriorityColor(list.get(holder.getAdapterPosition()), holder.mPriorityIc.getContext()));
+        holder.mPriorityIc.setColorFilter(getPriorityColor(mListFiltered.get(position), holder.mPriorityIc.getContext()));
 
-        if (list.get(holder.getAdapterPosition()).isAlertState()) {
+        if (mListFiltered.get(position).isCriticalState()) {
             holder.mAlertMarge.setVisibility(View.VISIBLE);
         } else {
             holder.mAlertMarge.setVisibility(View.INVISIBLE);
@@ -74,9 +93,9 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
             case 1:
                 color = ContextCompat.getColor(context, R.color.green_light);
                 break;
-            case 2:
-                color = ContextCompat.getColor(context, R.color.alert);
-                break;
+//            case 2:
+//                color = ContextCompat.getColor(context, R.color.alert);
+//                break;
             case 3:
                 color = ContextCompat.getColor(context, R.color.red_dark);
                 break;
@@ -119,35 +138,55 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
 
+            boolean onlyCritical = PersistenceManager.getInstance().getTaskFilterOnlyCritical();
+            List<Integer> priorityToShow = PersistenceManager.getInstance().getTaskFilterPriorityToShow();
+            mSearchExpression = constraint.toString();
             FilterResults results = new FilterResults();
-            if (constraint.length() > 1) {
 
-                mListFiltered.clear();
-                ArrayList<TaskProgress> allItems = new ArrayList<>();
-                for (TaskProgress task : mItemList) {
-                    if (isContainLetters(task.getSubjectTrans().toLowerCase(), constraint.toString().toLowerCase())
-                            || isContainLetters(task.getText().toLowerCase(), constraint.toString().toLowerCase())) {
-                        if (!allItems.contains(task)) {
-                            allItems.add(task);
-                        }
+            mListFiltered.clear();
+            ArrayList<TaskProgress> allItems = new ArrayList<>();
+            for (TaskProgress task : list) {
+                if ((constraint.length() == 0 || (isContainLetters(task.getSubjectTrans().toLowerCase(), constraint.toString().toLowerCase())
+                        || isContainLetters(task.getText().toLowerCase(), constraint.toString().toLowerCase()))
+                ) && (minDateToShow == 0
+                        || TimeUtils.convertDateToMillisecond(task.getHistoryCreateDate(), TimeUtils.SQL_T_FORMAT_NO_SECOND) >= minDateToShow)
+                && isPriorityToShow(task.getTaskPriorityID(), priorityToShow)
+                && isCriticalToShow(task.isCriticalState(), onlyCritical)) {
+                    if (!allItems.contains(task)) {
+                        allItems.add(task);
                     }
                 }
 
                 mListFiltered.addAll(allItems);
                 results.values = allItems;
-
                 results.count = allItems.size();
 
-            } else {
-
-                mListFiltered.clear();
-                mListFiltered.addAll(mItemList);
-                results.values = mListFiltered;
-
-                results.count = mListFiltered.size();
             }
             return results;
 
+        }
+
+        private boolean isCriticalToShow(boolean criticalState, boolean onlyCritical) {
+            return !onlyCritical || criticalState;
+        }
+
+        private boolean isPriorityToShow(int taskPriorityID, List<Integer> priorityToShow) {
+            for (Integer integer: priorityToShow){
+                if (integer == taskPriorityID){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+
+            mListFiltered = (List<TaskProgress>) results.values;
+            TextView itemCount1 = headerView.findViewById(R.id.TCH_count_generated);
+            itemCount1.setText(String.format(Locale.getDefault(), "%d", mListFiltered.size()));
+            setItemList(mListFiltered);
         }
 
         private boolean isContainLetters(String text, String searchLetters) {
@@ -158,16 +197,6 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
                 }
             }
             return true;
-        }
-
-
-        @SuppressWarnings("unchecked")
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-
-            mListFiltered = (List<TaskProgress>) results.values;
-
-            notifyDataSetChanged();
         }
 
     }
