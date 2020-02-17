@@ -305,5 +305,4 @@ public class TaskProgress {
         return false;
     }
 
-
 }

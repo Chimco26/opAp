@@ -1,6 +1,5 @@
 package com.operatorsapp.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +10,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 
+import com.example.common.SelectableString;
 import com.example.common.task.TaskProgress;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.utils.TaskUtil;
 import com.operatorsapp.utils.TimeUtils;
 import com.woxthebox.draglistview.DragItemAdapter;
 
@@ -78,36 +78,13 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
             holder.mDelegate.setText(mListFiltered.get(position).getHistoryDisplayName2Chars());
         }
 
-        holder.mPriorityIc.setColorFilter(getPriorityColor(mListFiltered.get(position), holder.mPriorityIc.getContext()));
+        holder.mPriorityIc.setColorFilter(TaskUtil.getPriorityColor(mListFiltered.get(position).getTaskPriorityID(), holder.mPriorityIc.getContext()));
 
         if (mListFiltered.get(position).isCriticalState()) {
             holder.mAlertMarge.setVisibility(View.VISIBLE);
         } else {
             holder.mAlertMarge.setVisibility(View.INVISIBLE);
         }
-    }
-
-    private int getPriorityColor(TaskProgress taskProgress, Context context) {
-        int color;
-        switch (taskProgress.getTaskPriorityID()) {
-            case 1:
-                color = ContextCompat.getColor(context, R.color.green_light);
-                break;
-//            case 2:
-//                color = ContextCompat.getColor(context, R.color.alert);
-//                break;
-            case 3:
-                color = ContextCompat.getColor(context, R.color.red_dark);
-                break;
-            case 4:
-                color = ContextCompat.getColor(context, R.color.red_line);
-                break;
-            default:
-                color = ContextCompat.getColor(context, R.color.alert);
-                break;
-        }
-        return color;
-
     }
 
     @Override
@@ -138,41 +115,47 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
 
-            boolean onlyCritical = PersistenceManager.getInstance().getTaskFilterOnlyCritical();
-            List<Integer> priorityToShow = PersistenceManager.getInstance().getTaskFilterPriorityToShow();
+            ArrayList<SelectableString> periodToShow = PersistenceManager.getInstance().getTaskFilterPeriodToShow();
+            List<SelectableString> priorityToShow = PersistenceManager.getInstance().getTaskFilterPriorityToShow();
             mSearchExpression = constraint.toString();
             FilterResults results = new FilterResults();
 
             mListFiltered.clear();
             ArrayList<TaskProgress> allItems = new ArrayList<>();
             for (TaskProgress task : list) {
-                if ((constraint.length() == 0 || (isContainLetters(task.getSubjectTrans().toLowerCase(), constraint.toString().toLowerCase())
-                        || isContainLetters(task.getText().toLowerCase(), constraint.toString().toLowerCase()))
+                if ((constraint.length() == 0 || (isContainLetters(task.getSubjectTrans(), constraint.toString().toLowerCase())
+                        || isContainLetters(task.getText(), constraint.toString().toLowerCase()))
                 ) && (minDateToShow == 0
                         || TimeUtils.convertDateToMillisecond(task.getHistoryCreateDate(), TimeUtils.SQL_T_FORMAT_NO_SECOND) >= minDateToShow)
-                && isPriorityToShow(task.getTaskPriorityID(), priorityToShow)
-                && isCriticalToShow(task.isCriticalState(), onlyCritical)) {
+                        && isPriorityToShow(task.getTaskPriorityID(), priorityToShow)
+                        && isCriticalToShow(task.isCriticalState(), periodToShow)) {
                     if (!allItems.contains(task)) {
                         allItems.add(task);
                     }
                 }
-
-                mListFiltered.addAll(allItems);
-                results.values = allItems;
-                results.count = allItems.size();
-
             }
+            mListFiltered.addAll(allItems);
+            results.values = allItems;
+            results.count = allItems.size();
             return results;
 
         }
 
-        private boolean isCriticalToShow(boolean criticalState, boolean onlyCritical) {
-            return !onlyCritical || criticalState;
+        private boolean isCriticalToShow(boolean criticalState, ArrayList<SelectableString> periodToShow) {
+            for (SelectableString integer : periodToShow) {
+                if ((Integer.parseInt(integer.getId()) == 1 && integer.isSelected()
+                        && !criticalState)
+                || (Integer.parseInt(integer.getId()) == 2 && integer.isSelected()
+                        && criticalState)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
-        private boolean isPriorityToShow(int taskPriorityID, List<Integer> priorityToShow) {
-            for (Integer integer: priorityToShow){
-                if (integer == taskPriorityID){
+        private boolean isPriorityToShow(int taskPriorityID, List<SelectableString> priorityToShow) {
+            for (SelectableString integer : priorityToShow) {
+                if (Integer.parseInt(integer.getId()) == taskPriorityID && integer.isSelected()) {
                     return true;
                 }
             }
@@ -190,6 +173,9 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
         }
 
         private boolean isContainLetters(String text, String searchLetters) {
+            if (text == null || text.length() < 1) {
+                return false;
+            }
             String[] searchLettersExpressions = searchLetters.split(" ");
             for (String string : searchLettersExpressions) {
                 if (!text.contains(string)) {

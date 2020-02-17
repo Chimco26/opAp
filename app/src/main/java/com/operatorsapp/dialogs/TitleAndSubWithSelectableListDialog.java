@@ -4,11 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.common.SelectableString;
 import com.example.common.department.MachinesLineDetail;
@@ -100,7 +101,7 @@ public class TitleAndSubWithSelectableListDialog implements View.OnClickListener
                     }
                 }
             }
-        });
+        }, false);
         mRv.setAdapter(mAdapter);
     }
 

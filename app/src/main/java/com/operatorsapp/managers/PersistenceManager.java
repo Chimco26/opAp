@@ -107,8 +107,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_DEFAULT_REPORT_REJECT_UNIT = "PREF_DEFAULT_REPORT_REJECT_UNIT";
     private static final String JOSH_ID = "PREF_JOSH_ID";
     private static final String TASKS_ORDER_BY = "TASKS_ORDER_BY";
-    private static final String TASKS_FILTER_ONLY_CRITICAL = "TASKS_FILTER_ONLY_CRITICAL";
     private static final String TASKS_FILTER_PRIORITY_TO_SHOW = "TASKS_FILTER_PRIORITY_TO_SHOW";
+    private static final String TASKS_FILTER_PERIOD_TO_SHOW = "TASKS_FILTER_PERIOD_TO_SHOW";
 
 
     private static PersistenceManager msInstance;
@@ -882,26 +882,35 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         return SecurePreferences.getInstance().getBoolean(TASKS_ORDER_BY, true);
     }
 
-    public void setTaskFilterOnlyCritical(boolean onlyCritical) {
-        SecurePreferences.getInstance().setBoolean(TASKS_FILTER_ONLY_CRITICAL, onlyCritical);
-    }
-
-    public boolean getTaskFilterOnlyCritical() {
-        return SecurePreferences.getInstance().getBoolean(TASKS_ORDER_BY, false);
-    }
-
-    public void setTaskFilterPriorityToShow(List<Integer> priorityToShow) {
+    public void setTaskFilterPriorityToShow(ArrayList<SelectableString> priorityToShow) {
         SecurePreferences.getInstance().setString(TASKS_FILTER_PRIORITY_TO_SHOW, mGson.toJson(priorityToShow));
     }
 
-    public List<Integer> getTaskFilterPriorityToShow() {
-        Type listType = new TypeToken<List<Integer>>() {}.getType();
-        List<Integer> list = mGson.fromJson(SecurePreferences.getInstance().getString(TASKS_FILTER_PRIORITY_TO_SHOW), listType);
-        if (list == null){
-            list = new ArrayList<Integer>();
-            list.add(1);list.add(2);list.add(3);list.add(4);
+    public ArrayList<SelectableString> getTaskFilterPriorityToShow() {
+        Type listType = new TypeToken<ArrayList<SelectableString>>() {}.getType();
+        ArrayList<SelectableString> list = mGson.fromJson(SecurePreferences.getInstance().getString(TASKS_FILTER_PRIORITY_TO_SHOW), listType);
+        if (list == null || list.isEmpty()){
+            list = new ArrayList<SelectableString>();
+            list.add(new SelectableString("", true, String.valueOf(1)));
+            list.add(new SelectableString("", true, String.valueOf(2)));
+            list.add(new SelectableString("", true, String.valueOf(3)));
+            list.add(new SelectableString("", true, String.valueOf(4)));
         }
         return list;
     }
 
+    public void setTaskFilterPeriodToShow(ArrayList<SelectableString> periodToShow) {
+        SecurePreferences.getInstance().setString(TASKS_FILTER_PERIOD_TO_SHOW, mGson.toJson(periodToShow));
+    }
+
+    public ArrayList<SelectableString> getTaskFilterPeriodToShow() {
+        Type listType = new TypeToken<List<SelectableString>>() {}.getType();
+        ArrayList<SelectableString> list = mGson.fromJson(SecurePreferences.getInstance().getString(TASKS_FILTER_PERIOD_TO_SHOW), listType);
+        if (list == null || list.isEmpty()){
+            list = new ArrayList<SelectableString>();
+            list.add(new SelectableString("", true, String.valueOf(1)));
+            list.add(new SelectableString("", true, String.valueOf(2)));
+        }
+        return list;
+    }
 }

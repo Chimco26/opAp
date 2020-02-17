@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -96,40 +97,93 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:weightSum="10"
-        android:gravity="center_vertical">
+        android:weightSum="10">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:textColor="@color/default_gray"
+            android:layout_weight="0.8"
+            android:maxLines="1"
+            android:gravity="center_vertical"
             android:text="@string/order_by"
-            android:gravity="center_vertical"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.1"/>
+            android:textColor="@color/default_gray" />
 
         <Spinner
+            android:id="@+id/FTB_order_by_spinner"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/FTB_filter_ly"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:textColor="@color/default_gray"
-            android:text="@string/filter_by"
-            android:gravity="center_vertical"/>
+            android:layout_weight="1.1"
+            android:weightSum="1.1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.8"
+                android:maxLines="1"
+                android:gravity="center_vertical"
+                android:text="@string/filter_by"
+                android:textColor="@color/default_gray" />
+
+            <ImageView
+                android:id="@+id/FTB_filter_ic"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:src="@drawable/ic_filter_list_black_24dp" />
+
+        </LinearLayout>
 
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.1"/>
+            android:layout_weight="4.3" />
+
+        <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.8"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            app:corner_radius="3dp">
+
+            <EditText
+                android:id="@+id/FTB_search_et"
+                style="@style/FontStyle_T6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.85"
+                android:background="@drawable/box_grey_stroke_except_right"
+                android:gravity="center_vertical"
+                android:hint="@string/search_tasks"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/C2"
+                android:textSize="17sp"
+                tools:ignore="NestedWeights,RtlSymmetry" />
+
+            <ImageView
+                android:id="@+id/FTB_search_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.15"
+                android:background="@color/blue1"
+                android:padding="5dp"
+                android:src="@drawable/ic_search_white_24dp"
+                tools:ignore="ContentDescription" />
+
+        </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
     </LinearLayout>
 

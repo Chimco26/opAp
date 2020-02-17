@@ -2,13 +2,14 @@ package com.operatorsapp.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.common.SelectableString;
 import com.operatorsapp.R;
@@ -18,11 +19,13 @@ import java.util.ArrayList;
 public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAdapter.ViewHolder> {
 
     private final ArrayList<SelectableString> mFilterList;
+    private final boolean mSelectAllOption;
     private CheckBoxFilterAdapterListener mCheckBoxFilterAdapterListener;
 
-    public CheckBoxFilterAdapter(ArrayList<SelectableString> list, CheckBoxFilterAdapterListener checkBoxFilterAdapterListener) {
+    public CheckBoxFilterAdapter(ArrayList<SelectableString> list, CheckBoxFilterAdapterListener checkBoxFilterAdapterListener, boolean selectAllOption) {
         mFilterList = list;
         mCheckBoxFilterAdapterListener = checkBoxFilterAdapterListener;
+        mSelectAllOption = selectAllOption;
     }
 
     @NonNull
@@ -48,7 +51,9 @@ public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAd
                     updateAll(check);
                 } else {
                     mFilterList.get(position).setSelected(check);
-//                    updateSelectAllItem(mFilterList);
+                    if (mSelectAllOption) {
+                        updateSelectAllItem(mFilterList);
+                    }
                 }
                 mCheckBoxFilterAdapterListener.onItemCheck(mFilterList.get(position));
             }

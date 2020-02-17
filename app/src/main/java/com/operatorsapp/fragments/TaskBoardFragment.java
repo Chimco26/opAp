@@ -1,21 +1,30 @@
 package com.operatorsapp.fragments;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.common.SelectableString;
 import com.example.common.StandardResponse;
 import com.example.common.callback.GetTaskListCallback;
 import com.example.common.task.TaskHistory;
@@ -25,10 +34,12 @@ import com.example.common.utils.TimeUtils;
 import com.operators.reportrejectnetworkbridge.interfaces.UpdateTaskStatusCallback;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.TaskColumnAdapter;
+import com.operatorsapp.dialogs.TaskFilterDialog;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.SimpleRequests;
+import com.operatorsapp.utils.TaskUtil;
 import com.woxthebox.draglistview.BoardView;
 import com.woxthebox.draglistview.ColumnProperties;
 
@@ -71,8 +82,10 @@ public class TaskBoardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initVars(view);
         initParams();
+        initVars(view);
+        initView(view);
+        initListener(view);
         configBoard();
         initBoardListener();
         getTaskList();
@@ -80,16 +93,68 @@ public class TaskBoardFragment extends Fragment {
 
     private void initParams() {
         isOrderByDate = PersistenceManager.getInstance().getTasksOrderByDate();
-//        ArrayList<Integer> integers = new ArrayList<Integer>();
-//        integers.add(1);
-//        PersistenceManager.getInstance().setTaskFilterPriorityToShow(integers);
-//        PersistenceManager.getInstance().setTaskFilterOnlyCritical(true);
+        initFilterParams();
+    }
+
+    /**
+     * because need to insert value from resources
+     */
+    private void initFilterParams() {
+        ArrayList<SelectableString> priorityList = PersistenceManager.getInstance().getTaskFilterPriorityToShow();
+        for (SelectableString selectableString : priorityList) {
+            selectableString.setColor(TaskUtil.getPriorityColor(Integer.parseInt(selectableString.getId()), getContext()));
+            selectableString.setString(TaskUtil.getPriorityName(Integer.parseInt(selectableString.getId()), getContext()));
+        }
+        PersistenceManager.getInstance().setTaskFilterPriorityToShow(priorityList);
+
+        ArrayList<SelectableString> periodList = PersistenceManager.getInstance().getTaskFilterPeriodToShow();
+        periodList.get(0).setColor(getResources().getColor(R.color.blue1));
+        periodList.get(0).setString(getString(R.string.in_time));
+        periodList.get(1).setColor(getResources().getColor(R.color.red_dark));
+        periodList.get(1).setString(getString(R.string.past_time));
+        PersistenceManager.getInstance().setTaskFilterPeriodToShow(periodList);
     }
 
     public void initVars(@NonNull View view) {
         mBoardView = view.findViewById(R.id.FTB_board_view);
-        ((TextView) view.findViewById(R.id.FTB_title_tv)).setText(String.format(Locale.getDefault(),
-                "%s - %d", getString(R.string.task_manager), PersistenceManager.getInstance().getMachineId()));
+        initOrderBySpinner((Spinner) view.findViewById(R.id.FTB_order_by_spinner));
+    }
+
+    private void initOrderBySpinner(Spinner spinner) {
+        List<String> list = new ArrayList<>();
+        list.add(getString(R.string.date));
+        list.add(getString(R.string.priority));
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
+        if (!isOrderByDate) {
+            spinner.setSelection(1, false);
+        }
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i) {
+                    case 0:
+                        isOrderByDate = true;
+                        break;
+                    case 1:
+                        isOrderByDate = false;
+                        break;
+                }
+                PersistenceManager.getInstance().setTasksOrderByDate(isOrderByDate);
+                orderAll();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    public void initListener(@NonNull View view) {
         view.findViewById(R.id.FTB_close_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,6 +163,45 @@ public class TaskBoardFragment extends Fragment {
                 }
             }
         });
+        view.findViewById(R.id.FTB_filter_ly).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TaskFilterDialog taskFilterDialog = new TaskFilterDialog(getContext());
+                AlertDialog dialog = taskFilterDialog.showTaskFilterDialog();
+                dialog.show();
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        orderAll();
+                    }
+                });
+
+            }
+        });
+        ((EditText) view.findViewById(R.id.FTB_search_et)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                for (ColumnObject columnObject : mColumnsObjectList) {
+                    columnObject.getAdapter().getFilter().filter(charSequence);
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
+    public void initView(@NonNull View view) {
+        ((TextView) view.findViewById(R.id.FTB_title_tv)).setText(String.format(Locale.getDefault(),
+                "%s - %d", getString(R.string.task_manager), PersistenceManager.getInstance().getMachineId()));
     }
 
     private void initColumns(String name, List<TaskProgress> taskProgress, int id, long minDateToShow) {
@@ -220,6 +324,9 @@ public class TaskBoardFragment extends Fragment {
             @Override
             public void onGetTaskListCallbackSuccess(TaskListResponse response) {
                 ProgressDialogManager.dismiss();
+                if (isDetached() || getContext() == null) {
+                    return;
+                }
                 List<TaskProgress> taskList = response.getResponseDictionaryDT().getTaskProgress();
                 initColumnLists();
                 createColumnsLists(taskList);
@@ -304,34 +411,30 @@ public class TaskBoardFragment extends Fragment {
 
     private void orderList(ColumnObject columnObject) {
         if (isOrderByDate) {
-            orderByDate(columnObject.getAdapter().getListFiltered());
+            orderByDate(columnObject.getAdapter().getList());
         } else {
-            orderByPriority(columnObject.getAdapter().getListFiltered());
+            orderByPriority(columnObject.getAdapter().getList());
         }
-        columnObject.getAdapter().getFilter().filter("");
+        columnObject.getAdapter().getFilter().filter(columnObject.getAdapter().getSearchExpression());
     }
 
     private void orderByPriority(List<TaskProgress> list) {
-        if (list.size() > 0) {
-            Collections.sort(list, new Comparator<TaskProgress>() {
-                @Override
-                public int compare(TaskProgress o1, TaskProgress o2) {
-                    return Integer.valueOf(o2.getTaskPriorityID()).compareTo(o1.getTaskPriorityID());
-                }
-            });
-        }
+        Collections.sort(list, new Comparator<TaskProgress>() {
+            @Override
+            public int compare(TaskProgress o1, TaskProgress o2) {
+                return Integer.valueOf(o2.getTaskPriorityID()).compareTo(o1.getTaskPriorityID());
+            }
+        });
     }
 
     private void orderByDate(List<TaskProgress> list) {
-        if (list.size() > 0) {
-            Collections.sort(list, new Comparator<TaskProgress>() {
-                @Override
-                public int compare(TaskProgress o1, TaskProgress o2) {
-                    return TimeUtils.convertDateToMillisecond(o2.getTaskStartTimeTarget(), TimeUtils.SQL_T_FORMAT_NO_SECOND)
-                            .compareTo(TimeUtils.convertDateToMillisecond(o1.getTaskStartTimeTarget(), TimeUtils.SQL_T_FORMAT_NO_SECOND));
-                }
-            });
-        }
+        Collections.sort(list, new Comparator<TaskProgress>() {
+            @Override
+            public int compare(TaskProgress o1, TaskProgress o2) {
+                return TimeUtils.convertDateToMillisecond(o2.getTaskStartTimeTarget(), TimeUtils.SQL_T_FORMAT_NO_SECOND)
+                        .compareTo(TimeUtils.convertDateToMillisecond(o1.getTaskStartTimeTarget(), TimeUtils.SQL_T_FORMAT_NO_SECOND));
+            }
+        });
     }
 
     private TaskHistory createHistoryObject(TaskProgress taskProgress, int toColumn) {
