@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment;
 import com.example.common.StandardResponse;
 import com.example.common.callback.CreateTaskCallback;
 import com.example.common.task.Task;
+import com.example.common.task.TaskProgress;
 import com.operatorsapp.R;
 import com.operatorsapp.fragments.TaskBoardFragment;
+import com.operatorsapp.fragments.TaskDetailsFragment;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
@@ -35,6 +37,14 @@ public class TaskActivity extends AppCompatActivity {
         try {
             TaskBoardFragment taskBoardFragment = TaskBoardFragment.newInstance();
             getSupportFragmentManager().beginTransaction().add(R.id.TA_container, taskBoardFragment).addToBackStack(TaskBoardFragment.class.getSimpleName()).commit();
+        } catch (Exception e) {
+        }
+    }
+
+    private void showTaskDetailsFragment(TaskProgress taskProgress) {
+        try {
+            TaskDetailsFragment taskDetailsFragment = TaskDetailsFragment.newInstance(taskProgress);
+            getSupportFragmentManager().beginTransaction().add(R.id.TA_container, taskDetailsFragment).addToBackStack(TaskDetailsFragment.class.getSimpleName()).commit();
         } catch (Exception e) {
         }
     }

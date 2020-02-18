@@ -110,11 +110,19 @@
             android:text="@string/order_by"
             android:textColor="@color/default_gray" />
 
-        <Spinner
-            android:id="@+id/FTB_order_by_spinner"
+        <RelativeLayout
+            android:id="@+id/reject_reason_rl"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@drawable/edit_text_background_selector">
+
+            <Spinner
+                android:id="@+id/FTB_order_by_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/FTB_filter_ly"

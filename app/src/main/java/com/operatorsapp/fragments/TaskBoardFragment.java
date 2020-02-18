@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,6 +33,7 @@ import com.example.common.task.TaskProgress;
 import com.example.common.utils.TimeUtils;
 import com.operators.reportrejectnetworkbridge.interfaces.UpdateTaskStatusCallback;
 import com.operatorsapp.R;
+import com.operatorsapp.adapters.SimpleSpinnerAdapter;
 import com.operatorsapp.adapters.TaskColumnAdapter;
 import com.operatorsapp.dialogs.TaskFilterDialog;
 import com.operatorsapp.managers.PersistenceManager;
@@ -128,8 +128,8 @@ public class TaskBoardFragment extends Fragment {
         List<String> list = new ArrayList<>();
         list.add(getString(R.string.date));
         list.add(getString(R.string.priority));
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, list);
+        final SimpleSpinnerAdapter dataAdapter = new SimpleSpinnerAdapter(getActivity(), R.layout.base_spinner_item, list);
+        dataAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
         if (!isOrderByDate) {

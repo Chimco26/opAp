@@ -1,12 +1,17 @@
 package com.example.common.task;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.example.common.utils.TimeUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-public class TaskProgress {
+public class TaskProgress implements Parcelable {
+
+    public static final String TAG = TaskProgress.class.getSimpleName();
 
     public enum TaskStatus {
         TODO(2),
@@ -305,4 +310,67 @@ public class TaskProgress {
         return false;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.taskID);
+        dest.writeInt(this.historyID);
+        dest.writeInt(this.taskStatus);
+        dest.writeInt(this.taskCreateUser);
+        dest.writeInt(this.assignee);
+        dest.writeString(this.taskCreateDate);
+        dest.writeString(this.taskStartTimeTarget);
+        dest.writeString(this.taskEndTimeTarget);
+        dest.writeString(this.subjectTrans);
+        dest.writeString(this.text);
+        dest.writeString(this.taskPriorityTrans);
+        dest.writeInt(this.taskPriorityID);
+        dest.writeString(this.historyDisplayHName);
+        dest.writeString(this.historyDisplayName);
+        dest.writeString(this.historyUser);
+        dest.writeString(this.historyCreateDate);
+        dest.writeInt(this.taskLevel);
+        dest.writeInt(this.StringID);
+        dest.writeString(this.lName);
+        dest.writeString(this.eName);
+    }
+
+    protected TaskProgress(Parcel in) {
+        this.taskID = in.readInt();
+        this.historyID = in.readInt();
+        this.taskStatus = in.readInt();
+        this.taskCreateUser = in.readInt();
+        this.assignee = in.readInt();
+        this.taskCreateDate = in.readString();
+        this.taskStartTimeTarget = in.readString();
+        this.taskEndTimeTarget = in.readString();
+        this.subjectTrans = in.readString();
+        this.text = in.readString();
+        this.taskPriorityTrans = in.readString();
+        this.taskPriorityID = in.readInt();
+        this.historyDisplayHName = in.readString();
+        this.historyDisplayName = in.readString();
+        this.historyUser = in.readString();
+        this.historyCreateDate = in.readString();
+        this.taskLevel = in.readInt();
+        this.StringID = in.readInt();
+        this.lName = in.readString();
+        this.eName = in.readString();
+    }
+
+    public static final Parcelable.Creator<TaskProgress> CREATOR = new Parcelable.Creator<TaskProgress>() {
+        @Override
+        public TaskProgress createFromParcel(Parcel source) {
+            return new TaskProgress(source);
+        }
+
+        @Override
+        public TaskProgress[] newArray(int size) {
+            return new TaskProgress[size];
+        }
+    };
 }

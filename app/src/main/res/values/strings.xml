@@ -521,5 +521,14 @@
     <string name="past_time">Paste time</string>
     <string name="working_manually">Working manually</string>
     <string name="period">Period</string>
+    <string name="add_task">Add Task</string>
+    <string name="opened_by">Opened by</string>
+    <string name="status">Status</string>
+    <string name="subject">Subject</string>
+    <string name="task_level">Task Level</string>
+    <string name="description">Description</string>
+    <string name="selection">Selection</string>
+    <string name="severity">Severity</string>
+    <string name="total_time">Total time</string>
 
 </resources>
