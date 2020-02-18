@@ -196,7 +196,7 @@ import static com.example.common.permissions.WidgetInfo.PermissionId.SHIFT_REPOR
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_ERP_JOB_ID;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_JOB_ID;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_PRODUCT_NAME;
-import static com.operatorsapp.activities.JobActionActivity.EXTRA_IS_NO_PRODUCTION;
+import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_IS_NO_PRODUCTION;
 import static com.operatorsapp.fragments.ActionBarAndEventsFragment.EXTRA_FIELD_FOR_MACHINE;
 import static com.operatorsapp.utils.ClearData.cleanEvents;
 
@@ -289,7 +289,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Integer mSelectProductJoshId;
     private View mReportBtn;
     private boolean mIsTimeLineOpen;
-    private String[] mReportCycleUnitValues = new String[2];//values of cycle unit report : [0] = originalValue ; [1] = max value if orinal is over the max
     private SparseArray<WidgetInfo> permissionForMachineHashMap;
     private NextJobTimerDialog mNextJobTimerDialog;
     private int mShowDialogJobId;
@@ -1818,16 +1817,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onOpenQCActivity() {
-//        Intent intent = new Intent(DashboardActivity.this, QCActivity.class);
-//        ignoreFromOnPause = true;
-//
-//        if (mActionBarAndEventsFragment != null) {
-//
-//            mActionBarAndEventsFragment.setFromAnotherActivity(true);
-//        }
-//        startActivityForResult(intent, QC_ACTIVITY_RESULT_CODE);
-//
-        Intent intent = new Intent(DashboardActivity.this, TaskActivity.class);
+        Intent intent = new Intent(DashboardActivity.this, QCActivity.class);
         ignoreFromOnPause = true;
 
         if (mActionBarAndEventsFragment != null) {
@@ -2136,6 +2126,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         layoutParams3.bottomMargin = bottomMargin;
 
         mContainer3.setLayoutParams(layoutParams3);
+    }
+
+    @Override
+    public void onOpenTaskActivity() {
+        Intent intent = new Intent(DashboardActivity.this, TaskActivity.class);
+        ignoreFromOnPause = true;
+
+        if (mActionBarAndEventsFragment != null) {
+
+            mActionBarAndEventsFragment.setFromAnotherActivity(true);
+        }
+        startActivity(intent);
     }
 
     @Override
@@ -2876,15 +2878,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onReportCycleUnit(String value, String originalValue) {
+    public void onReportCycleUnit(String value) {
         if (value == null || value.equals("")) {
             value = "0";
         }
-        if (originalValue == null || originalValue.equals("")) {
-            originalValue = "0";
-        }
-        mReportCycleUnitValues[0] = originalValue;
-        mReportCycleUnitValues[1] = value;
         sendCycleUnitReport(Double.parseDouble(value));
     }
 
@@ -2919,14 +2916,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         OppAppLogger.getInstance().i(TAG, "sendRejectReport units value is: " + String.valueOf(value) + " JobId: " + mSelectProductJobId);
 
         mReportCore.sendCycleUnitsReport(value, mSelectProductJobId);
-
-//        if (getFragmentManager() != null) {
-//
-//            getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//
-//        }
-
-//        SendBroadcast.refreshPolling(getContext());
     }
 
     private void sendRejectReport(String value, boolean isUnit, int selectedCauseId,
@@ -3002,23 +2991,26 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             OppAppLogger.getInstance().i(TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
 
+            String text = "";
+            text = response.getError().getErrorDesc();
             if (response.getFunctionSucceed()) {
-                String text = "";
-                if (mReportCycleUnitValues[0].equals(mReportCycleUnitValues[1])) {
-                    text = response.getError().getErrorDesc();
-                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.SUCCESS);
-                } else if (Double.parseDouble(mReportCycleUnitValues[0]) > Double.parseDouble(mReportCycleUnitValues[1])) {
-                    text = String.format("%s %s %s %s", getString(R.string.report_cycle_failed_but_max_reported), getString(R.string.reported),
-                            getString(R.string.max_value_is), mReportCycleUnitValues[1]);
-                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.NETWORK_ERROR);
-                } else if (Double.parseDouble(mReportCycleUnitValues[0]) < Double.parseDouble(mReportCycleUnitValues[1])) {
-                    text = String.format("%s %s %s %s", getString(R.string.report_cycle_failed_but_min_reported), getString(R.string.reported),
-                            getString(R.string.min_value_is), mReportCycleUnitValues[1]);
-                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.NETWORK_ERROR);
-                }
-            } else {
-                ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+//                if (mReportCycleUnitValues[0].equals(mReportCycleUnitValues[1])) {
+                ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.SUCCESS);
+            }else {
+                ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.NETWORK_ERROR);
             }
+//            else if (Double.parseDouble(mReportCycleUnitValues[0]) > Double.parseDouble(mReportCycleUnitValues[1])) {
+//                    text = String.format("%s %s %s %s", getString(R.string.report_cycle_failed_but_max_reported), getString(R.string.reported),
+//                            getString(R.string.max_value_is), mReportCycleUnitValues[1]);
+//                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.NETWORK_ERROR);
+//                } else if (Double.parseDouble(mReportCycleUnitValues[0]) < Double.parseDouble(mReportCycleUnitValues[1])) {
+//                    text = String.format("%s %s %s %s", getString(R.string.report_cycle_failed_but_min_reported), getString(R.string.reported),
+//                            getString(R.string.min_value_is), mReportCycleUnitValues[1]);
+//                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.NETWORK_ERROR);
+//                }
+//            } else {
+//                ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+//            }
 
             SendBroadcast.refreshPolling(DashboardActivity.this);
 
@@ -3461,9 +3453,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 install.setDataAndType(apkUri, "application/vnd.android.package-archive");
                 install.normalizeMimeType("application/vnd.android.package-archive");
 
-                if(install.resolveActivity(getPackageManager()) != null) {
+                if (install.resolveActivity(getPackageManager()) != null) {
                     startActivity(install);
-                }else {
+                } else {
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, getString(R.string.install_activity_not_found), CroutonCreator.CroutonType.NETWORK_ERROR);
                 }
 

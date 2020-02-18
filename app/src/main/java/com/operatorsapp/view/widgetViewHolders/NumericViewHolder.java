@@ -234,8 +234,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View v) {
                 if (!mEditCycleEt.getText().toString().isEmpty()) {
                     widget.setEditStep(0);
-                    mDashboardCentralContainerListener.onReportCycleUnit(getCycleReportValue(Double.parseDouble(mEditCycleEt.getText().toString()))
-                            , String.valueOf(Double.parseDouble(mEditCycleEt.getText().toString())));
+                    mDashboardCentralContainerListener.onReportCycleUnit(String.valueOf(Double.parseDouble(mEditCycleEt.getText().toString())));
                     mEditCycleEt.clearFocus();
                     setupNumericCycleItem(widget);
                     mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());

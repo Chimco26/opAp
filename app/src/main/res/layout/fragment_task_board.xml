@@ -50,7 +50,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/btn_plus_copy" />
+                android:src="@drawable/ic_add" />
 
 
             <TextView
@@ -120,8 +120,8 @@
             android:id="@+id/FTB_filter_ly"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1.1"
-            android:weightSum="1.1"
+            android:layout_weight="1.15"
+            android:weightSum="1.15"
             android:orientation="horizontal">
 
             <TextView
@@ -137,15 +137,15 @@
                 android:id="@+id/FTB_filter_ic"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.3"
-                android:src="@drawable/ic_filter_list_black_24dp" />
+                android:layout_weight="0.35"
+                android:src="@drawable/ic_filter_default" />
 
         </LinearLayout>
 
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="4.3" />
+            android:layout_weight="4.2" />
 
         <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
             android:layout_width="0dp"

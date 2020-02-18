@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -56,6 +57,7 @@ import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static androidx.annotation.Dimension.SP;
 
 public class TaskBoardFragment extends Fragment {
+    private static final int COLUMN_COUNT = 4;
     private BoardView mBoardView;
     private ArrayList<TaskProgress> mTodoList;
     private ArrayList<TaskProgress> mInProgressList;
@@ -63,6 +65,7 @@ public class TaskBoardFragment extends Fragment {
     private ArrayList<TaskProgress> mCancelledList;
     private ArrayList<ColumnObject> mColumnsObjectList = new ArrayList<>();
     private boolean isOrderByDate = true;
+    private ImageView mFilterIc;
 
     public static TaskBoardFragment newInstance() {
         return new TaskBoardFragment();
@@ -117,6 +120,7 @@ public class TaskBoardFragment extends Fragment {
 
     public void initVars(@NonNull View view) {
         mBoardView = view.findViewById(R.id.FTB_board_view);
+        mFilterIc = view.findViewById(R.id.FTB_filter_ic);
         initOrderBySpinner((Spinner) view.findViewById(R.id.FTB_order_by_spinner));
     }
 
@@ -173,9 +177,9 @@ public class TaskBoardFragment extends Fragment {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
                         orderAll();
+                        initFilterIcon();
                     }
                 });
-
             }
         });
         ((EditText) view.findViewById(R.id.FTB_search_et)).addTextChangedListener(new TextWatcher() {
@@ -202,6 +206,15 @@ public class TaskBoardFragment extends Fragment {
     public void initView(@NonNull View view) {
         ((TextView) view.findViewById(R.id.FTB_title_tv)).setText(String.format(Locale.getDefault(),
                 "%s - %d", getString(R.string.task_manager), PersistenceManager.getInstance().getMachineId()));
+        initFilterIcon();
+    }
+
+    private void initFilterIcon(){
+        if (TaskUtil.isFiltered()){
+            mFilterIc.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter_selected));
+        }else {
+            mFilterIc.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter_default));
+        }
     }
 
     private void initColumns(String name, List<TaskProgress> taskProgress, int id, long minDateToShow) {
@@ -314,7 +327,8 @@ public class TaskBoardFragment extends Fragment {
         mBoardView.setSnapToColumnInLandscape(false);
         mBoardView.setColumnSnapPosition(BoardView.ColumnSnapPosition.CENTER);
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        mBoardView.setColumnWidth((int) (metrics.widthPixels / 4 - 30 * metrics.density));
+        //to set column dimension in ratio of screen width
+        mBoardView.setColumnWidth((int) (metrics.widthPixels / COLUMN_COUNT - ((COLUMN_COUNT - 1) * 10) * metrics.density));
     }
 
     private void getTaskList() {

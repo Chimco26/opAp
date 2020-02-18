@@ -4,7 +4,11 @@ import android.content.Context;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.common.SelectableString;
 import com.operatorsapp.R;
+import com.operatorsapp.managers.PersistenceManager;
+
+import java.util.ArrayList;
 
 public class TaskUtil {
 
@@ -49,6 +53,22 @@ public class TaskUtil {
         }
         return name;
 
+    }
+
+    public static boolean isFiltered(){
+        ArrayList<SelectableString> periodList = PersistenceManager.getInstance().getTaskFilterPeriodToShow();
+        for (SelectableString selectableString: periodList){
+            if (!selectableString.isSelected()){
+                return true;
+            }
+        }
+        ArrayList<SelectableString> priorityList = PersistenceManager.getInstance().getTaskFilterPriorityToShow();
+        for (SelectableString selectableString: priorityList){
+            if (!selectableString.isSelected()){
+                return true;
+            }
+        }
+        return false;
     }
 
 

@@ -32,7 +32,6 @@ public class TaskActivity extends AppCompatActivity {
     }
 
     private void showTaskBoardFragment() {
-
         try {
             TaskBoardFragment taskBoardFragment = TaskBoardFragment.newInstance();
             getSupportFragmentManager().beginTransaction().add(R.id.TA_container, taskBoardFragment).addToBackStack(TaskBoardFragment.class.getSimpleName()).commit();
