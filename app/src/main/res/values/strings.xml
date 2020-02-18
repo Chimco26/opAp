@@ -519,5 +519,6 @@
     <string name="very_high">Very High</string>
     <string name="in_time">In time</string>
     <string name="past_time">Paste time</string>
+    <string name="working_manually">Working manually</string>
 
 </resources>
