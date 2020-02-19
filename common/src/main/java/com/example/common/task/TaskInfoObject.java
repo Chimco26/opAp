@@ -15,6 +15,10 @@ public class TaskInfoObject {
     @Expose
     private String displayName;
 
+    public TaskInfoObject(String displayName) {
+        this.displayName = displayName;
+    }
+
     public Integer getID() {
         return iD;
     }

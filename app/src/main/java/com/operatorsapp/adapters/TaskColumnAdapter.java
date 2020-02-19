@@ -32,12 +32,14 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
     private TaskFilter mFilter = new TaskFilter();
     private List<TaskProgress> mListFiltered = new ArrayList<>();
     private Long minDateToShow;
+    private TaskColumnAdapterListener mListener;
 
-    public TaskColumnAdapter(List<TaskProgress> tasks, long minDateToShow, LinearLayout view) {
+    public TaskColumnAdapter(List<TaskProgress> tasks, long minDateToShow, LinearLayout view, TaskColumnAdapterListener listener) {
         this.minDateToShow = minDateToShow;
         headerView = view;
         list = tasks;
         mListFiltered.addAll(list);
+        mListener = listener;
     }
 
     public String getSearchExpression() {
@@ -106,8 +108,14 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
             mDelegate = itemView.findViewById(R.id.ITask_author);
             mPriorityIc = itemView.findViewById(R.id.ITask_priority_ic);
             mAlertMarge = itemView.findViewById(R.id.ITask_priority_view);
-        }
 
+            itemView.findViewById(R.id.ITask_main_rl).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onTaskClicked(mListFiltered.get(getAdapterPosition()));
+                }
+            });
+        }
     }
 
     private class TaskFilter extends Filter {
@@ -184,6 +192,9 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
             }
             return true;
         }
+    }
 
+    public interface TaskColumnAdapterListener{
+        void onTaskClicked(TaskProgress taskProgress);
     }
 }

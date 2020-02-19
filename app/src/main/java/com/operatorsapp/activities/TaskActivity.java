@@ -6,21 +6,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.common.StandardResponse;
-import com.example.common.callback.CreateTaskCallback;
-import com.example.common.task.Task;
 import com.example.common.task.TaskProgress;
 import com.operatorsapp.R;
 import com.operatorsapp.fragments.TaskBoardFragment;
 import com.operatorsapp.fragments.TaskDetailsFragment;
 import com.operatorsapp.managers.CroutonCreator;
-import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.server.NetworkManager;
-import com.operatorsapp.utils.SimpleRequests;
 
 import java.util.List;
 
-public class TaskActivity extends AppCompatActivity {
+public class TaskActivity extends AppCompatActivity implements TaskBoardFragment.TaskBoardFragmentListener {
 
     private CroutonCreator mCroutonCreator;
 
@@ -49,21 +43,6 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
-    private void createTask() {
-        PersistenceManager pm = PersistenceManager.getInstance();
-        SimpleRequests.createOrUpdateTask(new Task("a"), pm.getSiteUrl(), new CreateTaskCallback() {
-            @Override
-            public void onCreateTaskCallbackSuccess(StandardResponse response) {
-
-            }
-
-            @Override
-            public void onCreateTaskCallbackFailed(StandardResponse reason) {
-
-            }
-        }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
-    }
-
     @Override
     public void onBackPressed() {
         List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
@@ -71,5 +50,15 @@ public class TaskActivity extends AppCompatActivity {
             finish();
         }
         super.onBackPressed();
+    }
+
+    @Override
+    public void onTaskClicked(TaskProgress taskProgress) {
+        showTaskDetailsFragment(taskProgress);
+    }
+
+    @Override
+    public void onCreateTask() {
+        showTaskDetailsFragment(null);
     }
 }

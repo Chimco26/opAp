@@ -1,5 +1,6 @@
 package com.operatorsapp.fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -56,7 +57,7 @@ import java.util.Locale;
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static androidx.annotation.Dimension.SP;
 
-public class TaskBoardFragment extends Fragment {
+public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.TaskColumnAdapterListener {
     private static final int COLUMN_COUNT = 4;
     private BoardView mBoardView;
     private ArrayList<TaskProgress> mTodoList;
@@ -66,9 +67,21 @@ public class TaskBoardFragment extends Fragment {
     private ArrayList<ColumnObject> mColumnsObjectList = new ArrayList<>();
     private boolean isOrderByDate = true;
     private ImageView mFilterIc;
+    private TaskBoardFragmentListener mListener;
 
     public static TaskBoardFragment newInstance() {
         return new TaskBoardFragment();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof TaskBoardFragmentListener){
+            mListener = (TaskBoardFragmentListener) context;
+        }else {
+            throw new RuntimeException(context.toString()
+                    + " must implement TaskBoardFragmentListener");
+        }
     }
 
     @Override
@@ -167,6 +180,12 @@ public class TaskBoardFragment extends Fragment {
                 }
             }
         });
+        view.findViewById(R.id.FTB_create_btn_ly).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onCreateTask();
+            }
+        });
         view.findViewById(R.id.FTB_filter_ly).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -223,7 +242,7 @@ public class TaskBoardFragment extends Fragment {
 
         LinearLayout view = initHeaderListView(name);
 
-        TaskColumnAdapter listAdapter = new TaskColumnAdapter(taskProgress, minDateToShow, view);
+        TaskColumnAdapter listAdapter = new TaskColumnAdapter(taskProgress, minDateToShow, view, this);
 
         ColumnProperties columnProperties = ColumnProperties.Builder.newBuilder(listAdapter)
                 .setLayoutManager(layoutManager)
@@ -455,6 +474,11 @@ public class TaskBoardFragment extends Fragment {
         return new TaskHistory(taskProgress.getTaskID(), mColumnsObjectList.get(toColumn).getId(), taskProgress.getAssignee());
     }
 
+    @Override
+    public void onTaskClicked(TaskProgress taskProgress) {
+        mListener.onTaskClicked(taskProgress);
+    }
+
     private class ColumnObject {
         TaskColumnAdapter adapter;
         String name;
@@ -477,5 +501,12 @@ public class TaskBoardFragment extends Fragment {
         public Integer getId() {
             return id;
         }
+    }
+
+
+    public interface TaskBoardFragmentListener{
+        void onTaskClicked(TaskProgress taskProgress);
+
+        void onCreateTask();
     }
 }

@@ -13,6 +13,9 @@ public class TaskProgress implements Parcelable {
 
     public static final String TAG = TaskProgress.class.getSimpleName();
 
+    public TaskProgress() {
+    }
+
     public enum TaskStatus {
         TODO(2),
         IN_PROGRESS(3),

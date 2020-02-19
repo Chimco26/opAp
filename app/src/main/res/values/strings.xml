@@ -530,5 +530,6 @@
     <string name="selection">Selection</string>
     <string name="severity">Severity</string>
     <string name="total_time">Total time</string>
+    <string name="attached_files">Attached Files</string>
 
 </resources>
