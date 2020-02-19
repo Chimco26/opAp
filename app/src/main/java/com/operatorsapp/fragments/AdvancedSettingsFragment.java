@@ -3,18 +3,10 @@ package com.operatorsapp.fragments;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -26,14 +18,19 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.oppapplog.OppAppLogger;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.broadcast.SendLogsBroadcast;
-import com.zemingo.logrecorder.LogRecorder;
 
 
 public class AdvancedSettingsFragment extends Fragment implements View.OnClickListener, CroutonRootProvider, SendLogsBroadcast.SendLogsListener {
@@ -180,6 +177,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         });
 
         mSendLogButton = view.findViewById(R.id.send_log_settings_button);
+        mSendLogButton.setVisibility(View.INVISIBLE);
     }
 
 
@@ -224,7 +222,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         super.onResume();
         mButtonSave.setOnClickListener(this);
         mSendLogButton.setOnClickListener(this);
-        registerReceiver();
+//        registerReceiver();
 
 
     }
@@ -304,43 +302,43 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
             }
             case R.id.send_log_settings_button: {
 
-                if (isStoragePermissionGranted()) {
-
-                    sendLogToEmail();
-
-                }
+//                if (isStoragePermissionGranted()) {
+//
+//                    sendLogToEmail();
+//
+//                }
             }
             break;
         }
     }
 
-    private void sendLogToEmail() {
-
-        ProgressDialogManager.show(getActivity());
-        OppAppLogger.getInstance().d(LOG_TAG, "start sendLogToEmail(), ");
-        LogRecorder.getInstance().setEmailInfo("support@matics.live", "Operator app logs", null);
-        try {
-            LogRecorder.getInstance().requestSendLogsIntent(false, new LogRecorder.SendLogsListener() {
-                @Override
-                public void onCompleted(final Intent intent) {
-                    ProgressDialogManager.dismiss();
-                    try {
-                        mListener.onIgnoreOnPauseFromAdvancedSettings();
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        OppAppLogger.getInstance().e(LOG_TAG, "requestSendLogsIntent(), failed.", e);
-                    }
-                }
-            });
-            OppAppLogger.getInstance().d(LOG_TAG, "end sendLogToEmail(), ");
-        } catch (Exception e) {
-            ProgressDialogManager.dismiss();
-            e.printStackTrace();
-            if (e.getMessage() != null)
-
-                Log.e(LOG_TAG, e.getMessage());
-        }
-    }
+//    private void sendLogToEmail() {
+//
+//        ProgressDialogManager.show(getActivity());
+//        OppAppLogger.getInstance().d(LOG_TAG, "start sendLogToEmail(), ");
+//        LogRecorder.getInstance().setEmailInfo("support@matics.live", "Operator app logs", null);
+//        try {
+//            LogRecorder.getInstance().requestSendLogsIntent(false, new LogRecorder.SendLogsListener() {
+//                @Override
+//                public void onCompleted(final Intent intent) {
+//                    ProgressDialogManager.dismiss();
+//                    try {
+//                        mListener.onIgnoreOnPauseFromAdvancedSettings();
+//                        startActivity(intent);
+//                    } catch (Exception e) {
+//                        OppAppLogger.getInstance().e(LOG_TAG, "requestSendLogsIntent(), failed.", e);
+//                    }
+//                }
+//            });
+//            OppAppLogger.getInstance().d(LOG_TAG, "end sendLogToEmail(), ");
+//        } catch (Exception e) {
+//            ProgressDialogManager.dismiss();
+//            e.printStackTrace();
+//            if (e.getMessage() != null)
+//
+//                Log.e(LOG_TAG, e.getMessage());
+//        }
+//    }
 
     public boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
@@ -423,7 +421,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     @Override
     public void onPermissionGranted() {
 
-        sendLogToEmail();
+//        sendLogToEmail();
     }
 
     public interface AdvancedSettingsListener{

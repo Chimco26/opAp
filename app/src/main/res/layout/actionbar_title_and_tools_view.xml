@@ -110,7 +110,8 @@
                 android:paddingTop="5dp"
                 android:paddingEnd="5dp"
                 android:paddingBottom="5dp"
-                android:src="@drawable/ic_task" />
+                android:src="@drawable/ic_task"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/toolbar_notification_button"

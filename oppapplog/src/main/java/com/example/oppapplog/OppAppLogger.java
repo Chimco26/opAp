@@ -2,38 +2,34 @@ package com.example.oppapplog;
 
 
 import android.content.Context;
-import android.content.ReceiverCallNotAllowedException;
 import android.util.Log;
-
-import com.zemingo.logrecorder.LogRecorder;
-import com.zemingo.logrecorder.ZLogger;
 
 public class OppAppLogger {
 
     private static final String PREF_STORAGE_PERMISSION_GRANTED = "PREF_STORAGE_PERMISSION_GRANTED";
     private static final String TAG = OppAppLogger.class.getSimpleName();
 
-    private static boolean mGranted = false;
+    private static boolean mGranted = true;//false
     private static OppAppLogger instance;
 
     private OppAppLogger(Context context) {
 
-        try {
-            LogRecorder.initInstance(context);
-
-            mGranted = context.getSharedPreferences("user_preferences", Context.MODE_PRIVATE).getBoolean(PREF_STORAGE_PERMISSION_GRANTED, false);
-
-            if (BuildConfig.DEBUG) {
-                ZLogger.DEBUG = true;
-            }
-        }catch (ReceiverCallNotAllowedException e){
-
-        }
+//        try {
+//            LogRecorder.initInstance(context);
+//
+//            mGranted = context.getSharedPreferences("user_preferences", Context.MODE_PRIVATE).getBoolean(PREF_STORAGE_PERMISSION_GRANTED, false);
+//
+//            if (BuildConfig.DEBUG) {
+//                ZLogger.DEBUG = true;
+//            }
+//        }catch (ReceiverCallNotAllowedException e){
+//
+//        }
     }
 
     private OppAppLogger() {
 
-        mGranted = false;
+        mGranted = true;
     }
 
     public static void setStorageGranted(Context context, boolean granted) {
@@ -70,55 +66,55 @@ public class OppAppLogger {
 
     public void v(String tag, String msg) {
         if (mGranted) {
-            ZLogger.v(tag, msg);
+            Log.v(tag, msg);
         }
 
     }
 
     public void d(String tag, String msg) {
         if (mGranted) {
-            ZLogger.d(tag, msg);
+            Log.d(tag, msg);
         }
 
     }
 
     public void i(String tag, String msg) {
         if (mGranted) {
-            ZLogger.i(tag, msg);
+            Log.i(tag, msg);
         }
 
     }
 
     public void w(String tag, String msg) {
         if (mGranted) {
-            ZLogger.w(tag, msg);
+            Log.w(tag, msg);
         }
 
     }
 
     public void w(String tag, Exception e) {
         if (mGranted) {
-            ZLogger.w(tag, e);
+            Log.w(tag, e);
         }
 
     }
 
     public void w(String tag, String msg, Exception e) {
         if (mGranted) {
-            ZLogger.w(tag, msg, e);
+            Log.w(tag, msg, e);
         }
 
     }
 
     public void e(String tag, String msg) {
         if (mGranted) {
-            ZLogger.e(tag, msg);
+            Log.e(tag, msg);
         }
     }
 
     public void e(String tag, String msg, Exception e) {
         if (mGranted) {
-            ZLogger.e(tag, msg, e);
+            Log.e(tag, msg, e);
         }
     }
 
