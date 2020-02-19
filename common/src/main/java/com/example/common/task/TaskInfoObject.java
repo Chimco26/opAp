@@ -19,7 +19,10 @@ public class TaskInfoObject {
         this.displayName = displayName;
     }
 
-    public Integer getID() {
+    public int getID() {
+        if (iD == null){
+            return 0;
+        }
         return iD;
     }
 

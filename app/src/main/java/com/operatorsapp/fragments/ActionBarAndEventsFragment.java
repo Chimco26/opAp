@@ -158,6 +158,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.example.common.permissions.WidgetInfo.PermissionId.TASK;
 import static com.operatorsapp.managers.PersistenceManager.setMachineData;
 import static com.operatorsapp.utils.SimpleRequests.getMachineLine;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
@@ -1729,7 +1730,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (mToolBarView != null) {
             mToolBarView.findViewById(R.id.toolbar_production_status_rl).setVisibility(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.PRODUCTION_STATUS.getId()).getHaspermission());
             if (mToolBarTaskBtn != null) {
-//                mToolBarTaskBtn.setVisibility(WidgetInfo.getWidgetInfo(permissionResponse, TASK.getId()).getHaspermission());
+                mToolBarTaskBtn.setVisibility(WidgetInfo.getWidgetInfo(permissionResponse, TASK.getId()).getHaspermission());
             }
         }
         if (mTimeLineType != null) {

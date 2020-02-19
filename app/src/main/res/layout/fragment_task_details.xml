@@ -59,7 +59,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.02" />
+            android:layout_weight="0.04" />
 
         <ImageView
             android:id="@+id/FTD_close_btn"
@@ -170,6 +170,10 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"/>
+
                 <TextView
                     android:id="@+id/FTD_status_tv"
                     android:layout_width="match_parent"
@@ -238,7 +242,8 @@
                         android:id="@+id/FTD_description_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@drawable/box_grey_stroke" />
+                        android:background="@drawable/box_grey_stroke"
+                        android:padding="15dp"/>
 
                 </RelativeLayout>
 
@@ -322,6 +327,10 @@
             android:layout_weight="0.4"
             android:orientation="vertical">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
             <TextView
                 android:id="@+id/FTD_severity_tv"
                 android:layout_width="match_parent"
@@ -356,7 +365,7 @@
                         android:id="@+id/FTD_start_date_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/selection"
+                        android:text="@string/start_date"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -364,7 +373,9 @@
                         android:id="@+id/FTD_start_date_edit_tv"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:background="@drawable/box_grey_stroke"/>
+                        android:background="@drawable/box_grey_stroke"
+                        android:gravity="center"
+                        android:textSize="23sp"/>
 
                 </LinearLayout>
 
@@ -383,7 +394,7 @@
                         android:id="@+id/FTD_end_date_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/selection"
+                        android:text="@string/end_date"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -391,7 +402,9 @@
                         android:id="@+id/FTD_end_date_edit_tv"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:background="@drawable/box_grey_stroke"/>
+                        android:background="@drawable/box_grey_stroke"
+                        android:gravity="center"
+                        android:textSize="23sp"/>
 
                 </LinearLayout>
 
@@ -417,11 +430,6 @@
                     android:textSize="20sp"
                     android:textColor="@color/black"
                     android:layout_marginStart="15dp"/>
-
-                <Spinner
-                    android:id="@+id/FTD_total_time_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp" />
 
             </LinearLayout>
 
