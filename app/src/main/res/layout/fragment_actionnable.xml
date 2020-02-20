@@ -74,7 +74,7 @@
                     android:textSize="35sp" />
 
                 <Button
-                    android:id="@+id/AJA-job_activate_btn"
+                    android:id="@+id/AJA_job_activate_btn"
                     android:layout_width="220dp"
                     android:layout_height="50dp"
                     android:layout_alignParentEnd="true"

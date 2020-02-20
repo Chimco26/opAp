@@ -49,6 +49,9 @@ public class Task {
         this.text = text;
     }
 
+    public Task() {
+    }
+
     public Integer getHistoryID() {
         return historyID;
     }
@@ -139,10 +142,6 @@ public class Task {
 
     public Integer getSourceTaskCreationPlatform() {
         return sourceTaskCreationPlatform;
-    }
-
-    public void setSourceTaskCreationPlatform(Integer sourceTaskCreationPlatform) {
-        this.sourceTaskCreationPlatform = sourceTaskCreationPlatform;
     }
 
     public Integer getStatus() {

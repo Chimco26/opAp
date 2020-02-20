@@ -1,6 +1,7 @@
 package com.operatorsapp.fragments;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.common.SelectableString;
 import com.example.common.StandardResponse;
 import com.example.common.callback.CreateTaskCallback;
 import com.example.common.task.Task;
@@ -24,11 +28,16 @@ import com.example.common.task.TaskObjectsForCreateOrEditResponse;
 import com.example.common.task.TaskProgress;
 import com.operators.reportrejectnetworkbridge.interfaces.GetTaskObjectsForCreateCallback;
 import com.operatorsapp.R;
+import com.operatorsapp.activities.GalleryActivity;
+import com.operatorsapp.adapters.GalleryAdapter;
+import com.operatorsapp.adapters.SeverityCheckBoxFilterAdapter;
 import com.operatorsapp.adapters.TaskInfoObjectSpinnerAdapter;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.model.GalleryModel;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.SimpleRequests;
+import com.operatorsapp.utils.TaskUtil;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -55,6 +64,9 @@ public class TaskDetailsFragment extends Fragment {
     private Spinner mStatusSpinner;
     private EditText mDescriptionEt;
     private TextView mTotalTimeTv;
+    private RecyclerView mSeverityRv;
+    private RecyclerView mAttachedFilesRv;
+    private View mAttachedFilesTv;
 
     public static TaskDetailsFragment newInstance(TaskProgress taskProgress) {
         TaskDetailsFragment taskDetailsFragment = new TaskDetailsFragment();
@@ -100,6 +112,9 @@ public class TaskDetailsFragment extends Fragment {
         mLevelSpinner = view.findViewById(R.id.FTD_level_spinner);
         mDescriptionEt = view.findViewById(R.id.FTD_description_spinner);
         mTotalTimeTv = view.findViewById(R.id.FTD_total_time_tv);
+        mSeverityRv = view.findViewById(R.id.FTD_severity_rv);
+        mAttachedFilesRv = view.findViewById(R.id.FTD_attached_files_rv);
+        mAttachedFilesTv = view.findViewById(R.id.FTD_attached_files_tv);
     }
 
     private void initView(TaskProgress task, TaskObjectForCreateOrEditContent editTaskObject) {
@@ -109,9 +124,11 @@ public class TaskDetailsFragment extends Fragment {
             mAuthorTv.setText(PersistenceManager.getInstance().getOperatorName());
             initStatusSpinner(editTaskObject.getStatus(), 0);
             initSubjectSpinner(editTaskObject.getSubjects());
-            initLevelSpinner(editTaskObject.getLevel());
+//            initLevelSpinner(editTaskObject.getLevel());
             initStartAndEndTimeViews();
             initTotalTime(task);
+            initSeverity(editTaskObject.getPriority(), TaskProgress.TaskStatus.TODO.getValue(), true);
+            mAttachedFilesTv.setVisibility(View.GONE);
         } else {
             mDescriptionEt.setEnabled(false);
             mDescriptionEt.setFocusable(false);
@@ -123,8 +140,8 @@ public class TaskDetailsFragment extends Fragment {
             mEndDate.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(task.getTaskEndTimeTarget(),
                     SQL_T_FORMAT_NO_SECOND), ONLY_DATE_FORMAT));
             mAuthorTv.setText(String.valueOf(task.getTaskCreateUser()));
-            initSeverity(task, editTaskObject);
-            initAttachFiles(task);
+            initSeverity(editTaskObject.getPriority(), task.getTaskStatus(), false);
+            initAttachFiles();
             initTotalTime(task);
             initStatusSpinner(editTaskObject.getStatus(), task.getTaskStatus());
             List<TaskInfoObject> subjects = new ArrayList<>();
@@ -135,6 +152,7 @@ public class TaskDetailsFragment extends Fragment {
             initLevelSpinner(levels);
         }
     }
+
 
     private void initStartAndEndTimeViews() {
         final long start;
@@ -232,7 +250,7 @@ public class TaskDetailsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 dataAdapter.setTitle(adapterView.getSelectedItemPosition());
-                mTask.setSubjectTrans(subjects.get(adapterView.getSelectedItemPosition()).getDisplayName());
+                mTask.setSubjectTrans(subjects.get(adapterView.getSelectedItemPosition()).getName());
             }
 
             @Override
@@ -252,9 +270,7 @@ public class TaskDetailsFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int selectedId = status.get(adapterView.getSelectedItemPosition()).getID();
                 dataAdapter.setTitle(adapterView.getSelectedItemPosition());
-                if (selectedId != taskStatus) {
-                    mTask.setTaskStatus(status.get(adapterView.getSelectedItemPosition()).getID());
-                }
+                mTask.setTaskStatus(selectedId);
             }
 
             @Override
@@ -268,19 +284,101 @@ public class TaskDetailsFragment extends Fragment {
         long start = TimeUtils.convertDateToMillisecond(task.getTaskStartTimeTarget(), SQL_T_FORMAT_NO_SECOND);
         long end = TimeUtils.convertDateToMillisecond(task.getTaskEndTimeTarget(), SQL_T_FORMAT_NO_SECOND);
 
-        int total = 1;
-        total += (end - start) / DAY_IN_MILLIS;
+        long total = 0;
+        total = (end - start) / DAY_IN_MILLIS;
+        total = total % DAY_IN_MILLIS;
 
         mTotalTimeTv.setText(String.format(Locale.getDefault(), "%d%s", total, getString(R.string.days)));
 
     }
 
-    private void initAttachFiles(TaskProgress task) {
+    private void initAttachFiles() {
 
+        final ArrayList<String> files = new ArrayList<>();
+        files.add("https://www.ets.org/Media/Tests/GRE/pdf/gre_research_validity_data.pdf");
+
+        files.add(files.get(0));
+        files.add(files.get(0));
+        files.add(files.get(0));
+
+        files.add(3, "http://personal.psu.edu/hyw5138/mini.jpg");
+
+        files.add(files.get(3));
+        files.add(files.get(3));
+        files.add(files.get(3));
+        files.add(files.get(3));
+        files.add(files.get(3));
+
+        final ArrayList<GalleryModel> galleryModels = new ArrayList<>();
+
+        for (String s : files) {
+
+            galleryModels.add(new GalleryModel(s, false));
+        }
+
+        GalleryAdapter adapter = new GalleryAdapter(galleryModels, new GalleryAdapter.GalleryAdapterListener() {
+            @Override
+            public void onImageClick(GalleryModel galleryModel) {
+                startGalleryActivity(files, "Task files");
+            }
+
+            @Override
+            public void onPdfClick(GalleryModel galleryModel) {
+                startGalleryActivity(files, "Task files");
+            }
+        }, getContext(), R.layout.item_task_gallery);
+
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        mAttachedFilesRv.setLayoutManager(layoutManager);
+
+        mAttachedFilesRv.setAdapter(adapter);
     }
 
-    private void initSeverity(TaskProgress task, TaskObjectForCreateOrEditContent editTaskObject) {
+    private void startGalleryActivity(List<String> fileUrl, String name) {
 
+        if (fileUrl != null && fileUrl.size() > 0) {
+
+            Intent galleryIntent = new Intent(getActivity(), GalleryActivity.class);
+
+            galleryIntent.putExtra(GalleryActivity.EXTRA_FILE_URL, (ArrayList<String>) fileUrl);
+
+            galleryIntent.putExtra(GalleryActivity.EXTRA_RECIPE_FILES_TITLE, name);
+
+//            mGalleryIntent.putExtra(GalleryActivity.EXTRA_RECIPE_PDF_FILES, mPdfList);
+
+            startActivityForResult(galleryIntent, GalleryActivity.EXTRA_GALLERY_CODE);
+
+        }
+    }
+
+    private void initSeverity(final List<TaskInfoObject> severities, final int selectedId, boolean editable) {
+        final ArrayList<SelectableString> severitiesObjects;
+        severitiesObjects = initSeveritiesSelectableString(severities, selectedId);
+        mSeverityRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        mSeverityRv.setHasFixedSize(true);
+        SeverityCheckBoxFilterAdapter severitiesAdapter = new SeverityCheckBoxFilterAdapter(severitiesObjects, new SeverityCheckBoxFilterAdapter.SeverityCheckBoxFilterAdapterListener() {
+            @Override
+            public void onItemCheck(SelectableString selectableString) {
+                mTask.setTaskPriorityID(Integer.parseInt(selectableString.getId()));
+            }
+        }, false, true, editable);
+        mSeverityRv.setAdapter(severitiesAdapter);
+    }
+
+    private ArrayList<SelectableString> initSeveritiesSelectableString(List<TaskInfoObject> editTaskObject, int selectedId) {
+        ArrayList<SelectableString> selectableStrings = new ArrayList<>();
+        for (TaskInfoObject taskInfoObject : editTaskObject) {
+            SelectableString selectableString = new SelectableString(TaskUtil.getPriorityName(taskInfoObject.getID(), getContext()),
+                    false, String.valueOf(taskInfoObject.getID()), TaskUtil.getPriorityColor(taskInfoObject.getID(), getContext()));
+            if (selectedId == taskInfoObject.getID()) {
+                selectableString.setSelected(true);
+            }
+            selectableStrings.add(selectableString);
+
+        }
+        return selectableStrings;
     }
 
     private void initListener(View view) {
@@ -300,8 +398,13 @@ public class TaskDetailsFragment extends Fragment {
         });
     }
 
-    private Task buildTask(TaskProgress task) {
-        return null;
+    private Task buildTask(TaskProgress taskProgress) {
+        Task task = new Task();
+//        task.setText(mDescriptionEt.getText().toString());
+//        task.setCreateUser(mDescriptionEt.getText().toString());
+//        task.setPriority(taskProgress.getTaskPriorityID());
+//        task.setSubject(taskProgress.get);
+        return task;
     }
 
     private void createTask(Task task) {

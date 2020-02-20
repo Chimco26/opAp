@@ -55,16 +55,16 @@ public class TaskUtil {
 
     }
 
-    public static boolean isFiltered(){
+    public static boolean isFiltered() {
         ArrayList<SelectableString> periodList = PersistenceManager.getInstance().getTaskFilterPeriodToShow();
-        for (SelectableString selectableString: periodList){
-            if (!selectableString.isSelected()){
+        for (SelectableString selectableString : periodList) {
+            if (!selectableString.isSelected()) {
                 return true;
             }
         }
         ArrayList<SelectableString> priorityList = PersistenceManager.getInstance().getTaskFilterPriorityToShow();
-        for (SelectableString selectableString: priorityList){
-            if (!selectableString.isSelected()){
+        for (SelectableString selectableString : priorityList) {
+            if (!selectableString.isSelected()) {
                 return true;
             }
         }
