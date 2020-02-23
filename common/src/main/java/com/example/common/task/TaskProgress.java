@@ -77,6 +77,9 @@ public class TaskProgress implements Parcelable {
     @SerializedName("SubjectTrans")
     @Expose
     private String subjectTrans;
+    @SerializedName("SubjectID")
+    @Expose
+    private int subjectId;
     @SerializedName("Text")
     @Expose
     private String text;
@@ -110,9 +113,29 @@ public class TaskProgress implements Parcelable {
     @SerializedName("EName")
     @Expose
     private String eName;
+    @SerializedName("EstimatedExecutionTime")
+    @Expose
+    private double estimatedExecutionTime;
 
     public TaskProgress(int taskID) {
         this.taskID = taskID;
+    }
+
+
+    public double getEstimatedExecutionTime() {
+        return estimatedExecutionTime;
+    }
+
+    public void setEstimatedExecutionTime(double estimatedExecutionTime) {
+        this.estimatedExecutionTime = estimatedExecutionTime;
+    }
+
+    public int getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(int subjectId) {
+        this.subjectId = subjectId;
     }
 
     public int getTaskID() {

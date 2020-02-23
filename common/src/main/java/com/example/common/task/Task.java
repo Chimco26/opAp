@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class Task {
 
+    @SerializedName("ID")
+    @Expose
+    private Integer ID;
     @SerializedName("HistoryID")
     @Expose
     private Integer historyID;
@@ -50,6 +53,14 @@ public class Task {
     }
 
     public Task() {
+    }
+
+    public Integer getID() {
+        return ID;
+    }
+
+    public void setID(Integer ID) {
+        this.ID = ID;
     }
 
     public Integer getHistoryID() {

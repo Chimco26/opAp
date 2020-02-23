@@ -19,6 +19,12 @@ public class TaskInfoObject {
         this.displayName = displayName;
     }
 
+    public TaskInfoObject(Integer iD, String name, String displayName) {
+        this.iD = iD;
+        this.name = name;
+        this.displayName = displayName;
+    }
+
     public int getID() {
         if (iD == null){
             return 0;
