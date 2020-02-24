@@ -25,6 +25,10 @@ public class TaskInfoObject {
         this.displayName = displayName;
     }
 
+    public TaskInfoObject(int id) {
+        this.iD = id;
+    }
+
     public int getID() {
         if (iD == null){
             return 0;

@@ -187,6 +187,9 @@ public class TaskProgress implements Parcelable {
     }
 
     public String getTaskStartTimeTarget() {
+        if (taskStartTimeTarget == null){
+            return "";
+        }
         return taskStartTimeTarget;
     }
 
@@ -195,6 +198,9 @@ public class TaskProgress implements Parcelable {
     }
 
     public String getTaskEndTimeTarget() {
+        if (taskEndTimeTarget == null){
+            return "";
+        }
         return taskEndTimeTarget;
     }
 

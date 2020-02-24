@@ -3514,15 +3514,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onPostActivateJobSuccess(StandardResponse response) {
 
-//                ProgressDialogManager.dismiss();
-
                 if (response == null) {
-
+                    ProgressDialogManager.dismiss();
                     StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
 
                 } else if (((StandardResponse) response).getError() != null) {
-
+                    ProgressDialogManager.dismiss();
                     StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject);
 

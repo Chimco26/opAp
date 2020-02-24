@@ -76,9 +76,9 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof TaskBoardFragmentListener){
+        if (context instanceof TaskBoardFragmentListener) {
             mListener = (TaskBoardFragmentListener) context;
-        }else {
+        } else {
             throw new RuntimeException(context.toString()
                     + " must implement TaskBoardFragmentListener");
         }
@@ -228,10 +228,10 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
         initFilterIcon();
     }
 
-    private void initFilterIcon(){
-        if (TaskUtil.isFiltered()){
+    private void initFilterIcon() {
+        if (TaskUtil.isFiltered()) {
             mFilterIc.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter_selected));
-        }else {
+        } else {
             mFilterIc.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter_default));
         }
     }
@@ -420,7 +420,7 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
             @Override
             public void onUpdateTaskStatusCallbackSuccess(StandardResponse response) {
                 ProgressDialogManager.dismiss();
-                //update original list to perform filtering
+                taskProgress.setTaskStatus(mColumnsObjectList.get(toColumn).getId());
                 mColumnsObjectList.get(fromColumn).getAdapter().getList().remove(taskProgress);
                 mColumnsObjectList.get(toColumn).getAdapter().getList().add(taskProgress);
                 //reorder
@@ -479,6 +479,10 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
         mListener.onTaskClicked(taskProgress);
     }
 
+    public void refresh() {
+        getTaskList();
+    }
+
     private class ColumnObject {
         TaskColumnAdapter adapter;
         String name;
@@ -504,7 +508,7 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
     }
 
 
-    public interface TaskBoardFragmentListener{
+    public interface TaskBoardFragmentListener {
         void onTaskClicked(TaskProgress taskProgress);
 
         void onCreateTask();

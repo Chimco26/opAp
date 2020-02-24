@@ -11,7 +11,9 @@ import com.example.common.request.BaseRequest;
 import com.example.common.request.MachineIdRequest;
 import com.example.common.task.CreateTaskHistoryRequest;
 import com.example.common.task.CreateTaskRequest;
+import com.example.common.task.GetTaskFilesRequest;
 import com.example.common.task.TaskDefaultRequest;
+import com.example.common.task.TaskFilesResponse;
 import com.example.common.task.TaskListResponse;
 import com.example.common.task.TaskObjectsForCreateOrEditResponse;
 
@@ -46,5 +48,8 @@ public interface EmeraldGetSimple {
 
     @POST("/LeaderMESApi/CreateTaskHistory")
     Call<StandardResponse> updateTaskStatus(@Body CreateTaskHistoryRequest request);
+
+    @POST("/LeaderMESApi/GetTaskFiles")
+    Call<TaskFilesResponse> getTaskFiles(@Body GetTaskFilesRequest request);
 }
 

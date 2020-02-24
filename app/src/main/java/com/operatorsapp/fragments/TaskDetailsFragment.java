@@ -1,6 +1,7 @@
 package com.operatorsapp.fragments;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -23,21 +24,26 @@ import com.example.common.SelectableString;
 import com.example.common.StandardResponse;
 import com.example.common.callback.CreateTaskCallback;
 import com.example.common.task.Task;
+import com.example.common.task.TaskFilesResponse;
 import com.example.common.task.TaskInfoObject;
 import com.example.common.task.TaskObjectForCreateOrEditContent;
 import com.example.common.task.TaskObjectsForCreateOrEditResponse;
 import com.example.common.task.TaskProgress;
+import com.operators.reportrejectnetworkbridge.interfaces.GetTaskFilesCallback;
 import com.operators.reportrejectnetworkbridge.interfaces.GetTaskObjectsForCreateCallback;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.GalleryActivity;
+import com.operatorsapp.activities.TaskActivity;
 import com.operatorsapp.adapters.GalleryAdapter;
 import com.operatorsapp.adapters.SeverityCheckBoxFilterAdapter;
 import com.operatorsapp.adapters.TaskInfoObjectSpinnerAdapter;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.GalleryModel;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.InputFilterMinMax;
+import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.TaskUtil;
 import com.operatorsapp.utils.TimeUtils;
@@ -63,12 +69,14 @@ public class TaskDetailsFragment extends Fragment {
     private Spinner mSubjectSpinner;
     private Spinner mStatusSpinner;
     private EditText mDescriptionEt;
-    private TextView mTimeHr;
+    private EditText mTimeHr;
+    private EditText mTimeMin;
     private RecyclerView mSeverityRv;
     private RecyclerView mAttachedFilesRv;
     private View mAttachedFilesTv;
     private int initialStatus;
-    private EditText mTimeMin;
+    private TextView mSaveBtn;
+    private TaskDetailsFragmentListener mListener;
 
     public static TaskDetailsFragment newInstance(TaskProgress taskProgress) {
         TaskDetailsFragment taskDetailsFragment = new TaskDetailsFragment();
@@ -79,16 +87,26 @@ public class TaskDetailsFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        if (context instanceof TaskDetailsFragmentListener) {
+            mListener = (TaskDetailsFragmentListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement TaskDetailsFragmentListener");
+        }
+        super.onAttach(context);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         if (getArguments() != null && getArguments().containsKey(TaskProgress.TAG)) {
             mTask = (TaskProgress) getArguments().get(TaskProgress.TAG);
         }
         if (mTask == null) {
             mTask = new TaskProgress();
-            mTask.setTaskLevel(3);
             mTask.setHistoryCreateDate(TimeUtils.getDate(new Date().getTime(), SQL_T_FORMAT_NO_SECOND));
             mTask.setTaskCreateUser(Integer.parseInt(PersistenceManager.getInstance().getOperatorId()));
-        }else {
+        } else {
             initialStatus = mTask.getTaskStatus();
         }
         super.onCreate(savedInstanceState);
@@ -123,45 +141,78 @@ public class TaskDetailsFragment extends Fragment {
         mSeverityRv = view.findViewById(R.id.FTD_severity_rv);
         mAttachedFilesRv = view.findViewById(R.id.FTD_attached_files_rv);
         mAttachedFilesTv = view.findViewById(R.id.FTD_attached_files_tv);
+        mSaveBtn = view.findViewById(R.id.FTD_add_task_btn);
     }
 
     private void initView(TaskProgress task, TaskObjectForCreateOrEditContent editTaskObject) {
         if (task.getTaskID() == 0) {
+            mSaveBtn.setText(getString(R.string.add_task));
             mTitleTv.setText(getString(R.string.add_new_task));
             mDateTv.setText(TimeUtils.getDate(new Date().getTime(), ONLY_DATE_FORMAT));
             mAuthorTv.setText(PersistenceManager.getInstance().getOperatorName());
             initStatusSpinner(editTaskObject.getStatus(), editTaskObject.getStatus().get(0).getID());
+            initSeverity(editTaskObject.getPriority(), TaskProgress.TaskPriority.MEDIUM.getValue(), true);
             initSubjectSpinner(editTaskObject.getSubjects(), editTaskObject.getSubjects().get(0).getID());
-            initSeverity(editTaskObject.getPriority(), TaskProgress.TaskStatus.TODO.getValue(), true);
             initLevelSpinner(getMachineLevel(editTaskObject.getLevel()));
             initStartAndEndTimeViews();
             initTotalTime(task);
             mAttachedFilesTv.setVisibility(View.GONE);
         } else {
-            mDescriptionEt.setEnabled(false);
-            mDescriptionEt.setFocusable(false);
+            mSaveBtn.setText(getString(R.string.save));
             mTitleTv.setText(getString(R.string.edit_task));
+            mDescriptionEt.setText(task.getText());
             mDateTv.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(task.getTaskCreateDate(),
                     SQL_T_FORMAT_NO_SECOND), ONLY_DATE_FORMAT));
-            mStartDate.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(task.getTaskStartTimeTarget(),
-                    SQL_T_FORMAT_NO_SECOND), ONLY_DATE_FORMAT));
-            mEndDate.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(task.getTaskEndTimeTarget(),
-                    SQL_T_FORMAT_NO_SECOND), ONLY_DATE_FORMAT));
             mAuthorTv.setText(String.valueOf(task.getTaskCreateUser()));
-            initSeverity(editTaskObject.getPriority(), task.getTaskStatus(), false);
-            initAttachFiles();
+            if (task.getTaskStartTimeTarget() != null && !task.getTaskStartTimeTarget().isEmpty()
+                    && !task.getTaskStartTimeTarget().equals("0")) {
+                mStartDate.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(task.getTaskStartTimeTarget(),
+                        SQL_T_FORMAT_NO_SECOND), ONLY_DATE_FORMAT));
+            }
+            if (task.getTaskEndTimeTarget() != null && !task.getTaskEndTimeTarget().isEmpty()
+                    && !task.getTaskEndTimeTarget().equals("0")) {
+                mEndDate.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(task.getTaskEndTimeTarget(),
+                        SQL_T_FORMAT_NO_SECOND), ONLY_DATE_FORMAT));
+            }
+            getTaskFiles(task.getTaskID());
             initTotalTime(task);
-            initStatusSpinner(editTaskObject.getStatus(), task.getTaskStatus());
-            List<TaskInfoObject> subjects = new ArrayList<>();
-            subjects.add(new TaskInfoObject(task.getSubjectTrans()));
-            initSubjectSpinner(subjects, task.getSubjectId());
-            initLevelSpinner(new TaskInfoObject(String.valueOf(task.getTaskLevel())));
+            initLevelSpinner(getMachineLevel(editTaskObject.getLevel()));
+            if (task.getTaskCreateUser() != Integer.parseInt(PersistenceManager.getInstance().getOperatorId())) {
+                disableEditText(mDescriptionEt);
+                disableEditText(mTimeMin);
+                disableEditText(mTimeHr);
+                initSeverity(editTaskObject.getPriority(), task.getTaskPriorityID(), false);
+                List<TaskInfoObject> status = removeIdFromInfoObjectList(editTaskObject.getStatus(), TaskProgress.TaskStatus.CANCELLED.getValue());
+                initStatusSpinner(status, task.getTaskStatus());
+                List<TaskInfoObject> subjects = new ArrayList<>();
+                subjects.add(new TaskInfoObject(task.getSubjectTrans()));
+                initSubjectSpinner(subjects, task.getSubjectId());
+            } else {
+                initSeverity(editTaskObject.getPriority(), task.getTaskPriorityID(), true);
+                initStatusSpinner(editTaskObject.getStatus(), task.getTaskStatus());
+                initSubjectSpinner(editTaskObject.getSubjects(), task.getSubjectId());
+                initStartAndEndTimeViews();
+            }
         }
     }
 
+    private List<TaskInfoObject> removeIdFromInfoObjectList(List<TaskInfoObject> status, int statusToRemove) {
+        for (TaskInfoObject taskInfoObject : status) {
+            if (taskInfoObject.getID() == statusToRemove) {
+                status.remove(taskInfoObject);
+            }
+        }
+        return status;
+    }
+
+    private void disableEditText(EditText editText) {
+        editText.setEnabled(false);
+        editText.setFocusable(false);
+    }
+
     private TaskInfoObject getMachineLevel(List<TaskInfoObject> level) {
-        for (TaskInfoObject taskInfoObject: level){
-            if (taskInfoObject.getID() == 3){
+        for (TaskInfoObject taskInfoObject : level) {
+            if (taskInfoObject.getID() == 3) {
                 return taskInfoObject;
             }
         }
@@ -172,22 +223,20 @@ public class TaskDetailsFragment extends Fragment {
     private void initStartAndEndTimeViews() {
         final long[] start = new long[1];
         final long[] end = new long[1];
-        if (mTask.getTaskStartTimeTarget() != null) {
+        if (!mTask.getTaskStartTimeTarget().isEmpty()) {
             start[0] = TimeUtils.convertDateToMillisecond(mTask.getTaskStartTimeTarget(), SQL_T_FORMAT_NO_SECOND);
             mStartDate.setText(TimeUtils.getDate(
                     start[0], ONLY_DATE_FORMAT));
         } else {
             start[0] = new Date().getTime();
-            mStartDate.setText(TimeUtils.getDate(start[0], ONLY_DATE_FORMAT));
         }
 
-        if (mTask.getTaskEndTimeTarget() != null) {
+        if (!mTask.getTaskEndTimeTarget().isEmpty()) {
             end[0] = TimeUtils.convertDateToMillisecond(mTask.getTaskEndTimeTarget(), SQL_T_FORMAT_NO_SECOND);
             mEndDate.setText(TimeUtils.getDate(
                     end[0], ONLY_DATE_FORMAT));
         } else {
             end[0] = new Date().getTime();
-            mEndDate.setText(TimeUtils.getDate(end[0], ONLY_DATE_FORMAT));
         }
 
         mStartDate.setOnClickListener(new View.OnClickListener() {
@@ -209,7 +258,10 @@ public class TaskDetailsFragment extends Fragment {
                                 ONLY_DATE_FORMAT));
                     }
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-                datePickerDialog.getDatePicker().setMaxDate(end[0]);
+                if (!mTask.getTaskEndTimeTarget().isEmpty()) {
+                    datePickerDialog.getDatePicker().setMaxDate(end[0]);
+                }
+                datePickerDialog.getDatePicker().setMinDate(new Date().getTime());
                 datePickerDialog.show();
             }
         });
@@ -227,9 +279,9 @@ public class TaskDetailsFragment extends Fragment {
                         calendar.set(Calendar.DAY_OF_MONTH, i2);
                         end[0] = calendar.getTime().getTime();
                         mTask.setTaskEndTimeTarget(TimeUtils.getDate(end[0], SQL_T_FORMAT_NO_SECOND));
-                                mEndDate.setText(TimeUtils.getDate(
-                                        TimeUtils.convertDateToMillisecond(mTask.getTaskEndTimeTarget(), SQL_T_FORMAT_NO_SECOND),
-                                        ONLY_DATE_FORMAT));
+                        mEndDate.setText(TimeUtils.getDate(
+                                TimeUtils.convertDateToMillisecond(mTask.getTaskEndTimeTarget(), SQL_T_FORMAT_NO_SECOND),
+                                ONLY_DATE_FORMAT));
                     }
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.getDatePicker().setMinDate(start[0]);
@@ -259,25 +311,32 @@ public class TaskDetailsFragment extends Fragment {
         });
     }
 
-    private void initSubjectSpinner(final List<TaskInfoObject> subjects, int subjectId) {
+    private void initSubjectSpinner(final List<TaskInfoObject> subjects, final int subjectId) {
         mTask.setSubjectId(subjectId);
         final TaskInfoObjectSpinnerAdapter dataAdapter = new TaskInfoObjectSpinnerAdapter(getActivity(), R.layout.base_spinner_item, subjects);
         dataAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSubjectSpinner.setAdapter(dataAdapter);
-        mSubjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mSubjectSpinner.post(new Runnable() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                dataAdapter.setTitle(adapterView.getSelectedItemPosition());
-                mTask.setSubjectTrans(subjects.get(adapterView.getSelectedItemPosition()).getName());
-                mTask.setSubjectId(subjects.get(adapterView.getSelectedItemPosition()).getID());
-            }
+            public void run() {
+                mSubjectSpinner.setSelection(getInfoObjectSelectedPosition(subjects, subjectId));
+                mSubjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        dataAdapter.setTitle(adapterView.getSelectedItemPosition());
+                        mTask.setSubjectTrans(subjects.get(adapterView.getSelectedItemPosition()).getName());
+                        mTask.setSubjectId(subjects.get(adapterView.getSelectedItemPosition()).getID());
+                    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
 
+                    }
+                });
             }
         });
+
     }
 
     private void initStatusSpinner(final List<TaskInfoObject> status, final int taskStatus) {
@@ -286,50 +345,63 @@ public class TaskDetailsFragment extends Fragment {
         dataAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mStatusSpinner.setAdapter(dataAdapter);
-        mStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mStatusSpinner.post(new Runnable() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                int selectedId = status.get(adapterView.getSelectedItemPosition()).getID();
-                dataAdapter.setTitle(adapterView.getSelectedItemPosition());
-                mTask.setTaskStatus(selectedId);
-            }
+            public void run() {
+                mStatusSpinner.setSelection(getInfoObjectSelectedPosition(status, taskStatus));
+                mStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        int selectedId = status.get(adapterView.getSelectedItemPosition()).getID();
+                        dataAdapter.setTitle(adapterView.getSelectedItemPosition());
+                        mTask.setTaskStatus(selectedId);
+                    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
 
+                    }
+                });
             }
         });
     }
 
+    private int getInfoObjectSelectedPosition(List<TaskInfoObject> status, int taskStatus) {
+        for (int i = 0; i < status.size(); i++) {
+            if (status.get(i).getID() == taskStatus) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     private void initTotalTime(TaskProgress task) {
-        int hours = ((int)task.getEstimatedExecutionTime());
-        int min = (int) ((task.getEstimatedExecutionTime()) - ((int)task.getEstimatedExecutionTime()));
-        mTimeHr.setText(String.valueOf(hours));
-        mTimeMin.setText(String.valueOf(min));
+        if (task.getEstimatedExecutionTime() > 0) {
+            int hours = ((int) task.getEstimatedExecutionTime());
+            int min = (int) ((task.getEstimatedExecutionTime()) - ((int) task.getEstimatedExecutionTime()));
+            mTimeHr.setText(String.valueOf(hours));
+            mTimeMin.setText(String.valueOf(min));
+        }
         mTimeMin.setFilters(new InputFilter[]{new InputFilterMinMax(0, 60)});
     }
 
-    private void initAttachFiles() {
+    private void initAttachFiles(TaskFilesResponse taskFiles) {
 
+        if (taskFiles == null || taskFiles.getResponseDictionaryDT() == null
+                || taskFiles.getResponseDictionaryDT().getTaskFiles() == null || taskFiles.getResponseDictionaryDT().getTaskFiles().isEmpty()) {
+            mAttachedFilesTv.setVisibility(View.GONE);
+            return;
+        } else {
+            mAttachedFilesTv.setVisibility(View.VISIBLE);
+        }
         final ArrayList<String> files = new ArrayList<>();
-        files.add("https://www.ets.org/Media/Tests/GRE/pdf/gre_research_validity_data.pdf");
-
-        files.add(files.get(0));
-        files.add(files.get(0));
-        files.add(files.get(0));
-
-        files.add(3, "http://personal.psu.edu/hyw5138/mini.jpg");
-
-        files.add(files.get(3));
-        files.add(files.get(3));
-        files.add(files.get(3));
-        files.add(files.get(3));
-        files.add(files.get(3));
-
         final ArrayList<GalleryModel> galleryModels = new ArrayList<>();
 
-        for (String s : files) {
+        for (TaskFilesResponse.TaskFiles filePath : taskFiles.getResponseDictionaryDT().getTaskFiles()) {
+            files.add(filePath.getFilePath());
+        }
 
+        for (String s : files) {
             galleryModels.add(new GalleryModel(s, false));
         }
 
@@ -371,6 +443,7 @@ public class TaskDetailsFragment extends Fragment {
     }
 
     private void initSeverity(final List<TaskInfoObject> severities, final int selectedId, boolean editable) {
+        mTask.setTaskPriorityID(selectedId);
         final ArrayList<SelectableString> severitiesObjects;
         severitiesObjects = initSeveritiesSelectableString(severities, selectedId);
         mSeverityRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -410,7 +483,10 @@ public class TaskDetailsFragment extends Fragment {
         view.findViewById(R.id.FTD_add_task_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createTask(buildTask(mTask));
+                Task task = buildTask(mTask);
+                if (task != null) {
+                    createTask(task);
+                }
             }
         });
     }
@@ -423,15 +499,35 @@ public class TaskDetailsFragment extends Fragment {
         task.setSubject(taskProgress.getSubjectId());
         task.setText(mDescriptionEt.getText().toString());
         task.setTaskLevel(taskProgress.getTaskLevel());
+        task.setTaskLevelObjectID(PersistenceManager.getInstance().getMachineId());
         task.setPriority(taskProgress.getTaskPriorityID());
         task.setAssignee(taskProgress.getAssignee());
-        task.setStartTimeTarget(taskProgress.getTaskStartTimeTarget());
-        task.setEndTimeTarget(taskProgress.getTaskEndTimeTarget());
-        task.setEstimatedExecutionTime(Integer.parseInt(mTimeHr.getText().toString()) + Integer.valueOf(mTimeMin.getText().toString())/100d);
-        if (taskProgress.getTaskStatus() != initialStatus){
+        task.setStartTimeTarget(taskProgress.getTaskStartTimeTarget().replace("T", " "));
+        task.setEndTimeTarget(taskProgress.getTaskEndTimeTarget().replace("T", " "));
+        double totalTime;
+        totalTime = getTotalTime();
+//        if (totalTime == 0){
+//            Toast.makeText(getContext(), "you need to fill total time", Toast.LENGTH_SHORT).show();
+//            return null;
+//        }else {
+        task.setEstimatedExecutionTime(totalTime);
+//        }
+        if (taskProgress.getTaskStatus() != initialStatus) {
             task.setStatus(taskProgress.getTaskStatus());
+        } else {
+            task.setStatus(0);
         }
         return task;
+    }
+
+    private double getTotalTime() {
+        double totalTime;
+        try {
+            totalTime = Integer.parseInt(mTimeHr.getText().toString()) + Integer.valueOf(mTimeMin.getText().toString()) / 100d;
+        } catch (NumberFormatException e) {
+            totalTime = 0;
+        }
+        return totalTime;
     }
 
     private void createTask(Task task) {
@@ -441,11 +537,15 @@ public class TaskDetailsFragment extends Fragment {
             @Override
             public void onCreateTaskCallbackSuccess(StandardResponse response) {
                 ProgressDialogManager.dismiss();
+                ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
+                mListener.onUpdate();
             }
 
             @Override
             public void onCreateTaskCallbackFailed(StandardResponse reason) {
                 ProgressDialogManager.dismiss();
+                String error = reason.getError().getErrorDesc();
+                ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(), error, CroutonCreator.CroutonType.CREDENTIALS_ERROR);
             }
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
     }
@@ -469,6 +569,21 @@ public class TaskDetailsFragment extends Fragment {
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
     }
 
+    private void getTaskFiles(int taskID) {
+        PersistenceManager pm = PersistenceManager.getInstance();
+        SimpleRequests.getTaskFiles(taskID, pm.getSiteUrl(), new GetTaskFilesCallback() {
+            @Override
+            public void onGetTaskFilesCallbackSuccess(TaskFilesResponse response) {
+                initAttachFiles(response);
+            }
+
+            @Override
+            public void onGetTaskFilesCallbackFailed(StandardResponse reason) {
+                mAttachedFilesTv.setVisibility(View.GONE);
+            }
+        }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
+    }
+
     private void removeOpenStatus(List<TaskInfoObject> status) {
         for (TaskInfoObject taskInfoObject : status) {
             if (taskInfoObject.getID() == 1) {
@@ -476,6 +591,10 @@ public class TaskDetailsFragment extends Fragment {
                 return;
             }
         }
+    }
+
+    public interface TaskDetailsFragmentListener {
+        void onUpdate();
     }
 
 }
