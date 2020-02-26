@@ -17,6 +17,7 @@ public class TaskProgress implements Parcelable {
     }
 
     public enum TaskStatus {
+        OPEN(1),
         TODO(2),
         IN_PROGRESS(3),
         DONE(4),
@@ -187,7 +188,7 @@ public class TaskProgress implements Parcelable {
     }
 
     public String getTaskStartTimeTarget() {
-        if (taskStartTimeTarget == null){
+        if (taskStartTimeTarget == null) {
             return "";
         }
         return taskStartTimeTarget;
@@ -198,7 +199,7 @@ public class TaskProgress implements Parcelable {
     }
 
     public String getTaskEndTimeTarget() {
-        if (taskEndTimeTarget == null){
+        if (taskEndTimeTarget == null) {
             return "";
         }
         return taskEndTimeTarget;
@@ -249,6 +250,9 @@ public class TaskProgress implements Parcelable {
     }
 
     public String getHistoryDisplayName() {
+        if (historyDisplayName == null) {
+            return "";
+        }
         return historyDisplayName;
     }
 
@@ -328,13 +332,13 @@ public class TaskProgress implements Parcelable {
         long taskEndTime = TimeUtils.convertDateToMillisecond(taskEndTimeTarget, TimeUtils.SQL_T_FORMAT_NO_SECOND);
         switch (status) {
             case 2:
-                if (taskStartTime <= timeStamp) {
+                if (taskStartTime != 0 && taskStartTime <= timeStamp) {
                     return true;
                 }
                 break;
             case 3:
             case 4:
-                if (taskEndTime <= timeStamp) {
+                if (taskEndTime != 0 && taskEndTime <= timeStamp) {
                     return true;
                 }
                 break;

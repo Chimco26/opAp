@@ -2,12 +2,12 @@ package com.operatorsapp.fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +40,7 @@ import com.operatorsapp.dialogs.TaskFilterDialog;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.TaskUtil;
 import com.woxthebox.draglistview.BoardView;
@@ -137,8 +138,8 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
         initOrderBySpinner((Spinner) view.findViewById(R.id.FTB_order_by_spinner));
     }
 
-    private void initOrderBySpinner(Spinner spinner) {
-        List<String> list = new ArrayList<>();
+    private void initOrderBySpinner(final Spinner spinner) {
+        final List<String> list = new ArrayList<>();
         list.add(getString(R.string.date));
         list.add(getString(R.string.priority));
         final SimpleSpinnerAdapter dataAdapter = new SimpleSpinnerAdapter(getActivity(), R.layout.base_spinner_item, list);
@@ -147,11 +148,13 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
         spinner.setAdapter(dataAdapter);
         if (!isOrderByDate) {
             spinner.setSelection(1, false);
+            dataAdapter.setTitle(1);
         }
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                dataAdapter.setTitle(i);
                 switch (i) {
                     case 0:
                         isOrderByDate = true;
@@ -220,11 +223,21 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
 
             }
         });
+        ((EditText) view.findViewById(R.id.FTB_search_et)).setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == KeyEvent.ACTION_DOWN){
+                    KeyboardUtils.closeKeyboard(getActivity());
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     public void initView(@NonNull View view) {
         ((TextView) view.findViewById(R.id.FTB_title_tv)).setText(String.format(Locale.getDefault(),
-                "%s - %d", getString(R.string.task_manager), PersistenceManager.getInstance().getMachineId()));
+                "%s - %s", getString(R.string.task_manager), PersistenceManager.getInstance().getMachineName()));
         initFilterIcon();
     }
 
@@ -238,7 +251,7 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
 
     private void initColumns(String name, List<TaskProgress> taskProgress, int id, long minDateToShow) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        int backgroundColor = ContextCompat.getColor(getContext(), R.color.white);
+        int backgroundColor = ContextCompat.getColor(getContext(), R.color.C2);
 
         LinearLayout view = initHeaderListView(name);
 
@@ -247,7 +260,7 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
         ColumnProperties columnProperties = ColumnProperties.Builder.newBuilder(listAdapter)
                 .setLayoutManager(layoutManager)
                 .setHasFixedItemSize(false)
-                .setColumnBackgroundColor(Color.TRANSPARENT)
+                .setColumnBackgroundColor(backgroundColor)
                 .setItemsSectionBackgroundColor(backgroundColor)
                 .setHeader(view)
 //                .setColumnDrugView(textView)
@@ -363,6 +376,7 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
                 List<TaskProgress> taskList = response.getResponseDictionaryDT().getTaskProgress();
                 initColumnLists();
                 createColumnsLists(taskList);
+                mBoardView.clearBoard();
                 initColumns(getString(R.string.todo), mTodoList, TaskProgress.TaskStatus.TODO.getValue(), 0);
                 initColumns(getString(R.string.in_progress), mInProgressList, TaskProgress.TaskStatus.IN_PROGRESS.getValue(), 0);
                 initColumns(getString(R.string.done_for_task), mDoneList, TaskProgress.TaskStatus.DONE.getValue(), new Date().getTime() - DAY_IN_MILLIS);

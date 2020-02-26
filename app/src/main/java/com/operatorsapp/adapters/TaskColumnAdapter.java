@@ -27,7 +27,7 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
         implements Filterable {
 
     private LinearLayout headerView;
-    private String mSearchExpression = "";
+    private static String mSearchExpression = "";
     private List<TaskProgress> list;
     private TaskFilter mFilter = new TaskFilter();
     private List<TaskProgress> mListFiltered = new ArrayList<>();

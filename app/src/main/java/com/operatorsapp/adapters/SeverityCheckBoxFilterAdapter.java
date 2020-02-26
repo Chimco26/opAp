@@ -37,7 +37,7 @@ public class SeverityCheckBoxFilterAdapter extends RecyclerView.Adapter<Severity
     public SeverityCheckBoxFilterAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        return new SeverityCheckBoxFilterAdapter.ViewHolder(inflater.inflate(R.layout.item_check_box, parent, false));
+        return new SeverityCheckBoxFilterAdapter.ViewHolder(inflater.inflate(R.layout.item_check_box_horizontal_match_parent, parent, false));
     }
 
     @Override

@@ -104,7 +104,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.8"
+            android:layout_weight="0.7"
             android:maxLines="1"
             android:gravity="center_vertical"
             android:text="@string/order_by"
@@ -114,7 +114,7 @@
             android:id="@+id/reject_reason_rl"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="1.1"
             android:background="@drawable/edit_text_background_selector">
 
             <Spinner
@@ -140,7 +140,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.8"
+                android:layout_weight="0.6"
                 android:maxLines="1"
                 android:gravity="center_vertical"
                 android:text="@string/filter_by"
@@ -150,7 +150,7 @@
                 android:id="@+id/FTB_filter_ic"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.35"
+                android:layout_weight="0.55"
                 android:src="@drawable/ic_filter_default" />
 
         </LinearLayout>
@@ -178,6 +178,7 @@
                 android:background="@drawable/box_grey_stroke_except_right"
                 android:gravity="center_vertical"
                 android:hint="@string/search_tasks"
+                android:imeOptions="actionDone"
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp"
                 android:singleLine="true"
