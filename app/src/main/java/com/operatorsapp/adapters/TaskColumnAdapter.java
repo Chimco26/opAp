@@ -72,12 +72,12 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
         super.onBindViewHolder(holder, position);
         holder.mTitle.setText(String.valueOf(mListFiltered.get(position).getSubjectTrans()));
         holder.mText.setText(mListFiltered.get(position).getText());
-        String delegate = mListFiltered.get(position).getHistoryDisplayName();
+        String delegate = mListFiltered.get(position).getAssigneeDisplayName();
         if (delegate == null || delegate.isEmpty()) {
             holder.mDelegate.setVisibility(View.INVISIBLE);
         } else {
             holder.mDelegate.setVisibility(View.VISIBLE);
-            holder.mDelegate.setText(mListFiltered.get(position).getHistoryDisplayName2Chars());
+            holder.mDelegate.setText(mListFiltered.get(position).getAssigneDisplayName2Chars());
         }
 
         holder.mPriorityIc.setColorFilter(TaskUtil.getPriorityColor(mListFiltered.get(position).getTaskPriorityID(), holder.mPriorityIc.getContext()));

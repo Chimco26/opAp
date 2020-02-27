@@ -17,11 +17,15 @@ public class TaskHistory {
     @SerializedName("SourceTaskCreationPlatform")
     @Expose
     private final Integer sourceTaskCreationPlatform = 3;
+    @SerializedName("HistoryUserID")
+    @Expose
+    private String historyUserID;
 
-    public TaskHistory(Integer taskID, Integer status, Integer assignee) {
+    public TaskHistory(Integer taskID, Integer status, Integer assignee, String operatorId) {
         this.taskID = taskID;
         this.status = status;
         this.assignee = assignee;
+        this.historyUserID = operatorId;
     }
 
     public Integer getTaskID() {

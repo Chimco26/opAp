@@ -409,20 +409,22 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
     }
 
     private void createColumnsLists(List<TaskProgress> taskList) {
-        for (TaskProgress task : taskList) {
-            switch (task.getTaskStatus()) {
-                case 2:
-                    mTodoList.add(task);
-                    break;
-                case 3:
-                    mInProgressList.add(task);
-                    break;
-                case 4:
-                    mDoneList.add(task);
-                    break;
-                case 5:
-                    mCancelledList.add(task);
-                    break;
+        if (taskList != null) {
+            for (TaskProgress task : taskList) {
+                switch (task.getTaskStatus()) {
+                    case 2:
+                        mTodoList.add(task);
+                        break;
+                    case 3:
+                        mInProgressList.add(task);
+                        break;
+                    case 4:
+                        mDoneList.add(task);
+                        break;
+                    case 5:
+                        mCancelledList.add(task);
+                        break;
+                }
             }
         }
     }
@@ -485,7 +487,7 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
     }
 
     private TaskHistory createHistoryObject(TaskProgress taskProgress, int toColumn) {
-        return new TaskHistory(taskProgress.getTaskID(), mColumnsObjectList.get(toColumn).getId(), taskProgress.getAssignee());
+        return new TaskHistory(taskProgress.getTaskID(), mColumnsObjectList.get(toColumn).getId(), taskProgress.getAssignee(), PersistenceManager.getInstance().getOperatorId());
     }
 
     @Override

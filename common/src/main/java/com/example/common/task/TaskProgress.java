@@ -63,6 +63,18 @@ public class TaskProgress implements Parcelable {
     @SerializedName("TaskCreateUser")
     @Expose
     private int taskCreateUser;
+    @SerializedName("CreateUserName")
+    @Expose
+    private String createUserName;
+    @SerializedName("CreateUserHName")
+    @Expose
+    private String createUserHName;
+    @SerializedName("AssigneeDisplayName")
+    @Expose
+    private String assigneeDisplayName;
+    @SerializedName("AssigneeDisplayHName")
+    @Expose
+    private String assigneeDisplayHName;
     @SerializedName("Assignee")
     @Expose
     private int assignee;
@@ -122,6 +134,41 @@ public class TaskProgress implements Parcelable {
         this.taskID = taskID;
     }
 
+
+    public String getAssigneeDisplayName() {
+        if (assigneeDisplayName == null){
+            return "";
+        }
+        return assigneeDisplayName;
+    }
+
+    public void setAssigneeDisplayName(String assigneeDisplayName) {
+        this.assigneeDisplayName = assigneeDisplayName;
+    }
+
+    public String getAssigneeDisplayHName() {
+        return assigneeDisplayHName;
+    }
+
+    public void setAssigneeDisplayHName(String assigneeDisplayHName) {
+        this.assigneeDisplayHName = assigneeDisplayHName;
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
+    public String getCreateUserHName() {
+        return createUserHName;
+    }
+
+    public void setCreateUserHName(String createUserHName) {
+        this.createUserHName = createUserHName;
+    }
 
     public double getEstimatedExecutionTime() {
         return estimatedExecutionTime;
@@ -308,9 +355,9 @@ public class TaskProgress implements Parcelable {
         this.eName = eName;
     }
 
-    public String getHistoryDisplayName2Chars() {
-        if (historyDisplayName.contains(" ")) {
-            String[] strings = historyDisplayName.split(" ");
+    public String getAssigneDisplayName2Chars() {
+        if (assigneeDisplayName.contains(" ")) {
+            String[] strings = assigneeDisplayName.split(" ");
             String result = "";
             if (strings[0] != null && strings[0].length() > 0) {
                 result += String.valueOf(strings[0].charAt(0)).toUpperCase();
@@ -320,7 +367,7 @@ public class TaskProgress implements Parcelable {
             }
             return result;
         } else {
-            return String.valueOf(historyDisplayName.charAt(0));
+            return String.valueOf(assigneeDisplayName.charAt(0));
         }
     }
 
@@ -337,7 +384,6 @@ public class TaskProgress implements Parcelable {
                 }
                 break;
             case 3:
-            case 4:
                 if (taskEndTime != 0 && taskEndTime <= timeStamp) {
                     return true;
                 }

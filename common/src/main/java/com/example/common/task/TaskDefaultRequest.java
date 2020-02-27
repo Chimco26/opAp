@@ -10,9 +10,13 @@ public class TaskDefaultRequest {
     @SerializedName("SessionID")
     @Expose
     private String sessionID;
+    @SerializedName("MachineID")
+    @Expose
+    private int machineId;
 
-    public TaskDefaultRequest(String sessionId) {
-        this.sessionID = sessionId;
+    public TaskDefaultRequest(String sessionID, int machineId) {
+        this.sessionID = sessionID;
+        this.machineId = machineId;
     }
 
     public Integer getSourceTaskCreationPlatform() {

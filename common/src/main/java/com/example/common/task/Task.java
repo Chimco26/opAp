@@ -11,6 +11,9 @@ public class Task {
     @SerializedName("HistoryID")
     @Expose
     private Integer historyID;
+    @SerializedName("HistoryUserID")
+    @Expose
+    private String historyUserID;
     @SerializedName("CreateUser")
     @Expose
     private Integer createUser;
@@ -61,6 +64,14 @@ public class Task {
 
     public void setID(Integer ID) {
         this.ID = ID;
+    }
+
+    public String getHistoryUserID() {
+        return historyUserID;
+    }
+
+    public void setHistoryUserID(String historyUserID) {
+        this.historyUserID = historyUserID;
     }
 
     public Integer getHistoryID() {

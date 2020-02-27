@@ -7,7 +7,7 @@ import java.util.List;
 
 public class TaskListContentResponse {
 
-    @SerializedName("TaskProgress")
+    @SerializedName("Tasks")
     @Expose
     private List<TaskProgress> taskProgress = null;
 

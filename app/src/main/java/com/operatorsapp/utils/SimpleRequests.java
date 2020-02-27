@@ -907,8 +907,9 @@ public class SimpleRequests {
 
         final int[] retryCount = {0};
 
+        PersistenceManager persistenceManager = PersistenceManager.getInstance();
         Call<TaskListResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
-                requestTimeout, TimeUnit.SECONDS).getTaskList(new TaskDefaultRequest(PersistenceManager.getInstance().getSessionId()));
+                requestTimeout, TimeUnit.SECONDS).getTaskList(new TaskDefaultRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId()));
 
         call.enqueue(new Callback<TaskListResponse>() {
             @Override
@@ -999,8 +1000,9 @@ public class SimpleRequests {
 
         final int[] retryCount = {0};
 
+        PersistenceManager persistenceManager = PersistenceManager.getInstance();
         Call<TaskObjectsForCreateOrEditResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
-                requestTimeout, TimeUnit.SECONDS).getTaskObjectsForCreateOrEdit(new TaskDefaultRequest(PersistenceManager.getInstance().getSessionId()));
+                requestTimeout, TimeUnit.SECONDS).getTaskObjectsForCreateOrEdit(new TaskDefaultRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId()));
 
         call.enqueue(new Callback<TaskObjectsForCreateOrEditResponse>() {
             @Override

@@ -169,7 +169,7 @@ public class TaskDetailsFragment extends Fragment {
             mDescriptionEt.setText(task.getText());
             mDateTv.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(task.getTaskCreateDate(),
                     SQL_T_FORMAT_NO_SECOND), ONLY_DATE_FORMAT));
-            mAuthorTv.setText(task.getHistoryDisplayName());
+            mAuthorTv.setText(task.getCreateUserName());
             if (task.getTaskStartTimeTarget() != null && !task.getTaskStartTimeTarget().isEmpty()
                     && !task.getTaskStartTimeTarget().equals("0")) {
                 mStartDate.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(task.getTaskStartTimeTarget(),
@@ -525,6 +525,7 @@ public class TaskDetailsFragment extends Fragment {
         Task task = new Task();
         task.setID(taskProgress.getTaskID());
         task.setHistoryID(taskProgress.getHistoryID());
+        task.setHistoryUserID(PersistenceManager.getInstance().getOperatorId());
         task.setCreateUser(taskProgress.getTaskCreateUser());
         task.setSubject(taskProgress.getSubjectId());
         task.setText(mDescriptionEt.getText().toString());

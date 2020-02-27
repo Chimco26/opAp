@@ -40,7 +40,7 @@ public interface EmeraldGetSimple {
     @POST("/LeaderMESApi/GetTaskObjects")
     Call<TaskObjectsForCreateOrEditResponse> getTaskObjectsForCreateOrEdit(@Body TaskDefaultRequest request);
 
-    @POST("/LeaderMESApi/GetTaskProgress")
+    @POST("/LeaderMESApi/GetTaskForMachine")
     Call<TaskListResponse> getTaskList(@Body TaskDefaultRequest request);
 
     @POST("/LeaderMESApi/CreateTask")
