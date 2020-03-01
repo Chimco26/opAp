@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="500dp"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:maxWidth="200dp"
+            android:text="@string/filter_tasks"
+            android:textColor="@color/blue1"
+            android:textSize="23sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/DTF_close_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/close_btn" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="15dp" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -11,74 +41,72 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="40dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/priority"
-                    android:textSize="23sp"
-                    android:textColor="@color/machine_blue" />
-
-                <ImageView
-                    android:id="@+id/DTF_priority_arrow"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentEnd="true"
-                    android:rotation="90"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/arrow_with_circle" />
-            </RelativeLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/DTF_priority_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/item_check_box"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:layout_weight="1">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/DTF_priority_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.2"
+                    android:layout_height="match_parent"
+                    android:gravity="top"
+                    android:text="@string/priority"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="23sp" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="40dp"
-                        android:gravity="center_vertical"
-                        android:text="@string/period"
-                        android:textSize="23sp"
-                        android:textColor="@color/machine_blue" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/DTF_priority_rv"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.8"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="15dp"
+                    tools:listitem="@layout/item_check_box" />
+            </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/DTF_time_arrow"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentEnd="true"
-                        android:rotation="90"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/arrow_with_circle" />
-                </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/DTF_period_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.2"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:gravity="top"
+                    android:text="@string/period"
+                    android:textColor="@color/black"
+                    android:textSize="23sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/DTF_time_rv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:listitem="@layout/item_check_box"/>
+                    android:layout_width="0dp"
+                    android:layout_weight="0.8"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="15dp"
+                    tools:listitem="@layout/item_check_box" />
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/DTF_apply_btn"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom|center"
+        android:background="@color/blue1"
+        android:gravity="center"
+        android:text="@string/apply"
+        android:textColor="@color/white"
+        android:textSize="23sp" />
 </LinearLayout>

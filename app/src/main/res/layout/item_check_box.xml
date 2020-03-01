@@ -8,6 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:buttonTint="@color/blue1"
+        android:maxLines="1"
         android:checked="true"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
