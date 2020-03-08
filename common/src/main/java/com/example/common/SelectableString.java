@@ -31,7 +31,7 @@ public class SelectableString {
     }
 
     public int getColor() {
-        if (color == 0){
+        if (color == 0) {
 
         }
         return color;
@@ -64,11 +64,12 @@ public class SelectableString {
     public void setId(String id) {
         this.id = id;
     }
-    public static ArrayList<SelectableString> updateList(ArrayList<SelectableString> oldList, ArrayList<SelectableString> newList){
 
-        for (SelectableString newListItem: newList){
-            for (SelectableString oldListItem: oldList){
-                if (newListItem.getId().equals(oldListItem.getId())){
+    public static ArrayList<SelectableString> updateList(ArrayList<SelectableString> oldList, ArrayList<SelectableString> newList) {
+
+        for (SelectableString newListItem : newList) {
+            for (SelectableString oldListItem : oldList) {
+                if (newListItem.getId().equals(oldListItem.getId())) {
                     newListItem.setSelected(oldListItem.isSelected);
                 }
             }
@@ -77,22 +78,51 @@ public class SelectableString {
         return newList;
     }
 
-    public static boolean setPrefCheck(ArrayList<SelectableString> selectableStrings, ArrayList<SelectableString> prefChecks){
-        if (selectableStrings.size() != prefChecks.size()){
+    public static boolean setPrefCheck(ArrayList<SelectableString> selectableStrings, ArrayList<SelectableString> prefChecks) {
+        if (selectableStrings.size() != prefChecks.size()) {
             return false;
         }
-        HashMap<String,SelectableString> prefHashMap = new HashMap<>();
-        for (SelectableString prefCheck: prefChecks){
+        HashMap<String, SelectableString> prefHashMap = new HashMap<>();
+        for (SelectableString prefCheck : prefChecks) {
             prefHashMap.put(prefCheck.getId(), prefCheck);
         }
-        for (SelectableString selectableString: selectableStrings) {
-            if (!prefHashMap.containsKey(selectableString.getId())){
+        for (SelectableString selectableString : selectableStrings) {
+            if (!prefHashMap.containsKey(selectableString.getId())) {
                 return false;
             }
         }
-        for (SelectableString selectableString: selectableStrings){
+        for (SelectableString selectableString : selectableStrings) {
             selectableString.setSelected(prefHashMap.get(selectableString.getId()).isSelected());
         }
         return true;
+    }
+
+    public ArrayList<SelectableString> selectThisItemOnly(ArrayList<SelectableString> list) {
+        for (SelectableString selectableString : list) {
+            if (selectableString == this) {
+                selectableString.setSelected(true);
+            } else {
+                selectableString.setSelected(false);
+            }
+        }
+        return list;
+    }
+
+    public static SelectableString getSelectedItem(ArrayList<SelectableString> list) {
+        for (SelectableString selectableString : list) {
+            if (selectableString.isSelected) {
+                return selectableString;
+            }
+        }
+        return null;
+    }
+
+    public static int getSelectedItemPosition(ArrayList<SelectableString> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).isSelected) {
+                return i;
+            }
+        }
+        return 0;
     }
 }

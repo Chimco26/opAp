@@ -47,9 +47,9 @@ public class TaskUtil {
             case 3:
                 name = context.getString(R.string.high);
                 break;
-            case 4:
-                name = context.getString(R.string.very_high);
-                break;
+//            case 4:
+//                name = context.getString(R.string.very_high);
+//                break;
         }
         return name;
 

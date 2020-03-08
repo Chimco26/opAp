@@ -27,6 +27,7 @@ import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.TimeUtils;
 
 import org.acra.ACRA;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -106,9 +107,9 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_MACHINE_LINE_ID = "PREF_MACHINE_LINE_ID";
     private static final String PREF_DEFAULT_REPORT_REJECT_UNIT = "PREF_DEFAULT_REPORT_REJECT_UNIT";
     private static final String JOSH_ID = "PREF_JOSH_ID";
-    private static final String TASKS_ORDER_BY = "TASKS_ORDER_BY";
-    private static final String TASKS_FILTER_PRIORITY_TO_SHOW = "TASKS_FILTER_PRIORITY_TO_SHOW";
-    private static final String TASKS_FILTER_PERIOD_TO_SHOW = "TASKS_FILTER_PERIOD_TO_SHOW";
+    private static final String TASKS_ORDER_BY = "TASKS_ORDER_BY_";
+    private static final String TASKS_FILTER_PRIORITY_TO_SHOW = "TASKS_FILTER_PRIORITY_TO_SHOW_";
+    private static final String TASKS_FILTER_PERIOD_TO_SHOW = "TASKS_FILTER_PERIOD_TO_SHOW_";
 
 
     private static PersistenceManager msInstance;
@@ -874,12 +875,15 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         PersistenceManager.getInstance().setNeedUpdateToken(true);
     }
 
-    public void setTasksOrderByDate(boolean orderByDate) {
-        SecurePreferences.getInstance().setBoolean(TASKS_ORDER_BY, orderByDate);
+    public void setTasksOrderBy(ArrayList<SelectableString> orderByDate) {
+        SecurePreferences.getInstance().setString(TASKS_ORDER_BY, mGson.toJson(orderByDate));
     }
 
-    public boolean getTasksOrderByDate() {
-        return SecurePreferences.getInstance().getBoolean(TASKS_ORDER_BY, true);
+    public ArrayList<SelectableString> getTasksOrderBy() {
+        Type listType = new TypeToken<ArrayList<SelectableString>>() {}.getType();
+        ArrayList<SelectableString> list = mGson.fromJson(SecurePreferences.getInstance().getString(TASKS_ORDER_BY), listType);
+        list = initSelectableList(list, 0, 4);
+        return list;
     }
 
     public void setTaskFilterPriorityToShow(ArrayList<SelectableString> priorityToShow) {
@@ -887,14 +891,19 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     }
 
     public ArrayList<SelectableString> getTaskFilterPriorityToShow() {
-        Type listType = new TypeToken<ArrayList<SelectableString>>() {}.getType();
+        Type listType = new TypeToken<ArrayList<SelectableString>>() {
+        }.getType();
         ArrayList<SelectableString> list = mGson.fromJson(SecurePreferences.getInstance().getString(TASKS_FILTER_PRIORITY_TO_SHOW), listType);
-        if (list == null || list.isEmpty()){
+        list = initSelectableList(list, 1, 3);
+        return list;
+    }
+
+    @NotNull
+    private ArrayList<SelectableString> initSelectableList(ArrayList<SelectableString> list, int startIndex, int itemCount) {
+        if (list == null || list.isEmpty()) {
             list = new ArrayList<SelectableString>();
-            list.add(new SelectableString("", true, String.valueOf(1)));
-            list.add(new SelectableString("", true, String.valueOf(2)));
-            list.add(new SelectableString("", true, String.valueOf(3)));
-            list.add(new SelectableString("", true, String.valueOf(4)));
+            for (int i = startIndex; i < startIndex + itemCount; i++)
+                list.add(new SelectableString("", true, String.valueOf(i)));
         }
         return list;
     }
@@ -904,9 +913,10 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     }
 
     public ArrayList<SelectableString> getTaskFilterPeriodToShow() {
-        Type listType = new TypeToken<List<SelectableString>>() {}.getType();
+        Type listType = new TypeToken<List<SelectableString>>() {
+        }.getType();
         ArrayList<SelectableString> list = mGson.fromJson(SecurePreferences.getInstance().getString(TASKS_FILTER_PERIOD_TO_SHOW), listType);
-        if (list == null || list.isEmpty()){
+        if (list == null || list.isEmpty()) {
             list = new ArrayList<SelectableString>();
             list.add(new SelectableString("", true, String.valueOf(1)));
             list.add(new SelectableString("", true, String.valueOf(2)));

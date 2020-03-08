@@ -66,7 +66,6 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
     private ArrayList<TaskProgress> mDoneList;
     private ArrayList<TaskProgress> mCancelledList;
     private ArrayList<ColumnObject> mColumnsObjectList = new ArrayList<>();
-    private boolean isOrderByDate = true;
     private ImageView mFilterIc;
     private TaskBoardFragmentListener mListener;
 
@@ -109,8 +108,8 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
     }
 
     private void initParams() {
-        isOrderByDate = PersistenceManager.getInstance().getTasksOrderByDate();
         initFilterParams();
+        initOrderByParams();
     }
 
     /**
@@ -132,6 +131,18 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
         PersistenceManager.getInstance().setTaskFilterPeriodToShow(periodList);
     }
 
+    /**
+     * because need to insert value from resources
+     */
+    private void initOrderByParams() {
+        ArrayList<SelectableString> orderByList = PersistenceManager.getInstance().getTasksOrderBy();
+        orderByList.get(0).setString(getString(R.string.priority));
+        orderByList.get(1).setString(getString(R.string.create_date));
+        orderByList.get(2).setString(getString(R.string.start_date));
+        orderByList.get(3).setString(getString(R.string.end_date));
+        PersistenceManager.getInstance().setTasksOrderBy(orderByList);
+    }
+
     public void initVars(@NonNull View view) {
         mBoardView = view.findViewById(R.id.FTB_board_view);
         mFilterIc = view.findViewById(R.id.FTB_filter_ic);
@@ -139,31 +150,21 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
     }
 
     private void initOrderBySpinner(final Spinner spinner) {
-        final List<String> list = new ArrayList<>();
-        list.add(getString(R.string.date));
-        list.add(getString(R.string.priority));
+        final List<SelectableString> list = PersistenceManager.getInstance().getTasksOrderBy();
         final SimpleSpinnerAdapter dataAdapter = new SimpleSpinnerAdapter(getActivity(), R.layout.base_spinner_item, list);
         dataAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
-        if (!isOrderByDate) {
-            spinner.setSelection(1, false);
-            dataAdapter.setTitle(1);
-        }
+        int selectedPosition = SelectableString.getSelectedItemPosition((ArrayList<SelectableString>) list);
+        spinner.setSelection(selectedPosition, false);
+        dataAdapter.setTitle(selectedPosition);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 dataAdapter.setTitle(i);
-                switch (i) {
-                    case 0:
-                        isOrderByDate = true;
-                        break;
-                    case 1:
-                        isOrderByDate = false;
-                        break;
-                }
-                PersistenceManager.getInstance().setTasksOrderByDate(isOrderByDate);
+                list.get(i).selectThisItemOnly((ArrayList<SelectableString>) list);
+                PersistenceManager.getInstance().setTasksOrderBy((ArrayList<SelectableString>) list);
                 orderAll();
             }
 
@@ -226,7 +227,7 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
         ((EditText) view.findViewById(R.id.FTB_search_et)).setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i == KeyEvent.ACTION_DOWN){
+                if (i == KeyEvent.ACTION_DOWN) {
                     KeyboardUtils.closeKeyboard(getActivity());
                     return true;
                 }
@@ -459,10 +460,20 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
     }
 
     private void orderList(ColumnObject columnObject) {
-        if (isOrderByDate) {
-            orderByDate(columnObject.getAdapter().getList());
-        } else {
-            orderByPriority(columnObject.getAdapter().getList());
+        int orderByPosition = SelectableString.getSelectedItemPosition(PersistenceManager.getInstance().getTasksOrderBy());
+        switch (orderByPosition) {
+            case 0:
+                orderByPriority(columnObject.getAdapter().getList());
+                break;
+            case 1:
+                orderByCreateDate(columnObject.getAdapter().getList());
+                break;
+            case 2:
+                orderByStartDate(columnObject.getAdapter().getList());
+                break;
+            case 3:
+                orderByEndDate(columnObject.getAdapter().getList());
+                break;
         }
         columnObject.getAdapter().getFilter().filter(columnObject.getAdapter().getSearchExpression());
     }
@@ -476,12 +487,32 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
         });
     }
 
-    private void orderByDate(List<TaskProgress> list) {
+    private void orderByStartDate(List<TaskProgress> list) {
         Collections.sort(list, new Comparator<TaskProgress>() {
             @Override
             public int compare(TaskProgress o1, TaskProgress o2) {
                 return TimeUtils.convertDateToMillisecond(o2.getTaskStartTimeTarget(), TimeUtils.SQL_T_FORMAT_NO_SECOND)
                         .compareTo(TimeUtils.convertDateToMillisecond(o1.getTaskStartTimeTarget(), TimeUtils.SQL_T_FORMAT_NO_SECOND));
+            }
+        });
+    }
+
+    private void orderByEndDate(List<TaskProgress> list) {
+        Collections.sort(list, new Comparator<TaskProgress>() {
+            @Override
+            public int compare(TaskProgress o1, TaskProgress o2) {
+                return TimeUtils.convertDateToMillisecond(o2.getTaskEndTimeTarget(), TimeUtils.SQL_T_FORMAT_NO_SECOND)
+                        .compareTo(TimeUtils.convertDateToMillisecond(o1.getTaskEndTimeTarget(), TimeUtils.SQL_T_FORMAT_NO_SECOND));
+            }
+        });
+    }
+
+    private void orderByCreateDate(List<TaskProgress> list) {
+        Collections.sort(list, new Comparator<TaskProgress>() {
+            @Override
+            public int compare(TaskProgress o1, TaskProgress o2) {
+                return TimeUtils.convertDateToMillisecond(o2.getTaskCreateDate(), TimeUtils.SQL_T_FORMAT_NO_SECOND)
+                        .compareTo(TimeUtils.convertDateToMillisecond(o1.getTaskCreateDate(), TimeUtils.SQL_T_FORMAT_NO_SECOND));
             }
         });
     }

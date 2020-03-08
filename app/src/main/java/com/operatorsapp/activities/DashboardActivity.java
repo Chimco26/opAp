@@ -393,7 +393,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         updateAndroidSecurityProvider(this);
 
 //        // Analytics
-//        OperatorApplication application = (OperatorApplication) getApplication();
+//        OperatorApplication application = (OperatorApplication) ƒgetApplication();
 //        mTracker = application.getDefaultTracker();
 
         mMachines = getIntent().getExtras().<Machine>getParcelableArrayList(MainActivity.MACHINE_LIST);

@@ -465,7 +465,7 @@ public class TaskDetailsFragment extends Fragment {
 
     private void initSeverity(List<TaskInfoObject> severities, final int selectedId, boolean editable) {
         mTask.setTaskPriorityID(selectedId);
-        severities = removeIdFromInfoObjectList(severities, VERY_HIGH.getValue());
+//        severities = removeIdFromInfoObjectList(severities, VERY_HIGH.getValue());
         final ArrayList<SelectableString> severitiesObjects;
         severitiesObjects = initSeveritiesSelectableString(severities, selectedId);
         mSeverityRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
