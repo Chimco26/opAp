@@ -85,6 +85,31 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/FTD_task_id_ly"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginEnd="35dp">
+
+                <TextView
+                    android:id="@+id/FTD_task_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/task_id"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/FTD_task_id_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -162,8 +187,8 @@
                     android:id="@+id/FTD_status_tv"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
-                    android:text="@string/status"
                     android:gravity="center_vertical"
+                    android:text="@string/status"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -188,10 +213,10 @@
                     android:id="@+id/FTD_subject_tv"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
+                    android:gravity="center_vertical"
                     android:text="@string/subject"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:gravity="center_vertical"/>
+                    android:textSize="16sp" />
 
                 <RelativeLayout
                     android:id="@+id/FTD_subject_rl"
@@ -214,40 +239,40 @@
                     android:id="@+id/FTD_description_tv"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
+                    android:gravity="center_vertical"
                     android:text="@string/description"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:gravity="center_vertical"/>
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/FTD_description_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:background="@drawable/box_grey_stroke"
-                    android:padding="15dp"/>
+                    android:padding="15dp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="10dp" />
 
                 <TextView
-                    android:id="@+id/FTD_level_tv"
+                    android:id="@+id/FTD_assign_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/task_level"
+                    android:text="@string/assign_to"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <RelativeLayout
-                    android:id="@+id/FTD_level_rl"
+                    android:id="@+id/FTD_assign_rl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/edit_text_background_selector"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <Spinner
-                        android:id="@+id/FTD_level_spinner"
+                        android:id="@+id/FTD_assign_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="40dp" />
 
@@ -316,10 +341,10 @@
                 android:id="@+id/FTD_severity_tv"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
+                android:gravity="center_vertical"
                 android:text="@string/severity"
                 android:textColor="@color/black"
-                android:textSize="16sp"
-                android:gravity="center_vertical"/>
+                android:textSize="16sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/FTD_severity_rv"
@@ -347,10 +372,10 @@
                         android:id="@+id/FTD_start_date_tv"
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
+                        android:gravity="center_vertical"
                         android:text="@string/start_date"
                         android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:gravity="center_vertical"/>
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/FTD_start_date_edit_tv"
@@ -378,10 +403,10 @@
                         android:id="@+id/FTD_end_date_tv"
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
+                        android:gravity="center_vertical"
                         android:text="@string/end_date"
                         android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:gravity="center_vertical"/>
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/FTD_end_date_edit_tv"
@@ -409,10 +434,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
+                    android:gravity="center_vertical"
                     android:text="@string/total_time"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:gravity="center_vertical"/>
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/FTD_time_hr_et"
@@ -429,10 +454,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:layout_marginStart="5dp"
+                    android:gravity="center_vertical"
                     android:text="@string/hr2"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:gravity="center_vertical"/>
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/FTD_time_min_et"
@@ -449,10 +474,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:layout_marginStart="5dp"
+                    android:gravity="center_vertical"
                     android:text="@string/min"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:gravity="center_vertical"/>
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -464,10 +489,10 @@
                 android:id="@+id/FTD_attached_files_tv"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
+                android:gravity="center_vertical"
                 android:text="@string/attached_files"
                 android:textColor="@color/black"
-                android:textSize="16sp"
-                android:gravity="center_vertical"/>
+                android:textSize="16sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/FTD_attached_files_rv"

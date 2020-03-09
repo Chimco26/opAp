@@ -17,6 +17,9 @@ public class Task {
     @SerializedName("CreateUser")
     @Expose
     private Integer createUser;
+    @SerializedName("CreateUserName")
+    @Expose
+    private String createUserName;
     @SerializedName("Subject")
     @Expose
     private Integer subject;
@@ -56,6 +59,14 @@ public class Task {
     }
 
     public Task() {
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
     }
 
     public Integer getID() {

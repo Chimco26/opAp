@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -70,7 +71,7 @@ public class TaskDetailsFragment extends Fragment {
     private TextView mAuthorTv;
     private TextView mStartDate;
     private TextView mEndDate;
-    private Spinner mLevelSpinner;
+    private Spinner mAssignSpinner;
     private Spinner mSubjectSpinner;
     private Spinner mStatusSpinner;
     private EditText mDescriptionEt;
@@ -82,6 +83,10 @@ public class TaskDetailsFragment extends Fragment {
     private int initialStatus;
     private TextView mSaveBtn;
     private TaskDetailsFragmentListener mListener;
+    private TextView mAssignTv;
+    private View mAssignRl;
+    private TextView mTaskIdTv;
+    private LinearLayout mTaskIdLy;
 
     public static TaskDetailsFragment newInstance(TaskProgress taskProgress) {
         TaskDetailsFragment taskDetailsFragment = new TaskDetailsFragment();
@@ -111,6 +116,7 @@ public class TaskDetailsFragment extends Fragment {
             mTask = new TaskProgress();
             mTask.setHistoryCreateDate(TimeUtils.getDate(new Date().getTime(), SQL_T_FORMAT_NO_SECOND));
             mTask.setTaskCreateUser(Integer.parseInt(PersistenceManager.getInstance().getOperatorId()));
+            mTask.setCreateUserName(PersistenceManager.getInstance().getOperatorName());
         } else {
             initialStatus = mTask.getTaskStatus();
         }
@@ -133,13 +139,17 @@ public class TaskDetailsFragment extends Fragment {
 
     private void initVars(View view) {
         mTitleTv = view.findViewById(R.id.FTD_title_tv);
+        mTaskIdTv = view.findViewById(R.id.FTD_task_id_tv);
+        mTaskIdLy = view.findViewById(R.id.FTD_task_id_ly);
         mDateTv = view.findViewById(R.id.FTD_date_tv);
         mAuthorTv = view.findViewById(R.id.FTD_open_by_tv);
         mStartDate = view.findViewById(R.id.FTD_start_date_edit_tv);
         mEndDate = view.findViewById(R.id.FTD_end_date_edit_tv);
         mStatusSpinner = view.findViewById(R.id.FTD_status_spinner);
         mSubjectSpinner = view.findViewById(R.id.FTD_subject_spinner);
-        mLevelSpinner = view.findViewById(R.id.FTD_level_spinner);
+        mAssignSpinner = view.findViewById(R.id.FTD_assign_spinner);
+        mAssignTv = view.findViewById(R.id.FTD_assign_tv);
+        mAssignRl = view.findViewById(R.id.FTD_assign_rl);
         mDescriptionEt = view.findViewById(R.id.FTD_description_spinner);
         mTimeHr = view.findViewById(R.id.FTD_time_hr_et);
         mTimeMin = view.findViewById(R.id.FTD_time_min_et);
@@ -150,16 +160,18 @@ public class TaskDetailsFragment extends Fragment {
     }
 
     private void initView(TaskProgress task, TaskObjectForCreateOrEditContent editTaskObject) {
+        mAuthorTv.setText(task.getCreateUserName());
         if (task.getTaskID() == 0) {
+            mTaskIdLy.setVisibility(View.GONE);
             mSaveBtn.setText(getString(R.string.add_task));
             mTitleTv.setText(getString(R.string.add_new_task));
             mDateTv.setText(TimeUtils.getDate(new Date().getTime(), ONLY_DATE_FORMAT));
-            mAuthorTv.setText(PersistenceManager.getInstance().getOperatorName());
             initStatusSpinner(editTaskObject.getStatus(), TODO.getValue());
             mStatusSpinner.setEnabled(false);
             initSeverity(editTaskObject.getPriority(), TaskProgress.TaskPriority.MEDIUM.getValue(), true);
             initSubjectSpinner(editTaskObject.getSubjects(), editTaskObject.getSubjects().get(0).getID());
-//            initLevelSpinner(getMachineLevel(editTaskObject.getLevel()));
+            initAssignSpinner("");
+            mAssignSpinner.setEnabled(false);
             initStartAndEndTimeViews();
             initTotalTime(task);
             mAttachedFilesTv.setVisibility(View.GONE);
@@ -169,7 +181,8 @@ public class TaskDetailsFragment extends Fragment {
             mDescriptionEt.setText(task.getText());
             mDateTv.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(task.getTaskCreateDate(),
                     SQL_T_FORMAT_NO_SECOND), ONLY_DATE_FORMAT));
-            mAuthorTv.setText(task.getCreateUserName());
+            mTaskIdTv.setText(String.valueOf(task.getTaskID()));
+            mTaskIdLy.setVisibility(View.VISIBLE);
             if (task.getTaskStartTimeTarget() != null && !task.getTaskStartTimeTarget().isEmpty()
                     && !task.getTaskStartTimeTarget().equals("0")) {
                 mStartDate.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(task.getTaskStartTimeTarget(),
@@ -182,7 +195,8 @@ public class TaskDetailsFragment extends Fragment {
             }
             getTaskFiles(task.getTaskID());
             initTotalTime(task);
-//            initLevelSpinner(getMachineLevel(editTaskObject.getLevel()));
+            initAssignSpinner(task.getAssigneeDisplayName());
+            mAssignSpinner.setEnabled(false);
             if (task.getTaskCreateUser() != Integer.parseInt(PersistenceManager.getInstance().getOperatorId())) {
                 disableEditText(mDescriptionEt);
                 disableEditText(mTimeMin);
@@ -300,14 +314,14 @@ public class TaskDetailsFragment extends Fragment {
         });
     }
 
-    private void initLevelSpinner(final TaskInfoObject level) {
+    private void initAssignSpinner(final String assign) {
         final List<TaskInfoObject> levels = new ArrayList<>();
-        levels.add(level);
+        levels.add(new TaskInfoObject(assign));
         final TaskInfoObjectSpinnerAdapter dataAdapter = new TaskInfoObjectSpinnerAdapter(getActivity(), R.layout.base_spinner_item, levels);
         dataAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mLevelSpinner.setAdapter(dataAdapter);
-        mLevelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mAssignSpinner.setAdapter(dataAdapter);
+        mAssignSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 mTask.setTaskLevel(levels.get(adapterView.getSelectedItemPosition()).getID());
@@ -465,7 +479,7 @@ public class TaskDetailsFragment extends Fragment {
 
     private void initSeverity(List<TaskInfoObject> severities, final int selectedId, boolean editable) {
         mTask.setTaskPriorityID(selectedId);
-//        severities = removeIdFromInfoObjectList(severities, VERY_HIGH.getValue());
+        severities = removeIdFromInfoObjectList(severities, VERY_HIGH.getValue());
         final ArrayList<SelectableString> severitiesObjects;
         severitiesObjects = initSeveritiesSelectableString(severities, selectedId);
         mSeverityRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -527,6 +541,7 @@ public class TaskDetailsFragment extends Fragment {
         task.setHistoryID(taskProgress.getHistoryID());
         task.setHistoryUserID(PersistenceManager.getInstance().getOperatorId());
         task.setCreateUser(taskProgress.getTaskCreateUser());
+        task.setCreateUserName(taskProgress.getCreateUserName());
         task.setSubject(taskProgress.getSubjectId());
         task.setText(mDescriptionEt.getText().toString());
         task.setTaskLevel(MACHINE_TASK_LEVEL);

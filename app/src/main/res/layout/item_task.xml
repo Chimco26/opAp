@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="124dp"
+    android:layout_height="129dp"
     android:layout_margin="7dp"
     android:background="@color/white">
 
@@ -20,7 +20,7 @@
         <TextView
             android:id="@+id/ITask_title"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="35dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"

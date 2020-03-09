@@ -110,6 +110,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String TASKS_ORDER_BY = "TASKS_ORDER_BY_";
     private static final String TASKS_FILTER_PRIORITY_TO_SHOW = "TASKS_FILTER_PRIORITY_TO_SHOW_";
     private static final String TASKS_FILTER_PERIOD_TO_SHOW = "TASKS_FILTER_PERIOD_TO_SHOW_";
+    private static final String TASK_ORDER_BY_ASC = "TASK_ORDER_BY_ASC";
 
 
     private static PersistenceManager msInstance;
@@ -923,4 +924,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         }
         return list;
     }
+
+    public void setTasksOrderByAsc(boolean isAsc) {
+        SecurePreferences.getInstance().setBoolean(TASK_ORDER_BY_ASC, isAsc);
+    }
+
+    public boolean getTasksOrderByAsc() {
+        return SecurePreferences.getInstance().getBoolean(TASK_ORDER_BY_ASC, false);
+    }
+
 }
