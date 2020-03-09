@@ -76,7 +76,7 @@
                     android:layout_weight="0.7"
                     android:layout_height="match_parent"
                     android:layout_marginStart="15dp"
-                    tools:listitem="@layout/item_check_box" />
+                    tools:listitem="@layout/item_checkbox_for_vertical" />
             </LinearLayout>
 
             <LinearLayout

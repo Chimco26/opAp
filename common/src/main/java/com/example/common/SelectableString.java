@@ -97,7 +97,7 @@ public class SelectableString {
         return true;
     }
 
-    public ArrayList<SelectableString> selectThisItemOnly(ArrayList<SelectableString> list) {
+    public void selectThisItemOnly(ArrayList<SelectableString> list) {
         for (SelectableString selectableString : list) {
             if (selectableString == this) {
                 selectableString.setSelected(true);
@@ -105,7 +105,6 @@ public class SelectableString {
                 selectableString.setSelected(false);
             }
         }
-        return list;
     }
 
     public static SelectableString getSelectedItem(ArrayList<SelectableString> list) {
@@ -124,5 +123,14 @@ public class SelectableString {
             }
         }
         return 0;
+    }
+
+    public static boolean isAllSelected(ArrayList<SelectableString> list, boolean isSelected) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).isSelected != isSelected) {
+                return false;
+            }
+        }
+        return true;
     }
 }

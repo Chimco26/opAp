@@ -27,6 +27,8 @@ public class TaskFilterDialog {
     private Context mContext;
     private AlertDialog mAlarmAlertDialog;
     private CompoundButton.OnCheckedChangeListener selectAllListener;
+    final ArrayList<SelectableString> priorities = PersistenceManager.getInstance().getTaskFilterPriorityToShow();
+    final ArrayList<SelectableString> periods = PersistenceManager.getInstance().getTaskFilterPeriodToShow();
 
     public TaskFilterDialog(Context context) {
         mContext = context;
@@ -45,7 +47,6 @@ public class TaskFilterDialog {
         final RecyclerView periodRv = view.findViewById(R.id.DTF_time_rv);
         final CheckBox selectAllCb = view.findViewById(R.id.DTF_select_all_cb);
 
-        final ArrayList<SelectableString> priorities = PersistenceManager.getInstance().getTaskFilterPriorityToShow();
         final CheckBoxFilterAdapter prioritiesAdapter = new CheckBoxFilterAdapter(priorities, new CheckBoxFilterAdapter.CheckBoxFilterAdapterListener() {
             @Override
             public void onItemCheck(SelectableString selectableString) {
@@ -57,13 +58,12 @@ public class TaskFilterDialog {
                     }
                 }
             }
-        }, false);
+        }, false, true);
         priorityRv.setAdapter(prioritiesAdapter);
         priorityRv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         priorityRv.setLayoutManager(llm);
 
-        final ArrayList<SelectableString> periods = PersistenceManager.getInstance().getTaskFilterPeriodToShow();
         periodRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         periodRv.setHasFixedSize(true);
         final CheckBoxFilterAdapter periodsAdapter = new CheckBoxFilterAdapter(periods, new CheckBoxFilterAdapter.CheckBoxFilterAdapterListener() {
@@ -77,7 +77,7 @@ public class TaskFilterDialog {
                     }
                 }
             }
-        }, false);
+        }, false, true);
         periodRv.setAdapter(periodsAdapter);
 
         builder.setCancelable(true);
@@ -120,10 +120,10 @@ public class TaskFilterDialog {
 
     private void updateSelectAll(CheckBox selectAllCb) {
         selectAllCb.setOnCheckedChangeListener(null);
-        if (TaskUtil.isFiltered()){
-            selectAllCb.setChecked(false);
-        }else {
+        if (SelectableString.isAllSelected(periods, true) && SelectableString.isAllSelected(priorities, true)){
             selectAllCb.setChecked(true);
+        }else {
+            selectAllCb.setChecked(false);
         }
         selectAllCb.setOnCheckedChangeListener(selectAllListener);
     }
