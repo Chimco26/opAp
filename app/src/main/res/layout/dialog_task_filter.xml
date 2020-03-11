@@ -35,14 +35,6 @@
         android:layout_width="match_parent"
         android:layout_height="15dp" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/DTF_select_all_cb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:buttonTint="@color/blue1"
-        android:maxLines="1"
-        android:text="@string/select_all" />
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

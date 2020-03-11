@@ -60,6 +60,7 @@ public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAd
                         updateSelectAllItem(mFilterList);
                     }
                 }
+                notifyDataSetChanged();
                 mCheckBoxFilterAdapterListener.onItemCheck(mFilterList.get(position));
             }
         });

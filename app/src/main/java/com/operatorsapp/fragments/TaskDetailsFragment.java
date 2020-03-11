@@ -115,7 +115,7 @@ public class TaskDetailsFragment extends Fragment {
         if (mTask == null) {
             mTask = new TaskProgress();
             mTask.setHistoryCreateDate(TimeUtils.getDate(new Date().getTime(), SQL_T_FORMAT_NO_SECOND));
-            mTask.setTaskCreateUser(Integer.parseInt(PersistenceManager.getInstance().getOperatorId()));
+            mTask.setTaskCreateUser(PersistenceManager.getInstance().getOperatorDBId());
             mTask.setCreateUserName(PersistenceManager.getInstance().getOperatorName());
         } else {
             initialStatus = mTask.getTaskStatus();

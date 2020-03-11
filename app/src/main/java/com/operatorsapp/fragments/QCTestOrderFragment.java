@@ -123,7 +123,7 @@ public class QCTestOrderFragment extends Fragment implements
                     } catch (Exception ignored) {
                     }
                     sendTestOrder(new TestOrderSendRequest(mTestOrderRequest.getJobID(), mTestOrder.getJoshID(),
-                            mTestOrder.getProductID(), mTestOrderRequest.getSubType(), samples));
+                            mTestOrder.getProductID(), mTestOrderRequest.getSubType(), samples, PersistenceManager.getInstance().getOperatorDBId()));
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.you_need_to_select_the_test_field), Toast.LENGTH_SHORT).show();
                 }

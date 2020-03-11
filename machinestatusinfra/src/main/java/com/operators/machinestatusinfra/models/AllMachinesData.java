@@ -74,6 +74,8 @@ public class AllMachinesData {
     private String operatorName;
     @SerializedName("WorkerID")
     private String OperatorId;
+    @SerializedName("UserID")
+    private int userId;
     @SerializedName("ProductionModeID")
     private int mProductionModeID;
     @SerializedName("CustomerIsActivateJobs")
@@ -110,6 +112,10 @@ public class AllMachinesData {
     private int mLineID;
     @SerializedName("ReportRejectDefaultUnits")
     private int mReportRejectDefaultUnits;
+
+    public int getUserId() {
+        return userId;
+    }
 
     public int getReportRejectDefaultUnits() {
         return mReportRejectDefaultUnits;

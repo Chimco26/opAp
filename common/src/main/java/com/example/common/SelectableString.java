@@ -30,6 +30,15 @@ public class SelectableString {
         this.isSelected = isSelected;
     }
 
+    public static void removeById(ArrayList<SelectableString> list, String selectAllId) {
+        for (SelectableString selectableString : list) {
+            if (selectableString.id.equals(selectAllId)) {
+                list.remove(selectableString);
+                return;
+            }
+        }
+    }
+
     public int getColor() {
         if (color == 0) {
 

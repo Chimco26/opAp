@@ -125,7 +125,7 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
         PersistenceManager.getInstance().setTaskFilterPriorityToShow(priorityList);
 
         ArrayList<SelectableString> periodList = PersistenceManager.getInstance().getTaskFilterPeriodToShow();
-        periodList.get(0).setColor(getResources().getColor(R.color.blue1));
+        periodList.get(0).setColor(getResources().getColor(R.color.machine_blue));
         periodList.get(0).setString(getString(R.string.in_time));
         periodList.get(1).setColor(getResources().getColor(R.color.red_dark));
         periodList.get(1).setString(getString(R.string.past_time));

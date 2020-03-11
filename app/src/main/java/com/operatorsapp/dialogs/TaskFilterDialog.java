@@ -30,8 +30,13 @@ public class TaskFilterDialog {
     final ArrayList<SelectableString> priorities = PersistenceManager.getInstance().getTaskFilterPriorityToShow();
     final ArrayList<SelectableString> periods = PersistenceManager.getInstance().getTaskFilterPeriodToShow();
 
+
     public TaskFilterDialog(Context context) {
         mContext = context;
+        periods.add(0, new SelectableString(mContext.getString(R.string.select_all),
+                SelectableString.isAllSelected(periods, true), SelectableString.SELECT_ALL_ID, mContext.getResources().getColor(R.color.blue1)));
+        priorities.add(0, new SelectableString(mContext.getString(R.string.select_all),
+                SelectableString.isAllSelected(priorities, true), SelectableString.SELECT_ALL_ID, mContext.getResources().getColor(R.color.blue1)));
     }
 
     public AlertDialog showTaskFilterDialog() {
@@ -45,20 +50,25 @@ public class TaskFilterDialog {
         final ImageView closeBtn = view.findViewById(R.id.DTF_close_btn);
         final RecyclerView priorityRv = view.findViewById(R.id.DTF_priority_rv);
         final RecyclerView periodRv = view.findViewById(R.id.DTF_time_rv);
-        final CheckBox selectAllCb = view.findViewById(R.id.DTF_select_all_cb);
 
         final CheckBoxFilterAdapter prioritiesAdapter = new CheckBoxFilterAdapter(priorities, new CheckBoxFilterAdapter.CheckBoxFilterAdapterListener() {
             @Override
             public void onItemCheck(SelectableString selectableString) {
-                for (SelectableString selectableString1 : priorities) {
-                    if (selectableString1.getId().equals(selectableString.getId())) {
-                        selectableString1.setSelected(selectableString.isSelected());
-                        updateSelectAll(selectAllCb);
-                        return;
-                    }
-                }
+//                if (selectableString.getId().equals(SelectableString.SELECT_ALL_ID)) {
+//                    for (SelectableString selectableString1 : priorities) {
+//                        selectableString1.setSelected(selectableString.isSelected());
+//                    }
+//                }else {
+//                    for (SelectableString selectableString1 : priorities) {
+//                        if (selectableString1.getId().equals(selectableString.getId())) {
+//                            selectableString1.setSelected(selectableString.isSelected());
+////                        updateSelectAll(selectAllCb);
+//                            return;
+//                        }
+//                    }
+//                }
             }
-        }, false, true);
+        }, true, true);
         priorityRv.setAdapter(prioritiesAdapter);
         priorityRv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
@@ -69,15 +79,15 @@ public class TaskFilterDialog {
         final CheckBoxFilterAdapter periodsAdapter = new CheckBoxFilterAdapter(periods, new CheckBoxFilterAdapter.CheckBoxFilterAdapterListener() {
             @Override
             public void onItemCheck(SelectableString selectableString) {
-                for (SelectableString selectableString1 : periods) {
-                    if (selectableString1.getId().equals(selectableString.getId())) {
-                        selectableString1.setSelected(selectableString.isSelected());
-                        updateSelectAll(selectAllCb);
-                        return;
-                    }
-                }
+//                for (SelectableString selectableString1 : periods) {
+//                    if (selectableString1.getId().equals(selectableString.getId())) {
+//                        selectableString1.setSelected(selectableString.isSelected());
+////                        updateSelectAll(selectAllCb);
+//                        return;
+//                    }
+//                }
             }
-        }, false, true);
+        }, true, true);
         periodRv.setAdapter(periodsAdapter);
 
         builder.setCancelable(true);
@@ -93,6 +103,8 @@ public class TaskFilterDialog {
         applyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SelectableString.removeById(periods, SelectableString.SELECT_ALL_ID);
+                SelectableString.removeById(priorities, SelectableString.SELECT_ALL_ID);
                 PersistenceManager.getInstance().setTaskFilterPeriodToShow(periods);
                 PersistenceManager.getInstance().setTaskFilterPriorityToShow(priorities);
                 mAlarmAlertDialog.dismiss();
@@ -112,8 +124,6 @@ public class TaskFilterDialog {
                 prioritiesAdapter.notifyDataSetChanged();
             }
         };
-
-        updateSelectAll(selectAllCb);
 
         return mAlarmAlertDialog;
     }

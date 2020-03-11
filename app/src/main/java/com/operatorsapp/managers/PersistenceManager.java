@@ -111,6 +111,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String TASKS_FILTER_PRIORITY_TO_SHOW = "TASKS_FILTER_PRIORITY_TO_SHOW_";
     private static final String TASKS_FILTER_PERIOD_TO_SHOW = "TASKS_FILTER_PERIOD_TO_SHOW_";
     private static final String TASK_ORDER_BY_ASC = "TASK_ORDER_BY_ASC";
+    private static final String PREFS_OPERATOR_DB_ID = "PREFS_OPERATOR_DB_ID";
 
 
     private static PersistenceManager msInstance;
@@ -220,6 +221,14 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     @Override
     public void setOperatorId(String operatorId) {
         SecurePreferences.getInstance().setString(PREF_OPERATOR_ID, operatorId);
+    }
+    
+    public void setOperatorDBId(int operatorDbId){
+        SecurePreferences.getInstance().setInt(PREFS_OPERATOR_DB_ID, operatorDbId);
+    }
+
+    public int getOperatorDBId(){
+        return SecurePreferences.getInstance().getInt(PREFS_OPERATOR_DB_ID);
     }
 
     @Override
@@ -930,7 +939,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     }
 
     public boolean getTasksOrderByAsc() {
-        return SecurePreferences.getInstance().getBoolean(TASK_ORDER_BY_ASC, false);
+        return SecurePreferences.getInstance().getBoolean(TASK_ORDER_BY_ASC, false
+        );
     }
 
 }

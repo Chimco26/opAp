@@ -177,7 +177,7 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
 
             mListFiltered = (List<TaskProgress>) results.values;
             TextView itemCount1 = headerView.findViewById(R.id.TCH_count_generated);
-            itemCount1.setText(String.format(Locale.getDefault(), "%d", mListFiltered.size()));
+            itemCount1.setText(String.format(Locale.getDefault(), "%d", results.count));
             setItemList(mListFiltered);
         }
 

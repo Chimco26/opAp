@@ -1086,6 +1086,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                         String opName = machineStatus.getAllMachinesData().get(0).getOperatorName();
                         String opId = machineStatus.getAllMachinesData().get(0).getOperatorId();
+                        PersistenceManager.getInstance().setOperatorDBId(machineStatus.getAllMachinesData().get(0).getUserId());
 
                         if (opId != null && !opId.equals("") && opName != null && !opName.equals("")) {
 
