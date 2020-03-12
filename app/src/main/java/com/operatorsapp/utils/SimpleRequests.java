@@ -1054,7 +1054,7 @@ public class SimpleRequests {
             @Override
             public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
 
-                if (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty()) {
+                if (response.body() != null && response.body().getError().getErrorDesc() == null || response.body() != null && response.body().getError().getErrorDesc().isEmpty()) {
                     if (callback != null) {
 
                         callback.onUpdateTaskStatusCallbackSuccess(response.body());

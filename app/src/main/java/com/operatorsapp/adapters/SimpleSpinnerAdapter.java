@@ -1,6 +1,7 @@
 package com.operatorsapp.adapters;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +17,12 @@ import com.operatorsapp.R;
 import java.util.List;
 
 public class SimpleSpinnerAdapter extends ArrayAdapter<SelectableString> {
-    private Activity mContext;
+    private Context mContext;
     private List<SelectableString> mSpinnerItems;
     private TextView mRowName;
     private View mView;
 
-    public SimpleSpinnerAdapter(Activity context, int resource, List<SelectableString> list) {
+    public SimpleSpinnerAdapter(Context context, int resource, List<SelectableString> list) {
         super(context, resource, list);
         mSpinnerItems = list;
         mContext = context;
@@ -32,7 +33,7 @@ public class SimpleSpinnerAdapter extends ArrayAdapter<SelectableString> {
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         if (row == null) {
-            LayoutInflater inflater = mContext.getLayoutInflater();
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             row = inflater.inflate(R.layout.base_spinner_item, parent, false);
             mView = row;
             mRowName = row.findViewById(R.id.spinner_item_name);
@@ -55,7 +56,7 @@ public class SimpleSpinnerAdapter extends ArrayAdapter<SelectableString> {
     public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         if (row == null) {
-            LayoutInflater inflater = mContext.getLayoutInflater();
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             row = inflater.inflate(R.layout.base_spinner_item_dropdown, parent, false);
         }
         String item = mSpinnerItems.get(position).getString();

@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.common.QCModels.SamplesDatum;
 import com.example.common.QCModels.SaveTestDetailsRequest;
 import com.example.common.QCModels.SaveTestDetailsResponse;
+import com.example.common.QCModels.TestDetail;
+import com.example.common.QCModels.TestDetailsForm;
 import com.example.common.QCModels.TestDetailsRequest;
 import com.example.common.QCModels.TestDetailsResponse;
 import com.example.common.QCModels.TestFieldsDatum;
@@ -36,6 +38,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.QCActivity;
+import com.operatorsapp.adapters.QCDetailsMultiTypeAdapter;
 import com.operatorsapp.adapters.QCMultiTypeAdapter;
 import com.operatorsapp.adapters.QCParametersHorizontalAdapter;
 import com.operatorsapp.adapters.QCSamplesMultiTypeAdapter;
@@ -52,6 +55,8 @@ import java.util.List;
 import java.util.Locale;
 
 import static androidx.annotation.Dimension.SP;
+import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_COMBO_INT;
+import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_HIDDEN_INT;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_LAST;
 
 public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
@@ -76,6 +81,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private View mMainView;
     private View mMinusSamplesBtn;
     private View mPlusSamplesBtn;
+    private RecyclerView mDetailsRv;
 
     public static QCDetailsFragment newInstance(int testId) {
 
@@ -100,9 +106,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_qc_details, container, false);
 
-        return rootView;
+        return inflater.inflate(R.layout.fragment_qc_details, container, false);
     }
 
     @Override
@@ -131,6 +136,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             }
         });
         mSamplesTestRV = view.findViewById(R.id.FQCD_paramters_rv);
+        mDetailsRv = view.findViewById(R.id.FQCD_details_rv);
         mTestContainer = view.findViewById(R.id.FQCD_fields_ll);
         view.findViewById(R.id.FQCD_close).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -249,6 +255,16 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         initPassedView(mTestOrderDetails.getTestDetails().get(0).getPassed());
         initSamplesTestRv();
         initTestRv();
+        initDetailsRv();
+    }
+
+    private void initDetailsRv() {
+        QCDetailsMultiTypeAdapter testAdapter = new QCDetailsMultiTypeAdapter(mTestOrderDetails.getTestDetailsForm(), mTestOrderDetails.getTestDetails().get(0).getTestStatus());
+        mDetailsRv.setAdapter(testAdapter);
+        mDetailsRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(2, 50, true, 0);
+        mDetailsRv.addItemDecoration(gridSpacingItemDecoration);
+        mDetailsRv.setHasFixedSize(false);
     }
 
     private void initPassedView(Boolean status) {
@@ -364,6 +380,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                     mTestOrderDetails = testDetailsResponse;
                     initSamplesData();
                     initFieldsData();
+                    initDetailsData();
                     initView();
                     initIncrementSamples(testDetailsResponse.getTestDetails().get(0).getAllowEditSamples());
                 }
@@ -375,6 +392,22 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                 mNoDataTv.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    private void initDetailsData() {
+        List<TestDetailsForm> testDetails = mTestOrderDetails.getTestDetailsForm();
+        List<TestDetailsForm> toRemove = new ArrayList<>();
+
+        for (TestDetailsForm testDetail: testDetails){
+            if (testDetail.getDisplayType().equals(FIELD_TYPE_HIDDEN_INT)){
+                toRemove.add(testDetail);
+            }
+            if (testDetail.getDisplayType().equals(FIELD_TYPE_COMBO_INT) && testDetail.getName().toLowerCase().equals("status")){
+                testDetail.setComboList(mTestOrderDetails.getStatusList());
+            }
+        }
+
+        testDetails.removeAll(toRemove);
     }
 
     private void initFieldsData() {

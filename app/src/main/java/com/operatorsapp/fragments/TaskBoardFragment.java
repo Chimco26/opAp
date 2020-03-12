@@ -68,7 +68,7 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
     private ArrayList<ColumnObject> mColumnsObjectList = new ArrayList<>();
     private ImageView mFilterIc;
     private TaskBoardFragmentListener mListener;
-    private TextView mOrderAscTv;
+    private ImageView mOrderAscIc;
 
     public static TaskBoardFragment newInstance() {
         return new TaskBoardFragment();
@@ -147,7 +147,7 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
     public void initVars(@NonNull View view) {
         mBoardView = view.findViewById(R.id.FTB_board_view);
         mFilterIc = view.findViewById(R.id.FTB_filter_ic);
-        mOrderAscTv = view.findViewById(R.id.FTB_asc_tv);
+        mOrderAscIc = view.findViewById(R.id.FTB_asc_btn);
         initOrderBySpinner((Spinner) view.findViewById(R.id.FTB_order_by_spinner));
     }
 
@@ -494,9 +494,9 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
 
     private void setOrderAscView(boolean isOrderAsc) {
         if (isOrderAsc) {
-            mOrderAscTv.setText(getString(R.string.asc));
+            mOrderAscIc.setRotation(180);
         } else {
-            mOrderAscTv.setText(getString(R.string.des));
+            mOrderAscIc.setRotation(0);
         }
     }
 

@@ -39,6 +39,15 @@ public class SelectableString {
         }
     }
 
+    public static SelectableString getById(ArrayList<SelectableString> list, String id) {
+        for (SelectableString selectableString : list) {
+            if (selectableString.id.equals(id)) {
+                return selectableString;
+            }
+        }
+        return null;
+    }
+
     public int getColor() {
         if (color == 0) {
 
