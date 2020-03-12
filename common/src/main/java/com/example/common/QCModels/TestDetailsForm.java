@@ -7,8 +7,9 @@ import java.util.List;
 
 public class TestDetailsForm {
     public static final int FIELD_TYPE_TEXT_INT = 1;
+    public static final int FIELD_TYPE_COMBO_INT = 2;
     public static final int FIELD_TYPE_BOOLEAN_INT = 3;
-    public static final int FIELD_TYPE_COMBO_INT = 6;
+    public static final int FIELD_TYPE_NUMBER_INT = 6;
     public static final int FIELD_TYPE_DATE_INT = 7;
     public static final int FIELD_TYPE_TIME_INT = 8;
     public static final int FIELD_TYPE_HIDDEN_INT = 12;

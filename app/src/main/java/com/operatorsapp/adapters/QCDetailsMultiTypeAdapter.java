@@ -34,6 +34,7 @@ import java.util.List;
 import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_BOOLEAN_INT;
 import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_COMBO_INT;
 import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_DATE_INT;
+import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_NUMBER_INT;
 import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_TEXT_INT;
 import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_TIME_INT;
 import static com.operatorsapp.utils.TimeUtils.SIMPLE_HM_FORMAT;
@@ -63,6 +64,8 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
                 return new QCDetailsMultiTypeAdapter.TextViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_text_parameter, parent, false));
             case FIELD_TYPE_TIME_INT:
                 return new QCDetailsMultiTypeAdapter.TimeTextViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_time_2, parent, false));
+            case FIELD_TYPE_NUMBER_INT:
+                return new QCDetailsMultiTypeAdapter.NumViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_num_parameter_2, parent, false));
             case FIELD_TYPE_COMBO_INT:
                 return new QCDetailsMultiTypeAdapter.ComboViewHolder(inflater.inflate(R.layout.item_qc_paramters_horizontal_spinner, parent, false));
             default:
@@ -113,6 +116,12 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(null);
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setEnabled(false);
                 }
+                break;
+            case FIELD_TYPE_NUMBER_INT:
+                ((QCDetailsMultiTypeAdapter.NumViewHolder) viewHolder).title.setText(item.getDisplayEName());
+                TooltipCompat.setTooltipText(((QCDetailsMultiTypeAdapter.NumViewHolder) viewHolder).title, item.getDisplayEName());
+                ((QCDetailsMultiTypeAdapter.NumViewHolder) viewHolder).mEditNumberEt.setText(item.getCurrentValue());
+                setEditableMode(position, item, ((QCDetailsMultiTypeAdapter.NumViewHolder) viewHolder).mEditNumberEt, viewHolder);
                 break;
             case FIELD_TYPE_TEXT_INT:
                 ((TextViewHolder) viewHolder).title.setText(item.getDisplayEName());
@@ -199,6 +208,8 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
                 return FIELD_TYPE_BOOLEAN_INT;
             case FIELD_TYPE_TEXT_INT:
                 return FIELD_TYPE_TEXT_INT;
+            case FIELD_TYPE_NUMBER_INT:
+                return FIELD_TYPE_NUMBER_INT;
             case FIELD_TYPE_TIME_INT:
             case FIELD_TYPE_DATE_INT:
                 return FIELD_TYPE_TIME_INT;
@@ -262,7 +273,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
         }
 
         private void initSpinner(final Spinner spinner, List<StatusList> statusLists) {
-            if (statusLists == null){
+            if (statusLists == null) {
                 return;
             }
             final List<SelectableString> list = buildSelectableStringList(statusLists);
@@ -292,10 +303,23 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
 
         private List<SelectableString> buildSelectableStringList(List<StatusList> statusLists) {
             ArrayList<SelectableString> selectableStrings = new ArrayList<>();
-            for (StatusList statusList: statusLists){
+            for (StatusList statusList : statusLists) {
                 selectableStrings.add(new SelectableString(statusList.getName(), false, String.valueOf(statusList.getID())));
             }
             return selectableStrings;
+        }
+
+    }
+
+    public class NumViewHolder extends CustomViewHolder {
+
+        private EditText mEditNumberEt;
+
+        NumViewHolder(View itemView) {
+            super(itemView);
+            title.setVisibility(View.VISIBLE);
+
+            mEditNumberEt = itemView.findViewById(R.id.IQCPHN_et);
         }
 
     }

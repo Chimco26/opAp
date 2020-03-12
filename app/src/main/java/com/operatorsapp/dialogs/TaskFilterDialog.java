@@ -2,7 +2,6 @@ package com.operatorsapp.dialogs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -15,11 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.common.SelectableString;
-import com.example.common.task.Task;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.CheckBoxFilterAdapter;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.utils.TaskUtil;
 
 import java.util.ArrayList;
 
@@ -50,23 +47,14 @@ public class TaskFilterDialog {
         final ImageView closeBtn = view.findViewById(R.id.DTF_close_btn);
         final RecyclerView priorityRv = view.findViewById(R.id.DTF_priority_rv);
         final RecyclerView periodRv = view.findViewById(R.id.DTF_time_rv);
+        final CheckBox selectAllCb = view.findViewById(R.id.DTF_check_box);
+
+        selectAllCb.setChecked(SelectableString.isAllSelected(periods, true) && SelectableString.isAllSelected(priorities, true));
 
         final CheckBoxFilterAdapter prioritiesAdapter = new CheckBoxFilterAdapter(priorities, new CheckBoxFilterAdapter.CheckBoxFilterAdapterListener() {
             @Override
             public void onItemCheck(SelectableString selectableString) {
-//                if (selectableString.getId().equals(SelectableString.SELECT_ALL_ID)) {
-//                    for (SelectableString selectableString1 : priorities) {
-//                        selectableString1.setSelected(selectableString.isSelected());
-//                    }
-//                }else {
-//                    for (SelectableString selectableString1 : priorities) {
-//                        if (selectableString1.getId().equals(selectableString.getId())) {
-//                            selectableString1.setSelected(selectableString.isSelected());
-////                        updateSelectAll(selectAllCb);
-//                            return;
-//                        }
-//                    }
-//                }
+                updateSelectAll(selectAllCb);
             }
         }, true, true);
         priorityRv.setAdapter(prioritiesAdapter);
@@ -79,13 +67,7 @@ public class TaskFilterDialog {
         final CheckBoxFilterAdapter periodsAdapter = new CheckBoxFilterAdapter(periods, new CheckBoxFilterAdapter.CheckBoxFilterAdapterListener() {
             @Override
             public void onItemCheck(SelectableString selectableString) {
-//                for (SelectableString selectableString1 : periods) {
-//                    if (selectableString1.getId().equals(selectableString.getId())) {
-//                        selectableString1.setSelected(selectableString.isSelected());
-////                        updateSelectAll(selectAllCb);
-//                        return;
-//                    }
-//                }
+                updateSelectAll(selectAllCb);
             }
         }, true, true);
         periodRv.setAdapter(periodsAdapter);
@@ -124,15 +106,15 @@ public class TaskFilterDialog {
                 prioritiesAdapter.notifyDataSetChanged();
             }
         };
-
+        selectAllCb.setOnCheckedChangeListener(selectAllListener);
         return mAlarmAlertDialog;
     }
 
     private void updateSelectAll(CheckBox selectAllCb) {
         selectAllCb.setOnCheckedChangeListener(null);
-        if (SelectableString.isAllSelected(periods, true) && SelectableString.isAllSelected(priorities, true)){
+        if (SelectableString.isAllSelected(periods, true) && SelectableString.isAllSelected(priorities, true)) {
             selectAllCb.setChecked(true);
-        }else {
+        } else {
             selectAllCb.setChecked(false);
         }
         selectAllCb.setOnCheckedChangeListener(selectAllListener);

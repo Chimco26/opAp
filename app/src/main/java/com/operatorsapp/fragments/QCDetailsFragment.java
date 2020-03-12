@@ -57,6 +57,7 @@ import java.util.Locale;
 import static androidx.annotation.Dimension.SP;
 import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_COMBO_INT;
 import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_HIDDEN_INT;
+import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_NUMBER_INT;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_LAST;
 
 public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
@@ -402,7 +403,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             if (testDetail.getDisplayType().equals(FIELD_TYPE_HIDDEN_INT)){
                 toRemove.add(testDetail);
             }
-            if (testDetail.getDisplayType().equals(FIELD_TYPE_COMBO_INT) && testDetail.getName().toLowerCase().equals("status")){
+            if (testDetail.getDisplayType().equals(FIELD_TYPE_NUMBER_INT) && testDetail.getName().equals("TestStatus")){
+                testDetail.setDisplayType(FIELD_TYPE_COMBO_INT);
                 testDetail.setComboList(mTestOrderDetails.getStatusList());
             }
         }
