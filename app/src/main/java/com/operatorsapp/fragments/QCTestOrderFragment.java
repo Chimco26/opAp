@@ -281,7 +281,11 @@ public class QCTestOrderFragment extends Fragment implements
                     if (subType.getHasSamples()) {
                         mSamplesLy.setVisibility(View.VISIBLE);
                         if (subType.getDefaultSamplesCount() != null){
-                            mSamplesEt.setText(String.valueOf(subType.getDefaultSamplesCount()));
+                            if (subType.getDefaultSamplesCount() == 0){
+                                mSamplesEt.setHint(String.valueOf(subType.getDefaultSamplesCount()));
+                            }else {
+                                mSamplesEt.setText(String.valueOf(subType.getDefaultSamplesCount()));
+                            }
                         }else {
                             mSamplesEt.setText(null);
                         }
