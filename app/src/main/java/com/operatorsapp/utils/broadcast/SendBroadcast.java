@@ -2,7 +2,7 @@ package com.operatorsapp.utils.broadcast;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import static com.operatorsapp.utils.broadcast.RefreshPollingBroadcast.ACTION_REFRESH_POLLING;
 import static com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast.ACTION_SELECT_REASON;

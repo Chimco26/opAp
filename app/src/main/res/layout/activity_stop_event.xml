@@ -4,7 +4,8 @@
     android:id="@+id/parent_layouts"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:keepScreenOn="true">
 
     <RelativeLayout
         android:id="@+id/ASE_bar"

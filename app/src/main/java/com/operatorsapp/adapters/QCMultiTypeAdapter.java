@@ -3,9 +3,9 @@ package com.operatorsapp.adapters;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.TooltipCompat;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.TooltipCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -232,12 +232,9 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
     }
 
     private void setRangeView(final TestFieldsDatum item, final RangeView2 mRangeView) {
-
-
         mRangeView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-
                 mRangeView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 updateRangeView(item, mRangeView);
             }
@@ -249,11 +246,14 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
         if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
             try {
                 mRangeView.setCurrentValue(Float.parseFloat(item.getCurrentValue()));
+                mRangeView.setDefaultMode(false);
             }catch (Exception e){
                 mRangeView.setCurrentValue(0);
+                mRangeView.setDefaultMode(true);
             }
         } else {
             mRangeView.setCurrentValue(0);
+            mRangeView.setDefaultMode(true);
         }
         mRangeView.setHighLimit(item.getHValue());
         mRangeView.setLowLimit(item.getLValue());

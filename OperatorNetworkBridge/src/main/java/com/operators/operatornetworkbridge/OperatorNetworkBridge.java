@@ -1,6 +1,6 @@
 package com.operators.operatornetworkbridge;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.app.operatorinfra.GetOperatorByIdCallback;
 import com.app.operatorinfra.Operator;

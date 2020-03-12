@@ -314,7 +314,7 @@
                                     app:autoSizeMaxTextSize="22sp"
                                     app:autoSizeTextType="uniform" />
 
-                                <android.support.design.widget.TextInputEditText
+                                <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/units_edit_text"
                                     style="@style/FontStyle_T6"
                                     android:layout_width="match_parent"
@@ -356,7 +356,7 @@
                                     app:autoSizeMaxTextSize="22sp"
                                     app:autoSizeTextType="uniform" />
 
-                                <android.support.design.widget.TextInputEditText
+                                <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/weight_edit_text"
                                     style="@style/FontStyle_T6"
                                     android:layout_width="match_parent"

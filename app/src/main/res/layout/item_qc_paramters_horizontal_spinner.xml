@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:paddingBottom="23dp"
+    android:weightSum="10">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3.5"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/QCP_parameter_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="2"
+            android:text="@string/parameter"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="37dp"
+        android:layout_weight="5.5"
+        android:background="@drawable/edit_text_background_selector">
+
+        <Spinner
+            android:id="@+id/IQCPHS_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+</LinearLayout>

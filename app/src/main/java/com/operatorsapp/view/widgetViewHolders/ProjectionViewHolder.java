@@ -2,7 +2,7 @@ package com.operatorsapp.view.widgetViewHolders;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -14,8 +14,6 @@ import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.utils.WidgetAdapterUtils;
 import com.operatorsapp.view.widgetViewHolders.helper.ProjectionDrawablesHelper;
-
-import me.grantland.widget.AutofitTextView;
 
 import static com.operatorsapp.utils.WidgetAdapterUtils.isNotNearestTexts;
 import static com.operatorsapp.utils.WidgetAdapterUtils.valueInK;

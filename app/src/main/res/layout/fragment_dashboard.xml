@@ -242,7 +242,7 @@
                     android:textSize="50sp" />
             </LinearLayout>
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/fragment_dashboard_widgets"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -291,7 +291,7 @@
                 android:visibility="gone"
                 app:minTextSize="15dp" />
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/fragment_dashboard_shift_log"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

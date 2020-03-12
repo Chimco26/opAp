@@ -1,6 +1,6 @@
 package com.operators.reportrejectnetworkbridge;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.example.common.StandardResponse;
 import com.example.common.callback.ErrorObjectInterface;

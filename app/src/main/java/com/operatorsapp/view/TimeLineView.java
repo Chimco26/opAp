@@ -5,12 +5,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 
-import com.operatorsapp.R;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 
 import java.text.ParseException;
@@ -19,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.concurrent.TimeUnit;
 
 public class TimeLineView extends View {
 

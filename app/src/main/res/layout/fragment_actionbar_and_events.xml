@@ -202,7 +202,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <android.support.v4.widget.SwipeRefreshLayout
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                     android:id="@+id/shift_log_swipe_refresh"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
@@ -229,7 +229,7 @@
                                 android:textColor="@color/black"
                                 android:textSize="20sp" />
 
-                            <android.support.v7.widget.RecyclerView
+                            <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/FAAE_lenox_machines_rv"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent" />
@@ -517,7 +517,7 @@
                                         android:scrollbars="vertical"
                                         android:visibility="gone" />
 
-                                    <android.support.v7.widget.RecyclerView
+                                    <androidx.recyclerview.widget.RecyclerView
                                         android:id="@+id/fragment_dashboard_shift_log"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
@@ -531,7 +531,7 @@
                         </LinearLayout>
 
                     </RelativeLayout>
-                </android.support.v4.widget.SwipeRefreshLayout>
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
                 <View
                     android:id="@+id/fragment_dashboard_divider"
@@ -714,7 +714,7 @@
                     app:autoSizeTextType="uniform" />
             </LinearLayout>
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/FAAE_machine_line_rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -11,7 +11,7 @@ import android.widget.Spinner;
 import java.lang.reflect.Field;
 
 
-public class EmeraldSpinner extends android.support.v7.widget.AppCompatSpinner {
+public class EmeraldSpinner extends androidx.appcompat.widget.AppCompatSpinner {
     AdapterView.OnItemSelectedListener listener;
 
     private OnSpinnerEventsListener mListener;

@@ -4,12 +4,6 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,9 +15,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.common.QCModels.SamplesDatum;
 import com.example.common.QCModels.SaveTestDetailsRequest;
 import com.example.common.QCModels.SaveTestDetailsResponse;
+import com.example.common.QCModels.TestDetail;
+import com.example.common.QCModels.TestDetailsForm;
 import com.example.common.QCModels.TestDetailsRequest;
 import com.example.common.QCModels.TestDetailsResponse;
 import com.example.common.QCModels.TestFieldsDatum;
@@ -35,6 +38,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.QCActivity;
+import com.operatorsapp.adapters.QCDetailsMultiTypeAdapter;
 import com.operatorsapp.adapters.QCMultiTypeAdapter;
 import com.operatorsapp.adapters.QCParametersHorizontalAdapter;
 import com.operatorsapp.adapters.QCSamplesMultiTypeAdapter;
@@ -50,7 +54,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import static android.support.annotation.Dimension.SP;
+import static androidx.annotation.Dimension.SP;
+import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_COMBO_INT;
+import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_HIDDEN_INT;
+import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_NUMBER_INT;
 import static com.example.common.QCModels.TestDetailsResponse.FIELD_TYPE_LAST;
 
 public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
@@ -73,6 +80,9 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private TextView mPassedTv;
     private TextView mTitleTv;
     private View mMainView;
+    private View mMinusSamplesBtn;
+    private View mPlusSamplesBtn;
+    private RecyclerView mDetailsRv;
 
     public static QCDetailsFragment newInstance(int testId) {
 
@@ -97,9 +107,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_qc_details, container, false);
 
-        return rootView;
+        return inflater.inflate(R.layout.fragment_qc_details, container, false);
     }
 
     @Override
@@ -128,6 +137,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             }
         });
         mSamplesTestRV = view.findViewById(R.id.FQCD_paramters_rv);
+        mDetailsRv = view.findViewById(R.id.FQCD_details_rv);
         mTestContainer = view.findViewById(R.id.FQCD_fields_ll);
         view.findViewById(R.id.FQCD_close).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,22 +179,34 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
     private void initIncrementSamplesView(View view) {
         mSamplesNumberEt = view.findViewById(R.id.FQCD_units_text_view);
-        view.findViewById(R.id.FQCD_button_minus).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Integer.parseInt(mSamplesNumberEt.getText().toString()) > 0) {
-                    mSamplesCount = Integer.parseInt(mSamplesNumberEt.getText().toString()) - 1;
-                    updateSamples(false, mSamplesCount);
+        mMinusSamplesBtn = view.findViewById(R.id.FQCD_button_minus);
+        mPlusSamplesBtn = view.findViewById(R.id.FQCD_button_plus);
+    }
+
+    private void initIncrementSamples(boolean enable){
+        if (enable) {
+            mMinusSamplesBtn.setVisibility(View.VISIBLE);
+            mPlusSamplesBtn.setVisibility(View.VISIBLE);
+            mMinusSamplesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (Integer.parseInt(mSamplesNumberEt.getText().toString()) > 0) {
+                        mSamplesCount = Integer.parseInt(mSamplesNumberEt.getText().toString()) - 1;
+                        updateSamples(false, mSamplesCount);
+                    }
                 }
-            }
-        });
-        view.findViewById(R.id.FQCD_button_plus).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSamplesCount = Integer.parseInt(mSamplesNumberEt.getText().toString()) + 1;
-                updateSamples(true, mSamplesCount - 1);
-            }
-        });
+            });
+            mPlusSamplesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mSamplesCount = Integer.parseInt(mSamplesNumberEt.getText().toString()) + 1;
+                    updateSamples(true, mSamplesCount - 1);
+                }
+            });
+        }else {
+            mMinusSamplesBtn.setVisibility(View.GONE);
+            mPlusSamplesBtn.setVisibility(View.GONE);
+        }
     }
 
     private void updateSamples(boolean isIncrement, int position) {
@@ -234,6 +256,16 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         initPassedView(mTestOrderDetails.getTestDetails().get(0).getPassed());
         initSamplesTestRv();
         initTestRv();
+        initDetailsRv();
+    }
+
+    private void initDetailsRv() {
+        QCDetailsMultiTypeAdapter testAdapter = new QCDetailsMultiTypeAdapter(mTestOrderDetails.getTestDetailsForm(), mTestOrderDetails.getTestDetails().get(0).getTestStatus());
+        mDetailsRv.setAdapter(testAdapter);
+        mDetailsRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(2, 50, true, 0);
+        mDetailsRv.addItemDecoration(gridSpacingItemDecoration);
+        mDetailsRv.setHasFixedSize(false);
     }
 
     private void initPassedView(Boolean status) {
@@ -349,7 +381,9 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                     mTestOrderDetails = testDetailsResponse;
                     initSamplesData();
                     initFieldsData();
+                    initDetailsData();
                     initView();
+                    initIncrementSamples(testDetailsResponse.getTestDetails().get(0).getAllowEditSamples());
                 }
             }
 
@@ -359,6 +393,23 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                 mNoDataTv.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    private void initDetailsData() {
+        List<TestDetailsForm> testDetails = mTestOrderDetails.getTestDetailsForm();
+        List<TestDetailsForm> toRemove = new ArrayList<>();
+
+        for (TestDetailsForm testDetail: testDetails){
+            if (testDetail.getDisplayType().equals(FIELD_TYPE_HIDDEN_INT)){
+                toRemove.add(testDetail);
+            }
+            if (testDetail.getDisplayType().equals(FIELD_TYPE_NUMBER_INT) && testDetail.getName().equals("TestStatus")){
+                testDetail.setDisplayType(FIELD_TYPE_COMBO_INT);
+                testDetail.setComboList(mTestOrderDetails.getStatusList());
+            }
+        }
+
+        testDetails.removeAll(toRemove);
     }
 
     private void initFieldsData() {

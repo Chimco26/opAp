@@ -1,7 +1,7 @@
 package com.operators.machinedatanetworkbridge;
 
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.example.common.ErrorResponse;
 import com.example.common.StandardResponse;

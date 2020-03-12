@@ -3,10 +3,10 @@ package com.operatorsapp.fragments;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -123,7 +123,7 @@ public class QCTestOrderFragment extends Fragment implements
                     } catch (Exception ignored) {
                     }
                     sendTestOrder(new TestOrderSendRequest(mTestOrderRequest.getJobID(), mTestOrder.getJoshID(),
-                            mTestOrder.getProductID(), mTestOrderRequest.getSubType(), samples));
+                            mTestOrder.getProductID(), mTestOrderRequest.getSubType(), samples, PersistenceManager.getInstance().getOperatorDBId()));
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.you_need_to_select_the_test_field), Toast.LENGTH_SHORT).show();
                 }
@@ -276,13 +276,27 @@ public class QCTestOrderFragment extends Fragment implements
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                     subTypeAdapter.setTitle(position);
-                    mTestOrderRequest.setSubType(testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position).getId());
-                    if (testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position).getHasSamples() != null &&
-                            testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position).getHasSamples()) {
+                    SubType subType = testOrderResponse.getResponseDictionaryDT().getSubTypes().get(position);
+                    mTestOrderRequest.setSubType(subType.getId());
+                    if (subType.getHasSamples()) {
                         mSamplesLy.setVisibility(View.VISIBLE);
+                        if (subType.getDefaultSamplesCount() != null){
+                            if (subType.getDefaultSamplesCount() == 0){
+                                mSamplesEt.setHint(String.valueOf(subType.getDefaultSamplesCount()));
+                            }else {
+                                mSamplesEt.setText(String.valueOf(subType.getDefaultSamplesCount()));
+                            }
+                        }else {
+                            mSamplesEt.setText(null);
+                        }
+                        if (subType.getAllowEdit()){
+                            mSamplesEt.setEnabled(true);
+                        }else {
+                            mSamplesEt.setEnabled(false);
+                        }
                     } else {
                         mSamplesLy.setVisibility(View.GONE);
-                        mSamplesEt.setHint("0");
+                        mSamplesEt.setText(null);
                     }
                 }
 

@@ -1,13 +1,14 @@
 package com.operatorsapp.adapters;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.common.UpsertType;
 import com.example.common.machineData.Worker;
@@ -40,7 +41,7 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final WorkerAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull WorkerAdapter.ViewHolder viewHolder, int position) {
 
         Worker worker = list.get(position);
         viewHolder.numberTv.setText(worker.getWorkerID());
@@ -65,28 +66,7 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.ViewHolder
             viewHolder.removeBtn.setColorFilter(viewHolder.itemView.getContext().getResources().getColor(R.color.black));
         }
 
-        viewHolder.removeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onRemoveWorker(list.get(viewHolder.getAdapterPosition()));
-                list.remove(viewHolder.getAdapterPosition());
-                if (viewHolder.getAdapterPosition() == 0) {
-                    notifyDataSetChanged();
-                } else {
-                    notifyItemRemoved(viewHolder.getAdapterPosition());
-                }
-            }
-        });
-
-        viewHolder.itemView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    onStartDragListener.onStartDrag(viewHolder);
-                }
-                return false;
-            }
-        });
+        viewHolder.setListeners(viewHolder);
     }
 
     @Override
@@ -135,6 +115,31 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.ViewHolder
             }catch (IllegalStateException e){
 
             }
+        }
+
+        public void setListeners(@NonNull ViewHolder viewHolder) {
+            viewHolder.removeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onRemoveWorker(WorkerAdapter.this.list.get(getAdapterPosition()));
+                    WorkerAdapter.this.list.remove(getAdapterPosition());
+                    if (getAdapterPosition() == 0) {
+                        notifyDataSetChanged();
+                    } else {
+                        notifyItemRemoved(getAdapterPosition());
+                    }
+                }
+            });
+
+            viewHolder.itemView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        onStartDragListener.onStartDrag(ViewHolder.this);
+                    }
+                    return false;
+                }
+            });
         }
     }
 

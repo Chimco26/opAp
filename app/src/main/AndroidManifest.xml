@@ -11,7 +11,6 @@
     <uses-permission android:name="android.permission.CLEAR_APP_CACHE" />
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.STATUS_BAR"/>
-    <uses-permission android:name="android.permission.STATUS_BAR"/>
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR"/>
 
     <application
@@ -26,12 +25,10 @@
         <activity
             android:name=".activities.MainActivity"
             android:configChanges="keyboardHidden|orientation"
-
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -48,10 +45,10 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name=".activities.JobActionActivity"
+            android:name=".activities.TaskActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.ActivateJobActivity"
             android:configChanges="keyboardHidden|orientation"

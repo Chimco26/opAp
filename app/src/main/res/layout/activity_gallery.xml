@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:keepScreenOn="true"
     tools:context=".activities.GalleryActivity">
 
     <RelativeLayout
@@ -159,7 +160,7 @@
             android:layout_height="2dp"
             android:background="@color/default_gray" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/AG_rv"
             android:layout_width="match_parent"
             android:layout_height="0dp"

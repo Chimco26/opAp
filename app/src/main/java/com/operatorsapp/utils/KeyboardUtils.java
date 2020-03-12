@@ -6,9 +6,12 @@ import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 /**
  * Created by david vardi
@@ -148,6 +151,27 @@ public class KeyboardUtils {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) 200, metrics);
+    }
+
+    public static void setupUI(View view, final Context context) {
+
+        // Set up touch listener for non-text box views to hide keyboard.
+        if (!(view instanceof EditText)) {
+            view.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    closeKeyboard(context);
+                    return false;
+                }
+            });
+        }
+
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View innerView = ((ViewGroup) view).getChildAt(i);
+                setupUI(innerView, context);
+            }
+        }
     }
 
     public interface KeyboardListener {

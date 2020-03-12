@@ -1,8 +1,9 @@
 package com.operatorsapp.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
@@ -226,7 +227,7 @@ public class StopEventLogActivity extends AppCompatActivity
 
     public Fragment getVisibleFragment() {
         Fragment f = null;
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         List<Fragment> fragments = fragmentManager.getFragments();
         if (fragments != null) {
             for (Fragment fragment : fragments) {

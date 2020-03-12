@@ -1,13 +1,14 @@
 package com.operatorsapp.adapters;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.example.common.QCModels.ResponseDictionnaryItemsBaseModel;
 import com.operatorsapp.R;
@@ -32,7 +33,7 @@ public class DictionarySpinnerAdapter extends ArrayAdapter<ResponseDictionnaryIt
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
-            row = inflater.inflate(R.layout.base_spinner_item, parent, false);
+            row = inflater.inflate(R.layout.active_jobs_spinner_item, parent, false);
             mView = row;
             mRowName = row.findViewById(R.id.spinner_item_name);
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
@@ -64,7 +65,7 @@ public class DictionarySpinnerAdapter extends ArrayAdapter<ResponseDictionnaryIt
             mRowName = mView.findViewById(R.id.spinner_item_name);
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
             mRowName.setText(mSpinnerItems.get(position).getName());
-            mRowName.setTextSize(24);
+            mRowName.setTextSize(22);
         }
     }
 }

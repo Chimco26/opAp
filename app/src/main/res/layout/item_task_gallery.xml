@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="65dp"
+    android:layout_height="65dp"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    >
+
+    <LinearLayout
+        android:id="@+id/IG_image_ly"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="5dp"
+        android:orientation="vertical"
+        android:background="@drawable/background_item_gallery"
+        >
+
+        <ImageView
+            android:id="@+id/IG_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:background="@color/white"/>
+
+    </LinearLayout>
+
+</LinearLayout>

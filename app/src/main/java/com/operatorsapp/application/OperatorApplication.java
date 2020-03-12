@@ -2,7 +2,7 @@ package com.operatorsapp.application;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.multidex.MultiDexApplication;
+import androidx.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;

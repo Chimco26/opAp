@@ -3,6 +3,8 @@ package com.example.common.QCModels;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class TestDetail {
     @SerializedName("ID")
     @Expose
@@ -82,6 +84,16 @@ public class TestDetail {
     @SerializedName("Passed")
     @Expose
     private Boolean passed;
+    @SerializedName("AllowEditSamplesCount")
+    @Expose
+    private Boolean allowEditSamples;
+
+    public Boolean getAllowEditSamples() {
+        if (allowEditSamples == null){
+            return false;
+        }
+        return allowEditSamples;
+    }
 
     public Integer getID() {
         return iD;
@@ -290,4 +302,5 @@ public class TestDetail {
     public void setPassed(Boolean passed) {
         this.passed = passed;
     }
+
 }

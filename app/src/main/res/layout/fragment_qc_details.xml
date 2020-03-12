@@ -122,7 +122,7 @@
             android:background="@color/divider_gray" />
 
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp">
@@ -140,6 +140,54 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="15dp" />
+
+                <LinearLayout
+                    android:id="@+id/FQCD_details_ly"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/test_details"
+                        android:textColor="@color/machine_blue"
+                        android:textSize="23sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/divider_gray" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/FQCD_details_rv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/divider_gray" />
+
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/FQCD_samples_ly"
@@ -163,12 +211,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="15dp" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/divider_gray" />
-
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/FQCD_paramters_rv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -257,7 +300,7 @@
                     android:orientation="vertical" />
             </LinearLayout>
 
-        </android.support.v4.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 
     <TextView

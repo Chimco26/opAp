@@ -1,12 +1,13 @@
 package com.operatorsapp.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operatorsapp.R;
@@ -21,15 +22,18 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     private final Context mContext;
 
     private GalleryAdapterListener mListener;
+    private int mItemLayoutId;
 
 
-    public GalleryAdapter(ArrayList<GalleryModel> fileUrls, GalleryAdapterListener listener, Context context) {
+    public GalleryAdapter(ArrayList<GalleryModel> fileUrls, GalleryAdapterListener listener, Context context, int itemLayoutId) {
 
         mGalleryModels = fileUrls;
 
         mListener = listener;
 
         mContext = context;
+
+        mItemLayoutId = itemLayoutId;
     }
 
 
@@ -38,21 +42,23 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     public GalleryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        return new GalleryAdapter.ViewHolder(inflater.inflate(R.layout.item_gallery, parent, false));
+        return new GalleryAdapter.ViewHolder(inflater.inflate(mItemLayoutId, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull final GalleryAdapter.ViewHolder viewHolder, final int position) {
 
-        viewHolder.mImgLy.post(new Runnable() {
-            @Override
-            public void run() {
-                ViewGroup.MarginLayoutParams mItemViewParams4;
-                mItemViewParams4 = (ViewGroup.MarginLayoutParams) viewHolder.mImgLy.getLayoutParams();
-                mItemViewParams4.width = mContext.getResources().getDisplayMetrics().widthPixels / 6;
-                viewHolder.mImgLy.requestLayout();
-            }
-        });
+        if (mItemLayoutId == R.layout.item_gallery) {
+            viewHolder.mImgLy.post(new Runnable() {
+                @Override
+                public void run() {
+                    ViewGroup.MarginLayoutParams mItemViewParams4;
+                    mItemViewParams4 = (ViewGroup.MarginLayoutParams) viewHolder.mImgLy.getLayoutParams();
+                    mItemViewParams4.width = mContext.getResources().getDisplayMetrics().widthPixels / 6;
+                    viewHolder.mImgLy.requestLayout();
+                }
+            });
+        }
 
         if (mGalleryModels.get(position).isSelected()) {
 
@@ -77,11 +83,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             @Override
             public void onClick(View v) {
 
-                viewHolder.mImgLy.setBackground(mContext.getResources().getDrawable(R.drawable.background_item_gallery_selected));
+                if (mItemLayoutId == R.layout.item_gallery) {
 
-                resetSelectedItems();
-
-                mGalleryModels.get(position).setSelected(true);
+                    viewHolder.mImgLy.setBackground(mContext.getResources().getDrawable(R.drawable.background_item_gallery_selected));
+                    resetSelectedItems();
+                    mGalleryModels.get(position).setSelected(true);
+                }
 
                 if (!mGalleryModels.get(position).getUrl().endsWith("pdf")) {
 

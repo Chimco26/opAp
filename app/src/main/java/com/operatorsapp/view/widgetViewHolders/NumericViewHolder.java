@@ -2,8 +2,6 @@ package com.operatorsapp.view.widgetViewHolders;
 
 import android.app.Activity;
 import android.graphics.PorterDuff;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
@@ -233,8 +234,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View v) {
                 if (!mEditCycleEt.getText().toString().isEmpty()) {
                     widget.setEditStep(0);
-                    mDashboardCentralContainerListener.onReportCycleUnit(getCycleReportValue(Double.parseDouble(mEditCycleEt.getText().toString()))
-                            , String.valueOf(Double.parseDouble(mEditCycleEt.getText().toString())));
+                    mDashboardCentralContainerListener.onReportCycleUnit(String.valueOf(Double.parseDouble(mEditCycleEt.getText().toString())));
                     mEditCycleEt.clearFocus();
                     setupNumericCycleItem(widget);
                     mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());

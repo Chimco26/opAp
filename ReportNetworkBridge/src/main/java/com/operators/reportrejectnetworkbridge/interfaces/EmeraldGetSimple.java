@@ -9,6 +9,13 @@ import com.example.common.machineData.ShiftOperatorResponse;
 import com.example.common.operator.SaveShiftWorkersRequest;
 import com.example.common.request.BaseRequest;
 import com.example.common.request.MachineIdRequest;
+import com.example.common.task.CreateTaskHistoryRequest;
+import com.example.common.task.CreateTaskRequest;
+import com.example.common.task.GetTaskFilesRequest;
+import com.example.common.task.TaskDefaultRequest;
+import com.example.common.task.TaskFilesResponse;
+import com.example.common.task.TaskListResponse;
+import com.example.common.task.TaskObjectsForCreateOrEditResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -29,5 +36,20 @@ public interface EmeraldGetSimple {
 
     @POST("/LeaderMESApi/saveShiftWorkers")
     Call<StandardResponse> saveShiftWorkers(@Body SaveShiftWorkersRequest request);
+
+    @POST("/LeaderMESApi/GetTaskObjects")
+    Call<TaskObjectsForCreateOrEditResponse> getTaskObjectsForCreateOrEdit(@Body TaskDefaultRequest request);
+
+    @POST("/LeaderMESApi/GetTaskForMachine")
+    Call<TaskListResponse> getTaskList(@Body TaskDefaultRequest request);
+
+    @POST("/LeaderMESApi/CreateTask")
+    Call<StandardResponse> createOrdUpdateTask(@Body CreateTaskRequest request);
+
+    @POST("/LeaderMESApi/CreateTaskHistory")
+    Call<StandardResponse> updateTaskStatus(@Body CreateTaskHistoryRequest request);
+
+    @POST("/LeaderMESApi/GetTaskFiles")
+    Call<TaskFilesResponse> getTaskFiles(@Body GetTaskFilesRequest request);
 }
 

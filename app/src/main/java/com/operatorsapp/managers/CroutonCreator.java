@@ -4,7 +4,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;

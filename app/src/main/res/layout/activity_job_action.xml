@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.JobActionActivity">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/AJA_main_ly"
@@ -127,7 +126,7 @@
                         </RelativeLayout>
 
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/AJA_search_rv"
                             android:layout_width="match_parent"
                             android:layout_height="36dp"
@@ -140,7 +139,7 @@
                         android:layout_height="1dp"
                         android:background="@color/divider_gray" />
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/AJA_product_rv"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -181,7 +180,7 @@
                                 android:textSize="35sp" />
 
                             <Button
-                                android:id="@+id/AJA-job_activate_btn"
+                                android:id="@+id/AJA_job_activate_btn"
                                 android:layout_width="220dp"
                                 android:layout_height="50dp"
                                 android:layout_alignParentEnd="true"
@@ -199,7 +198,7 @@
                             android:layout_marginTop="15dp"
                             android:background="@color/divider_gray" />
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/AJA_top_prop_rv"
                             android:layout_width="match_parent"
                             android:layout_height="87dp"/>
@@ -389,7 +388,7 @@
 
                                     </LinearLayout>
 
-                                    <android.support.v7.widget.RecyclerView
+                                    <androidx.recyclerview.widget.RecyclerView
                                         android:id="@+id/AJA_actions_rv"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content" />

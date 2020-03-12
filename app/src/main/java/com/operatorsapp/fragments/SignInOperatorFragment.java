@@ -3,12 +3,6 @@ package com.operatorsapp.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,6 +12,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.operatorinfra.Operator;
 import com.example.common.StandardResponse;
@@ -122,6 +123,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                 saveShiftWorkers();
             }
         });
+        mSignInButton.setClickable(false);
         mOperatorIdEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -291,6 +293,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         @Override
         public void onOperatorDataReceived(Operator operator) {
             removePhoneKeypad();
+            mSignInButton.setOnClickListener(SignInOperatorFragment.this);
             if (operator != null) {
                 if (operator.getOperatorName().equals("")) {
                     OppAppLogger.getInstance().d(LOG_TAG, "Operator data receive failed. Reason : Empty operator name ");
@@ -314,6 +317,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
 
         @Override
         public void onOperatorDataReceiveFailure(StandardResponse reason) {
+            mSignInButton.setOnClickListener(SignInOperatorFragment.this);
             OppAppLogger.getInstance().d(LOG_TAG, "Operator data receive failed. Reason : " + reason.getError().toString());
             if (reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
@@ -382,6 +386,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                     ProgressDialogManager.show(getActivity());
                     mOperatorIdEditText.setText(null);
                     OppAppLogger.getInstance().i(LOG_TAG, "Operator id: " + id);
+                    mSignInButton.setOnClickListener(null);
                     mOperatorCore.getOperatorById(id);
                 } else {
                     ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.already_in_the_perators_list), CroutonCreator.CroutonType.NETWORK_ERROR);

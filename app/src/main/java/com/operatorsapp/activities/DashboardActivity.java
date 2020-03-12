@@ -18,16 +18,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.util.SparseArray;
@@ -35,6 +25,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.common.ErrorResponse;
 import com.example.common.Event;
@@ -195,7 +196,7 @@ import static com.example.common.permissions.WidgetInfo.PermissionId.SHIFT_REPOR
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_ERP_JOB_ID;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_JOB_ID;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_PRODUCT_NAME;
-import static com.operatorsapp.activities.JobActionActivity.EXTRA_IS_NO_PRODUCTION;
+import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_IS_NO_PRODUCTION;
 import static com.operatorsapp.fragments.ActionBarAndEventsFragment.EXTRA_FIELD_FOR_MACHINE;
 import static com.operatorsapp.utils.ClearData.cleanEvents;
 
@@ -288,7 +289,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Integer mSelectProductJoshId;
     private View mReportBtn;
     private boolean mIsTimeLineOpen;
-    private String[] mReportCycleUnitValues = new String[2];//values of cycle unit report : [0] = originalValue ; [1] = max value if orinal is over the max
     private SparseArray<WidgetInfo> permissionForMachineHashMap;
     private NextJobTimerDialog mNextJobTimerDialog;
     private int mShowDialogJobId;
@@ -393,7 +393,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         updateAndroidSecurityProvider(this);
 
 //        // Analytics
-//        OperatorApplication application = (OperatorApplication) getApplication();
+//        OperatorApplication application = (OperatorApplication) ƒgetApplication();
 //        mTracker = application.getDefaultTracker();
 
         mMachines = getIntent().getExtras().<Machine>getParcelableArrayList(MainActivity.MACHINE_LIST);
@@ -722,7 +722,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             try {
 
-                android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+                FragmentManager fm = getSupportFragmentManager();
                 fm.beginTransaction().remove(mWidgetFragment).commit();
             } catch (IllegalStateException ignored) {
             }
@@ -731,7 +731,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             try {
 
-                android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+                FragmentManager fm = getSupportFragmentManager();
                 fm.beginTransaction().remove(mActionBarAndEventsFragment).commit();
             } catch (IllegalStateException ignored) {
             }
@@ -745,7 +745,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     boolean first = false;
 
-    private android.support.v4.app.FragmentManager.OnBackStackChangedListener getListener() {
+    private FragmentManager.OnBackStackChangedListener getListener() {
 
         return new FragmentManager.OnBackStackChangedListener() {
             public void onBackStackChanged() {
@@ -1086,6 +1086,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                         String opName = machineStatus.getAllMachinesData().get(0).getOperatorName();
                         String opId = machineStatus.getAllMachinesData().get(0).getOperatorId();
+                        PersistenceManager.getInstance().setOperatorDBId(machineStatus.getAllMachinesData().get(0).getUserId());
 
                         if (opId != null && !opId.equals("") && opName != null && !opName.equals("")) {
 
@@ -1767,7 +1768,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     public Fragment getVisibleFragment() {
         Fragment f = null;
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         List<Fragment> fragments = fragmentManager.getFragments();
         if (fragments != null) {
             for (Fragment fragment : fragments) {
@@ -2126,6 +2127,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         layoutParams3.bottomMargin = bottomMargin;
 
         mContainer3.setLayoutParams(layoutParams3);
+    }
+
+    @Override
+    public void onOpenTaskActivity() {
+        Intent intent = new Intent(DashboardActivity.this, TaskActivity.class);
+        ignoreFromOnPause = true;
+
+        if (mActionBarAndEventsFragment != null) {
+
+            mActionBarAndEventsFragment.setFromAnotherActivity(true);
+        }
+        startActivity(intent);
     }
 
     @Override
@@ -2866,15 +2879,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onReportCycleUnit(String value, String originalValue) {
+    public void onReportCycleUnit(String value) {
         if (value == null || value.equals("")) {
             value = "0";
         }
-        if (originalValue == null || originalValue.equals("")) {
-            originalValue = "0";
-        }
-        mReportCycleUnitValues[0] = originalValue;
-        mReportCycleUnitValues[1] = value;
         sendCycleUnitReport(Double.parseDouble(value));
     }
 
@@ -2909,14 +2917,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         OppAppLogger.getInstance().i(TAG, "sendRejectReport units value is: " + String.valueOf(value) + " JobId: " + mSelectProductJobId);
 
         mReportCore.sendCycleUnitsReport(value, mSelectProductJobId);
-
-//        if (getFragmentManager() != null) {
-//
-//            getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//
-//        }
-
-//        SendBroadcast.refreshPolling(getContext());
     }
 
     private void sendRejectReport(String value, boolean isUnit, int selectedCauseId,
@@ -2992,23 +2992,26 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             OppAppLogger.getInstance().i(TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
 
+            String text = "";
+            text = response.getError().getErrorDesc();
             if (response.getFunctionSucceed()) {
-                String text = "";
-                if (mReportCycleUnitValues[0].equals(mReportCycleUnitValues[1])) {
-                    text = response.getError().getErrorDesc();
-                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.SUCCESS);
-                } else if (Double.parseDouble(mReportCycleUnitValues[0]) > Double.parseDouble(mReportCycleUnitValues[1])) {
-                    text = String.format("%s %s %s %s", getString(R.string.report_cycle_failed_but_max_reported), getString(R.string.reported),
-                            getString(R.string.max_value_is), mReportCycleUnitValues[1]);
-                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.NETWORK_ERROR);
-                } else if (Double.parseDouble(mReportCycleUnitValues[0]) < Double.parseDouble(mReportCycleUnitValues[1])) {
-                    text = String.format("%s %s %s %s", getString(R.string.report_cycle_failed_but_min_reported), getString(R.string.reported),
-                            getString(R.string.min_value_is), mReportCycleUnitValues[1]);
-                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.NETWORK_ERROR);
-                }
-            } else {
-                ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+//                if (mReportCycleUnitValues[0].equals(mReportCycleUnitValues[1])) {
+                ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.SUCCESS);
+            }else {
+                ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.NETWORK_ERROR);
             }
+//            else if (Double.parseDouble(mReportCycleUnitValues[0]) > Double.parseDouble(mReportCycleUnitValues[1])) {
+//                    text = String.format("%s %s %s %s", getString(R.string.report_cycle_failed_but_max_reported), getString(R.string.reported),
+//                            getString(R.string.max_value_is), mReportCycleUnitValues[1]);
+//                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.NETWORK_ERROR);
+//                } else if (Double.parseDouble(mReportCycleUnitValues[0]) < Double.parseDouble(mReportCycleUnitValues[1])) {
+//                    text = String.format("%s %s %s %s", getString(R.string.report_cycle_failed_but_min_reported), getString(R.string.reported),
+//                            getString(R.string.min_value_is), mReportCycleUnitValues[1]);
+//                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.NETWORK_ERROR);
+//                }
+//            } else {
+//                ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+//            }
 
             SendBroadcast.refreshPolling(DashboardActivity.this);
 
@@ -3451,9 +3454,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 install.setDataAndType(apkUri, "application/vnd.android.package-archive");
                 install.normalizeMimeType("application/vnd.android.package-archive");
 
-                if(install.resolveActivity(getPackageManager()) != null) {
+                if (install.resolveActivity(getPackageManager()) != null) {
                     startActivity(install);
-                }else {
+                } else {
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, getString(R.string.install_activity_not_found), CroutonCreator.CroutonType.NETWORK_ERROR);
                 }
 
@@ -3512,15 +3515,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onPostActivateJobSuccess(StandardResponse response) {
 
-//                ProgressDialogManager.dismiss();
-
                 if (response == null) {
-
+                    ProgressDialogManager.dismiss();
                     StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "PostActivateJob Failed");
                     ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
 
                 } else if (((StandardResponse) response).getError() != null) {
-
+                    ProgressDialogManager.dismiss();
                     StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, ((StandardResponse) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject);
 

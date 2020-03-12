@@ -3,7 +3,17 @@ package com.example.common.QCModels;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class TestDetailsForm {
+    public static final int FIELD_TYPE_TEXT_INT = 1;
+    public static final int FIELD_TYPE_COMBO_INT = 2;
+    public static final int FIELD_TYPE_BOOLEAN_INT = 3;
+    public static final int FIELD_TYPE_NUMBER_INT = 6;
+    public static final int FIELD_TYPE_DATE_INT = 7;
+    public static final int FIELD_TYPE_TIME_INT = 8;
+    public static final int FIELD_TYPE_HIDDEN_INT = 12;
+
     @SerializedName("Name")
     @Expose
     private String name;
@@ -31,6 +41,7 @@ public class TestDetailsForm {
     @SerializedName("CurrentValue")
     @Expose
     private String currentValue;
+    private List<StatusList> statusList;
 
     public String getName() {
         return name;
@@ -104,4 +115,11 @@ public class TestDetailsForm {
         this.currentValue = currentValue;
     }
 
+    public void setComboList(List<StatusList> statusList) {
+        this.statusList = statusList;
+    }
+
+    public List<StatusList> getStatusList() {
+        return statusList;
+    }
 }

@@ -74,7 +74,7 @@
                     android:textSize="35sp" />
 
                 <Button
-                    android:id="@+id/AJA-job_activate_btn"
+                    android:id="@+id/AJA_job_activate_btn"
                     android:layout_width="220dp"
                     android:layout_height="50dp"
                     android:layout_alignParentEnd="true"
@@ -91,7 +91,7 @@
                 android:layout_height="2dp"
                 android:layout_marginTop="15dp" />
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/AJA_top_prop_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -287,7 +287,7 @@
 
                     </LinearLayout>
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/AJA_actions_rv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />

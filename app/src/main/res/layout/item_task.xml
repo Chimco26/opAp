@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="129dp"
+    android:layout_margin="7dp"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/ITask_main_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/ITask_priority_view"
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:background="@color/red_dark" />
+
+        <TextView
+            android:id="@+id/ITask_title"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/black"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/ITask_text"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/ITask_title"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center_vertical"
+            android:maxLines="2"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:id="@+id/ITask_priority_ic"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/ic_priority"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/ITask_author"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_toStartOf="@+id/ITask_priority_ic"
+            android:background="@drawable/circle_blue"
+            android:gravity="center"
+            android:maxLength="2"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+</RelativeLayout>

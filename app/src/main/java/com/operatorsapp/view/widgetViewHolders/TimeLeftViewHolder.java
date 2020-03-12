@@ -1,7 +1,7 @@
 package com.operatorsapp.view.widgetViewHolders;
 
-import android.support.v4.widget.TextViewCompat;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.widget.TextViewCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Html;
 import android.util.TypedValue;
 import android.view.View;

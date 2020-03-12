@@ -2,13 +2,13 @@ package com.operatorsapp.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.operatorsapp.R;
 import com.operatorsapp.utils.FilterStatus;
@@ -28,13 +28,13 @@ public class LegendDialogAdapter extends RecyclerView.Adapter<LegendDialogAdapte
         mLegendList = new ArrayList<>();
         mLegendList.add(new FilterStatus(context.getString(R.string.working), "#1aa917"));
         mLegendList.add(new FilterStatus(context.getString(R.string.working_setup), "#127510"));
+        mLegendList.add(new FilterStatus(context.getString(R.string.working_manually), "#90EE90"));
         mLegendList.add(new FilterStatus(context.getString(R.string.parameter_deviation), "#f5a623"));
         mLegendList.add(new FilterStatus(context.getString(R.string.stop), "#c01b29"));
         mLegendList.add(new FilterStatus(context.getString(R.string.stop_setup), "#850f16"));
         mLegendList.add(new FilterStatus(context.getString(R.string.idle), "#a6a8ab"));
         mLegendList.add(new FilterStatus(context.getString(R.string.working_no_production), "#7f7f7f"));
         mLegendList.add(new FilterStatus(context.getString(R.string.no_communication_p), "#21809e"));
-
 
     }
 

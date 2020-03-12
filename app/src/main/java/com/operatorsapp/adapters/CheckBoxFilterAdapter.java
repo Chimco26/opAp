@@ -2,13 +2,14 @@ package com.operatorsapp.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.common.SelectableString;
 import com.operatorsapp.R;
@@ -18,11 +19,15 @@ import java.util.ArrayList;
 public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAdapter.ViewHolder> {
 
     private final ArrayList<SelectableString> mFilterList;
+    private final boolean mSelectAllOption;
+    private final boolean mIsVertical;
     private CheckBoxFilterAdapterListener mCheckBoxFilterAdapterListener;
 
-    public CheckBoxFilterAdapter(ArrayList<SelectableString> list, CheckBoxFilterAdapterListener checkBoxFilterAdapterListener) {
+    public CheckBoxFilterAdapter(ArrayList<SelectableString> list, CheckBoxFilterAdapterListener checkBoxFilterAdapterListener, boolean selectAllOption, boolean isVertical) {
         mFilterList = list;
         mCheckBoxFilterAdapterListener = checkBoxFilterAdapterListener;
+        mSelectAllOption = selectAllOption;
+        mIsVertical = isVertical;
     }
 
     @NonNull
@@ -30,6 +35,9 @@ public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAd
     public CheckBoxFilterAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
+        if (mIsVertical){
+            return new CheckBoxFilterAdapter.ViewHolder(inflater.inflate(R.layout.item_checkbox_for_vertical, parent, false));
+        }
         return new CheckBoxFilterAdapter.ViewHolder(inflater.inflate(R.layout.item_check_box, parent, false));
     }
 
@@ -48,8 +56,11 @@ public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAd
                     updateAll(check);
                 } else {
                     mFilterList.get(position).setSelected(check);
-//                    updateSelectAllItem(mFilterList);
+                    if (mSelectAllOption) {
+                        updateSelectAllItem(mFilterList);
+                    }
                 }
+                notifyDataSetChanged();
                 mCheckBoxFilterAdapterListener.onItemCheck(mFilterList.get(position));
             }
         });

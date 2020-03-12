@@ -2,7 +2,7 @@ package com.operatorsapp.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +31,8 @@ import com.operatorsapp.view.widgetViewHolders.TimeViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.support.v7.widget.RecyclerView.Adapter;
-import static android.support.v7.widget.RecyclerView.ViewHolder;
+import static androidx.recyclerview.widget.RecyclerView.Adapter;
+import static androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 public class WidgetAdapter extends Adapter {
     private static final long TEN_HOURS = 60000L * 60 * 10;

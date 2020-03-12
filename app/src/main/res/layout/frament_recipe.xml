@@ -247,7 +247,7 @@
             android:orientation="vertical"
             android:visibility="gone">
 
-            <android.support.v4.widget.NestedScrollView
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -257,7 +257,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"></LinearLayout>
 
-            </android.support.v4.widget.NestedScrollView>
+            </androidx.core.widget.NestedScrollView>
 
             <LinearLayout
                 android:id="@+id/FR_channel_1_99_no_data_ly"

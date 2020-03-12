@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class ProjectionDrawablesHelper {
 

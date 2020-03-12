@@ -7,15 +7,16 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnErrorListener;
@@ -25,15 +26,11 @@ import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.github.barteksc.pdfviewer.util.Constants;
 import com.github.chrisbanes.photoview.OnScaleChangedListener;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.halilibo.bettervideoplayer.BetterVideoCallback;
 import com.halilibo.bettervideoplayer.BetterVideoPlayer;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.GalleryAdapter;
-import com.operatorsapp.application.OperatorApplication;
-import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.model.GalleryModel;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.utils.DownloadHelper;
@@ -207,7 +204,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         mGalleryModels.get(0).setSelected(true);
 
-        mAdapter = new GalleryAdapter(mGalleryModels, this, this);
+        mAdapter = new GalleryAdapter(mGalleryModels, this, this, R.layout.item_gallery);
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);

@@ -41,6 +41,7 @@ public class RangeView2 extends View {
     private int mWidth = 1;
     private boolean mShowStandardIc;
     private boolean mShowAvgdIc;
+    private boolean mIsDefaultMode;
 
     public void setAvgValue(float avgValue) {
         this.mAvgValue = avgValue;
@@ -71,6 +72,7 @@ public class RangeView2 extends View {
         mWidth = width;
         postInvalidate();
     }
+
     public RangeView2(Context context) {
         super(context);
         init(context, null, 0);
@@ -107,8 +109,8 @@ public class RangeView2 extends View {
         mHeight = dipToPixels(context, 15);
         border = dipToPixels(context, 12);
 
-        avgImage = Bitmap.createScaledBitmap(avgImage,(int)(mHeight), (int)(mHeight),true);
-        mStandardImage = Bitmap.createScaledBitmap(mStandardImage,(int) (mHeight *1.2),(int) (mHeight *1.2),true);
+        avgImage = Bitmap.createScaledBitmap(avgImage, (int) (mHeight), (int) (mHeight), true);
+        mStandardImage = Bitmap.createScaledBitmap(mStandardImage, (int) (mHeight * 1.2), (int) (mHeight * 1.2), true);
         mGrayPaint.setAntiAlias(true);
         mGrayPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mGrayPaint.setColor(Color.parseColor("#cecece"));
@@ -169,9 +171,14 @@ public class RangeView2 extends View {
             canvas.drawLine(((mCurrentValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20, getHeight() / 2 - border, percent * 20 + ((mCurrentValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent, getHeight() / 2 + mHeight / 2, mCurrentPaint);
             canvas.drawText(currentValueTxt, (((mCurrentValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20) - mTextPaint.measureText(currentValueTxt) / 2, getHeight() / 2 - border - textPadding, mTextPaint);
         } else if (mCurrentValue < mLowLimit) {
-            canvas.drawLine(0, getHeight() / 2f, percent * 20, getHeight() / 2f, mGreenPaint);
-            canvas.drawLine(percent * 10, getHeight() / 2 - border, percent * 10, getHeight() / 2 + mHeight / 2, mCurrentPaint);
-            canvas.drawText(currentValueTxt, percent * 10 - mTextPaint.measureText(currentValueTxt) / 2, getHeight() / 2 - border - textPadding, mTextPaint);
+            if (!mIsDefaultMode){
+                canvas.drawLine(0, getHeight() / 2f, percent * 20, getHeight() / 2f, mGreenPaint);
+                canvas.drawLine(percent * 10, getHeight() / 2 - border, percent * 10, getHeight() / 2 + mHeight / 2, mCurrentPaint);
+                canvas.drawText(currentValueTxt, percent * 10 - mTextPaint.measureText(currentValueTxt) / 2, getHeight() / 2 - border - textPadding, mTextPaint);
+            }else {
+                canvas.drawLine(percent * 10, getHeight() / 2 - border, percent * 10, getHeight() / 2 + mHeight / 2, mGrayPaint);
+                canvas.drawText(currentValueTxt, percent * 10 - mTextPaint.measureText(currentValueTxt) / 2, getHeight() / 2 - border - textPadding, mGrayPaint);
+            }
         } else {
             canvas.drawLine(percent * 80, getHeight() / 2f, percent * 100, getHeight() / 2f, mGreenPaint);
             canvas.drawLine(percent * 90, getHeight() / 2 - border, percent * 90, getHeight() / 2 + mHeight / 2, mCurrentPaint);
@@ -205,4 +212,7 @@ public class RangeView2 extends View {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, metrics);
     }
 
+    public void setDefaultMode(boolean isDefaultMode) {
+        mIsDefaultMode = isDefaultMode;
+    }
 }

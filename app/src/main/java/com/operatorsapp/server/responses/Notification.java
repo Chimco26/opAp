@@ -1,7 +1,6 @@
 package com.operatorsapp.server.responses;
 
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 
 import com.google.gson.annotations.SerializedName;
 import com.operatorsapp.R;

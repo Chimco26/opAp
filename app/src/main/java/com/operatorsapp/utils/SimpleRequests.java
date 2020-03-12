@@ -1,16 +1,18 @@
 package com.operatorsapp.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.example.common.ErrorResponse;
 import com.example.common.MultipleRejectRequestModel;
 import com.example.common.StandardResponse;
 import com.example.common.StopLogs.StopLogsResponse;
+import com.example.common.callback.CreateTaskCallback;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.callback.GetDepartmentCallback;
 import com.example.common.callback.GetMachineLineCallback;
 import com.example.common.callback.GetShiftWorkersCallback;
 import com.example.common.callback.GetStopLogCallback;
+import com.example.common.callback.GetTaskListCallback;
 import com.example.common.department.DepartmentsMachinesResponse;
 import com.example.common.department.MachineLineRequest;
 import com.example.common.department.MachineLineResponse;
@@ -19,6 +21,15 @@ import com.example.common.operator.SaveShiftWorkersRequest;
 import com.example.common.request.BaseRequest;
 import com.example.common.request.MachineIdRequest;
 import com.example.common.request.RecipeUpdateRequest;
+import com.example.common.task.CreateTaskHistoryRequest;
+import com.example.common.task.CreateTaskRequest;
+import com.example.common.task.GetTaskFilesRequest;
+import com.example.common.task.Task;
+import com.example.common.task.TaskDefaultRequest;
+import com.example.common.task.TaskFilesResponse;
+import com.example.common.task.TaskHistory;
+import com.example.common.task.TaskListResponse;
+import com.example.common.task.TaskObjectsForCreateOrEditResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
@@ -35,12 +46,15 @@ import com.operators.reportrejectnetworkbridge.interfaces.GetJobDetailsNetworkMa
 import com.operators.reportrejectnetworkbridge.interfaces.GetPendingJobListNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetReportMultipleRequestNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetSimpleNetworkManager;
+import com.operators.reportrejectnetworkbridge.interfaces.GetTaskFilesCallback;
+import com.operators.reportrejectnetworkbridge.interfaces.GetTaskObjectsForCreateCallback;
 import com.operators.reportrejectnetworkbridge.interfaces.GetVersionNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostActivateJobNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostSplitEventNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostUpdateNotesForJobNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostUpdtaeActionsNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.RecipeNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.interfaces.UpdateTaskStatusCallback;
 import com.operators.reportrejectnetworkbridge.server.request.GetAllRecipesRequest;
 import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SessionIdModel;
@@ -888,5 +902,238 @@ public class SimpleRequests {
         });
 
     }
+
+    public static void getTaskList(String siteUrl, final GetTaskListCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        PersistenceManager persistenceManager = PersistenceManager.getInstance();
+        Call<TaskListResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                requestTimeout, TimeUnit.SECONDS).getTaskList(new TaskDefaultRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId()));
+
+        call.enqueue(new Callback<TaskListResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<TaskListResponse> call, @NonNull Response<TaskListResponse> response) {
+
+                if (response.body() != null && (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty())) {
+                    if (callback != null) {
+
+                        callback.onGetTaskListCallbackSuccess(response.body());
+                    } else {
+
+                        OppAppLogger.getInstance().w(LOG_TAG, "getTaskList(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TaskListResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getTaskList Error");
+                        callback.onGetTaskListCallbackFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.getInstance().w(LOG_TAG, "getTaskList(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    public static void createOrUpdateTask(Task task, String siteUrl, final CreateTaskCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<StandardResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                requestTimeout, TimeUnit.SECONDS).createOrdUpdateTask(new CreateTaskRequest(PersistenceManager.getInstance().getSessionId(), task));
+
+        call.enqueue(new Callback<StandardResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+
+                if (response.body() != null && response.body().getError().getErrorDesc() == null || response.body() != null && response.body().getError().getErrorDesc().isEmpty()) {
+                    if (callback != null) {
+
+                        callback.onCreateTaskCallbackSuccess(response.body());
+                    } else {
+
+                        OppAppLogger.getInstance().w(LOG_TAG, "createOrUpdateTask(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "createOrUpdateTask Error");
+                        callback.onCreateTaskCallbackFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.getInstance().w(LOG_TAG, "createOrUpdateTask(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    public static void getTaskObjectsForCreateOrEdit(String siteUrl, final GetTaskObjectsForCreateCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        PersistenceManager persistenceManager = PersistenceManager.getInstance();
+        Call<TaskObjectsForCreateOrEditResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                requestTimeout, TimeUnit.SECONDS).getTaskObjectsForCreateOrEdit(new TaskDefaultRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId()));
+
+        call.enqueue(new Callback<TaskObjectsForCreateOrEditResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<TaskObjectsForCreateOrEditResponse> call, @NonNull Response<TaskObjectsForCreateOrEditResponse> response) {
+
+                if (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty()) {
+                    if (callback != null) {
+
+                        callback.onGetTaskObjectsForCreateCallbackSuccess(response.body());
+                    } else {
+
+                        OppAppLogger.getInstance().w(LOG_TAG, "getTaskObjectsForCreateOrEdit(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TaskObjectsForCreateOrEditResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getTaskObjectsForCreateOrEdit Error");
+                        callback.onGetTaskObjectsForCreateCallbackFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.getInstance().w(LOG_TAG, "getTaskObjectsForCreateOrEdit(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    public static void updateTaskStatus(TaskHistory task, String siteUrl, final UpdateTaskStatusCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<StandardResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                requestTimeout, TimeUnit.SECONDS).updateTaskStatus(new CreateTaskHistoryRequest(PersistenceManager.getInstance().getSessionId(), task));
+
+        call.enqueue(new Callback<StandardResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+
+                if (response.body() != null && response.body().getError().getErrorDesc() == null || response.body() != null && response.body().getError().getErrorDesc().isEmpty()) {
+                    if (callback != null) {
+
+                        callback.onUpdateTaskStatusCallbackSuccess(response.body());
+                    } else {
+
+                        OppAppLogger.getInstance().w(LOG_TAG, "updateTaskStatus(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "updateTaskStatus Error");
+                        callback.onUpdateTaskStatusCallbackFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.getInstance().w(LOG_TAG, "updateTaskStatus(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    public static void getTaskFiles(int taskId, String siteUrl, final GetTaskFilesCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<TaskFilesResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                requestTimeout, TimeUnit.SECONDS).getTaskFiles(new GetTaskFilesRequest(PersistenceManager.getInstance().getSessionId(), taskId));
+
+        call.enqueue(new Callback<TaskFilesResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<TaskFilesResponse> call, @NonNull Response<TaskFilesResponse> response) {
+
+                if (response.body() != null && (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty())) {
+                    if (callback != null) {
+
+                        callback.onGetTaskFilesCallbackSuccess(response.body());
+                    } else {
+
+                        OppAppLogger.getInstance().w(LOG_TAG, "updateTaskStatus(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TaskFilesResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "updateTaskStatus Error");
+                        callback.onGetTaskFilesCallbackFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.getInstance().w(LOG_TAG, "updateTaskStatus(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
 
 }

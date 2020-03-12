@@ -27,6 +27,7 @@ import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.TimeUtils;
 
 import org.acra.ACRA;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface,
         ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
@@ -105,6 +107,11 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_MACHINE_LINE_ID = "PREF_MACHINE_LINE_ID";
     private static final String PREF_DEFAULT_REPORT_REJECT_UNIT = "PREF_DEFAULT_REPORT_REJECT_UNIT";
     private static final String JOSH_ID = "PREF_JOSH_ID";
+    private static final String TASKS_ORDER_BY = "TASKS_ORDER_BY_";
+    private static final String TASKS_FILTER_PRIORITY_TO_SHOW = "TASKS_FILTER_PRIORITY_TO_SHOW_";
+    private static final String TASKS_FILTER_PERIOD_TO_SHOW = "TASKS_FILTER_PERIOD_TO_SHOW_";
+    private static final String TASK_ORDER_BY_ASC = "TASK_ORDER_BY_ASC";
+    private static final String PREFS_OPERATOR_DB_ID = "PREFS_OPERATOR_DB_ID";
 
 
     private static PersistenceManager msInstance;
@@ -214,6 +221,14 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     @Override
     public void setOperatorId(String operatorId) {
         SecurePreferences.getInstance().setString(PREF_OPERATOR_ID, operatorId);
+    }
+    
+    public void setOperatorDBId(int operatorDbId){
+        SecurePreferences.getInstance().setInt(PREFS_OPERATOR_DB_ID, operatorDbId);
+    }
+
+    public int getOperatorDBId(){
+        return SecurePreferences.getInstance().getInt(PREFS_OPERATOR_DB_ID);
     }
 
     @Override
@@ -869,4 +884,63 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         PersistenceManager.getInstance().setSelectedMachine(true);
         PersistenceManager.getInstance().setNeedUpdateToken(true);
     }
+
+    public void setTasksOrderBy(ArrayList<SelectableString> orderByDate) {
+        SecurePreferences.getInstance().setString(TASKS_ORDER_BY, mGson.toJson(orderByDate));
+    }
+
+    public ArrayList<SelectableString> getTasksOrderBy() {
+        Type listType = new TypeToken<ArrayList<SelectableString>>() {}.getType();
+        ArrayList<SelectableString> list = mGson.fromJson(SecurePreferences.getInstance().getString(TASKS_ORDER_BY), listType);
+        list = initSelectableList(list, 0, 4);
+        return list;
+    }
+
+    public void setTaskFilterPriorityToShow(ArrayList<SelectableString> priorityToShow) {
+        SecurePreferences.getInstance().setString(TASKS_FILTER_PRIORITY_TO_SHOW, mGson.toJson(priorityToShow));
+    }
+
+    public ArrayList<SelectableString> getTaskFilterPriorityToShow() {
+        Type listType = new TypeToken<ArrayList<SelectableString>>() {
+        }.getType();
+        ArrayList<SelectableString> list = mGson.fromJson(SecurePreferences.getInstance().getString(TASKS_FILTER_PRIORITY_TO_SHOW), listType);
+        list = initSelectableList(list, 1, 3);
+        return list;
+    }
+
+    @NotNull
+    private ArrayList<SelectableString> initSelectableList(ArrayList<SelectableString> list, int startIndex, int itemCount) {
+        if (list == null || list.isEmpty()) {
+            list = new ArrayList<SelectableString>();
+            for (int i = startIndex; i < startIndex + itemCount; i++)
+                list.add(new SelectableString("", true, String.valueOf(i)));
+        }
+        return list;
+    }
+
+    public void setTaskFilterPeriodToShow(ArrayList<SelectableString> periodToShow) {
+        SecurePreferences.getInstance().setString(TASKS_FILTER_PERIOD_TO_SHOW, mGson.toJson(periodToShow));
+    }
+
+    public ArrayList<SelectableString> getTaskFilterPeriodToShow() {
+        Type listType = new TypeToken<List<SelectableString>>() {
+        }.getType();
+        ArrayList<SelectableString> list = mGson.fromJson(SecurePreferences.getInstance().getString(TASKS_FILTER_PERIOD_TO_SHOW), listType);
+        if (list == null || list.isEmpty()) {
+            list = new ArrayList<SelectableString>();
+            list.add(new SelectableString("", true, String.valueOf(1)));
+            list.add(new SelectableString("", true, String.valueOf(2)));
+        }
+        return list;
+    }
+
+    public void setTasksOrderByAsc(boolean isAsc) {
+        SecurePreferences.getInstance().setBoolean(TASK_ORDER_BY_ASC, isAsc);
+    }
+
+    public boolean getTasksOrderByAsc() {
+        return SecurePreferences.getInstance().getBoolean(TASK_ORDER_BY_ASC, false
+        );
+    }
+
 }

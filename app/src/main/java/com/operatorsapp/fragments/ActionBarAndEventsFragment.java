@@ -15,17 +15,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -56,6 +45,18 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.app.operatorinfra.Operator;
 import com.example.common.Event;
@@ -157,6 +158,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.example.common.permissions.WidgetInfo.PermissionId.TASK;
 import static com.operatorsapp.managers.PersistenceManager.setMachineData;
 import static com.operatorsapp.utils.SimpleRequests.getMachineLine;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
@@ -283,6 +285,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mLineLy;
     private View mLineProgress;
     private View mBottomRl;
+    private View mToolBarTaskBtn;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -1475,6 +1478,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mOnGoToScreenListener.goToFragment(SettingsFragment.newInstance(), false, true);
                 }
             });
+
+            mToolBarTaskBtn = mToolBarView.findViewById(R.id.task_button);
+            mToolBarTaskBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onOpenTaskActivity();
+                }
+            });
+            
             actionBar.setCustomView(mToolBarView);
 
 //            setToolBarHeight(mToolBarView);
@@ -1717,6 +1729,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
         if (mToolBarView != null) {
             mToolBarView.findViewById(R.id.toolbar_production_status_rl).setVisibility(WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.PRODUCTION_STATUS.getId()).getHaspermission());
+            if (mToolBarTaskBtn != null) {
+                mToolBarTaskBtn.setVisibility(WidgetInfo.getWidgetInfo(permissionResponse, TASK.getId()).getHaspermission());
+            }
         }
         if (mTimeLineType != null) {
             if (WidgetInfo.getWidgetInfo(permissionResponse, WidgetInfo.PermissionId.EVENT_LIST.getId()).getHaspermissionBoolean()
@@ -1936,7 +1951,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void openNotificationsList() {
-
+        if (!isAdded() || getActivity() == null){return;}
         if (mPopUpDialog != null && mPopUpDialog.isShowing()) {
             mPopUpDialog.dismiss();
         }
@@ -3543,6 +3558,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onViewLog();
 
         void onResizeBottomMargin(int bottomMargin);
+
+        void onOpenTaskActivity();
     }
 
 }

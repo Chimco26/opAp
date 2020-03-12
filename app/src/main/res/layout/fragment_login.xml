@@ -66,7 +66,7 @@
             android:orientation="vertical"
             tools:context="com.leadermes.emerald.fragments.LoginFragment">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/factory_url"
                 style="@style/FontStyle_T6"
                 android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                 android:textSize="24sp"
                 tools:ignore="NestedWeights,RtlSymmetry" />
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/user_name"
                 style="@style/FontStyle_T6"
                 android:layout_width="match_parent"
