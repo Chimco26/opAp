@@ -516,9 +516,8 @@
     <string name="low">Low</string>
     <string name="medium">Medium</string>
     <string name="high">High</string>
-    <string name="very_high">Very High</string>
     <string name="in_time">In time</string>
-    <string name="past_time">Paste time</string>
+    <string name="past_time">Past time</string>
     <string name="working_manually">Working manually</string>
     <string name="period">Period</string>
     <string name="add_task">Add Task</string>
@@ -529,7 +528,7 @@
     <string name="description">Description</string>
     <string name="selection">Selection</string>
     <string name="severity">Severity</string>
-    <string name="total_time">Total time</string>
+    <string name="estimated_duration">Estimated duration</string>
     <string name="attached_files">Attached Files</string>
     <string name="edit_task">Edit Task</string>
     <string name="days">Days</string>
@@ -539,6 +538,7 @@
     <string name="create_date">Create date</string>
     <string name="assign_to">Assign to</string>
     <string name="task_id">Task Id</string>
-    <string name="test_details">Tast details</string>
+    <string name="test_details">Test details</string>
+    <string name="execution_time_frame">Execution Time Frame</string>
 
 </resources>

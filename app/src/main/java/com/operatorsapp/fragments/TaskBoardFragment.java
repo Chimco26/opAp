@@ -385,6 +385,7 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
                     return;
                 }
                 List<TaskProgress> taskList = response.getResponseDictionaryDT().getTaskProgress();
+                mColumnsObjectList.clear();
                 initColumnLists();
                 createColumnsLists(taskList);
                 mBoardView.clearBoard();
