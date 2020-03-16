@@ -13,4 +13,3 @@ public interface EmeraldGetMachinesStatusServiceRequest {
     @POST("/LeaderMESApi/GetCurrentMachineStatus")
     Call<MachineStatusDataResponse> getMachineStatus(@Body GetMachineStatusDataRequest getMachineStatusDataRequest);
 }
-
