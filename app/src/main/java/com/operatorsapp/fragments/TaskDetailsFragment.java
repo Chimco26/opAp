@@ -88,6 +88,7 @@ public class TaskDetailsFragment extends Fragment {
     private View mAssignRl;
     private TextView mTaskIdTv;
     private LinearLayout mTaskIdLy;
+    private int operatorId;
 
     public static TaskDetailsFragment newInstance(TaskProgress taskProgress) {
         TaskDetailsFragment taskDetailsFragment = new TaskDetailsFragment();
@@ -116,8 +117,16 @@ public class TaskDetailsFragment extends Fragment {
         if (mTask == null) {
             mTask = new TaskProgress();
             mTask.setHistoryCreateDate(TimeUtils.getDate(new Date().getTime(), SQL_T_FORMAT_NO_SECOND));
-            mTask.setTaskCreateUser(PersistenceManager.getInstance().getOperatorDBId());
-            mTask.setCreateUserName(PersistenceManager.getInstance().getOperatorName());
+            operatorId = PersistenceManager.getInstance().getOperatorDBId();
+            if (operatorId == 0){
+                operatorId = PersistenceManager.getInstance().getUserId();
+            }
+            mTask.setTaskCreateUser(operatorId);
+            String operatorName = PersistenceManager.getInstance().getOperatorName();
+            if (operatorName == null || operatorName.isEmpty()){
+                operatorName = PersistenceManager.getInstance().getUserName();
+            }
+            mTask.setCreateUserName(operatorName);
         } else {
             initialStatus = mTask.getTaskStatus();
         }
@@ -169,10 +178,6 @@ public class TaskDetailsFragment extends Fragment {
             mSaveBtn.setText(getString(R.string.add_task));
             mTitleTv.setText(getString(R.string.add_new_task));
             mDateTv.setText(TimeUtils.getDate(new Date().getTime(), ONLY_DATE_FORMAT));
-            if (PersistenceManager.getInstance().getOperatorId().equals("")){//todo
-                ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(), "sorry, you need to sign in operator for create task", CroutonCreator.CroutonType.CREDENTIALS_ERROR);
-                return;
-            }
             initStatusSpinner(editTaskObject.getStatus(), TODO.getValue(), getResources().getColor(R.color.grey1));
             mStatusSpinner.setEnabled(false);
             initSeverity(editTaskObject.getPriority(), TaskProgress.TaskPriority.MEDIUM.getValue(), true);
@@ -204,7 +209,7 @@ public class TaskDetailsFragment extends Fragment {
             initTotalTime(task);
             initAssignSpinner(task.getAssigneeDisplayName(), getResources().getColor(R.color.grey1));
             mAssignSpinner.setEnabled(false);
-            if (PersistenceManager.getInstance().getOperatorId().equals("") || task.getTaskCreateUser() != Integer.parseInt(PersistenceManager.getInstance().getOperatorId())) {
+            if (task.getTaskCreateUser() != operatorId) {
                 disableEditText(mDescriptionEt);
                 disableEditText(mTimeMin);
                 disableEditText(mTimeHr);
@@ -527,8 +532,12 @@ public class TaskDetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Task task = buildTask(mTask);
-                if (task != null) {
+                if (checkMandatoryFilled(task)){
                     createTask(task);
+                }else {
+                    ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(),
+                            getString(R.string.you_need_to_complete_all_mandatory_fields),
+                            CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                 }
             }
         });
@@ -542,11 +551,18 @@ public class TaskDetailsFragment extends Fragment {
         });
     }
 
+    private boolean checkMandatoryFilled(Task task) {
+        return task.getCreateUser() != 0 && task.getHistoryUserID() != null
+                && task.getSubject() != 0
+                && task.getText() != null && !task.getText().isEmpty();
+    }
+
+
     private Task buildTask(TaskProgress taskProgress) {
         Task task = new Task();
         task.setID(taskProgress.getTaskID());
         task.setHistoryID(taskProgress.getHistoryID());
-        task.setHistoryUserID(PersistenceManager.getInstance().getOperatorId());
+        task.setHistoryUserID(String.valueOf(operatorId));
         task.setCreateUser(taskProgress.getTaskCreateUser());
         task.setCreateUserName(taskProgress.getCreateUserName());
         task.setSubject(taskProgress.getSubjectId());
