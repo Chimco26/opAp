@@ -3,10 +3,6 @@ package com.operatorsapp.fragments;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +13,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.example.common.QCModels.ResponseDictionnaryItemsBaseModel;
 import com.example.common.QCModels.SubType;
@@ -281,7 +282,11 @@ public class QCTestOrderFragment extends Fragment implements
                     if (subType.getHasSamples()) {
                         mSamplesLy.setVisibility(View.VISIBLE);
                         if (subType.getDefaultSamplesCount() != null){
-                            mSamplesEt.setText(String.valueOf(subType.getDefaultSamplesCount()));
+                            if (subType.getDefaultSamplesCount() == 0){
+                                mSamplesEt.setHint(String.valueOf(subType.getDefaultSamplesCount()));
+                            }else {
+                                mSamplesEt.setText(String.valueOf(subType.getDefaultSamplesCount()));
+                            }
                         }else {
                             mSamplesEt.setText(null);
                         }
