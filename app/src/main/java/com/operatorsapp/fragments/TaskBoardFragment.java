@@ -385,6 +385,7 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
                     return;
                 }
                 List<TaskProgress> taskList = response.getResponseDictionaryDT().getTaskProgress();
+                mColumnsObjectList.clear();
                 initColumnLists();
                 createColumnsLists(taskList);
                 mBoardView.clearBoard();
@@ -559,7 +560,11 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
     }
 
     private TaskHistory createHistoryObject(TaskProgress taskProgress, int toColumn) {
-        return new TaskHistory(taskProgress.getTaskID(), mColumnsObjectList.get(toColumn).getId(), taskProgress.getAssignee(), PersistenceManager.getInstance().getOperatorId());
+        int operatorId = PersistenceManager.getInstance().getOperatorDBId();
+        if (operatorId == 0){
+            operatorId = PersistenceManager.getInstance().getUserId();
+        }
+        return new TaskHistory(taskProgress.getTaskID(), mColumnsObjectList.get(toColumn).getId(), taskProgress.getAssignee(), String.valueOf(operatorId));
     }
 
     @Override

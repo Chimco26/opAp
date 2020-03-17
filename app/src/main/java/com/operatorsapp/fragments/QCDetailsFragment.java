@@ -264,6 +264,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         mDetailsRv.setAdapter(testAdapter);
         mDetailsRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(2, 50, true, 0);
+        gridSpacingItemDecoration.setSpacingTop(0);
+        gridSpacingItemDecoration.setSpacingBottom(0);
         mDetailsRv.addItemDecoration(gridSpacingItemDecoration);
         mDetailsRv.setHasFixedSize(false);
     }

@@ -88,8 +88,8 @@
                 android:id="@+id/FTD_task_id_ly"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginEnd="35dp">
+                android:layout_marginEnd="35dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/FTD_task_id"
@@ -245,7 +245,7 @@
                     android:textSize="16sp" />
 
                 <EditText
-                    android:id="@+id/FTD_description_spinner"
+                    android:id="@+id/FTD_description_et"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:background="@drawable/box_grey_stroke"
@@ -267,14 +267,14 @@
                 <RelativeLayout
                     android:id="@+id/FTD_assign_rl"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:background="@drawable/edit_text_background_selector"
                     android:visibility="visible">
 
                     <Spinner
                         android:id="@+id/FTD_assign_spinner"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" />
+                        android:layout_height="match_parent" />
 
                 </RelativeLayout>
 
@@ -356,9 +356,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp" />
 
+
+            <TextView
+                android:id="@+id/FTD_execution_time_frame_tv"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:gravity="center_vertical"
+                android:text="@string/execution_time_frame"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="65dp"
                 android:orientation="horizontal"
                 android:weightSum="2.2">
 
@@ -425,59 +435,71 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:gravity="center_vertical"
+                android:text="@string/estimated_duration"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="65dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/total_time"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/FTD_time_hr_et"
-                    android:layout_width="75dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="15dp"
-                    android:background="@drawable/box_grey_stroke"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:orientation="vertical">
 
-                <TextView
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/hr2"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/FTD_time_hr_et"
+                        android:layout_width="75dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/box_grey_stroke"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:layout_marginStart="5dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/hr2"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/FTD_time_min_et"
-                    android:layout_width="75dp"
                     android:layout_height="match_parent"
+                    android:orientation="vertical"
                     android:layout_marginStart="15dp"
-                    android:background="@drawable/box_grey_stroke"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    >
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:layout_marginStart="5dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/min"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/min"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/FTD_time_min_et"
+                        android:layout_width="75dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/box_grey_stroke"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

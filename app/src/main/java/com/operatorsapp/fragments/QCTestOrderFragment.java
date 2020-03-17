@@ -3,10 +3,6 @@ package com.operatorsapp.fragments;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +13,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.example.common.QCModels.ResponseDictionnaryItemsBaseModel;
 import com.example.common.QCModels.SubType;
@@ -122,8 +123,12 @@ public class QCTestOrderFragment extends Fragment implements
                         samples = Integer.parseInt(mSamplesEt.getText().toString() + "");
                     } catch (Exception ignored) {
                     }
+                    int operatorId = PersistenceManager.getInstance().getOperatorDBId();
+                    if (operatorId == 0){
+                        operatorId = PersistenceManager.getInstance().getUserId();
+                    }
                     sendTestOrder(new TestOrderSendRequest(mTestOrderRequest.getJobID(), mTestOrder.getJoshID(),
-                            mTestOrder.getProductID(), mTestOrderRequest.getSubType(), samples, PersistenceManager.getInstance().getOperatorDBId()));
+                            mTestOrder.getProductID(), mTestOrderRequest.getSubType(), samples, operatorId));
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.you_need_to_select_the_test_field), Toast.LENGTH_SHORT).show();
                 }

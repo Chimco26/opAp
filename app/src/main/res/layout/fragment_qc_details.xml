@@ -168,10 +168,15 @@
                         android:layout_height="1dp"
                         android:background="@color/divider_gray" />
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp" />
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/FQCD_details_rv"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        />
 
                     <View
                         android:layout_width="match_parent"
