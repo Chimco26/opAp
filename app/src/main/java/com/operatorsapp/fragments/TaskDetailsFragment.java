@@ -300,7 +300,9 @@ public class TaskDetailsFragment extends Fragment {
                                     calendar.set(Calendar.MINUTE, minute);
                                     final Calendar calendarEnd = Calendar.getInstance();
                                     calendarEnd.setTime(new Date(end[0]));
-                                    if (calendar.after(calendarEnd)) {
+                                    final Calendar calendarCurrent = Calendar.getInstance();
+                                    calendarCurrent.setTime(new Date());
+                                    if (calendar.before(calendarCurrent) || calendar.after(calendarEnd)) {
                                         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.TimePickerTheme, finalMyTimeListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
                                         timePickerDialog.setTitle(String.format("%s :", getString(R.string.choose_hour_before_end_hour)));
                                         timePickerDialog.show();
@@ -349,7 +351,9 @@ public class TaskDetailsFragment extends Fragment {
                                     calendar.set(Calendar.MINUTE, minute);
                                     final Calendar calendarStart = Calendar.getInstance();
                                     calendarStart.setTime(new Date(start[0]));
-                                    if (calendar.before(calendarStart)){
+                                    final Calendar calendarCurrent = Calendar.getInstance();
+                                    calendarCurrent.setTime(new Date());
+                                    if (calendar.before(calendarCurrent) || calendar.before(calendarStart)){
                                         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.TimePickerTheme, finalMyTimeListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
                                         timePickerDialog.setTitle(String.format("%s :", getString(R.string.choose_hour_after_start_hour)));
                                         timePickerDialog.show();

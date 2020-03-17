@@ -123,7 +123,10 @@ public class QCTestOrderFragment extends Fragment implements
                         samples = Integer.parseInt(mSamplesEt.getText().toString() + "");
                     } catch (Exception ignored) {
                     }
-                    int operatorId = PersistenceManager.getInstance().getOperatorDBId();
+                    int operatorId = 0;
+                    try {
+                        operatorId = Integer.parseInt(PersistenceManager.getInstance().getOperatorId());
+                    }catch (NumberFormatException ignored){ }
                     if (operatorId == 0){
                         operatorId = PersistenceManager.getInstance().getUserId();
                     }
