@@ -1951,7 +1951,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void openNotificationsList() {
-
+        if (!isAdded() || getActivity() == null){return;}
         if (mPopUpDialog != null && mPopUpDialog.isShowing()) {
             mPopUpDialog.dismiss();
         }

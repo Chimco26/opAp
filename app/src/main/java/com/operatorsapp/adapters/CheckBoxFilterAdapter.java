@@ -20,12 +20,14 @@ public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAd
 
     private final ArrayList<SelectableString> mFilterList;
     private final boolean mSelectAllOption;
+    private final boolean mIsVertical;
     private CheckBoxFilterAdapterListener mCheckBoxFilterAdapterListener;
 
-    public CheckBoxFilterAdapter(ArrayList<SelectableString> list, CheckBoxFilterAdapterListener checkBoxFilterAdapterListener, boolean selectAllOption) {
+    public CheckBoxFilterAdapter(ArrayList<SelectableString> list, CheckBoxFilterAdapterListener checkBoxFilterAdapterListener, boolean selectAllOption, boolean isVertical) {
         mFilterList = list;
         mCheckBoxFilterAdapterListener = checkBoxFilterAdapterListener;
         mSelectAllOption = selectAllOption;
+        mIsVertical = isVertical;
     }
 
     @NonNull
@@ -33,6 +35,9 @@ public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAd
     public CheckBoxFilterAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
+        if (mIsVertical){
+            return new CheckBoxFilterAdapter.ViewHolder(inflater.inflate(R.layout.item_checkbox_for_vertical, parent, false));
+        }
         return new CheckBoxFilterAdapter.ViewHolder(inflater.inflate(R.layout.item_check_box, parent, false));
     }
 
@@ -55,6 +60,7 @@ public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAd
                         updateSelectAllItem(mFilterList);
                     }
                 }
+                notifyDataSetChanged();
                 mCheckBoxFilterAdapterListener.onItemCheck(mFilterList.get(position));
             }
         });

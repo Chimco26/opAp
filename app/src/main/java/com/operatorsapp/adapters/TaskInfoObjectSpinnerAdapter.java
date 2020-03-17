@@ -16,15 +16,21 @@ import com.operatorsapp.R;
 import java.util.List;
 
 public class TaskInfoObjectSpinnerAdapter extends ArrayAdapter<TaskInfoObject> {
+    private final int color;
     private Activity mContext;
     private List<TaskInfoObject> mSpinnerItems;
     private TextView mRowName;
     private View mView;
 
-    public TaskInfoObjectSpinnerAdapter(Activity context, int resource, List<TaskInfoObject> list) {
+    public TaskInfoObjectSpinnerAdapter(Activity context, int resource, List<TaskInfoObject> list, int color) {
         super(context, resource, list);
         mSpinnerItems = list;
         mContext = context;
+        if (color != 0){
+            this.color = color;
+        }else {
+            this.color = ContextCompat.getColor(mContext, R.color.status_bar);
+        }
     }
 
     @NonNull
@@ -36,16 +42,12 @@ public class TaskInfoObjectSpinnerAdapter extends ArrayAdapter<TaskInfoObject> {
             row = inflater.inflate(R.layout.base_spinner_item, parent, false);
             mView = row;
             mRowName = row.findViewById(R.id.spinner_item_name);
-            mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-            if(mSpinnerItems != null && mSpinnerItems.get(0) != null)
-            {
+            mRowName.setTextColor(color);
+            if(mSpinnerItems != null && mSpinnerItems.get(0) != null) {
                 mRowName.setText(mSpinnerItems.get(0).getDisplayName());
-            }
-            else
-            {
+            } else {
                 mRowName.setText(mContext.getString(R.string.dashes));
             }
-
             mRowName.setTextSize(22);
         }
         return row;
@@ -71,7 +73,7 @@ public class TaskInfoObjectSpinnerAdapter extends ArrayAdapter<TaskInfoObject> {
     public void setTitle(int position) {
 
         mRowName = mView.findViewById(R.id.spinner_item_name);
-        mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+        mRowName.setTextColor(color);
         mRowName.setText(mSpinnerItems.get(position).getDisplayName());
         mRowName.setTextSize(24);
     }

@@ -190,7 +190,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
                     setGraphData(selectableStrings, graphs);
                 }
-            }, true);
+            }, true, false);
         } else {
             mCheckBoxFilterAdapter.notifyDataSetChanged();
         }

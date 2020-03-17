@@ -114,7 +114,7 @@
             android:id="@+id/reject_reason_rl"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1.1"
+            android:layout_weight="1.3"
             android:background="@drawable/edit_text_background_selector">
 
             <Spinner
@@ -123,6 +123,18 @@
                 android:layout_height="match_parent" />
 
         </RelativeLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1" />
+
+        <ImageView
+            android:id="@+id/FTB_asc_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".6"
+            android:src="@drawable/arrow_svg" />
 
         <View
             android:layout_width="0dp"
@@ -158,7 +170,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="4.1" />
+            android:layout_weight="3.3" />
 
         <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
             android:layout_width="0dp"

@@ -101,7 +101,7 @@ public class TitleAndSubWithSelectableListDialog implements View.OnClickListener
                     }
                 }
             }
-        }, false);
+        }, false, false);
         mRv.setAdapter(mAdapter);
     }
 

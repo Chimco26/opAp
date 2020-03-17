@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -70,7 +72,7 @@ public class TaskDetailsFragment extends Fragment {
     private TextView mAuthorTv;
     private TextView mStartDate;
     private TextView mEndDate;
-    private Spinner mLevelSpinner;
+    private Spinner mAssignSpinner;
     private Spinner mSubjectSpinner;
     private Spinner mStatusSpinner;
     private EditText mDescriptionEt;
@@ -82,6 +84,11 @@ public class TaskDetailsFragment extends Fragment {
     private int initialStatus;
     private TextView mSaveBtn;
     private TaskDetailsFragmentListener mListener;
+    private TextView mAssignTv;
+    private View mAssignRl;
+    private TextView mTaskIdTv;
+    private LinearLayout mTaskIdLy;
+    private int operatorId;
 
     public static TaskDetailsFragment newInstance(TaskProgress taskProgress) {
         TaskDetailsFragment taskDetailsFragment = new TaskDetailsFragment();
@@ -110,7 +117,16 @@ public class TaskDetailsFragment extends Fragment {
         if (mTask == null) {
             mTask = new TaskProgress();
             mTask.setHistoryCreateDate(TimeUtils.getDate(new Date().getTime(), SQL_T_FORMAT_NO_SECOND));
-            mTask.setTaskCreateUser(Integer.parseInt(PersistenceManager.getInstance().getOperatorId()));
+            operatorId = PersistenceManager.getInstance().getOperatorDBId();
+            if (operatorId == 0){
+                operatorId = PersistenceManager.getInstance().getUserId();
+            }
+            mTask.setTaskCreateUser(operatorId);
+            String operatorName = PersistenceManager.getInstance().getOperatorName();
+            if (operatorName == null || operatorName.isEmpty()){
+                operatorName = PersistenceManager.getInstance().getUserName();
+            }
+            mTask.setCreateUserName(operatorName);
         } else {
             initialStatus = mTask.getTaskStatus();
         }
@@ -133,14 +149,20 @@ public class TaskDetailsFragment extends Fragment {
 
     private void initVars(View view) {
         mTitleTv = view.findViewById(R.id.FTD_title_tv);
+        mTaskIdTv = view.findViewById(R.id.FTD_task_id_tv);
+        mTaskIdLy = view.findViewById(R.id.FTD_task_id_ly);
         mDateTv = view.findViewById(R.id.FTD_date_tv);
         mAuthorTv = view.findViewById(R.id.FTD_open_by_tv);
         mStartDate = view.findViewById(R.id.FTD_start_date_edit_tv);
         mEndDate = view.findViewById(R.id.FTD_end_date_edit_tv);
         mStatusSpinner = view.findViewById(R.id.FTD_status_spinner);
         mSubjectSpinner = view.findViewById(R.id.FTD_subject_spinner);
-        mLevelSpinner = view.findViewById(R.id.FTD_level_spinner);
-        mDescriptionEt = view.findViewById(R.id.FTD_description_spinner);
+        mAssignSpinner = view.findViewById(R.id.FTD_assign_spinner);
+        mAssignTv = view.findViewById(R.id.FTD_assign_tv);
+        mAssignRl = view.findViewById(R.id.FTD_assign_rl);
+        mDescriptionEt = view.findViewById(R.id.FTD_description_et);
+        TextView mDescriptionTitleTv = view.findViewById(R.id.FTD_description_tv);
+        mDescriptionTitleTv.setText(Html.fromHtml(getString(R.string.description) + "<font color='red'>*</font>"), TextView.BufferType.SPANNABLE);
         mTimeHr = view.findViewById(R.id.FTD_time_hr_et);
         mTimeMin = view.findViewById(R.id.FTD_time_min_et);
         mSeverityRv = view.findViewById(R.id.FTD_severity_rv);
@@ -150,16 +172,18 @@ public class TaskDetailsFragment extends Fragment {
     }
 
     private void initView(TaskProgress task, TaskObjectForCreateOrEditContent editTaskObject) {
+        mAuthorTv.setText(task.getCreateUserName());
         if (task.getTaskID() == 0) {
+            mTaskIdLy.setVisibility(View.GONE);
             mSaveBtn.setText(getString(R.string.add_task));
             mTitleTv.setText(getString(R.string.add_new_task));
             mDateTv.setText(TimeUtils.getDate(new Date().getTime(), ONLY_DATE_FORMAT));
-            mAuthorTv.setText(PersistenceManager.getInstance().getOperatorName());
-            initStatusSpinner(editTaskObject.getStatus(), TODO.getValue());
+            initStatusSpinner(editTaskObject.getStatus(), TODO.getValue(), getResources().getColor(R.color.grey1));
             mStatusSpinner.setEnabled(false);
             initSeverity(editTaskObject.getPriority(), TaskProgress.TaskPriority.MEDIUM.getValue(), true);
-            initSubjectSpinner(editTaskObject.getSubjects(), editTaskObject.getSubjects().get(0).getID());
-//            initLevelSpinner(getMachineLevel(editTaskObject.getLevel()));
+            initSubjectSpinner(editTaskObject.getSubjects(), editTaskObject.getSubjects().get(0).getID(), 0);
+            initAssignSpinner("", getResources().getColor(R.color.grey1));
+            mAssignSpinner.setEnabled(false);
             initStartAndEndTimeViews();
             initTotalTime(task);
             mAttachedFilesTv.setVisibility(View.GONE);
@@ -169,7 +193,8 @@ public class TaskDetailsFragment extends Fragment {
             mDescriptionEt.setText(task.getText());
             mDateTv.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(task.getTaskCreateDate(),
                     SQL_T_FORMAT_NO_SECOND), ONLY_DATE_FORMAT));
-            mAuthorTv.setText(task.getCreateUserName());
+            mTaskIdTv.setText(String.valueOf(task.getTaskID()));
+            mTaskIdLy.setVisibility(View.VISIBLE);
             if (task.getTaskStartTimeTarget() != null && !task.getTaskStartTimeTarget().isEmpty()
                     && !task.getTaskStartTimeTarget().equals("0")) {
                 mStartDate.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(task.getTaskStartTimeTarget(),
@@ -182,8 +207,9 @@ public class TaskDetailsFragment extends Fragment {
             }
             getTaskFiles(task.getTaskID());
             initTotalTime(task);
-//            initLevelSpinner(getMachineLevel(editTaskObject.getLevel()));
-            if (task.getTaskCreateUser() != Integer.parseInt(PersistenceManager.getInstance().getOperatorId())) {
+            initAssignSpinner(task.getAssigneeDisplayName(), getResources().getColor(R.color.grey1));
+            mAssignSpinner.setEnabled(false);
+            if (task.getTaskCreateUser() != operatorId) {
                 disableEditText(mDescriptionEt);
                 disableEditText(mTimeMin);
                 disableEditText(mTimeHr);
@@ -192,13 +218,13 @@ public class TaskDetailsFragment extends Fragment {
                 if (task.getTaskStatus() != TaskProgress.TaskStatus.CANCELLED.getValue()) {
                     status = removeIdFromInfoObjectList(editTaskObject.getStatus(), TaskProgress.TaskStatus.CANCELLED.getValue());
                 }
-                initStatusSpinner(status, task.getTaskStatus());
-                initSubjectSpinner(editTaskObject.getSubjects(), task.getSubjectId());
+                initStatusSpinner(status, task.getTaskStatus(), 0);
+                initSubjectSpinner(editTaskObject.getSubjects(), task.getSubjectId(), getResources().getColor(R.color.grey1));
                 mSubjectSpinner.setEnabled(false);
             } else {
                 initSeverity(editTaskObject.getPriority(), task.getTaskPriorityID(), true);
-                initStatusSpinner(editTaskObject.getStatus(), task.getTaskStatus());
-                initSubjectSpinner(editTaskObject.getSubjects(), task.getSubjectId());
+                initStatusSpinner(editTaskObject.getStatus(), task.getTaskStatus(), 0);
+                initSubjectSpinner(editTaskObject.getSubjects(), task.getSubjectId(), 0);
                 initStartAndEndTimeViews();
             }
         }
@@ -300,14 +326,14 @@ public class TaskDetailsFragment extends Fragment {
         });
     }
 
-    private void initLevelSpinner(final TaskInfoObject level) {
+    private void initAssignSpinner(final String assign, int color) {
         final List<TaskInfoObject> levels = new ArrayList<>();
-        levels.add(level);
-        final TaskInfoObjectSpinnerAdapter dataAdapter = new TaskInfoObjectSpinnerAdapter(getActivity(), R.layout.base_spinner_item, levels);
+        levels.add(new TaskInfoObject(assign));
+        final TaskInfoObjectSpinnerAdapter dataAdapter = new TaskInfoObjectSpinnerAdapter(getActivity(), R.layout.base_spinner_item, levels, color);
         dataAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mLevelSpinner.setAdapter(dataAdapter);
-        mLevelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mAssignSpinner.setAdapter(dataAdapter);
+        mAssignSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 mTask.setTaskLevel(levels.get(adapterView.getSelectedItemPosition()).getID());
@@ -321,9 +347,9 @@ public class TaskDetailsFragment extends Fragment {
         });
     }
 
-    private void initSubjectSpinner(final List<TaskInfoObject> subjects, final int subjectId) {
+    private void initSubjectSpinner(final List<TaskInfoObject> subjects, final int subjectId, int color) {
         mTask.setSubjectId(subjectId);
-        final TaskInfoObjectSpinnerAdapter dataAdapter = new TaskInfoObjectSpinnerAdapter(getActivity(), R.layout.base_spinner_item, subjects);
+        final TaskInfoObjectSpinnerAdapter dataAdapter = new TaskInfoObjectSpinnerAdapter(getActivity(), R.layout.base_spinner_item, subjects, color);
         dataAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSubjectSpinner.setAdapter(dataAdapter);
@@ -349,10 +375,10 @@ public class TaskDetailsFragment extends Fragment {
 
     }
 
-    private void initStatusSpinner(List<TaskInfoObject> status, final int taskStatus) {
+    private void initStatusSpinner(List<TaskInfoObject> status, final int taskStatus, int color) {
         mTask.setTaskStatus(taskStatus);
         status = removeIdFromInfoObjectList(status, TaskProgress.TaskStatus.OPEN.getValue());
-        final TaskInfoObjectSpinnerAdapter dataAdapter = new TaskInfoObjectSpinnerAdapter(getActivity(), R.layout.base_spinner_item, status);
+        final TaskInfoObjectSpinnerAdapter dataAdapter = new TaskInfoObjectSpinnerAdapter(getActivity(), R.layout.base_spinner_item, status, color);
         dataAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mStatusSpinner.setAdapter(dataAdapter);
@@ -506,8 +532,12 @@ public class TaskDetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Task task = buildTask(mTask);
-                if (task != null) {
+                if (checkMandatoryFilled(task)){
                     createTask(task);
+                }else {
+                    ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(),
+                            getString(R.string.you_need_to_complete_all_mandatory_fields),
+                            CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                 }
             }
         });
@@ -521,12 +551,20 @@ public class TaskDetailsFragment extends Fragment {
         });
     }
 
+    private boolean checkMandatoryFilled(Task task) {
+        return task.getCreateUser() != 0 && task.getHistoryUserID() != null
+                && task.getSubject() != 0
+                && task.getText() != null && !task.getText().isEmpty();
+    }
+
+
     private Task buildTask(TaskProgress taskProgress) {
         Task task = new Task();
         task.setID(taskProgress.getTaskID());
         task.setHistoryID(taskProgress.getHistoryID());
-        task.setHistoryUserID(PersistenceManager.getInstance().getOperatorId());
+        task.setHistoryUserID(String.valueOf(operatorId));
         task.setCreateUser(taskProgress.getTaskCreateUser());
+        task.setCreateUserName(taskProgress.getCreateUserName());
         task.setSubject(taskProgress.getSubjectId());
         task.setText(mDescriptionEt.getText().toString());
         task.setTaskLevel(MACHINE_TASK_LEVEL);

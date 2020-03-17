@@ -70,7 +70,8 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        holder.mTitle.setText(String.valueOf(mListFiltered.get(position).getSubjectTrans()));
+        holder.mTitle.setText(String.format(Locale.getDefault(), "%s - %d", mListFiltered.get(position).getSubjectTrans(),
+                mListFiltered.get(position).getTaskID()));
         holder.mText.setText(mListFiltered.get(position).getText());
         String delegate = mListFiltered.get(position).getAssigneeDisplayName();
         if (delegate == null || delegate.isEmpty()) {
@@ -176,7 +177,7 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
 
             mListFiltered = (List<TaskProgress>) results.values;
             TextView itemCount1 = headerView.findViewById(R.id.TCH_count_generated);
-            itemCount1.setText(String.format(Locale.getDefault(), "%d", mListFiltered.size()));
+            itemCount1.setText(String.format(Locale.getDefault(), "%d", results.count));
             setItemList(mListFiltered);
         }
 
