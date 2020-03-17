@@ -37,7 +37,6 @@ import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_DATE_INT;
 import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_NUMBER_INT;
 import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_TEXT_INT;
 import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_TIME_INT;
-import static com.operatorsapp.utils.TimeUtils.SIMPLE_HM_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.SQL_NO_T_FORMAT;
 
 public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
@@ -136,9 +135,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
                 break;
             case FIELD_TYPE_TIME_INT:
                 if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
-                    ((TimeTextViewHolder) viewHolder).mTextTimeTv.setText(TimeUtils.getDateFromFormat(
-                            new Date(TimeUtils.getLongFromDateString(item.getCurrentValue(), SQL_NO_T_FORMAT)),
-                            SIMPLE_HM_FORMAT));
+                    ((TimeTextViewHolder) viewHolder).mTextTimeTv.setText(item.getCurrentValue());
                 }
                 ((TimeTextViewHolder) viewHolder).title.setText(item.getDisplayEName());
                 TooltipCompat.setTooltipText(((TimeTextViewHolder) viewHolder).title, item.getDisplayEName());
@@ -323,6 +320,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
         }
 
     }
+
 
     public class TimeTextViewHolder extends CustomViewHolder {
 

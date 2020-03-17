@@ -540,5 +540,7 @@
     <string name="task_id">Task Id</string>
     <string name="test_details">Test details</string>
     <string name="execution_time_frame">Execution Time Frame</string>
+    <string name="choose_hour_after_start_hour">Choose hour after start hour</string>
+    <string name="choose_hour_before_end_hour">Choose hour before end hour</string>
 
 </resources>
