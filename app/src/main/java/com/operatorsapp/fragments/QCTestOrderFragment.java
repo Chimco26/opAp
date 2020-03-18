@@ -127,9 +127,6 @@ public class QCTestOrderFragment extends Fragment implements
                     try {
                         operatorId = Integer.parseInt(PersistenceManager.getInstance().getOperatorId());
                     }catch (NumberFormatException ignored){ }
-                    if (operatorId == 0){
-                        operatorId = PersistenceManager.getInstance().getUserId();
-                    }
                     sendTestOrder(new TestOrderSendRequest(mTestOrderRequest.getJobID(), mTestOrder.getJoshID(),
                             mTestOrder.getProductID(), mTestOrderRequest.getSubType(), samples, operatorId));
                 } else {
