@@ -286,6 +286,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mLineProgress;
     private View mBottomRl;
     private View mToolBarTaskBtn;
+    private TextView mToolBarTaskCount;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -1480,6 +1481,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             });
 
             mToolBarTaskBtn = mToolBarView.findViewById(R.id.task_button);
+            mToolBarTaskCount = mToolBarView.findViewById(R.id.task_button_count_tv);
             mToolBarTaskBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -3032,6 +3034,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (machineStatus == null) {
             return;
         }
+        mToolBarTaskCount.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getTaskCountTotal()));
         AllMachinesData machinesData = machineStatus.getAllMachinesData().get(0);
         String nameByLang = OperatorApplication.isEnglishLang() ? machinesData.getCurrentProductEname() : machinesData.getCurrentProductName();
         if (nameByLang.length() > 31) {

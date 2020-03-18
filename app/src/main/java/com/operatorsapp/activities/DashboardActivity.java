@@ -193,10 +193,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static com.example.common.permissions.WidgetInfo.PermissionId.SHIFT_REPORT;
+import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_IS_NO_PRODUCTION;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_ERP_JOB_ID;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_JOB_ID;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_PRODUCT_NAME;
-import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_IS_NO_PRODUCTION;
 import static com.operatorsapp.fragments.ActionBarAndEventsFragment.EXTRA_FIELD_FOR_MACHINE;
 import static com.operatorsapp.utils.ClearData.cleanEvents;
 
@@ -1069,6 +1069,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onStatusReceivedSuccessfully(MachineStatus machineStatus) {
 
+                boolean isNewShift = false;
+                if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData() != null &&
+                        mCurrentMachineStatus.getAllMachinesData().size() > 0) {
+                    isNewShift = (mCurrentMachineStatus.getAllMachinesData().get(0).getShiftEndingIn() - machineStatus.getAllMachinesData().get(0).getShiftEndingIn()) < 0;
+                }
                 mCurrentMachineStatus = machineStatus;
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
@@ -1127,10 +1132,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             mCurrentMachineStatus.getAllMachinesData().get(0).getmAutoActivateNextJobTimer(),
                             mCurrentMachineStatus.getAllMachinesData().get(0).getmNextERPJobID(),
                             mCurrentMachineStatus.getAllMachinesData().get(0).getmAutoActivateNextJobTimerSec());
-//     for test             showTimeNextJobDialog(true,
-//                           2,
-//                            true,
-//                            "xsx", 532232225);
+                    if (isNewShift && machineStatus.getAllMachinesData().get(0).isWorkerSigninOnShiftChange()
+                            && !(getVisibleFragment() instanceof SignInOperatorFragment)) {
+                        goToFragment(new SignInOperatorFragment(), true, true);
+                    }
                 }
 
 
@@ -2997,7 +3002,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             if (response.getFunctionSucceed()) {
 //                if (mReportCycleUnitValues[0].equals(mReportCycleUnitValues[1])) {
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.SUCCESS);
-            }else {
+            } else {
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.NETWORK_ERROR);
             }
 //            else if (Double.parseDouble(mReportCycleUnitValues[0]) > Double.parseDouble(mReportCycleUnitValues[1])) {
