@@ -14,9 +14,9 @@ public class TestOrderSendRequest {
     @SerializedName("Samples")
     private int samples;
     @SerializedName("WorkerID")
-    private int workerId;
+    private String workerId;
 
-    public TestOrderSendRequest(long jobID, long joshID, long productID, long subType, int samples, int workerId) {
+    public TestOrderSendRequest(long jobID, long joshID, long productID, long subType, int samples, String workerId) {
         this.jobID = jobID;
         this.joshID = joshID;
         this.productID = productID;

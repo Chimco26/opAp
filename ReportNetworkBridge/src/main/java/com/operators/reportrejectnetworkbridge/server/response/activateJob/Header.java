@@ -27,6 +27,18 @@ public class Header implements Parcelable {
     private Boolean showOnHeader;
 
     private boolean isSelected;
+    private String searchExpression;
+
+    public String getSearchExpression() {
+        if (searchExpression == null){
+            return "";
+        }
+        return searchExpression;
+    }
+
+    public void setSearchExpression(String searchExpression) {
+        this.searchExpression = searchExpression;
+    }
 
     public boolean isSelected() {
         return isSelected;

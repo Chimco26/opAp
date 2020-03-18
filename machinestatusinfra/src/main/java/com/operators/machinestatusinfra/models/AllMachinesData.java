@@ -3,6 +3,8 @@ package com.operators.machinestatusinfra.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class AllMachinesData {
     @SerializedName("CurrentJobID")
     private int currentJobID;
@@ -112,6 +114,28 @@ public class AllMachinesData {
     private int mLineID;
     @SerializedName("ReportRejectDefaultUnits")
     private int mReportRejectDefaultUnits;
+    @SerializedName("TaskStatuscount")
+    private ArrayList<TaskStatusCount> taskCountObject;
+    @SerializedName("WorkerSignInOnShiftChange")
+    private boolean workerSigninOnShiftChange;
+
+    public boolean isWorkerSigninOnShiftChange() {
+        return workerSigninOnShiftChange;
+    }
+
+    public ArrayList<TaskStatusCount> getTaskCountObject() {
+        return taskCountObject;
+    }
+
+    public int getTaskCountTotal() {
+        int total = 0;
+        if (taskCountObject != null) {
+            for (TaskStatusCount taskStatusCount : taskCountObject) {
+                total += taskStatusCount.getNumOfTasks();
+            }
+        }
+        return total;
+    }
 
     public int getUserId() {
         return userId;
@@ -144,7 +168,7 @@ public class AllMachinesData {
     public Boolean getmAutoActivateNextJob() {
         if (mAutoActivateNextJob != null) {
             return mAutoActivateNextJob;
-        }else {
+        } else {
             return false;
         }
     }
@@ -152,7 +176,7 @@ public class AllMachinesData {
     public Integer getmAutoActivateNextJobTimerSec() {
         if (mAutoActivateNextJobTimerSec != null) {
             return mAutoActivateNextJobTimerSec;
-        }else {
+        } else {
             return 0;
         }
     }
@@ -160,7 +184,7 @@ public class AllMachinesData {
     public Boolean getmAutoActivateNextJobTimer() {
         if (mAutoActivateNextJobTimer != null) {
             return mAutoActivateNextJobTimer;
-        }else {
+        } else {
             return false;
         }
     }
@@ -168,7 +192,7 @@ public class AllMachinesData {
     public Long getmNextJobID() {
         if (mNextJobID != null) {
             return mNextJobID;
-        }else {
+        } else {
             return 0l;
         }
     }

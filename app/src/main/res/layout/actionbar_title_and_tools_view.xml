@@ -101,16 +101,34 @@
                 android:paddingBottom="8dp"
                 android:src="@drawable/settings_new_small" />
 
-            <ImageView
-                android:id="@+id/task_button"
+            <RelativeLayout
                 android:layout_width="39dp"
                 android:layout_height="39dp"
-                android:layout_marginEnd="31dp"
-                android:paddingStart="5dp"
-                android:paddingTop="5dp"
-                android:paddingEnd="5dp"
-                android:paddingBottom="5dp"
-                android:src="@drawable/ic_task" />
+                android:layout_marginEnd="31dp">
+
+                <ImageView
+                    android:id="@+id/task_button"
+                    android:layout_width="39dp"
+                    android:layout_height="39dp"
+                    android:paddingStart="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="5dp"
+                    android:paddingBottom="5dp"
+                    android:src="@drawable/ic_task" />
+
+                <TextView
+                    android:id="@+id/task_button_count_tv"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/blue_circle"
+                    android:maxLines="1"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:visibility="visible" />
+            </RelativeLayout>
 
             <ImageView
                 android:id="@+id/toolbar_notification_button"
