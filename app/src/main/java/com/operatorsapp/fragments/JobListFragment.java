@@ -3,6 +3,7 @@ package com.operatorsapp.fragments;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -44,17 +45,14 @@ public class JobListFragment extends Fragment implements
     public static final String TIME_LEFT_HR_HOUR = "TimeLeftHrHour";
     private static final String TAG = JobListFragment.class.getSimpleName();
     private EditText mSearchViewEt;
-    //    private Spinner mHeadersRv;
     private RecyclerView mPendingJobsRv;
-    //    private JobHeadersSpinnerAdapter mHeadersAdapter;
     private PendingJobsListAdapter mPendingJobsAdapter;
     private PendingJobStandardResponse mPendingJobsResponse;
     private ArrayList<PendingJob> mPendingJobs;
     private List<PendingJob> mPendingJobsNoHeadersFiltered = new ArrayList<>();
     private HashMap<String, Header> mHashMapHeaders;
-    private ArrayList<Header> mHeaders;
+//    private ArrayList<Header> headers;
     private JobListFragmentListener mListener;
-    //    private Header mSelectedHeader;
     private TextView mTitleTv;
     private String[] orderedHederasKey = new String[7];
 
@@ -84,13 +82,13 @@ public class JobListFragment extends Fragment implements
                 mPendingJobsNoHeadersFiltered.addAll(mPendingJobs);
             }
             if (getArguments().containsKey(Header.TAG)) {
-                mHeaders = getArguments().getParcelableArrayList(Header.TAG);
-                sortHeaders();
+                ArrayList<Header> headers = getArguments().getParcelableArrayList(Header.TAG);
+                sortHeaders(headers);
                 int i = 0;
                 int counter = 0;// max 7
-                while (counter < 7 && i < mHeaders.size()) {
-                    if (mHeaders.get(i).isShowOnHeader()) {
-                        orderedHederasKey[counter] = mHeaders.get(i).getName();
+                while (counter < 7 && i < headers.size()) {
+                    if (headers.get(i).isShowOnHeader()) {
+                        orderedHederasKey[counter] = headers.get(i).getName();
                         counter++;
                     }
                     i++;
@@ -224,7 +222,6 @@ public class JobListFragment extends Fragment implements
     private void initRecyclerViews() {
 
         if (mPendingJobs != null && mPendingJobs.size() > 0) {
-            sortHeaders();
             mPendingJobs.get(0).setSelected(true);
             RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
             mPendingJobsAdapter = new PendingJobsListAdapter(mPendingJobs, orderedHederasKey, this, getActivity());
@@ -258,15 +255,10 @@ public class JobListFragment extends Fragment implements
         });
     }
 
-    private void sortHeaders() {
+    private void sortHeaders(ArrayList<Header> headers) {
 
-//        for (int i = 0; i < mHeaders.size(); i++) {
-//            if (!mHeaders.get(i).isShowOnHeader()) {
-//                mHeaders.get(i).setOrder(50 + i);
-//            }
-//        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            mHeaders.sort(new Comparator<Header>() {
+            headers.sort(new Comparator<Header>() {
                 @Override
                 public int compare(Header o1, Header o2) {
                     if (o1.getOrder().equals(o2.getOrder())) {
@@ -338,7 +330,6 @@ public class JobListFragment extends Fragment implements
     public void updateRvBySearchResult() {
 
         mPendingJobs.clear();
-//        mHeaders.clear();
 
         if (mPendingJobsResponse != null) {
             outerLoop:
@@ -369,16 +360,11 @@ public class JobListFragment extends Fragment implements
                 if (!mPendingJobs.contains(pendingJob)) {
                     mPendingJobs.add(pendingJob);
                 }
-
-//                if (!mHeaders.contains(mHashMapHeaders.get(property.getKey())) && mHashMapHeaders.get(property.getKey()) != null) {
-//                    mHeaders.add(mHashMapHeaders.get(property.getKey()));
-//                }
             }
         }
 
         mPendingJobsNoHeadersFiltered.clear();
         mPendingJobsNoHeadersFiltered.addAll(mPendingJobs);
-        sortHeaders();
         if (mPendingJobsAdapter != null) {
             mPendingJobsAdapter.notifyDataSetChanged();
             filterPendingJobsByHeaders();
