@@ -189,7 +189,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     @Override
     public int getMachineId() {
-        return SecurePreferences.getInstance().getInt(PREF_MACHINE_ID);
+        return SecurePreferences.getInstance().getInt(PREF_MACHINE_ID, -1);
     }
 
     @Override

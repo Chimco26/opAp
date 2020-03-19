@@ -115,6 +115,7 @@ import com.operatorsapp.fragments.ReportProductionFragment;
 import com.operatorsapp.fragments.ReportRejectsFragment;
 import com.operatorsapp.fragments.ReportShiftFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragment;
+import com.operatorsapp.fragments.SelectMachineFragment;
 import com.operatorsapp.fragments.SelectStopReasonFragment;
 import com.operatorsapp.fragments.SignInOperatorFragment;
 import com.operatorsapp.fragments.ViewPagerFragment;
@@ -216,7 +217,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         OnReportFieldsUpdatedCallbackListener,
         EasyPermissions.PermissionCallbacks,
         SelectStopReasonFragment.SelectStopReasonFragmentListener,
-        SignInOperatorFragment.SignInOperatorFragmentListener {
+        SignInOperatorFragment.SignInOperatorFragmentListener,
+        SelectMachineFragment.SelectMachineFragmentListener {
 
     private static final String TAG = DashboardActivity.class.getSimpleName();
 
@@ -297,6 +299,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private boolean mIsUpgrading = false;
     private AsyncTask<String, String, String> mDownloadFile;
     private boolean isNeedRecipeRefresh;
+    private SelectMachineFragment mSelectMachineFragment;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -1565,7 +1568,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void goToDashboardActivity(int machine, ArrayList<Machine> machines) {
+    public void goToDashboardActivity(ArrayList<Machine> machines) {
 
     }
 
@@ -1813,12 +1816,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onChangeMachineRequest() {
         Log.i(TAG, "onChangeMachineRequest() command received from settings screen");
 
-        ClearData.clearMachineData();
-        Intent myIntent = new Intent(this, MainActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        myIntent.putExtra(MainActivity.GO_TO_SELECT_MACHINE_FRAGMENT, true);
-        startActivity(myIntent);
-        finish();
+        mSelectMachineFragment = SelectMachineFragment.newInstance();
+        if (mActionBarAndEventsFragment != null){
+            mActionBarAndEventsFragment.setVisiblefragment(mSelectMachineFragment);
+        }
+        getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, mSelectMachineFragment).commit();
+        showReportBtn(false);
     }
 
     @Override
@@ -2144,6 +2147,19 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mActionBarAndEventsFragment.setFromAnotherActivity(true);
         }
         startActivity(intent);
+    }
+
+    @Override
+    public void onActionBarAndEventsFragmentCreated() {
+
+        if (PersistenceManager.getInstance().getMachineId() == -1 && !(getVisibleFragment() instanceof SelectMachineFragment)){
+            mSelectMachineFragment = SelectMachineFragment.newInstance();
+            if (mActionBarAndEventsFragment != null){
+                mActionBarAndEventsFragment.setVisiblefragment(mSelectMachineFragment);
+            }
+            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, mSelectMachineFragment).commit();
+            showReportBtn(false);
+        }
     }
 
     @Override
@@ -2531,6 +2547,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         Fragment visible = getVisibleFragment();
 
+        if (mSelectMachineFragment != null){
+            if (PersistenceManager.getInstance().getMachineId() == -1){
+                return;
+            }
+            onCloseSelectMachine();
+            return;
+        }
         if (SingleLineKeyboard.isKeyBoardOpen) {
             if (mWidgetFragment != null) {
                 mWidgetFragment.onCloseKeyboard();
@@ -3320,6 +3343,32 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onSaveWorkers() {
         onBackPressed();
+        ProgressDialogManager.show(this);
+        dashboardDataStartPolling();
+    }
+
+    @Override
+    public void onChangeFactory() {
+        Intent myIntent = new Intent(this, MainActivity.class);
+        myIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(myIntent);
+        finish();
+    }
+
+    @Override
+    public void onCloseSelectMachine() {
+        if (PersistenceManager.getInstance().getMachineId() == -1){
+            return;
+        }
+        mActionBarAndEventsFragment.setActionBar();
+        getSupportFragmentManager().beginTransaction().remove(mSelectMachineFragment).commit();
+        showReportBtn(true);
+        mSelectMachineFragment = null;
+    }
+
+    @Override
+    public void onMachineSelected() {
+        onCloseSelectMachine();
         ProgressDialogManager.show(this);
         dashboardDataStartPolling();
     }
