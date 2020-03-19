@@ -57,6 +57,7 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
                             OppAppLogger.getInstance().d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = " + response.body().getMachineStatus().getAllMachinesData().size());
                         }
                         MachineStatus machineStatus = response.body().getMachineStatus();
+                        machineStatus.setTaskCountObject(response.body().getTaskCountObject());
                         getMachineStatusCallback.onGetMachineStatusSucceeded(machineStatus);
                     }
                     else

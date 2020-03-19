@@ -118,7 +118,7 @@ public class TaskDetailsFragment extends Fragment {
             mTask = (TaskProgress) getArguments().get(TaskProgress.TAG);
         }
         operatorId = PersistenceManager.getInstance().getOperatorDBId();
-        if (operatorId == 0){
+        if (operatorId == 0) {
             operatorId = PersistenceManager.getInstance().getUserId();
         }
         if (mTask == null) {
@@ -126,7 +126,7 @@ public class TaskDetailsFragment extends Fragment {
             mTask.setHistoryCreateDate(TimeUtils.getDate(new Date().getTime(), SQL_T_FORMAT_NO_SECOND));
             mTask.setTaskCreateUser(operatorId);
             String operatorName = PersistenceManager.getInstance().getOperatorName();
-            if (operatorName == null || operatorName.isEmpty()){
+            if (operatorName == null || operatorName.isEmpty()) {
                 operatorName = PersistenceManager.getInstance().getUserName();
             }
             mTask.setCreateUserName(operatorName);
@@ -298,33 +298,33 @@ public class TaskDetailsFragment extends Fragment {
                                 if (view.isShown()) {
                                     calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                                     calendar.set(Calendar.MINUTE, minute);
-                                    final Calendar calendarEnd = Calendar.getInstance();
-                                    calendarEnd.setTime(new Date(end[0]));
-                                    final Calendar calendarCurrent = Calendar.getInstance();
-                                    calendarCurrent.setTime(new Date());
-                                    if (calendar.before(calendarCurrent) || calendar.after(calendarEnd)) {
-                                        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.TimePickerTheme, finalMyTimeListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
-                                        timePickerDialog.setTitle(String.format("%s :", getString(R.string.choose_hour)));
-                                        timePickerDialog.show();
-                                    } else {
-                                        start[0] = calendar.getTime().getTime();
-                                        mTask.setTaskStartTimeTarget(TimeUtils.getDate(start[0], SQL_T_FORMAT_NO_SECOND));
-                                        mStartDate.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(mTask.getTaskStartTimeTarget(),
-                                                SQL_T_FORMAT_NO_SECOND), SQL_NO_T_FORMAT_NO_SECOND));
-                                    }
+                                    start[0] = calendar.getTime().getTime();
+                                    mTask.setTaskStartTimeTarget(TimeUtils.getDate(start[0], SQL_T_FORMAT_NO_SECOND));
+                                    mStartDate.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(mTask.getTaskStartTimeTarget(),
+                                            SQL_T_FORMAT_NO_SECOND), SQL_NO_T_FORMAT_NO_SECOND));
                                 }
                             }
-                        };
+                        }
+
+                        ;
                         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.TimePickerTheme, myTimeListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
-                        timePickerDialog.setTitle(String.format("%s :", getString(R.string.choose_hour)));
+                        timePickerDialog.setTitle(String.format("%s :",
+
+                                getString(R.string.choose_hour)));
                         timePickerDialog.show();
 
                     }
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-                if (!mTask.getTaskEndTimeTarget().isEmpty()) {
+                if (!mTask.getTaskEndTimeTarget().
+
+                        isEmpty()) {
                     datePickerDialog.getDatePicker().setMaxDate(end[0]);
                 }
-                datePickerDialog.getDatePicker().setMinDate(new Date().getTime());
+                datePickerDialog.getDatePicker().
+
+                        setMinDate(new Date().
+
+                                getTime());
                 datePickerDialog.show();
             }
         });
@@ -349,20 +349,11 @@ public class TaskDetailsFragment extends Fragment {
                                 if (view.isShown()) {
                                     calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                                     calendar.set(Calendar.MINUTE, minute);
-                                    final Calendar calendarStart = Calendar.getInstance();
-                                    calendarStart.setTime(new Date(start[0]));
-                                    final Calendar calendarCurrent = Calendar.getInstance();
-                                    calendarCurrent.setTime(new Date());
-                                    if (calendar.before(calendarCurrent) || calendar.before(calendarStart)){
-                                        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.TimePickerTheme, finalMyTimeListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
-                                        timePickerDialog.setTitle(String.format("%s :", getString(R.string.choose_hour)));
-                                        timePickerDialog.show();
-                                    }else {
-                                        end[0] = calendar.getTime().getTime();
-                                        mTask.setTaskEndTimeTarget(TimeUtils.getDate(end[0], SQL_T_FORMAT_NO_SECOND));
-                                        mEndDate.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(mTask.getTaskEndTimeTarget(),
-                                                SQL_T_FORMAT_NO_SECOND), SQL_NO_T_FORMAT_NO_SECOND));
-                                    }
+                                    end[0] = calendar.getTime().getTime();
+                                    mTask.setTaskEndTimeTarget(TimeUtils.getDate(end[0], SQL_T_FORMAT_NO_SECOND));
+                                    mEndDate.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(mTask.getTaskEndTimeTarget(),
+                                            SQL_T_FORMAT_NO_SECOND), SQL_NO_T_FORMAT_NO_SECOND));
+
                                 }
                             }
                         };
@@ -584,9 +575,9 @@ public class TaskDetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Task task = buildTask(mTask);
-                if (checkMandatoryFilled(task)){
+                if (checkMandatoryFilled(task)) {
                     createTask(task);
-                }else {
+                } else {
                     ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(),
                             getString(R.string.you_need_to_complete_all_mandatory_fields),
                             CroutonCreator.CroutonType.CREDENTIALS_ERROR);

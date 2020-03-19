@@ -2,6 +2,7 @@ package com.operators.machinestatusinfra.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MachineStatus {
@@ -13,6 +14,7 @@ public class MachineStatus {
     private Object mMissingMachineIds;
     @SerializedName("allMachinesData")
     private List<AllMachinesData> mAllMachinesData;
+    private ArrayList<TaskStatusCount> taskCountObject;
 
     public MachineStatus(List<Object> departmentMachinePC, List<Object> departmentOeePee, Object missingMachineIds, List<AllMachinesData> allMachinesData) {
         mDepartmentMachinePC = departmentMachinePC;
@@ -71,4 +73,21 @@ public class MachineStatus {
         this.mAllMachinesData = mAllMachinesData;
     }
 
+    public int getTaskCountTotal() {
+        int total = 0;
+        if (taskCountObject != null) {
+            for (TaskStatusCount taskStatusCount : taskCountObject) {
+                total += taskStatusCount.getNumOfTasks();
+            }
+        }
+        return total;
+    }
+
+    public ArrayList<TaskStatusCount> getTaskCountObject() {
+        return taskCountObject;
+    }
+
+    public void setTaskCountObject(ArrayList<TaskStatusCount> taskCountObject) {
+        this.taskCountObject = taskCountObject;
+    }
 }
