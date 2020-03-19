@@ -114,27 +114,11 @@ public class AllMachinesData {
     private int mLineID;
     @SerializedName("ReportRejectDefaultUnits")
     private int mReportRejectDefaultUnits;
-    @SerializedName("TaskStatuscount")
-    private ArrayList<TaskStatusCount> taskCountObject;
     @SerializedName("WorkerSignInOnShiftChange")
     private boolean workerSigninOnShiftChange;
 
     public boolean isWorkerSigninOnShiftChange() {
         return workerSigninOnShiftChange;
-    }
-
-    public ArrayList<TaskStatusCount> getTaskCountObject() {
-        return taskCountObject;
-    }
-
-    public int getTaskCountTotal() {
-        int total = 0;
-        if (taskCountObject != null) {
-            for (TaskStatusCount taskStatusCount : taskCountObject) {
-                total += taskStatusCount.getNumOfTasks();
-            }
-        }
-        return total;
     }
 
     public int getUserId() {

@@ -4,13 +4,6 @@ package com.operatorsapp.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,30 +11,40 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.common.StandardResponse;
+import com.example.common.callback.GetDepartmentCallback;
 import com.example.common.department.DepartmentMachineValue;
 import com.example.common.department.DepartmentsMachinesResponse;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.AutoCompleteAdapter;
 import com.operatorsapp.adapters.DepartmentAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ClearData;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.KeyboardUtils;
-
-import java.lang.reflect.Type;
+import com.operatorsapp.utils.SimpleRequests;
 
 import static com.operatorsapp.managers.PersistenceManager.setMachineData;
 
 public class SelectMachineFragment extends BackStackAwareFragment implements AdapterView.OnItemClickListener, View.OnClickListener, DepartmentAdapter.DepartmentAdapterListener {
     public static final String LOG_TAG = SelectMachineFragment.class.getSimpleName();
     private static final String MACHINES_LIST = "machines_list";
-    private GoToScreenListener mNavigationCallback;
+//    private GoToScreenListener mNavigationCallback;
     private AppCompatAutoCompleteTextView mSearchField;
     private ImageView mGoButton;
     private DepartmentsMachinesResponse mDepartmentMachine;
@@ -50,153 +53,105 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     private boolean canGoNext = false;
     private String mMachineName;
     private DepartmentAdapter mDepartmentAdapter;
+    private RecyclerView departementRecyclerView;
+    private TextView noDataTv;
+    private SelectMachineFragmentListener mListener;
+    private ProgressBar mProgress;
 
 
-    public static SelectMachineFragment newInstance(DepartmentsMachinesResponse machinesList)
-    {
-        Gson gson = new Gson();
-        String machinesListString = gson.toJson(machinesList);
-        Bundle args = new Bundle();
-        args.putString(MACHINES_LIST, machinesListString);
-        SelectMachineFragment fragment = new SelectMachineFragment();
-        fragment.setArguments(args);
-        return fragment;
+    public static SelectMachineFragment newInstance() {
+        return new SelectMachineFragment();
     }
 
     @Override
-    public void onAttach(Context context)
-    {
+    public void onAttach(Context context) {
         super.onAttach(context);
-        try
-        {
-            mNavigationCallback = (GoToScreenListener) context;
-        } catch(ClassCastException e)
-        {
-            throw new ClassCastException("Calling fragment must implement OnCroutonRequestListener interface");
+        try {
+            mListener = (SelectMachineFragmentListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Calling fragment must implement SelectMachineFragmentListener interface");
         }
     }
 
     @Override
-    public void onDetach()
-    {
+    public void onDetach() {
         super.onDetach();
-        mNavigationCallback = null;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if(getArguments() != null)
-        {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<DepartmentsMachinesResponse>()
-            {}.getType();
-            mDepartmentMachine = gson.fromJson(getArguments().getString(MACHINES_LIST), listType);
-        }
-
         //Analytics
         new GoogleAnalyticsHelper().trackScreen(getActivity(), "Select machine");
     }
 
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_select_machine, container, false);
         setActionBar();
 
-//        Collections.sort(mDepartmentMachine, new Comparator<Machine>() {
-//            @Override
-//            public int compare(Machine o1, Machine o2) {
-//                if (OperatorApplication.isEnglishLang()){
-//                    return o1.getMachineEName().compareTo(o2.getMachineEName());
-//                }else {
-//                    return o1.getMachineLName().compareTo(o2.getMachineLName());
-//                }
-//            }
-//        });
-
         rootView.findViewById(R.id.FSM_change_factory_btn).setOnClickListener(this);
-
+        departementRecyclerView = rootView.findViewById(R.id.FSM_department_rv);
         mSearchField = rootView.findViewById(R.id.machine_id_name);
         mGoButton = rootView.findViewById(R.id.goBtn);
-        if (mDepartmentMachine != null && mDepartmentMachine.getDepartmentMachine() != null && mDepartmentMachine.getDepartmentMachine().size() > 0) {
-            initDepartmentRv(rootView);
-            mSearchField.addTextChangedListener(mTextWatcher);
-            mGoButton.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-//                if(mGoButton.isEnabled())
-//                {
-//                    setMachineData();
-//                }
-                    KeyboardUtils.closeKeyboard(getActivity());
-                }
-            });
-        }else {
-            mSearchField.setVisibility(View.GONE);
-            mGoButton.setVisibility(View.GONE);
-            rootView.findViewById(R.id.FSM_no_data_tv).setVisibility(View.VISIBLE);
-        }
-//        mAutoCompleteAdapter = new AutoCompleteAdapter(getActivity(), mDepartmentMachine);
-//        mSearchField.setAdapter(mAutoCompleteAdapter);
-//        mSearchField.setOnItemClickListener(this);
-//        mSearchField.addTextChangedListener(mTextWatcher);
-//        mSearchField.setOnEditorActionListener(new TextView.OnEditorActionListener()
-//        {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
-//            {
-//                if(canGoNext)
-//                {
-//
-//                    PersistenceManager.getInstance().setMachineId(mMachineId);
-//                    PersistenceManager.getInstance().setMachineName(mMachineName);
-//                    PersistenceManager.getInstance().setSelectedMachine(true);
-//                    PersistenceManager.getInstance().setNeedUpdateToken(true);
-//                    mNavigationCallback.goToDashboardActivity(mMachineId, null);
-//                }
-//                return true;
-//            }
-//
-//        });
-//        mSearchField.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mSearchField.showDropDown();
-//            }
-//        });
-
-//        mGoButton.setEnabled(false);
-
-//        if (getActivity() != null) {
-//            SoftKeyboardUtil.showKeyboard(getActivity());
-//        }
-
+        noDataTv = rootView.findViewById(R.id.FSM_no_data_tv);
+        mProgress = rootView.findViewById(R.id.FSM_progress);
+        getDepartmentsMachines();
         return rootView;
     }
 
-    private void initDepartmentRv(View rootView) {
+
+    private void getDepartmentsMachines() {
+        mProgress.setVisibility(View.VISIBLE);
+        SimpleRequests.getDepartmentsMachines(PersistenceManager.getInstance().getSiteUrl(), new GetDepartmentCallback() {
+            @Override
+            public void onGetDepartmentSuccess(DepartmentsMachinesResponse response) {
+                mProgress.setVisibility(View.GONE);
+                mDepartmentMachine = response;
+                initView();
+            }
+
+            @Override
+            public void onGetDepartmentFailed(StandardResponse reason) {
+                mProgress.setVisibility(View.GONE);
+
+            }
+        }, NetworkManager.getInstance(), PersistenceManager.getInstance().getTotalRetries(), PersistenceManager.getInstance().getRequestTimeout());
+
+    }
+
+    private void initView() {
+        if (mDepartmentMachine != null && mDepartmentMachine.getDepartmentMachine() != null && mDepartmentMachine.getDepartmentMachine().size() > 0) {
+            initDepartmentRv();
+            mSearchField.addTextChangedListener(mTextWatcher);
+            mGoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    KeyboardUtils.closeKeyboard(getActivity());
+                }
+            });
+        } else {
+            mSearchField.setVisibility(View.GONE);
+            mGoButton.setVisibility(View.GONE);
+            noDataTv.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void initDepartmentRv() {
 
         if (mDepartmentMachine.getDepartmentMachine() != null && mDepartmentMachine.getDepartmentMachine().size() > 0) {
             mDepartmentAdapter = new DepartmentAdapter(mDepartmentMachine.getDepartmentMachine(), this);
 
-            RecyclerView recyclerView = rootView.findViewById(R.id.FSM_department_rv);
-
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
-            recyclerView.setLayoutManager(layoutManager);
+            departementRecyclerView.setLayoutManager(layoutManager);
 
-            recyclerView.setAdapter(mDepartmentAdapter);
+            departementRecyclerView.setAdapter(mDepartmentAdapter);
         }
     }
 
-    protected void setActionBar()
-    {
+    protected void setActionBar() {
         if (getActivity() != null) {
 
             ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -214,7 +169,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 backButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        getActivity().onBackPressed();
+                        mListener.onCloseSelectMachine();
                     }
                 });
                 ((TextView) view.findViewById(R.id.title)).setText(getString(R.string.link_machine));
@@ -243,17 +198,14 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         }
     }
 
-    private TextWatcher mTextWatcher = new TextWatcher()
-    {
+    private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after)
-        {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
         }
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count)
-        {
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
             canGoNext = false;
 //            mGoButton.setEnabled(false);
             mDepartmentAdapter.setSearchFilter(s.toString());
@@ -263,8 +215,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         }
 
         @Override
-        public void afterTextChanged(Editable s)
-        {
+        public void afterTextChanged(Editable s) {
 
         }
     };
@@ -272,13 +223,14 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.FSM_change_factory_btn:
 
-                if (mNavigationCallback != null){
-                    ClearData.clearData();
-                    mNavigationCallback.goToFragment(LoginFragment.newInstance(false), false, false);
-                }
+//                if (mNavigationCallback != null){
+                ClearData.clearData();
+//                    mNavigationCallback.goToFragment(LoginFragment.newInstance(false), false, false);
+                mListener.onChangeFactory();
+//                }
                 break;
         }
 
@@ -286,10 +238,18 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
     @Override
     public void onMachineSelected(DepartmentMachineValue departmentMachineValue) {
+        ClearData.clearMachineData();
         mMachineId = departmentMachineValue.getId();
         mMachineName = departmentMachineValue.getMachineName();
         setMachineData(departmentMachineValue.getId(), departmentMachineValue.getMachineName());
         PersistenceManager.getInstance().setMachineLineId(departmentMachineValue.getLineId());
-        mNavigationCallback.goToDashboardActivity(mMachineId, null);
+//        mNavigationCallback.goToDashboardActivity(mMachineId, null);
+        mListener.onMachineSelected();
+    }
+
+    public interface SelectMachineFragmentListener {
+        void onChangeFactory();
+        void onCloseSelectMachine();
+        void onMachineSelected();
     }
 }

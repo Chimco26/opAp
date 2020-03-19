@@ -4,6 +4,7 @@ import com.example.common.StandardResponse;
 import com.google.gson.annotations.SerializedName;
 import com.operators.machinestatusinfra.models.AllMachinesData;
 import com.operators.machinestatusinfra.models.MachineStatus;
+import com.operators.machinestatusinfra.models.TaskStatusCount;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,9 @@ public class MachineStatusDataResponse extends StandardResponse {
     private List<AllMachinesData> mAllMachinesData = new ArrayList<>();
     @SerializedName("MissingMachineIds")
     private Object mMissingMachineIds;
+    @SerializedName("TaskStatuscount")
+    private ArrayList<TaskStatusCount> taskCountObject;
+
 
     public MachineStatus getMachineStatus() {
         return new MachineStatus(mDepartmentMachinePC, mDepartmentOeePee, mMissingMachineIds, mAllMachinesData);
@@ -53,6 +57,10 @@ public class MachineStatusDataResponse extends StandardResponse {
 
     public void setmMissingMachineIds(Object mMissingMachineIds) {
         this.mMissingMachineIds = mMissingMachineIds;
+    }
+
+    public ArrayList<TaskStatusCount> getTaskCountObject() {
+        return taskCountObject;
     }
 
 }

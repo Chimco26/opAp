@@ -11,7 +11,7 @@ public interface GoToScreenListener {
     // wanted fragment instance to activity by using callback and the activity makes the switch in the way he wants.
     void goToFragment(Fragment fragment, boolean isCentralContainer, boolean addToBackStack);
 
-    void goToDashboardActivity(int machine, ArrayList<Machine> machines);
+    void goToDashboardActivity(ArrayList<Machine> machines);
 
     void isTryToLogin(boolean isTryToLogin);
 }

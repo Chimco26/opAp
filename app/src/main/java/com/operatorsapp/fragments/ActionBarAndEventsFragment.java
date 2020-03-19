@@ -382,7 +382,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         lenoxMachineLy.setLayoutManager(linearLayoutManager);
         lenoxMachineLy.setAdapter(new LenoxMachineAdapter(getContext(), mMachines, this));
-
     }
 
     public ViewGroup.LayoutParams initView(@NonNull View view) {
@@ -1294,6 +1293,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     || mVisiblefragment instanceof RecipeFragment
                     || mVisiblefragment instanceof SelectStopReasonFragment
                     || mVisiblefragment instanceof ReportStopReasonFragment
+                    || mVisiblefragment instanceof SelectMachineFragment
                     || mVisiblefragment instanceof ReportShiftFragment)) {
                 return;
             }
@@ -1488,7 +1488,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mListener.onOpenTaskActivity();
                 }
             });
-            
+
             actionBar.setCustomView(mToolBarView);
 
 //            setToolBarHeight(mToolBarView);
@@ -1507,6 +1507,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
         if (permissionResponseHashmap != null) {
             displayViewByServerSettings(permissionResponseHashmap);
+        }
+        if (PersistenceManager.getInstance().getMachineId() == -1){
+            mListener.onActionBarAndEventsFragmentCreated();
         }
     }
 
@@ -1664,7 +1667,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public boolean isAttachedCheck() {
-        if (!isAdded() || getActivity() == null){
+        if (!isAdded() || getActivity() == null) {
             return true;
         }
         return false;
@@ -1953,7 +1956,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void openNotificationsList() {
-        if (!isAdded() || getActivity() == null){return;}
+        if (!isAdded() || getActivity() == null) {
+            return;
+        }
         if (mPopUpDialog != null && mPopUpDialog.isShowing()) {
             mPopUpDialog.dismiss();
         }
@@ -3034,7 +3039,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (machineStatus == null) {
             return;
         }
-        mToolBarTaskCount.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getTaskCountTotal()));
+        mToolBarTaskCount.setText(String.valueOf(machineStatus.getTaskCountTotal()));
         AllMachinesData machinesData = machineStatus.getAllMachinesData().get(0);
         String nameByLang = OperatorApplication.isEnglishLang() ? machinesData.getCurrentProductEname() : machinesData.getCurrentProductName();
         if (nameByLang.length() > 31) {
@@ -3369,7 +3374,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 sendTokenWithSessionIdToServer(getResources().getStringArray(R.array.language_codes_array)[position],
-                        languagesNames[position] );
+                        languagesNames[position]);
 
             }
 
@@ -3563,6 +3568,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onResizeBottomMargin(int bottomMargin);
 
         void onOpenTaskActivity();
+
+        void onActionBarAndEventsFragmentCreated();
     }
 
 }

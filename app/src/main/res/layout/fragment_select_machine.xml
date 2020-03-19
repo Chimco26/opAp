@@ -126,5 +126,17 @@
             android:textColor="@color/black"
             android:visibility="gone"
             />
+
+        <ProgressBar
+            android:id="@+id/FSM_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/C16"
+            android:indeterminateTintMode="src_atop"
+            android:layout_centerInParent="true"/>
+
     </RelativeLayout>
 </LinearLayout>

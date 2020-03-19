@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     public static final String GO_TO_SELECT_MACHINE_FRAGMENT = "GO_TO_SELECT_MACHINE_FRAGMENT";
     private CroutonCreator mCroutonCreator;
     private boolean mIsTryToLogin;
-    private boolean mGoToSelectMachine = false;
+//    private boolean mGoToSelectMachine = false;
     private Fragment mCurrentFragment;
 
     @Override
@@ -99,14 +99,14 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         mCroutonCreator = new CroutonCreator();
 
         Bundle intent = getIntent().getExtras();
-        if (intent != null){
-            mGoToSelectMachine = intent.getBoolean(GO_TO_SELECT_MACHINE_FRAGMENT);
-        }
-        if (mGoToSelectMachine) {
-            goToFragment(LoginFragment.newInstance(true), true, false);
-        } else {
-            goToFragment(LoginFragment.newInstance(false), true, false);
-        }
+//        if (intent != null){
+//            mGoToSelectMachine = intent.getBoolean(GO_TO_SELECT_MACHINE_FRAGMENT);
+//        }
+//        if (mGoToSelectMachine) {
+//            goToFragment(LoginFragment.newInstance(), true, false);
+//        } else {
+            goToFragment(LoginFragment.newInstance(), true, false);
+//        }
 
         updateAndroidSecurityProvider(this);
 
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     }
 
     @Override
-    public void goToDashboardActivity(int machineId, ArrayList<Machine> machines) {
+    public void goToDashboardActivity(ArrayList<Machine> machines) {
         if (isFinishing()){
             return;
         }
@@ -186,7 +186,6 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
         Intent intent = new Intent(this, DashboardActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putInt("machineId", machineId);
         bundle.putParcelableArrayList(MACHINE_LIST, machines);
         intent.putExtras(bundle);
         startActivity(intent);

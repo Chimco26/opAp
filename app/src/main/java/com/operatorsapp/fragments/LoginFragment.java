@@ -58,14 +58,14 @@ public class LoginFragment extends Fragment {
     private TextView mLoginBtnBackground;
     private ImageView mShowHidePass;
     private boolean mPasswordIsVisible = false;
-    private boolean mGoToSelectMachine;
+//    private boolean mGoToSelectMachine;
 
-    public static LoginFragment newInstance(boolean goToSelectMachine) {
+    public static LoginFragment newInstance() {
 
         LoginFragment loginFragment = new LoginFragment();
-        Bundle args = new Bundle();
-        args.putBoolean(GO_TO_SELECT_MACHINE, goToSelectMachine);
-        loginFragment.setArguments(args);
+//        Bundle args = new Bundle();
+//        args.putBoolean(GO_TO_SELECT_MACHINE, goToSelectMachine);
+//        loginFragment.setArguments(args);
 
         return loginFragment;
     }
@@ -78,9 +78,9 @@ public class LoginFragment extends Fragment {
         // Analytics
         new GoogleAnalyticsHelper().trackScreen(getActivity(), "Login screen");
 
-        if (getArguments() != null) {
-            mGoToSelectMachine = getArguments().getBoolean(GO_TO_SELECT_MACHINE);
-        }
+//        if (getArguments() != null) {
+//            mGoToSelectMachine = getArguments().getBoolean(GO_TO_SELECT_MACHINE);
+//        }
     }
 
     @Override
@@ -289,9 +289,7 @@ public class LoginFragment extends Fragment {
 //                getVersion(machines, true);
                     //getNotifications();
                     PersistenceManager.getInstance().setSiteName(siteName);
-
-                    getDepartmentsMachines(machines, finalSiteUrl, true);
-
+                    getVersion(machines, true);
                 }
 
                 @Override
@@ -314,7 +312,7 @@ public class LoginFragment extends Fragment {
         SimpleRequests.getDepartmentsMachines(finalSiteUrl, new GetDepartmentCallback() {
             @Override
             public void onGetDepartmentSuccess(DepartmentsMachinesResponse response) {
-                getVersion(machines, isTryToLogin, response);
+                getVersion(machines, isTryToLogin);
             }
 
             @Override
@@ -325,14 +323,15 @@ public class LoginFragment extends Fragment {
 
     }
 
-    private void tryToLoginSuccess(DepartmentsMachinesResponse machines) {
+    private void tryToLoginSuccess(ArrayList<Machine> machines) {
         dismissProgressDialog();
         if (mNavigationCallback != null) {
 
 //            if (BuildConfig.FLAVOR.equals(getString(R.string.emerald_flavor_name))) {
 
-            mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), true, true);
+//            mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(), true, true);
 
+            mNavigationCallback.goToDashboardActivity(machines);
 //            } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
 //
 //                PersistenceManager.getInstance().setSelectedMachine(true);
@@ -355,6 +354,7 @@ public class LoginFragment extends Fragment {
                 public void onLoginSucceeded(ArrayList<Machine> machines, String siteName) {
                     OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
                     getDepartmentsMachines(machines, PersistenceManager.getInstance().getSiteUrl(), false);
+                    getVersion(machines, false);
                     PersistenceManager.getInstance().setSiteName(siteName);
                 }
 
@@ -373,14 +373,14 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private void loginSuccess(ArrayList<Machine> machines, DepartmentsMachinesResponse departmentsMachinesResponse) {
+    private void loginSuccess(ArrayList<Machine> machines) {
         dismissProgressDialog();
         if (mNavigationCallback != null) {
-            if (mGoToSelectMachine) {
-                mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(departmentsMachinesResponse), false, false);
-            } else {
-                mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId(), machines);
-            }
+//            if (mGoToSelectMachine) {
+//                mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(), false, false);
+//            } else {
+                mNavigationCallback.goToDashboardActivity(machines);
+//            }
             mNavigationCallback.isTryToLogin(false);
         }
     }
@@ -415,7 +415,7 @@ public class LoginFragment extends Fragment {
 //
 //    }
 
-    private void getVersion(final ArrayList<Machine> machines, final boolean isTryTologin, final DepartmentsMachinesResponse departmentsMachinesResponse) {
+    private void getVersion(final ArrayList<Machine> machines, final boolean isTryTologin) {
 
         SimpleRequests simpleRequests = new SimpleRequests();
 
@@ -434,11 +434,11 @@ public class LoginFragment extends Fragment {
 
                 if (isTryTologin) {
 
-                    tryToLoginSuccess(departmentsMachinesResponse);
+                    tryToLoginSuccess(machines);
 
                 } else {
 
-                    loginSuccess(machines, departmentsMachinesResponse);
+                    loginSuccess(machines);
 
                 }
 
@@ -449,11 +449,11 @@ public class LoginFragment extends Fragment {
 
                 if (isTryTologin) {
 
-                    tryToLoginSuccess(departmentsMachinesResponse);
+                    tryToLoginSuccess(machines);
 
                 } else {
 
-                    loginSuccess(machines, departmentsMachinesResponse);
+                    loginSuccess(machines);
 
                 }
 
