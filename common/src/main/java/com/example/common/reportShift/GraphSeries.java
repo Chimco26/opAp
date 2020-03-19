@@ -91,13 +91,16 @@ public class GraphSeries {
                     double standardDeviation = calculateStandardDeviation(itemList, mean);
                     for (int i = 0; i < itemList.size(); i++) {
 
-                        if (itemList.get(i).getY() != null && itemList.get(i).getY() >= mean - standardDeviation
-                                && itemList.get(i).getY() <= mean + standardDeviation) {
+                        if (itemList.get(i).getY() == null || (itemList.get(i).getY() != null && itemList.get(i).getY() >= mean - standardDeviation
+                                && itemList.get(i).getY() <= mean + standardDeviation)) {
                             averagedItems.add(itemList.get(i));
                         }else {
-                            if (itemList.get(i).getY() == null){
-                                averagedItems.add(itemList.get(i));
-                            }
+//                            try {
+                                averagedItems.add(new Item(itemList.get(i).getX(), getMean(itemList)));
+//                            }catch (IndexOutOfBoundsException e){
+//                                averagedItems.add(itemList.get(i));
+//                            }
+
                         }
                     }
                 }
