@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
             }
         });
 
-//        initDataStorage();
+        initDataStorage();
 
         setupAlarm();
 
