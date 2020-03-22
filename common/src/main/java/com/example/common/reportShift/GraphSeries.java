@@ -91,16 +91,19 @@ public class GraphSeries {
                     double standardDeviation = calculateStandardDeviation(itemList, mean);
                     for (int i = 0; i < itemList.size(); i++) {
 
-                        if (itemList.get(i).getY() == null || (itemList.get(i).getY() != null && itemList.get(i).getY() >= mean - standardDeviation
-                                && itemList.get(i).getY() <= mean + standardDeviation)) {
+                        if (itemList.get(i).getY() != null && itemList.get(i).getY() >= mean - standardDeviation
+                                && itemList.get(i).getY() <= mean + standardDeviation) {
                             averagedItems.add(itemList.get(i));
-                        }else {
-//                            try {
-                                averagedItems.add(new Item(itemList.get(i).getX(), getMean(itemList)));
-//                            }catch (IndexOutOfBoundsException e){
-//                                averagedItems.add(itemList.get(i));
-//                            }
-
+                        } else {
+                            double y = mean;
+                            if (itemList.get(i).getY() != null) {
+                                if (itemList.get(i).getY() > mean + standardDeviation) {
+                                    y += standardDeviation;
+                                } else if (itemList.get(i).getY() < mean - standardDeviation) {
+                                    y -= standardDeviation;
+                                }
+                            }
+                            averagedItems.add(new Item(itemList.get(i).getX(), y));
                         }
                     }
                 }
@@ -136,7 +139,7 @@ public class GraphSeries {
             double squaredDiffMean = newSum / counter;
             double standardDev = (Math.sqrt(squaredDiffMean));
             return standardDev;
-        }catch (Exception e){
+        } catch (Exception e) {
             return 0;
         }
     }
@@ -152,7 +155,7 @@ public class GraphSeries {
         }
         try {
             return sum / counter;
-        }catch (Exception e){
+        } catch (Exception e) {
             return sd.get(0).getY();
         }
     }
