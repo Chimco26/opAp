@@ -127,7 +127,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public static PersistenceManager getInstance() {
         if (msInstance == null) {
-            OppAppLogger.getInstance().e(LOG_TAG, "getInstance(), fail, PersistenceManager is not init");
+            OppAppLogger.e(LOG_TAG, "getInstance(), fail, PersistenceManager is not init");
         }
         return msInstance;
     }
@@ -296,7 +296,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         }
 
 
-        OppAppLogger.getInstance().d(LOG_TAG, "saveShiftLogs(), jsonEvents: " + mGson.toJson(events));
+        OppAppLogger.d(LOG_TAG, "saveShiftLogs(), jsonEvents: " + mGson.toJson(events));
     }
 
     private ArrayList<Event> getEventsFirstHalf(ArrayList<Event> events) {

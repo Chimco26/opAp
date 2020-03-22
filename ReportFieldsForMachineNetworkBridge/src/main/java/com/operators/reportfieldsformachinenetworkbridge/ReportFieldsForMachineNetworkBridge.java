@@ -51,7 +51,7 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                         }
                         else
                         {
-                            OppAppLogger.getInstance().i(LOG_TAG, "getReportFieldsForMachine onResponse Success");
+                            OppAppLogger.i(LOG_TAG, "getReportFieldsForMachine onResponse Success");
                             callback.onGetReportFieldsForMachineSuccess(response.body().getReportFieldsForMachine());
                         }
                     }
@@ -59,7 +59,7 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                     {
                         if(response.body() != null)
                         {
-                            OppAppLogger.getInstance().i(LOG_TAG, "getReportFieldsForMachine onResponse failure");
+                            OppAppLogger.i(LOG_TAG, "getReportFieldsForMachine onResponse failure");
                             response.body().getError().setDefaultErrorCodeConstant(response.body().getError().getErrorCode());
                             callback.onGetReportFieldsForMachineFailed(response.body());
                         }
@@ -67,7 +67,7 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                 }
                 else
                 {
-                    OppAppLogger.getInstance().i(LOG_TAG, "getReportFieldsForMachine callback is null");
+                    OppAppLogger.i(LOG_TAG, "getReportFieldsForMachine callback is null");
                 }
             }
 
@@ -78,20 +78,20 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                 {
                     if(mRetryCount++ < totalRetries)
                     {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     }
                     else
                     {
                         mRetryCount = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Response Error");
                         callback.onGetReportFieldsForMachineFailed(errorObject);
                     }
                 }
                 else
                 {
-                    OppAppLogger.getInstance().i(LOG_TAG, "getReportFieldsForMachine callback is null");
+                    OppAppLogger.i(LOG_TAG, "getReportFieldsForMachine callback is null");
                 }
 
             }

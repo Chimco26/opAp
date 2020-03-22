@@ -4,9 +4,7 @@ import android.content.Context;
 import android.os.Environment;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class LogCacheCleaner {
 

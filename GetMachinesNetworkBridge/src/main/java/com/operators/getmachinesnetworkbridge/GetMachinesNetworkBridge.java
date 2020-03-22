@@ -39,17 +39,17 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
                     }
                     if (response.body().getError().getErrorDesc() == null) {
                         if (machines != null && machines.size() > 0) {
-                            OppAppLogger.getInstance().d(LOG_TAG, "onRequestSucceed(), " + machines.size() + " machines");
+                            OppAppLogger.d(LOG_TAG, "onRequestSucceed(), " + machines.size() + " machines");
 
                             getMachinesCallback.onGetMachinesSucceeded(machines);
 
                         } else {
-                            OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), list null or empty");
+                            OppAppLogger.d(LOG_TAG, "onRequestFailed(), list null or empty");
                             StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.No_data, "list null or empty");
                             getMachinesCallback.onGetMachinesFailed(errorObject);
                         }
                     } else {
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequest(), getMachines failed");
+                        OppAppLogger.d(LOG_TAG, "onRequest(), getMachines failed");
                         StandardResponse errorObject = new StandardResponse();
                         errorObject.getError().setDefaultErrorCodeConstant(response.body().getError().getErrorCode());
                         getMachinesCallback.onGetMachinesFailed(errorObject);
@@ -60,10 +60,10 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
             @Override
             public void onFailure(Call<MachinesResponse> call, Throwable t) {
                 if (retryCount++ < totalRetries) {
-                    OppAppLogger.getInstance().v(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.v(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 } else {
-                    OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "General Error");
                     getMachinesCallback.onGetMachinesFailed(errorObject);
                 }

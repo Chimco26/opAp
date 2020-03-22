@@ -328,7 +328,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
-        OppAppLogger.getInstance().d(LOG_TAG, "onViewCreated(), start ");
+        OppAppLogger.d(LOG_TAG, "onViewCreated(), start ");
         super.onViewCreated(view, savedInstanceState);
 
         //Analytics
@@ -589,7 +589,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mOperatorCore.registerListener(mOperatorForMachineUICallbackListener);
 
-        OppAppLogger.getInstance().d(LOG_TAG, "onViewCreated(), end ");
+        OppAppLogger.d(LOG_TAG, "onViewCreated(), end ");
 
         initProductsSpinner();
         initBottomNotificationLayout(view);
@@ -1080,7 +1080,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         @Override
         public void onSetOperatorFailed(StandardResponse reason) {
-            OppAppLogger.getInstance().d(LOG_TAG, "onSetOperatorFailed() " + reason.getError().getErrorDesc());
+            OppAppLogger.d(LOG_TAG, "onSetOperatorFailed() " + reason.getError().getErrorDesc());
         }
 
     };
@@ -1094,7 +1094,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public void onResume() {
-        OppAppLogger.getInstance().d(LOG_TAG, "onResume(), Start ");
+        OppAppLogger.d(LOG_TAG, "onResume(), Start ");
         super.onResume();
 
         if (mFromAnotherActivity) {
@@ -1149,7 +1149,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mLoadingDataText.setVisibility(View.VISIBLE);
         }
 
-        OppAppLogger.getInstance().d(LOG_TAG, "onResume(), end ");
+        OppAppLogger.d(LOG_TAG, "onResume(), end ");
 
 
     }
@@ -1177,13 +1177,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mListener.onWidgetChangeState(!isOpen);
 
-        //        OppAppLogger.getInstance().clearPollingRequest(TAG, "setActionBar(),  " + " toolBar: " + mToolBarView.getHeight() + " -- " + mTollBarsHeight * 0.65);
-        //        OppAppLogger.getInstance().clearPollingRequest(TAG, "setActionBar(),  " + " status: " + mStatusLayout.getHeight() + " -- " + mTollBarsHeight * 0.35);
+        //        OppAppLogger.clearPollingRequest(TAG, "setActionBar(),  " + " toolBar: " + mToolBarView.getHeight() + " -- " + mTollBarsHeight * 0.65);
+        //        OppAppLogger.clearPollingRequest(TAG, "setActionBar(),  " + " status: " + mStatusLayout.getHeight() + " -- " + mTollBarsHeight * 0.35);
     }
 
     @Override
     public void onAttach(Context context) {
-        OppAppLogger.getInstance().d(LOG_TAG, "onAttach(), start ");
+        OppAppLogger.d(LOG_TAG, "onAttach(), start ");
         super.onAttach(context);
         try {
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
@@ -1199,12 +1199,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
-        OppAppLogger.getInstance().d(LOG_TAG, "onAttach(), end ");
+        OppAppLogger.d(LOG_TAG, "onAttach(), end ");
     }
 
     @Override
     public void onDetach() {
-        OppAppLogger.getInstance().d(LOG_TAG, "onDetach(), start ");
+        OppAppLogger.d(LOG_TAG, "onDetach(), start ");
         super.onDetach();
         mCroutonCallback = null;
         mOnGoToScreenListener = null;
@@ -1213,7 +1213,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mOperatorCore.unregisterListener();
         mOperatorCore = null;
         mListener = null;
-        OppAppLogger.getInstance().d(LOG_TAG, "onDetach(), end ");
+        OppAppLogger.d(LOG_TAG, "onDetach(), end ");
     }
 
     public void initProductView(ActiveJobsListForMachine activeJobsListForMachine) {
@@ -1404,7 +1404,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null || mCurrentMachineStatus.getAllMachinesData().size() == 0) {
-                        OppAppLogger.getInstance().w(LOG_TAG, "missing machine status data in job spinner");
+                        OppAppLogger.w(LOG_TAG, "missing machine status data in job spinner");
                         return;
                     }
                     mJobsSpinnerAdapter.updateSelectedId(mJobActionsSpinnerItems.get(position).getUniqueID());
@@ -1674,7 +1674,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void openActivateJobScreen() {
-        OppAppLogger.getInstance().d(LOG_TAG, "New Job");
+        OppAppLogger.d(LOG_TAG, "New Job");
         if (PersistenceManager.getInstance().getVersion() >= MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB) {
             mListener.onJobActionItemClick();
         } else {
@@ -2263,16 +2263,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
-                OppAppLogger.getInstance().d(LOG_TAG, "onPreDraw(), start ");
+                OppAppLogger.d(LOG_TAG, "onPreDraw(), start ");
                 if (view.getViewTreeObserver().isAlive()) {
                     view.getViewTreeObserver().removeOnPreDrawListener(this);
                 }
                 ViewGroup.LayoutParams toolBarParams;
                 toolBarParams = view.getLayoutParams();
                 toolBarParams.height = (int) (mTollBarsHeight * 0.65);
-                OppAppLogger.getInstance().d(LOG_TAG, "onPreDraw(), pre request layout ");
+                OppAppLogger.d(LOG_TAG, "onPreDraw(), pre request layout ");
                 view.requestLayout();
-                OppAppLogger.getInstance().d(LOG_TAG, "onPreDraw(), end ");
+                OppAppLogger.d(LOG_TAG, "onPreDraw(), end ");
 //        TODO        dismissProgressDialog();
                 return true;
             }
@@ -2442,7 +2442,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public void onDeviceStatusChanged(MachineStatus machineStatus) {
-        OppAppLogger.getInstance().i(LOG_TAG, "onDeviceStatusChanged()");
+        OppAppLogger.i(LOG_TAG, "onDeviceStatusChanged()");
 
         mCurrentMachineStatus = machineStatus;
 
@@ -2963,9 +2963,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (activeJobsListForMachine != null) {
             initProductView(activeJobsListForMachine);
-            OppAppLogger.getInstance().i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+            OppAppLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
         } else {
-            OppAppLogger.getInstance().w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
+            OppAppLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
         }
     }
 
@@ -3169,7 +3169,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.down_time));
 
         } else {
-            OppAppLogger.getInstance().w(LOG_TAG, "Undefined parameter");
+            OppAppLogger.w(LOG_TAG, "Undefined parameter");
 
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.ic_no_data));
         }

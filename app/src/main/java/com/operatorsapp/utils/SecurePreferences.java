@@ -227,7 +227,7 @@ public class SecurePreferences {
             try {
                 return decrypt(securedEncodedValue);
             } catch (SecurePreferencesException e) {
-                OppAppLogger.getInstance().e(LOG_TAG, "getString(), failed on key " + key);
+                OppAppLogger.e(LOG_TAG, "getString(), failed on key " + key);
                 throw e;
             }
         }
@@ -282,7 +282,7 @@ return null;
         byte[] securedValue = Base64.decode(securedEncodedValue, Base64.NO_WRAP);
         byte[] value = convert(reader, securedValue);
         if (value == null) {
-            OppAppLogger.getInstance().e(LOG_TAG, "decrypt(), value is null");
+            OppAppLogger.e(LOG_TAG, "decrypt(), value is null");
             return null;
         }
         try {

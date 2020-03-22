@@ -105,7 +105,7 @@ public class SimpleRequests {
                         callback.onGetAllRecipeSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "getAllRecipesRequest(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "getAllRecipesRequest(), onResponse() callback is null");
                     }
                 } else {
 
@@ -118,16 +118,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<RecipeResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getAllRecipesRequest_Failed Error");
                         callback.onGetAllRecipeFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "getAllRecipesRequest(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "getAllRecipesRequest(), onFailure() callback is null");
 
                 }
             }
@@ -150,7 +150,7 @@ public class SimpleRequests {
                         callback.onRequestSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "updateRecipe(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "updateRecipe(), onResponse() callback is null");
                     }
                 } else {
 
@@ -167,16 +167,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, t.getMessage());
                         callback.onRequestFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "updateRecipe(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "updateRecipe(), onFailure() callback is null");
 
                 }
             }
@@ -199,7 +199,7 @@ public class SimpleRequests {
                         callback.onGetVersionSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "getAllRecipesRequest(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "getAllRecipesRequest(), onResponse() callback is null");
                     }
                 } else {
 
@@ -212,16 +212,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<List<VersionResponse>> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getAllRecipesRequest_Failed Error");
                         callback.onGetVersionFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "getAllRecipesRequest(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "getAllRecipesRequest(), onFailure() callback is null");
 
                 }
             }
@@ -244,7 +244,7 @@ public class SimpleRequests {
                         callback.onGetDepartmentSuccess((DepartmentsMachinesResponse) response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "getDepartmentsMachines(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "getDepartmentsMachines(), onResponse() callback is null");
                     }
                 } else {
 
@@ -257,16 +257,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<DepartmentsMachinesResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getDepartmentsMachines_Failed Error");
                         callback.onGetDepartmentFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "getDepartmentsMachines(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "getDepartmentsMachines(), onFailure() callback is null");
 
                 }
             }
@@ -290,7 +290,7 @@ public class SimpleRequests {
                         callback.onGetMachineLineSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "getMachineLine(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "getMachineLine(), onResponse() callback is null");
                     }
                 } else {
 
@@ -303,16 +303,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<MachineLineResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getMachineLine Error");
                         callback.onGetMachineLineFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "getMachineLine(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "getMachineLine(), onFailure() callback is null");
 
                 }
             }
@@ -336,7 +336,7 @@ public class SimpleRequests {
                         callback.onGetStopLogSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "getLineShiftLog(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "getLineShiftLog(), onResponse() callback is null");
                     }
                 } else {
 
@@ -349,16 +349,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<StopLogsResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getLineShiftLog Error");
                         callback.onGetStopLogFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "getLineShiftLog(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "getLineShiftLog(), onFailure() callback is null");
 
                 }
             }
@@ -383,7 +383,7 @@ public class SimpleRequests {
                         callback.onGetShiftWorkersSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "getShiftWorkers(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "getShiftWorkers(), onResponse() callback is null");
                     }
                 } else {
 
@@ -396,16 +396,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<ShiftOperatorResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getShiftWorkers Error");
                         callback.onGetShiftWorkersFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "getShiftWorkers(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "getShiftWorkers(), onFailure() callback is null");
 
                 }
             }
@@ -442,16 +442,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "saveShiftWorkers Error");
                         callback.onRequestFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "saveShiftWorkers(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "saveShiftWorkers(), onFailure() callback is null");
 
                 }
             }
@@ -474,7 +474,7 @@ public class SimpleRequests {
                         callback.onGetVersionSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "getAllRecipesRequest(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "getAllRecipesRequest(), onResponse() callback is null");
                     }
                 } else {
 
@@ -487,16 +487,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<IntervalAndTimeOutResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getAllRecipesRequest_Failed Error");
                         callback.onGetVersionFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "getAllRecipesRequest(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "getAllRecipesRequest(), onFailure() callback is null");
 
                 }
             }
@@ -522,7 +522,7 @@ public class SimpleRequests {
 
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "postUpdateNotesForJob(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "postUpdateNotesForJob(), onResponse() callback is null");
                     }
                 } else {
 
@@ -544,16 +544,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "postUpdateNotesForJob Error");
                         callback.onUpdateNotesFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "postUpdateNotesForJob(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "postUpdateNotesForJob(), onFailure() callback is null");
 
                 }
             }
@@ -580,7 +580,7 @@ public class SimpleRequests {
 
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "getPendingJobList(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "getPendingJobList(), onResponse() callback is null");
                     }
                 } else {
 
@@ -593,16 +593,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<PendingJobStandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getPendingJobList_Failed Error");
                         callback.onGetPendingJobListFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "getPendingJobList(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "getPendingJobList(), onFailure() callback is null");
 
                 }
             }
@@ -627,7 +627,7 @@ public class SimpleRequests {
 
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "reportMultipleRejects(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "reportMultipleRejects(), onResponse() callback is null");
                     }
                 } else {
 
@@ -640,16 +640,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "reportMultipleRejects Error");
                         callback.onRequestFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "reportMultipleRejects(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "reportMultipleRejects(), onFailure() callback is null");
 
                 }
             }
@@ -674,7 +674,7 @@ public class SimpleRequests {
 
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "getJobDetails(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "getJobDetails(), onResponse() callback is null");
                     }
                 } else {
 
@@ -687,16 +687,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<JobDetailsStandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getJobDeatils_Failed Error");
                         callback.onGetJobDetailsFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "getJobDetails(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "getJobDetails(), onFailure() callback is null");
 
                 }
             }
@@ -722,7 +722,7 @@ public class SimpleRequests {
 
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "postUpdateActions(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "postUpdateActions(), onResponse() callback is null");
                     }
                 } else {
 
@@ -735,16 +735,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "postUpdtaeActions_Failed Error");
                         callback.onPostUpdtaeActionsFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "postUpdateActions(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "postUpdateActions(), onFailure() callback is null");
 
                 }
             }
@@ -770,7 +770,7 @@ public class SimpleRequests {
 
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "PostActivateJob(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "PostActivateJob(), onResponse() callback is null");
                     }
                 } else {
 
@@ -783,16 +783,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "PostActivateJob Failed Error");
                         callback.onPostActivateJobFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "PostActivateJob(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "PostActivateJob(), onFailure() callback is null");
 
                 }
             }
@@ -816,7 +816,7 @@ public class SimpleRequests {
 
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "PostSplit(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "PostSplit(), onResponse() callback is null");
                     }
                 } else {
                     String msg = "";
@@ -833,16 +833,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, t.getMessage());
                         callback.onPostSplitEventFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "PostSplitEvent(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "PostSplitEvent(), onFailure() callback is null");
 
                 }
             }
@@ -867,7 +867,7 @@ public class SimpleRequests {
 
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "PostProductionMode(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "PostProductionMode(), onResponse() callback is null");
                     }
                 } else {
 
@@ -886,16 +886,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, t.getMessage());
                         callback.onPostProductionModeFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "PostProductionMode(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "PostProductionMode(), onFailure() callback is null");
 
                 }
             }
@@ -921,7 +921,7 @@ public class SimpleRequests {
                         callback.onGetTaskListCallbackSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "getTaskList(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "getTaskList(), onResponse() callback is null");
                     }
                 } else {
 
@@ -934,16 +934,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<TaskListResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getTaskList Error");
                         callback.onGetTaskListCallbackFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "getTaskList(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "getTaskList(), onFailure() callback is null");
 
                 }
             }
@@ -967,7 +967,7 @@ public class SimpleRequests {
                         callback.onCreateTaskCallbackSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "createOrUpdateTask(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "createOrUpdateTask(), onResponse() callback is null");
                     }
                 } else {
 
@@ -980,16 +980,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "createOrUpdateTask Error");
                         callback.onCreateTaskCallbackFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "createOrUpdateTask(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "createOrUpdateTask(), onFailure() callback is null");
 
                 }
             }
@@ -1014,7 +1014,7 @@ public class SimpleRequests {
                         callback.onGetTaskObjectsForCreateCallbackSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "getTaskObjectsForCreateOrEdit(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "getTaskObjectsForCreateOrEdit(), onResponse() callback is null");
                     }
                 } else {
 
@@ -1027,16 +1027,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<TaskObjectsForCreateOrEditResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getTaskObjectsForCreateOrEdit Error");
                         callback.onGetTaskObjectsForCreateCallbackFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "getTaskObjectsForCreateOrEdit(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "getTaskObjectsForCreateOrEdit(), onFailure() callback is null");
 
                 }
             }
@@ -1060,7 +1060,7 @@ public class SimpleRequests {
                         callback.onUpdateTaskStatusCallbackSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "updateTaskStatus(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "updateTaskStatus(), onResponse() callback is null");
                     }
                 } else {
 
@@ -1073,16 +1073,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "updateTaskStatus Error");
                         callback.onUpdateTaskStatusCallbackFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "updateTaskStatus(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "updateTaskStatus(), onFailure() callback is null");
 
                 }
             }
@@ -1106,7 +1106,7 @@ public class SimpleRequests {
                         callback.onGetTaskFilesCallbackSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "updateTaskStatus(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "updateTaskStatus(), onResponse() callback is null");
                     }
                 } else {
 
@@ -1119,16 +1119,16 @@ public class SimpleRequests {
             public void onFailure(@NonNull Call<TaskFilesResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "updateTaskStatus Error");
                         callback.onGetTaskFilesCallbackFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "updateTaskStatus(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "updateTaskStatus(), onFailure() callback is null");
 
                 }
             }

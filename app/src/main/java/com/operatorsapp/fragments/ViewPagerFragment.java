@@ -152,7 +152,7 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
     }
 
     public void openActivateJobScreen() {
-        OppAppLogger.getInstance().d(TAG, "New Job");
+        OppAppLogger.d(TAG, "New Job");
         if (PersistenceManager.getInstance().getVersion() >= MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB) {
             mListener.onJobActionItemClick();
         } else {

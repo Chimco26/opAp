@@ -312,7 +312,7 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
         reportNetworkBridge.injectInventory(NetworkManager.getInstance());
         ReportCore mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
-        OppAppLogger.getInstance().i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " type value: " + mSelectedPackageTypeId + " type name: " + mSelectedPackageTypeName + " JobId: " + mJoshId);
+        OppAppLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " type value: " + mSelectedPackageTypeId + " type name: " + mSelectedPackageTypeName + " JobId: " + mJoshId);
 
         mReportCore.sendInventoryReport(mSelectedPackageTypeId, mUnitsCounter, mJoshId);
 
@@ -351,7 +351,7 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
         public void sendReportFailure(StandardResponse reason) {
             dismissProgressDialog();
             new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, false, "Report Production- " + reason.getError().getErrorDesc());
-            OppAppLogger.getInstance().i(LOG_TAG, "sendReportFailure() reason: " + reason.getError().getErrorDesc());
+            OppAppLogger.i(LOG_TAG, "sendReportFailure() reason: " + reason.getError().getErrorDesc());
             mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getError().getErrorDesc(), true);
             SendBroadcast.refreshPolling(getContext());
 

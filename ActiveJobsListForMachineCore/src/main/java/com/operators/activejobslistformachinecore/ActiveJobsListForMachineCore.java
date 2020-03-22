@@ -42,15 +42,15 @@ public class ActiveJobsListForMachineCore {
                                         mActiveJobsListForMachineUICallbackListener.onActiveJobsListForMachineReceived(activeJobsListForMachine);
                                     }
                                     else {
-                                        OppAppLogger.getInstance().w(LOG_TAG, "getActiveJobsListForMachine() activeJobsListForMachine list is empty");
+                                        OppAppLogger.w(LOG_TAG, "getActiveJobsListForMachine() activeJobsListForMachine list is empty");
                                     }
                                 }
                                 else {
-                                    OppAppLogger.getInstance().w(LOG_TAG, "getActiveJobsListForMachine() activeJobsListForMachine list null");
+                                    OppAppLogger.w(LOG_TAG, "getActiveJobsListForMachine() activeJobsListForMachine list null");
                                 }
                             }
                             else {
-                                OppAppLogger.getInstance().w(LOG_TAG, "getActiveJobsListForMachine() activeJobsListForMachine is null");
+                                OppAppLogger.w(LOG_TAG, "getActiveJobsListForMachine() activeJobsListForMachine is null");
 
                             }
                         }
@@ -58,7 +58,7 @@ public class ActiveJobsListForMachineCore {
                         @Override
                         public void onGetActiveJobsListForMachineFailed(StandardResponse reason) {
                             mActiveJobsListForMachineUICallbackListener.onActiveJobsListForMachineReceiveFailed(reason);
-                            OppAppLogger.getInstance().e(LOG_TAG, "getActiveJobsListForMachine() - onGetActiveJobsListForMachineFailed() ");
+                            OppAppLogger.e(LOG_TAG, "getActiveJobsListForMachine() - onGetActiveJobsListForMachineFailed() ");
 
 
                         }

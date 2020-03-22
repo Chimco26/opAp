@@ -32,7 +32,7 @@ public class TimeToEndCounter
 
             public void onFinish() {
                 mOnTimeToEndChangedListener.onTimeToEndChanged(FINISHED);
-                OppAppLogger.getInstance().i(LOG_TAG, "onFinish()");
+                OppAppLogger.i(LOG_TAG, "onFinish()");
             }
 
         }.start();
@@ -53,7 +53,7 @@ public class TimeToEndCounter
             @Override
             public void onFinish() {
                 mOnTimeToEndChangedListener.onTimeToEndChanged(FINISHED);
-                OppAppLogger.getInstance().i(LOG_TAG, "onFinish()");
+                OppAppLogger.i(LOG_TAG, "onFinish()");
             }
 
         }.start();

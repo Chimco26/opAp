@@ -31,13 +31,13 @@ public class QCRequests {
                         onFailure(call, new Throwable(getErrorMessage(response.body(), "getQCTestOrder() failed")));
                     }
                 }else {
-                    OppAppLogger.getInstance().w(TAG, "getQCTestOrder() failed");
+                    OppAppLogger.w(TAG, "getQCTestOrder() failed");
                 }
             }
 
             @Override
             public void onFailure(Call<TestOrderResponse> call, Throwable t) {
-                OppAppLogger.getInstance().w(TAG, t.getMessage());
+                OppAppLogger.w(TAG, t.getMessage());
                 StandardResponse errorResponse = new StandardResponse(ErrorResponse.ErrorCode.No_data, t.getMessage());
                 callback.onFailure(errorResponse);
             }
@@ -62,13 +62,13 @@ public class QCRequests {
                         onFailure(call, new Throwable(getErrorMessage(response.body(),"postQCSendTestOrder() failed")));
                     }
                 }else {
-                    OppAppLogger.getInstance().w(TAG, "postQCSendTestOrder() failed");
+                    OppAppLogger.w(TAG, "postQCSendTestOrder() failed");
                 }
             }
 
             @Override
             public void onFailure(Call<StandardResponse> call, Throwable t) {
-                OppAppLogger.getInstance().w(TAG, t.getMessage());
+                OppAppLogger.w(TAG, t.getMessage());
                 StandardResponse errorResponse = new StandardResponse(ErrorResponse.ErrorCode.No_data, t.getMessage());
                 callback.onFailure(errorResponse);
             }
@@ -92,13 +92,13 @@ public class QCRequests {
                         onFailure(call, new Throwable(getErrorMessage(response.body(),"getQCTestDetails() failed")));
                     }
                 }else {
-                    OppAppLogger.getInstance().w(TAG, "getQCTestDetails() failed");
+                    OppAppLogger.w(TAG, "getQCTestDetails() failed");
                 }
             }
 
             @Override
             public void onFailure(Call<TestDetailsResponse> call, Throwable t) {
-                OppAppLogger.getInstance().w(TAG, t.getMessage());
+                OppAppLogger.w(TAG, t.getMessage());
                 StandardResponse errorResponse = new StandardResponse(ErrorResponse.ErrorCode.No_data, t.getMessage());
                 callback.onFailure(errorResponse);
             }
@@ -122,13 +122,13 @@ public class QCRequests {
                         onFailure(call, new Throwable(getErrorMessage(response.body(), "postQCSaveTestDetails() failed")));
                     }
                 }else {
-                    OppAppLogger.getInstance().w(TAG, "postQCSaveTestDetails() failed");
+                    OppAppLogger.w(TAG, "postQCSaveTestDetails() failed");
                 }
             }
 
             @Override
             public void onFailure(Call<SaveTestDetailsResponse> call, Throwable t) {
-                OppAppLogger.getInstance().w(TAG, t.getMessage());
+                OppAppLogger.w(TAG, t.getMessage());
                 StandardResponse errorResponse = new StandardResponse(ErrorResponse.ErrorCode.No_data, t.getMessage());
                 callback.onFailure(errorResponse);
             }

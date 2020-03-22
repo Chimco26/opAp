@@ -303,7 +303,7 @@ public class StopEventLogActivity extends AppCompatActivity
                 }
                 // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
                 onShowCrouton(response.getError().getErrorDesc(), false);
-                OppAppLogger.getInstance().i(TAG, "sendReportSuccess()");
+                OppAppLogger.i(TAG, "sendReportSuccess()");
                 Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
                 mStopEventLogFragment.onResume();
                 for (int i = 0; i < mSelectedEvents.size(); i++) {
@@ -337,7 +337,7 @@ public class StopEventLogActivity extends AppCompatActivity
         @Override
         public void sendReportFailure(StandardResponse reason) {
             ProgressDialogManager.dismiss();
-            OppAppLogger.getInstance().w(TAG, "sendReportFailure()");
+            OppAppLogger.w(TAG, "sendReportFailure()");
             String msg = "missing reports";
             if (reason != null && reason.getError().getErrorDesc() != null) {
                 msg = reason.getError().getErrorDesc();
