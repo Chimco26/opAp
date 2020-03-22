@@ -303,7 +303,7 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
         {
             case R.id.button_report:
             {
-                OppAppLogger.getInstance().d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString() + " jobId " + mJobId);
+                OppAppLogger.d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString() + " jobId " + mJobId);
                 if(canSendReport())
                 {
                     sendReport();
@@ -348,7 +348,7 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
 
                 mDashboardCroutonListener.onShowCrouton((o.getError().getErrorDesc()), false);
             }
-            OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
+            OppAppLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
 
             if (getFragmentManager() != null){
@@ -361,7 +361,7 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
         public void sendReportFailure(StandardResponse reason)
         {
             dismissProgressDialog();
-            OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
+            OppAppLogger.w(LOG_TAG, "sendReportFailure()");
             if(reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch)
             {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback()
@@ -375,7 +375,7 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
                     @Override
                     public void onSilentLoginFailed(StandardResponse reason)
                     {
-                        OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
+                        OppAppLogger.w(LOG_TAG, "Failed silent login");
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                         dismissProgressDialog();

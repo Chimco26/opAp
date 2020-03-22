@@ -51,12 +51,12 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
                 if (response.body() != null && response.body().getEvents() != null && (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorCode() == 1967)) {
                     ArrayList<Event> events = response.body().getEvents();
 
-                    OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse " + events.size() + " events");
+                    OppAppLogger.d(LOG_TAG, "getShiftLog , onResponse " + events.size() + " events");
 
                     shiftLogCoreCallback.onShiftLogSucceeded(events);
                 } else {
 
-                    OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse - getShiftLog failed Error");
+                    OppAppLogger.d(LOG_TAG, "getShiftLog , onResponse - getShiftLog failed Error");
                     StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "getShiftLog failed Error");
                     shiftLogCoreCallback.onShiftLogFailed(errorObject);
                 }
@@ -65,12 +65,12 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
             @Override
             public void onFailure(Call<ShiftLogResponse> call, Throwable t) {
                 if (retryCount++ < totalRetries) {
-                    OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
 
                     call.clone().enqueue(this);
                 } else {
                     retryCount = 0;
-                    OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog, onFailure " + t.getMessage());
+                    OppAppLogger.d(LOG_TAG, "getShiftLog, onFailure " + t.getMessage());
 
                     StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "General Error");
                     shiftLogCoreCallback.onShiftLogFailed(errorObject);
@@ -91,11 +91,11 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
                 if (response.body() != null && response.body().getError().getErrorDesc() == null) {
                     shiftForMachineCoreCallback.onShiftForMachineSucceeded(response.body());
                 } else if (response.body() != null) {
-                    OppAppLogger.getInstance().e(LOG_TAG, "GetShiftForMachine onResponse, " + response.body().getError());
+                    OppAppLogger.e(LOG_TAG, "GetShiftForMachine onResponse, " + response.body().getError());
                     StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Server, "shift for machine failed" );
                     shiftForMachineCoreCallback.onShiftForMachineFailed(errorObject);
                 } else {
-                    OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse - GetShiftForMachine failed Error");
+                    OppAppLogger.d(LOG_TAG, "getShiftLog , onResponse - GetShiftForMachine failed Error");
                     StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "GetShiftForMachine failed Error");
                     shiftForMachineCoreCallback.onShiftForMachineFailed(errorObject);
                 }
@@ -104,11 +104,11 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
             @Override
             public void onFailure(Call<ShiftForMachineResponse> call, Throwable t) {
                 if (retryCount++ < totalRetries) {
-                    OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 } else {
                     retryCount = 0;
-                    OppAppLogger.getInstance().d(LOG_TAG, "GetShiftForMachine, onFailure " + t.getMessage());
+                    OppAppLogger.d(LOG_TAG, "GetShiftForMachine, onFailure " + t.getMessage());
                     StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "General Error");
                     shiftForMachineCoreCallback.onShiftForMachineFailed(errorObject);
                 }
@@ -128,10 +128,10 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
             public void onResponse(Call<ActualBarExtraResponse> call, Response<ActualBarExtraResponse> response) {
 
                 if (response.body() != null && response.body().getFunctionSucceed()) {
-                    OppAppLogger.getInstance().d(LOG_TAG, "GetActualBarExtraDetails , onResponse ");
+                    OppAppLogger.d(LOG_TAG, "GetActualBarExtraDetails , onResponse ");
                     actualBarExtraResponseActualBarExtraDetailsCallback.onActualBarExtraDetailsSucceeded(response.body());
                 } else {
-                    OppAppLogger.getInstance().d(LOG_TAG, "GetActualBarExtraDetails , onResponse - GetActualBarExtraDetails failed Error");
+                    OppAppLogger.d(LOG_TAG, "GetActualBarExtraDetails , onResponse - GetActualBarExtraDetails failed Error");
                     StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "GetActualBarExtraDetails failed Error");
                     actualBarExtraResponseActualBarExtraDetailsCallback.onActualBarExtraDetailsFailed(errorObject);
                 }
@@ -140,12 +140,12 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
             @Override
             public void onFailure(Call<ActualBarExtraResponse> call, Throwable t) {
                 if (retryCount++ < totalRetries) {
-                    OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
 
                     call.clone().enqueue(this);
                 } else {
                     retryCount = 0;
-                    OppAppLogger.getInstance().d(LOG_TAG, "GetActualBarExtraDetails, onFailure " + t.getMessage());
+                    OppAppLogger.d(LOG_TAG, "GetActualBarExtraDetails, onFailure " + t.getMessage());
 
                     StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "General Error");
                     actualBarExtraResponseActualBarExtraDetailsCallback.onActualBarExtraDetailsFailed(errorObject);
@@ -166,7 +166,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
                     if (callback != null){
                         callback.onGetMachineJoshDataSuccess(response.body());
                     }else {
-                        OppAppLogger.getInstance().w(LOG_TAG, "getMachineJoshData(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "getMachineJoshData(), onResponse() callback is null");
                     }
                 }else {
                     String msg = "getMachineJoshData Failed";
@@ -184,16 +184,16 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
             public void onFailure(Call<MachineJoshDataResponse> call, Throwable t) {
                 if (callback != null) {
                     if (retryCount++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "getMachineJoshData Error");
                         callback.onGetMachineJoshDataFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "getMachineJoshData(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "getMachineJoshData(), onFailure() callback is null");
 
                 }
             }

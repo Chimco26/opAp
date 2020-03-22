@@ -39,7 +39,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
     public void inject(GetOperatorByIdNetworkManagerInterface getOperatorByIdNetworkManagerInterface, SetOperatorForMachineNetworkManagerInterface setOperatorForMachineNetworkManagerInterface) {
         mGetOperatorByIdNetworkManagerInterface = getOperatorByIdNetworkManagerInterface;
         mSetOperatorForMachineNetworkManagerInterface = setOperatorForMachineNetworkManagerInterface;
-        OppAppLogger.getInstance().i(LOG_TAG, "OperatorNetworkBridge inject()");
+        OppAppLogger.i(LOG_TAG, "OperatorNetworkBridge inject()");
     }
 
     @Override
@@ -60,7 +60,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
                             getOperatorByIdCallback.onGetOperatorSucceeded(operator);
                         }
                     } else {
-                        OppAppLogger.getInstance().w(LOG_TAG, "Response is null");
+                        OppAppLogger.w(LOG_TAG, "Response is null");
                     }
                 } else {
                     if (response.body() != null) {
@@ -68,7 +68,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
                         response.body().getError().setDefaultErrorCodeConstant(response.body().getError().getErrorCode());
                         getOperatorByIdCallback.onGetOperatorFailed(response.body());
                     } else {
-                        OppAppLogger.getInstance().w(LOG_TAG, "Response body is null");
+                        OppAppLogger.w(LOG_TAG, "Response body is null");
 
                     }
                 }
@@ -77,11 +77,11 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
             @Override
             public void onFailure(@NonNull Call<OperatorDataResponse> call, @NonNull Throwable t) {
                 if (mRetryCount++ < totalRetries) {
-                    OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 } else {
                     mRetryCount = 0;
-                    OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Get_operator_failed Error");
                     getOperatorByIdCallback.onGetOperatorFailed(errorObject);
                 }
@@ -133,11 +133,11 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 if (mRetryCount++ < totalRetries) {
-                    OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 } else {
                     mRetryCount = 0;
-                    OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Set_operator_for_machine_failed Error");
                     setOperatorForMachineCallback.onSetOperatorForMachineFailed(errorObject);
                 }

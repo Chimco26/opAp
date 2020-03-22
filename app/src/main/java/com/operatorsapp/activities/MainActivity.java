@@ -61,10 +61,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int STORAGE_REQUEST_CODE = 1;
     public static final String MACHINE_LIST = "MACHINE_LIST";
-    public static final String GO_TO_SELECT_MACHINE_FRAGMENT = "GO_TO_SELECT_MACHINE_FRAGMENT";
     private CroutonCreator mCroutonCreator;
-    private boolean mIsTryToLogin;
-//    private boolean mGoToSelectMachine = false;
     private Fragment mCurrentFragment;
 
     @Override
@@ -76,7 +73,9 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         ChangeLang.changeLanguage(this);
         try {
             ACRA.init(getApplication());
-        }catch (IllegalStateException ignored){}catch (NullPointerException e){}
+        } catch (IllegalStateException ignored) {
+        } catch (NullPointerException e) {
+        }
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -92,26 +91,17 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
             }
         });
 
-//        initLoggerAndDataStorage();
+//        initDataStorage();
 
         setupAlarm();
 
         mCroutonCreator = new CroutonCreator();
 
-        Bundle intent = getIntent().getExtras();
-//        if (intent != null){
-//            mGoToSelectMachine = intent.getBoolean(GO_TO_SELECT_MACHINE_FRAGMENT);
-//        }
-//        if (mGoToSelectMachine) {
-//            goToFragment(LoginFragment.newInstance(), true, false);
-//        } else {
-            goToFragment(LoginFragment.newInstance(), true, false);
-//        }
+        goToFragment(LoginFragment.newInstance(), true, false);
 
         updateAndroidSecurityProvider(this);
 
         checkFlavor();
-
 
 
     }
@@ -138,44 +128,32 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     @Override
     public void onBackPressed() {
-//        if (!mIsTryToLogin) {
-//
-//            if (mCurrentFragment instanceof SelectMachineFragment && !mGoToSelectMachine) {
-//                cleanData();
-//                goToFragment(LoginFragment.newInstance(false), false, false);
-//            } else {
-//               finish();
-//            }
-//        }else {
-            finish();
-//        }
+        super.onBackPressed();
     }
 
     @Override
     public void goToFragment(Fragment fragment, boolean centralContainer, boolean addToBackStack) {
-        if (isFinishing()){
+        if (isFinishing()) {
             return;
         }
         try {
-            OppAppLogger.getInstance().d(TAG, "goToFragment(), " + fragment.getClass().getSimpleName());
+            OppAppLogger.d(TAG, "goToFragment(), " + fragment.getClass().getSimpleName());
             mCurrentFragment = fragment;
             if (addToBackStack) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).addToBackStack("").commit();
             } else {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).commit();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
 
     @Override
     public void goToDashboardActivity(ArrayList<Machine> machines) {
-        if (isFinishing()){
+        if (isFinishing()) {
             return;
         }
-        //now we have machineID and can get notifications history
-        getNotifications();
 
 //        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name)) &&
 //                PersistenceManager.getInstance().getMachineId() == -1) {
@@ -189,11 +167,14 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         bundle.putParcelableArrayList(MACHINE_LIST, machines);
         intent.putExtras(bundle);
         startActivity(intent);
+
+        //now we have machineID and can get notifications history
+        getNotifications();
     }
 
     private void getNotifications() {
 
-        ProgressDialogManager.show(this);
+//        ProgressDialogManager.show(this);
         NetworkManager.getInstance().getNotificationHistory(new Callback<NotificationHistoryResponse>() {
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
@@ -227,10 +208,10 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
                     } else {
                         PersistenceManager.getInstance().setRecentTechCallId(0);
                     }
-                    ProgressDialogManager.dismiss();
+//                    ProgressDialogManager.dismiss();
                     finish();
                 } else {
-                    ProgressDialogManager.dismiss();
+//                    ProgressDialogManager.dismiss();
                     PersistenceManager.getInstance().setNotificationHistory(null);
                     finish();
                 }
@@ -240,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
             @Override
             public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
 
-                ProgressDialogManager.dismiss();
+//                ProgressDialogManager.dismiss();
                 PersistenceManager.getInstance().setNotificationHistory(null);
                 finish();
 
@@ -257,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
             // Show dialog to allow users to install, update, or otherwise enable Google Play services.
             GoogleApiAvailability.getInstance().getErrorDialog(callingActivity, e.getConnectionStatusCode(), 0);
         } catch (GooglePlayServicesNotAvailableException e) {
-            OppAppLogger.getInstance().e("SecurityException", "Google Play Services not available.");
+            OppAppLogger.e("SecurityException", "Google Play Services not available.");
         }
     }
 
@@ -289,19 +270,14 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     @Override
     public void isTryToLogin(boolean isTryToLogin) {
-        mIsTryToLogin = isTryToLogin;
     }
 
 
-    public void initLoggerAndDataStorage() {
+    public void initDataStorage() {
 
         if (Build.VERSION.SDK_INT >= 23) {
 
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-
-                initZLogger();
-
-            } else {
+            if (!(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
 
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.REQUEST_INSTALL_PACKAGES}, STORAGE_REQUEST_CODE);
 
@@ -313,21 +289,6 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == STORAGE_REQUEST_CODE) {
-            initZLogger();
-        }
-    }
-
-    public void initZLogger() {
-
-        OppAppLogger.setStorageGranted(this, true);
-
-        OppAppLogger.initInstance(this);
-
-        // TODO: 2/10/2019 way to go to LoginFragment from here 
-
-        //     goToFragment(LoginFragment.newInstance(false), false, false);
     }
 
     private void setupAlarm() {
@@ -348,38 +309,10 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         if (firingCal.compareTo(currentCal) < 0) {
             firingCal.add(Calendar.DAY_OF_MONTH, 1);
         }
-        Long intendedTime = firingCal.getTimeInMillis();
+        long intendedTime = firingCal.getTimeInMillis();
         if (alarmManager != null) {
             alarmManager.setRepeating(AlarmManager.RTC, intendedTime, INTERVAL_DAY, pendingIntent);
         }
     }
-
-//
-//    public static void cleanData() {
-//        PostDeleteTokenRequest request = new PostDeleteTokenRequest(PersistenceManager.getInstance().getMachineId(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getNotificationToken());
-//        NetworkManager.getInstance().postDeleteToken(request, new Callback<ErrorResponseNewVersion>() {
-//            @Override
-//            public void onResponse(Call<ErrorResponseNewVersion> call, retrofit2.Response<ErrorResponseNewVersion> response) {
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
-//
-//            }
-//        });
-//
-//        DataSupport.deleteAll(Event.class);
-//
-//        String tmpLanguage = PersistenceManager.getInstance().getCurrentLang();
-//        String tmpLanguageName = PersistenceManager.getInstance().getCurrentLanguageName();
-//
-//        PersistenceManager.getInstance().clear();
-//
-//        PersistenceManager.getInstance().items.clear();
-//
-//        PersistenceManager.getInstance().setCurrentLang(tmpLanguage);
-//        PersistenceManager.getInstance().setCurrentLanguageName(tmpLanguageName);
-//    }
 
 }

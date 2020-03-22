@@ -329,7 +329,7 @@ public class ApproveFirstItemFragment extends DialogFragment implements View.OnC
                 mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), true);
             }
 
-            OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
+            OppAppLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
             if (mCallbackListener != null) {
                 mCallbackListener.onApproveFirstItemComplete();
@@ -344,7 +344,7 @@ public class ApproveFirstItemFragment extends DialogFragment implements View.OnC
         @Override
         public void sendReportFailure(StandardResponse reason) {
             dismissProgressDialog();
-            OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
+            OppAppLogger.w(LOG_TAG, "sendReportFailure()");
             if (reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
@@ -354,7 +354,7 @@ public class ApproveFirstItemFragment extends DialogFragment implements View.OnC
 
                     @Override
                     public void onSilentLoginFailed(StandardResponse reason) {
-                        OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
+                        OppAppLogger.w(LOG_TAG, "Failed silent login");
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                         dismissProgressDialog();

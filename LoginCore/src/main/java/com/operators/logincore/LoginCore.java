@@ -46,19 +46,19 @@ public class LoginCore {
             mLoginNetworkBridgeInterface.login(siteUrl, username, EncryptedPassword, mLoginPersistenceManagerInterface.getCurrentLang(),  new LoginCoreCallback() {
             @Override
             public void onLoginSucceeded(final String sessionId, final String siteName, final int userId) {
-                OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(), " + sessionId);
+                OppAppLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(), " + sessionId);
                 saveSessionData(sessionId, siteUrl, username, password, userId);
 
                 mGetMachinesNetworkBridgeInterface.getMachines(siteUrl, sessionId, new GetMachinesCallback<Machine>() {
                     @Override
                     public void onGetMachinesSucceeded(ArrayList<Machine> machines) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "getMachines, onGetMachinesSucceeded(), " + machines.size() + " machines");
+                        OppAppLogger.d(LOG_TAG, "getMachines, onGetMachinesSucceeded(), " + machines.size() + " machines");
                         loginUICallback.onLoginSucceeded(machines, siteName);
                     }
 
                     @Override
                     public void onGetMachinesFailed(StandardResponse reason) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "getMachines, onGetMachinesFailed" + reason.getError().getErrorDesc());
+                        OppAppLogger.d(LOG_TAG, "getMachines, onGetMachinesFailed" + reason.getError().getErrorDesc());
                         loginUICallback.onLoginFailed(reason);
                     }
                 }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());
@@ -66,7 +66,7 @@ public class LoginCore {
 
             @Override
             public void onLoginFailed(StandardResponse reason) {
-                OppAppLogger.getInstance().d(LOG_TAG, "login, onLoginFailed");
+                OppAppLogger.d(LOG_TAG, "login, onLoginFailed");
                 loginUICallback.onLoginFailed(reason);
             }
         }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());
@@ -79,7 +79,7 @@ public class LoginCore {
             @Override
             public void onLoginSucceeded(String sessionId, String siteName, final int userId) {
 
-                OppAppLogger.getInstance().d(LOG_TAG, "silentLoginFromDashBoard, onLoginSucceeded(), " + sessionId);
+                OppAppLogger.d(LOG_TAG, "silentLoginFromDashBoard, onLoginSucceeded(), " + sessionId);
 
                 saveSessionData(sessionId, siteUrl, username, password, userId);
                 loginUICallback.onLoginSucceeded(null, siteName);
@@ -87,7 +87,7 @@ public class LoginCore {
 
             @Override
             public void onLoginFailed(StandardResponse reason) {
-                OppAppLogger.getInstance().d(LOG_TAG, "silentLoginFromDashBoard, onLoginFailed");
+                OppAppLogger.d(LOG_TAG, "silentLoginFromDashBoard, onLoginFailed");
                 loginUICallback.onLoginFailed(reason);
             }
         }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());

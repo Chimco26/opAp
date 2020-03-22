@@ -28,7 +28,7 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
     public void inject(GetMachineStatusNetworkManagerInterface getMachineStatusNetworkManager)
     {
         mGetMachineStatusNetworkManagerInterface = getMachineStatusNetworkManager;
-        OppAppLogger.getInstance().i(LOG_TAG, " GetMachineStatusNetworkBridge inject()");
+        OppAppLogger.i(LOG_TAG, " GetMachineStatusNetworkBridge inject()");
     }
 
     @Override
@@ -48,13 +48,13 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
                     {
                         if(response.body().getMachineStatus().getAllMachinesData().size() == 0)
                         {
-                            OppAppLogger.getInstance().d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = 0");
+                            OppAppLogger.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = 0");
                             //                        StandardResponse errorObject = new StandardResponse(ErrorObject.ErrorCode.Get_machines_failed, response.body().getErrorResponse().getErrorDesc());
                             //                        getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                         }
                         else
                         {
-                            OppAppLogger.getInstance().d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = " + response.body().getMachineStatus().getAllMachinesData().size());
+                            OppAppLogger.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = " + response.body().getMachineStatus().getAllMachinesData().size());
                         }
                         MachineStatus machineStatus = response.body().getMachineStatus();
                         machineStatus.setTaskCountObject(response.body().getTaskCountObject());
@@ -62,14 +62,14 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
                     }
                     else
                     {
-                        OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse - getMachineStatus failed Error");
+                        OppAppLogger.d(LOG_TAG, "getShiftLog , onResponse - getMachineStatus failed Error");
                         StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "getMachineData failed Error");
                         getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                     }
                 }
                 else
                 {
-                    OppAppLogger.getInstance().d(LOG_TAG, "getMachineStatus, onResponse(),  " + "isSuccessful = false");
+                    OppAppLogger.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "isSuccessful = false");
                     if(response.body() != null && response.body().getError() != null)
                     {
                         StandardResponse errorObject = new StandardResponse();
@@ -84,13 +84,13 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
             {
                 if(mRetryCount++ < totalRetries)
                 {
-                    OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 }
                 else
                 {
                     mRetryCount = 0;
-                    OppAppLogger.getInstance().d(LOG_TAG, "getMachineStatus, onFailure " + t.getMessage());
+                    OppAppLogger.d(LOG_TAG, "getMachineStatus, onFailure " + t.getMessage());
                     StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Get_machines_failed Error");
                     getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                 }

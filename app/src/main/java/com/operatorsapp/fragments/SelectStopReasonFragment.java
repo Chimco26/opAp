@@ -231,7 +231,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
         if (mSelectedEvents != null && mSelectedEvents.size() > 0) {
 
-            OppAppLogger.getInstance().i(TAG, "Selected sub reason id: " + subReason.getId());
+            OppAppLogger.i(TAG, "Selected sub reason id: " + subReason.getId());
 
             mSelectedSubreason = subReason;
 
@@ -309,7 +309,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
                     // TODO: 17/07/2018 add crouton for success
                     // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
                     mDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), false);
-                    OppAppLogger.getInstance().i(TAG, "sendReportSuccess()");
+                    OppAppLogger.i(TAG, "sendReportSuccess()");
                     Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
                     //Analytics
                     new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.STOP_REASON_REPORT, true,
@@ -351,7 +351,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         @Override
         public void sendReportFailure(StandardResponse reason) {
             dismissProgressDialog();
-            OppAppLogger.getInstance().w(TAG, "sendReportFailure()");
+            OppAppLogger.w(TAG, "sendReportFailure()");
 
             //Analytics
             new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.STOP_REASON_REPORT, false, "Error: " + reason.getError().getErrorDesc());
@@ -365,7 +365,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 //
 //                    @Override
 //                    public void onSilentLoginFailed(StandardResponse reason) {
-//                        OppAppLogger.getInstance().w(TAG, "Failed silent login");
+//                        OppAppLogger.w(TAG, "Failed silent login");
 //                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
 //                        ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
 //                    }

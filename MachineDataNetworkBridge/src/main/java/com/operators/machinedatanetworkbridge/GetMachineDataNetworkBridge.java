@@ -30,7 +30,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
     public void inject(GetMachineDataNetworkManagerInterface getMachineDataNetworkManagerInterface)
     {
         mGetMachineDataNetworkManagerInterface = getMachineDataNetworkManagerInterface;
-        OppAppLogger.getInstance().i(LOG_TAG, " GetMachineStatusNetworkBridge inject()");
+        OppAppLogger.i(LOG_TAG, " GetMachineStatusNetworkBridge inject()");
     }
 
     @Override
@@ -47,12 +47,12 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
                 if(response.body() != null && response.body().getMachineParams() != null && response.body().getError().getErrorDesc() == null)
                 {
                     ArrayList<Widget> widgets = response.body().getMachineParams();
-                    OppAppLogger.getInstance().d(LOG_TAG, "getMachineData, onResponse " + widgets.size() + " widgets");
+                    OppAppLogger.d(LOG_TAG, "getMachineData, onResponse " + widgets.size() + " widgets");
                     getMachineDataCallback.onGetMachineDataSucceeded(response.body().getMachineParams());
                 }
                 else
                 {
-                    OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse - getMachineData failed Error");
+                    OppAppLogger.d(LOG_TAG, "getShiftLog , onResponse - getMachineData failed Error");
                     StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getMachineData failed Error");
                     getMachineDataCallback.onGetMachineDataFailed(errorObject);
                 }
@@ -63,13 +63,13 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
             {
                 if(mRetryCount++ < totalRetries)
                 {
-                    OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 }
                 else
                 {
                     mRetryCount = 0;
-                    OppAppLogger.getInstance().d(LOG_TAG, "getMachineData, onFailure " + t.getMessage());
+                    OppAppLogger.d(LOG_TAG, "getMachineData, onFailure " + t.getMessage());
                     StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, t.getMessage());
                     getMachineDataCallback.onGetMachineDataFailed(errorObject);
 

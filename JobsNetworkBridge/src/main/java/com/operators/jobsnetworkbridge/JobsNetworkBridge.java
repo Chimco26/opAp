@@ -33,7 +33,7 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
     {
         mGetJobsListForMachineNetworkManagerInterface = getJobsListForMachineNetworkManager;
         mStartJobForMachineNetworkManagerInterface = startJobForMachineNetworkManager;
-        OppAppLogger.getInstance().i(LOG_TAG, "JobsNetworkBridge inject()");
+        OppAppLogger.i(LOG_TAG, "JobsNetworkBridge inject()");
     }
 
     @Override
@@ -63,7 +63,7 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                     }
                     else
                     {
-                        OppAppLogger.getInstance().w(LOG_TAG, "jobListForMachine.getData() is null");
+                        OppAppLogger.w(LOG_TAG, "jobListForMachine.getData() is null");
                         StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.No_data, "Get_jobs_list_failed Error");
                         getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                     }
@@ -77,7 +77,7 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                     }
                     else
                     {
-                        OppAppLogger.getInstance().w(LOG_TAG, "response.body() is null");
+                        OppAppLogger.w(LOG_TAG, "response.body() is null");
                         StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.No_data, "Get_jobs_list_failed Error");
                         getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                     }
@@ -89,13 +89,13 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
             {
                 if(mRetryCount++ < totalRetries)
                 {
-                    OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 }
                 else
                 {
                     mRetryCount = 0;
-                    OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Get_jobs_list_failed Error");
                     getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                 }

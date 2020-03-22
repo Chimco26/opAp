@@ -49,10 +49,10 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
                 } else {
                     SessionResponse.UserSessionIDResult sessionResult = response.body().getUserSessionIDResult();
                     if (sessionResult.getError().getErrorDesc() == null) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestSucceed(), " + response.body().getUserSessionIDResult());
+                        OppAppLogger.d(LOG_TAG, "onRequestSucceed(), " + response.body().getUserSessionIDResult());
                         loginCoreCallback.onLoginSucceeded(response.body().getUserSessionIDResult().getSessionIds().get(0).getSessionId(), sessionResult.getSessionIds().get(0).getmSiteName(), sessionResult.getSessionIds().get(0).getUserID());
                     } else {
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequest(), getSessionId failed");
+                        OppAppLogger.d(LOG_TAG, "onRequest(), getSessionId failed");
                         sessionResult.getError().setDefaultErrorCodeConstant(sessionResult.getError().getErrorCode());
                         loginCoreCallback.onLoginFailed(sessionResult);
                     }
@@ -64,11 +64,11 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
             @Override
             public void onFailure(@NonNull Call<SessionResponse> call, @NonNull Throwable t) {
                 if (mRetryCount++ < totalRetries) {
-                    OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 } else {
                     mRetryCount = 0;
-                    OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "General Error");
                     loginCoreCallback.onLoginFailed(errorObject);
                 }

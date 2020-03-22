@@ -43,7 +43,7 @@ public class CroutonCreator {
             return;
         }
         if (!mCurrentCrouton.isEmpty() && mCurrentCrouton.getCroutonType().equals(CroutonType.NETWORK_ERROR) && mCurrentCrouton.getCroutonType().equals(croutonType)) {
-            OppAppLogger.getInstance().v(LOG_TAG, "showCrouton(), trying to show same crouton type twice");
+            OppAppLogger.v(LOG_TAG, "showCrouton(), trying to show same crouton type twice");
             return;
         }
         Crouton.cancelAllCroutons();
@@ -68,7 +68,7 @@ public class CroutonCreator {
                 crouton = createCrouton(activity, SpannableStringBuilder.valueOf(croutonMessage), croutonDurationInMilliseconds, viewGroup, croutonType);
                 break;
             default:
-                OppAppLogger.getInstance().e(LOG_TAG, "showCrouton(), no crouton type");
+                OppAppLogger.e(LOG_TAG, "showCrouton(), no crouton type");
                 return;
         }
         crouton.setLifecycleCallback(new LifecycleCallback() {
@@ -104,7 +104,7 @@ public class CroutonCreator {
 
     private boolean checkIfConnectivityCroutonIsDisplayed() {
         if (!mCurrentCrouton.isEmpty() && mCurrentCrouton.getCroutonType().equals(CroutonType.CONNECTIVITY)) {
-            OppAppLogger.getInstance().v(LOG_TAG, "showErrorCrouton(), connectivity crouton is displayed");
+            OppAppLogger.v(LOG_TAG, "showErrorCrouton(), connectivity crouton is displayed");
             return true;
         }
         return false;

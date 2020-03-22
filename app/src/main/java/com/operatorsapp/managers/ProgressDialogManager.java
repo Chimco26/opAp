@@ -17,7 +17,7 @@ public class ProgressDialogManager {
                 mProgressDialog.show(activity.getFragmentManager(), "ProgressDialogManager");
             }
         } catch (Exception e) {
-            OppAppLogger.getInstance().e(LOG_TAG, "failed to create progress dialog, " + e.getMessage());
+            OppAppLogger.e(LOG_TAG, "failed to create progress dialog, " + e.getMessage());
         }
     }
 
@@ -30,7 +30,7 @@ public class ProgressDialogManager {
         } catch (Exception e) {
             e.printStackTrace();
             mProgressDialog = null;
-            OppAppLogger.getInstance().e(LOG_TAG, "failed to dismiss progress dialog, " + e.getMessage());
+            OppAppLogger.e(LOG_TAG, "failed to dismiss progress dialog, " + e.getMessage());
         }
     }
 

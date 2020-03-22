@@ -3,11 +3,6 @@ package com.operatorsapp.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -20,9 +15,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import com.example.common.StandardResponse;
-import com.example.common.callback.GetDepartmentCallback;
-import com.example.common.department.DepartmentsMachinesResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.infra.Machine;
 import com.operators.logincore.LoginCore;
@@ -48,7 +47,6 @@ import static android.text.format.DateUtils.DAY_IN_MILLIS;
 
 public class LoginFragment extends Fragment {
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
-    private final static String GO_TO_SELECT_MACHINE = "GO_TO_SELECT_MACHINE";
     private GoToScreenListener mNavigationCallback;
     private OnCroutonRequestListener mCroutonCallback;
     private EditText mSiteUrl;
@@ -58,16 +56,10 @@ public class LoginFragment extends Fragment {
     private TextView mLoginBtnBackground;
     private ImageView mShowHidePass;
     private boolean mPasswordIsVisible = false;
-//    private boolean mGoToSelectMachine;
 
     public static LoginFragment newInstance() {
 
-        LoginFragment loginFragment = new LoginFragment();
-//        Bundle args = new Bundle();
-//        args.putBoolean(GO_TO_SELECT_MACHINE, goToSelectMachine);
-//        loginFragment.setArguments(args);
-
-        return loginFragment;
+        return new LoginFragment();
     }
 
     @Override
@@ -78,9 +70,6 @@ public class LoginFragment extends Fragment {
         // Analytics
         new GoogleAnalyticsHelper().trackScreen(getActivity(), "Login screen");
 
-//        if (getArguments() != null) {
-//            mGoToSelectMachine = getArguments().getBoolean(GO_TO_SELECT_MACHINE);
-//        }
     }
 
     @Override
@@ -102,7 +91,6 @@ public class LoginFragment extends Fragment {
         mSiteUrl.setText(PersistenceManager.getInstance().getSiteUrl());
         mUserName = rootView.findViewById(R.id.user_name);
         mPassword = rootView.findViewById(R.id.password);
-//        mLoginBtnBackground = rootView.findViewById(R.id.loginBtn_background);
 
         mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -279,14 +267,11 @@ public class LoginFragment extends Fragment {
             if (!siteUrl.toLowerCase().startsWith("https://")) {
                 siteUrl = String.format("https://api%1$s.my.leadermes.com", siteUrl);
             }
-
-            final String finalSiteUrl = siteUrl;
             LoginCore.getInstance().login(siteUrl, userName, password, new LoginUICallback<Machine>() {
                 @Override
                 public void onLoginSucceeded(ArrayList<Machine> machines, String siteName) {
-                    OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded() ");
+                    OppAppLogger.d(LOG_TAG, "login, onGetMachinesSucceeded() ");
 
-//                getVersion(machines, true);
                     //getNotifications();
                     PersistenceManager.getInstance().setSiteName(siteName);
                     getVersion(machines, true);
@@ -305,22 +290,6 @@ public class LoginFragment extends Fragment {
                 }
             });
         }
-    }
-
-    private void getDepartmentsMachines(final ArrayList<Machine> machines, String finalSiteUrl, final boolean isTryToLogin) {
-
-        SimpleRequests.getDepartmentsMachines(finalSiteUrl, new GetDepartmentCallback() {
-            @Override
-            public void onGetDepartmentSuccess(DepartmentsMachinesResponse response) {
-                getVersion(machines, isTryToLogin);
-            }
-
-            @Override
-            public void onGetDepartmentFailed(StandardResponse reason) {
-                dismissProgressDialog();
-            }
-        }, NetworkManager.getInstance(), PersistenceManager.getInstance().getTotalRetries(), PersistenceManager.getInstance().getRequestTimeout());
-
     }
 
     private void tryToLoginSuccess(ArrayList<Machine> machines) {
@@ -352,10 +321,9 @@ public class LoginFragment extends Fragment {
             LoginCore.getInstance().login(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getUserName(), PersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
                 @Override
                 public void onLoginSucceeded(ArrayList<Machine> machines, String siteName) {
-                    OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
-                    getDepartmentsMachines(machines, PersistenceManager.getInstance().getSiteUrl(), false);
-                    getVersion(machines, false);
+                    OppAppLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
                     PersistenceManager.getInstance().setSiteName(siteName);
+                    getVersion(machines, false);
                 }
 
                 @Override
@@ -376,11 +344,7 @@ public class LoginFragment extends Fragment {
     private void loginSuccess(ArrayList<Machine> machines) {
         dismissProgressDialog();
         if (mNavigationCallback != null) {
-//            if (mGoToSelectMachine) {
-//                mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(), false, false);
-//            } else {
-                mNavigationCallback.goToDashboardActivity(machines);
-//            }
+            mNavigationCallback.goToDashboardActivity(machines);
             mNavigationCallback.isTryToLogin(false);
         }
     }

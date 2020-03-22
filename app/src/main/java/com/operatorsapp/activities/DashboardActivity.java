@@ -390,7 +390,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        OppAppLogger.getInstance().d(TAG, "onCreate(), start ");
+        OppAppLogger.d(TAG, "onCreate(), start ");
 
         setContentView(R.layout.activity_dashboard);
         updateAndroidSecurityProvider(this);
@@ -426,7 +426,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             getSupportFragmentManager().addOnBackStackChangedListener(getListener());
         } catch (IllegalStateException ignored) {
         }
-        OppAppLogger.getInstance().d(TAG, "onCreate(), end ");
+        OppAppLogger.d(TAG, "onCreate(), end ");
 
         setupVersionCheck();
 
@@ -815,7 +815,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             GoogleApiAvailability.getInstance().getErrorDialog(callingActivity, e.getConnectionStatusCode(), 0);
 
         } catch (GooglePlayServicesNotAvailableException e) {
-            OppAppLogger.getInstance().e("SecurityException", "Google Play Services not available.");
+            OppAppLogger.e("SecurityException", "Google Play Services not available.");
         }
     }
 
@@ -959,7 +959,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onMachinePermissionCallbackFailed(StandardResponse reason) {
-                OppAppLogger.getInstance().w(TAG, "onMachinePermissionCallbackFailed");
+                OppAppLogger.w(TAG, "onMachinePermissionCallbackFailed");
             }
         };
     }
@@ -974,7 +974,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onActualBarExtraDetailsFailed(StandardResponse reason) {
-                OppAppLogger.getInstance().w(TAG, "onActualBarExtraDetailsFailed");
+                OppAppLogger.w(TAG, "onActualBarExtraDetailsFailed");
             }
         };
     }
@@ -1034,17 +1034,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 }
 
-                OppAppLogger.getInstance().i(TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+                OppAppLogger.i(TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
             } else {
                 ProgressDialogManager.dismiss();
-                OppAppLogger.getInstance().w(TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
+                OppAppLogger.w(TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
         }
 
         @Override
         public void onActiveJobsListForMachineReceiveFailed(StandardResponse reason) {
             if (reason != null && reason.getError() != null && reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.SessionInvalid) {
-                OppAppLogger.getInstance().w(TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getError().getErrorDesc());
+                OppAppLogger.w(TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getError().getErrorDesc());
                 silentLoginFromDashBoard(DashboardActivity.this, new SilentLoginCallback() {
                     @Override
                     public void onSilentLoginSucceeded() {
@@ -1058,7 +1058,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 });
             } else {
 
-                OppAppLogger.getInstance().w(TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getError().getErrorDesc());
+                OppAppLogger.w(TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getError().getErrorDesc());
 //            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
                 mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, null, mSelectProductJobId, PersistenceManager.getInstance().getShiftStart());
             }
@@ -1123,7 +1123,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     ProgressDialogManager.dismiss();
                 } else {
                     ProgressDialogManager.dismiss();
-                    OppAppLogger.getInstance().w(TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
+                    OppAppLogger.w(TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
                 if (machineStatus != null) {
                     setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
@@ -1156,7 +1156,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         dashboardUICallbackListener.onTimerChanged(countDownTimer);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(TAG, "onTimerChanged() - DashboardUICallbackListener is null");
+                    OppAppLogger.w(TAG, "onTimerChanged() - DashboardUICallbackListener is null");
                 }
             }
 
@@ -1170,7 +1170,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
 
-                        OppAppLogger.getInstance().i(TAG, "onStatusReceiveFailed() reason: " + reason.getError().getErrorDesc());
+                        OppAppLogger.i(TAG, "onStatusReceiveFailed() reason: " + reason.getError().getErrorDesc());
                         dashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.Status);
                     }
                 }
@@ -1271,7 +1271,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     }
                 } else {
 
-                    OppAppLogger.getInstance().w(TAG, " onDataReceivedSuccessfully() - DashboardUICallbackListener is null");
+                    OppAppLogger.w(TAG, " onDataReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
                 if (ProgressDialogManager.isShowing()) {
                     ProgressDialogManager.dismiss();
@@ -1280,7 +1280,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onDataReceiveFailed(StandardResponse reason) {
-                OppAppLogger.getInstance().i(TAG, "onDataReceivedSuccessfully() reason: " + reason.getError().getErrorDesc());
+                OppAppLogger.i(TAG, "onDataReceivedSuccessfully() reason: " + reason.getError().getErrorDesc());
 
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
@@ -1332,7 +1332,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onGetShiftForMachineFailed(StandardResponse reason) {
-                OppAppLogger.getInstance().w(TAG, "get shift for machine failed with reason: " + reason.getError() + " " + reason.getError().getErrorDesc());
+                OppAppLogger.w(TAG, "get shift for machine failed with reason: " + reason.getError() + " " + reason.getError().getErrorDesc());
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, reason);
 
                 if (ProgressDialogManager.isShowing()) {
@@ -1398,7 +1398,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     if (ProgressDialogManager.isShowing()) {
                         ProgressDialogManager.dismiss();
                     }
-                    OppAppLogger.getInstance().w(TAG, " shiftLogStartPolling() - DashboardUICallbackListener is null");
+                    OppAppLogger.w(TAG, " shiftLogStartPolling() - DashboardUICallbackListener is null");
                 }
             }
 
@@ -1407,7 +1407,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 if (reason != null) {
 
-                    OppAppLogger.getInstance().i(TAG, "shiftLogStartPolling() reason: " + reason.getError().getErrorDesc());
+                    OppAppLogger.i(TAG, "shiftLogStartPolling() reason: " + reason.getError().getErrorDesc());
 
                     if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
@@ -1427,7 +1427,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         @Override
         public void onReportFieldsReceivedSuccessfully(ReportFieldsForMachine reportFieldsForMachine) {
             if (reportFieldsForMachine != null) {
-                OppAppLogger.getInstance().d(TAG, "onReportFieldsReceivedSuccessfully()");
+                OppAppLogger.d(TAG, "onReportFieldsReceivedSuccessfully()");
                 mReportFieldsForMachine = reportFieldsForMachine;
                 if (mOnReportFieldsUpdatedCallbackListener != null) {
                     mOnReportFieldsUpdatedCallbackListener.onReportUpdatedSuccess();
@@ -1436,7 +1436,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     mWidgetFragment.setReportFieldForMachine(mReportFieldsForMachine);
                 }
             } else {
-                OppAppLogger.getInstance().w(TAG, "reportFieldsForMachine is null");
+                OppAppLogger.w(TAG, "reportFieldsForMachine is null");
                 if (mOnReportFieldsUpdatedCallbackListener != null) {
                     mOnReportFieldsUpdatedCallbackListener.onReportUpdateFailure();
                 }
@@ -1451,7 +1451,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         @Override
         public void onReportFieldsReceivedSFailure(StandardResponse reason) {
-            OppAppLogger.getInstance().i(TAG, "onReportFieldsReceivedSFailure() reason: " + reason.getError().getErrorDesc());
+            OppAppLogger.i(TAG, "onReportFieldsReceivedSFailure() reason: " + reason.getError().getErrorDesc());
             if (mOnReportFieldsUpdatedCallbackListener != null) {
                 mOnReportFieldsUpdatedCallbackListener.onReportUpdateFailure();
             }
@@ -1592,7 +1592,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mJobsCore.registerListener(new JobsForMachineUICallbackListener() {
             @Override
             public void onJobListReceived(JobListForMachine jobListForMachine) {
-                OppAppLogger.getInstance().i(TAG, "onJobListReceived()");
+                OppAppLogger.i(TAG, "onJobListReceived()");
                 if (jobListForMachine != null) {
                     if (jobListForMachine.getData() != null || jobListForMachine.getHeaders() != null) {
                         mDashboardActivityToJobsFragmentCallback.onJobsListReceived(jobListForMachine);
@@ -1609,7 +1609,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onJobListReceiveFailed(StandardResponse reason) {
-                OppAppLogger.getInstance().w(TAG, "onJobListReceiveFailed() " + reason.getError());
+                OppAppLogger.w(TAG, "onJobListReceiveFailed() " + reason.getError());
                 mDashboardActivityToJobsFragmentCallback.onJobsListReceiveFailed();
                 if (ProgressDialogManager.isShowing()) {
                     ProgressDialogManager.dismiss();
@@ -1618,7 +1618,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onStartJobSuccess() {
-                OppAppLogger.getInstance().i(TAG, "onStartJobSuccess()");
+                OppAppLogger.i(TAG, "onStartJobSuccess()");
 
                 mDashboardActivityToSelectedJobFragmentCallback.onStartJobSuccess();
 
@@ -1644,7 +1644,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 if (reason.getError().getErrorDesc().contains("Job started successfully")) {
                     ShowCrouton.jobsLoadingAlertCrouton(DashboardActivity.this, reason.getError().getErrorDesc());
                 } else {
-                    OppAppLogger.getInstance().i(TAG, "onStartJobFailed()");
+                    OppAppLogger.i(TAG, "onStartJobFailed()");
                     mDashboardActivityToSelectedJobFragmentCallback.onStartJobFailure();
                     ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, reason);
                 }
@@ -1710,7 +1710,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         PersistenceManager.getInstance().setOperatorId(operatorId);
         PersistenceManager.getInstance().setOperatorName(operatorName);
 
-        OppAppLogger.getInstance().i(TAG, "onSetOperatorForMachineSuccess(), operator Id: " + operatorId + " operator name: " + operatorName);
+        OppAppLogger.i(TAG, "onSetOperatorForMachineSuccess(), operator Id: " + operatorId + " operator name: " + operatorName);
 
         mAllDashboardDataCore.stopPolling();
 
@@ -1737,7 +1737,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onLoginSucceeded(ArrayList<Machine> machines, String siteName) {
 
-                OppAppLogger.getInstance().d(TAG, "login, onGetMachinesSucceeded(),  go Next");
+                OppAppLogger.d(TAG, "login, onGetMachinesSucceeded(),  go Next");
                 silentLoginCallback.onSilentLoginSucceeded();
                 PersistenceManager.getInstance().setSiteName(siteName);
                 checkUpdateNotificationToken();
@@ -1768,7 +1768,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
             return null;
         } catch (NullPointerException ex) {
-            OppAppLogger.getInstance().e(TAG, "getCurrentFragment(), error: " + ex.getMessage());
+            OppAppLogger.e(TAG, "getCurrentFragment(), error: " + ex.getMessage());
             return null;
         }
     }
@@ -1794,7 +1794,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             return mReportFieldsForMachine;
         }
-        OppAppLogger.getInstance().w(TAG, "mReportFieldsForMachine is null");
+        OppAppLogger.w(TAG, "mReportFieldsForMachine is null");
         return null;
     }
 
@@ -1883,52 +1883,52 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         PersistenceManager.getInstance().setCurrentLang(tmpLanguage);
         PersistenceManager.getInstance().setCurrentLanguageName(tmpLanguageName);
 
-        OppAppLogger.getInstance().i(TAG, "PersistenceManager cleared");
+        OppAppLogger.i(TAG, "PersistenceManager cleared");
         //Cores clear
         if (mReportFieldsForMachineCore != null) {
             mReportFieldsForMachineCore.stopPolling();
             mReportFieldsForMachineCore.unregisterListener();
-            OppAppLogger.getInstance().i(TAG, "mReportFieldsForMachineCore cleared");
+            OppAppLogger.i(TAG, "mReportFieldsForMachineCore cleared");
         }
         if (mAllDashboardDataCore != null) {
             mAllDashboardDataCore.stopPolling();
             mAllDashboardDataCore.unregisterListener();
-            OppAppLogger.getInstance().i(TAG, "mAllDashboardDataCore cleared");
+            OppAppLogger.i(TAG, "mAllDashboardDataCore cleared");
         }
 
         if (mJobsCore != null) {
             mJobsCore.unregisterListener();
-            OppAppLogger.getInstance().i(TAG, "mJobsCore cleared");
+            OppAppLogger.i(TAG, "mJobsCore cleared");
         }
 
         if (mReportFieldsForMachineCore != null) {
             mReportFieldsForMachine = null;
-            OppAppLogger.getInstance().i(TAG, "mReportFieldsForMachine cleared");
+            OppAppLogger.i(TAG, "mReportFieldsForMachine cleared");
         }
         //Interfaces clear
         if (mOnReportFieldsUpdatedCallbackListener != null) {
             mOnReportFieldsUpdatedCallbackListener = null;
-            OppAppLogger.getInstance().i(TAG, "mOnReportFieldsUpdatedCallbackListener cleared");
+            OppAppLogger.i(TAG, "mOnReportFieldsUpdatedCallbackListener cleared");
         }
         if (mDashboardActivityToJobsFragmentCallback != null) {
             mDashboardActivityToJobsFragmentCallback = null;
-            OppAppLogger.getInstance().i(TAG, "mDashboardActivityToJobsFragmentCallback cleared");
+            OppAppLogger.i(TAG, "mDashboardActivityToJobsFragmentCallback cleared");
         }
         if (mDashboardActivityToSelectedJobFragmentCallback != null) {
             mDashboardActivityToSelectedJobFragmentCallback = null;
-            OppAppLogger.getInstance().i(TAG, "mDashboardActivityToSelectedJobFragmentCallback cleared");
+            OppAppLogger.i(TAG, "mDashboardActivityToSelectedJobFragmentCallback cleared");
         }
         if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
             mDashboardUICallbackListenerList.clear();
-            OppAppLogger.getInstance().i(TAG, "mDashboardUICallbackListenerList cleared");
+            OppAppLogger.i(TAG, "mDashboardUICallbackListenerList cleared");
         }
         if (mReportFieldsForMachineUICallback != null) {
             mReportFieldsForMachineUICallback = null;
-            OppAppLogger.getInstance().i(TAG, "mReportFieldsForMachineUICallback cleared");
+            OppAppLogger.i(TAG, "mReportFieldsForMachineUICallback cleared");
         }
         if (mCroutonCreator != null) {
             mCroutonCreator = null;
-            OppAppLogger.getInstance().i(TAG, "mCroutonCreator cleared");
+            OppAppLogger.i(TAG, "mCroutonCreator cleared");
 
         }
     }
@@ -1942,12 +1942,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         getActiveJobs();
 
         onRefreshPolling();
-        OppAppLogger.getInstance().i(TAG, "onRefreshReportFieldsRequest() command received from settings screen");
+        OppAppLogger.i(TAG, "onRefreshReportFieldsRequest() command received from settings screen");
     }
 
     @Override
     public void onRefreshApplicationRequest() {
-        OppAppLogger.getInstance().i(TAG, "onRefreshApplicationRequest() command received from settings screen");
+        OppAppLogger.i(TAG, "onRefreshApplicationRequest() command received from settings screen");
         refreshApp();
     }
 
@@ -2009,7 +2009,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onRefreshPollingRequest() {
-        OppAppLogger.getInstance().i(TAG, "onRefreshPollingRequest() command received from settings screen");
+        OppAppLogger.i(TAG, "onRefreshPollingRequest() command received from settings screen");
 
 //        mAllDashboardDataCore.stopPolling();
 //
@@ -2942,7 +2942,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         reportNetworkBridge.inject(NetworkManager.getInstance());
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
-        OppAppLogger.getInstance().i(TAG, "sendRejectReport units value is: " + String.valueOf(value) + " JobId: " + mSelectProductJobId);
+        OppAppLogger.i(TAG, "sendRejectReport units value is: " + String.valueOf(value) + " JobId: " + mSelectProductJobId);
 
         mReportCore.sendCycleUnitsReport(value, mSelectProductJobId);
     }
@@ -2979,7 +2979,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onRequestSuccess(StandardResponse response) {
                 StandardResponse StandardResponse = objectToNewError(response);
-                OppAppLogger.getInstance().i(TAG, "sendMultipleReportSuccess()");
+                OppAppLogger.i(TAG, "sendMultipleReportSuccess()");
                 if (StandardResponse.getFunctionSucceed()) {
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, StandardResponse.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
                 } else {
@@ -3017,7 +3017,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         public void sendReportSuccess(StandardResponse errorResponse) {
             StandardResponse response = objectToNewError(errorResponse);
 //            ProgressDialogManager.dismiss();
-            OppAppLogger.getInstance().i(TAG, "sendReportSuccess()");
+            OppAppLogger.i(TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
 
             String text = "";
@@ -3048,7 +3048,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         @Override
         public void sendReportFailure(StandardResponse reason) {
             ProgressDialogManager.dismiss();
-            OppAppLogger.getInstance().w(TAG, "sendReportFailure()");
+            OppAppLogger.w(TAG, "sendReportFailure()");
             if (reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
                 silentLoginFromDashBoard(DashboardActivity.this, new SilentLoginCallback() {
                     @Override
@@ -3058,7 +3058,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                     @Override
                     public void onSilentLoginFailed(StandardResponse reason) {
-                        OppAppLogger.getInstance().w(TAG, "Failed silent login");
+                        OppAppLogger.w(TAG, "Failed silent login");
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
                         ProgressDialogManager.dismiss();
@@ -3080,7 +3080,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         public void sendReportSuccess(StandardResponse errorResponse) {
             StandardResponse response = objectToNewError(errorResponse);
 //            ProgressDialogManager.dismiss();
-            OppAppLogger.getInstance().i(TAG, "sendReportSuccess()");
+            OppAppLogger.i(TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
 
             if (response.getFunctionSucceed()) {
@@ -3100,7 +3100,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         @Override
         public void sendReportFailure(StandardResponse reason) {
             ProgressDialogManager.dismiss();
-            OppAppLogger.getInstance().w(TAG, "sendReportFailure()");
+            OppAppLogger.w(TAG, "sendReportFailure()");
             if (reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
                 new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.REJECT_REPORT, false, "Report Reject- Credentials_mismatch");
                 silentLoginFromDashBoard(DashboardActivity.this, new SilentLoginCallback() {
@@ -3111,7 +3111,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                     @Override
                     public void onSilentLoginFailed(StandardResponse reason) {
-                        OppAppLogger.getInstance().w(TAG, "Failed silent login");
+                        OppAppLogger.w(TAG, "Failed silent login");
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
                         ProgressDialogManager.dismiss();
@@ -3147,7 +3147,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
                 mRejectForMultipleRequests = null;
             }
-            OppAppLogger.getInstance().i(TAG, "sendReportSuccess()");
+            OppAppLogger.i(TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
             onApproveFirstItemComplete();
 
@@ -3156,7 +3156,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         @Override
         public void sendReportFailure(StandardResponse reason) {
             ProgressDialogManager.dismiss();
-            OppAppLogger.getInstance().w(TAG, "sendReportFailure()");
+            OppAppLogger.w(TAG, "sendReportFailure()");
             mRejectForMultipleRequests = null;
             if (reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
                 silentLoginFromDashBoard(DashboardActivity.this, new SilentLoginCallback() {
@@ -3167,7 +3167,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                     @Override
                     public void onSilentLoginFailed(StandardResponse reason) {
-                        OppAppLogger.getInstance().w(TAG, "Failed silent login");
+                        OppAppLogger.w(TAG, "Failed silent login");
                         StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
                         ProgressDialogManager.dismiss();
@@ -3214,7 +3214,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Fragment reportFragment = null;
 
         if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null || mCurrentMachineStatus.getAllMachinesData().size() == 0) {
-            OppAppLogger.getInstance().w(TAG, "missing machine status data in job spinner");
+            OppAppLogger.w(TAG, "missing machine status data in job spinner");
             return;
         }
 

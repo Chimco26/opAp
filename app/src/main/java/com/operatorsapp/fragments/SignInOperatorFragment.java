@@ -132,7 +132,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                OppAppLogger.getInstance().i(LOG_TAG, "S " + s + " , start " + start + " before, " + before + " count " + count);
+                OppAppLogger.i(LOG_TAG, "S " + s + " , start " + start + " before, " + before + " count " + count);
                 if (getActivity() != null) {
 
                     if (start + count > 0) {
@@ -296,11 +296,11 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
             mSignInButton.setOnClickListener(SignInOperatorFragment.this);
             if (operator != null) {
                 if (operator.getOperatorName().equals("")) {
-                    OppAppLogger.getInstance().d(LOG_TAG, "Operator data receive failed. Reason : Empty operator name ");
+                    OppAppLogger.d(LOG_TAG, "Operator data receive failed. Reason : Empty operator name ");
                     removePhoneKeypad();
                     ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, getString(R.string.no_worker_found));
                 } else {
-                    OppAppLogger.getInstance().d(LOG_TAG, "Operator data received: Operator Id is:" + operator.getOperatorId() + " Operator Name Is: " + operator.getOperatorName());
+                    OppAppLogger.d(LOG_TAG, "Operator data received: Operator Id is:" + operator.getOperatorId() + " Operator Name Is: " + operator.getOperatorName());
                     mNoDataTv.setVisibility(View.GONE);
                     Worker worker = new Worker(operator.getOperatorId(), operator.getOperatorName(), UpsertType.INSERT.getValue());
                     workerItems.add(worker);
@@ -308,7 +308,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                     workersAdapter.notifyItemInserted(workerItems.size() - 1);
                 }
             } else {
-                OppAppLogger.getInstance().d(LOG_TAG, "Operator data receive failed. Reason : ");
+                OppAppLogger.d(LOG_TAG, "Operator data receive failed. Reason : ");
                 removePhoneKeypad();
                 ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, getString(R.string.no_worker_found));
             }
@@ -318,13 +318,13 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         @Override
         public void onOperatorDataReceiveFailure(StandardResponse reason) {
             mSignInButton.setOnClickListener(SignInOperatorFragment.this);
-            OppAppLogger.getInstance().d(LOG_TAG, "Operator data receive failed. Reason : " + reason.getError().toString());
+            OppAppLogger.d(LOG_TAG, "Operator data receive failed. Reason : " + reason.getError().toString());
             if (reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
                     public void onSilentLoginSucceeded() {
                         String id = mOperatorIdEditText.getText().toString();
-                        OppAppLogger.getInstance().i(LOG_TAG, "Operator id: " + id);
+                        OppAppLogger.i(LOG_TAG, "Operator id: " + id);
                         mOperatorCore.getOperatorById(id);
                     }
 
@@ -385,7 +385,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                 if (isNotInList(id)) {
                     ProgressDialogManager.show(getActivity());
                     mOperatorIdEditText.setText(null);
-                    OppAppLogger.getInstance().i(LOG_TAG, "Operator id: " + id);
+                    OppAppLogger.i(LOG_TAG, "Operator id: " + id);
                     mSignInButton.setOnClickListener(null);
                     mOperatorCore.getOperatorById(id);
                 } else {

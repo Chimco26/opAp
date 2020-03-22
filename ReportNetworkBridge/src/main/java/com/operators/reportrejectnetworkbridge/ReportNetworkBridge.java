@@ -75,7 +75,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                         callback.onSendStopReportSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                     }
                 } else {
 
@@ -88,16 +88,16 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Send_Report_Failed Error");
                         callback.onSendStopReportFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
 
                 }
             }
@@ -123,7 +123,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                         callback.onSendStopReportSuccess(response.body());
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "sendMultipleReportReject(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "sendMultipleReportReject(), onResponse() callback is null");
                     }
                 } else {
                     String msg = "response not successful";
@@ -140,16 +140,16 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, t.getMessage());
                         callback.onSendStopReportFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "sendMultipleReportReject(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "sendMultipleReportReject(), onFailure() callback is null");
 
                 }
             }
@@ -170,7 +170,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                     if (callback != null) {
                         callback.onSendReportSuccess(response.body());
                     } else {
-                        OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                     }
                 } else {
                     String error = "";
@@ -185,16 +185,16 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, t.getMessage());
                         callback.onSendReportFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
 
                 }
             }
@@ -213,7 +213,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                     if (callback != null) {
                         callback.onSendReportSuccess(response.body());
                     } else {
-                        OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                     }
                 } else {
                     onFailure(call, new Exception("response not successful"));
@@ -224,16 +224,16 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Send_Report_Failed Error");
                         callback.onSendReportFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
 
                 }
             }
@@ -253,7 +253,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                     if (callback != null) {
                         callback.onSendReportSuccess(response.body());
                     } else {
-                        OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                     }
                 } else {
                     onFailure(call, new Exception("response not successful"));
@@ -264,16 +264,16 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Send_Report_Failed Error");
                         callback.onSendReportFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
 
                 }
             }
@@ -292,7 +292,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                     if (callback != null) {
                         callback.onSendReportSuccess(response.body());
                     } else {
-                        OppAppLogger.getInstance().w(LOG_TAG, "sendReportInventory(), onResponse() callback is null");
+                        OppAppLogger.w(LOG_TAG, "sendReportInventory(), onResponse() callback is null");
                     }
                 } else {
                     onFailure(call, new Exception("response not successful"));
@@ -303,16 +303,16 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Send_Report_Failed Error");
                         callback.onSendReportFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "sendReportInventory(), onFailure() callback is null");
+                    OppAppLogger.w(LOG_TAG, "sendReportInventory(), onFailure() callback is null");
 
                 }
             }

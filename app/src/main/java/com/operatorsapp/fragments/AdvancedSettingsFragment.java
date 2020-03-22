@@ -315,7 +315,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
 //    private void sendLogToEmail() {
 //
 //        ProgressDialogManager.show(getActivity());
-//        OppAppLogger.getInstance().d(LOG_TAG, "start sendLogToEmail(), ");
+//        OppAppLogger.d(LOG_TAG, "start sendLogToEmail(), ");
 //        LogRecorder.getInstance().setEmailInfo("support@matics.live", "Operator app logs", null);
 //        try {
 //            LogRecorder.getInstance().requestSendLogsIntent(false, new LogRecorder.SendLogsListener() {
@@ -326,11 +326,11 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
 //                        mListener.onIgnoreOnPauseFromAdvancedSettings();
 //                        startActivity(intent);
 //                    } catch (Exception e) {
-//                        OppAppLogger.getInstance().e(LOG_TAG, "requestSendLogsIntent(), failed.", e);
+//                        OppAppLogger.e(LOG_TAG, "requestSendLogsIntent(), failed.", e);
 //                    }
 //                }
 //            });
-//            OppAppLogger.getInstance().d(LOG_TAG, "end sendLogToEmail(), ");
+//            OppAppLogger.d(LOG_TAG, "end sendLogToEmail(), ");
 //        } catch (Exception e) {
 //            ProgressDialogManager.dismiss();
 //            e.printStackTrace();

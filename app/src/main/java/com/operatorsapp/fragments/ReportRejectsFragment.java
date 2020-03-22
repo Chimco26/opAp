@@ -354,7 +354,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
             }
             case R.id.button_approve: {
 
-                OppAppLogger.getInstance().d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString() + " jobId " + mJobId);
+                OppAppLogger.d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString() + " jobId " + mJobId);
                 if (canSendReport()) {
                     sendReport();
                 }
@@ -382,7 +382,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         public void sendReportSuccess(StandardResponse errorResponse) {
             StandardResponse response = objectToNewError(errorResponse);
             dismissProgressDialog();
-            OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
+            OppAppLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
 
             if (response.getFunctionSucceed()) {
@@ -406,7 +406,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         public void sendReportFailure(StandardResponse reason) {
             new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.REJECT_REPORT, true, "Report Reject failed - " + reason.getError().getErrorDesc());
             dismissProgressDialog();
-            OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
+            OppAppLogger.w(LOG_TAG, "sendReportFailure()");
             if (reason.getError().getErrorCodeConstant() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
@@ -416,7 +416,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
 
                     @Override
                     public void onSilentLoginFailed(StandardResponse reason) {
-                        OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
+                        OppAppLogger.w(LOG_TAG, "Failed silent login");
                         StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                         dismissProgressDialog();

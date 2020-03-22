@@ -38,7 +38,7 @@ public class ProgressDialogFragment extends DialogFragment {
                 getDialog().setCanceledOnTouchOutside(false);
             }
         } catch (Exception e) {
-            OppAppLogger.getInstance().d(LOG_TAG, "onResume():" + e.getMessage());
+            OppAppLogger.d(LOG_TAG, "onResume():" + e.getMessage());
         }
     }
 

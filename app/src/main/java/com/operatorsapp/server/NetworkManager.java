@@ -156,7 +156,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
 
     public static NetworkManager getInstance() {
         if (msInstance == null) {
-            OppAppLogger.getInstance().e(LOG_TAG, "getInstance(), fail, NetworkManager is not init");
+            OppAppLogger.e(LOG_TAG, "getInstance(), fail, NetworkManager is not init");
         }
         return msInstance;
     }

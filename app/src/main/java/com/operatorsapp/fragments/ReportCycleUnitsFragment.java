@@ -352,7 +352,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         reportNetworkBridge.inject(NetworkManager.getInstance());
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
-        OppAppLogger.getInstance().i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " JobId: " + mJobId);
+        OppAppLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " JobId: " + mJobId);
 
         mReportCore.sendCycleUnitsReport(mUnitsCounter, mJobId);
 
@@ -364,7 +364,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         public void sendReportSuccess(StandardResponse o) {
 
             StandardResponse response = objectToNewError(o);
-            OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
+            OppAppLogger.i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
 
             dismissProgressDialog();
             if (response.getFunctionSucceed()) {
@@ -398,7 +398,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
         @Override
         public void sendReportFailure(StandardResponse reason) {
-            OppAppLogger.getInstance().i(LOG_TAG, "sendReportFailure() reason: " + reason.getError().getErrorDesc());
+            OppAppLogger.i(LOG_TAG, "sendReportFailure() reason: " + reason.getError().getErrorDesc());
             mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getError().getErrorDesc(), true);
             new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.CHANGE_UNIT_IN_CYCLE, false, "Change unit in cycle- " + reason.getError().getErrorDesc());
             dismissProgressDialog();

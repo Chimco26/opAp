@@ -27,7 +27,7 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
     private int mRetryCount = 0;
 
     public void inject(ActiveJobsListForMachineNetworkManagerInterface activeJobsListForMachineNetworkManagerInterface) {
-        OppAppLogger.getInstance().i(LOG_TAG, "ActiveJoshListForMachineNetworkBridge inject()");
+        OppAppLogger.i(LOG_TAG, "ActiveJoshListForMachineNetworkBridge inject()");
         mActiveJobsListForMachineNetworkManagerInterface = activeJobsListForMachineNetworkManagerInterface;
     }
 
@@ -49,7 +49,7 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
                                 callback.onGetActiveJobsListForMachineFailed(errorObject);
                             }
                         } else {
-                            OppAppLogger.getInstance().w(LOG_TAG, "getActiveJoshForMachine() callback is null");
+                            OppAppLogger.w(LOG_TAG, "getActiveJoshForMachine() callback is null");
 
                         }
                     } else {
@@ -78,11 +78,11 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
             @Override
             public void onFailure(@NonNull Call<ActiveJobsListForMachineResponse> call, @NonNull Throwable t) {
                 if (mRetryCount++ < totalRetries) {
-                    OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 } else {
                     mRetryCount = 0;
-                    OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Response failure");
                     callback.onGetActiveJobsListForMachineFailed(errorObject);
                 }

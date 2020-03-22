@@ -84,7 +84,7 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
             @Override
             public void onSetOperatorSuccess(String operatorId) {
                 SendBroadcast.refreshPolling(getContext());
-                OppAppLogger.getInstance().i(LOG_TAG, "onSetOperatorSuccess()");
+                OppAppLogger.i(LOG_TAG, "onSetOperatorSuccess()");
                 mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
 
                 //Analytics
@@ -104,7 +104,7 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
 
     public void updateFailed(StandardResponse reason) {
         ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "Set operator failed. Reason : " + reason.getError().toString());
-        OppAppLogger.getInstance().w(LOG_TAG, "Set operator failed. Reason : " + reason.getError().toString());
+        OppAppLogger.w(LOG_TAG, "Set operator failed. Reason : " + reason.getError().toString());
         //Analytics
         new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.OPERATOR_SIGN_IN, false,
                 "Failed Reason: " + reason.getError().toString());
