@@ -132,10 +132,11 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
             mListFiltered.clear();
             ArrayList<TaskProgress> allItems = new ArrayList<>();
             for (TaskProgress task : list) {
-                if ((constraint.length() == 0 || (isContainLetters(task.getSubjectTrans(), constraint.toString().toLowerCase())
-                        || isContainLetters(task.getText(), constraint.toString().toLowerCase()))
-                ) && (minDateToShow == 0
-                        || TimeUtils.convertDateToMillisecond(task.getHistoryCreateDate(), TimeUtils.SQL_T_FORMAT_NO_SECOND) >= minDateToShow)
+                if ((constraint.length() == 0 ||
+                        (isContainLetters(String.format(Locale.getDefault(), "%s - %d", task.getSubjectTrans(),
+                                task.getTaskID()), constraint.toString().toLowerCase())
+                                || isContainLetters(task.getText(), constraint.toString().toLowerCase())))
+                        && (minDateToShow == 0 || TimeUtils.convertDateToMillisecond(task.getHistoryCreateDate(), TimeUtils.SQL_T_FORMAT_NO_SECOND) >= minDateToShow)
                         && isPriorityToShow(task.getTaskPriorityID(), priorityToShow)
                         && isCriticalToShow(task.isCriticalState(), periodToShow)) {
                     if (!allItems.contains(task)) {
@@ -154,7 +155,7 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
             for (SelectableString integer : periodToShow) {
                 if ((Integer.parseInt(integer.getId()) == 1 && integer.isSelected()
                         && !criticalState)
-                || (Integer.parseInt(integer.getId()) == 2 && integer.isSelected()
+                        || (Integer.parseInt(integer.getId()) == 2 && integer.isSelected()
                         && criticalState)) {
                     return true;
                 }
@@ -187,7 +188,7 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
             }
             String[] searchLettersExpressions = searchLetters.split(" ");
             for (String string : searchLettersExpressions) {
-                if (!text.contains(string)) {
+                if (!text.toLowerCase().contains(string)) {
                     return false;
                 }
             }
@@ -195,7 +196,7 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
         }
     }
 
-    public interface TaskColumnAdapterListener{
+    public interface TaskColumnAdapterListener {
         void onTaskClicked(TaskProgress taskProgress);
     }
 }
