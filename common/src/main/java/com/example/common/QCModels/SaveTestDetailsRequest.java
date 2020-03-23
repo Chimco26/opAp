@@ -21,12 +21,13 @@ public class SaveTestDetailsRequest {
     private int testId;
     @SerializedName("TestDetails")
     @Expose
-    private ArrayList<String> testDetails = new ArrayList<>();
+    private List<TestDetailFormForSend> testDetails = new ArrayList<>();
 
-    public SaveTestDetailsRequest(List<TestSampleFieldsDatum> testSampleFieldsData, List<TestFieldsDatum> testFieldsData, int samples, int testId) {
+    public SaveTestDetailsRequest(List<TestSampleFieldsDatum> testSampleFieldsData, List<TestFieldsDatum> testFieldsData, int samples, int testId, List<TestDetailFormForSend> testDetails) {
         this.testSampleFieldsData = testSampleFieldsData;
         this.testFieldsData = testFieldsData;
         this.samples = samples;
         this.testId = testId;
+        this.testDetails = testDetails;
     }
 }

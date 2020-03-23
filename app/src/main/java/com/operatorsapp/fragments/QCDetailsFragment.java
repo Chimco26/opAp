@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.common.QCModels.SamplesDatum;
 import com.example.common.QCModels.SaveTestDetailsRequest;
 import com.example.common.QCModels.SaveTestDetailsResponse;
-import com.example.common.QCModels.TestDetail;
+import com.example.common.QCModels.TestDetailFormForSend;
 import com.example.common.QCModels.TestDetailsForm;
 import com.example.common.QCModels.TestDetailsRequest;
 import com.example.common.QCModels.TestDetailsResponse;
@@ -68,7 +68,6 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private QCRequests mQcRequests;
     private View mNoDataTv;
     private ProgressBar mProgressBar;
-    private QCDetailsFragmentListener mListener;
     private TestDetailsResponse mTestOrderDetails;
     private RecyclerView mSamplesTestRV;
     private LinearLayout mTestContainer;
@@ -137,7 +136,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             }
         });
         mSamplesTestRV = view.findViewById(R.id.FQCD_paramters_rv);
-        mDetailsRv = view.findViewById(R.id.FQCD_details_rv);
+        setDetailRvView(view);
         mTestContainer = view.findViewById(R.id.FQCD_fields_ll);
         view.findViewById(R.id.FQCD_close).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,6 +146,16 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         });
         initIncrementSamplesView(view);
         initPassedVars(view);
+    }
+
+    private void setDetailRvView(View view) {
+        mDetailsRv = view.findViewById(R.id.FQCD_details_rv);
+        mDetailsRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(2, 50, true, 0);
+        gridSpacingItemDecoration.setSpacingTop(0);
+        gridSpacingItemDecoration.setSpacingBottom(0);
+        mDetailsRv.addItemDecoration(gridSpacingItemDecoration);
+        mDetailsRv.setHasFixedSize(false);
     }
 
     private boolean isMandatoryFieldsCompleted() {
@@ -183,7 +192,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         mPlusSamplesBtn = view.findViewById(R.id.FQCD_button_plus);
     }
 
-    private void initIncrementSamples(boolean enable){
+    private void initIncrementSamples(boolean enable) {
         if (enable) {
             mMinusSamplesBtn.setVisibility(View.VISIBLE);
             mPlusSamplesBtn.setVisibility(View.VISIBLE);
@@ -203,7 +212,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                     updateSamples(true, mSamplesCount - 1);
                 }
             });
-        }else {
+        } else {
             mMinusSamplesBtn.setVisibility(View.GONE);
             mPlusSamplesBtn.setVisibility(View.GONE);
         }
@@ -237,7 +246,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private void updateSamplesRelativeToOriginal() {
         List<TestSampleFieldsDatum> samples = mTestOrderDetails.getTestSampleFieldsData();
         List<TestSampleFieldsDatum> originalSamples = mTestOrderDetails.getOriginalSampleFields();
-        if (samples.get(samples.size() - 1).getFieldType().equals(FIELD_TYPE_LAST)) {
+        if (samples.size() > 1 && samples.get(samples.size() - 1).getFieldType().equals(FIELD_TYPE_LAST)) {
             samples.remove(samples.get(samples.size() - 1));
         }
         for (int i = 0; i < originalSamples.size(); i++) {
@@ -262,12 +271,6 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private void initDetailsRv() {
         QCDetailsMultiTypeAdapter testAdapter = new QCDetailsMultiTypeAdapter(mTestOrderDetails.getTestDetailsForm(), mTestOrderDetails.getTestDetails().get(0).getTestStatus());
         mDetailsRv.setAdapter(testAdapter);
-        mDetailsRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(2, 50, true, 0);
-        gridSpacingItemDecoration.setSpacingTop(0);
-        gridSpacingItemDecoration.setSpacingBottom(0);
-        mDetailsRv.addItemDecoration(gridSpacingItemDecoration);
-        mDetailsRv.setHasFixedSize(false);
     }
 
     private void initPassedView(Boolean status) {
@@ -292,7 +295,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                 if (mTestOrderDetails != null && mTestOrderDetails.getTestSampleFieldsData() != null
                         && mTestOrderDetails.getTestSampleFieldsData().size() > 0) {
                     mMainView.findViewById(R.id.FQCD_samples_ly).setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     mMainView.findViewById(R.id.FQCD_samples_ly).setVisibility(View.GONE);
                 }
             }
@@ -365,11 +368,6 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
     @Override
     public void onAttach(Context context) {
-        if (context instanceof QCDetailsFragmentListener) {
-            mListener = (QCDetailsFragmentListener) context;
-        } else {
-            Log.d(TAG, "onAttach: must override QCDetailsFragmentListener");
-        }
         super.onAttach(context);
     }
 
@@ -401,11 +399,11 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         List<TestDetailsForm> testDetails = mTestOrderDetails.getTestDetailsForm();
         List<TestDetailsForm> toRemove = new ArrayList<>();
 
-        for (TestDetailsForm testDetail: testDetails){
-            if (testDetail.getDisplayType().equals(FIELD_TYPE_HIDDEN_INT)){
+        for (TestDetailsForm testDetail : testDetails) {
+            if (testDetail.getDisplayType().equals(FIELD_TYPE_HIDDEN_INT)) {
                 toRemove.add(testDetail);
             }
-            if (testDetail.getDisplayType().equals(FIELD_TYPE_NUMBER_INT) && testDetail.getName().equals("TestStatus")){
+            if (testDetail.getDisplayType().equals(FIELD_TYPE_NUMBER_INT) && testDetail.getName().equals("TestStatus")) {
                 testDetail.setDisplayType(FIELD_TYPE_COMBO_INT);
                 testDetail.setComboList(mTestOrderDetails.getStatusList());
             }
@@ -459,9 +457,9 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         int counter = 1000;
         ArrayList<TestSampleFieldsDatum> toRemove = new ArrayList<>();
         for (TestSampleFieldsDatum testSampleFieldsDatum : mTestOrderDetails.getTestSampleFieldsData()) {
-            if (testSampleFieldsDatum.getCurrentValue() == null && testSampleFieldsDatum.getFieldType() == null){
+            if (testSampleFieldsDatum.getCurrentValue() == null && testSampleFieldsDatum.getFieldType() == null) {
                 toRemove.add(testSampleFieldsDatum);
-            }else {
+            } else {
                 for (SamplesDatum samplesDatum : testSampleFieldsDatum.getSamplesData()) {
                     if (samplesDatum.getID() == null || samplesDatum.getID().equals(0)) {
                         samplesDatum.setID(counter++);
@@ -483,7 +481,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
 
         updateSamplesRelativeToOriginal();
         final SaveTestDetailsRequest saveTestDetailsRequest = new SaveTestDetailsRequest(testDetailsResponse.getTestSampleFieldsData(),
-                testDetailsResponse.getTestFieldsData(), mSamplesCount, mTestDetailsRequest.getTestId());
+                testDetailsResponse.getTestFieldsData(), mSamplesCount, mTestDetailsRequest.getTestId(), getListForSend(mTestOrderDetails.getTestDetailsForm()));
         mProgressBar.setVisibility(View.VISIBLE);
         mQcRequests.postQCSaveTestDetails(saveTestDetailsRequest, new QCRequests.postQCSaveTestDetailsCallback() {
             @Override
@@ -497,8 +495,17 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             public void onFailure(StandardResponse standardResponse) {
                 mProgressBar.setVisibility(View.GONE);
                 ShowCrouton.showSimpleCrouton((QCActivity) getActivity(), standardResponse);
+                getTestOrderDetails();
             }
         });
+    }
+
+    public List<TestDetailFormForSend> getListForSend(List<TestDetailsForm> testDetailsForms) {
+        ArrayList<TestDetailFormForSend> testDetailFormForSends = new ArrayList<>();
+        for (TestDetailsForm testDetailsForm : testDetailsForms) {
+            testDetailFormForSends.add(new TestDetailFormForSend(testDetailsForm.getName(), testDetailsForm.getCurrentValue()));
+        }
+        return testDetailFormForSends;
     }
 
     @Override

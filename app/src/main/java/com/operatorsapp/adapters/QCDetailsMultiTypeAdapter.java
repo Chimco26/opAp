@@ -131,7 +131,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
             case FIELD_TYPE_COMBO_INT:
                 ((ComboViewHolder) viewHolder).title.setText(item.getDisplayEName());
                 TooltipCompat.setTooltipText(((ComboViewHolder) viewHolder).title, item.getDisplayEName());
-                ((ComboViewHolder) viewHolder).initSpinner(((ComboViewHolder) viewHolder).mSpinner, list.get(position).getStatusList());
+                ((ComboViewHolder) viewHolder).initSpinner(((ComboViewHolder) viewHolder).mSpinner, item);
                 break;
             case FIELD_TYPE_TIME_INT:
                 if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
@@ -269,11 +269,11 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
 
         }
 
-        private void initSpinner(final Spinner spinner, List<StatusList> statusLists) {
-            if (statusLists == null) {
+        private void initSpinner(final Spinner spinner, final TestDetailsForm item) {
+            if (item == null) {
                 return;
             }
-            final List<SelectableString> list = buildSelectableStringList(statusLists);
+            final List<SelectableString> list = buildSelectableStringList(item.getStatusList());
             final SimpleSpinnerAdapter dataAdapter = new SimpleSpinnerAdapter(spinner.getContext(), R.layout.base_spinner_item, list);
             dataAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -289,6 +289,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
                     dataAdapter.setTitle(i);
                     list.get(i).selectThisItemOnly((ArrayList<SelectableString>) list);
                     testStatus = Integer.valueOf(list.get(i).getId());
+                    item.setCurrentValue(list.get(i).getId());
                 }
 
                 @Override
