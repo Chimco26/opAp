@@ -503,7 +503,9 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     public List<TestDetailFormForSend> getListForSend(List<TestDetailsForm> testDetailsForms) {
         ArrayList<TestDetailFormForSend> testDetailFormForSends = new ArrayList<>();
         for (TestDetailsForm testDetailsForm : testDetailsForms) {
-            testDetailFormForSends.add(new TestDetailFormForSend(testDetailsForm.getName(), testDetailsForm.getCurrentValue()));
+            if (testDetailsForm.getAllowEntry()) {
+                testDetailFormForSends.add(new TestDetailFormForSend(testDetailsForm.getName(), testDetailsForm.getCurrentValue()));
+            }
         }
         return testDetailFormForSends;
     }

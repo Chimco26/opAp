@@ -2614,7 +2614,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mListener.onClearAllSelectedEvents();
+                                if (mListener != null) {
+                                    mListener.onClearAllSelectedEvents();
+                                }
                             }
                         });
                     }
