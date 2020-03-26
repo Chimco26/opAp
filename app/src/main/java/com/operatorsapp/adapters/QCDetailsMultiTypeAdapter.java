@@ -37,6 +37,7 @@ import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_DATE_INT;
 import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_NUMBER_INT;
 import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_TEXT_INT;
 import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_TIME_INT;
+import static com.operatorsapp.utils.TimeUtils.SIMPLE_FORMAT_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.SQL_NO_T_FORMAT;
 
 public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
@@ -343,7 +344,9 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
                         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         calendar.set(Calendar.MINUTE, minute);
                         item.setCurrentValue(TimeUtils.getDate(calendar.getTime().getTime(), SQL_NO_T_FORMAT));
-                        mTextTimeTv.setText(item.getCurrentValue());
+                        mTextTimeTv.setText(TimeUtils.getDateFromFormat(
+                                new Date(TimeUtils.getLongFromDateString(item.getCurrentValue(), SQL_NO_T_FORMAT)),
+                                SIMPLE_FORMAT_FORMAT));
                     }
                 }
             };
@@ -355,7 +358,11 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
         public void showDatePicker(final TimeTextViewHolder viewHolder, final TestDetailsForm item) {
             final Calendar calendar = Calendar.getInstance();
             if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty() && !item.getCurrentValue().equals("0")) {
-                calendar.setTime(new Date(TimeUtils.getLongFromDateString(item.getCurrentValue(), SQL_NO_T_FORMAT)));
+                long time = TimeUtils.getLongFromDateString(item.getCurrentValue(), SQL_NO_T_FORMAT);
+                if (time == 0){
+                    time = TimeUtils.getLongFromDateString(item.getCurrentValue(), SIMPLE_FORMAT_FORMAT);
+                }
+                calendar.setTime(new Date(time));
             } else {
                 calendar.setTime(new Date());
             }

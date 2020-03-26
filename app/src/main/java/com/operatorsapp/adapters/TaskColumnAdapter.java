@@ -1,5 +1,6 @@
 package com.operatorsapp.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -142,6 +143,8 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
                     if (!allItems.contains(task)) {
                         allItems.add(task);
                     }
+                }else {
+                    Log.d("TAG", "performFiltering: ");
                 }
             }
             mListFiltered.addAll(allItems);

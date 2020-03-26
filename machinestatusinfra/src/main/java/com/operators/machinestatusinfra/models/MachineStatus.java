@@ -77,7 +77,9 @@ public class MachineStatus {
         int total = 0;
         if (taskCountObject != null) {
             for (TaskStatusCount taskStatusCount : taskCountObject) {
-                total += taskStatusCount.getNumOfTasks();
+                if (taskStatusCount.getTaskStatusId() == 2 || taskStatusCount.getTaskStatusId() == 3) {
+                    total += taskStatusCount.getNumOfTasks();
+                }
             }
         }
         return total;

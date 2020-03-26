@@ -20,17 +20,21 @@
         android:orientation="horizontal"
         android:weightSum="1">
 
-        <TextView
-            android:id="@+id/FTB_title_tv"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:textColor="@color/blue1"
-            android:textStyle="bold"
-            app:autoSizeMaxTextSize="25sp"
-            app:autoSizeTextType="uniform" />
+            android:layout_weight="0.5">
+
+            <TextView
+                android:id="@+id/FTB_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:textColor="@color/blue1"
+                android:textStyle="bold"
+                android:textSize="25sp"/>
+        </LinearLayout>
 
         <View
             android:layout_width="0dp"
@@ -105,8 +109,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.7"
-            android:maxLines="1"
             android:gravity="center_vertical"
+            android:maxLines="1"
             android:text="@string/order_by"
             android:textColor="@color/default_gray" />
 
@@ -146,15 +150,15 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1.15"
-            android:weightSum="1.15"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="1.15">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.6"
-                android:maxLines="1"
                 android:gravity="center_vertical"
+                android:maxLines="1"
                 android:text="@string/filter_by"
                 android:textColor="@color/default_gray" />
 
