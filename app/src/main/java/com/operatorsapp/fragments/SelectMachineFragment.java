@@ -165,6 +165,9 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 // rootView null
                 @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_view1, null);
                 ImageView backButton = view.findViewById(R.id.action_bar_back_btn);
+                if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+                    backButton.setRotationY(180);
+                }
                 backButton.setVisibility(View.VISIBLE);
                 backButton.setOnClickListener(new View.OnClickListener() {
                     @Override

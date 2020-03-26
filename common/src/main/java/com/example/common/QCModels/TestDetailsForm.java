@@ -3,6 +3,7 @@ package com.example.common.QCModels;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestDetailsForm {
@@ -14,9 +15,6 @@ public class TestDetailsForm {
     public static final int FIELD_TYPE_TIME_INT = 8;
     public static final int FIELD_TYPE_HIDDEN_INT = 12;
 
-    @SerializedName("Name")
-    @Expose
-    private String name;
     @SerializedName("DisplayHName")
     @Expose
     private String displayHName;
@@ -38,6 +36,9 @@ public class TestDetailsForm {
     @SerializedName("LinkTarget")
     @Expose
     private Object linkTarget;
+    @SerializedName("Name")
+    @Expose
+    private String name;
     @SerializedName("CurrentValue")
     @Expose
     private String currentValue;
@@ -122,4 +123,5 @@ public class TestDetailsForm {
     public List<StatusList> getStatusList() {
         return statusList;
     }
+
 }

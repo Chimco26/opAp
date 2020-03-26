@@ -102,7 +102,7 @@
                 android:src="@drawable/settings_new_small" />
 
             <RelativeLayout
-                android:layout_width="39dp"
+                android:layout_width="45dp"
                 android:layout_height="39dp"
                 android:layout_marginEnd="31dp">
 

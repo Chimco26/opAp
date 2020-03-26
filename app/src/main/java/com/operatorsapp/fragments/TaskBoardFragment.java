@@ -380,7 +380,6 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
         SimpleRequests.getTaskList(pm.getSiteUrl(), new GetTaskListCallback() {
             @Override
             public void onGetTaskListCallbackSuccess(TaskListResponse response) {
-                ProgressDialogManager.dismiss();
                 if (isDetached() || getContext() == null) {
                     return;
                 }
@@ -394,6 +393,7 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
                 initColumns(getString(R.string.done_for_task), mDoneList, TaskProgress.TaskStatus.DONE.getValue(), new Date().getTime() - DAY_IN_MILLIS);
                 initColumns(getString(R.string.cancelled), mCancelledList, TaskProgress.TaskStatus.CANCELLED.getValue(), new Date().getTime() - DAY_IN_MILLIS);
                 orderAll();
+                ProgressDialogManager.dismiss();
             }
 
             @Override
@@ -447,7 +447,6 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
         SimpleRequests.updateTaskStatus(createHistoryObject(taskProgress, toColumn), pm.getSiteUrl(), new UpdateTaskStatusCallback() {
             @Override
             public void onUpdateTaskStatusCallbackSuccess(StandardResponse response) {
-                ProgressDialogManager.dismiss();
                 taskProgress.setTaskStatus(mColumnsObjectList.get(toColumn).getId());
                 taskProgress.setHistoryCreateDate(com.operatorsapp.utils.TimeUtils.getDate(new Date().getTime(),
                         com.operatorsapp.utils.TimeUtils.SQL_T_FORMAT_NO_SECOND));
@@ -456,6 +455,7 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
                 //reorder
                 orderList(mColumnsObjectList.get(fromColumn));
                 orderList(mColumnsObjectList.get(toColumn));
+                ProgressDialogManager.dismiss();
             }
 
             @Override

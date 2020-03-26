@@ -37,6 +37,7 @@ import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_DATE_INT;
 import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_NUMBER_INT;
 import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_TEXT_INT;
 import static com.example.common.QCModels.TestDetailsForm.FIELD_TYPE_TIME_INT;
+import static com.operatorsapp.utils.TimeUtils.SIMPLE_FORMAT_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.SQL_NO_T_FORMAT;
 
 public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
@@ -131,7 +132,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
             case FIELD_TYPE_COMBO_INT:
                 ((ComboViewHolder) viewHolder).title.setText(item.getDisplayEName());
                 TooltipCompat.setTooltipText(((ComboViewHolder) viewHolder).title, item.getDisplayEName());
-                ((ComboViewHolder) viewHolder).initSpinner(((ComboViewHolder) viewHolder).mSpinner, list.get(position).getStatusList());
+                ((ComboViewHolder) viewHolder).initSpinner(((ComboViewHolder) viewHolder).mSpinner, item);
                 break;
             case FIELD_TYPE_TIME_INT:
                 if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
@@ -269,11 +270,11 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
 
         }
 
-        private void initSpinner(final Spinner spinner, List<StatusList> statusLists) {
-            if (statusLists == null) {
+        private void initSpinner(final Spinner spinner, final TestDetailsForm item) {
+            if (item == null) {
                 return;
             }
-            final List<SelectableString> list = buildSelectableStringList(statusLists);
+            final List<SelectableString> list = buildSelectableStringList(item.getStatusList());
             final SimpleSpinnerAdapter dataAdapter = new SimpleSpinnerAdapter(spinner.getContext(), R.layout.base_spinner_item, list);
             dataAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -289,6 +290,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
                     dataAdapter.setTitle(i);
                     list.get(i).selectThisItemOnly((ArrayList<SelectableString>) list);
                     testStatus = Integer.valueOf(list.get(i).getId());
+                    item.setCurrentValue(list.get(i).getId());
                 }
 
                 @Override
@@ -342,7 +344,9 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
                         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         calendar.set(Calendar.MINUTE, minute);
                         item.setCurrentValue(TimeUtils.getDate(calendar.getTime().getTime(), SQL_NO_T_FORMAT));
-                        mTextTimeTv.setText(item.getCurrentValue());
+                        mTextTimeTv.setText(TimeUtils.getDateFromFormat(
+                                new Date(TimeUtils.getLongFromDateString(item.getCurrentValue(), SQL_NO_T_FORMAT)),
+                                SIMPLE_FORMAT_FORMAT));
                     }
                 }
             };
@@ -354,7 +358,11 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
         public void showDatePicker(final TimeTextViewHolder viewHolder, final TestDetailsForm item) {
             final Calendar calendar = Calendar.getInstance();
             if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty() && !item.getCurrentValue().equals("0")) {
-                calendar.setTime(new Date(TimeUtils.getLongFromDateString(item.getCurrentValue(), SQL_NO_T_FORMAT)));
+                long time = TimeUtils.getLongFromDateString(item.getCurrentValue(), SQL_NO_T_FORMAT);
+                if (time == 0){
+                    time = TimeUtils.getLongFromDateString(item.getCurrentValue(), SIMPLE_FORMAT_FORMAT);
+                }
+                calendar.setTime(new Date(time));
             } else {
                 calendar.setTime(new Date());
             }
