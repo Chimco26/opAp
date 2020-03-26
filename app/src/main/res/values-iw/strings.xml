@@ -471,5 +471,22 @@
     <string name="powered_by_leadermes">סופק על ידי מטיקס</string>
     <string name="stop_logs">יומן אירועי עצירה</string>
     <string name="default_unanswered_technocian_call">ממתין לתגובת טכנאי</string>
-
+    <string name="add_new_task">הוסף משימה חדשה</string>
+    <string name="todo">לביצוע</string>
+    <string name="in_progress">בעבודה</string>
+    <string name="done_for_task">בוצע</string>
+    <string name="cancelled">בוטל</string>
+    <string name="task_manager">משימת מנהל</string>
+    <string name="order_by">הוזמן על ידי</string>
+    <string name="search_tasks">חפש משימה</string>
+    <string name="date">תאריך</string>
+    <string name="priority">רמת דחיפות</string>
+    <string name="low">נמוכה</string>
+    <string name="medium">בינונית</string>
+    <string name="high">גבוהה</string>
+    <string name="in_time">בזמן</string>
+    <string name="past_time">הזמן חלף</string>
+    <string name="working_manually">עבודה ידנית</string>
+    <string name="service_call_made_new">קריאת שירות נשלחה ממפעיל %1$ ממכונה</string>
+    <string name="period">משך</string>
 </resources>

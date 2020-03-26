@@ -1,8 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE resources [
-    <!ENTITY placeholder1 "matics_placeholder_matics_number_1">
-    <!ENTITY placeholder2 "matics_placeholder_matics_number_2">
-    ]>
+﻿<?xml version="1.0" encoding="utf-8"?><!DOCTYPE resources [<!ENTITY placeholder1 "matics_placeholder_matics_number_1"><!ENTITY placeholder2 "matics_placeholder_matics_number_2">]>
 <resources>
     <!-- General -->
     <string name="no_communication">Geen communicatie</string>
@@ -124,29 +120,29 @@
     <string name="first_item_approval">Einde Ombouw</string>
 
     <!--<array name="languages_spinner_array">-->
-        <!--<item>English</item>-->
-        <!--<item>Hebrew</item>-->
-        <!--<item>Chinese</item>-->
-        <!--<item>German</item>-->
-        <!--<item>Russian</item>-->
-        <!--<item>Ukrainian</item>-->
-        <!--<item>Spanish</item>-->
-        <!--<item>French</item>-->
-        <!--<item>Dutch</item>-->
-        <!--<item>Arabic</item>-->
+    <!--<item>English</item>-->
+    <!--<item>Hebrew</item>-->
+    <!--<item>Chinese</item>-->
+    <!--<item>German</item>-->
+    <!--<item>Russian</item>-->
+    <!--<item>Ukrainian</item>-->
+    <!--<item>Spanish</item>-->
+    <!--<item>French</item>-->
+    <!--<item>Dutch</item>-->
+    <!--<item>Arabic</item>-->
     <!--</array>-->
 
     <!--<array name="language_codes_array">-->
-        <!--<item>en</item>-->
-        <!--<item>iw</item>-->
-        <!--<item>zh</item>-->
-        <!--<item>de</item>-->
-        <!--<item>ru</item>-->
-        <!--<item>uk</item>-->
-        <!--<item>es</item>-->
-        <!--<item>fr</item>-->
-        <!--<item>nl</item>-->
-        <!--<item>ar</item>-->
+    <!--<item>en</item>-->
+    <!--<item>iw</item>-->
+    <!--<item>zh</item>-->
+    <!--<item>de</item>-->
+    <!--<item>ru</item>-->
+    <!--<item>uk</item>-->
+    <!--<item>es</item>-->
+    <!--<item>fr</item>-->
+    <!--<item>nl</item>-->
+    <!--<item>ar</item>-->
     <!--</array>-->
 
     <array name="jobs_spinner_array">
@@ -273,7 +269,8 @@
     <string name="events">evenementen</string>
     <string name="kg">kg</string>
     <string name="gram">g</string>
-    <string name="service_call_made_new">Dienstoproep werd verzonden door operator &placeholder1; van machine</string>
+    <string name="service_call_made_new">Dienstoproep werd verzonden door operator &placeholder1;
+        van machine</string>
     <string name="default_unanswered_technician_call">Operator &placeholder1; opende een dienstoproep. Wachten op antwoord van de technicus</string>
     <string name="midnight">middernacht</string>
     <string name="split_event_validation_text">U gaat een evenement splitsen, \\n Weet u zeker dat u verder wilt gaan?</string>
@@ -294,12 +291,15 @@
     <string name="service_call_exists_subtitle">Open dienstoproepen werden gevonden, \\n u kunt de open oproepen verwijderen of een nieuwe openen</string>
     <string name="open_new_call">Nieuwe dienstoproep</string>
     <string name="empty_job_list_msg">De lijst van jobs in afwachting is leeg</string>
-    <string name="call_approved2">Een oproep gedaan door operator &placeholder1; werd goedgekeurd</string>
+    <string name="call_approved2">Een oproep gedaan door operator &placeholder1;
+        werd goedgekeurd</string>
     <string name="call_declined">De oproep werd afgewezen</string>
-    <string name="call_declined2">Een oproep gedaan door operator &placeholder1; werd afgewezen</string>
+    <string name="call_declined2">Een oproep gedaan door operator &placeholder1;
+        werd afgewezen</string>
     <string name="started_service2">Oproep gedaan door operator &placeholder1; beantwoorden</string>
     <string name="service_completed2">Dienstoproep gedaan door operator &placeholder1; werd afgewerkt</string>
-    <string name="call_cancelled2">Oproep gedaan door operator &placeholder1; werd geannuleerd</string>
+    <string name="call_cancelled2">Oproep gedaan door operator &placeholder1;
+        werd geannuleerd</string>
     <string name="more_details">Wachten op meer details</string>
     <string name="technician">Technicus</string>
     <string name="time_left_to_current_job">Resterende tijd tot huidige job</string>
@@ -321,10 +321,12 @@
     <string name="SetupInjectionsCount">Meer dan &placeholder1; programma\\\'s afgerond tijdens implementatie.</string>
     <string name="UnReportedStopsPC">Meer dan &placeholder1; % van de stoptijd is niet gecategoriseerd in deze dienst.</string>
     <string name="RejectsPC">Meer dan &placeholder1; % afgewezen.</string>
-    <string name="OpenEventDuration">Huidige stopzetting duurt meer dan &placeholder1; minuten.</string>
+    <string name="OpenEventDuration">Huidige stopzetting duurt meer dan &placeholder1;
+        minuten.</string>
     <string name="ProductionModeInjectionsCount">&placeholder1; programma\\\'s ontdekt die niet in productie zijn.</string>
     <string name="CycleTimeDeviation">Een afwijking van &placeholder1; % ten opzichte van de standaard programmatijd is waargenomen.</string>
-    <string name="ShortEventsFromProductionPC">Totale korte stopzettingen van de gehele productietijd overstijgt &placeholder1; %.</string>
+    <string name="ShortEventsFromProductionPC">Totale korte stopzettingen van de gehele productietijd overstijgt &placeholder1;
+        %.</string>
     <string name="WorkerNotSigned">Er is &placeholder1; minuten na de start van de dienst nog geen operator aangemeld.</string>
     <string name="open_calls">Open oproepen</string>
     <string name="last_24h">Laatste 24 uur</string>
@@ -455,5 +457,43 @@
     <string name="view_log">Logboek inzien</string>
     <string name="save_and_close">Opslaan en sluiten</string>
     <string name="default_unanswered_technocian_call">Wachtend op antwoord technicus</string>
-
+    <string name="install_activity_not_found">install_activity_not_found</string>
+    <string name="add_new_task">Nieuw taak toevoegen</string>
+    <string name="todo">To-do</string>
+    <string name="in_progress">In behandeling</string>
+    <string name="done_for_task">Klaar</string>
+    <string name="cancelled">Geannuleerd</string>
+    <string name="task_manager">Taakbeheerder</string>
+    <string name="order_by">Bestellen voor</string>
+    <string name="search_tasks">Taken zoeken</string>
+    <string name="date">datum</string>
+    <string name="priority">Prioriteit</string>
+    <string name="low">Laag</string>
+    <string name="medium">Middelmatig</string>
+    <string name="high">Hoog</string>
+    <string name="in_time">Op tijd</string>
+    <string name="past_time">Verleden tijd</string>
+    <string name="working_manually">Handmatig werkend</string>
+    <string name="period">Periode</string>
+    <string name="add_task">Taak toevoegen</string>
+    <string name="opened_by">Geopend door</string>
+    <string name="status">Status</string>
+    <string name="subject">Onderwerp</string>
+    <string name="task_level">Taakniveau</string>
+    <string name="description">Omschrijving</string>
+    <string name="selection">Selectie</string>
+    <string name="severity">Ernst</string>
+    <string name="estimated_duration">Geschatte duur</string>
+    <string name="attached_files">Bijgevoegde bestanden</string>
+    <string name="edit_task">Taak bewerken</string>
+    <string name="days">dagen</string>
+    <string name="start_date">Begindatum</string>
+    <string name="end_date">Einddatum</string>
+    <string name="filter_tasks">Takenfilter</string>
+    <string name="create_date">Datum aanmaken</string>
+    <string name="assign_to">Toewijzen aan</string>
+    <string name="task_id">Taak-ID</string>
+    <string name="test_details">Testdetails</string>
+    <string name="execution_time_frame">Tijdsbestek voor uitvoer</string>
+    <string name="you_cant_add_more_workers_than">u kunt niet meer arbeiders toevoegen dan</string>
 </resources>
