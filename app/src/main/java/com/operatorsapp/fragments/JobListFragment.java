@@ -37,12 +37,6 @@ import java.util.Map;
 public class JobListFragment extends Fragment implements
         View.OnClickListener, PendingJobsAdapter.PendingJobsAdapterListener {
 
-    public static final String ID = "ID";
-    public static final String PRODUCT_CATALOG_ID = "ProductCatalogID";
-    public static final String UNITS_TARGET = "UnitsTarget";
-    public static final String UNITS_PRODUCED = "UnitsProduced";
-    public static final String END_TIME = "EndTime";
-    public static final String TIME_LEFT_HR_HOUR = "TimeLeftHrHour";
     private static final String TAG = JobListFragment.class.getSimpleName();
     private EditText mSearchViewEt;
     private RecyclerView mPendingJobsRv;

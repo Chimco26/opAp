@@ -166,6 +166,9 @@ public class TestFieldsDatum {
     }
 
     public Float getLValue() {
+        if (lValue == null){
+            return 0f;
+        }
         return lValue;
     }
 

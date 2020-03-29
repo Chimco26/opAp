@@ -608,7 +608,7 @@
                 android:id="@+id/bottom_notification_tv"
                 style="@style/ToolbarTheme"
                 android:layout_width="0dp"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:gravity="start"
@@ -620,7 +620,7 @@
                 android:id="@+id/bottom_notification_time_tv"
                 style="@style/ToolbarTheme"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="20dp"
                 android:gravity="start"
@@ -640,7 +640,7 @@
         <RelativeLayout
             android:id="@+id/FAAE_machine_line_ly"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="64dp"
             android:background="@color/white"
             android:paddingStart="15dp"
             android:visibility="visible">

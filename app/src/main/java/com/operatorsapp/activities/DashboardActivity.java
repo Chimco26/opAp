@@ -2967,6 +2967,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
         } catch (NumberFormatException e) {
             ShowCrouton.showSimpleCrouton(DashboardActivity.this, getResources().getString(R.string.invalid_value), CroutonCreator.CroutonType.NETWORK_ERROR);
+        } catch (IndexOutOfBoundsException e){
+            ShowCrouton.showSimpleCrouton(DashboardActivity.this,
+                    getResources().getString(R.string.josh) + " " + getResources().getString(R.string.invalid_value), CroutonCreator.CroutonType.NETWORK_ERROR);
         }
 //        SendBroadcast.refreshPolling(getContext());
     }
