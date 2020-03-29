@@ -317,7 +317,8 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
 
             @Override
             public void onItemDragEnded(int fromColumn, int fromRow, int toColumn, int toRow) {
-                if (fromColumn == toColumn) {
+                if (fromColumn == toColumn || mColumnsObjectList.size() <= toColumn
+                        || mColumnsObjectList.get(toColumn).getAdapter().getListFiltered().size() <= toRow) {
                     mBoardView.moveItem(toColumn, toRow, fromColumn, fromRow, false);
                 } else {
                     updateTaskStatus(mColumnsObjectList.get(toColumn).getAdapter().getListFiltered().get(toRow), fromColumn, fromRow, toColumn, toRow);

@@ -330,7 +330,7 @@ public class SimpleRequests {
             @Override
             public void onResponse(@NonNull Call<StopLogsResponse> call, @NonNull Response<StopLogsResponse> response) {
 
-                if (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty()) {
+                if (response.body() != null && (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty())) {
                     if (callback != null) {
 
                         callback.onGetStopLogSuccess(response.body());
@@ -377,7 +377,7 @@ public class SimpleRequests {
             @Override
             public void onResponse(@NonNull Call<ShiftOperatorResponse> call, @NonNull Response<ShiftOperatorResponse> response) {
 
-                if (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty()) {
+                if (response.body() != null && (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty())) {
                     if (callback != null) {
 
                         callback.onGetShiftWorkersSuccess(response.body());
@@ -423,7 +423,7 @@ public class SimpleRequests {
             @Override
             public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
 
-                if (response.body() != null && response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty()) {
+                if (response.body() != null && (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty())) {
                     if (callback != null) {
 
                         callback.onRequestSuccess(response.body());
@@ -809,7 +809,7 @@ public class SimpleRequests {
         call.enqueue(new Callback<StandardResponse>() {
             @Override
             public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
-                if (response != null && response.body() != null && response.body().getFunctionSucceed()) {
+                if (response.body() != null &&  response.body().getFunctionSucceed()) {
                     if (callback != null) {
 
                         callback.onPostSplitEventSuccess(response.body());
@@ -820,7 +820,7 @@ public class SimpleRequests {
                     }
                 } else {
                     String msg = "";
-                    if (response != null && response.body() != null && response.body().getError() != null) {
+                    if (response.body() != null && response.body().getError() != null) {
                         msg = response.body().getError().getErrorDesc();
                     }
                     onFailure(call, new Throwable(msg));
@@ -961,7 +961,7 @@ public class SimpleRequests {
             @Override
             public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
 
-                if (response.body() != null && response.body().getError().getErrorDesc() == null || response.body() != null && response.body().getError().getErrorDesc().isEmpty()) {
+                if (response.body() != null && (response.body().getError().getErrorDesc() == null || response.body() != null && response.body().getError().getErrorDesc().isEmpty())) {
                     if (callback != null) {
 
                         callback.onCreateTaskCallbackSuccess(response.body());
@@ -1008,7 +1008,7 @@ public class SimpleRequests {
             @Override
             public void onResponse(@NonNull Call<TaskObjectsForCreateOrEditResponse> call, @NonNull Response<TaskObjectsForCreateOrEditResponse> response) {
 
-                if (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty()) {
+                if (response.body() != null && (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty())) {
                     if (callback != null) {
 
                         callback.onGetTaskObjectsForCreateCallbackSuccess(response.body());
@@ -1054,7 +1054,7 @@ public class SimpleRequests {
             @Override
             public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
 
-                if (response.body() != null && response.body().getError().getErrorDesc() == null || response.body() != null && response.body().getError().getErrorDesc().isEmpty()) {
+                if (response.body() != null && (response.body().getError().getErrorDesc() == null || response.body() != null && response.body().getError().getErrorDesc().isEmpty())) {
                     if (callback != null) {
 
                         callback.onUpdateTaskStatusCallbackSuccess(response.body());

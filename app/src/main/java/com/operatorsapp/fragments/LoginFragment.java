@@ -134,7 +134,7 @@ public class LoginFragment extends Fragment {
             doSilentLogin();
         }
 
-        ravtechTest(rootView);
+//        ravtechTest(rootView);
 
         return rootView;
     }
