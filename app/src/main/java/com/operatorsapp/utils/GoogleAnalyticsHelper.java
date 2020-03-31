@@ -38,18 +38,7 @@ public class GoogleAnalyticsHelper {
         params.putString(FirebaseAnalytics.Param.AFFILIATION, "site name: " + pm.getSiteName());
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params);
 
-
-//        Tracker tracker = getTracker(context);
-//        if (tracker != null) {
-//            PersistenceManager pm = PersistenceManager.getInstance();
-//
-//            tracker.setClientId("machine name + id: " + pm.getMachineName() + ", " + pm.getMachineId());
-//            tracker.setAppVersion(pm.getVersion() + "");
-//            tracker.setHostname(pm.getSiteName());
-//            tracker.setScreenName(screenName);
-//            tracker.set("Machine Name + Id", pm.getMachineName() + ", " + pm.getMachineId());
-//            tracker.send(new HitBuilders.ScreenViewBuilder().build());
-//        }
+        trackSite(context, "screen", "", screenName, FirebaseAnalytics.Event.VIEW_ITEM);
     }
 
     public void trackEvent(Context context, EventCategory category, boolean isSucceed , String label){
@@ -69,25 +58,44 @@ public class GoogleAnalyticsHelper {
         params.putString(FirebaseAnalytics.Param.CONTENT, label);
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params);
 
+        trackSite(context, getCategory(category), label, "", FirebaseAnalytics.Event.SELECT_CONTENT);
+        trackContent(context, getCategory(category), label, FirebaseAnalytics.Event.SELECT_CONTENT);
+    }
 
+    private void trackSite(Context context, String category, String label, String screenName, String name){
 
+        if (context == null){
+            return;
+        }
+        FirebaseAnalytics firebaseAnalytics = getTracker(context);
+        PersistenceManager pm = PersistenceManager.getInstance();
 
-//
-//        Tracker tracker = getTracker(context);
-//        if (tracker != null) {
-//            PersistenceManager pm = PersistenceManager.getInstance();
-//
-//            tracker.setClientId("machine name + id: " + pm.getMachineName() + ", " + pm.getMachineId());
-//            tracker.setAppVersion(pm.getVersion() + "");
-//            tracker.setHostname(pm.getSiteName());
-//            tracker.set("Machine Name + Id", pm.getMachineName() + ", " + pm.getMachineId());
-//            tracker.send(new HitBuilders.EventBuilder()
-//                    .setCategory(getCategory(category))
-//                    .setAction(isSucceed ? "Action was preformed successfully" : "Action has failed")
-//                    .setLabel(label)
-//                    .build());
-//        }
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, category);
+        params.putString(FirebaseAnalytics.Param.ITEM_NAME, screenName);
+        params.putString(FirebaseAnalytics.Param.ITEM_ID, "machine name + id: " + pm.getMachineName() + ", " + pm.getMachineId());
+        params.putString(FirebaseAnalytics.Param.ITEM_VARIANT, "version num: " + pm.getVersion());
+        params.putString(FirebaseAnalytics.Param.ITEM_NAME, "event name: " + name);
+        params.putString(FirebaseAnalytics.Param.CONTENT, label);
+        firebaseAnalytics.logEvent(pm.getSiteName(), params);
+    }
 
+    private void trackContent(Context context, String category, String label, String name){
+
+        if (context == null){
+            return;
+        }
+        FirebaseAnalytics firebaseAnalytics = getTracker(context);
+        PersistenceManager pm = PersistenceManager.getInstance();
+
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, category);
+        params.putString(FirebaseAnalytics.Param.ITEM_ID, "machine name + id: " + pm.getMachineName() + ", " + pm.getMachineId());
+        params.putString(FirebaseAnalytics.Param.ITEM_VARIANT, "version num: " + pm.getVersion());
+        params.putString(FirebaseAnalytics.Param.ITEM_NAME, "event name: " + name);
+        params.putString(FirebaseAnalytics.Param.AFFILIATION, "site name: " + pm.getSiteName());
+        params.putString(FirebaseAnalytics.Param.CONTENT, label);
+        firebaseAnalytics.logEvent(label, params);
     }
 
     private String getCategory(EventCategory category) {
