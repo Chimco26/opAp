@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -74,15 +73,16 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
         holder.mTitle.setText(String.format(Locale.getDefault(), "%s - %d", mListFiltered.get(position).getSubjectTrans(),
                 mListFiltered.get(position).getTaskID()));
         holder.mText.setText(mListFiltered.get(position).getText());
-        String delegate = mListFiltered.get(position).getAssigneeDisplayName();
-        if (delegate == null || delegate.isEmpty()) {
-            holder.mDelegate.setVisibility(View.INVISIBLE);
-        } else {
-            holder.mDelegate.setVisibility(View.VISIBLE);
-            holder.mDelegate.setText(mListFiltered.get(position).getAssigneDisplayName2Chars());
-        }
+        String assignee = mListFiltered.get(position).getAssigneeDisplayHName();
+        holder.mAssignee.setText(assignee);
+        holder.mAssigneeTitle.setText(String.format("%s:", holder.mAssigneeTitle.getText()));
+        int visibility = (assignee == null || assignee.isEmpty()) ? View.INVISIBLE : View.VISIBLE;
+        holder.mAssignee.setVisibility(visibility);
+        holder.mAssigneeTitle.setVisibility(visibility);
 
-        holder.mPriorityIc.setColorFilter(TaskUtil.getPriorityColor(mListFiltered.get(position).getTaskPriorityID(), holder.mPriorityIc.getContext()));
+        holder.mPriorityTv.setTextColor(TaskUtil.getPriorityColor(mListFiltered.get(position).getTaskPriorityID(), holder.itemView.getContext()));
+        holder.mPriorityTv.setText(TaskUtil.getPriorityName(mListFiltered.get(position).getTaskPriorityID(), holder.itemView.getContext()));
+
 
         if (mListFiltered.get(position).isCriticalState()) {
             holder.mAlertMarge.setVisibility(View.VISIBLE);
@@ -97,19 +97,21 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
     }
 
     public class ViewHolder extends DragItemAdapter.ViewHolder {
+        private final TextView mAssigneeTitle;
         private TextView mTitle;
         private TextView mText;
-        private TextView mDelegate;
-        private ImageView mPriorityIc;
+        private TextView mAssignee;
+        private TextView mPriorityTv;
         private View mAlertMarge;
 
         public ViewHolder(View itemView, int handleResId, boolean dragOnLongPress) {
             super(itemView, handleResId, dragOnLongPress);
             mTitle = itemView.findViewById(R.id.ITask_title);
             mText = itemView.findViewById(R.id.ITask_text);
-            mDelegate = itemView.findViewById(R.id.ITask_author);
-            mPriorityIc = itemView.findViewById(R.id.ITask_priority_ic);
+            mAssignee = itemView.findViewById(R.id.ITask_assign);
+            mPriorityTv = itemView.findViewById(R.id.ITask_priority_tv);
             mAlertMarge = itemView.findViewById(R.id.ITask_priority_view);
+            mAssigneeTitle = itemView.findViewById(R.id.ITask_assign_title);
 
             itemView.findViewById(R.id.ITask_main_rl).setOnClickListener(new View.OnClickListener() {
                 @Override
