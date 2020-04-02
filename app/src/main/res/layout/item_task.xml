@@ -39,28 +39,43 @@
             android:maxLines="2"
             android:textColor="@color/black" />
 
-        <ImageView
-            android:id="@+id/ITask_priority_ic"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+        <TextView
+            android:id="@+id/ITask_priority_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:gravity="center_vertical"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="5dp"
-            android:src="@drawable/ic_priority"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"
+            android:textSize="16sp"/>
 
         <TextView
-            android:id="@+id/ITask_author"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="5dp"
+            android:id="@+id/ITask_assign_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textColor="@color/black"
+            android:maxLines="1"
+            android:layout_marginStart="10dp"
             android:layout_marginBottom="5dp"
-            android:layout_toStartOf="@+id/ITask_priority_ic"
-            android:background="@drawable/circle_blue"
-            android:gravity="center"
-            android:maxLength="2"
-            android:textColor="@color/white" />
+            android:layout_alignParentBottom="true"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:text="@string/assign_to"/>
+
+        <TextView
+            android:id="@+id/ITask_assign"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@+id/ITask_assign_title"/>
     </RelativeLayout>
 </RelativeLayout>
