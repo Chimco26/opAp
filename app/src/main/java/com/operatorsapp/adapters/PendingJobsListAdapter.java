@@ -19,6 +19,7 @@ import java.util.HashMap;
 
 public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsListAdapter.ViewHolder> {
 
+    private static final String PRODUCT_IMAGE_PATH = "productimagepath";
     private final Context mContext;
     private final ArrayList<PendingJob> mPandingjobs;
     private final String[] mOrderedHederasKey;
@@ -49,55 +50,13 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
         ArrayList<Property> properties = (ArrayList<Property>) mPandingjobs.get(viewHolder.getAdapterPosition()).getProperties();
         HashMap<String, String> propertiesHashMap = listToHashMap(properties);
 
-        if (mOrderedHederasKey[0] != null && mOrderedHederasKey[0].toLowerCase().equals("ProductImagePath".toLowerCase())) {
-            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[0]), viewHolder.m1Img);
-            viewHolder.m1Tv.setText("");
-        } else {
-            ImageLoader.getInstance().displayImage("", viewHolder.m1Img);
-            viewHolder.m1Tv.setText(propertiesHashMap.get(mOrderedHederasKey[0]));
-        }
-        if (mOrderedHederasKey[1] != null && mOrderedHederasKey[1].toLowerCase().equals("ProductImagePath".toLowerCase())) {
-            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[1]), viewHolder.m2Img);
-            viewHolder.m2Tv.setText("");
-        } else {
-            ImageLoader.getInstance().displayImage("", viewHolder.m2Img);
-            viewHolder.m2Tv.setText(propertiesHashMap.get(mOrderedHederasKey[1]));
-        }
-        if (mOrderedHederasKey[2] != null && mOrderedHederasKey[2].toLowerCase().equals("ProductImagePath".toLowerCase())) {
-            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[2]), viewHolder.m3Img);
-            viewHolder.m3Tv.setText("");
-        } else {
-            ImageLoader.getInstance().displayImage("", viewHolder.m3Img);
-            viewHolder.m3Tv.setText(propertiesHashMap.get(mOrderedHederasKey[2]));
-        }
-        if (mOrderedHederasKey[3] != null && mOrderedHederasKey[3].toLowerCase().equals("ProductImagePath".toLowerCase())) {
-            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[3]), viewHolder.m4Img);
-            viewHolder.m4Tv.setText("");
-        } else {
-            ImageLoader.getInstance().displayImage("", viewHolder.m4Img);
-            viewHolder.m4Tv.setText(propertiesHashMap.get(mOrderedHederasKey[3]));
-        }
-        if (mOrderedHederasKey[4] != null && mOrderedHederasKey[4].toLowerCase().equals("ProductImagePath".toLowerCase())) {
-            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[4]), viewHolder.m5Img);
-            viewHolder.m5Tv.setText("");
-        } else {
-            ImageLoader.getInstance().displayImage("", viewHolder.m5Img);
-            viewHolder.m5Tv.setText(propertiesHashMap.get(mOrderedHederasKey[4]));
-        }
-        if (mOrderedHederasKey[5] != null && mOrderedHederasKey[5].toLowerCase().equals("ProductImagePath".toLowerCase())) {
-            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[5]), viewHolder.m6Img);
-            viewHolder.m6Tv.setText("");
-        } else {
-            ImageLoader.getInstance().displayImage("", viewHolder.m6Img);
-            viewHolder.m6Tv.setText(propertiesHashMap.get(mOrderedHederasKey[5]));
-        }
-        if (mOrderedHederasKey[6] != null && mOrderedHederasKey[6].toLowerCase().equals("ProductImagePath".toLowerCase())) {
-            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[6]), viewHolder.m7Img);
-            viewHolder.m7Tv.setText("");
-        } else {
-            ImageLoader.getInstance().displayImage("", viewHolder.m7Img);
-            viewHolder.m7Tv.setText(propertiesHashMap.get(mOrderedHederasKey[6]));
-        }
+        setImageOrText(propertiesHashMap, 0, viewHolder.m1Img, viewHolder.m1Tv);
+        setImageOrText(propertiesHashMap, 1, viewHolder.m2Img, viewHolder.m2Tv);
+        setImageOrText(propertiesHashMap, 2, viewHolder.m3Img, viewHolder.m3Tv);
+        setImageOrText(propertiesHashMap, 3, viewHolder.m4Img, viewHolder.m4Tv);
+        setImageOrText(propertiesHashMap, 4, viewHolder.m5Img, viewHolder.m5Tv);
+        setImageOrText(propertiesHashMap, 5, viewHolder.m6Img, viewHolder.m6Tv);
+        setImageOrText(propertiesHashMap, 6, viewHolder.m7Img, viewHolder.m7Tv);
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +66,31 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
 
             }
         });
+    }
+
+    private void setImageOrText(HashMap<String, String> propertiesHashMap, int i, ImageView m1Img, TextView m1Tv) {
+        if (mOrderedHederasKey[i] != null && mOrderedHederasKey[i].toLowerCase().equals(PRODUCT_IMAGE_PATH)) {
+            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[i]), m1Img);
+            m1Tv.setText("");
+        } else {
+            ImageLoader.getInstance().displayImage("", m1Img);
+            m1Tv.setText(getText(propertiesHashMap.get(mOrderedHederasKey[i])));
+        }
+    }
+
+    private String getText(String s){
+        try {
+            float number = 0;
+            number = Float.parseFloat(s);
+            if (number >= 1000){
+                int thousands = (int) (number / 1000);
+                float rest = number - (thousands * 1000);
+                return thousands + "," + rest;
+            }
+            return s;
+        }catch (NullPointerException | NumberFormatException e){
+            return s;
+        }
     }
 
     private HashMap<String, String> listToHashMap(ArrayList<Property> properties) {

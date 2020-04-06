@@ -66,7 +66,7 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.ViewHolder
             viewHolder.removeBtn.setColorFilter(viewHolder.itemView.getContext().getResources().getColor(R.color.black));
         }
 
-        viewHolder.setListeners(viewHolder);
+        viewHolder.setListeners();
     }
 
     @Override
@@ -112,26 +112,26 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.ViewHolder
         public void onItemClear() {
             try {
                 notifyDataSetChanged();
-            }catch (IllegalStateException e){
-
-            }
+            }catch (IllegalStateException ignored){}
         }
 
-        public void setListeners(@NonNull ViewHolder viewHolder) {
-            viewHolder.removeBtn.setOnClickListener(new View.OnClickListener() {
+        private void setListeners() {
+            removeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onRemoveWorker(WorkerAdapter.this.list.get(getAdapterPosition()));
-                    WorkerAdapter.this.list.remove(getAdapterPosition());
-                    if (getAdapterPosition() == 0) {
-                        notifyDataSetChanged();
-                    } else {
-                        notifyItemRemoved(getAdapterPosition());
+                    if (getAdapterPosition() != -1) {
+                        listener.onRemoveWorker(WorkerAdapter.this.list.get(getAdapterPosition()));
+                        WorkerAdapter.this.list.remove(getAdapterPosition());
+                        if (getAdapterPosition() == 0) {
+                            notifyDataSetChanged();
+                        } else {
+                            notifyItemRemoved(getAdapterPosition());
+                        }
                     }
                 }
             });
 
-            viewHolder.itemView.setOnTouchListener(new View.OnTouchListener() {
+            itemView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
