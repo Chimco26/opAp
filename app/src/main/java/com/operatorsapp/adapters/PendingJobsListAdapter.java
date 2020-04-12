@@ -14,12 +14,16 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.Pendi
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
 import com.operatorsapp.R;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsListAdapter.ViewHolder> {
 
     private static final String PRODUCT_IMAGE_PATH = "productimagepath";
+    private static final String ID_NAME = "ID";
+    private static final String ERP_JOB_ID_NAME = "ERPJobID";
     private final Context mContext;
     private final ArrayList<PendingJob> mPandingjobs;
     private final String[] mOrderedHederasKey;
@@ -68,26 +72,27 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
         });
     }
 
-    private void setImageOrText(HashMap<String, String> propertiesHashMap, int i, ImageView m1Img, TextView m1Tv) {
+    private void setImageOrText(HashMap<String, String> propertiesHashMap, int i, ImageView imageView, TextView textView) {
         if (mOrderedHederasKey[i] != null && mOrderedHederasKey[i].toLowerCase().equals(PRODUCT_IMAGE_PATH)) {
-            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[i]), m1Img);
-            m1Tv.setText("");
-        } else {
-            ImageLoader.getInstance().displayImage("", m1Img);
-            m1Tv.setText(getText(propertiesHashMap.get(mOrderedHederasKey[i])));
+            ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[i]), imageView);
+            textView.setText("");
+        } else if(mOrderedHederasKey[i] != null){
+            ImageLoader.getInstance().displayImage("", imageView);
+            if (mOrderedHederasKey[i].equals(ID_NAME) || mOrderedHederasKey[i].equals(ERP_JOB_ID_NAME)) {
+                textView.setText(propertiesHashMap.get(mOrderedHederasKey[i]));
+            }else {
+                textView.setText(getText(propertiesHashMap.get(mOrderedHederasKey[i])));
+            }
+        }else {
+            ImageLoader.getInstance().displayImage("", imageView);
+            textView.setText("");
         }
     }
 
     private String getText(String s){
         try {
-            float number = 0;
-            number = Float.parseFloat(s);
-            if (number >= 1000){
-                int thousands = (int) (number / 1000);
-                float rest = number - (thousands * 1000);
-                return thousands + "," + rest;
-            }
-            return s;
+            int number = (int)Float.parseFloat(s);
+            return NumberFormat.getNumberInstance(Locale.getDefault()).format(number);
         }catch (NullPointerException | NumberFormatException e){
             return s;
         }
