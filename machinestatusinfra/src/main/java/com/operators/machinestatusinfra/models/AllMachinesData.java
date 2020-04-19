@@ -14,6 +14,8 @@ public class AllMachinesData {
     private String currentProductEname;
     @SerializedName("CurrentProductID")
     private int currentProductID;
+    @SerializedName("CurrentCatalogID")
+    private String currentCatalogID;
     @SerializedName("CurrentProductName")
     private String currentProductName;
     @SerializedName("CurrentValue")
@@ -155,6 +157,10 @@ public class AllMachinesData {
         } else {
             return false;
         }
+    }
+
+    public String getCurrentCatalogID() {
+        return currentCatalogID;
     }
 
     public Integer getmAutoActivateNextJobTimerSec() {

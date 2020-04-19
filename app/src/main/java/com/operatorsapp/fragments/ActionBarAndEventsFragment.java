@@ -3047,7 +3047,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (nameByLang.length() > 31) {
             nameByLang = nameByLang.substring(0, 31);
         }
-        mProductNameTextView.setText(new StringBuilder(nameByLang).append(",").append(" ID - ").append(String.valueOf(machinesData.getCurrentProductID())));
+        String id = machinesData.getCurrentCatalogID();
+        if (id == null || id.isEmpty()){
+            id = String.valueOf(machinesData.getCurrentProductID());
+        }
+        mProductNameTextView.setText(new StringBuilder(nameByLang).append(",").append(" ID - ").append(id));
         mJobIdTextView.setText((String.valueOf(machinesData.getCurrentJobName())));
         mShiftIdTextView.setText(String.valueOf(machinesData.getShiftIDString()));
         String machineName = OperatorApplication.isEnglishLang() ? machinesData.getMachineEName() : machinesData.getMachineLname();
