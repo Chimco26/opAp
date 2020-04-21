@@ -137,33 +137,24 @@
 
 
     <array name="jobs_spinner_array">
-        <item>Activate Job</item>
-        <item>Add Rejects</item>
-        <item>Change Units In Cycle</item>
-        <item>Report Production</item>
+        <item>Aktiválja a munkát</item>
+        <item>Elutasítás hozzáadása</item>
+        <item>Egységek módosítása ciklusban</item>
+        <item>Jelentés készítése</item>
         <item>Teszt rendelése</item>
-    </array>
-
-    <array name="shiftlog_spinner_items">
-
-        <item>All Events</item>
-        <item>Alarms</item>
-        <item>All Stops</item>
-        <item>Uncategorized Stops</item>
-
     </array>
 
     <string name="approve_first_item">Beállítás befejezése</string>
 
     <plurals name="days">
-        <item quantity="one">%d Day</item>
-        <item quantity="other">%d Days</item>
+        <item quantity="one">%d Nap</item>
+        <item quantity="other">%d Nap</item>
     </plurals>
 
     <plurals name="hours">
-        <item quantity="zero">Hour</item>
-        <item quantity="one">Hour</item>
-        <item quantity="other">Hours</item>
+        <item quantity="zero">Óra</item>
+        <item quantity="one">Óra</item>
+        <item quantity="other">Órák</item>
     </plurals>
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="welcome">Üdvözöljük</string>
@@ -385,13 +376,6 @@
     <string name="type_something">Gépelj valamit</string>
     <string name="service_calls_distribution">Szolgáltatáshívások terjesztése</string>
     <string name="shift_report">Shift jelentés</string>
-
-    <string-array name="color_array">
-        <item>#954b7d</item>
-        <item>#ff6b6b</item>
-        <item>#5aca96</item>
-        <item>#599abe</item>
-    </string-array >
 
     <string name="cycle_time">Ciklusidő</string>
     <string name="you_have">Rendelkezésre áll:</string>
