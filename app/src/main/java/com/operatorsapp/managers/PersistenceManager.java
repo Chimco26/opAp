@@ -112,6 +112,9 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String TASKS_FILTER_PERIOD_TO_SHOW = "TASKS_FILTER_PERIOD_TO_SHOW_";
     private static final String TASK_ORDER_BY_ASC = "TASK_ORDER_BY_ASC";
     private static final String PREFS_OPERATOR_DB_ID = "PREFS_OPERATOR_DB_ID";
+    private static final String SHIFT_GRAPH_CUSTOM_Y = "SHIFT_GRAPH_CUSTOM_Y";
+    private static final String SHIFT_GRAPH_CUSTOM_Y_MIN = "SHIFT_GRAPH_CUSTOM_Y_MIN";
+    private static final String SHIFT_GRAPH_CUSTOM_Y_MAX = "SHIFT_GRAPH_CUSTOM_Y_MAX";
 
 
     private static PersistenceManager msInstance;
@@ -222,12 +225,12 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     public void setOperatorId(String operatorId) {
         SecurePreferences.getInstance().setString(PREF_OPERATOR_ID, operatorId);
     }
-    
-    public void setOperatorDBId(int operatorDbId){
+
+    public void setOperatorDBId(int operatorDbId) {
         SecurePreferences.getInstance().setInt(PREFS_OPERATOR_DB_ID, operatorDbId);
     }
 
-    public int getOperatorDBId(){
+    public int getOperatorDBId() {
         return SecurePreferences.getInstance().getInt(PREFS_OPERATOR_DB_ID);
     }
 
@@ -890,7 +893,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     }
 
     public ArrayList<SelectableString> getTasksOrderBy() {
-        Type listType = new TypeToken<ArrayList<SelectableString>>() {}.getType();
+        Type listType = new TypeToken<ArrayList<SelectableString>>() {
+        }.getType();
         ArrayList<SelectableString> list = mGson.fromJson(SecurePreferences.getInstance().getString(TASKS_ORDER_BY), listType);
         list = initSelectableList(list, 0, 4);
         return list;
@@ -939,8 +943,31 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     }
 
     public boolean getTasksOrderByAsc() {
-        return SecurePreferences.getInstance().getBoolean(TASK_ORDER_BY_ASC, false
-        );
+        return SecurePreferences.getInstance().getBoolean(TASK_ORDER_BY_ASC, false);
+    }
+
+    public void setShiftCustomY(boolean isCustom) {
+        SecurePreferences.getInstance().setBoolean(SHIFT_GRAPH_CUSTOM_Y, isCustom);
+    }
+
+    public boolean isShiftCustomY() {
+        return SecurePreferences.getInstance().getBoolean(SHIFT_GRAPH_CUSTOM_Y, false);
+    }
+
+    public void setShiftGraphMinY(float min) {
+        SecurePreferences.getInstance().setFloat(SHIFT_GRAPH_CUSTOM_Y_MIN, min);
+    }
+
+    public float getShiftGraphMinY() {
+        return SecurePreferences.getInstance().getFloat(SHIFT_GRAPH_CUSTOM_Y_MIN);
+    }
+
+    public void setShiftGraphMaxY(float max) {
+        SecurePreferences.getInstance().setFloat(SHIFT_GRAPH_CUSTOM_Y_MAX, max);
+    }
+
+    public float getShiftGraphMaxY() {
+        return SecurePreferences.getInstance().getFloat(SHIFT_GRAPH_CUSTOM_Y_MAX);
     }
 
 }
