@@ -48,6 +48,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.adapters.CheckBoxFilterAdapter;
 import com.operatorsapp.adapters.TopFiveAdapter;
 import com.operatorsapp.application.OperatorApplication;
+import com.operatorsapp.dialogs.ShiftGraphYAxisValueSetterDialog;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.managers.PersistenceManager;
@@ -168,6 +169,17 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     private void initCycleTimeVars(View view) {
         mCycleTime = view.findViewById(R.id.FRS_cycle_time_view).findViewById(R.id.CTV_cycle_time_chart);
         mGraphRv = view.findViewById(R.id.FRS_cycle_time_view).findViewById(R.id.CTV_filter_rv);
+        view.findViewById(R.id.FRS_cycle_time_view).findViewById(R.id.CTV_custom_y_axis_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new ShiftGraphYAxisValueSetterDialog(new ShiftGraphYAxisValueSetterDialog.ShiftGraphYAxisValueSetterDialogListener() {
+                    @Override
+                    public void onSaveYAxisValues() {
+                        setGraphData(mSelectableStrings, mGraphs);
+                    }
+                }).showDialog(getActivity()).show();
+            }
+        });
     }
 
     private void initGraphFilterRv(final ArrayList<Graph> graphs, final ArrayList<SelectableString> selectableStrings) {
@@ -405,6 +417,11 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         setXAxisStyle(graph);
         setYAxisStyle(graph);
         graph.getAxisLeft().removeAllLimitLines();
+        PersistenceManager persistenceManager = PersistenceManager.getInstance();
+        if (persistenceManager.isShiftCustomY()) {
+            graph.getAxisLeft().setAxisMinimum(persistenceManager.getShiftGraphMinY());
+            graph.getAxisLeft().setAxisMaximum(persistenceManager.getShiftGraphMaxY());
+        }
         if (showLimits) {
             for (FloatCouple floatcouple : limits) {
                 setLimitLine(graph, floatcouple.a, floatcouple.b);

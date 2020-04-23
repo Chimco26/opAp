@@ -16,7 +16,7 @@
     <!--android:spinnerMode="dropdown"-->
     <!--/>-->
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:orientation="horizontal">
@@ -42,12 +42,21 @@
             android:layoutDirection="ltr"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_toEndOf="@+id/CTV_tv"
             android:orientation="horizontal"
             android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="30dp"
             android:fadeScrollbars="false"
             android:scrollbars="horizontal"/>
-    </LinearLayout>
+
+        <ImageView
+            android:id="@+id/CTV_custom_y_axis_btn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_format_line_spacing_black_24dp"/>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
