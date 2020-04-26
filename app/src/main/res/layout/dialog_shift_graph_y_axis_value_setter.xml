@@ -57,7 +57,7 @@
             android:maxLines="1"
             android:textColor="@color/blue1"
             android:textSize="25sp"
-            android:text="@string/min"/>
+            android:text="@string/chart_min_"/>
 
         <TextView
             android:id="@+id/max"
@@ -69,7 +69,7 @@
             android:maxLines="1"
             android:textColor="@color/blue1"
             android:textSize="25sp"
-            android:text="@string/max"/>
+            android:text="@string/chart_max_"/>
 
         <EditText
             android:id="@+id/SGY_min_et"
@@ -80,7 +80,7 @@
             android:layout_alignTop="@+id/min"
             android:layout_toEndOf="@+id/min"
             android:textSize="25sp"
-            android:inputType="numberDecimal"/>
+            android:inputType="numberDecimal|numberSigned"/>
 
         <EditText
             android:id="@+id/SGY_max_et"
@@ -91,7 +91,7 @@
             android:layout_alignTop="@+id/max"
             android:layout_toEndOf="@+id/max"
             android:textSize="25sp"
-            android:inputType="numberDecimal"/>
+            android:inputType="numberDecimal|numberSigned"/>
 
 
 

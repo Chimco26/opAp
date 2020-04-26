@@ -421,6 +421,9 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         if (persistenceManager.isShiftCustomY()) {
             graph.getAxisLeft().setAxisMinimum(persistenceManager.getShiftGraphMinY());
             graph.getAxisLeft().setAxisMaximum(persistenceManager.getShiftGraphMaxY());
+        }else {
+            graph.getAxisLeft().resetAxisMinimum();
+            graph.getAxisLeft().resetAxisMaximum();
         }
         if (showLimits) {
             for (FloatCouple floatcouple : limits) {

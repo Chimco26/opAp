@@ -3041,7 +3041,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (machineStatus == null) {
             return;
         }
-        mToolBarTaskCount.setText(String.valueOf(machineStatus.getTaskCountTotal()));
+        int count = machineStatus.getTaskCountTotal();
+        if (count > 0) {
+            mToolBarTaskCount.setVisibility(View.VISIBLE);
+            mToolBarTaskCount.setText(String.valueOf(count));
+        }else {
+            mToolBarTaskCount.setVisibility(View.INVISIBLE);
+        }
         AllMachinesData machinesData = machineStatus.getAllMachinesData().get(0);
         String nameByLang = OperatorApplication.isEnglishLang() ? machinesData.getCurrentProductEname() : machinesData.getCurrentProductName();
         if (nameByLang.length() > 31) {
