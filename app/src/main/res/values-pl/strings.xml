@@ -420,7 +420,7 @@
     <string name="save">Zapisz zmiany</string>
     <string name="shift_log_standard">Wg normy</string>
     <string name="you_cant_add_more_workers_than">nie możesz dodać więcej pracowników niż</string>
-    <string name="install_activity_not_found">nie_wykryto_procesu_instalacji</string>
+    <string name="install_activity_not_found">Nie można znaleźć aplikacji instalacyjnej, spróbuj ponownie zainstalować „Sklep Google Play”</string>
     <string name="add_new_task">Dodaj nowe zadanie</string>
     <string name="todo">Do wykonania</string>
     <string name="in_progress">W toku</string>
@@ -458,4 +458,7 @@
     <string name="task_id">Ident. zadania</string>
     <string name="test_details">Dane testu</string>
     <string name="execution_time_frame">Przedział czasowy realizacji</string>
+    <string name="activate_custom_y_axis_values">Aktywuj własne wartości osi Y</string>
+    <string name="max_value_must_be_greater_than_min">Maks. wartość musi być większa niż min. wartość</string>
+    <string name="stop_logs">Zatrzymaj dziennik zdarzeń</string>
 </resources>

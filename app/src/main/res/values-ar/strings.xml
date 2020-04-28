@@ -451,7 +451,7 @@
     <string name="view_log">عرض السجل</string>
     <string name="save_and_close">حفظ وإغلاق</string>
     <string name="default_unanswered_technocian_call">في انتظارالتقني للرد</string>
-    <string name="install_activity_not_found">install_activity_not_found</string>
+    <string name="install_activity_not_found">تعذر العثور على تطبيق التثبيت ، حاول إعادة تثبيت \"متجر Google Play\"</string>
     <string name="add_new_task">أضف مهمة جديدة</string>
     <string name="todo">قائمة المهام</string>
     <string name="in_progress">قيد التشغيل</string>
@@ -490,4 +490,6 @@
     <string name="test_details">بيانات الاختبار</string>
     <string name="execution_time_frame">الإطار الزمني للتنفيذ</string>
     <string name="you_cant_add_more_workers_than">لا يمكنك إضافة عمال أكثر من</string>
+    <string name="activate_custom_y_axis_values">تنشيط قيم المحور ص المخصصة</string>
+    <string name="max_value_must_be_greater_than_min">القيمة القصوى يجب أن تكون أعلى من القيمة الدنيا</string>
 </resources>

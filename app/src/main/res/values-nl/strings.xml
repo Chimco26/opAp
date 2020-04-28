@@ -457,7 +457,7 @@
     <string name="view_log">Logboek inzien</string>
     <string name="save_and_close">Opslaan en sluiten</string>
     <string name="default_unanswered_technocian_call">Wachtend op antwoord technicus</string>
-    <string name="install_activity_not_found">install_activity_not_found</string>
+    <string name="install_activity_not_found">Kan de installatietoepassing niet vinden, probeer \'Google Play Store\' opnieuw te installeren</string>
     <string name="add_new_task">Nieuw taak toevoegen</string>
     <string name="todo">To-do</string>
     <string name="in_progress">In behandeling</string>
@@ -496,4 +496,6 @@
     <string name="test_details">Testdetails</string>
     <string name="execution_time_frame">Tijdsbestek voor uitvoer</string>
     <string name="you_cant_add_more_workers_than">u kunt niet meer arbeiders toevoegen dan</string>
+    <string name="activate_custom_y_axis_values">Activeer aangepaste Y-aswaarden</string>
+    <string name="max_value_must_be_greater_than_min">Max. waarde moet groter zijn dan min. waarde</string>
 </resources>
