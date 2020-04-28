@@ -439,7 +439,7 @@
     <string name="you_cant_add_more_workers_than">nem adhat hozzá több dolgozót, mint</string>
     <string name="save_and_close">Mentés és bezárás</string>
     <string name="default_unanswered_technocian_call">Várakozás a technikus válaszára</string>
-    <string name="install_activity_not_found">telepítés_tevékenység_nem található</string>
+    <string name="install_activity_not_found">Nem található a telepítő alkalmazás, próbálja meg újratelepíteni a \"Google Play Áruház\"</string>
     <string name="add_new_task">Új feladat hozzáadása</string>
     <string name="todo">Teendő</string>
     <string name="in_progress">Folyamatban</string>
@@ -477,4 +477,6 @@
     <string name="task_id">Feladat azonosító</string>
     <string name="test_details">Teszt részletei</string>
     <string name="execution_time_frame">Végrehajtás időkerete</string>
+    <string name="activate_custom_y_axis_values">Egyedi Y tengely értékek aktiválása</string>
+    <string name="max_value_must_be_greater_than_min">A max. értéknek nagyobbnak kell lennie a min. értéknél</string>
 </resources>

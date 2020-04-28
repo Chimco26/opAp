@@ -451,7 +451,7 @@
     <string name="you_cant_add_more_workers_than">vous ne pouvez pas ajouter plus d\'ouvriers que</string>
     <string name="save_and_close">Enregistrer et fermer</string>
     <string name="default_unanswered_technocian_call">En attente de la réponse du technicien</string>
-    <string name="install_activity_not_found">activité_install_introuvable</string>
+    <string name="install_activity_not_found">Impossible de trouver l\'application d\'installation, essayez de réinstaller \"Google Play Store\"</string>
     <string name="add_new_task">Ajouter une tâche</string>
     <string name="todo">À faire</string>
     <string name="in_progress">En cours</string>
@@ -489,4 +489,6 @@
     <string name="task_id">ID Tâche</string>
     <string name="test_details">Détails du test</string>
     <string name="execution_time_frame">Délai d\'exécution</string>
+    <string name="activate_custom_y_axis_values">Activer les valeurs personnalisées de l\'axe Y</string>
+    <string name="max_value_must_be_greater_than_min">La valeur maximale doit être supérieure à la valeur minimale</string>
 </resources>

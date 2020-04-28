@@ -445,7 +445,7 @@
     <string name="view_log">Переглянути журнал</string>
     <string name="save_and_close">Зберегти і закрити</string>
     <string name="default_unanswered_technocian_call">Очікується на відповідь техніка</string>
-    <string name="install_activity_not_found">не_знайдено_активність_встановлення</string>
+    <string name="install_activity_not_found">Не вдалося знайти інсталяційну програму, спробуйте перевстановити \"Google Play Store\"</string>
     <string name="add_new_task">Додати нове завдання</string>
     <string name="todo">Зробити</string>
     <string name="in_progress">В процесі</string>
@@ -484,4 +484,7 @@
     <string name="test_details">Деталі тесту</string>
     <string name="execution_time_frame">Часові рамки для виконання</string>
     <string name="you_cant_add_more_workers_than">Ви не можете додати більше працівників, ніж</string>
+    <string name="activate_custom_y_axis_values">Активуйте користувацькі значення осі Y</string>
+    <string name="max_value_must_be_greater_than_min">Максимальне значення повинно бути більше мінімального значення</string>
+    <string name="powered_by_leadermes">Працює на Matics</string>
 </resources>
