@@ -2,17 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="350dp"
     android:layout_height="450dp"
-    android:padding="1px"
     android:layout_margin="8dp"
-    android:background="@android:color/darker_gray">
+    android:background="@android:color/darker_gray"
+    android:padding="1px">
 
-    <androidx.appcompat.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/template_dialog_rv"
-        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-    </androidx.appcompat.widget.RecyclerView>
-
+        android:layout_height="match_parent"
+        android:background="@color/white" />
 
 </RelativeLayout>

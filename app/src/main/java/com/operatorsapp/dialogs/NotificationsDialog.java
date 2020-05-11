@@ -123,6 +123,7 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
             @Override
             public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
                 ProgressDialogManager.dismiss();
+                mListener.onGetNotificationTemplateError(t.getMessage());
             }
         });
     }
@@ -177,5 +178,6 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
         void onSendNewNotification(String text);
         void onNotificationResponse(int notificationId, int responseType);
         void onGetNotificationsFromServer(boolean openNotificationDialog);
+        void onGetNotificationTemplateError(String message);
     }
 }
