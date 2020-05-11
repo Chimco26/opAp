@@ -41,6 +41,8 @@ public class ClearData {
         PersistenceManager.getInstance().setCurrentLang(tmpLanguage);
         PersistenceManager.getInstance().setCurrentLanguageName(tmpLanguageName);
 
+        PersistenceManager.getInstance().setMachineId(-1);
+
     }
 
     public static void clearMachineData(){
