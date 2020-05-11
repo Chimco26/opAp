@@ -1508,7 +1508,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (permissionResponseHashmap != null) {
             displayViewByServerSettings(permissionResponseHashmap);
         }
-        if (PersistenceManager.getInstance().getMachineId() == -1){
+        if (PersistenceManager.getInstance().getMachineId() == -1) {
             mListener.onActionBarAndEventsFragmentCreated();
         }
     }
@@ -1977,6 +1977,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             public void onGetNotificationsFromServer(boolean openNotificationDialog) {
                 getNotificationsFromServer(openNotificationDialog);
             }
+
+            @Override
+            public void onGetNotificationTemplateError(String message) {
+                ShowCrouton.showSimpleCrouton(mCroutonCallback, message, CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+            }
         });
 
         mPopUpDialog.setCanceledOnTouchOutside(true);
@@ -1989,7 +1994,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         int machineId = PersistenceManager.getInstance().getMachineId();
         String sessionId = PersistenceManager.getInstance().getSessionId();
         String title = "notification from opapp";
-        SendNotificationRequest request = new SendNotificationRequest(machineId, text, title, sessionId);
+        final SendNotificationRequest request = new SendNotificationRequest(machineId, text, title, sessionId);
         ProgressDialogManager.show(getActivity());
 
         NetworkManager.getInstance().postSendNotification(request, new Callback<NotificationHistoryResponse>() {
@@ -1999,13 +2004,23 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 if (mPopUpDialog != null && mPopUpDialog.isShowing()) {
                     mPopUpDialog.dismiss();
                 }
-                PersistenceManager.getInstance().setSelfNotificationsId(response.body().getLeaderRecordID() + "");
-                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.SEND_NOTIFICATION, true, "Send New Notification");
+                if (response.body() != null && response.body().getError().getErrorDesc() == null) {
+                    PersistenceManager.getInstance().setSelfNotificationsId(response.body().getLeaderRecordID() + "");
+                    new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.SEND_NOTIFICATION, true, "Send New Notification");
+                } else {
+                    if (response.body() != null) {
+                        onFailure(call, new Throwable(response.body().getError().getErrorDesc()));
+                    }else {
+                        ShowCrouton.showSimpleCrouton(mCroutonCallback, getString(R.string.credentials_error), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+                    }
+                }
+
             }
 
             @Override
             public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
                 ProgressDialogManager.dismiss();
+                ShowCrouton.showSimpleCrouton(mCroutonCallback, t.getMessage(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.SEND_NOTIFICATION, false, "Send New Notification");
             }
         });
@@ -2061,18 +2076,22 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 @Override
                 public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
 
-                    new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.RESPOND_TO_NOTIFICATION, true, "Respond to Notification- ID: " + notification[0].getmNotificationID());
+                    if (response.body() != null && response.body().getError().getErrorDesc() != null) {
+                        onFailure(call, new Throwable(response.body().getError().getErrorDesc()));
+                    } else {
+                        new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.RESPOND_TO_NOTIFICATION, true, "Respond to Notification- ID: " + notification[0].getmNotificationID());
 
-                    ArrayList<Notification> nList = pm.getNotificationHistory();
-                    notification[0].setmResponseType(responseType);
-                    nList.add(notification[0]);
-                    pm.setNotificationHistory(nList);
+                        ArrayList<Notification> nList = pm.getNotificationHistory();
+                        notification[0].setmResponseType(responseType);
+                        nList.add(notification[0]);
+                        pm.setNotificationHistory(nList);
 //                    setNotificationNeedResponse();
-                    if (isRefresh) {
-                        openNotificationsList();
-                    }
-                    if (ProgressDialogManager.isShowing()) {
-                        ProgressDialogManager.dismiss();
+                        if (isRefresh) {
+                            openNotificationsList();
+                        }
+                        if (ProgressDialogManager.isShowing()) {
+                            ProgressDialogManager.dismiss();
+                        }
                     }
                 }
 
@@ -2082,6 +2101,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (ProgressDialogManager.isShowing()) {
                         ProgressDialogManager.dismiss();
                     }
+                    ShowCrouton.showSimpleCrouton(mCroutonCallback, t.getMessage(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                 }
             });
         }
@@ -3045,7 +3065,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (count > 0) {
             mToolBarTaskCount.setVisibility(View.VISIBLE);
             mToolBarTaskCount.setText(String.valueOf(count));
-        }else {
+        } else {
             mToolBarTaskCount.setVisibility(View.INVISIBLE);
         }
         AllMachinesData machinesData = machineStatus.getAllMachinesData().get(0);
@@ -3054,7 +3074,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             nameByLang = nameByLang.substring(0, 31);
         }
         String id = machinesData.getCurrentCatalogID();
-        if (id == null || id.isEmpty()){
+        if (id == null || id.isEmpty()) {
             id = String.valueOf(machinesData.getCurrentProductID());
         }
         mProductNameTextView.setText(new StringBuilder(nameByLang).append(",").append(" ID - ").append(id));
@@ -3462,7 +3482,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
 
-                if (response != null && response.body() != null && response.body().getError().getErrorDesc() == null) {
+                if (response.body() != null && response.body().getError().getErrorDesc() == null) {
 
                     // TODO: 28/03/2019 update tech list for new calls
                     ArrayList<TechCallInfo> techList = PersistenceManager.getInstance().getCalledTechnician();
@@ -3508,6 +3528,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 } else {
                     PersistenceManager.getInstance().setNotificationHistory(null);
+                    if (response.body() != null) {
+                        onFailure(call, new Throwable(response.body().getError().getErrorDesc()));
+                    } else {
+                        ShowCrouton.showSimpleCrouton(mCroutonCallback, getString(R.string.credentials_error), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+                    }
                 }
 
 //                setNotificationNeedResponse();
@@ -3518,8 +3543,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
 
-                PersistenceManager.getInstance().setNotificationHistory(null);
-
+                ShowCrouton.showSimpleCrouton(mCroutonCallback, t.getMessage(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
             }
         });
 
