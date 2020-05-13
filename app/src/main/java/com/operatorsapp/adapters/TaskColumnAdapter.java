@@ -75,7 +75,7 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
         holder.mText.setText(mListFiltered.get(position).getText());
         String assignee = mListFiltered.get(position).getAssigneeDisplayHName();
         holder.mAssignee.setText(assignee);
-        holder.mAssigneeTitle.setText(String.format("%s:", holder.mAssigneeTitle.getText()));
+        holder.mAssigneeTitle.setText(String.format("%s:", R.string.assign_to));
         int visibility = (assignee == null || assignee.isEmpty()) ? View.INVISIBLE : View.VISIBLE;
         holder.mAssignee.setVisibility(visibility);
         holder.mAssigneeTitle.setVisibility(visibility);
