@@ -542,4 +542,5 @@
     <string name="execution_time_frame">Execution Time Frame</string>
     <string name="activate_custom_y_axis_values">Activate custom Y Axis values</string>
     <string name="max_value_must_be_greater_than_min">Max value must be greater than min value</string>
+    <string name="source">Source</string>
 </resources>
