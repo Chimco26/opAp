@@ -16,6 +16,7 @@ import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSpl
 import com.operatorsapp.R;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.ViewHolder> {
 
@@ -60,8 +61,9 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
 
         initSplits(viewHolder, position);
 
-        viewHolder.mTitle.setText(mChannelSplits.get(position).getlName());
-
+        viewHolder.mTitle.setText(String.format(Locale.getDefault(),
+                "%s - %d", viewHolder.itemView.getContext().getResources()
+                .getString(R.string.source), mChannelSplits.get(position).getSplitNumber()));
 
         if (mChannelSplits.get(position).getBaseSplits() != null && mChannelSplits.get(position).getBaseSplits().size() > 0) {
 
