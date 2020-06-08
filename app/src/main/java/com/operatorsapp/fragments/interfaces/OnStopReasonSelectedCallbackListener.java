@@ -1,9 +1,9 @@
 package com.operatorsapp.fragments.interfaces;
 
-import com.operators.reportfieldsformachineinfra.SubReasons;
+import com.operatorsapp.server.responses.StopReasonsGroup;
 
 public interface OnStopReasonSelectedCallbackListener {
     void onStopReasonSelected(int position);
     void onUpdateStopReasonSelected(int position);
-    void onSubReasonSelected(SubReasons subReasons);
+    void onSubReasonSelected(StopReasonsGroup subReasons);
 }

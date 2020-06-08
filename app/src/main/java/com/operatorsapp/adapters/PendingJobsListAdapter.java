@@ -91,7 +91,10 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
 
     private String getText(String s){
         try {
-            int number = (int)Float.parseFloat(s);
+            if (s.endsWith(".0")){
+                s = s.substring(0, s.length()-2);
+            }
+            double number = Double.parseDouble(s);
             return NumberFormat.getNumberInstance(Locale.getDefault()).format(number);
         }catch (NullPointerException | NumberFormatException e){
             return s;

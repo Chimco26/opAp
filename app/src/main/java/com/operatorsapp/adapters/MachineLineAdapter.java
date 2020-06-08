@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ public class MachineLineAdapter extends RecyclerView.Adapter<MachineLineAdapter.
     public void onBindViewHolder(@NonNull final MachineLineAdapter.ViewHolder viewHolder, final int position) {
 
         viewHolder.mTitle.setText(mMachineLineItems.get(position).getMachineName());
+        viewHolder.mRootStop.setVisibility(mMachineLineItems.get(position).isRootStop() ? View.VISIBLE : View.GONE);
 
         viewHolder.mTextBckgrnd.setBackgroundColor(Color.parseColor(mMachineLineItems.get(position).getStatusColor()));
         viewHolder.mBarView.setBackgroundColor(Color.parseColor(mMachineLineItems.get(position).getStatusColor()));
@@ -85,6 +87,7 @@ public class MachineLineAdapter extends RecyclerView.Adapter<MachineLineAdapter.
         private final View mTextBckgrnd;
         private final ImageView mArrowDown;
         private final ImageView mArrowUp;
+        private final FrameLayout mRootStop;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -94,6 +97,7 @@ public class MachineLineAdapter extends RecyclerView.Adapter<MachineLineAdapter.
             mArrowDown = itemView.findViewById(R.id.ILM_arrow_down);
             mArrowUp = itemView.findViewById(R.id.ILM_arrow_up);
             mTitle = itemView.findViewById(R.id.ILM_tv);
+            mRootStop = itemView.findViewById(R.id.ILM_root_stop_fl);
         }
 
     }

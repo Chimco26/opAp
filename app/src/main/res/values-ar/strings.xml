@@ -492,4 +492,6 @@
     <string name="you_cant_add_more_workers_than">لا يمكنك إضافة عمال أكثر من</string>
     <string name="activate_custom_y_axis_values">تنشيط قيم المحور ص المخصصة</string>
     <string name="max_value_must_be_greater_than_min">القيمة القصوى يجب أن تكون أعلى من القيمة الدنيا</string>
+    <string name="start_service">بدء العمل على نداء الخدمه</string>
+    <string name="finish_service">انهاء العمل على نداء الخدمه</string>
 </resources>

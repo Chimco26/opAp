@@ -58,6 +58,8 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
                         }
                         MachineStatus machineStatus = response.body().getMachineStatus();
                         machineStatus.setTaskCountObject(response.body().getTaskCountObject());
+                        machineStatus.setAllowReportingOnSetupEvents(response.body().isAllowReportingOnSetupEvents());
+                        machineStatus.setAllowReportingSetupAfterSetupEnd(response.body().ismAllowReportingSetupAfterSetupEnd());
                         getMachineStatusCallback.onGetMachineStatusSucceeded(machineStatus);
                     }
                     else

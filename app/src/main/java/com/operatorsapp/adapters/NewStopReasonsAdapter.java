@@ -17,6 +17,7 @@ import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListener;
+import com.operatorsapp.server.responses.StopReasonsGroup;
 import com.operatorsapp.utils.ReasonImage;
 import com.operatorsapp.utils.ReasonImageLenox;
 
@@ -29,12 +30,12 @@ import java.util.List;
 
 public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAdapter.ViewHolder> {
 
-    private ArrayList<StopReasons> mStopItemsList;
+    private ArrayList<StopReasonsGroup> mStopItemsList;
     private Context mContext;
     private OnStopReasonSelectedCallbackListener mOnStopReasonSelectedCallbackListener;
 
-    public NewStopReasonsAdapter(Context context, List<StopReasons> stopItemsList, OnStopReasonSelectedCallbackListener onStopReasonSelectedCallbackListener) {
-        mStopItemsList = (ArrayList<StopReasons>) stopItemsList;
+    public NewStopReasonsAdapter(Context context, ArrayList<StopReasonsGroup> stopItemsList, OnStopReasonSelectedCallbackListener onStopReasonSelectedCallbackListener) {
+        mStopItemsList = stopItemsList;
         mContext = context;
         mOnStopReasonSelectedCallbackListener = onStopReasonSelectedCallbackListener;
     }
@@ -108,11 +109,11 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
     /****  Vertical Adapter  ****/
 
     private class VerticalAdapter extends RecyclerView.Adapter<VerticalAdapter.VerticalViewHolder> {
-        private final List<SubReasons> mVerticalList;
+        private final ArrayList<StopReasonsGroup> mVerticalList;
         private final int mImgId;
         private final int mGroupReasonPosition;
 
-        public VerticalAdapter(int groupReasonPosition, List<SubReasons> subReasons, int imgId) {
+        public VerticalAdapter(int groupReasonPosition, ArrayList<StopReasonsGroup> subReasons, int imgId) {
             mVerticalList = subReasons;
             mImgId = imgId;
             mGroupReasonPosition = groupReasonPosition;
@@ -132,7 +133,7 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
             String title = OperatorApplication.isEnglishLang() ? mVerticalList.get(position).getEName() : mVerticalList.get(position).getLName();
             holder.mVerticalTitle.setText(title);
 
-            int icon = mVerticalList.get(position).getEventIcon(mContext);
+            int icon = mVerticalList.get(position).getGroupIcon(mContext);
             if (icon == 0){
 //                icon = mImgId;
                 holder.mVerticalImage.setVisibility(View.INVISIBLE);
@@ -152,7 +153,7 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
 
         @Override
         public int getItemCount() {
-            return mVerticalList.size();
+            return mVerticalList == null ? 0 : mVerticalList.size();
         }
 
         public class VerticalViewHolder extends RecyclerView.ViewHolder {

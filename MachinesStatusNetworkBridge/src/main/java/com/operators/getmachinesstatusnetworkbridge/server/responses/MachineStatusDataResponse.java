@@ -21,7 +21,19 @@ public class MachineStatusDataResponse extends StandardResponse {
     private Object mMissingMachineIds;
     @SerializedName("TaskStatuscount")
     private ArrayList<TaskStatusCount> taskCountObject;
+    @SerializedName("AllowReportingOnSetupEvents")
 
+    public boolean isAllowReportingOnSetupEvents() {
+        if (getmAllMachinesData().isEmpty())
+            return false;
+        return getmAllMachinesData().get(0).isAllowReportingOnSetupEvents();
+    }
+
+    public boolean ismAllowReportingSetupAfterSetupEnd() {
+        if (getmAllMachinesData().isEmpty())
+            return false;
+        return getmAllMachinesData().get(0).isAddRejectsOnSetupEnd();
+    }
 
     public MachineStatus getMachineStatus() {
         return new MachineStatus(mDepartmentMachinePC, mDepartmentOeePee, mMissingMachineIds, mAllMachinesData);

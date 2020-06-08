@@ -43,6 +43,7 @@ import retrofit2.Response;
 
 public class TechCallDialog extends Dialog implements View.OnClickListener, TechnicianAdapter.TechItemListener {
 
+    private final boolean isManageServiceCall;
     private ArrayList<TechCallInfo> mTechList;
     private RecyclerView mRecyclerView;
     private TextView mSubtitleTv;
@@ -58,9 +59,10 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
     private View mRightTabUnderline;
     private View mLeftTabUnderline;
 
-    public TechCallDialog(@NonNull Context context, ArrayList<TechCallInfo> techList, List<Technician> techniciansList, TechDialogListener listener) {
+    public TechCallDialog(@NonNull Context context, ArrayList<TechCallInfo> techList, List<Technician> techniciansList, boolean isManageServiceCall, TechDialogListener listener) {
         super(context);
         mTechList = new ArrayList<>();
+        this.isManageServiceCall = isManageServiceCall;
         for (TechCallInfo call : techList) {
             if (call.isOpenCall()){
                 mTechList.add(call);
@@ -157,7 +159,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
 
     private void setOpenCalls(int position) {
         setRecyclerViewParams(45.0f);
-        mRecyclerView.setAdapter(new TechCallAdapter(getContext(), mTechList, new TechCallAdapter.TechCallItemListener() {
+        mRecyclerView.setAdapter(new TechCallAdapter(getContext(), mTechList, isManageServiceCall, new TechCallAdapter.TechCallItemListener() {
             @Override
             public void onRemoveCallPressed(final TechCallInfo techCallInfo) {
                 Notification notificationToRemove = null;
@@ -226,6 +228,78 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                 }else {
                     mProgressBarFl.setVisibility(View.GONE);
                 }
+            }
+
+            @Override
+            public void onManageCall(final TechCallInfo techCallInfo) {
+                mProgressBarFl.setVisibility(View.VISIBLE);
+                Notification notification = null;
+                final PersistenceManager pm = PersistenceManager.getInstance();
+                for (Notification not : pm.getNotificationHistory()) {
+                    if (not.getmNotificationID() == techCallInfo.getmNotificationId()){
+                        notification = not;
+                    }
+                }
+
+                if (notification == null) return;
+                String srcId = pm.getOperatorId();
+                if (!(srcId != null && srcId.length() > 0)){
+                    srcId = pm.getUserId() + "";
+                }
+                final RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
+                        notification.getmTitle(),
+                        notification.getmBody(getContext()),
+                        pm.getMachineId() + "",
+                        notification.getmNotificationID() + "",
+                        Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE,
+                        notification.getmNotificationType(),
+                        Consts.NOTIFICATION_RESPONSE_TARGET_TECHNICIAN,
+                        pm.getUserId() + "",
+                        pm.getOperatorName(),
+                        techCallInfo.getmName(),
+                        srcId,
+                        techCallInfo.getmTechnicianId() +"");
+
+                if (techCallInfo.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET){
+                    NetworkManager.getInstance().postResponseToNotification(request, new Callback<StandardResponse>() {
+                        @Override
+                        public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
+                        }
+                    });
+                }
+
+                if (techCallInfo.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE){
+                    request.setResponseType(Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE);
+                }else {
+                    request.setResponseType(Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE);
+                }
+
+                NetworkManager.getInstance().postResponseToNotification(request, new Callback<StandardResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+                        if (response.body() != null && response.body().getError().getErrorDesc() == null){
+
+                            techCallInfo.setmResponseType(request.getmResponseType());
+                            pm.setCalledTechnicianList(mTechList);
+                            mListener.onCleanTech();
+                            setOpenCalls(((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition());
+
+
+                        }else {
+                            onFailure(call, new Throwable());
+                        }
+                        mProgressBarFl.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
+                        mProgressBarFl.setVisibility(View.GONE);
+                    }
+                });
             }
         }));
         ((LinearLayoutManager) mRecyclerView.getLayoutManager()).scrollToPosition(position);

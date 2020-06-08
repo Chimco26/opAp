@@ -483,4 +483,6 @@
     <string name="execution_time_frame">执行时间范围</string>
     <string name="activate_custom_y_axis_values">激活自定义 Y 轴值</string>
     <string name="max_value_must_be_greater_than_min">最大值必须大于最小值</string>
+    <string name="start_service">開始服務</string>
+    <string name="finish_service">完成服務</string>
 </resources>

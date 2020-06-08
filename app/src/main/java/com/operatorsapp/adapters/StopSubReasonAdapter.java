@@ -19,20 +19,22 @@ import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnSelectedSubReasonListener;
+import com.operatorsapp.server.responses.StopReasonsGroup;
 import com.operatorsapp.utils.ReasonImageLenox;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdapter.ViewHolder> {
 
     private static final String LOG_TAG = StopSubReasonAdapter.class.getSimpleName();
-    private final StopReasons mStopReason;
-    private List<SubReasons> mSubReasonsList;
+    private final StopReasonsGroup mStopReason;
+    private ArrayList<StopReasonsGroup> mSubReasonsList;
     private Context mContext;
     private int mSelectedPosition = -1;
     private OnSelectedSubReasonListener mOnSelectedSubReasonListener;
 
-    public StopSubReasonAdapter(OnSelectedSubReasonListener onSelectedSubReasonListener, Context context, StopReasons stopReason) {
+    public StopSubReasonAdapter(OnSelectedSubReasonListener onSelectedSubReasonListener, Context context, StopReasonsGroup stopReason) {
         mSubReasonsList = stopReason.getSubReasons();
         mStopReason = stopReason;
         mContext = context;

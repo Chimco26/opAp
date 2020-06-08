@@ -15,18 +15,20 @@ import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListener;
+import com.operatorsapp.server.responses.StopReasonsGroup;
 import com.operatorsapp.utils.ReasonImage;
 import com.operatorsapp.utils.ReasonImageLenox;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.ViewHolder> {
 
-    private List<StopReasons> mStopItemsList;
+    private ArrayList<StopReasonsGroup> mStopItemsList;
     private Context mContext;
     private OnStopReasonSelectedCallbackListener mOnStopReasonSelectedCallbackListener;
 
-    public StopReasonsAdapter(Context context, List<StopReasons> stopItemsList, OnStopReasonSelectedCallbackListener onStopReasonSelectedCallbackListener) {
+    public StopReasonsAdapter(Context context, ArrayList<StopReasonsGroup> stopItemsList, OnStopReasonSelectedCallbackListener onStopReasonSelectedCallbackListener) {
         mStopItemsList = stopItemsList;
         mContext = context;
         mOnStopReasonSelectedCallbackListener = onStopReasonSelectedCallbackListener;

@@ -153,6 +153,7 @@ import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
+import com.operatorsapp.server.responses.StopReasonsGroup;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.ClearData;
 import com.operatorsapp.utils.Consts;
@@ -199,6 +200,9 @@ import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_ERP_JOB
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_JOB_ID;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_PRODUCT_NAME;
 import static com.operatorsapp.fragments.ActionBarAndEventsFragment.EXTRA_FIELD_FOR_MACHINE;
+import static com.operatorsapp.fragments.ReportStopReasonFragment.IS_REPORTING_ON_SETUP_END;
+import static com.operatorsapp.fragments.ReportStopReasonFragment.IS_REPORTING_ON_SETUP_EVENTS;
+import static com.operatorsapp.fragments.ReportStopReasonFragment.IS_SETUP_MODE;
 import static com.operatorsapp.utils.ClearData.cleanEvents;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
@@ -1846,6 +1850,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onViewLog() {
         Intent intent = new Intent(this, StopEventLogActivity.class);
         intent.putExtra(EXTRA_FIELD_FOR_MACHINE, getReportForMachine());
+        intent.putExtra(IS_REPORTING_ON_SETUP_EVENTS, mCurrentMachineStatus.isAllowReportingOnSetupEvents());
+        intent.putExtra(IS_REPORTING_ON_SETUP_END, mCurrentMachineStatus.isAllowReportingSetupAfterSetupEnd());
+        intent.putExtra(IS_SETUP_MODE, mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() == 0);
         startActivity(intent);
         ignoreFromOnPause = true;
 
@@ -2532,7 +2539,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onReport(int position, SubReasons mSelectedSubreason) {
+    public void onReport(int position, StopReasonsGroup mSelectedSubreason) {
 
     }
 
