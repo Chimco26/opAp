@@ -34,6 +34,7 @@ import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.responses.StopReasonsGroup;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.SendReportUtil;
@@ -59,10 +60,10 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     private static final float MINIMUM_VERSION_TO_NEW_API = 1.7f;
     private static final String EXTRA_VIEW_LOG_REPORT_IS_SUCCESS = "EXTRA_VIEW_LOG_REPORT_IS_SUCCESS";
 
-    private ReportFieldsForMachine mReportFieldsForMachine;
+//    private ReportFieldsForMachine mReportFieldsForMachine;
     private Integer mJoshId = 0;
 
-    private SubReasons mSelectedSubreason;
+    private StopReasonsGroup mSelectedSubreason;
     private int mSelectedReason;
 
     private RecyclerView mRecyclerView;
@@ -82,9 +83,10 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     private boolean isFromViewLog;
     private SelectStopReasonFragmentListener mListener;
     private boolean isFromViewLogRoot;
+    private StopReasonsGroup mStopReason;
 
 
-    public static SelectStopReasonFragment newInstance(int position, int joshId, int reasonId, String eName, String lName, boolean isOpen) {
+    public static SelectStopReasonFragment newInstance(int position, StopReasonsGroup stopReasonsGroup, int joshId, int reasonId, String eName, String lName, boolean isOpen) {
         SelectStopReasonFragment selectedStopReasonFragment = new SelectStopReasonFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(SELECTED_STOP_REASON_POSITION, position);
@@ -94,7 +96,12 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         bundle.putInt(REASON_ID, reasonId);
         bundle.putBoolean(IS_OPEN, isOpen);
         selectedStopReasonFragment.setArguments(bundle);
+        selectedStopReasonFragment.setStopReasons(stopReasonsGroup);
         return selectedStopReasonFragment;
+    }
+
+    private void setStopReasons(StopReasonsGroup stopReasonsGroup) {
+        mStopReason = stopReasonsGroup;
     }
 
     @Override
@@ -116,9 +123,9 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     public void onAttach(Context context) {
         super.onAttach(context);
         ReportFieldsFragmentCallbackListener reportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
-        if (reportFieldsFragmentCallbackListener != null) {
-            mReportFieldsForMachine = reportFieldsFragmentCallbackListener.getReportForMachine();
-        }
+//        if (reportFieldsFragmentCallbackListener != null) {
+//            mReportFieldsForMachine = reportFieldsFragmentCallbackListener.getReportForMachine();
+//        }
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
         if (context instanceof ShowDashboardCroutonListener) {
             mDashboardCroutonListener = (ShowDashboardCroutonListener) getActivity();
@@ -132,7 +139,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     public void onDetach() {
         super.onDetach();
 
-        mReportFieldsForMachine = null;
+//        mReportFieldsForMachine = null;
 
         mOnCroutonRequestListener = null;
     }
@@ -147,7 +154,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_select_stop_reason_new, container, false);
 
-        mSelectedReason = mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId();
+        mSelectedReason = mStopReason.getId();
         if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
             view.findViewById(R.id.powered_by_leadermess_txt).setVisibility(View.VISIBLE);
         }
@@ -196,8 +203,8 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     }
 
     private void initSubReasons() {
-        if (mReportFieldsForMachine != null) {
-            mStopReasonsAdapter = new StopSubReasonAdapter(this, getContext(), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition));
+        if (mStopReason != null) {
+            mStopReasonsAdapter = new StopSubReasonAdapter(this, getContext(), mStopReason);
             mRecyclerView.setAdapter(mStopReasonsAdapter);
         }
     }
@@ -227,7 +234,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     }
 
     @Override
-    public void onSubReasonSelected(SubReasons subReason) {
+    public void onSubReasonSelected(StopReasonsGroup subReason) {
 
         if (mSelectedEvents != null && mSelectedEvents.size() > 0) {
 
@@ -313,7 +320,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
                     Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
                     //Analytics
                     new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.STOP_REASON_REPORT, true,
-                            "Stop Reason: " + mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName() + ", Subreason: " + mSelectedSubreason.getEName());
+                            "Stop Reason: " + mStopReason.getEName() + ", Subreason: " + mSelectedSubreason.getEName());
                 } catch (NullPointerException e) {
 
                 }
@@ -434,6 +441,6 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     public interface SelectStopReasonFragmentListener {
         void onSuccess(StandardResponse standardResponse);
 
-        void onReport(int mSelectedPosition, SubReasons mSelectedSubreason);
+        void onReport(int mSelectedPosition, StopReasonsGroup mSelectedSubreason);
     }
 }

@@ -32,6 +32,9 @@ public class MachinesLineDetail {
     @SerializedName("MachineStatusColor")
     @Expose
     private String statusColor;
+    @SerializedName("RootStop")
+    @Expose
+    private boolean rootStop;
 
     public Integer getCurrentStatusTimeMin() {
         return currentStatusTimeMin;
@@ -101,5 +104,9 @@ public class MachinesLineDetail {
         if (statusColor != null && !statusColor.isEmpty())
             return statusColor;
         else return "#ffffff";
+    }
+
+    public boolean isRootStop() {
+        return rootStop;
     }
 }

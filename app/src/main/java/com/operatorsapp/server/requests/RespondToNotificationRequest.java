@@ -119,4 +119,8 @@ public class RespondToNotificationRequest {
     public String getmTargetUserName() {
         return mTargetUserName;
     }
+
+    public void setResponseType(int responseType) {
+        mResponseType = responseType;
+    }
 }

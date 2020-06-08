@@ -48,12 +48,14 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     private ArrayList<Float> mSelectedEvents;
     private ArrayList<Event> mUpdatedAlarms;
     private int mFirstStopEventPosition;
+    private boolean isAllowReportingOnSetupEvents;
 
     public ShiftLogSqlAdapter(Context context, Cursor cursor, boolean closedState, int closeWidth,
                               OnStopClickListener onStopClickListener, int openWidth, int height,
-                              boolean selectMode, ArrayList<Float> selectedEvents) {
+                              boolean selectMode, ArrayList<Float> selectedEvents, boolean isAllowReportingOnSetupEvents) {
         super(cursor);
         mContext = context;
+        this.isAllowReportingOnSetupEvents = isAllowReportingOnSetupEvents;
         mClosedState = closedState;
         mCloseWidth = closeWidth;
         mOnStopClickListener = onStopClickListener;
@@ -205,7 +207,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         if (type == STOPPED) {
 
             if (viewHolder.getAdapterPosition() <= mFirstStopEventPosition && event.getEventEndTime().isEmpty()
-                    && event.getEventReasonID() != 100) {
+                    && (event.getEventReasonID() != 100 || isAllowReportingOnSetupEvents)) {
 
                 mFirstStopEventPosition = viewHolder.getAdapterPosition();
                 if (!BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {

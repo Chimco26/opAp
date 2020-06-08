@@ -50,4 +50,33 @@
             android:rotation="180"
             android:src="@drawable/ic_arrow" />
     </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/ILM_root_stop_fl"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="10dp"
+        android:visibility="gone"
+        android:background="@drawable/circle_white">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:background="@drawable/circle_grey">
+
+            <ImageView
+                android:id="@+id/ILM_root_stop_iv"
+                android:layout_width="19dp"
+                android:layout_height="19dp"
+                android:layout_gravity="center"
+                android:layout_margin="1dp"
+                android:src="@drawable/ic_root_stop"/>
+        </FrameLayout>
+
+    </FrameLayout>
+
 </RelativeLayout>

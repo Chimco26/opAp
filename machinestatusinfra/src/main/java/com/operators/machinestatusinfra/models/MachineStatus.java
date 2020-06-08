@@ -15,6 +15,8 @@ public class MachineStatus {
     @SerializedName("allMachinesData")
     private List<AllMachinesData> mAllMachinesData;
     private ArrayList<TaskStatusCount> taskCountObject;
+    private boolean isAllowReportingOnSetupEvents;
+    private boolean isAllowReportingSetupAfterSetupEnd;
 
     public MachineStatus(List<Object> departmentMachinePC, List<Object> departmentOeePee, Object missingMachineIds, List<AllMachinesData> allMachinesData) {
         mDepartmentMachinePC = departmentMachinePC;
@@ -25,6 +27,22 @@ public class MachineStatus {
 
     public List<AllMachinesData> getAllMachinesData() {
         return mAllMachinesData;
+    }
+
+    public boolean isAllowReportingOnSetupEvents() {
+        return isAllowReportingOnSetupEvents;
+    }
+
+    public boolean isAllowReportingSetupAfterSetupEnd() {
+        return isAllowReportingSetupAfterSetupEnd;
+    }
+
+    public void setAllowReportingOnSetupEvents(boolean allowReportingOnSetupEvents) {
+        isAllowReportingOnSetupEvents  = allowReportingOnSetupEvents;
+    }
+
+    public void setAllowReportingSetupAfterSetupEnd(boolean ismAllowReportingSetupAfterSetupEnd) {
+        isAllowReportingSetupAfterSetupEnd = ismAllowReportingSetupAfterSetupEnd;
     }
 
     public enum MachineServerStatus {

@@ -512,4 +512,6 @@
     <string name="activate_custom_y_axis_values">הכנס ערכי ציר Y</string>
     <string name="max_value_must_be_greater_than_min">הערך המקסימלי חייב להיות גבוה מהערך המינימלי</string>
     <string name="install_activity_not_found">לא ניתן למצוא את קבצי ההתקנה של האפליקציה, נסה להתקין מחדש דרך חנות האפליקציות</string>
+    <string name="start_service">התחל טיפול</string>
+    <string name="finish_service">סיום טיפול</string>
 </resources>

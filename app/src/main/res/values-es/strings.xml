@@ -490,4 +490,6 @@
     <string name="activate_custom_y_axis_values">Activar los valores personalizados del eje Y</string>
     <string name="max_value_must_be_greater_than_min">El valor máx. debe ser mayor que el valor mín.</string>
     <string name="stop_logs">Detener registro de eventos</string>
+    <string name="start_service">iniciar servicio</string>
+    <string name="finish_service">finalizar servicio</string>
 </resources>

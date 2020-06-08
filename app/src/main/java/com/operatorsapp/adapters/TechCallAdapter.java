@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,10 +29,12 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final ArrayList<TechCallInfo> mTechList;
     private final Context mContext;
     private final TechCallItemListener mListener;
+    private final boolean isManageServiceCall;
 
-    public TechCallAdapter(Context context, ArrayList<TechCallInfo> mTechList, TechCallItemListener listener) {
+    public TechCallAdapter(Context context, ArrayList<TechCallInfo> mTechList, boolean isManageServiceCall, TechCallItemListener listener) {
         mContext = context;
         this.mTechList = mTechList;
+        this.isManageServiceCall = isManageServiceCall;
         mListener = listener;
         sortTechList();
     }
@@ -66,6 +69,21 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final TechViewHolder techViewHolder = (TechViewHolder) holder;
+
+        if (isManageServiceCall){
+            techViewHolder.mManageCallFl.setVisibility(View.VISIBLE);
+            techViewHolder.mManageCallIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.wrench));
+            techViewHolder.mManageCallTv.setText(mContext.getResources().getString(R.string.start_service));
+        }else {
+            techViewHolder.mManageCallFl.setVisibility(View.GONE);
+        }
+        techViewHolder.mManageCallFl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onManageCall(mTechList.get(position));
+            }
+        });
+
         techViewHolder.mTextTv.setText(mTechList.get(position).getmName());
         techViewHolder.mTimeTv.setText(TimeUtils.getDate(mTechList.get(position).getmCallTime(), TimeUtils.COMMON_DATE_FORMAT));
         techViewHolder.mRemoveIv.setOnClickListener(new View.OnClickListener() {
@@ -98,10 +116,13 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
                 icon = R.drawable.at_work_blue;
                 txt = mContext.getResources().getString(R.string.at_work);
+                techViewHolder.mManageCallIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.check_all));
+                techViewHolder.mManageCallTv.setText(mContext.getResources().getString(R.string.finish_service));
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
                 icon = R.drawable.service_done;
                 txt = mContext.getResources().getString(R.string.service_completed);
+                techViewHolder.mManageCallFl.setVisibility(View.GONE);
                 break;
         }
         techViewHolder.mStatusIv.setImageResource(icon);
@@ -119,10 +140,16 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private TextView mTimeTv;
         private ImageView mRemoveIv;
         private ImageView mStatusIv;
+        private ImageView mManageCallIv;
+        private TextView mManageCallTv;
+        private FrameLayout mManageCallFl;
 
         public TechViewHolder(View v) {
             super(v);
             mRemoveIv = itemView.findViewById(R.id.tech_call_item_remove_iv);
+            mManageCallIv = itemView.findViewById(R.id.tech_call_item_manage_call_iv);
+            mManageCallTv = itemView.findViewById(R.id.tech_call_item_manage_call_tv);
+            mManageCallFl = itemView.findViewById(R.id.tech_call_item_manage_call_fl);
             mTextTv = itemView.findViewById(R.id.tech_call_item_text_tv);
             mTimeTv = itemView.findViewById(R.id.tech_call_item_time_tv);
             mStatusIv = itemView.findViewById(R.id.tech_call_item_status_iv);
@@ -132,5 +159,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public interface TechCallItemListener{
         void onRemoveCallPressed(TechCallInfo techCallInfo);
+
+        void onManageCall(TechCallInfo techCallInfo);
     }
 }

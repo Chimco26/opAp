@@ -118,6 +118,24 @@ public class AllMachinesData {
     private int mReportRejectDefaultUnits;
     @SerializedName("WorkerSignInOnShiftChange")
     private boolean workerSigninOnShiftChange;
+    @SerializedName("ManageServiceCallInOpApp")
+    private boolean isManageServiceCallForTechnician;
+    @SerializedName("AllowReportingOnSetupEvents")
+    private boolean isAllowReportingOnSetupEvents;
+    @SerializedName("AllowReportingSetupAfterSetupEnd")
+    private boolean mAllowReportingSetupAfterSetupEnd;
+
+    public boolean isAllowReportingOnSetupEvents() {
+        return isAllowReportingOnSetupEvents;
+    }
+
+    public boolean ismAllowReportingSetupAfterSetupEnd() {
+        return mAllowReportingSetupAfterSetupEnd;
+    }
+
+    public boolean isManageServiceCallForTechnician() {
+        return isManageServiceCallForTechnician;
+    }
 
     public boolean isWorkerSigninOnShiftChange() {
         return workerSigninOnShiftChange;
@@ -357,6 +375,10 @@ public class AllMachinesData {
 
     public boolean canReportApproveFirstItem() {
         return !setupEnd; // when not setup end, we can send this report.
+    }
+
+    public boolean isSetupEnd() {
+        return setupEnd;
     }
 
     public String getMachineEName() {

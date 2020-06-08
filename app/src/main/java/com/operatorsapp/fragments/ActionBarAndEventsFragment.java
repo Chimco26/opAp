@@ -1528,11 +1528,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void openDeleteTechCallDialog(ArrayList<TechCallInfo> tech) {
+        Log.d(LOG_TAG, "SessionId " + PersistenceManager.getInstance().getSessionId());
         List<Technician> techniciansList = new ArrayList<Technician>();
         if (((DashboardActivity) getActivity()).getReportForMachine() != null && ((DashboardActivity) getActivity()).getReportForMachine().getTechnicians() != null) {
             techniciansList = ((DashboardActivity) getActivity()).getReportForMachine().getTechnicians();
         }
-        mPopUpDialog = new TechCallDialog(getActivity(), tech, techniciansList, new TechCallDialog.TechDialogListener() {
+        boolean isManageServiceCall = mCurrentMachineStatus.getmAllMachinesData().get(0).isManageServiceCallForTechnician();
+        mPopUpDialog = new TechCallDialog(getActivity(), tech, techniciansList, isManageServiceCall, new TechCallDialog.TechDialogListener() {
             @Override
             public void onNewCallPressed() {
                 mPopUpDialog.dismiss();
@@ -2380,7 +2382,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public void onSplitEventPressed(Float eventID) {
-        // TODO: 05/07/2018 call server split event
 
         mListener.onSplitEventPressed(eventID);
 
@@ -2419,7 +2420,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
 
         if (mListener != null && events != null && events.size() > 0) {
-            mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(mIsOpen, mActiveJobsListForMachine, mSelectedPosition));
+            mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(
+                    mIsOpen, mActiveJobsListForMachine, mSelectedPosition, mCurrentMachineStatus.isAllowReportingOnSetupEvents(),
+                    mCurrentMachineStatus.isAllowReportingSetupAfterSetupEnd(),  !mCurrentMachineStatus.getAllMachinesData().get(0).isSetupEnd()));
         } else {
             return;
         }
@@ -2448,7 +2451,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void setShiftLogAdapter(Cursor cursor) {
         mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), cursor,
                 !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight,
-                mIsSelectionMode, mSelectedEvents);
+                mIsSelectionMode, mSelectedEvents, mCurrentMachineStatus != null && mCurrentMachineStatus.isAllowReportingOnSetupEvents());
 
         mShiftLogRecycler.setAdapter(mShiftLogAdapter);
     }
@@ -3510,12 +3513,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                         techList.remove(i);
                                     }
                                 }
-
-                                if (isNew) {
-                                    techList.add(new TechCallInfo(not.getmResponseType(), not.getmTargetName(), not.getmResponseType() + "",
-                                            TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
-                                            not.getmNotificationID(), not.getmTargetUserId()));
-                                }
+                            }
+                            if (isNew) {
+                                techList.add(new TechCallInfo(not.getmResponseType(), not.getmTargetName(), not.getmResponseType() + "",
+                                        TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
+                                        not.getmNotificationID(), not.getmTargetUserId()));
                             }
                         }
                     }

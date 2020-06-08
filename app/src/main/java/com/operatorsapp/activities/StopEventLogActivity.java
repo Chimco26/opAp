@@ -13,7 +13,6 @@ import com.example.common.StandardResponse;
 import com.example.common.StopLogs.Event;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
-import com.operators.reportfieldsformachineinfra.SubReasons;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
@@ -29,6 +28,7 @@ import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.responses.StopReasonsGroup;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.ShowCrouton;
@@ -38,6 +38,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.operatorsapp.fragments.ActionBarAndEventsFragment.EXTRA_FIELD_FOR_MACHINE;
+import static com.operatorsapp.fragments.ReportStopReasonFragment.IS_REPORTING_ON_SETUP_END;
+import static com.operatorsapp.fragments.ReportStopReasonFragment.IS_REPORTING_ON_SETUP_EVENTS;
+import static com.operatorsapp.fragments.ReportStopReasonFragment.IS_SETUP_MODE;
 import static com.operatorsapp.fragments.ReportStopReasonFragment.MINIMUM_VERSION_TO_NEW_API;
 import static org.litepal.LitePalApplication.getContext;
 
@@ -57,9 +60,12 @@ public class StopEventLogActivity extends AppCompatActivity
     private CroutonCreator mCroutonCreator;
     private ReportCore mReportCore;
     private int position;
-    private SubReasons subReason;
+    private StopReasonsGroup subReason;
     private ArrayList<Event> mSubEvents;
     private StopEventLogFragment mStopEventLogFragment;
+    private boolean isReportingOnSetupEnd;
+    private boolean isReportingOnSetupEvents;
+    private boolean isSetupMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,13 +88,17 @@ public class StopEventLogActivity extends AppCompatActivity
         if (getIntent().hasExtra(EXTRA_FIELD_FOR_MACHINE)) {
             mFieldForMachine = getIntent().getParcelableExtra(EXTRA_FIELD_FOR_MACHINE);
         }
+
+        isReportingOnSetupEvents= getIntent().getBooleanExtra(IS_REPORTING_ON_SETUP_EVENTS, false);
+        isReportingOnSetupEnd = getIntent().getBooleanExtra(IS_REPORTING_ON_SETUP_END, false);
+        isSetupMode = getIntent().getBooleanExtra(IS_SETUP_MODE, false);
         mStopEventLogFragment = StopEventLogFragment.newInstance();
         getSupportFragmentManager().beginTransaction().add(R.id.ASE_container, mStopEventLogFragment).addToBackStack(StopEventLogFragment.TAG).commit();
     }
 
     @Override
     public void onReportEvents(ArrayList<Event> subEvents, ArrayList<Float> eventsIds, boolean b) {
-        ReportStopReasonFragment fragment = ReportStopReasonFragment.newInstance(true, null, 0);
+        ReportStopReasonFragment fragment = ReportStopReasonFragment.newInstance(true, null, 0, isReportingOnSetupEvents, isReportingOnSetupEnd, isSetupMode);
         getSupportFragmentManager().beginTransaction().add(R.id.ASE_container, fragment).addToBackStack(ReportStopReasonFragment.TAG).commit();
         fragment.setSelectedEvents(eventsIds);
         mSelectedEvents = eventsIds;
@@ -122,7 +132,7 @@ public class StopEventLogActivity extends AppCompatActivity
     }
 
     @Override
-    public void onReport(final int position, final SubReasons mSelectedSubreason) {
+    public void onReport(final int position, final StopReasonsGroup mSelectedSubreason) {
         if (getVisibleFragment() instanceof ReportStopReasonFragment) {
             onBackPressed();
         }
@@ -241,7 +251,7 @@ public class StopEventLogActivity extends AppCompatActivity
 
     //SEND REPORT
 
-    private void sendReport(int position, SubReasons subReasons) {
+    private void sendReport(int position, StopReasonsGroup subReasons) {
 
         this.position = position;
         this.subReason = subReasons;
