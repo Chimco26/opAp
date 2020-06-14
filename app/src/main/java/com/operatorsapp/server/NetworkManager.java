@@ -1110,9 +1110,9 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         call.enqueue(callback);
     }
 
-    public void getStopReasons(final Callback<StopReasonsResponse> callback) {
+    public void getStopReasons(int machineId, final Callback<StopReasonsResponse> callback) {
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
-        MachineIdRequest request = new MachineIdRequest(PersistenceManager.getInstance().getMachineId() + "", PersistenceManager.getInstance().getSessionId());
+        MachineIdRequest request = new MachineIdRequest(machineId + "", PersistenceManager.getInstance().getSessionId());
         Call<StopReasonsResponse> call = mRetrofit.create(OpAppServiceRequests.class).getStopReasons(request);
         call.enqueue(callback);
     }

@@ -61,9 +61,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.app.operatorinfra.Operator;
 import com.example.common.Event;
 import com.example.common.StandardResponse;
+import com.example.common.StopLogs.StopLogsResponse;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.callback.GetMachineLineCallback;
+import com.example.common.callback.GetStopLogCallback;
 import com.example.common.department.MachineLineResponse;
 import com.example.common.department.MachinesLineDetail;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
@@ -123,6 +125,7 @@ import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.requests.SendNotificationRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
+import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.ClearData;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
@@ -160,6 +163,7 @@ import retrofit2.Response;
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static com.example.common.permissions.WidgetInfo.PermissionId.TASK;
 import static com.operatorsapp.managers.PersistenceManager.setMachineData;
+import static com.operatorsapp.utils.SimpleRequests.getLineShiftLog;
 import static com.operatorsapp.utils.SimpleRequests.getMachineLine;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 
@@ -2396,7 +2400,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onSelectMode(Event event) {
 
-        startSelectMode(event, null);
+        startSelectMode(event,null);
     }
 
     public void startSelectMode(Event event, MyTaskListener myTaskListener) {
@@ -2421,8 +2425,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (mListener != null && events != null && events.size() > 0) {
             mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(
-                    mIsOpen, mActiveJobsListForMachine, mSelectedPosition, mCurrentMachineStatus.isAllowReportingOnSetupEvents(),
-                    mCurrentMachineStatus.isAllowReportingSetupAfterSetupEnd(),  !mCurrentMachineStatus.getAllMachinesData().get(0).isSetupEnd()));
+                    mIsOpen, mActiveJobsListForMachine, mSelectedPosition, mCurrentMachineStatus.isAllowReportingOnSetupEvents(), mCurrentMachineStatus.isAllowReportingSetupAfterSetupEnd(),
+                    !mCurrentMachineStatus.getAllMachinesData().get(0).isSetupEnd(), PersistenceManager.getInstance().getMachineId(), ""));
         } else {
             return;
         }
@@ -2434,18 +2438,61 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (mAsyncTask != null) {
                 mAsyncTask.cancel(true);
             }
-            setShiftLogAdapter(cursor);
+        setShiftLogAdapter(cursor);
 
-            initEvents(events);
+        initEvents(events);
 
-            onStopEventSelected(event.getEventID(), true);
+        onStopEventSelected(event.getEventID(), true);
 
-            mShowAlarmCheckBoxLy.setVisibility(View.GONE);
-            mMinDurationLil.setVisibility(View.GONE);
+         mShowAlarmCheckBoxLy.setVisibility(View.GONE);
+         mMinDurationLil.setVisibility(View.GONE);
         } else {
             myTaskListener.onUpdateEventsRecyclerViews(cursor, events);
             myTaskListener.onStartSelectMode(event);
         }
+    }
+
+    private void getLineEvents(){
+        PersistenceManager pm = PersistenceManager.getInstance();
+        getLineShiftLog(pm.getSiteUrl(), new GetStopLogCallback() {
+            @Override
+            public void onGetStopLogSuccess(StopLogsResponse response) {
+
+                if (response != null && response.getEvents() != null && response.getEvents().size() > 0) {
+                    com.example.common.StopLogs.Event lastEventRegistered = PersistenceManager.getInstance().getLastLineEvent();
+                    com.example.common.StopLogs.Event lastEventReceived = null;
+
+                    for (com.example.common.StopLogs.Event event : response.getEvents()) {
+
+                        if (event.getRootEventID() == 0 && (lastEventRegistered == null || event.getEventID() > lastEventRegistered.getEventID())){
+                            lastEventReceived = event;
+                        }
+                    }
+
+                    if (lastEventReceived != null) {
+                        PersistenceManager.getInstance().setLastLineEvent(lastEventReceived);
+
+                        if (mListener != null) {
+                            mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(
+                                    mIsOpen, mActiveJobsListForMachine, mSelectedPosition, mCurrentMachineStatus.isAllowReportingOnSetupEvents(), mCurrentMachineStatus.isAllowReportingSetupAfterSetupEnd(),
+                                    !mCurrentMachineStatus.getAllMachinesData().get(0).isSetupEnd(), PersistenceManager.getInstance().getMachineId(), getRootMachineName(lastEventReceived), lastEventReceived));
+
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onGetStopLogFailed(StandardResponse reason) {
+            }
+        }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
+    }
+
+    private String getRootMachineName(com.example.common.StopLogs.Event event) {
+        // TODO: 09/06/2020  get event root cause machine name
+//        if (mSelectedEvents != null && mSelectedEvents.size() > 1)
+//            return "";
+        return "";
     }
 
     public void setShiftLogAdapter(Cursor cursor) {
@@ -2518,8 +2565,20 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mShiftLogSwipeRefresh.setRefreshing(false);
         }
         getNotificationsFromServer(false);
+        checkLanguage();
+        getLineEvents();
     }
 
+    private void checkLanguage() {
+        String currentLanguageName = PersistenceManager.getInstance().getCurrentLanguageName();
+        String currentLanguageCode = PersistenceManager.getInstance().getCurrentLang();
+        if (mLanguagesSpinner != null && !mLanguagesSpinner.getSelectedItem().equals(currentLanguageName)){
+            sendTokenWithSessionIdToServer(PersistenceManager.getInstance().getCurrentLang(),currentLanguageName);
+        }
+        if(!currentLanguageCode.equals(Locale.getDefault().getLanguage())){
+            ChangeLang.initLanguage(getActivity());
+        }
+    }
 
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MachineJoshDataResponse machineJoshDataResponse) {

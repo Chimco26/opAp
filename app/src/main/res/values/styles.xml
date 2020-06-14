@@ -37,23 +37,23 @@
 
 
     <style name="BreeSerifRegular">
-        <item name="fontPath">fonts/BreeSerif-Regular.ttf</item>
+        <item name="fontPath">fonts/ProximaNova-Regular.ttf</item>
     </style>
 
     <style name="DroidSans">
-        <item name="fontPath">fonts/DroidSans.ttf</item>
+        <item name="fontPath">fonts/ProximaNova-Regular.ttf</item>
     </style>
 
     <style name="DroidSansBold">
-        <item name="fontPath">fonts/DroidSans-Bold.ttf</item>
+        <item name="fontPath">fonts/ProximaNova-Semibold.ttf</item>
     </style>
 
     <style name="RobotoMedium">
-        <item name="fontPath">fonts/Roboto-Medium.ttf</item>
+        <item name="fontPath">fonts/ProximaNova-Semibold.ttf</item>
     </style>
 
     <style name="RobotoRegular">
-        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+        <item name="fontPath">fonts/ProximaNova-Regular.ttf</item>
     </style>
 
     <style name="ProximaNovaSemiBold">

@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,6 +34,9 @@ public class TitleAndSubWithSelectableListDialog implements View.OnClickListener
     private RecyclerView mRv;
     private CheckBoxFilterAdapter mAdapter;
     private ArrayList<Integer> mSelectedMachineIds;
+    private LinearLayout selectAllLil;
+    private CheckBox selectAllChkBx;
+    private TextView selectAllTv;
 
 
     public TitleAndSubWithSelectableListDialog(Activity activity, final TitleAndSubWithSelectableListDialogListener listener
@@ -55,6 +60,9 @@ public class TitleAndSubWithSelectableListDialog implements View.OnClickListener
         TextView title = view.findViewById(R.id.AML_text_tv);
         TextView subTitle = view.findViewById(R.id.AML_subtitle_tv);
         TextView positiveBtn = view.findViewById(R.id.AML_positive_btn);
+        selectAllLil = view.findViewById(R.id.AML_select_all_lil);
+        selectAllChkBx = view.findViewById(R.id.AML_select_all_chk);
+        selectAllTv = view.findViewById(R.id.AML_select_all_tv);
 
         setRv(view);
         title.setText(mTitle);
@@ -69,6 +77,7 @@ public class TitleAndSubWithSelectableListDialog implements View.OnClickListener
         mAlarmAlertDialog = builder.create();
 
         positiveBtn.setOnClickListener(this);
+        selectAllLil.setOnClickListener(this);
         view.findViewById(R.id.button_cancel).setOnClickListener(this);
 
         mAlarmAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -112,6 +121,22 @@ public class TitleAndSubWithSelectableListDialog implements View.OnClickListener
             case R.id.button_cancel:
 //                mListener.onClickNegativeBtn();
                 mAlarmAlertDialog.dismiss();
+                break;
+            case R.id.AML_select_all_lil:
+                selectAllChkBx.setChecked(!selectAllChkBx.isChecked());
+                if (selectAllChkBx.isChecked()){
+                    selectAllTv.setText(mContext.getResources().getString(R.string.deselect_all));
+                    mSelectedMachineIds.clear();
+                    for (MachinesLineDetail machine : mMachineLineList) {
+                        mSelectedMachineIds.add(machine.getMachineID());
+                    }
+                }else {
+                    selectAllTv.setText(mContext.getResources().getString(R.string.select_all));
+                    mSelectedMachineIds.clear();
+                }
+
+                mAdapter.updateAll(selectAllChkBx.isChecked());
+                mAdapter.notifyDataSetChanged();
                 break;
             case R.id.AML_positive_btn:
                 ArrayList<MachinesLineDetail> machinesLineDetails = new ArrayList<>();

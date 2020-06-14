@@ -12,7 +12,8 @@
         android:layout_width="483dp"
         android:layout_height="452dp"
         android:background="@color/white"
-        android:padding="23dp">
+        android:paddingBottom="23dp"
+        android:paddingTop="23dp">
 
         <RelativeLayout
             android:id="@+id/button_cancel"
@@ -36,9 +37,10 @@
             android:layout_marginEnd="100dp"
             android:gravity="center"
             android:maxLines="1"
-            android:padding="15dp"
+            android:padding="10dp"
             android:textColor="@color/blue1"
-            android:textSize="20sp"
+            android:textSize="24sp"
+            style="@style/ProximaNovaSemiBold"
             app:autoSizeMaxTextSize="25dp"
             app:autoSizeTextType="uniform" />
         
@@ -49,19 +51,51 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:layout_below="@+id/AML_text_tv"
-            android:layout_marginTop="20sp"
             android:maxLines="1"
-            android:padding="15dp"
+            android:padding="10dp"
             android:textColor="@color/black"
             android:textSize="20sp"
             app:autoSizeMaxTextSize="25dp"
             app:autoSizeTextType="uniform" />
-        
+
+
+        <LinearLayout
+            android:id="@+id/AML_select_all_lil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/AML_subtitle_tv"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/AML_select_all_chk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:clickable="false"
+                android:src="@color/selector_white_black"/>
+
+            <TextView
+                android:id="@+id/AML_select_all_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:text="@string/select_all"
+                app:autoSizeMaxTextSize="25dp"
+                app:autoSizeTextType="uniform" />
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/AML_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/AML_subtitle_tv"
+            android:layout_below="@id/AML_select_all_lil"
             android:layout_above="@+id/AML_positive_btn"
             android:padding="15dp"
             tools:listitem="@layout/item_check_box" />

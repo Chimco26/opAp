@@ -115,6 +115,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String SHIFT_GRAPH_CUSTOM_Y = "SHIFT_GRAPH_CUSTOM_Y";
     private static final String SHIFT_GRAPH_CUSTOM_Y_MIN = "SHIFT_GRAPH_CUSTOM_Y_MIN";
     private static final String SHIFT_GRAPH_CUSTOM_Y_MAX = "SHIFT_GRAPH_CUSTOM_Y_MAX";
+    private static final String LINE_LAST_EVENT = "LINE_LAST_EVENT";
 
 
     private static PersistenceManager msInstance;
@@ -970,4 +971,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         return SecurePreferences.getInstance().getFloat(SHIFT_GRAPH_CUSTOM_Y_MAX);
     }
 
+    public void setLastLineEvent(com.example.common.StopLogs.Event event) {
+        SecurePreferences.getInstance().setString(LINE_LAST_EVENT, mGson.toJson(event));
+    }
+
+    public com.example.common.StopLogs.Event getLastLineEvent() {
+        Type listType = new TypeToken<com.example.common.StopLogs.Event>() {
+        }.getType();
+        return mGson.fromJson(SecurePreferences.getInstance().getString(LINE_LAST_EVENT), listType);
+    }
 }

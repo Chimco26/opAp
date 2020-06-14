@@ -24,6 +24,7 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
     private static final String PRODUCT_IMAGE_PATH = "productimagepath";
     private static final String ID_NAME = "ID";
     private static final String ERP_JOB_ID_NAME = "ERPJobID";
+    private static final String CATALOG_ID = "ProductCatalogID";
     private final Context mContext;
     private final ArrayList<PendingJob> mPandingjobs;
     private final String[] mOrderedHederasKey;
@@ -78,7 +79,7 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
             textView.setText("");
         } else if(mOrderedHederasKey[i] != null){
             ImageLoader.getInstance().displayImage("", imageView);
-            if (mOrderedHederasKey[i].equals(ID_NAME) || mOrderedHederasKey[i].equals(ERP_JOB_ID_NAME)) {
+            if (mOrderedHederasKey[i].equals(ID_NAME) || mOrderedHederasKey[i].equals(ERP_JOB_ID_NAME) || mOrderedHederasKey[i].equals(CATALOG_ID)) {
                 textView.setText(propertiesHashMap.get(mOrderedHederasKey[i]));
             }else {
                 textView.setText(getText(propertiesHashMap.get(mOrderedHederasKey[i])));

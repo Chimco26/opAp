@@ -101,7 +101,7 @@ public class CheckBoxFilterAdapter extends RecyclerView.Adapter<CheckBoxFilterAd
         }
     }
 
-    private void updateAll(boolean b) {
+    public void updateAll(boolean b) {
         for (SelectableString string : mFilterList) {
             string.setSelected(b);
         }

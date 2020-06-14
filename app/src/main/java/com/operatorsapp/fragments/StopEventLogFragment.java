@@ -189,15 +189,25 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
         ArrayList<Float> list = new ArrayList<>();
         list.add(item.getEventID() * 1f);
         if (rootMap.containsKey(item.getEventID()) && rootMap.get(item.getEventID()).size() > 0) {
-            mListener.onReportEvents(rootMap.get(item.getEventID()), list, true);
+            mListener.onReportEvents(item.getMachineId(), rootMap.get(item.getEventID()), list, true, getRootMachineName(item));
         } else {
-            mListener.onReportEvents(mStopLogsItems, list, false);
+            mListener.onReportEvents(item.getMachineId(), mStopLogsItems, list, false, getRootMachineName(item));
         }
+    }
+
+    private String getRootMachineName(Event event) {
+        if (event.getRootEventID() == 0){
+            return event.getMachineName() + "\n"+ getString(R.string.start) + ": " + event.getEventTime() + "     " + getString(R.string.end) + ": " + event.getEventEndTime();
+        }
+
+        ArrayList<Event> root = rootMap.get(event.getRootEventID());
+
+        return root != null ? root.get(0).getMachineName() : "";
     }
 
     public interface OnStopEventLogFragmentListener {
 
-        void onReportEvents(ArrayList<Event> subEvents, ArrayList<Float> eventsIds, boolean isRoot);
+        void onReportEvents(int machineId, ArrayList<Event> subEvents, ArrayList<Float> eventsIds, boolean isRoot, String rootMachineName);
     }
 
 }

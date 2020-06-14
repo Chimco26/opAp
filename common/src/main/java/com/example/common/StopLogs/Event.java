@@ -1,10 +1,13 @@
 package com.example.common.StopLogs;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Event {
+public class Event implements Parcelable {
 
     @SerializedName("AlarmDismissed")
     @Expose
@@ -308,4 +311,88 @@ public class Event {
     public void setShowSub(boolean showSub) {
         this.showSub = showSub;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.alarmDismissed);
+        dest.writeValue(this.alarmHValue);
+        dest.writeValue(this.alarmLValue);
+        dest.writeValue(this.alarmStandardValue);
+        dest.writeValue(this.alarmValue);
+        dest.writeString(this.color);
+        dest.writeString(this.descr);
+        dest.writeValue(this.eventDefinitionID);
+        dest.writeValue(this.eventDuration);
+        dest.writeString(this.eventETitle);
+        dest.writeString(this.eventEndTime);
+        dest.writeString(this.eventGroupEname);
+        dest.writeValue(this.eventGroupID);
+        dest.writeString(this.eventGroupLname);
+        dest.writeValue(this.eventID);
+        dest.writeString(this.eventLTitle);
+        dest.writeValue(this.eventReasonID);
+        dest.writeString(this.eventSubTitleEname);
+        dest.writeString(this.eventSubTitleLname);
+        dest.writeString(this.eventTime);
+        dest.writeString(this.eventTitle);
+        dest.writeValue(this.rootEventID);
+        dest.writeValue(this.priority);
+        dest.writeValue(this.machineId);
+        dest.writeString(this.machineName);
+        dest.writeByte(this.expand ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.showSub ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.haveChild ? (byte) 1 : (byte) 0);
+    }
+
+    public Event() {
+    }
+
+    protected Event(Parcel in) {
+        this.alarmDismissed = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.alarmHValue = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.alarmLValue = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.alarmStandardValue = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.alarmValue = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.color = in.readString();
+        this.descr = in.readString();
+        this.eventDefinitionID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.eventDuration = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.eventETitle = in.readString();
+        this.eventEndTime = in.readString();
+        this.eventGroupEname = in.readString();
+        this.eventGroupID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.eventGroupLname = in.readString();
+        this.eventID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.eventLTitle = in.readString();
+        this.eventReasonID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.eventSubTitleEname = in.readString();
+        this.eventSubTitleLname = in.readString();
+        this.eventTime = in.readString();
+        this.eventTitle = in.readString();
+        this.rootEventID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.priority = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.machineId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.machineName = in.readString();
+        this.expand = in.readByte() != 0;
+        this.showSub = in.readByte() != 0;
+        this.haveChild = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel source) {
+            return new Event(source);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
 }

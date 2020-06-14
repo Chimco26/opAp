@@ -97,8 +97,9 @@ public class StopEventLogActivity extends AppCompatActivity
     }
 
     @Override
-    public void onReportEvents(ArrayList<Event> subEvents, ArrayList<Float> eventsIds, boolean b) {
-        ReportStopReasonFragment fragment = ReportStopReasonFragment.newInstance(true, null, 0, isReportingOnSetupEvents, isReportingOnSetupEnd, isSetupMode);
+    public void onReportEvents(int machineId, ArrayList<Event> subEvents, ArrayList<Float> eventsIds, boolean b, String rootMachineName) {
+
+        ReportStopReasonFragment fragment = ReportStopReasonFragment.newInstance(true, null, 0, isReportingOnSetupEvents, isReportingOnSetupEnd, isSetupMode, machineId, rootMachineName);
         getSupportFragmentManager().beginTransaction().add(R.id.ASE_container, fragment).addToBackStack(ReportStopReasonFragment.TAG).commit();
         fragment.setSelectedEvents(eventsIds);
         mSelectedEvents = eventsIds;
