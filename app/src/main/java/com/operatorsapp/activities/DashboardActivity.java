@@ -42,8 +42,10 @@ import com.example.common.Event;
 import com.example.common.MultipleRejectRequestModel;
 import com.example.common.RejectForMultipleRequest;
 import com.example.common.StandardResponse;
+import com.example.common.StopLogs.StopLogsResponse;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.callback.GetStopLogCallback;
 import com.example.common.callback.MachineJoshDataCallback;
 import com.example.common.department.MachinesLineDetail;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
@@ -845,7 +847,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 mDownloadFile.cancel(true);
             }
 
-            finish();
+//            finish();
 
         }
     }
@@ -930,7 +932,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void dashboardDataStartPolling() {
 
         mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(),
-                getShiftLogUICallback(), getActualBarUICallback(), getMachineJoshDataCallback(), getPermissionForMachine());
+                getShiftLogUICallback(), getActualBarUICallback(), getMachineJoshDataCallback(), getPermissionForMachine(), getStopEventsLineCallback());
 
         mAllDashboardDataCore.stopPolling();
 
@@ -938,6 +940,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mAllDashboardDataCore.startPolling();
 
+    }
+
+    private GetStopLogCallback getStopEventsLineCallback() {
+        return new GetStopLogCallback() {
+            @Override
+            public void onGetStopLogSuccess(StopLogsResponse response) {
+
+            }
+
+            @Override
+            public void onGetStopLogFailed(StandardResponse reason) {
+
+            }
+        };
     }
 
     private MachinePermissionCallback getPermissionForMachine() {
@@ -1144,7 +1160,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         goToFragment(new SignInOperatorFragment(), true, true);
                     }
                 }
-
 
             }
 
@@ -1848,6 +1863,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onViewLog() {
+        if (mCurrentMachineStatus == null){
+            return;
+        }
         Intent intent = new Intent(this, StopEventLogActivity.class);
         intent.putExtra(EXTRA_FIELD_FOR_MACHINE, getReportForMachine());
         intent.putExtra(IS_REPORTING_ON_SETUP_EVENTS, mCurrentMachineStatus.isAllowReportingOnSetupEvents());
@@ -2170,8 +2188,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onOpenReportStopReasonFragment(ReportStopReasonFragment
-                                                       reportStopReasonFragment) {
+    public void onOpenReportStopReasonFragment(ReportStopReasonFragment reportStopReasonFragment) {
 
         startReportModeTimer();
 
@@ -2183,7 +2200,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
 
         try {
-
+            List<Fragment> frags = getSupportFragmentManager().getFragments();
+            for ( Fragment frag : frags) {
+                if (frag instanceof  ReportStopReasonFragment){
+                    getSupportFragmentManager().beginTransaction().remove(frag).commit();
+                }
+            }
             getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), reportStopReasonFragment).commit();
         } catch (IllegalStateException ignored) {
         }
@@ -2813,7 +2835,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mGalleryIntent = null;
         Log.d(TAG, "ChangeLang: ");
-        ChangeLang.changeLanguage(this);
+        ChangeLang.initLanguage(this);
 
         ignoreFromOnPause = true;
         if (resultCode == RESULT_OK && requestCode == GalleryActivity.EXTRA_GALLERY_CODE) {

@@ -8,16 +8,20 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.common.ErrorResponse;
 import com.example.common.StandardResponse;
+import com.example.common.StopLogs.Event;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
@@ -32,6 +36,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.NewStopReasonsAdapter;
 import com.operatorsapp.adapters.StopReasonsAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
@@ -48,6 +53,8 @@ import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,6 +71,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     public static final String IS_REPORTING_ON_SETUP_EVENTS = "IS_REPORTING_ON_SETUP_EVENTS";
     private static final int SETUP_GROUP_ID = 10;
     public static final String IS_SETUP_MODE = "IS_SETUP_MODE";
+    public static final String ROOT_MACHINE_NAME = "ROOT_MACHINE_NAME";
+    public static final String MACHINE_ID = "MACHINE_ID";
+    public static final String ROOT_EVENT = "ROOT_EVENT";
 
     private Integer mJoshId = 0;
 
@@ -88,9 +98,11 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     private Switch mSwitch;
     private boolean isFromViewLog;
     private boolean isFromViewLogRoot;
+    private int mMachineIdForRequest;
+    private Event mRootEvent;
 
     public static ReportStopReasonFragment newInstance(boolean isOpen, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition,
-                                                       boolean isReportingOnSetupEvents, boolean isReportingOnSetupEnd, boolean isSetupMode) {
+                                                       boolean isReportingOnSetupEvents, boolean isReportingOnSetupEnd, boolean isSetupMode, int machineId, String rootMachineName) {
         ReportStopReasonFragment reportStopReasonFragment = new ReportStopReasonFragment();
         Bundle bundle = new Bundle();
         bundle.putBoolean(IS_OPEN, isOpen);
@@ -99,6 +111,25 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         bundle.putBoolean(IS_REPORTING_ON_SETUP_EVENTS, isReportingOnSetupEvents);
         bundle.putBoolean(IS_REPORTING_ON_SETUP_END, isReportingOnSetupEnd);
         bundle.putBoolean(IS_SETUP_MODE, isSetupMode);
+        bundle.putString(ROOT_MACHINE_NAME, rootMachineName);
+        bundle.putInt(MACHINE_ID, machineId > 0 ? machineId : PersistenceManager.getInstance().getMachineId());
+        reportStopReasonFragment.setArguments(bundle);
+        return reportStopReasonFragment;
+    }
+
+    public static ReportStopReasonFragment newInstance(boolean isOpen, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition, boolean isReportingOnSetupEvents,
+                                                       boolean isReportingOnSetupEnd, boolean isSetupMode, int machineId, String rootMachineName, Event rootEvent) {
+        ReportStopReasonFragment reportStopReasonFragment = new ReportStopReasonFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(IS_OPEN, isOpen);
+        bundle.putParcelable(CURRENT_JOB_LIST_FOR_MACHINE, activeJobsListForMachine);
+        bundle.putInt(CURRENT_SELECTED_POSITION, selectedPosition);
+        bundle.putBoolean(IS_REPORTING_ON_SETUP_EVENTS, isReportingOnSetupEvents);
+        bundle.putBoolean(IS_REPORTING_ON_SETUP_END, isReportingOnSetupEnd);
+        bundle.putBoolean(IS_SETUP_MODE, isSetupMode);
+        bundle.putString(ROOT_MACHINE_NAME, rootMachineName);
+        bundle.putInt(MACHINE_ID, machineId > 0 ? machineId : PersistenceManager.getInstance().getMachineId());
+        bundle.putParcelable(ROOT_EVENT, rootEvent);
         reportStopReasonFragment.setArguments(bundle);
         return reportStopReasonFragment;
     }
@@ -119,8 +150,10 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
     @Override
     public void onDetach() {
+        mOnCroutonRequestListener = null;
+        mListener = null;
+        mDashboardCroutonListener = null;
         super.onDetach();
-
     }
 
 
@@ -133,6 +166,8 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             isReportingOnSetupEnd = getArguments().getBoolean(IS_REPORTING_ON_SETUP_END, false);
             isReportingOnSetupEvents = getArguments().getBoolean(IS_REPORTING_ON_SETUP_EVENTS, false);
             isSetupMode = getArguments().getBoolean(IS_SETUP_MODE, false);
+            mMachineIdForRequest = getArguments().getInt(MACHINE_ID, PersistenceManager.getInstance().getMachineId());
+            mRootEvent = getArguments().getParcelable(ROOT_EVENT);
             ActiveJobsListForMachine mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
             int mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
             if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null
@@ -141,13 +176,12 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             }else {
                 mJoshId = PersistenceManager.getInstance().getJoshId();
             }
-            getStopReasons();
         }
 
     }
 
     private void getStopReasons() {
-        NetworkManager.getInstance().getStopReasons(new Callback<StopReasonsResponse>() {
+        NetworkManager.getInstance().getStopReasons(mMachineIdForRequest, new Callback<StopReasonsResponse>() {
             @Override
             public void onResponse(Call<StopReasonsResponse> call, Response<StopReasonsResponse> response) {
                 mStopReasonsList = new ArrayList<>();
@@ -168,8 +202,20 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                         }
                     }
 
+                    Collections.sort(mStopReasonsList, new Comparator<StopReasonsGroup>() {
+                        @Override
+                        public int compare(StopReasonsGroup o1, StopReasonsGroup o2) {
+                            if (o1.getmDisplayOrder() < o2.getmDisplayOrder())
+                                return -1;
+                            if (o2.getmDisplayOrder() < o1.getmDisplayOrder())
+                                return 1;
+                            return 0;
+                        }
+                    });
+
 //                    mStopReasonsList = response.body().getStopReasonsList();
-                    setupStopReasons();
+                    if (isAdded())
+                        setupStopReasons();
                 }else if (response.body() != null && response.body().getError() != null){
                     onFailure(call, new Throwable(response.body().getError().getErrorDesc()));
                 }else {
@@ -179,7 +225,8 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
             @Override
             public void onFailure(Call<StopReasonsResponse> call, Throwable t) {
-                setupStopReasons();
+                if (isAdded())
+                    setupStopReasons();
             }
         });
     }
@@ -288,6 +335,24 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 close();
             }
         });
+
+
+        TextView title = view.findViewById(R.id.FRSRN_stop_reason_title);
+        String rootMachineName = getArguments().getString(ROOT_MACHINE_NAME, "");
+
+        if (mRootEvent != null){
+            mSelectedEvents = new ArrayList<>();
+            mSelectedEvents.add(Float.valueOf(mRootEvent.getEventID()));
+            title.setVisibility(View.VISIBLE);
+            title.append(": " + mRootEvent.getMachineName() + " " + (OperatorApplication.isEnglishLang() ? mRootEvent.getEventGroupEname() : mRootEvent.getEventGroupLname()));
+        }else if (rootMachineName.isEmpty()){
+            title.setVisibility(View.INVISIBLE);
+        }else {
+            title.setVisibility(View.VISIBLE);
+            title.append(": " + rootMachineName);
+        }
+
+        getStopReasons();
     }
 
     public void setSpanCount(boolean isOpen) {

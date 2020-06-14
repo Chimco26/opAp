@@ -7,6 +7,7 @@ import com.example.common.Event;
 import com.example.common.StandardResponse;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.callback.GetMachineJoshDataCallback;
+import com.example.common.callback.GetStopLogCallback;
 import com.example.common.callback.MachineJoshDataCallback;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.example.common.permissions.PermissionResponse;
@@ -38,6 +39,7 @@ import com.operatorsapp.server.pulling.interfaces.OnTimeToEndChangedListener;
 import com.operatorsapp.server.pulling.interfaces.ShiftForMachineUICallback;
 import com.operatorsapp.server.pulling.interfaces.ShiftLogUICallback;
 import com.operatorsapp.server.pulling.timecounter.TimeToEndCounter;
+import com.operatorsapp.utils.SimpleRequests;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -80,6 +82,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     private TimeToEndCounter mTimeToEndCounter;
     private MachineJoshDataCallback mMachineJoshDataCallback;
     private MachinePermissionCallback mMachinePermissionsCallback;
+    private GetStopLogCallback mStopEventsLineCallback;
 
 
     public AllDashboardDataCore(AllDashboardDataCoreListener listener, GetMachineStatusNetworkBridgeInterface getMachineStatusNetworkBridge,
@@ -104,13 +107,14 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
     public void registerListener(MachineStatusUICallback machineStatusUICallback, MachineDataUICallback machineDataUICallback,
                                  ShiftLogUICallback shiftLogUICallback, ActualBarExtraDetailsUICallback actualBarExtraDetailsUICallback, MachineJoshDataCallback machineJoshDataCallback,
-                                 MachinePermissionCallback machinePermissionCallback) {
+                                 MachinePermissionCallback machinePermissionCallback, GetStopLogCallback stopEventsLineCallback) {
         mMachineStatusUICallback = machineStatusUICallback;
         mMachineDataUICallback = machineDataUICallback;
         mShiftLogUICallback = shiftLogUICallback;
         mActualBarExtraUICallback = actualBarExtraDetailsUICallback;
         mMachineJoshDataCallback = machineJoshDataCallback;
         mMachinePermissionsCallback = machinePermissionCallback;
+        mStopEventsLineCallback = stopEventsLineCallback;
     }
 
     public void unregisterListener() {
@@ -128,6 +132,9 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         }
         if (mMachineJoshDataCallback != null) {
             mMachineJoshDataCallback = null;
+        }
+        if (mStopEventsLineCallback != null) {
+            mStopEventsLineCallback = null;
         }
     }
 
@@ -172,12 +179,20 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         getMachineJoshData();
         getActualBarExtraDetails(shiftLogStartingFrom);
         getShiftLogs(onJobFinishedListener);
+        getStopEventsLine();
     }
 
     public void stopPolling() {
 
         if (mJob != null) {
             mJob.stopJob();
+        }
+    }
+
+    private void getStopEventsLine() {
+        if (mStopEventsLineCallback != null){
+            PersistenceManager pm = PersistenceManager.getInstance();
+            SimpleRequests.getLineShiftLog(pm.getSiteUrl(), mStopEventsLineCallback, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
         }
     }
 

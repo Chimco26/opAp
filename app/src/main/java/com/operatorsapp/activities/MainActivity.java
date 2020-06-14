@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         setContentView(R.layout.activity_main);
 
         Log.d(TAG, "ChangeLang: ");
-        ChangeLang.changeLanguage(this);
+        ChangeLang.initLanguage(this);
         try {
             ACRA.init(getApplication());
         } catch (IllegalStateException ignored) {

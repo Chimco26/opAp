@@ -15,8 +15,8 @@ public class MachineStatus {
     @SerializedName("allMachinesData")
     private List<AllMachinesData> mAllMachinesData;
     private ArrayList<TaskStatusCount> taskCountObject;
-    private boolean isAllowReportingOnSetupEvents;
-    private boolean isAllowReportingSetupAfterSetupEnd;
+    private boolean isAllowReportingOnSetupEvents = false;
+    private boolean isAllowReportingSetupAfterSetupEnd = false;
 
     public MachineStatus(List<Object> departmentMachinePC, List<Object> departmentOeePee, Object missingMachineIds, List<AllMachinesData> allMachinesData) {
         mDepartmentMachinePC = departmentMachinePC;

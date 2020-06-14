@@ -1,20 +1,80 @@
 package com.operatorsapp.utils;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
-import android.text.TextUtils;
-import android.util.Log;
-
 import com.operatorsapp.managers.PersistenceManager;
-
-import java.text.Bidi;
 import java.util.Locale;
 
 public class ChangeLang {
 
-    private static final String TAG = ChangeLang.class.getSimpleName();
+
+    //    public static final String[] languages = new String[]{"English", "עברית", "中文", "Deutsch", "русский", "Українська", "español", "Français", "Nederlands", "العربية"};
+    public static final String[] languagesCode = new String[]{"en", "iw", "zh", "de", "ru", "uk", "es", "fr", "nl", "ar", "it", "hu", "pl"}; // when adding a new language, add below as well
+    public static final String[] languagesCode3Letters = new String[]{"eng", "heb", "chn", "ger", "rus", "ukr", "spn", "fre", "ned", "arb", "ita", "hun", "pol"}; // add here new language as well when adding above
+
+
+    public static void initLanguage(Context baseContext) {
+
+        setLanguage(baseContext, getDefaultLanguage());
+
+    }
+
+    private static String getDefaultLanguage() {
+
+        String selectedLanguage = PersistenceManager.getInstance().getCurrentLang();
+
+        if (selectedLanguage != null) {
+            return selectedLanguage;
+        } else {
+            String localeLanguage = Locale.getDefault().getLanguage();
+            for (String language : languagesCode) {
+
+                if (language.equals(localeLanguage)) {
+                    PersistenceManager.getInstance().setCurrentLang(localeLanguage);
+                    return localeLanguage;
+                }
+            }
+            PersistenceManager.getInstance().setCurrentLang("en");
+            return "en";
+        }
+    }
+
+    public static boolean defaultIsEng() {
+
+        return PersistenceManager.getInstance().getCurrentLang().equals("en");
+    }
+
+    public static boolean defaultIsHebrew() {
+
+        return PersistenceManager.getInstance().getCurrentLang().equals("iw");
+    }
+
+    public static boolean defaultIsRtl() {
+
+        return defaultIsHebrew() || PersistenceManager.getInstance().getCurrentLang().equals("ar");
+    }
+
+    public static int getPositionByLanguageCode() {
+
+        String language = getDefaultLanguage();
+        for (int i = 0; i < languagesCode.length; i++) {
+            if (languagesCode[i].equals(language)) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private static void setLanguage(Context baseContext, String languageCode) {
+        Configuration config = baseContext.getResources().getConfiguration();
+        Locale locale = new Locale(languageCode, config.locale.getCountry());
+        Locale.setDefault(locale);
+        config.setLocale(locale);
+        baseContext.getResources().updateConfiguration(config, baseContext.getResources().getDisplayMetrics());
+    }
+
+
+    /*private static final String TAG = ChangeLang.class.getSimpleName();
 
     @SuppressWarnings("unused")
     public static void changeHebrew(final Context context) {
@@ -104,5 +164,5 @@ public class ChangeLang {
             ctx.getResources().updateConfiguration(cfg, null);
         }
 
-    }
+    }*/
 }

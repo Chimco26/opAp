@@ -200,7 +200,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                         @Override
                         public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
 
-                            if (response != null && response.body() != null && response.body().getError().getErrorDesc() == null){
+                            if (response.body() != null && response.body().getError().getErrorDesc() == null){
 
                                 mTechList.remove(techCallInfo);
                                 pm.setCalledTechnicianList(mTechList);
@@ -211,7 +211,8 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                                     mSubtitleTv.setVisibility(View.INVISIBLE);
                                 }
                                 mListener.onCleanTech();
-                                setOpenCalls(((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition());
+                                if (mRecyclerView != null && mRecyclerView.getLayoutManager() != null)
+                                    setOpenCalls(((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition());
 
 
                             }else {
@@ -283,7 +284,11 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                     public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
                         if (response.body() != null && response.body().getError().getErrorDesc() == null){
 
-                            techCallInfo.setmResponseType(request.getmResponseType());
+                            if (request.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE){
+                                mTechList.remove(techCallInfo);
+                            }else {
+                                techCallInfo.setmResponseType(request.getmResponseType());
+                            }
                             pm.setCalledTechnicianList(mTechList);
                             mListener.onCleanTech();
                             setOpenCalls(((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition());
