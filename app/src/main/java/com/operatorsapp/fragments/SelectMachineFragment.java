@@ -76,6 +76,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     @Override
     public void onDetach() {
         super.onDetach();
+        mListener = null;
     }
 
     @Override
@@ -172,7 +173,9 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 backButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mListener.onCloseSelectMachine();
+                        if (mListener != null) {
+                            mListener.onCloseSelectMachine();
+                        }
                     }
                 });
                 ((TextView) view.findViewById(R.id.title)).setText(getString(R.string.link_machine));
@@ -232,7 +235,9 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 //                if (mNavigationCallback != null){
                 ClearData.clearData();
 //                    mNavigationCallback.goToFragment(LoginFragment.newInstance(false), false, false);
-                mListener.onChangeFactory();
+                if (mListener != null) {
+                    mListener.onChangeFactory();
+                }
 //                }
                 break;
         }
@@ -247,7 +252,10 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         setMachineData(departmentMachineValue.getId(), departmentMachineValue.getMachineName());
         PersistenceManager.getInstance().setMachineLineId(departmentMachineValue.getLineId());
 //        mNavigationCallback.goToDashboardActivity(mMachineId, null);
-        mListener.onMachineSelected();
+
+        if (mListener != null) {
+            mListener.onMachineSelected();
+        }
     }
 
     public interface SelectMachineFragmentListener {

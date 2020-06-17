@@ -883,6 +883,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             super.onResume();
 
         }
+
+        ChangeLang.initLanguage(this);
     }
 
     private void registerReceiver() {
@@ -1294,6 +1296,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
                 if (ProgressDialogManager.isShowing()) {
                     ProgressDialogManager.dismiss();
+                }
+
+                if(!ChangeLang.isLanguageSetOk(DashboardActivity.this)){
+                    refreshApp();
                 }
             }
 
@@ -2400,6 +2406,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             ProgressDialogManager.show(DashboardActivity.this);
             postProductionMode(productionModeId, PersistenceManager.getInstance().getMachineId());
         }
+
+        if (mActionBarAndEventsFragment != null) {
+            mActionBarAndEventsFragment.blockStatusSpinner();
+        }
     }
 
     public void postProductionMode(int productionModeId, int machineId) {
@@ -2759,6 +2769,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void addFragmentsToViewPager(RecipeResponse response) {
 
         if (mViewPagerFragment != null) {
+            initWidgetFragment();
             if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
 
                 showRecipeFragment(response);
@@ -2976,8 +2987,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mReportCore.sendCycleUnitsReport(value, mSelectProductJobId);
     }
 
-    private void sendRejectReport(String value, boolean isUnit, int selectedCauseId,
-                                  int selectedReasonId) {
+    private void sendRejectReport(String value, boolean isUnit, int selectedCauseId, int selectedReasonId) {
+        if (mActiveJobsListForMachine == null || mActiveJobsListForMachine.getActiveJobs() == null){
+            return;
+        }
         mSendRejectObject = new SendRejectObject(value, isUnit, selectedCauseId, selectedReasonId);
         ProgressDialogManager.show(this);
         ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
@@ -3377,6 +3390,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         onBackPressed();
         ProgressDialogManager.show(this);
         dashboardDataStartPolling();
+        if (mActionBarAndEventsFragment.isVisible()){
+            mActionBarAndEventsFragment.blockOperatorsSpinner();
+        }
     }
 
     @Override
@@ -3392,10 +3408,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (PersistenceManager.getInstance().getMachineId() == -1){
             return;
         }
-        mActionBarAndEventsFragment.setActionBar();
         getSupportFragmentManager().beginTransaction().remove(mSelectMachineFragment).commit();
         showReportBtn(true);
         mSelectMachineFragment = null;
+        mActionBarAndEventsFragment.setActionBar();
     }
 
     @Override

@@ -2,7 +2,11 @@ package com.operatorsapp.utils;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.util.Log;
+
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.server.pulling.interfaces.MachineDataUICallback;
+
 import java.util.Locale;
 
 public class ChangeLang {
@@ -11,6 +15,7 @@ public class ChangeLang {
     //    public static final String[] languages = new String[]{"English", "עברית", "中文", "Deutsch", "русский", "Українська", "español", "Français", "Nederlands", "العربية"};
     public static final String[] languagesCode = new String[]{"en", "iw", "zh", "de", "ru", "uk", "es", "fr", "nl", "ar", "it", "hu", "pl"}; // when adding a new language, add below as well
     public static final String[] languagesCode3Letters = new String[]{"eng", "heb", "chn", "ger", "rus", "ukr", "spn", "fre", "ned", "arb", "ita", "hun", "pol"}; // add here new language as well when adding above
+    private static final String TAG = ChangeLang.class.getSimpleName();
 
 
     public static void initLanguage(Context baseContext) {
@@ -71,6 +76,16 @@ public class ChangeLang {
         Locale.setDefault(locale);
         config.setLocale(locale);
         baseContext.getResources().updateConfiguration(config, baseContext.getResources().getDisplayMetrics());
+        Log.d(TAG, "Set Language: " + languageCode);
+    }
+
+    public static boolean isLanguageSetOk(Context context) {
+        if (Locale.getDefault().getLanguage().equals(PersistenceManager.getInstance().getCurrentLang())){
+            return true;
+        }else {
+            setLanguage(context, PersistenceManager.getInstance().getCurrentLang());
+            return false;
+        }
     }
 
 

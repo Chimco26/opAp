@@ -181,6 +181,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public static final double MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB = 1.8f;
     private static final int PRODUCTION_ID = 1;
     public static final String EXTRA_FIELD_FOR_MACHINE = "EXTRA_FIELD_FOR_MACHINE";
+    private static final int BLOCK_OPERATOR_SPINNER_TIME = 1000 * 10;
+    private static final int BLOCK_PRODUCTION_SPINNER_TIME = 1000 * 10;
 
 
     private View mToolBarView;
@@ -291,6 +293,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mBottomRl;
     private View mToolBarTaskBtn;
     private TextView mToolBarTaskCount;
+    private boolean mBlockStatusChange = false;
+    private boolean mBlockOperatorChange = false;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -1537,7 +1541,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (((DashboardActivity) getActivity()).getReportForMachine() != null && ((DashboardActivity) getActivity()).getReportForMachine().getTechnicians() != null) {
             techniciansList = ((DashboardActivity) getActivity()).getReportForMachine().getTechnicians();
         }
-        boolean isManageServiceCall = mCurrentMachineStatus.getmAllMachinesData().get(0).isManageServiceCallForTechnician();
+        boolean isManageServiceCall = mCurrentMachineStatus != null && mCurrentMachineStatus.getmAllMachinesData().get(0).isManageServiceCallForTechnician();
         mPopUpDialog = new TechCallDialog(getActivity(), tech, techniciansList, isManageServiceCall, new TechCallDialog.TechDialogListener() {
             @Override
             public void onNewCallPressed() {
@@ -2160,7 +2164,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         productionStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                if (mBlockStatusChange) return;
                 if (mCurrentMachineStatus.getAllMachinesData().get(0).ismCustomerIsActivateJobs() &&
                         ((PackageTypes) productionStatusSpinner.getItemAtPosition(productionStatusSpinner.getSelectedItemPosition())).getId() == PRODUCTION_ID) {
 
@@ -2171,7 +2175,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     productionStatusSpinner.setVisibility(View.INVISIBLE);
                     textview.setVisibility(View.INVISIBLE);
                 }
-
+                blockStatusSpinner();
             }
 
             @Override
@@ -2214,6 +2218,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             operatorFl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (mBlockOperatorChange) return;
                     mOnGoToScreenListener.goToFragment(new SignInOperatorFragment(), true, true);
                     mListener.showWhiteFilter(false);
                 }
@@ -2233,11 +2238,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             operatorsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (mBlockOperatorChange) return;
                     if (position == 0) {
                         mOnGoToScreenListener.goToFragment(new SignInOperatorFragment(), true, true);
                         mListener.showWhiteFilter(false);
                     } else if (position == 1) {
                         mOperatorCore.setOperatorForMachine("");
+                        blockOperatorsSpinner();
                     }
                 }
 
@@ -2247,6 +2254,28 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
             });
         }
+    }
+
+    public void blockOperatorsSpinner() {
+        mBlockOperatorChange = true;
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mBlockOperatorChange = false;
+            }
+        }, BLOCK_OPERATOR_SPINNER_TIME);
+    }
+
+    public void blockStatusSpinner() {
+        mBlockStatusChange = true;
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mBlockStatusChange = false;
+            }
+        }, BLOCK_PRODUCTION_SPINNER_TIME);
     }
 
     private void startToolbarTutorial() {
@@ -2423,10 +2452,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         }
 
+        boolean isAllowReportingOnSetupEvents = false;
+        boolean isSetupEnd = false;
+        boolean isAllowReportingSetupAfterSetupEnd = false;
+        if (mCurrentMachineStatus != null){
+            isAllowReportingOnSetupEvents = mCurrentMachineStatus.isAllowReportingOnSetupEvents();
+            isSetupEnd = mCurrentMachineStatus.getAllMachinesData().get(0).isSetupEnd();
+            isAllowReportingSetupAfterSetupEnd = mCurrentMachineStatus.isAllowReportingSetupAfterSetupEnd();
+        }
+
         if (mListener != null && events != null && events.size() > 0) {
             mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(
-                    mIsOpen, mActiveJobsListForMachine, mSelectedPosition, mCurrentMachineStatus.isAllowReportingOnSetupEvents(), mCurrentMachineStatus.isAllowReportingSetupAfterSetupEnd(),
-                    !mCurrentMachineStatus.getAllMachinesData().get(0).isSetupEnd(), PersistenceManager.getInstance().getMachineId(), ""));
+                    mIsOpen, mActiveJobsListForMachine, mSelectedPosition, isAllowReportingOnSetupEvents, isAllowReportingSetupAfterSetupEnd,
+                    !isSetupEnd, PersistenceManager.getInstance().getMachineId(), ""));
         } else {
             return;
         }
@@ -2472,10 +2510,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (lastEventReceived != null) {
                         PersistenceManager.getInstance().setLastLineEvent(lastEventReceived);
 
+                        boolean isAllowReportingOnSetupEvents = false;
+                        boolean isSetupEnd = false;
+                        boolean isAllowReportingSetupAfterSetupEnd = false;
+                        if (mCurrentMachineStatus != null){
+                            isAllowReportingOnSetupEvents = mCurrentMachineStatus.isAllowReportingOnSetupEvents();
+                            isSetupEnd = mCurrentMachineStatus.getAllMachinesData().get(0).isSetupEnd();
+                            isAllowReportingSetupAfterSetupEnd = mCurrentMachineStatus.isAllowReportingSetupAfterSetupEnd();
+                        }
+
                         if (mListener != null) {
                             mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(
-                                    mIsOpen, mActiveJobsListForMachine, mSelectedPosition, mCurrentMachineStatus.isAllowReportingOnSetupEvents(), mCurrentMachineStatus.isAllowReportingSetupAfterSetupEnd(),
-                                    !mCurrentMachineStatus.getAllMachinesData().get(0).isSetupEnd(), PersistenceManager.getInstance().getMachineId(), getRootMachineName(lastEventReceived), lastEventReceived));
+                                    mIsOpen, mActiveJobsListForMachine, mSelectedPosition, isAllowReportingOnSetupEvents, isAllowReportingSetupAfterSetupEnd,
+                                    !isSetupEnd, PersistenceManager.getInstance().getMachineId(), getRootMachineName(lastEventReceived), lastEventReceived));
 
                         }
                     }
@@ -2565,20 +2612,20 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mShiftLogSwipeRefresh.setRefreshing(false);
         }
         getNotificationsFromServer(false);
-        checkLanguage();
+//        checkLanguage();
         getLineEvents();
     }
 
-    private void checkLanguage() {
-        String currentLanguageName = PersistenceManager.getInstance().getCurrentLanguageName();
-        String currentLanguageCode = PersistenceManager.getInstance().getCurrentLang();
-        if (mLanguagesSpinner != null && !mLanguagesSpinner.getSelectedItem().equals(currentLanguageName)){
-            sendTokenWithSessionIdToServer(PersistenceManager.getInstance().getCurrentLang(),currentLanguageName);
-        }
-        if(!currentLanguageCode.equals(Locale.getDefault().getLanguage())){
-            ChangeLang.initLanguage(getActivity());
-        }
-    }
+//    private void checkLanguage() {
+//        String currentLanguageName = PersistenceManager.getInstance().getCurrentLanguageName();
+//        String currentLanguageCode = PersistenceManager.getInstance().getCurrentLang();
+//        if (mLanguagesSpinner != null && !mLanguagesSpinner.getSelectedItem().equals(currentLanguageName)){
+//            sendTokenWithSessionIdToServer(PersistenceManager.getInstance().getCurrentLang(),currentLanguageName);
+//        }
+//        if(!currentLanguageCode.equals(Locale.getDefault().getLanguage())){
+//            ChangeLang.initLanguage(getActivity());
+//        }
+//    }
 
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MachineJoshDataResponse machineJoshDataResponse) {

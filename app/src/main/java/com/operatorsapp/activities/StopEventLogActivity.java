@@ -29,6 +29,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.responses.StopReasonsGroup;
+import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.ShowCrouton;
@@ -359,4 +360,9 @@ public class StopEventLogActivity extends AppCompatActivity
         }
     };
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ChangeLang.initLanguage(this);
+    }
 }

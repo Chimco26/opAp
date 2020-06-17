@@ -127,8 +127,10 @@ public class QCTestOrderFragment extends Fragment implements
                     if (PersistenceManager.getInstance().getOperatorId() != null){
                         operatorId = PersistenceManager.getInstance().getOperatorId();
                     }
-                    sendTestOrder(new TestOrderSendRequest(mTestOrderRequest.getJobID(), mTestOrder.getJoshID(),
-                            mTestOrder.getProductID(), mTestOrderRequest.getSubType(), samples, operatorId));
+                    if (mTestOrder != null) {
+                        sendTestOrder(new TestOrderSendRequest(mTestOrderRequest.getJobID(), mTestOrder.getJoshID(),
+                                mTestOrder.getProductID(), mTestOrderRequest.getSubType(), samples, operatorId));
+                    }
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.you_need_to_select_the_test_field), Toast.LENGTH_SHORT).show();
                 }

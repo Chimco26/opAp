@@ -100,12 +100,8 @@ import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.StopReasonsResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
 import com.operatorsapp.utils.SendReportUtil;
-import com.operatorsapp.utils.ShowCrouton;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -152,7 +148,6 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         GetSimpleNetworkManager {
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
-    private static boolean isOnlineChecking = false;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
     private Retrofit mRetrofit;
     private OkHttpClient okHttpClient;
@@ -171,39 +166,10 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         if (msInstance == null) {
             OppAppLogger.e(LOG_TAG, "getInstance(), fail, NetworkManager is not init");
         }
-        isOnline();
         return msInstance;
     }
 
     public NetworkManager() {
-    }
-
-    private static void isOnline() {
-        HandlerThread handlerThread = new HandlerThread("HandlerThread");
-        handlerThread.start();
-
-        if (!isOnlineChecking) {
-            isOnlineChecking = true;
-            Handler handler = new Handler(handlerThread.getLooper());
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-
-                    try {
-                        int timeoutMs = 1500;
-                        Socket sock = new Socket();
-                        SocketAddress sockaddr = new InetSocketAddress("8.8.8.8", 53);
-
-                        sock.connect(sockaddr, timeoutMs);
-                        sock.close();
-                        isOnlineChecking = false;
-                    } catch (IOException e) {
-                        isOnlineChecking = false;
-                        Toast.makeText(OperatorApplication.getAppContext(), "NO INTERNET CONNECTION AVAILABLE", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }
     }
 
     @Override

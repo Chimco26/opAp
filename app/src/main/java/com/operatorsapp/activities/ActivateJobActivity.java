@@ -38,6 +38,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 
@@ -569,5 +570,11 @@ public class ActivateJobActivity extends AppCompatActivity implements
     @Override
     public void onPostUpdateActions(ArrayList<Action> updatedActions) {
         postUpdateActions(updatedActions, String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ChangeLang.initLanguage(this);
     }
 }
