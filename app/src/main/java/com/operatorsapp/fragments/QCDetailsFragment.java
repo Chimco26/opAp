@@ -274,17 +274,21 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     }
 
     private void initPassedView(Boolean status) {
+        if (getActivity() == null){
+            return;
+        }
+
         if (status == null) {
             mPassedLy.setVisibility(View.INVISIBLE);
         } else if (status) {
             mPassedLy.setVisibility(View.VISIBLE);
-            mPassedLy.setBackgroundColor(getContext().getResources().getColor(R.color.new_green));
-            mPassedIc.setImageDrawable(getContext().getResources().getDrawable(R.drawable.passed));
+            mPassedLy.setBackgroundColor(getActivity().getResources().getColor(R.color.new_green));
+            mPassedIc.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.passed));
             mPassedTv.setText(getString(R.string.passed));
         } else {
             mPassedLy.setVisibility(View.VISIBLE);
-            mPassedLy.setBackgroundColor(getContext().getResources().getColor(R.color.red_dark));
-            mPassedIc.setImageDrawable(getContext().getResources().getDrawable(R.drawable.close_white));
+            mPassedLy.setBackgroundColor(getActivity().getResources().getColor(R.color.red_dark));
+            mPassedIc.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.close_white));
             mPassedTv.setText(getString(R.string.failed));
         }
     }

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.multidex.MultiDexApplication;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -57,8 +59,8 @@ public class OperatorApplication extends MultiDexApplication {
 
     private static Context msApplicationContext;
     private FirebaseAnalytics sAnalytics;
-//    private Tracker sTracker;
 
+//    private Tracker sTracker;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -171,5 +173,9 @@ public class OperatorApplication extends MultiDexApplication {
     public static boolean isEnglishLang() {
 
         return PersistenceManager.getInstance().getCurrentLang().equals("en");
+    }
+
+    public static void showNoInternetMsg() {
+        Toast.makeText(msApplicationContext, R.string.no_connection_msg, Toast.LENGTH_SHORT).show();
     }
 }

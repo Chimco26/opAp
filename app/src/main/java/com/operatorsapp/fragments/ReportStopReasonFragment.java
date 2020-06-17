@@ -405,7 +405,8 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
         try {
 
-            if (mStopReasonsList.get(position).getSubReasons().size() == 1) {//&& BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))
+            if (mStopReasonsList != null && mStopReasonsList.get(position) != null && mStopReasonsList.get(position).getSubReasons() != null
+                    && mStopReasonsList.get(position).getSubReasons().size() == 1) {//&& BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))
 
                 mSelectedPosition = position;
 

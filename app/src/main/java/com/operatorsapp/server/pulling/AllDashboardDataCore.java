@@ -1,5 +1,7 @@
 package com.operatorsapp.server.pulling;
 
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 
 import com.example.common.ErrorResponse;
@@ -28,6 +30,7 @@ import com.operators.shiftloginfra.ShiftLogCoreCallback;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.polling.EmeraldJobBase;
 import com.operatorsapp.server.NetworkManager;
@@ -39,8 +42,13 @@ import com.operatorsapp.server.pulling.interfaces.OnTimeToEndChangedListener;
 import com.operatorsapp.server.pulling.interfaces.ShiftForMachineUICallback;
 import com.operatorsapp.server.pulling.interfaces.ShiftLogUICallback;
 import com.operatorsapp.server.pulling.timecounter.TimeToEndCounter;
+import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.SimpleRequests;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,6 +67,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     private static final String LOG_TAG = AllDashboardDataCore.class.getSimpleName();
 
     private static final int START_DELAY = 0;
+    private static boolean isOnlineChecking = false;
     private final AllDashboardDataCoreListener mListener;
     private EmeraldJobBase mJob;
 
@@ -173,6 +182,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             jobId = 0;
         }
 
+        isOnline();
         getPermissionForMachine();
         getMachineStatus(onJobFinishedListener, jobId);
         getMachineData(onJobFinishedListener, jobId);
@@ -186,6 +196,34 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
         if (mJob != null) {
             mJob.stopJob();
+        }
+    }
+
+    private static void isOnline() {
+        HandlerThread handlerThread = new HandlerThread("HandlerThread");
+        handlerThread.start();
+
+        if (!isOnlineChecking) {
+            isOnlineChecking = true;
+            Handler handler = new Handler(handlerThread.getLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+
+                    try {
+                        int timeoutMs = 1500;
+                        Socket sock = new Socket();
+                        SocketAddress sockaddr = new InetSocketAddress("8.8.8.8", 53);
+
+                        sock.connect(sockaddr, timeoutMs);
+                        sock.close();
+                        isOnlineChecking = false;
+                    } catch (IOException e) {
+                        isOnlineChecking = false;
+                        OperatorApplication.showNoInternetMsg();
+                    }
+                }
+            });
         }
     }
 

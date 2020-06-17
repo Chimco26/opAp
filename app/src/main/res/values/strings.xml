@@ -547,4 +547,5 @@
     <string name="finish_service">finish service</string>
     <string name="deselect_all">Deselect All</string>
     <string name="root_cause">Root Cause</string>
+    <string name="no_connection_msg">Can\'t reach the server. Check internet connection</string>
 </resources>
