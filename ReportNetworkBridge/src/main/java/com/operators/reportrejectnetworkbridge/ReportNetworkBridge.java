@@ -105,9 +105,9 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
 
     }
 
-    public void sendMultipleReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, long[] eventId, Integer jobId, final SendReportStopCallback callback, final int totalRetries, int specificRequestTimeout) {
+    public void sendMultipleReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, long[] eventId, Integer jobId, final SendReportStopCallback callback, final int totalRetries, int specificRequestTimeout, boolean byRootEvent) {
 
-        SendMultipleStopRequest sendMultipleStopRequest = new SendMultipleStopRequest(sessionId, machineId, operatorId, stopReasonId, stopSubReasonId, jobId, eventId, false, false);
+        SendMultipleStopRequest sendMultipleStopRequest = new SendMultipleStopRequest(sessionId, machineId, operatorId, stopReasonId, stopSubReasonId, jobId, eventId, byRootEvent, false);
 
         final int[] retryCount = {0};
 

@@ -114,7 +114,7 @@ public class ReportCore {
 
     }
 
-    public void sendMultipleStopReport(int stopReasonId, int stopSubReasonId, long[] eventId, int joshId) {
+    public void sendMultipleStopReport(int stopReasonId, int stopSubReasonId, long[] eventId, int joshId, boolean byRootEvent) {
         if (mReportPersistenceManagerInterface != null) {
             mReportRejectNetworkBridgeInterface.sendMultipleReportStop(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
@@ -136,9 +136,8 @@ public class ReportCore {
                                 OppAppLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
-                    }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());
+                    }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout(), byRootEvent);
         }
-
     }
 
     public void sendCycleUnitsReport(double unitsPerCycle, Integer jobId) {

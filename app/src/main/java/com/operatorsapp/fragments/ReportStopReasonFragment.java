@@ -442,7 +442,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
             mSelectedSubreason = subReason;
 
-            if (isFromViewLogRoot){
+            if (isFromViewLogRoot || isFromViewLog){
                 mListener.onReport(mSelectedPosition, mSelectedSubreason);
             }else {
                 sendReport();
@@ -507,7 +507,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         } else {
 
             mReportCore.sendMultipleStopReport(mStopReasonsList.get(mSelectedPosition).getId(),
-                    mSelectedSubreason.getId(), eventsId, mJoshId);
+                    mSelectedSubreason.getId(), eventsId, mJoshId, false);
 
         }
 
