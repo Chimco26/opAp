@@ -295,7 +295,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
         } else {
 
-            mReportCore.sendMultipleStopReport(mSelectedReason, mSelectedSubreason.getId(), eventsId, mJoshId);
+            mReportCore.sendMultipleStopReport(mSelectedReason, mSelectedSubreason.getId(), eventsId, mJoshId, false);
 
         }
 

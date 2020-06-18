@@ -149,6 +149,13 @@ public class StopEventLogActivity extends AppCompatActivity
                 events.add(event.getEventID() * 1.0f);
             }
         }
+
+        String title = getString(R.string.report_stop_reason_to_all_connected_events);
+
+        if (mSelectedSubreason.getSubReasons() != null && mSelectedSubreason.getSubReasons().size() > 0) {
+            title = getString(R.string.update_this_event_to_all_linked);
+        }
+
         if (mSubEvents != null && mSubEvents.size() > 0) {
             Alert2BtnDialog alert2BtnDialog = new Alert2BtnDialog(this, new Alert2BtnDialog.Alert2BtnDialogListener() {
                 @Override
@@ -159,19 +166,19 @@ public class StopEventLogActivity extends AppCompatActivity
                         list.add(event.getEventID() * 1.0f);
                     }
                     mSelectedEvents.addAll(list);
-                    sendReport(position, mSelectedSubreason);
+                    sendReport(position, mSelectedSubreason, true);
                 }
 
                 @Override
                 public void onClickNegativeBtn() {
                     mSelectedEvents.addAll(events);
-                    sendReport(position, mSelectedSubreason);
+                    sendReport(position, mSelectedSubreason, false);
                 }
-            }, getString(R.string.update_this_event_to_all_linked), getString(R.string.yes), getString(R.string.only_to_unreported));
+            }, title, getString(R.string.yes), getString(R.string.only_to_this_event));
 
             alert2BtnDialog.showAlert2BtnDialog().show();
         }else {
-            sendReport(position, mSelectedSubreason);
+            sendReport(position, mSelectedSubreason, false);
         }
     }
 
@@ -253,7 +260,7 @@ public class StopEventLogActivity extends AppCompatActivity
 
     //SEND REPORT
 
-    private void sendReport(int position, StopReasonsGroup subReasons) {
+    private void sendReport(int position, StopReasonsGroup subReasons, boolean byRootEvent) {
 
         this.position = position;
         this.subReason = subReasons;
@@ -268,18 +275,18 @@ public class StopEventLogActivity extends AppCompatActivity
 
         mReportCore.registerListener(mReportCallbackListener);
 
-        long[] eventsId = new long[mSelectedEvents.size()];
-
-        for (int i = 0; i < mSelectedEvents.size(); i++) {
-
-            eventsId[i] = mSelectedEvents.get(i).intValue();
-
-//            SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId(),
-//                    mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName(),
-//                    mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getLName(),
-//                    mSelectedSubreason.getEName(), mSelectedSubreason.getLName());
-
-        }
+//        long[] eventsId = new long[mSelectedEvents.size()];
+//
+//        for (int i = 0; i < mSelectedEvents.size(); i++) {
+//
+//            eventsId[i] = mSelectedEvents.get(i).intValue();
+//
+////            SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId(),
+////                    mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName(),
+////                    mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getLName(),
+////                    mSelectedSubreason.getEName(), mSelectedSubreason.getLName());
+//
+//        }
 
         if (PersistenceManager.getInstance().getVersion() < MINIMUM_VERSION_TO_NEW_API) {
 
@@ -291,9 +298,9 @@ public class StopEventLogActivity extends AppCompatActivity
             }
 
         } else {
-
+            long[] eventsId = {subReason.getId()};
             mReportCore.sendMultipleStopReport(getReportForMachine().getStopReasons().get(position).getId(),
-                    subReasons.getId(), eventsId, PersistenceManager.getInstance().getJoshId());
+                    subReasons.getId(), eventsId, PersistenceManager.getInstance().getJoshId(), byRootEvent);
 
         }
 

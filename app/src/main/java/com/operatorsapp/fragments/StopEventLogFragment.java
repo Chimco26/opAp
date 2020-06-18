@@ -189,9 +189,9 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
         ArrayList<Float> list = new ArrayList<>();
         list.add(item.getEventID() * 1f);
         if (rootMap.containsKey(item.getRootEventID()) && rootMap.get(item.getRootEventID()).size() > 0) {
-            mListener.onReportEvents(item.getMachineId(), rootMap.get(item.getRootEventID()), list, true, getRootMachineName(item));
+            mListener.onReportEvents(item.getMachineId(), rootMap.get(item.getRootEventID()), list, item.getRootEventID() == 0, getRootMachineName(item));
         } else {
-            mListener.onReportEvents(item.getMachineId(), mStopLogsItems, list, false, getRootMachineName(item));
+            mListener.onReportEvents(item.getMachineId(), mStopLogsItems, list, item.getRootEventID() == 0, getRootMachineName(item));
         }
     }
 
