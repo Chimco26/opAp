@@ -298,7 +298,12 @@ public class StopEventLogActivity extends AppCompatActivity
             }
 
         } else {
-            long[] eventsId = {subReason.getId()};
+            long[] eventsId = {0};
+            if (mSelectedEvents != null && mSelectedEvents.size() > 0) {
+                {
+                    eventsId[0] = mSelectedEvents.get(0).longValue();
+                }
+            }
             mReportCore.sendMultipleStopReport(getReportForMachine().getStopReasons().get(position).getId(),
                     subReasons.getId(), eventsId, PersistenceManager.getInstance().getJoshId(), byRootEvent);
 

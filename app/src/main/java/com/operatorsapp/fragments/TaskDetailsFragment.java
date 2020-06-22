@@ -472,7 +472,7 @@ public class TaskDetailsFragment extends Fragment {
             mTimeHr.setText(String.valueOf(hours));
             mTimeMin.setText(String.valueOf(min));
         }
-        mTimeMin.setFilters(new InputFilter[]{new InputFilterMinMax(0, 60)});
+        mTimeMin.setFilters(new InputFilter[]{new InputFilterMinMax(0, 59)});
     }
 
     private void initAttachFiles(TaskFilesResponse taskFiles) {
