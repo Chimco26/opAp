@@ -187,7 +187,7 @@
     <string name="app_name">χειριστής MATICS</string>
     <string name="at_work">Σε εργασία</string>
     <string name="attention_cycles_detected_in_a_non_production_status"></string>
-    <string name="call_for_technician_unresponsive">η κλήση σας για τεχνικό δεν είχε ανταπόκριση για 5'</string>
+    <string name="call_for_technician_unresponsive">η κλήση σας για τεχνικό δεν είχε ανταπόκριση για 5\'</string>
     <string name="call_technician_text">Χρειάζετε να επιδιορθωθεί κάτι</string>
     <string name="call_technician_title">Κλήση Τεχνικού</string>
     <string name="called_technician">Καλέσθηκε τεχνικός</string>
@@ -446,8 +446,8 @@
     <string name="you_need_to_complete_all_mandatory_fields"></string>
     <string name="send_test_success">Στείλτε το τεστ επιτυχίας</string>
     <string name="powered_by_leadermes">Powered by Matics</string>
-    <string name="you_need_to_select_the_test">Χρειάζετε να διαλέξετε το τεστ που θέλετε να \'τρέξετε'</string>
-    <string name="you_need_to_select_the_test_field">Χρειάζετε να διαλέξετε το τεστ που θέλετε να \'τρέξετε'</string>
+    <string name="you_need_to_select_the_test">Χρειάζετε να διαλέξετε το τεστ που θέλετε να \'τρέξετε\'</string>
+    <string name="you_need_to_select_the_test_field">Χρειάζετε να διαλέξετε το τεστ που θέλετε να \'τρέξετε\'</string>
     <string name="view_log">Προβολή αρχείου καταγραφής</string>
     <string name="you_cant_add_more_workers_than">δε μπορείς να προσθέσεις περισσότερους χειριστές από</string>
     <string name="save_and_close">Αποθήκευση και κλείσιμο</string>
