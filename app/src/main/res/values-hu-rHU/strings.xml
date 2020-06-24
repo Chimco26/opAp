@@ -481,4 +481,11 @@
     <string name="max_value_must_be_greater_than_min">A max. értéknek nagyobbnak kell lennie a min. értéknél</string>
     <string name="start_service">indítsa el a szolgáltatást</string>
     <string name="finish_service">befejezni a szolgáltatást</string>
+    <string name="source">Forrás</string>
+    <string name="deselect_all">Összes kiválasztás törlése</string>
+    <string name="root_cause">Kiváltó ok</string>
+    <string name="no_connection_msg">A szerver nem elérhető. Ellenőrizze az internetkapcsolatot</string>
+    <string name="only_to_this_event">Nem, csak ennél az eseménynél</string>
+    <string name="report_stop_reason_to_all_connected_events">Leállás okának jelentése minden kapcsolódó eseményhez</string>
+    <string name="no_report_permission_on_setup">Ön nem jelenthet BEÁLLÍTÁSI eseményeket; kérjük, hogy további engedélyért forduljon a rendszergazdához</string>
 </resources>

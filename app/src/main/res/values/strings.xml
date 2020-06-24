@@ -550,4 +550,5 @@
     <string name="no_connection_msg">Can\'t reach the server. Check internet connection</string>
     <string name="only_to_this_event">No, only to this event</string>
     <string name="report_stop_reason_to_all_connected_events">Report stop reason to all connected events</string>
+    <string name="no_report_permission_on_setup">You are not allowed to report events on SETUP, please contact system administrator for more permissions</string>
 </resources>

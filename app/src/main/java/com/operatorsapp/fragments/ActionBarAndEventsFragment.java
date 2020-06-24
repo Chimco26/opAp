@@ -2462,6 +2462,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
 
         if (mListener != null && events != null && events.size() > 0) {
+            if ((isSetupEnd || isAllowReportingOnSetupEvents)){
+                ShowCrouton.showSimpleCrouton(mCroutonCallback, getString(R.string.no_report_permission_on_setup), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+                return;
+            }
             mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(
                     mIsOpen, mActiveJobsListForMachine, mSelectedPosition, isAllowReportingOnSetupEvents, isAllowReportingSetupAfterSetupEnd,
                     !isSetupEnd, PersistenceManager.getInstance().getMachineId(), ""));
@@ -2519,7 +2523,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             isAllowReportingSetupAfterSetupEnd = mCurrentMachineStatus.isAllowReportingSetupAfterSetupEnd();
                         }
 
-                        if (mListener != null) {
+                        if (mListener != null && (isSetupEnd || isAllowReportingOnSetupEvents)) {
                             mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(
                                     mIsOpen, mActiveJobsListForMachine, mSelectedPosition, isAllowReportingOnSetupEvents, isAllowReportingSetupAfterSetupEnd,
                                     !isSetupEnd, PersistenceManager.getInstance().getMachineId(), getRootMachineName(lastEventReceived), lastEventReceived));

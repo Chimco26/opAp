@@ -494,4 +494,11 @@
     <string name="max_value_must_be_greater_than_min">القيمة القصوى يجب أن تكون أعلى من القيمة الدنيا</string>
     <string name="start_service">بدء العمل على نداء الخدمه</string>
     <string name="finish_service">انهاء العمل على نداء الخدمه</string>
+    <string name="source">المصدر</string>
+    <string name="deselect_all">إلغاء تحديد الكل</string>
+    <string name="root_cause">السبب الجذري</string>
+    <string name="no_connection_msg">لا يمكن الوصول إلى الخادم. تحقق من اتصالك بالإنترنت</string>
+    <string name="only_to_this_event">لا، فقط بالنسبة لهذا الحدث</string>
+    <string name="report_stop_reason_to_all_connected_events">أبلغ عن سبب التوقف لجميع الأحداث ذات الصلة</string>
+    <string name="no_report_permission_on_setup">لا يُسمح لك بالإبلاغ عن الأحداث في قسم \"الإعداد\"، يرجى الاتصال بمسؤول النظام للحصول على مزيد من الأذونات</string>
 </resources>

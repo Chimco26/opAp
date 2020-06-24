@@ -485,4 +485,11 @@
     <string name="max_value_must_be_greater_than_min">最大值必须大于最小值</string>
     <string name="start_service">開始服務</string>
     <string name="finish_service">完成服務</string>
+    <string name="source">来源</string>
+    <string name="deselect_all">全部取消选择</string>
+    <string name="root_cause">根本原因</string>
+    <string name="no_connection_msg">无法访问服务器。请检查互联网连接</string>
+    <string name="only_to_this_event">不，仅对此事件</string>
+    <string name="report_stop_reason_to_all_connected_events">向所有关联事件报告停机原因</string>
+    <string name="no_report_permission_on_setup">您无权报告安装事件，请联系系统管理员以获取更多权限</string>
 </resources>
