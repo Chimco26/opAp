@@ -489,4 +489,11 @@
     <string name="powered_by_leadermes">Працює на Matics</string>
     <string name="start_service">почати обслуговування</string>
     <string name="finish_service">завершити обслуговування</string>
+    <string name="source">Джерело</string>
+    <string name="deselect_all">Скасувати вибір усіх</string>
+    <string name="root_cause">Першопричина</string>
+    <string name="no_connection_msg">Не вдається отримати доступ до сервера. Перевірте підключення до Інтернету</string>
+    <string name="only_to_this_event">Ні, тільки до цієї події</string>
+    <string name="report_stop_reason_to_all_connected_events">Повідомте про причину зупинки для всіх пов’язаних подій</string>
+    <string name="no_report_permission_on_setup">У вас немає дозволу повідомляти про події в НАЛАШТУВАННЯХ, будь ласка, зверніться до системного адміністратора, щоб отримати додаткові дозволи</string>
 </resources>

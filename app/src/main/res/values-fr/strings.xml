@@ -493,4 +493,11 @@
     <string name="max_value_must_be_greater_than_min">La valeur maximale doit être supérieure à la valeur minimale</string>
     <string name="start_service">démarrer le service</string>
     <string name="finish_service">terminer le service</string>
+    <string name="source">Source</string>
+    <string name="deselect_all">Tout désélectionner</string>
+    <string name="root_cause">Cause première</string>
+    <string name="no_connection_msg">Connexion au serveur impossible. Vérifiez la connexion Internet</string>
+    <string name="only_to_this_event">Non, seulement sur cet événement</string>
+    <string name="report_stop_reason_to_all_connected_events">Signaler le motif d\'arrêt sur tous les événements connectés</string>
+    <string name="no_report_permission_on_setup">Vous n\'êtes pas autorisé à signaler des événements sur le programme CONFIGURATION. Veuillez contacter l\'administrateur système pour obtenir les autorisations nécessaires</string>
 </resources>

@@ -494,4 +494,11 @@
     <string name="max_value_must_be_greater_than_min">Der Maximalwert muss größer als der Minimalwert sein</string>
     <string name="start_service">Service starten</string>
     <string name="finish_service">Service beenden</string>
+    <string name="source">Quelle</string>
+    <string name="deselect_all">Auswahl aufheben</string>
+    <string name="root_cause">Grundursache</string>
+    <string name="no_connection_msg">Server kann nicht erreicht werden. Internetverbindung überprüfen</string>
+    <string name="only_to_this_event">Nein, nur zu diesem Ereignis</string>
+    <string name="report_stop_reason_to_all_connected_events">Stoppgrund allen verbundenen Ereignissen melden</string>
+    <string name="no_report_permission_on_setup">Sie dürfen keine Ereignisse in SETUP melden. Weitere Berechtigungen erhalten Sie vom Systemadministrator</string>
 </resources>

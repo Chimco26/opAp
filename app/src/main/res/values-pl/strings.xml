@@ -463,4 +463,11 @@
     <string name="stop_logs">Zatrzymaj dziennik zdarzeń</string>
     <string name="start_service">uruchom usługę</string>
     <string name="finish_service">zatrzymaj usługę</string>
+    <string name="source">Źródło</string>
+    <string name="deselect_all">Odznacz wszystko</string>
+    <string name="root_cause">Przyczyna główna</string>
+    <string name="no_connection_msg">Nie można połączyć z serwerem. Sprawdź połączenie z Internetem</string>
+    <string name="only_to_this_event">Nie, tylko w zakresie tego zdarzenia</string>
+    <string name="report_stop_reason_to_all_connected_events">Zgłoś przyczynę przestoju (wszystkie połączone zdarzenia)</string>
+    <string name="no_report_permission_on_setup">Nie możesz zgłaszać zdarzeń w czasie KONFIGURACJI, skontaktuj się z administratorem systemu w celu uzyskania dodatkowych uprawnień</string>
 </resources>
