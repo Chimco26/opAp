@@ -151,7 +151,9 @@
                     android:textColor="@color/grey1"
                     android:textSize="18sp"
                     app:autoSizeMaxTextSize="18sp"
-                    app:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform">
+                    <requestFocus/>
+                </EditText>
 
 
             </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>

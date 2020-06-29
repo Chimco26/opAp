@@ -854,6 +854,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     protected void onResume() {
+        OppAppLogger.d(TAG, "onResume()");
 
         pollingBackup(true);
 
