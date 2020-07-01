@@ -3417,7 +3417,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onMachineSelected() {
+        cleanEvents();
         onCloseSelectMachine();
+        if (mActionBarAndEventsFragment != null) {
+            mActionBarAndEventsFragment.clearEventsRecycler();
+        }
         ProgressDialogManager.show(this);
         dashboardDataStartPolling();
     }
