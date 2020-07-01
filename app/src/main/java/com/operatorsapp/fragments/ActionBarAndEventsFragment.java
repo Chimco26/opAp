@@ -3112,6 +3112,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
+    public void clearEventsRecycler(){
+        mIsSelectionMode = false;
+        mNoData = true;
+        mSelectedEvents = new ArrayList<>();
+        mShiftLogRecycler.setAdapter(null);
+    }
+
 
     public void initFilterEvents(View view) {
 
