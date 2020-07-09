@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.common.department.MachineLineResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.utils.Consts;
@@ -30,10 +31,12 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final Context mContext;
     private final TechCallItemListener mListener;
     private final boolean isManageServiceCall;
+    private final String mMachineName;
 
-    public TechCallAdapter(Context context, ArrayList<TechCallInfo> mTechList, boolean isManageServiceCall, TechCallItemListener listener) {
+    public TechCallAdapter(Context context, ArrayList<TechCallInfo> mTechList, boolean isManageServiceCall, String machineName, TechCallItemListener listener) {
         mContext = context;
         this.mTechList = mTechList;
+        mMachineName = machineName;
         this.isManageServiceCall = isManageServiceCall;
         mListener = listener;
         sortTechList();
@@ -127,6 +130,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         techViewHolder.mStatusIv.setImageResource(icon);
         techViewHolder.mSubTextTv.setText(txt);
+        techViewHolder.mMachineNameTv.setText(mMachineName);
     }
 
     @Override
@@ -135,6 +139,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public class TechViewHolder extends RecyclerView.ViewHolder {
+        private TextView mMachineNameTv;
         private TextView mSubTextTv;
         private TextView mTextTv;
         private TextView mTimeTv;
@@ -154,6 +159,10 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mTimeTv = itemView.findViewById(R.id.tech_call_item_time_tv);
             mStatusIv = itemView.findViewById(R.id.tech_call_item_status_iv);
             mSubTextTv = itemView.findViewById(R.id.tech_call_item_subtext_tv);
+            mMachineNameTv = itemView.findViewById(R.id.tech_call_item_machine_name_tv);
+            if (!mMachineName.isEmpty()){
+                mMachineNameTv.setVisibility(View.VISIBLE);
+            }
         }
     }
 

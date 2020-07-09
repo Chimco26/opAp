@@ -51,6 +51,7 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
     public static final String EXTRA_REPORT_FIELD_FOR_MACHINE = "EXTRA_REPORT_FIELD_FOR_MACHINE";
     public static final String EXTRA_MANAGE_SERVICE_CALL_FOR_TECHNICIAN = "EXTRA_MANAGE_SERVICE_CALL_FOR_TECHNICIAN";
     public static final String EXTRA_IS_MACHINE_CHANGED = "EXTRA_IS_MACHINE_CHANGED";
+    public static final String EXTRA_MACHINE_LINE = "EXTRA_MACHINE_LINE";
 
     private LinearLayout mBackBtn;
     private ReportFieldsForMachine mReportFieldsMachine;
@@ -64,6 +65,7 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
     private ProgressBar mProgressBar;
     private boolean isMachineChanged = false;
     private CroutonCreator mCroutonCreator;
+    private MachineLineResponse mMachineLineResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +123,8 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
         SimpleRequests.getMachineLine(pm.getSiteUrl(), new GetMachineLineCallback() {
             @Override
             public void onGetMachineLineSuccess(MachineLineResponse response) {
-                setLineLayouts(response);
+                mMachineLineResponse = response;
+                setLineLayouts();
                 mLineProgress.setVisibility(View.GONE);
             }
 
@@ -133,20 +136,20 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
     }
 
-    private void setLineLayouts(MachineLineResponse response) {
-        if (response.getLineID() != 0){
+    private void setLineLayouts() {
+        if (mMachineLineResponse != null && mMachineLineResponse.getLineID() != 0){
             mLineLy.setVisibility(View.VISIBLE);
             machineLineItems.clear();
-            machineLineItems.addAll(response.getMachinesData());
+            machineLineItems.addAll(mMachineLineResponse.getMachinesData());
             mMachineLineAdapter.notifyDataSetChanged();
-            if (response.getLineName() != null && !response.getLineName().isEmpty()) {
-                mLineNameTv.setText(response.getLineName());
+            if (mMachineLineResponse.getLineName() != null && !mMachineLineResponse.getLineName().isEmpty()) {
+                mLineNameTv.setText(mMachineLineResponse.getLineName());
             } else {
                 mLineNameTv.setText(getResources().getString(R.string.production_line));
             }
             TechCallFragment fragment = (TechCallFragment) getSupportFragmentManager().findFragmentByTag(TechCallFragment.LOG_TAG);
             if (fragment != null && fragment.isVisible()){
-                fragment.setLineLayout(response);
+                fragment.setLineLayout(mMachineLineResponse);
             }
         }else {
             mLineLy.setVisibility(View.GONE);
@@ -158,10 +161,11 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
         TechCallFragment fragment = TechCallFragment.newInstance();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(TechCallActivity.EXTRA_REPORT_FIELD_FOR_MACHINE, new ArrayList<Parcelable>(mTechnicianList));
+        bundle.putParcelable(TechCallActivity.EXTRA_MACHINE_LINE, mMachineLineResponse);
         bundle.putBoolean(TechCallActivity.EXTRA_MANAGE_SERVICE_CALL_FOR_TECHNICIAN, isManageServiceCall);
 
         fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, TechCallFragment.LOG_TAG).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, fragment.LOG_TAG).commit();
     }
 
     public void setToolbar() {

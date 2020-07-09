@@ -58,6 +58,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.operatorsapp.activities.TechCallActivity.EXTRA_MACHINE_LINE;
 import static com.operatorsapp.activities.TechCallActivity.EXTRA_MANAGE_SERVICE_CALL_FOR_TECHNICIAN;
 import static com.operatorsapp.activities.TechCallActivity.EXTRA_REPORT_FIELD_FOR_MACHINE;
 
@@ -85,6 +86,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
     private int mSelectedTech = -1;
     private MachineLineResponse mMachineLine;
     private TextView mSortTv;
+    private boolean isOpenCalls = true;
 
     public TechCallFragment() {
     }
@@ -108,6 +110,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
         if (getArguments() != null) {
             isManageServiceCall = getArguments().getBoolean(EXTRA_MANAGE_SERVICE_CALL_FOR_TECHNICIAN, false);
             mTechnicianList = getArguments().getParcelableArrayList(EXTRA_REPORT_FIELD_FOR_MACHINE);
+            mMachineLine = getArguments().getParcelable(EXTRA_MACHINE_LINE);
             if (mTechnicianList == null) mTechnicianList = new ArrayList<>();
         }
         mTechCallList = PersistenceManager.getInstance().getCalledTechnician();
@@ -145,6 +148,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
         setOpenCalls(0);
         setTechniciansSpinner();
         setMachineSpinner();
+        setLineLayout(mMachineLine);
     }
 
     @Override
@@ -215,7 +219,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
 
     private void checkFieldsForNewCall() {
         boolean isFieldsOk = true;
-        if (mMachineLine.getLineID() != 0 && mSelectedMachine < 0){
+        if (mMachineLine != null && mMachineLine.getLineID() != 0 && mSelectedMachine < 0){
             mSelectMachineFrame.setBackgroundColor(Color.RED);
             isFieldsOk = false;
         }
@@ -230,6 +234,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setLast24Hrs() {
+        isOpenCalls = false;
         mLast24Tab.setTextColor(getResources().getColor(R.color.tabNotificationColor));
         mOpenTab.setTextColor(getResources().getColor(R.color.dark_indigo));
         mLast24Underline.setVisibility(View.VISIBLE);
@@ -251,12 +256,17 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setOpenCalls(int position) {
+        isOpenCalls = true;
         mOpenTab.setTextColor(getResources().getColor(R.color.tabNotificationColor));
         mLast24Tab.setTextColor(getResources().getColor(R.color.dark_indigo));
         mOpenUnderline.setVisibility(View.VISIBLE);
         mLast24Underline.setVisibility(View.INVISIBLE);
 
-        mRecycler.setAdapter(new TechCallAdapter(getContext(), mTechCallList, isManageServiceCall, new TechCallAdapter.TechCallItemListener() {
+        String machineName = "";
+        if (mMachineLine != null && mMachineLine.getLineID() > 0){
+            machineName = PersistenceManager.getInstance().getMachineName();
+        }
+        mRecycler.setAdapter(new TechCallAdapter(getContext(), mTechCallList, isManageServiceCall, machineName, new TechCallAdapter.TechCallItemListener() {
             @Override
             public void onRemoveCallPressed(TechCallInfo techCallInfo) {
                 removeCall(techCallInfo);
@@ -507,13 +517,18 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
 
     public void setLineLayout(MachineLineResponse machineLineResponse) {
         mMachineLine = machineLineResponse;
-        if (machineLineResponse.getLineID() != 0) {
+        if (mMachineLine != null && mMachineLine.getLineID() != 0) {
             mSelectMachineFrame.setVisibility(View.VISIBLE);
             mFilterIv.setVisibility(View.VISIBLE);
             mSortSpnr.setVisibility(View.VISIBLE);
             mSortTv.setVisibility(View.VISIBLE);
             setListeners();
             setMachineSpinner();
+            if (isOpenCalls) {
+                setOpenCalls(mRecycler.getChildAdapterPosition(mRecycler.getLayoutManager().getFocusedChild()));
+            }else {
+                setLast24Hrs();
+            }
         }else {
             mSelectMachineFrame.setVisibility(View.GONE);
             mFilterIv.setVisibility(View.GONE);

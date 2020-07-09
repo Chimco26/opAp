@@ -1374,8 +1374,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             technicianRl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    startTechCallActivity();
-                    openDeleteTechCallDialog(PersistenceManager.getInstance().getCalledTechnician());
+                    startTechCallActivity();
+//                    openDeleteTechCallDialog(PersistenceManager.getInstance().getCalledTechnician());
 
 //                    long technicianCallTime = PersistenceManager.getInstance().getTechnicianCallTime();
 //                    long now = new Date().getTime();

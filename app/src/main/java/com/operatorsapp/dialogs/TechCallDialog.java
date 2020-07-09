@@ -159,7 +159,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
 
     private void setOpenCalls(int position) {
         setRecyclerViewParams(45.0f);
-        mRecyclerView.setAdapter(new TechCallAdapter(getContext(), mTechList, isManageServiceCall, new TechCallAdapter.TechCallItemListener() {
+       /* mRecyclerView.setAdapter(new TechCallAdapter(getContext(), mTechList, isManageServiceCall, new TechCallAdapter.TechCallItemListener() {
             @Override
             public void onRemoveCallPressed(final TechCallInfo techCallInfo) {
                 Notification notificationToRemove = null;
@@ -306,7 +306,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                     }
                 });
             }
-        }));
+        }));*/
         ((LinearLayoutManager) mRecyclerView.getLayoutManager()).scrollToPosition(position);
     }
 
