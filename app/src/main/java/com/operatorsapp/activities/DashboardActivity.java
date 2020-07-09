@@ -238,6 +238,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private static final int CHECK_APP_VERSION_INTERVAL = 1000 * 60 * 60 * 3; //check every 3 hours
     private static final int REQUEST_WRITE_PERMISSION = 786;
     private static final int QC_ACTIVITY_RESULT_CODE = 2506;
+    private static final int TECH_CALL_ACTIVITY_RESULT_CODE = 2507;
     private boolean ignoreFromOnPause = false;
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private CroutonCreator mCroutonCreator;
@@ -2870,7 +2871,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 activateJob(Integer.parseInt(data.getStringExtra(ActivateJobActivity.EXTRA_ACTIVATE_JOB_ID)));
             }
+        }
 
+        if (resultCode == RESULT_OK && requestCode == TECH_CALL_ACTIVITY_RESULT_CODE){
+            if (data.getBooleanExtra(TechCallActivity.EXTRA_IS_MACHINE_CHANGED, false)){
+                mAllDashboardDataCore.startPolling();
+            }
         }
 
     }

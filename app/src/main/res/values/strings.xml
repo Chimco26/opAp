@@ -1,8 +1,4 @@
-<?xml version="1.0"?>
-<!DOCTYPE resources [
-    <!ENTITY placeholder1 "matics_placeholder_matics_number_1">
-    <!ENTITY placeholder2 "matics_placeholder_matics_number_2">
-    ]>
+<?xml version="1.0"?><!DOCTYPE resources [<!ENTITY placeholder1 "matics_placeholder_matics_number_1"><!ENTITY placeholder2 "matics_placeholder_matics_number_2">]>
 <resources>
 
     <string name="placeholder1" translatable="false">matics_placeholder_matics_number_1</string>
@@ -341,16 +337,20 @@
     <string name="change_factory">Change factory</string>
 
     <!--keys for insights-->
-    <string name="NoProgressMinFromStartShift">It\'s &placeholder2; minutes into the shift and machine &placeholder1; have not yet begun production.</string>
-    <string name="SetupDurationMinActual">Machine &placeholder1; is in setup for over &placeholder2; minutes.</string>
+    <string name="NoProgressMinFromStartShift">It\'s &placeholder2; minutes into the shift and machine &placeholder1;
+        have not yet begun production.</string>
+    <string name="SetupDurationMinActual">Machine &placeholder1; is in setup for over &placeholder2;
+        minutes.</string>
     <string name="SetupInjectionsCount">Machine &placeholder1; has done over &placeholder2; cycles in setup.</string>
     <string name="UnReportedStopsPC">Machine &placeholder1;: over &placeholder2; %% of stop time this shift is uncategorized.</string>
     <string name="RejectsPC">Machine &placeholder1; has over &placeholder2; %% Rejects.</string>
     <string name="OpenEventDuration">Current stop time for machine &placeholder1; is over &placeholder2; minutes.</string>
     <string name="ProductionModeInjectionsCount">&placeholder2; cycles detected on &placeholder1; in non production status.</string>
     <string name="CycleTimeDeviation">&placeholder2; %% exceeded Cycle Time standard on &placeholder1;.</string>
-    <string name="ShortEventsFromProductionPC">Machine &placeholder1; : Total short stops from the total production time exceeds &placeholder2; %%.</string>
-    <string name="WorkerNotSigned">Machine &placeholder1;: There isn\'t operator login to the machine &placeholder2; minutes after the beginning of the shift.</string>
+    <string name="ShortEventsFromProductionPC">Machine &placeholder1; : Total short stops from the total production time exceeds &placeholder2;
+        %%.</string>
+    <string name="WorkerNotSigned">Machine &placeholder1;: There isn\'t operator login to the machine &placeholder2;
+        minutes after the beginning of the shift.</string>
     <string name="open_calls">Open Calls</string>
     <string name="last_24h">Last 24hrs</string>
     <string name="you_ve_reached_the_production_target">You’ve reached the production target!</string>
@@ -495,7 +495,7 @@
     <string name="you_cant_add_more_workers_than">you can\'t add more workers than</string>
     <string name="default_unanswered_technocian_call">Waiting for the technician to reply</string>
     <string name="install_activity_not_found">Could not find installation application, try and reinstall "Google Play Store"</string>
-    <string name="lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incid"  translatable="false">Lorem ipsum dolor sit amet,
+    <string name="lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incid" translatable="false">Lorem ipsum dolor sit amet,
         consectetur adipiscing elit, sed do eiusmod tempor incidLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
         eiusmod tempor incidLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidLorem ipsum dolor
         sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidLorem ipsum dolor sit amet, consectetur adipiscing elit,
@@ -551,4 +551,7 @@
     <string name="only_to_this_event">No, only to this event</string>
     <string name="report_stop_reason_to_all_connected_events">Report stop reason to all connected events</string>
     <string name="no_report_permission_on_setup">You are not allowed to report events on SETUP, please contact system administrator for more permissions</string>
+    <string name="sort_by">Sort By</string>
+    <string name="select_technician">Select Technician</string>
+    <string name="dashboard">Dashboard</string>
 </resources>
