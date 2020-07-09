@@ -87,6 +87,7 @@ import com.operators.reportfieldsformachineinfra.Technician;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
+import com.operatorsapp.activities.TechCallActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.EventsAdapter;
@@ -1373,6 +1374,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             technicianRl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+//                    startTechCallActivity();
                     openDeleteTechCallDialog(PersistenceManager.getInstance().getCalledTechnician());
 
 //                    long technicianCallTime = PersistenceManager.getInstance().getTechnicianCallTime();
@@ -1519,6 +1521,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
         if (PersistenceManager.getInstance().getMachineId() == -1) {
             mListener.onActionBarAndEventsFragmentCreated();
+        }
+    }
+
+    private void startTechCallActivity() {
+
+        if (getActivity() != null && ((DashboardActivity) getActivity()).getReportForMachine() != null ) {
+            Intent intent = new Intent(getActivity(), TechCallActivity.class);
+            intent.putExtra(TechCallActivity.EXTRA_REPORT_FIELD_FOR_MACHINE, ((DashboardActivity) getActivity()).getReportForMachine());
+            intent.putExtra(TechCallActivity.EXTRA_MANAGE_SERVICE_CALL_FOR_TECHNICIAN, mCurrentMachineStatus != null && mCurrentMachineStatus.getmAllMachinesData().get(0).isManageServiceCallForTechnician());
+            startActivity(intent);
         }
     }
 
@@ -2463,13 +2475,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
 
         if (mListener != null && events != null && events.size() > 0) {
-            if (!(isSetupEnd || isAllowReportingOnSetupEvents)){
+//            if (!(isSetupEnd || isAllowReportingOnSetupEvents)){
+            if (event.getEventGroupID() == 10 && !isAllowReportingOnSetupEvents){
                 ShowCrouton.showSimpleCrouton(mCroutonCallback, getString(R.string.no_report_permission_on_setup), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                 return;
             }
             mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(
                     mIsOpen, mActiveJobsListForMachine, mSelectedPosition, isAllowReportingOnSetupEvents, isAllowReportingSetupAfterSetupEnd,
-                    !isSetupEnd, PersistenceManager.getInstance().getMachineId(), ""));
+                    event.getEventGroupID() == 10, PersistenceManager.getInstance().getMachineId(), ""));
         } else {
             return;
         }
@@ -2530,7 +2543,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         if (mListener != null && (isSetupEnd || isAllowReportingOnSetupEvents)) {
                             mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(
                                     mIsOpen, mActiveJobsListForMachine, mSelectedPosition, isAllowReportingOnSetupEvents, isAllowReportingSetupAfterSetupEnd,
-                                    !isSetupEnd, PersistenceManager.getInstance().getMachineId(), getRootMachineName(lastEventReceived), lastEventReceived));
+                                    lastEventReceived.getEventGroupID() == 10, PersistenceManager.getInstance().getMachineId(), getRootMachineName(lastEventReceived), lastEventReceived));
 
                         }
                     }

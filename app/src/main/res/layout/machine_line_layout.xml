@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/machine_line_ly"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:background="@color/white"
+    android:paddingStart="15dp"
+    android:visibility="visible">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/divider_gray" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/divider_gray" />
+
+    <LinearLayout
+        android:id="@+id/machine_line_title_ll"
+        android:layout_width="130dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/machine_line_log_btn_ll"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/blue1"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/machine_line_log_btn"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeTextType="uniform"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="1dp"
+                android:text="@string/view_log"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/line_arrow"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:rotation="180"
+                android:src="@drawable/arrow_back" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/machine_line_tv"
+            app:autoSizeMaxTextSize="20sp"
+            app:autoSizeTextType="uniform"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/production_line"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/machine_line_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@+id/machine_line_title_ll"
+        android:padding="0dp"
+        android:paddingStart="10dp"
+        tools:listitem="@layout/item_line_machine" />
+
+    <ProgressBar
+        android:id="@+id/line_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+</RelativeLayout>
+
+

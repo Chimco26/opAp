@@ -185,7 +185,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             @Override
             public void onResponse(Call<StopReasonsResponse> call, Response<StopReasonsResponse> response) {
                 mStopReasonsList = new ArrayList<>();
-                if (response.body() != null) {
+                if (response.body() != null && response.body().getStopReasonsList() != null) {
 
                     for (StopReasonsGroup item : response.body().getStopReasonsList()) {
 
