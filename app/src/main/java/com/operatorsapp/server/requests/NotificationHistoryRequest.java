@@ -18,6 +18,9 @@ public class NotificationHistoryRequest {
     @SerializedName("sourceMachineID")
     private int machineId;
 
+    @SerializedName("sourceMachines")
+    private int[] machinesIdArray;
+
     @SerializedName("applicationID")
     private int mAppCode;
 
@@ -25,5 +28,12 @@ public class NotificationHistoryRequest {
         this.sessionID = sessionID;
         this.machineId = machineId;
         mAppCode = APPLICATION_CODE_FOR_NOTIFICATIONS;
+    }
+
+    public NotificationHistoryRequest(String sessionId, int[] machinesId) {
+        this.sessionID = sessionId;
+        this.machinesIdArray = machinesId;
+        mAppCode = APPLICATION_CODE_FOR_NOTIFICATIONS;
+        this.machineId = -1;
     }
 }

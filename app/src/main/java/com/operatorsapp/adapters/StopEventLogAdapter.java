@@ -69,6 +69,13 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
                 getFilter().filter("");
             }
         });
+
+        viewHolder.techCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onTechCallSelected(event);
+            }
+        });
     }
 
     private int updateEvents(Event event) {
@@ -135,6 +142,7 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
         private final TextView end;
         private final TextView duration;
         private final TextView machine;
+        private final TextView techCall;
         private final View expandBackgrnd;
 
         ViewHolder(View itemView) {
@@ -149,6 +157,7 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
             end = itemView.findViewById(R.id.ISEL_end);
             duration = itemView.findViewById(R.id.ISEL_duration);
             machine = itemView.findViewById(R.id.ISEL_machine);
+            techCall = itemView.findViewById(R.id.ISEL_tech_call_tv);
         }
 
     }
@@ -217,5 +226,6 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
     public interface StopEventLogAdapterListener {
 
         void onLogSelected(Event item);
+        void onTechCallSelected(Event item);
     }
 }

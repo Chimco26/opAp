@@ -1006,6 +1006,16 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         call.enqueue(callback);
     }
 
+    public void getNotificationHistory(int[] machinesId, final Callback<NotificationHistoryResponse> callback) {
+
+        PersistenceManager pm = PersistenceManager.getInstance();
+        NotificationHistoryRequest request = new NotificationHistoryRequest(pm.getSessionId(), machinesId);
+        mRetrofit = getRetrofit(pm.getSiteUrl(), pm.getRequestTimeout(), TimeUnit.SECONDS);
+
+        Call<NotificationHistoryResponse> call = mRetrofit.create(OpAppServiceRequests.class).getNotificationHistoryRequest(request);
+        call.enqueue(callback);
+    }
+
     public void postTechnicianCall(PostTechnicianCallRequest request, final Callback<StandardResponse> callback) {
 
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);

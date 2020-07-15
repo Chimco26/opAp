@@ -1,5 +1,6 @@
 package com.operatorsapp.fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
@@ -34,6 +35,7 @@ import com.operatorsapp.adapters.TechCallAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.GenericDialog;
 import com.operatorsapp.dialogs.NotificationsDialog;
+import com.operatorsapp.dialogs.TechCallFilter;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
@@ -45,13 +47,18 @@ import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.Consts;
+import com.operatorsapp.utils.FilterStatus;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -87,6 +94,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
     private MachineLineResponse mMachineLine;
     private TextView mSortTv;
     private boolean isOpenCalls = true;
+    private HashMap<Integer, Boolean> mFilteredOutMachines = new HashMap<Integer, Boolean>();
 
     public TechCallFragment() {
     }
@@ -165,7 +173,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                 setLast24Hrs();
                 break;
             case R.id.tech_fragment_filter_iv:
-
+                openFilter();
                 break;
             case R.id.tech_fragment_select_tech_frame:
                 mSelectTechSpnr.performClick();
@@ -176,10 +184,41 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void openFilter() {
+
+        TechCallFilter filter = TechCallFilter.newInstants(mMachineLine, mFilteredOutMachines, new TechCallFilter.TechCallFilterListener() {
+            @Override
+            public void onFilterItems(HashMap<Integer, Boolean> filteredOutMachines) {
+                mFilteredOutMachines = filteredOutMachines;
+                filterCalls();
+                if(isOpenCalls ){
+                    setOpenCalls(0);
+                } else {
+                    setLast24Hrs();
+                }
+            }
+        });
+        filter.show(getChildFragmentManager(), null);
+    }
+
+    private void filterCalls() {
+        mTechCallList = PersistenceManager.getInstance().getCalledTechnician();
+        if (mFilteredOutMachines != null && mFilteredOutMachines.size() > 0) {
+
+            Iterator<TechCallInfo> iterator = mTechCallList.iterator();
+            while (iterator.hasNext()) {
+                TechCallInfo techCall = iterator.next();
+                if (mFilteredOutMachines.containsKey(techCall.getmMachineId()) && !mFilteredOutMachines.get(techCall.getmMachineId())){
+                    iterator.remove();
+                }
+            }
+        }
+    }
+
     private void setTechniciansSpinner() {
         ArrayList<String> technicianArray = new ArrayList<>();
         if (mTechnicianList != null) {
-            technicianArray.add("");
+            technicianArray.add(getResources().getString(R.string.select_technician));
             for (Technician technician : mTechnicianList) {
                 technicianArray.add(ChangeLang.defaultIsEng() ? technician.getEName() : technician.getLName());
             }
@@ -196,10 +235,78 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+    private void setSortSpinner() {
+        ArrayList<String> sortArray = new ArrayList<>();
+        sortArray.add(getResources().getString(R.string.date));
+        sortArray.add(getResources().getString(R.string.machine));
+        sortArray.add(getResources().getString(R.string.status));
+
+        mSortSpnr.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, sortArray));
+        mSortSpnr.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(isOpenCalls ){
+                    setOpenCalls(0);
+                } else {
+                    setLast24Hrs();
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
+    }
+
+    private void sortCalls(int position) {
+
+        switch (position){
+            case 0:  // sort by date
+                Collections.sort(mTechCallList, new Comparator<TechCallInfo>() {
+                    @Override
+                    public int compare(TechCallInfo o1, TechCallInfo o2) {
+                        if (o1.getmCallTime() > o2.getmCallTime()){
+                            return -1;
+                        }else if (o1.getmCallTime() < o2.getmCallTime()) {
+                            return 1;
+                        }
+                        return 0;
+                    }
+                });
+                break;
+
+            case 1:  // sort by machine
+                Collections.sort(mTechCallList, new Comparator<TechCallInfo>() {
+                    @Override
+                    public int compare(TechCallInfo o1, TechCallInfo o2) {
+                        if (o1.getmMachineId() > o2.getmMachineId()){
+                            return 1;
+                        }else if (o1.getmMachineId() < o2.getmMachineId()) {
+                            return -1;
+                        }
+                        return 0;
+                    }
+                });
+                break;
+
+            case 2:   // sort by status
+                Collections.sort(mTechCallList, new Comparator<TechCallInfo>() {
+                    @Override
+                    public int compare(TechCallInfo o1, TechCallInfo o2) {
+                        if (o1.getmResponseType() > o2.getmResponseType()){
+                            return 1;
+                        }else if (o1.getmResponseType() < o2.getmResponseType()) {
+                            return -1;
+                        }
+                        return 0;
+                    }
+                });
+                break;
+        }
+    }
+
     private void setMachineSpinner() {
         ArrayList<String> machineArray = new ArrayList<>();
         if (mMachineLine != null) {
-            machineArray.add("");
+            machineArray.add(getResources().getString(R.string.select_machine_screen_title));
             for (MachinesLineDetail machine : mMachineLine.getMachinesData()) {
                 machineArray.add(machine.getMachineName());
             }
@@ -240,19 +347,36 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
         mLast24Underline.setVisibility(View.VISIBLE);
         mOpenUnderline.setVisibility(View.INVISIBLE);
 
-        ArrayList<Notification> notList = new ArrayList<>();
+        ArrayList<TechCallInfo> techCallList = new ArrayList<>();
 
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_YEAR,-1);
-        Date date24hrs = cal.getTime();
+        long millis24h = 1000 * 60 * 60 * 24;
+        long millisBefore24h = Calendar.getInstance().getTimeInMillis() - millis24h;
 
-        for (Notification notification : PersistenceManager.getInstance().getNotificationHistory()) {
-            Date date = TimeUtils.getDateForNotification(notification.getmResponseDate());
-            if (date != null && notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN && date.after(date24hrs)) {
-                notList.add(notification);
+        for (TechCallInfo techCall : mTechCallList) {
+            if (techCall.getmCallTime() > millisBefore24h) {
+                techCallList.add(techCall);
             }
         }
-        mRecycler.setAdapter(new NotificationHistoryAdapter(getContext(), notList, null));
+
+        mRecycler.setAdapter(new TechCallAdapter(getContext(), techCallList, isManageServiceCall, mMachineLine, new TechCallAdapter.TechCallItemListener() {
+            @Override
+            public void onRemoveCallPressed(TechCallInfo techCallInfo) {
+                removeCall(techCallInfo);
+            }
+
+            @Override
+            public void onManageCall(TechCallInfo techCallInfo) {
+                manageCall(techCallInfo);
+            }
+        }));
+
+//        for (Notification notification : PersistenceManager.getInstance().getNotificationHistory()) {
+//            Date date = TimeUtils.getDateForNotification(notification.getmResponseDate());
+//            if (date != null && notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN && date.after(date24hrs)) {
+//                notList.add(notification);
+//            }
+//        }
+//        mRecycler.setAdapter(new NotificationHistoryAdapter(getContext(), notList, null));
     }
 
     private void setOpenCalls(int position) {
@@ -261,12 +385,14 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
         mLast24Tab.setTextColor(getResources().getColor(R.color.dark_indigo));
         mOpenUnderline.setVisibility(View.VISIBLE);
         mLast24Underline.setVisibility(View.INVISIBLE);
+//
+//        String machineName = "";
+//        if (mMachineLine != null && mMachineLine.getLineID() > 0){
+//            machineName = PersistenceManager.getInstance().getMachineName();
+//        }
 
-        String machineName = "";
-        if (mMachineLine != null && mMachineLine.getLineID() > 0){
-            machineName = PersistenceManager.getInstance().getMachineName();
-        }
-        mRecycler.setAdapter(new TechCallAdapter(getContext(), mTechCallList, isManageServiceCall, machineName, new TechCallAdapter.TechCallItemListener() {
+        sortCalls(mSortSpnr.getSelectedItemPosition());
+        mRecycler.setAdapter(new TechCallAdapter(getContext(), mTechCallList, isManageServiceCall, mMachineLine, new TechCallAdapter.TechCallItemListener() {
             @Override
             public void onRemoveCallPressed(TechCallInfo techCallInfo) {
                 removeCall(techCallInfo);
@@ -294,10 +420,12 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
         if (!(srcId != null && srcId.length() > 0)){
             srcId = pm.getUserId() + "";
         }
+        final int machineId = mMachineLine != null ? pm.getMachineId() : mMachineLine.getMachinesData().get(mSelectMachineSpnr.getSelectedItemPosition() -1).getMachineID();
+
         final RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
                 notification.getmTitle(),
                 notification.getmBody(getContext()),
-                pm.getMachineId() + "",
+                machineId + "",
                 notification.getmNotificationID() + "",
                 Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE,
                 notification.getmNotificationType(),
@@ -372,10 +500,12 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
             if (!(srcId != null && srcId.length() > 0)){
                 srcId = pm.getUserId() + "";
             }
+            int machineId = mMachineLine != null ? pm.getMachineId() : mMachineLine.getMachinesData().get(mSelectMachineSpnr.getSelectedItemPosition() -1).getMachineID();
+
             RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
                     notificationToRemove.getmTitle(),
                     notificationToRemove.getmBody(getContext()),
-                    pm.getMachineId() + "",
+                    machineId + "",
                     notificationToRemove.getmNotificationID() + "",
                     responseType,
                     notificationToRemove.getmNotificationType(),
@@ -433,8 +563,9 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
         final Technician technician = mTechnicianList.get(mSelectedTech);
         final String techName = OperatorApplication.isEnglishLang() ? technician.getEName() : technician.getLName();
         String sourceUserId = PersistenceManager.getInstance().getOperatorId();
+        final int machineId = mMachineLine == null ? pm.getMachineId() : mMachineLine.getMachinesData().get(mSelectMachineSpnr.getSelectedItemPosition() -1).getMachineID();
 
-        PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, technician.getID(), body, operatorName, technician.getEName(), sourceUserId);
+        PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), machineId, title, technician.getID(), body, mDescriptionEt.getText().toString(), operatorName, technician.getEName(), sourceUserId);
         NetworkManager.getInstance().postTechnicianCall(request, new Callback<StandardResponse>() {
             @Override
             public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
@@ -443,7 +574,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                     PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
                     PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
-                    TechCallInfo techCall = new TechCallInfo(0, techName, getString(R.string.called_technician) + "\n" + techName, Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID());
+                    TechCallInfo techCall = new TechCallInfo(machineId, 0, techName, getString(R.string.called_technician) + "\n" + techName, mDescriptionEt.getText().toString(), Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID());
                     PersistenceManager.getInstance().setCalledTechnician(techCall);
                     PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                     mListener.onGetNotificationsFromServer();
@@ -524,6 +655,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
             mSortTv.setVisibility(View.VISIBLE);
             setListeners();
             setMachineSpinner();
+            setSortSpinner();
             if (isOpenCalls) {
                 setOpenCalls(mRecycler.getChildAdapterPosition(mRecycler.getLayoutManager().getFocusedChild()));
             }else {

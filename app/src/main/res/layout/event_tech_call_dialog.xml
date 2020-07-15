@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ProximaNovaSemiBold"
+        android:text="@string/new_call"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/ETCD_machine_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        style="@style/ProximaNovaSemiBold"
+        android:text="machine name"
+        android:textColor="@color/grey1"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/ETCD_stop_event_reason_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        style="@style/ProximaNovaSemiBold"
+        android:textColor="@color/grey1"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            style="@style/ProximaNovaSemiBold"
+            android:text="@string/start_"
+            android:textColor="@color/grey1"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/ETCD_event_start_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            style="@style/ProximaNovaSemiBold"
+            android:textColor="@color/grey1"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ETCD_select_tech_frame"
+        android:orientation="vertical"
+        android:background="@color/grey_lite"
+        android:padding="1dp"
+        android:layout_marginTop="11dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Spinner
+            android:id="@+id/ETCD_select_tech_spnr"
+            android:background="@color/white"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:background="@color/grey_lite"
+        android:padding="1dp"
+        android:layout_marginTop="11dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/ETCD_description_et"
+            android:padding="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="8"
+            android:textAlignment="gravity"
+            android:gravity="top"
+            android:hint="@string/type_something"
+            android:background="@color/white"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/ETCD_apply_tv"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="end"
+        android:background="@color/C16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        style="@style/ProximaNovaSemiBold"
+        android:text="@string/send"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+</LinearLayout>

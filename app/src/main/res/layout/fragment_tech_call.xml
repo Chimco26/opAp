@@ -153,7 +153,8 @@
                     android:id="@+id/tech_fragment_filter_iv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:visibility="gone"
                     android:src="@drawable/ic_filter_default"/>
 
@@ -186,6 +187,11 @@
                 android:scrollbars="vertical"
                 android:paddingBottom="5dp"/>
 
+            <View
+                android:layout_width="2px"
+                android:layout_height="match_parent"
+                android:background="@color/grey_lite"/>
+
             <LinearLayout
                 android:layout_weight="1"
                 android:layout_width="0dp"
@@ -195,13 +201,40 @@
                 android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/ProximaNovaSemiBold"
-                    android:text="@string/new_call"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/ProximaNovaSemiBold"
+                        android:text="@string/new_call"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/tech_fragment_apply_tv"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="end"
+                        android:background="@color/C16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:padding="3dp"
+                        style="@style/ProximaNovaSemiBold"
+                        android:text="@string/send"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/tech_fragment_select_machine_frame"
@@ -214,14 +247,14 @@
                     android:layout_height="wrap_content">
 
 
-                    <TextView
-                        android:id="@+id/tech_fragment_select_machine_tv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/white"
-                        android:text="@string/select_machine_screen_title"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/tech_fragment_select_machine_tv"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:background="@color/white"-->
+<!--                        android:text="@string/select_machine_screen_title"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="18sp" />-->
 
                     <Spinner
                         android:id="@+id/tech_fragment_select_machine_spnr"
@@ -241,14 +274,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/tech_fragment_select_tech_tv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/white"
-                        android:text="@string/select_technician"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/tech_fragment_select_tech_tv"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:background="@color/white"-->
+<!--                        android:text="@string/select_technician"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="18sp" />-->
 
                     <Spinner
                         android:id="@+id/tech_fragment_select_tech_spnr"
@@ -279,23 +312,6 @@
                         android:textColor="@color/black"
                         android:textSize="14sp" />
                 </FrameLayout>
-
-                <TextView
-                    android:id="@+id/tech_fragment_apply_tv"
-                    android:layout_marginTop="10dp"
-                    android:layout_gravity="end"
-                    android:background="@color/C16"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="2dp"
-                    android:layout_marginBottom="2dp"
-                    android:padding="3dp"
-                    style="@style/ProximaNovaSemiBold"
-                    android:text="@string/open_new_call"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
-
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

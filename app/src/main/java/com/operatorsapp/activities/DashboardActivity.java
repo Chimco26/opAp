@@ -1462,6 +1462,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 if (mWidgetFragment != null) {
                     mWidgetFragment.setReportFieldForMachine(mReportFieldsForMachine);
                 }
+                PersistenceManager.getInstance().setTechnicianList(reportFieldsForMachine.getTechnicians());
             } else {
                 OppAppLogger.w(TAG, "reportFieldsForMachine is null");
                 if (mOnReportFieldsUpdatedCallbackListener != null) {

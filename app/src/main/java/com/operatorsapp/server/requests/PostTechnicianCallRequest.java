@@ -32,7 +32,13 @@ public class PostTechnicianCallRequest {
     @SerializedName("SourceWorkerID")
     private String sourceUserID;
 
-    public PostTechnicianCallRequest(String sessionID, int machineId, String title, int technicianId, String text, String userName, String technicianName, String sourceUserId) {
+    @SerializedName("additionalText")
+    private String additionalText;
+
+    @SerializedName("eventID")
+    private int eventID;
+
+    public PostTechnicianCallRequest(String sessionID, int machineId, String title, int technicianId, String text, String additionalText, String userName, String technicianName, String sourceUserId) {
         this.sessionID = sessionID;
         this.machineId = machineId;
         this.title = title;
@@ -41,6 +47,20 @@ public class PostTechnicianCallRequest {
         this.userName = userName;
         this.technicianName = technicianName;
         this.sourceUserID = sourceUserId;
+        this.additionalText = additionalText;
+    }
+
+    public PostTechnicianCallRequest(String sessionID, int machineId, String title, int technicianId, String text, String additionalText, String userName, String technicianName, String sourceUserId, int eventId) {
+        this.sessionID = sessionID;
+        this.machineId = machineId;
+        this.title = title;
+        this.technicianId = technicianId;
+        this.text = text;
+        this.userName = userName;
+        this.technicianName = technicianName;
+        this.sourceUserID = sourceUserId;
+        this.additionalText = additionalText;
+        this.eventID = eventId;
     }
 
     public String getSourceUserID() {
@@ -93,5 +113,13 @@ public class PostTechnicianCallRequest {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getAdditionalText() {
+        return additionalText;
+    }
+
+    public void setAdditionalText(String additionalText) {
+        this.additionalText = additionalText;
     }
 }

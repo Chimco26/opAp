@@ -54,6 +54,12 @@ public class Notification {
     @SerializedName("TargetUserID")
     private int mTargetUserId;
 
+    @SerializedName("SourceMachineID")
+    private int mSourceMachineID;
+
+    @SerializedName("AdditionalText")
+    private String mAdditionalText;
+
     public Notification(String mBody, String mTitle,  String mSender, String mSentTime, int mResponseType, String mResponseDate, String mTargetName, int mNotificationID, int mNotificationType) {
         this.mBody = mBody;
         this.mTitle = mTitle;
@@ -64,6 +70,18 @@ public class Notification {
         this.mTargetName = mTargetName;
         this.mNotificationID = mNotificationID;
         this.mNotificationType= mNotificationType;
+    }
+
+    public String getmAdditionalText() {
+        return mAdditionalText;
+    }
+
+    public void setmAdditionalText(String mAdditionalText) {
+        this.mAdditionalText = mAdditionalText;
+    }
+
+    public int getMachineID() {
+        return mSourceMachineID;
     }
 
     public int getmNotificationType() {
