@@ -17,6 +17,7 @@ import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerIn
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
+import com.operators.reportfieldsformachineinfra.Technician;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.operatorsapp.model.TechCallInfo;
@@ -116,6 +117,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String SHIFT_GRAPH_CUSTOM_Y_MIN = "SHIFT_GRAPH_CUSTOM_Y_MIN";
     private static final String SHIFT_GRAPH_CUSTOM_Y_MAX = "SHIFT_GRAPH_CUSTOM_Y_MAX";
     private static final String LINE_LAST_EVENT = "LINE_LAST_EVENT";
+    private static final String TECHNICIANS_LIST = "TECHNICIANS_LIST";
 
 
     private static PersistenceManager msInstance;
@@ -979,5 +981,15 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         Type listType = new TypeToken<com.example.common.StopLogs.Event>() {
         }.getType();
         return mGson.fromJson(SecurePreferences.getInstance().getString(LINE_LAST_EVENT), listType);
+    }
+
+    public ArrayList<Technician> getTechnicianList() {
+        Type listType = new TypeToken<ArrayList<Technician>>() {
+        }.getType();
+        return mGson.fromJson(SecurePreferences.getInstance().getString(TECHNICIANS_LIST), listType);
+    }
+
+    public void setTechnicianList(List<Technician> technicians) {
+        SecurePreferences.getInstance().setString(TECHNICIANS_LIST, mGson.toJson(technicians));
     }
 }

@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="90dp"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:weightSum="10">
+    android:orientation="horizontal">
 
     <View
         android:layout_width="0dp"
@@ -86,6 +85,24 @@
 
     <TextView
         android:id="@+id/ISEL_duration"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1.45"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="@string/duration"
+        android:textColor="@color/default_gray"
+        android:textSize="18sp"
+        app:autoSizeMaxTextSize="18sp"
+        app:autoSizeTextType="uniform" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight=".2" />
+
+    <TextView
+        android:id="@+id/ISEL_tech_call_tv"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1.45"

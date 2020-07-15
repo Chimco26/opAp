@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tech_call_filter_chkbx"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:gravity="start|center_vertical"
+    android:textAlignment="viewStart"
+    android:textSize="16sp"
+    android:checked="true"
+    android:textColor="@color/black"
+    style="@style/ProximaNovaSemiBold"
+    android:layout_margin="25dp">
+</CheckBox>

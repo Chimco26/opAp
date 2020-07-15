@@ -1609,7 +1609,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //        }
 
 
-        PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, technician.getID(), body, operatorName, technician.getEName(), sourceUserId);
+        PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, technician.getID(), body, "", operatorName, technician.getEName(), sourceUserId);
         NetworkManager.getInstance().postTechnicianCall(request, new Callback<StandardResponse>() {
             @Override
             public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
@@ -1619,7 +1619,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
                     PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
-                    TechCallInfo techCall = new TechCallInfo(0, techName, getString(R.string.called_technician) + "\n" + techName, Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID());
+                    TechCallInfo techCall = new TechCallInfo(PersistenceManager.getInstance().getMachineId(), 0, techName, getString(R.string.called_technician) + "\n" + techName, "", Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID());
                     PersistenceManager.getInstance().setCalledTechnician(techCall);
                     PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                     setTechnicianCallStatus();
@@ -1895,7 +1895,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
                 final int technicianId = techniciansList.get(position).getID();
 
-                PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, technicianId, body, operatorName, techniciansList.get(position).getEName(), sourceUserId);
+                PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, technicianId, body, "", operatorName, techniciansList.get(position).getEName(), sourceUserId);
                 NetworkManager.getInstance().postTechnicianCall(request, new Callback<StandardResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
@@ -1904,7 +1904,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
                             PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
-                            TechCallInfo techCall = new TechCallInfo(0, techName, getString(R.string.called_technician) + "\n" + techName, Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technicianId);
+                            TechCallInfo techCall = new TechCallInfo(PersistenceManager.getInstance().getMachineId(), 0, techName, getString(R.string.called_technician) + "\n" + techName, "", Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technicianId);
                             PersistenceManager.getInstance().setCalledTechnician(techCall);
                             PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                             setTechnicianCallStatus();
@@ -3742,7 +3742,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 if (response.body() != null && response.body().getError().getErrorDesc() == null) {
 
-                    // TODO: 28/03/2019 update tech list for new calls
                     ArrayList<TechCallInfo> techList = PersistenceManager.getInstance().getCalledTechnician();
                     ArrayList<TechCallInfo> techListCopy = new ArrayList<>();
                     techListCopy = techList;
@@ -3764,14 +3763,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                         techList.set(i, tech);
                                     } else if (tech.getmTechnicianId() == not.getmTargetUserId() && not.getmNotificationID() > tech.getmNotificationId()) {
                                         techList.remove(i);
-                                    } else if (tech.getmNotificationId() == not.getmNotificationID() && not.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED) {
+//                                    } else if (tech.getmNotificationId() == not.getmNotificationID() && not.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED) {
+                                    } else if (tech.getmNotificationId() == not.getmNotificationID()) {
                                         techList.remove(i);
                                     }
                                 }
                             }
                             if (isNew) {
-                                techList.add(new TechCallInfo(not.getmResponseType(), not.getmTargetName(), not.getmResponseType() + "",
-                                        TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
+                                techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmResponseType() + "",
+                                        not.getmAdditionalText(), TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
                                         not.getmNotificationID(), not.getmTargetUserId()));
                             }
                         }

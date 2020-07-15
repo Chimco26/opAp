@@ -22,7 +22,7 @@
             android:textColor="@color/black"
             android:ellipsize="end"
             android:visibility="gone"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"/>
@@ -31,19 +31,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            
+
             <ImageView
                 android:id="@+id/tech_call_item_status_iv"
-                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginEnd="10dp"
-                android:src="@drawable/call_sent_blue"/>
+                android:src="@drawable/call_sent_blue" />
 
             <TextView
                 android:id="@+id/tech_call_item_subtext_tv"
                 style="@style/ProximaNovaSemiBold"
-                android:layout_width="60dp"
+                android:layout_width="80dp"
                 android:maxLines="2"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -56,12 +56,12 @@
             android:id="@+id/tech_call_item_text_tv"
             style="@style/ProximaNovaSemiBold"
             android:textSize="16sp"
-            android:padding="10dp"
+            android:padding="5dp"
             android:textColor="@color/black"
             android:text="@string/service_call_exists"
             android:ellipsize="end"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:layout_gravity="center_vertical"
             android:layout_height="wrap_content" />
         <!--<View-->
@@ -73,12 +73,18 @@
             android:id="@+id/tech_call_item_time_tv"
             style="@style/ProximaNovaSemiBold"
             android:textSize="16sp"
-            android:padding="10dp"
+            android:padding="5dp"
             android:layout_gravity="center_vertical"
             android:textColor="@color/black"
             android:text="@string/service_call_exists"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="2"
             android:layout_height="wrap_content" />
+<!--
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>-->
 
         <!--<TextView-->
         <!--android:id="@+id/tech_call_item_status_tv"-->
@@ -98,7 +104,7 @@
            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@color/grey_lite"
-            android:visibility="gone"
+            android:visibility="visible"
             android:padding="1dp">
 
 
@@ -130,6 +136,7 @@
                    android:layout_gravity="center_vertical"
                    android:textColor="@color/black"
                    android:text="@string/start_service"
+                   android:minEms="8"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content" />
            </LinearLayout>
@@ -144,6 +151,35 @@
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:src="@android:drawable/ic_menu_delete"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tech_call_item_more_info_lil"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            style="@style/ProximaNovaSemiBold"
+            android:textSize="16sp"
+            android:padding="10dp"
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/black"
+            android:text="@string/more_info"
+            android:layout_gravity="center_vertical"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tech_call_item_more_info_tv"
+            style="@style/ProximaNovaSemiBold"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
     <View

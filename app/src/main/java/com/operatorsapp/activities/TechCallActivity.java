@@ -40,6 +40,7 @@ import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -88,49 +89,51 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
 
     private void initMachineLine() {
 
-        RecyclerView recyclerView = findViewById(R.id.machine_line_rv);
         mLineLy = findViewById(R.id.machine_line_ly);
-        mLineNameTv = findViewById(R.id.machine_line_tv);
-        mLineProgress = findViewById(R.id.line_progress);
-        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-            findViewById(R.id.line_arrow).setRotationY(180);
-        }
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        mMachineLineAdapter = new MachineLineAdapter(machineLineItems, new MachineLineAdapter.MachineLineAdapterListener() {
-            @Override
-            public void onMachineSelected(MachinesLineDetail departmentMachineValue) {
-                isMachineChanged = true;
-                ClearData.clearMachineData();
-                PersistenceManager.getInstance().setMachineData(departmentMachineValue.getMachineID(), departmentMachineValue.getMachineName());
-                onMachineChange(departmentMachineValue);
-                mProgressBar.setVisibility(View.VISIBLE);
-            }
-        });
-
-        recyclerView.setAdapter(mMachineLineAdapter);
         mLineLy.setVisibility(View.GONE);
+
+//        RecyclerView recyclerView = findViewById(R.id.machine_line_rv);
+//        mLineNameTv = findViewById(R.id.machine_line_tv);
+//        mLineProgress = findViewById(R.id.line_progress);
+//        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+//            findViewById(R.id.line_arrow).setRotationY(180);
+//        }
+//
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+//        mMachineLineAdapter = new MachineLineAdapter(machineLineItems, new MachineLineAdapter.MachineLineAdapterListener() {
+//            @Override
+//            public void onMachineSelected(MachinesLineDetail departmentMachineValue) {
+//                isMachineChanged = true;
+//                ClearData.clearMachineData();
+//                PersistenceManager.getInstance().setMachineData(departmentMachineValue.getMachineID(), departmentMachineValue.getMachineName());
+//                onMachineChange(departmentMachineValue);
+//                mProgressBar.setVisibility(View.VISIBLE);
+//            }
+//        });
+//
+//        recyclerView.setAdapter(mMachineLineAdapter);
     }
 
     private void onMachineChange(MachinesLineDetail departmentMachineValue) {
         mMachineLineAdapter.notifyDataSetChanged();
-        getNotificationsFromServer();
+//        getNotificationsFromServer();
     }
 
     private void getMachinesLineData() {
-        mLineProgress.setVisibility(View.VISIBLE);
+//        mLineProgress.setVisibility(View.VISIBLE);
         PersistenceManager pm = PersistenceManager.getInstance();
         SimpleRequests.getMachineLine(pm.getSiteUrl(), new GetMachineLineCallback() {
             @Override
             public void onGetMachineLineSuccess(MachineLineResponse response) {
                 mMachineLineResponse = response;
                 setLineLayouts();
-                mLineProgress.setVisibility(View.GONE);
+//                mLineProgress.setVisibility(View.GONE);
+                getNotificationsFromServer(mMachineLineResponse != null && mMachineLineResponse.getLineID() != 0);
             }
 
             @Override
             public void onGetMachineLineFailed(StandardResponse reason) {
-                mLineProgress.setVisibility(View.GONE);
+//                mLineProgress.setVisibility(View.GONE);
                 ShowCrouton.showSimpleCrouton(TechCallActivity.this, reason.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
@@ -138,15 +141,15 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
 
     private void setLineLayouts() {
         if (mMachineLineResponse != null && mMachineLineResponse.getLineID() != 0){
-            mLineLy.setVisibility(View.VISIBLE);
             machineLineItems.clear();
             machineLineItems.addAll(mMachineLineResponse.getMachinesData());
-            mMachineLineAdapter.notifyDataSetChanged();
-            if (mMachineLineResponse.getLineName() != null && !mMachineLineResponse.getLineName().isEmpty()) {
-                mLineNameTv.setText(mMachineLineResponse.getLineName());
-            } else {
-                mLineNameTv.setText(getResources().getString(R.string.production_line));
-            }
+//            mLineLy.setVisibility(View.VISIBLE);
+//            mMachineLineAdapter.notifyDataSetChanged();
+//            if (mMachineLineResponse.getLineName() != null && !mMachineLineResponse.getLineName().isEmpty()) {
+//                mLineNameTv.setText(mMachineLineResponse.getLineName());
+//            } else {
+//                mLineNameTv.setText(getResources().getString(R.string.production_line));
+//            }
             TechCallFragment fragment = (TechCallFragment) getSupportFragmentManager().findFragmentByTag(TechCallFragment.LOG_TAG);
             if (fragment != null && fragment.isVisible()){
                 fragment.setLineLayout(mMachineLineResponse);
@@ -179,9 +182,9 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
         });
     }
 
-    private void getNotificationsFromServer() {
+    private void getNotificationsFromServer(final boolean isLineMachine) {
 
-        NetworkManager.getInstance().getNotificationHistory(new Callback<NotificationHistoryResponse>() {
+        Callback<NotificationHistoryResponse> notificationCallback = new Callback<NotificationHistoryResponse>() {
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
 
@@ -193,35 +196,35 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
                     techListCopy = techList;
                     for (Notification not : response.body().getmNotificationsList()) {
 
-                        not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
-                        not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
+                            not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
+                            not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
 
-                        if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
-                            boolean isNew = true;
-                            if (techList != null && techListCopy.size() > 0) {
-                                for (int i = 0; i < techListCopy.size(); i++) {
-                                    TechCallInfo tech = techListCopy.get(i);
-                                    if (tech.getmNotificationId() == not.getmNotificationID() && tech.getmResponseType() == not.getmResponseType()
-                                            && tech.getmTechnicianId() == not.getmTargetUserId()) {
-                                        isNew = false;
-                                        tech.setmCallTime(TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT));
-                                        tech.setmResponseType(not.getmResponseType());
-                                        techList.set(i, tech);
-                                    } else if (tech.getmTechnicianId() == not.getmTargetUserId() && not.getmNotificationID() > tech.getmNotificationId()) {
-                                        techList.remove(i);
-                                    } else if (tech.getmNotificationId() == not.getmNotificationID() && not.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED) {
-                                        techList.remove(i);
+                            if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
+                                boolean isNew = true;
+                                if (techList != null && techListCopy.size() > 0) {
+                                    for (int i = 0; i < techListCopy.size(); i++) {
+                                        TechCallInfo tech = techListCopy.get(i);
+                                        if (tech.getmNotificationId() == not.getmNotificationID() && tech.getmResponseType() == not.getmResponseType()
+                                                && tech.getmTechnicianId() == not.getmTargetUserId()) {
+                                            isNew = false;
+                                            tech.setmCallTime(TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT));
+                                            tech.setmResponseType(not.getmResponseType());
+                                            techList.set(i, tech);
+                                        } else if (tech.getmTechnicianId() == not.getmTargetUserId() && not.getmNotificationID() > tech.getmNotificationId()) {
+                                            techList.remove(i);
+//                                        } else if (tech.getmNotificationId() == not.getmNotificationID() && not.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED) {
+                                        } else if (tech.getmNotificationId() == not.getmNotificationID()) {
+                                            techList.remove(i);
+                                        }
                                     }
                                 }
-                            }
-                            if (isNew) {
-                                techList.add(new TechCallInfo(not.getmResponseType(), not.getmTargetName(), not.getmResponseType() + "",
-                                        TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
-                                        not.getmNotificationID(), not.getmTargetUserId()));
+                                if (isNew) {
+                                    techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmResponseType() + "",
+                                            not.getmAdditionalText(), TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
+                                            not.getmNotificationID(), not.getmTargetUserId()));
+                                }
                             }
                         }
-                    }
-
                     PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
                     PersistenceManager.getInstance().setCalledTechnicianList(techList);
                     openTechCallFragment();
@@ -241,7 +244,17 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
                 openTechCallFragment();
                 ShowCrouton.showSimpleCrouton(TechCallActivity.this, t.getMessage(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
             }
-        });
+        };
+
+        if (isLineMachine) {
+            int[] machinesIdArray = new int[machineLineItems.size()];
+            for (int i = 0; i < machineLineItems.size(); i++) {
+                machinesIdArray[i] = machineLineItems.get(i).getMachineID();
+            }
+            NetworkManager.getInstance().getNotificationHistory(machinesIdArray, notificationCallback);
+        }else {
+            NetworkManager.getInstance().getNotificationHistory(notificationCallback);
+        }
 
     }
 
@@ -252,7 +265,7 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
 
     @Override
     public void onGetNotificationsFromServer() {
-        getNotificationsFromServer();
+        getNotificationsFromServer(mMachineLineResponse != null && mMachineLineResponse.getLineID() != 0);
     }
 
     @Override

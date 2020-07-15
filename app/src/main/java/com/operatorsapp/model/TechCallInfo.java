@@ -11,8 +11,10 @@ public class TechCallInfo {
     private int mResponseType;
     private int mNotificationId;
     private int mTechnicianId;
+    private int mMachineId;
     private String mName;
     private String mStatus;
+    private String mAdditionalText;
     private long mCallTime;
 
     public TechCallInfo(int mResponseType, String mName, String mStatus, long mCallTime) {
@@ -22,13 +24,27 @@ public class TechCallInfo {
         this.mCallTime = mCallTime;
     }
 
-    public TechCallInfo(int mResponseType, String mName, String mStatus, long mCallTime, int mNotificationId, int mTechnicianId) {
+    public TechCallInfo(int machineId, int mResponseType, String mName, String mStatus, String additionalText, long mCallTime, int mNotificationId, int mTechnicianId) {
         this.mResponseType = mResponseType;
         this.mName = mName;
         this.mStatus = mStatus;
         this.mCallTime = mCallTime;
         this.mNotificationId = mNotificationId;
         this.mTechnicianId= mTechnicianId;
+        this.mMachineId = machineId;
+        this.mAdditionalText = additionalText;
+    }
+
+    public int getmMachineId() {
+        return mMachineId;
+    }
+
+    public String getmAdditionalText() {
+        return mAdditionalText;
+    }
+
+    public void setmAdditionalText(String mAdditionalText) {
+        this.mAdditionalText = mAdditionalText;
     }
 
     public int getmTechnicianId() {
@@ -77,6 +93,10 @@ public class TechCallInfo {
 
     public void setmCallTime(long mCallTime) {
         this.mCallTime = mCallTime;
+    }
+
+    public void setmMachineId(int machineID) {
+        mMachineId = machineID;
     }
 
     public boolean isOpenCall(){
