@@ -847,8 +847,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             if (mDownloadFile != null) {
                 mDownloadFile.cancel(true);
             }
-
-//            finish();
+/*
+            if (!mIsUpgrading && PersistenceManager.getInstance().isStatusBarLocked()) {
+//                Intent intent = new Intent(Intent.ACTION_MAIN);
+//                intent.addCategory(Intent.CATEGORY_HOME);
+                Intent intent = new Intent(DashboardActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }*/
 
         }
     }
@@ -911,8 +918,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mIsCollapse = false;
         if (!mIsUpgrading && PersistenceManager.getInstance().isStatusBarLocked()) {
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
+//            Intent intent = new Intent(Intent.ACTION_MAIN);
+//            intent.addCategory(Intent.CATEGORY_HOME);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent intent = new Intent(DashboardActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
