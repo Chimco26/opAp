@@ -13,4 +13,6 @@ public interface OnStopClickListener {
     void onSplitEventPressed(Float eventID);
 
     void onLastItemUpdated();
+
+    void onServiceCallFromEvent(Event event);
 }

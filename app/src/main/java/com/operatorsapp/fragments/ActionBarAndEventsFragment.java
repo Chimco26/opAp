@@ -102,6 +102,7 @@ import com.operatorsapp.adapters.ShiftLogSqlAdapter;
 import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.DialogFragment;
+import com.operatorsapp.dialogs.EventTechCallDialog;
 import com.operatorsapp.dialogs.GenericDialog;
 import com.operatorsapp.dialogs.LauncherDialog;
 import com.operatorsapp.dialogs.LegendDialog;
@@ -2427,6 +2428,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
+    public void onServiceCallFromEvent(Event event) {
+        openTechCallPopUp(event);
+    }
+
+    @Override
     public void onSplitEventPressed(Float eventID) {
 
         mListener.onSplitEventPressed(eventID);
@@ -2510,6 +2516,93 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             myTaskListener.onStartSelectMode(event);
         }
     }
+
+
+    private void openTechCallPopUp(Event item) {
+        EventTechCallDialog dialog = new EventTechCallDialog(getActivity(), item, new EventTechCallDialog.EventTechCallDialogListener() {
+            @Override
+            public void onNewCallPressed(Technician technician, com.example.common.StopLogs.Event event, String additionalText) {
+                sendTechCall(technician, event, additionalText);
+            }
+        });
+        dialog.show();
+    }
+
+    private void sendTechCall(final Technician technician, com.example.common.StopLogs.Event event, final String additionalText) {
+
+        PersistenceManager pm = PersistenceManager.getInstance();
+        ProgressDialogManager.show(getActivity());
+
+        String body;
+        String operatorName = "";
+        String title = getString(R.string.operator) + " ";
+        if (pm.getOperatorName() != null && pm.getOperatorName().length() > 0) {
+            operatorName = pm.getOperatorName();
+        } else {
+            operatorName = pm.getUserName();
+        }
+
+        body = getResources().getString(R.string.service_call_made_new).replace(getResources().getString(R.string.placeholder1), operatorName);
+        body += " " + pm.getMachineName();
+        title += operatorName;
+
+        final String techName = OperatorApplication.isEnglishLang() ? technician.getEName() : technician.getLName();
+        String sourceUserId = PersistenceManager.getInstance().getOperatorId();
+        int machineId = PersistenceManager.getInstance().getMachineId();
+
+        PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), machineId, title, technician.getID(), body, additionalText, operatorName, technician.getEName(), sourceUserId, event.getEventID());
+        NetworkManager.getInstance().postTechnicianCall(request, new Callback<StandardResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+                if (response.body() != null && response.body().getError().getErrorDesc() == null) {
+//
+//                    PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
+//                    PersistenceManager.getInstance().setCalledTechnicianName(techName);
+//
+//                    TechCallInfo techCall = new TechCallInfo(machineId, 0, techName, getString(R.string.called_technician) + "\n" + techName, additionalText, Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID());
+//                    PersistenceManager.getInstance().setCalledTechnician(techCall);
+//                    PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
+                    ProgressDialogManager.dismiss();
+
+                    new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TECH_CALL, true, "technician name: " + techName);
+
+                } else {
+                    String msg = "failed";
+                    if (response.body() != null && response.body().getError() != null) {
+                        msg = response.body().getError().getErrorDesc();
+                    }
+                    onFailure(call, new Throwable(msg));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
+                ProgressDialogManager.dismiss();
+                PersistenceManager.getInstance().setCalledTechnicianName("");
+
+                String m = "";
+                if (t.getMessage() != null) {
+                    m = t.getMessage();
+                }
+
+                new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TECH_CALL, false, "reason: " + m);
+
+                final GenericDialog dialog = new GenericDialog(getActivity(), t.getMessage(), getString(R.string.call_technician_title), getString(R.string.ok), true);
+                final AlertDialog alertDialog = dialog.showNoProductionAlarm();
+                dialog.setListener(new GenericDialog.OnGenericDialogListener() {
+                    @Override
+                    public void onActionYes() {
+                        alertDialog.cancel();
+                    }
+                    @Override
+                    public void onActionNo() { }
+                    @Override
+                    public void onActionAnother() {}
+                });
+            }
+        });
+    }
+
 
     private void getLineEvents(){
         PersistenceManager pm = PersistenceManager.getInstance();

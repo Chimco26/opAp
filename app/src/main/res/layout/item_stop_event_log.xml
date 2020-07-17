@@ -156,6 +156,35 @@
             android:layout_height="match_parent"
             android:layout_weight=".2" />
 
+        <LinearLayout
+            android:id="@+id/ISEL_tech_call_info_lil"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.45"
+            android:gravity="center_vertical"
+            android:visibility="visible"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/ISEL_tech_call_status_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/call_sent_blue" />
+
+            <TextView
+                android:id="@+id/ISEL_tech_call_subtext_tv"
+                style="@style/ProximaNovaSemiBold"
+                android:layout_width="match_parent"
+                android:maxLines="2"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
         <TextView
             android:id="@+id/ISEL_tech_call_tv"
             android:layout_width="0dp"

@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.common.StopLogs.Event;
 import com.operators.reportfieldsformachineinfra.Technician;
@@ -46,6 +47,18 @@ public class EventTechCallDialog extends Dialog {
         mListener = listener;
     }
 
+    public EventTechCallDialog( Context context, com.example.common.Event item, EventTechCallDialogListener listener) {
+        super(context);
+        mTechnicianList = PersistenceManager.getInstance().getTechnicianList();
+        mEvent = new Event();
+        mEvent.setEventSubTitleEname(item.getEventSubTitleEname());
+        mEvent.setEventSubTitleLname(item.getEventSubTitleLname());
+        mEvent.setMachineName("");
+        mEvent.setEventID((int) item.getEventID());
+        mEvent.setEventTime(item.getEventTime());
+        mListener = listener;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +73,9 @@ public class EventTechCallDialog extends Dialog {
         mDescription = findViewById(R.id.ETCD_description_et);
         mSendCall = findViewById(R.id.ETCD_apply_tv);
 
-        mEventReasonTv.setText(mEvent.getEventTitle());
+        mMachineNameTv.setText(mEvent.getMachineName());
         mEventStartTimeTv.setText(mEvent.getEventTime());
-        mMachineNameTv.setText(PersistenceManager.getInstance().getCurrentLang().equals("en") ? mEvent.getEventSubTitleEname() : mEvent.getEventSubTitleLname());
+        mEventReasonTv.setText(PersistenceManager.getInstance().getCurrentLang().equals("en") ? mEvent.getEventSubTitleEname() : mEvent.getEventSubTitleLname());
 
         mSendCall.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +92,7 @@ public class EventTechCallDialog extends Dialog {
             mTechSppinerFrame.setBackgroundColor(Color.RED);
         }else {
             mListener.onNewCallPressed(mTechnicianList.get(mSelectedTech), mEvent, mDescription.getText().toString());
+            dismiss();
         }
     }
 

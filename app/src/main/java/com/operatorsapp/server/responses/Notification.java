@@ -60,6 +60,12 @@ public class Notification {
     @SerializedName("AdditionalText")
     private String mAdditionalText;
 
+    @SerializedName("EventName")
+    private String mEventName;
+
+    @SerializedName("EventID")
+    private int mEventID;
+
     public Notification(String mBody, String mTitle,  String mSender, String mSentTime, int mResponseType, String mResponseDate, String mTargetName, int mNotificationID, int mNotificationType) {
         this.mBody = mBody;
         this.mTitle = mTitle;
@@ -70,6 +76,22 @@ public class Notification {
         this.mTargetName = mTargetName;
         this.mNotificationID = mNotificationID;
         this.mNotificationType= mNotificationType;
+    }
+
+    public String getmEventName() {
+        return mEventName;
+    }
+
+    public void setmEventName(String mEventName) {
+        this.mEventName = mEventName;
+    }
+
+    public int getmEventID() {
+        return mEventID;
+    }
+
+    public void setmEventID(int mEventID) {
+        this.mEventID = mEventID;
     }
 
     public String getmAdditionalText() {

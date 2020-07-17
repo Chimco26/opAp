@@ -101,6 +101,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         private TextView mParameterMin;
         private TextView mParameterMax;
         private TextView mParameterTime;
+        private TextView mTechCallTv;
         private View mParameterDivider;
         private LinearLayout mParameterSubtitle;
         private View mParameterBottomDivider;
@@ -131,6 +132,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             mStoppedEnd = itemView.findViewById(R.id.event_stopped_shift_log_item_end);
             mStoppedEndDate = itemView.findViewById(R.id.event_stopped_shift_log_item_end_date);
             mStoppedDivider = itemView.findViewById(R.id.event_stopped_shift_log_divider);
+            mTechCallTv = itemView.findViewById(R.id.event_stopped_shift_log_item_tech_call_tv);
             mStoppedBottomDivider = itemView.findViewById(R.id.event_stopped_shift_log_bottom_divider);
             mStoppedSubtitle = itemView.findViewById(R.id.event_stopped_shift_log_item_subtitle);
             mSplitEvent = itemView.findViewById(R.id.event_stopped_shift_log_item_split_event);
@@ -202,6 +204,13 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         );
 
 
+        holder.mTechCallTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnStopClickListener.onServiceCallFromEvent(event);
+            }
+        });
+
         final int type = getItemViewType(event.getEventGroupID());
 
         if (type == STOPPED) {
@@ -221,6 +230,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
                     }
                 });
+
 
             } else {
                 holder.mSplitEvent.setVisibility(View.GONE);

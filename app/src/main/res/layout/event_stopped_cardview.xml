@@ -284,6 +284,22 @@
                     android:textStyle="bold"
                     app:autoSizeTextType="uniform" />
 
+
+                <TextView
+                    android:id="@+id/event_stopped_shift_log_item_tech_call_tv"
+                    style="@style/FontStyle_T31"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:maxLines="1"
+                    android:text="@string/open_new_call"
+                    android:textStyle="bold"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:background="@color/white"
+                    app:autoSizeTextType="uniform" />
+
+
             </LinearLayout>
 
         </LinearLayout>
