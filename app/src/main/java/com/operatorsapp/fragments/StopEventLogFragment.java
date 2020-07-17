@@ -53,6 +53,7 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
     private ProgressBar mProgressBar;
     private View mNoDataTv;
     private HashMap<Integer, ArrayList<Event>> rootMap = new HashMap<Integer, ArrayList<Event>>();
+    private EventTechCallDialog mTechCalldialog;
 
     public static StopEventLogFragment newInstance() {
         StopEventLogFragment stopEventLogFragment = new StopEventLogFragment();
@@ -214,20 +215,18 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
     }
 
     private void openTechCallPopUp(Event item) {
-
-        EventTechCallDialog dialog = new EventTechCallDialog(getActivity(), item, new EventTechCallDialog.EventTechCallDialogListener() {
+        mTechCalldialog = new EventTechCallDialog(getActivity(), item, new EventTechCallDialog.EventTechCallDialogListener() {
             @Override
             public void onNewCallPressed(Technician technician, Event event, String additionalText) {
                 sendTechCall(technician, event, additionalText);
             }
         });
-
-        dialog.show();
-
+        mTechCalldialog.show();
     }
 
     private void sendTechCall(final Technician technician, Event event, final String additionalText) {
 
+        mTechCalldialog.dismiss();
         PersistenceManager pm = PersistenceManager.getInstance();
         ProgressDialogManager.show(getActivity());
 
