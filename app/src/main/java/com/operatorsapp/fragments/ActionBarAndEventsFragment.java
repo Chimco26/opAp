@@ -296,6 +296,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private TextView mToolBarTaskCount;
     private boolean mBlockStatusChange = false;
     private boolean mBlockOperatorChange = false;
+    private boolean isAsyncTaskFinished = true;
 //    private Handler mEventHandler;
 
 
@@ -397,7 +398,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public ViewGroup.LayoutParams initView(@NonNull View view) {
         mIsOpen = false;
         mIsNewShiftLogs = PersistenceManager.getInstance().isNewShiftLogs();
-        mDatabaseHelper = DatabaseHelper.getInstance(getContext());
+        if (mDatabaseHelper == null) {
+            mDatabaseHelper = DatabaseHelper.getInstance(getContext());
+        }
         // get screen parameters
         Point size = new Point();
 
@@ -759,25 +762,24 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Nullable
     public Cursor getCursorByType() {
-        Cursor cursor;
+
         if (isShowAlarms) {
-            cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration());
+            return mDatabaseHelper.getCursorOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration());
         } else {
-            cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration());
+            return mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration());
         }
-        return cursor;
     }
 
     @Nullable
     public Cursor getCursorByTypeTimeLine() {
-        Cursor cursor;
+//        Cursor cursor;
 //         if (isShowAlarms) {
 //        cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
-        cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(0);
+        return mDatabaseHelper.getCursorOrderByTimeFilterByDuration(0);
 //        } else {
 //            cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
 //        }
-        return cursor;
+//        return cursor;
     }
 
     private void setNotificationsReceiver() {
@@ -1099,6 +1101,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onPause() {
         super.onPause();
+
+        if (mDatabaseHelper != null)
+            mDatabaseHelper.closeDB();
     }
 
 
@@ -2564,6 +2569,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void setShiftLogAdapter(Cursor cursor) {
+        if (mShiftLogAdapter != null){
+            mShiftLogAdapter.closeCursor();
+        }
         mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), cursor,
                 !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight,
                 mIsSelectionMode, mSelectedEvents, mCurrentMachineStatus != null && mCurrentMachineStatus.isAllowReportingOnSetupEvents());
@@ -2673,7 +2681,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 break;
             }
         }
-        if (isAdded()) {
+        if (isAdded() && isAsyncTaskFinished) {
             final Event finalLatestEvent1 = finalLatestEvent;
             if (mAsyncTask != null) {
                 mAsyncTask.cancel(true);
@@ -2911,8 +2919,21 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         @Override
         protected void onPostExecute(String result) {
+            isAsyncTaskFinished = true;
             super.onPostExecute(result);
             // do something with result
+        }
+
+        @Override
+        protected void onPreExecute() {
+            isAsyncTaskFinished = false;
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onCancelled() {
+            isAsyncTaskFinished = true;
+            super.onCancelled();
         }
     }
 
@@ -2974,6 +2995,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             }
             boolean mustBeClosed = false;
+            boolean isCountZero = DataSupport.count(Event.class) == 0;
             for (Event event : events) {
 
                 if (getActivity() == null || !isAdded() || myTask.isCancelled()) {
@@ -2987,7 +3009,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mustBeClosed = true;
                 }
 
-                if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
+                if (isCountZero || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
 
                     event.save();
 
@@ -3057,6 +3079,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 Cursor cursorNoSelect = getCursorByType();
 
                 if (cursorNoSelect == null || getActivity() == null || !isAdded() || myTask.isCancelled()) {
+                    if (cursorNoSelect != null)
+                        cursorNoSelect.close();
                     return;
                 }
 

@@ -27,7 +27,7 @@ import org.acra.sender.HttpSender;
 import org.litepal.LitePal;
 
 import io.fabric.sdk.android.Fabric;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+//import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 import static com.operatorsapp.utils.SendReportUtil.IS_APP_CRASH;
 import static com.operatorsapp.utils.SendReportUtil.MACHINE_ID;
@@ -78,7 +78,7 @@ public class OperatorApplication extends MultiDexApplication {
 
         sAnalytics = FirebaseAnalytics.getInstance(this);
 
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/DroidSans.ttf").setFontAttrId(R.attr.fontPath).build());
+//        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/DroidSans.ttf").setFontAttrId(R.attr.fontPath).build());
 
         PersistenceManager.initInstance(msApplicationContext);
 

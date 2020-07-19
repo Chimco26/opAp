@@ -220,7 +220,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Event> getListFromCursor(Cursor cursor) {
-
+        Log.d(LOG, "getListFromCursor() ");
         ArrayList<Event> events = new ArrayList<>();
 
         if (cursor == null){
@@ -265,7 +265,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public Cursor getCursorOrderByTime() {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT + " ORDER BY " + KEY_EVENT_ID + " DESC";
-
+        Log.d(LOG, countQuery);
         SQLiteDatabase db = this.getReadableDatabase();
         if (db.isOpen()) {
             Cursor c = db.rawQuery(countQuery, null);
@@ -309,6 +309,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " OR (" + KEY_TYPE + " = 0 AND " + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
+        Log.d(LOG, countQuery);
         SQLiteDatabase db = this.getReadableDatabase();
         if (db.isOpen()) {
             return db.rawQuery(countQuery, null);
@@ -322,6 +323,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " OR (" + KEY_TYPE + " = 0 AND " + KEY_GROUP_ID + " != 20 AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
+        Log.d(LOG, countQuery);
         SQLiteDatabase db = this.getReadableDatabase();
         if (db.isOpen()) {
             return db.rawQuery(countQuery, null);
@@ -364,6 +366,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ") OR (" + KEY_TYPE + " = 0 AND " + KEY_REASON_ID + " = " + reasonId + " AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
+        Log.d(LOG, countQuery);
         SQLiteDatabase db = this.getReadableDatabase();
 
         return db.rawQuery(countQuery, null);
@@ -378,6 +381,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " AND " +  KEY_GROUP_ID + " != 20 ))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
+        Log.d(LOG, countQuery);
         SQLiteDatabase db = this.getReadableDatabase();
 
         return db.rawQuery(countQuery, null);
@@ -418,7 +422,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Deleting a event
      */
     public void deleteEvent(float event_id) {
-
+        Log.d(LOG, "delete event id:" + event_id);
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.delete(TABLE_EVENT, KEY_EVENT_ID + " = ?",
