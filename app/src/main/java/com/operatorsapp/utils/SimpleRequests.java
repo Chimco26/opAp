@@ -809,7 +809,7 @@ public class SimpleRequests {
         call.enqueue(new Callback<StandardResponse>() {
             @Override
             public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
-                if (response.body() != null &&  response.body().getFunctionSucceed()) {
+                if (response.body() != null && response.body().getFunctionSucceed()) {
                     if (callback != null) {
 
                         callback.onPostSplitEventSuccess(response.body());
@@ -908,9 +908,16 @@ public class SimpleRequests {
         final int[] retryCount = {0};
 
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
-        Call<TaskListResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
-                requestTimeout, TimeUnit.SECONDS).getTaskList(new TaskDefaultRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId()));
 
+        Call<TaskListResponse> call;
+        int lineId = persistenceManager.getMachineLineId();
+        if (lineId > 0) {
+            call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                    requestTimeout, TimeUnit.SECONDS).getTaskListForLine(new MachineLineRequest(persistenceManager.getSessionId(), lineId));
+        } else {
+            call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                    requestTimeout, TimeUnit.SECONDS).getTaskList(new TaskDefaultRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId()));
+        }
         call.enqueue(new Callback<TaskListResponse>() {
             @Override
             public void onResponse(@NonNull Call<TaskListResponse> call, @NonNull Response<TaskListResponse> response) {

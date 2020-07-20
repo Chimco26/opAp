@@ -264,6 +264,8 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
             setSpanCount(mIsOpen);
 
+            mSwitch.setChecked(PersistenceManager.getInstance().isNewStopReasonDesign());
+
         }
     }
 
@@ -326,7 +328,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 //
 //        }
 
-        mSwitch.setChecked(PersistenceManager.getInstance().isNewStopReasonDesign());
+//        mSwitch.setChecked(PersistenceManager.getInstance().isNewStopReasonDesign());
 
         view.findViewById(R.id.FRSRN_close_select_events).setOnClickListener(new View.OnClickListener() {
             @Override
