@@ -185,17 +185,27 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/ISEL_tech_call_tv"
+        <FrameLayout
+            android:id="@+id/ISEL_tech_call_fl"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.45"
-            android:gravity="center"
-            android:maxLines="2"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:text="@string/open_new_call"
-            app:autoSizeMaxTextSize="20sp"
-            app:autoSizeTextType="uniform" />
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/grey1"
+            android:layout_weight="1.45">
+
+            <TextView
+                android:id="@+id/ISEL_tech_call_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:gravity="center"
+                android:maxLines="2"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:text="@string/open_new_call"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeTextType="uniform" />
+        </FrameLayout>
     </LinearLayout>
 </LinearLayout>

@@ -42,7 +42,7 @@
     <string name="no_notifications">καμία ειδοποίηση</string>
     <string name="no_data">κανένα δεδομένο</string>
     <string name="error_rest">σφάλμα στην υπηρεσία ανάπαυσης</string>
-    <string name="jobs_actions"></string>
+    <string name="jobs_actions">δράσεις εργασία</string>
     <string name="job_id">ταυτότητα εργασίας</string>
     <string name="product_name">ονομασία προιόντος</string>
     <string name="erp">ERP</string>
@@ -159,7 +159,7 @@
         <item>Δοκιμή παραγγελίας</item>
     </array>
 
-    <string name="approve_first_item"></string>
+    <string name="approve_first_item">Ορίστε Τέλος</string>
     <string name="welcome">Καλώς ήρθατε</string>
     <string name="log_in_to_nyour_factory"></string>
 

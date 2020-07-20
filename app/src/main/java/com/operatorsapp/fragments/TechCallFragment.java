@@ -580,7 +580,8 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                     PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
                     PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
-                    TechCallInfo techCall = new TechCallInfo(machineId, 0, techName, getString(R.string.called_technician) + "\n" + techName, mDescriptionEt.getText().toString(), Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID());
+                    TechCallInfo techCall = new TechCallInfo(machineId, 0, techName, getString(R.string.called_technician) + "\n" + techName,
+                            mDescriptionEt.getText().toString(), Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID(), 0);
                     PersistenceManager.getInstance().setCalledTechnician(techCall);
                     PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                     mListener.onGetNotificationsFromServer();

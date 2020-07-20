@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -82,7 +83,7 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
         Notification notification = checkTechCallForEvent(event);
         if (notification != null){
             setTechCallStatusForEvent(viewHolder, notification);
-            viewHolder.techCall.setText("");
+            viewHolder.techCall.setVisibility(View.INVISIBLE);
         }else {
             viewHolder.techCallStatusLil.setVisibility(View.GONE);
             viewHolder.techCall.setVisibility(View.VISIBLE);
@@ -211,7 +212,7 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
         private final TextView end;
         private final TextView duration;
         private final TextView machine;
-        private final TextView techCall;
+        private final FrameLayout techCall;
         private final View expandBackgrnd;
         private final LinearLayout techCallStatusLil;
         private final ImageView techCallStatusIv;
@@ -229,7 +230,7 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
             end = itemView.findViewById(R.id.ISEL_end);
             duration = itemView.findViewById(R.id.ISEL_duration);
             machine = itemView.findViewById(R.id.ISEL_machine);
-            techCall = itemView.findViewById(R.id.ISEL_tech_call_tv);
+            techCall = itemView.findViewById(R.id.ISEL_tech_call_fl);
             techCallStatusLil = itemView.findViewById(R.id.ISEL_tech_call_info_lil);
             techCallStatusIv = itemView.findViewById(R.id.ISEL_tech_call_status_iv);
             techCallStatusTv = itemView.findViewById(R.id.ISEL_tech_call_subtext_tv);

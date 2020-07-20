@@ -199,7 +199,8 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
                                 }
                             }
                             if (isNew) {
-                                techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmAdditionalText(), not.getmTitle(), TimeUtils.getDateForNotification(not.getmSentTime()).getTime(), not.getmNotificationID(), not.getmTargetUserId()));
+                                techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmTitle(), not.getmAdditionalText(),
+                                        TimeUtils.getDateForNotification(not.getmSentTime()).getTime(), not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID()));
                             }
                         }
                     }
