@@ -151,6 +151,15 @@
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:src="@android:drawable/ic_menu_delete"/>
+
+        <ImageView
+            android:id="@+id/tech_call_item_arrow_iv"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:src="@android:drawable/arrow_down_float"/>
     </LinearLayout>
 
     <LinearLayout
@@ -158,6 +167,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginStart="120dp"
+        android:layout_marginEnd="40dp"
         android:visibility="gone">
 
         <TextView
@@ -168,7 +179,7 @@
             android:textColor="@color/black"
             android:text="@string/more_info"
             android:layout_gravity="center_vertical"
-            android:layout_width="120dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
