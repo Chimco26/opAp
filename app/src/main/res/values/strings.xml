@@ -149,6 +149,7 @@
         <item>Italian</item>
         <item>Hungarian</item>
         <item>Polish</item>
+        <item>Greek</item>
     </array>
 
     <array name="language_codes_array">
@@ -165,6 +166,7 @@
         <item>it</item>
         <item>hu</item>
         <item>pl</item>
+        <item>el</item>
     </array>
     <array name="jobs_spinner_array">
         <item>Activate Job</item>
