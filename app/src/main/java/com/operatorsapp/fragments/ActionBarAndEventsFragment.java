@@ -1620,7 +1620,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
                     PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
-                    TechCallInfo techCall = new TechCallInfo(PersistenceManager.getInstance().getMachineId(), 0, techName, getString(R.string.called_technician) + "\n" + techName, "", Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID());
+                    TechCallInfo techCall = new TechCallInfo(PersistenceManager.getInstance().getMachineId(), 0, techName, getString(R.string.called_technician) + "\n" + techName,
+                            "", Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID(), 0);
                     PersistenceManager.getInstance().setCalledTechnician(techCall);
                     PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                     setTechnicianCallStatus();
@@ -1905,7 +1906,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
                             PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
-                            TechCallInfo techCall = new TechCallInfo(PersistenceManager.getInstance().getMachineId(), 0, techName, getString(R.string.called_technician) + "\n" + techName, "", Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technicianId);
+                            TechCallInfo techCall = new TechCallInfo(PersistenceManager.getInstance().getMachineId(), 0, techName, getString(R.string.called_technician) + "\n" + techName,
+                                    "", Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technicianId, 0);
                             PersistenceManager.getInstance().setCalledTechnician(techCall);
                             PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                             setTechnicianCallStatus();
@@ -2555,15 +2557,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
                 if (response.body() != null && response.body().getError().getErrorDesc() == null) {
-//
-//                    PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
-//                    PersistenceManager.getInstance().setCalledTechnicianName(techName);
-//
-//                    TechCallInfo techCall = new TechCallInfo(machineId, 0, techName, getString(R.string.called_technician) + "\n" + techName, additionalText, Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID());
-//                    PersistenceManager.getInstance().setCalledTechnician(techCall);
-//                    PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                     ProgressDialogManager.dismiss();
-
+                    getNotificationsFromServer(false);
                     new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TECH_CALL, true, "technician name: " + techName);
 
                 } else {
@@ -3865,7 +3860,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             if (isNew) {
                                 techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmResponseType() + "",
                                         not.getmAdditionalText(), TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
-                                        not.getmNotificationID(), not.getmTargetUserId()));
+                                        not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID()));
                             }
                         }
                     }
@@ -3875,7 +3870,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (openNotifications || (mPopUpDialog != null && mPopUpDialog.isShowing() && mPopUpDialog instanceof NotificationsDialog)) {
                         openNotificationsList();
                     }
-
+                    if (mShiftLogAdapter != null) {
+                        mShiftLogAdapter.updateTechCalls();
+                    }
                 } else {
                     PersistenceManager.getInstance().setNotificationHistory(null);
                     if (response.body() != null) {

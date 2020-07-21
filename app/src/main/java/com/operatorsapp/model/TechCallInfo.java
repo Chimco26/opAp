@@ -8,6 +8,7 @@ import com.operatorsapp.utils.Consts;
 
 public class TechCallInfo {
 
+    private int mEventId;
     private int mResponseType;
     private int mNotificationId;
     private int mTechnicianId;
@@ -24,7 +25,8 @@ public class TechCallInfo {
         this.mCallTime = mCallTime;
     }
 
-    public TechCallInfo(int machineId, int mResponseType, String mName, String mStatus, String additionalText, long mCallTime, int mNotificationId, int mTechnicianId) {
+    public TechCallInfo(int machineId, int mResponseType, String mName, String mStatus, String additionalText,
+                        long mCallTime, int mNotificationId, int mTechnicianId, int eventId) {
         this.mResponseType = mResponseType;
         this.mName = mName;
         this.mStatus = mStatus;
@@ -33,6 +35,15 @@ public class TechCallInfo {
         this.mTechnicianId= mTechnicianId;
         this.mMachineId = machineId;
         this.mAdditionalText = additionalText;
+        this.mEventId = eventId;
+    }
+
+    public int getEventId() {
+        return mEventId;
+    }
+
+    public void setEventId(int mEventId) {
+        this.mEventId = mEventId;
     }
 
     public int getmMachineId() {

@@ -557,4 +557,5 @@
     <string name="select_technician">Select Technician</string>
     <string name="dashboard">Dashboard</string>
     <string name="send">Send</string>
+    <string name="select_machines_for_display">Select Machines for Display</string>
 </resources>

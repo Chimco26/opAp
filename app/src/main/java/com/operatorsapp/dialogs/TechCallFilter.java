@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,17 +13,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.common.department.MachineLineResponse;
+import com.example.common.department.MachinesLineDetail;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.TechCallFilterAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class TechCallFilter extends DialogFragment {
 
     private MachineLineResponse mMachineLine;
     private HashMap<Integer, Boolean> mFilteredOutMachines;
     private TechCallFilterListener mListener;
+    private CheckBox mSelectAllCB;
+    private TechCallFilterAdapter mAdapter;
+    private RecyclerView mRecyclerView;
 
     public static TechCallFilter newInstants(MachineLineResponse machineLine, HashMap<Integer, Boolean> filteredOutMachines, TechCallFilterListener listener){
         TechCallFilter filter = new TechCallFilter();
@@ -61,18 +67,60 @@ public class TechCallFilter extends DialogFragment {
                 dismiss();
             }
         });
-
-        RecyclerView recyclerView = view.findViewById(R.id.DTCF_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        TechCallFilterAdapter adapter = new TechCallFilterAdapter(mMachineLine, mFilteredOutMachines, new TechCallFilterAdapter.TechCallFilterAdapterListener() {
+        mRecyclerView = view.findViewById(R.id.DTCF_recycler);
+        mSelectAllCB = view.findViewById(R.id.DTCF_select_all);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new TechCallFilterAdapter(mMachineLine, mFilteredOutMachines, new TechCallFilterAdapter.TechCallFilterAdapterListener() {
             @Override
             public void onItemCheckChanged(int position, boolean isChecked) {
                 mFilteredOutMachines.put(mMachineLine.getMachinesData().get(position).getMachineID(), isChecked);
-
+                setSelectAll();
             }
         });
-        recyclerView.setAdapter(adapter);
+        mRecyclerView.setAdapter(mAdapter);
+        mSelectAllCB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mSelectAllCB.isChecked()){
+                    for (MachinesLineDetail machine : mMachineLine.getMachinesData()) {
+                        mFilteredOutMachines.put(machine.getMachineID(), false);
+                    }
+                }else {
+                    for (MachinesLineDetail machine : mMachineLine.getMachinesData()) {
+                        mFilteredOutMachines.put(machine.getMachineID(), true);
+                    }
+                }
+                setSelectAll();
+            }
+        });
+        setSelectAll();
         return view;
+    }
+
+    private void setSelectAll() {
+
+        boolean isCheck = true;
+        if (mFilteredOutMachines != null && !mFilteredOutMachines.isEmpty()){
+            Set<Integer> keys = mFilteredOutMachines.keySet();
+            for (int key : keys) {
+                if (!mFilteredOutMachines.get(key)){
+                    isCheck = false;
+                    break;
+                }
+            }
+        }
+        mSelectAllCB.setChecked(isCheck);
+        mAdapter.updateFilterList(mFilteredOutMachines);
+
+        mRecyclerView.post(new Runnable()
+        {
+            @Override
+            public void run() {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+        
+
     }
 
     @Override

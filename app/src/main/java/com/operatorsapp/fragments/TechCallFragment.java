@@ -94,7 +94,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
     private MachineLineResponse mMachineLine;
     private TextView mSortTv;
     private boolean isOpenCalls = true;
-    private HashMap<Integer, Boolean> mFilteredOutMachines = new HashMap<Integer, Boolean>();
+    private HashMap<Integer, Boolean> mFilteredOutMachines;
 
     public TechCallFragment() {
     }
@@ -185,6 +185,12 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
     }
 
     private void openFilter() {
+        if (mFilteredOutMachines == null || mFilteredOutMachines.isEmpty()){
+            mFilteredOutMachines = new HashMap<>();
+            for (MachinesLineDetail machine : mMachineLine.getMachinesData()) {
+                mFilteredOutMachines.put(machine.getMachineID(), true);
+            }
+        }
 
         TechCallFilter filter = TechCallFilter.newInstants(mMachineLine, mFilteredOutMachines, new TechCallFilter.TechCallFilterListener() {
             @Override
@@ -574,7 +580,8 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                     PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
                     PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
-                    TechCallInfo techCall = new TechCallInfo(machineId, 0, techName, getString(R.string.called_technician) + "\n" + techName, mDescriptionEt.getText().toString(), Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID());
+                    TechCallInfo techCall = new TechCallInfo(machineId, 0, techName, getString(R.string.called_technician) + "\n" + techName,
+                            mDescriptionEt.getText().toString(), Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID(), 0);
                     PersistenceManager.getInstance().setCalledTechnician(techCall);
                     PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                     mListener.onGetNotificationsFromServer();

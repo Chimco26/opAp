@@ -3,16 +3,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="locale"
-
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/DTCF_close"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_margin="10dp"
-        android:layout_gravity="end"
-        android:src="@drawable/close_btn" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            style="@style/ProximaNovaSemiBold"
+            android:textAlignment="center"
+            android:padding="15dp"
+            android:text="@string/select_machines_for_display"/>
+
+        <ImageView
+            android:id="@+id/DTCF_close"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:layout_gravity="end"
+            android:src="@drawable/close_btn" />
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/DTCF_select_all"
+        android:padding="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_all"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/DTCF_recycler"

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,6 +26,8 @@ import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.OnStopClickListener;
+import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.utils.ReasonImage;
 import com.operatorsapp.utils.ReasonImageLenox;
 import com.operatorsapp.utils.TimeUtils;
@@ -49,6 +52,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     private ArrayList<Event> mUpdatedAlarms;
     private int mFirstStopEventPosition;
     private boolean isAllowReportingOnSetupEvents;
+    private ArrayList<TechCallInfo> mTechCallList;
 
     public ShiftLogSqlAdapter(Context context, Cursor cursor, boolean closedState, int closeWidth,
                               OnStopClickListener onStopClickListener, int openWidth, int height,
@@ -65,10 +69,16 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         mSelectedEvents = selectedEvents;
         mUpdatedAlarms = new ArrayList<>();
         mFirstStopEventPosition = getItemCount();
+        mTechCallList = PersistenceManager.getInstance().getCalledTechnician();
     }
 
     public void setSelectedEvents(ArrayList<Float> selectedEvents) {
         mSelectedEvents = selectedEvents;
+    }
+
+    public void updateTechCalls() {
+        mTechCallList = PersistenceManager.getInstance().getCalledTechnician();
+        notifyDataSetChanged();
     }
 
 
@@ -101,7 +111,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         private TextView mParameterMin;
         private TextView mParameterMax;
         private TextView mParameterTime;
-        private TextView mTechCallTv;
+        private FrameLayout mTechCallFl;
         private View mParameterDivider;
         private LinearLayout mParameterSubtitle;
         private View mParameterBottomDivider;
@@ -132,7 +142,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             mStoppedEnd = itemView.findViewById(R.id.event_stopped_shift_log_item_end);
             mStoppedEndDate = itemView.findViewById(R.id.event_stopped_shift_log_item_end_date);
             mStoppedDivider = itemView.findViewById(R.id.event_stopped_shift_log_divider);
-            mTechCallTv = itemView.findViewById(R.id.event_stopped_shift_log_item_tech_call_tv);
+            mTechCallFl = itemView.findViewById(R.id.event_stopped_shift_log_item_tech_call_fl);
             mStoppedBottomDivider = itemView.findViewById(R.id.event_stopped_shift_log_bottom_divider);
             mStoppedSubtitle = itemView.findViewById(R.id.event_stopped_shift_log_item_subtitle);
             mSplitEvent = itemView.findViewById(R.id.event_stopped_shift_log_item_split_event);
@@ -170,6 +180,9 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
     public void changeState(boolean closedState) {
         mClosedState = closedState;
+        if (!mClosedState){
+            mTechCallList = PersistenceManager.getInstance().getCalledTechnician();
+        }
         notifyDataSetChanged();
     }
 
@@ -204,7 +217,8 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         );
 
 
-        holder.mTechCallTv.setOnClickListener(new View.OnClickListener() {
+        checkTechCallForEvent(event, holder);
+        holder.mTechCallFl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnStopClickListener.onServiceCallFromEvent(event);
@@ -513,6 +527,16 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                 }
             });
         }
+    }
+
+    private void checkTechCallForEvent(Event event, ShiftLogViewHolder holder) {
+        for (TechCallInfo call : mTechCallList) {
+            if (call.getEventId() == event.getEventID()){
+                holder.mTechCallFl.setVisibility(View.GONE);
+                return;
+            }
+        }
+        holder.mTechCallFl.setVisibility(View.VISIBLE);
     }
 
     private void validateDialog(final float eventID) {

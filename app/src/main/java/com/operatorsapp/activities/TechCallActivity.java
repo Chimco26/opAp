@@ -219,9 +219,9 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
                                     }
                                 }
                                 if (isNew) {
-                                    techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmResponseType() + "",
+                                    techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmTitle(),
                                             not.getmAdditionalText(), TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
-                                            not.getmNotificationID(), not.getmTargetUserId()));
+                                            not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID()));
                                 }
                             }
                         }
