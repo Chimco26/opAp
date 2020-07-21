@@ -2819,6 +2819,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         getAllRecipes(PersistenceManager.getInstance().getJobId(), true, true);
     }
 
+    @Override
+    public void onShowCrouton(String string, CroutonCreator.CroutonType type) {
+        ShowCrouton.showSimpleCrouton(this, string, type);
+    }
+
     private void startGalleryActivity(List<String> fileUrl, String name) {
 
         if (fileUrl != null && fileUrl.size() > 0) {
