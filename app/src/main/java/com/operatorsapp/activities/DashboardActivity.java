@@ -3419,9 +3419,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (PersistenceManager.getInstance().getMachineId() == -1) {
             return;
         }
-        getSupportFragmentManager().beginTransaction().remove(mSelectMachineFragment).commit();
+        if (mSelectMachineFragment != null ) {
+            getSupportFragmentManager().beginTransaction().remove(mSelectMachineFragment).commit();
+            mSelectMachineFragment = null;
+        }
         showReportBtn(true);
-        mSelectMachineFragment = null;
         mActionBarAndEventsFragment.setActionBar();
     }
 
