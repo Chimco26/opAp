@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class TechCallFilterAdapter extends RecyclerView.Adapter<TechCallFilterAdapter.ViewHolder> {
 
     private final MachineLineResponse mMachineLine;
-    private final HashMap<Integer, Boolean> mFilteredOutMachines;
+    private HashMap<Integer, Boolean> mFilteredOutMachines;
     private final TechCallFilterAdapterListener mListener;
 
     public TechCallFilterAdapter(MachineLineResponse machineLine, HashMap<Integer, Boolean> filteredOutMachines, TechCallFilterAdapterListener listener) {
@@ -62,6 +62,10 @@ public class TechCallFilterAdapter extends RecyclerView.Adapter<TechCallFilterAd
                 }
             });
         }
+    }
+
+    public void updateFilterList(HashMap<Integer, Boolean> filteredList){
+        mFilteredOutMachines = filteredList;
     }
 
     public interface TechCallFilterAdapterListener {

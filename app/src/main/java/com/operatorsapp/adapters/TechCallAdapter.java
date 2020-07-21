@@ -71,6 +71,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         });
 
+        techViewHolder.mRemoveIv.setVisibility(View.VISIBLE);
         techViewHolder.mMoreInfoTv.setText(mTechList.get(position).getmAdditionalText());
         techViewHolder.mTextTv.setText(mTechList.get(position).getmName());
         techViewHolder.mTimeTv.setText(TimeUtils.getDate(mTechList.get(position).getmCallTime(), TimeUtils.COMMON_DATE_FORMAT));
@@ -100,7 +101,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
                 icon = R.drawable.cancel_blue;
                 txt = mContext.getResources().getString(R.string.service_call_was_canceled);
-                techViewHolder.mManageCallFl.setVisibility(View.INVISIBLE);
+                techViewHolder.mManageCallFl.setVisibility(View.GONE);
                 techViewHolder.mRemoveIv.setVisibility(View.INVISIBLE);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
@@ -112,7 +113,8 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
                 icon = R.drawable.service_done;
                 txt = mContext.getResources().getString(R.string.service_completed);
-                techViewHolder.mManageCallFl.setVisibility(View.INVISIBLE);
+                techViewHolder.mManageCallFl.setVisibility(View.GONE);
+                techViewHolder.mRemoveIv.setVisibility(View.INVISIBLE);
                 break;
         }
         techViewHolder.mStatusIv.setImageResource(icon);
@@ -142,6 +144,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private ImageView mRemoveIv;
         private ImageView mStatusIv;
         private ImageView mManageCallIv;
+        private ImageView mArrowIv;
         private TextView mManageCallTv;
         private FrameLayout mManageCallFl;
         private boolean isMoreInfoOpen = false;
@@ -154,6 +157,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mManageCallIv = itemView.findViewById(R.id.tech_call_item_manage_call_iv);
             mManageCallTv = itemView.findViewById(R.id.tech_call_item_manage_call_tv);
             mManageCallFl = itemView.findViewById(R.id.tech_call_item_manage_call_fl);
+            mArrowIv = itemView.findViewById(R.id.tech_call_item_arrow_iv);
             mTextTv = itemView.findViewById(R.id.tech_call_item_text_tv);
             mTimeTv = itemView.findViewById(R.id.tech_call_item_time_tv);
             mStatusIv = itemView.findViewById(R.id.tech_call_item_status_iv);
@@ -168,6 +172,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View v) {
                     mMoreInfoLil.setVisibility(isMoreInfoOpen ? View.GONE : View.VISIBLE);
                     isMoreInfoOpen = !isMoreInfoOpen;
+                    mArrowIv.setRotation(isMoreInfoOpen ? 180 : 0);
                 }
             });
         }
