@@ -114,10 +114,22 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <Button
+                    android:id="@+id/AJA_display_recipe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/display_recipe"
+                    android:textSize="18sp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/blue1"
+                    android:textColor="@color/white"
+                    android:padding="3dp"
+                    android:layout_gravity="end"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="15dp"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal"
                     android:weightSum="100">

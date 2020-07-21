@@ -557,4 +557,6 @@
     <string name="select_technician">Select Technician</string>
     <string name="dashboard">Dashboard</string>
     <string name="send">Send</string>
+    <string name="display_recipe">Display recipe</string>
+    <string name="error_cant_show_recipe">Error can\'t show recipe</string>
 </resources>
