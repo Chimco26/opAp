@@ -84,7 +84,6 @@ import com.operators.operatornetworkbridge.OperatorNetworkBridge;
 import com.operators.reportfieldsformachinecore.ReportFieldsForMachineCore;
 import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
-import com.operators.reportfieldsformachineinfra.SubReasons;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
@@ -157,7 +156,6 @@ import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.StopReasonsGroup;
 import com.operatorsapp.utils.ChangeLang;
-import com.operatorsapp.utils.ClearData;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
@@ -1300,7 +1298,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     ProgressDialogManager.dismiss();
                 }
 
-                if(!ChangeLang.isLanguageSetOk(DashboardActivity.this)){
+                if (!ChangeLang.isLanguageSetOk(DashboardActivity.this)) {
                     refreshApp();
                 }
             }
@@ -1845,7 +1843,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Log.i(TAG, "onChangeMachineRequest() command received from settings screen");
 
         mSelectMachineFragment = SelectMachineFragment.newInstance();
-        if (mActionBarAndEventsFragment != null){
+        if (mActionBarAndEventsFragment != null) {
             mActionBarAndEventsFragment.setVisiblefragment(mSelectMachineFragment);
         }
         getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, mSelectMachineFragment).commit();
@@ -1872,7 +1870,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onViewLog() {
-        if (mCurrentMachineStatus == null){
+        if (mCurrentMachineStatus == null) {
             return;
         }
         Intent intent = new Intent(this, StopEventLogActivity.class);
@@ -2186,9 +2184,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onActionBarAndEventsFragmentCreated() {
 
-        if (PersistenceManager.getInstance().getMachineId() == -1 && !(getVisibleFragment() instanceof SelectMachineFragment)){
+        if (PersistenceManager.getInstance().getMachineId() == -1 && !(getVisibleFragment() instanceof SelectMachineFragment)) {
             mSelectMachineFragment = SelectMachineFragment.newInstance();
-            if (mActionBarAndEventsFragment != null){
+            if (mActionBarAndEventsFragment != null) {
                 mActionBarAndEventsFragment.setVisiblefragment(mSelectMachineFragment);
             }
             getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, mSelectMachineFragment).commit();
@@ -2210,8 +2208,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         try {
             List<Fragment> frags = getSupportFragmentManager().getFragments();
-            for ( Fragment frag : frags) {
-                if (frag instanceof  ReportStopReasonFragment){
+            for (Fragment frag : frags) {
+                if (frag instanceof ReportStopReasonFragment) {
                     getSupportFragmentManager().beginTransaction().remove(frag).commit();
                 }
             }
@@ -2589,8 +2587,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         Fragment visible = getVisibleFragment();
 
-        if (mSelectMachineFragment != null){
-            if (PersistenceManager.getInstance().getMachineId() == -1){
+        if (mSelectMachineFragment != null) {
+            if (PersistenceManager.getInstance().getMachineId() == -1) {
                 return;
             }
             onCloseSelectMachine();
@@ -2879,8 +2877,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
         }
 
-        if (resultCode == RESULT_OK && requestCode == TECH_CALL_ACTIVITY_RESULT_CODE){
-            if (data.getBooleanExtra(TechCallActivity.EXTRA_IS_MACHINE_CHANGED, false)){
+        if (resultCode == RESULT_OK && requestCode == TECH_CALL_ACTIVITY_RESULT_CODE) {
+            if (data.getBooleanExtra(TechCallActivity.EXTRA_IS_MACHINE_CHANGED, false)) {
                 mAllDashboardDataCore.startPolling();
             }
         }
@@ -3001,7 +2999,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void sendRejectReport(String value, boolean isUnit, int selectedCauseId, int selectedReasonId) {
-        if (mActiveJobsListForMachine == null || mActiveJobsListForMachine.getActiveJobs() == null){
+        if (mActiveJobsListForMachine == null || mActiveJobsListForMachine.getActiveJobs() == null) {
             return;
         }
         mSendRejectObject = new SendRejectObject(value, isUnit, selectedCauseId, selectedReasonId);
@@ -3022,7 +3020,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
         } catch (NumberFormatException e) {
             ShowCrouton.showSimpleCrouton(DashboardActivity.this, getResources().getString(R.string.invalid_value), CroutonCreator.CroutonType.NETWORK_ERROR);
-        } catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             ShowCrouton.showSimpleCrouton(DashboardActivity.this,
                     getResources().getString(R.string.josh) + " " + getResources().getString(R.string.invalid_value), CroutonCreator.CroutonType.NETWORK_ERROR);
         }
@@ -3403,7 +3401,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         onBackPressed();
         ProgressDialogManager.show(this);
         dashboardDataStartPolling();
-        if (mActionBarAndEventsFragment.isVisible()){
+        if (mActionBarAndEventsFragment.isVisible()) {
             mActionBarAndEventsFragment.blockOperatorsSpinner();
         }
     }
@@ -3418,7 +3416,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onCloseSelectMachine() {
-        if (PersistenceManager.getInstance().getMachineId() == -1){
+        if (PersistenceManager.getInstance().getMachineId() == -1) {
             return;
         }
         getSupportFragmentManager().beginTransaction().remove(mSelectMachineFragment).commit();
