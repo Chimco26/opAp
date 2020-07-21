@@ -62,7 +62,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             techViewHolder.mManageCallIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.wrench));
             techViewHolder.mManageCallTv.setText(mContext.getResources().getString(R.string.start_service));
         }else {
-            techViewHolder.mManageCallFl.setVisibility(View.GONE);
+            techViewHolder.mManageCallFl.setVisibility(View.INVISIBLE);
         }
         techViewHolder.mManageCallFl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +101,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
                 icon = R.drawable.cancel_blue;
                 txt = mContext.getResources().getString(R.string.service_call_was_canceled);
-                techViewHolder.mManageCallFl.setVisibility(View.GONE);
+                techViewHolder.mManageCallFl.setVisibility(View.INVISIBLE);
                 techViewHolder.mRemoveIv.setVisibility(View.INVISIBLE);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
@@ -113,7 +113,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
                 icon = R.drawable.service_done;
                 txt = mContext.getResources().getString(R.string.service_completed);
-                techViewHolder.mManageCallFl.setVisibility(View.GONE);
+                techViewHolder.mManageCallFl.setVisibility(View.INVISIBLE);
                 techViewHolder.mRemoveIv.setVisibility(View.INVISIBLE);
                 break;
         }
