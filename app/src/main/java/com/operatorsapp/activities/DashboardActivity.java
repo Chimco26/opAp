@@ -100,8 +100,8 @@ import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResp
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
-import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
@@ -193,7 +193,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 import ravtech.co.il.publicutils.JobBase;
 import retrofit2.Call;
 import retrofit2.Callback;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+//import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static com.example.common.permissions.WidgetInfo.PermissionId.SHIFT_REPORT;
@@ -847,8 +847,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             if (mDownloadFile != null) {
                 mDownloadFile.cancel(true);
             }
-
-//            finish();
+/*
+            if (!mIsUpgrading && PersistenceManager.getInstance().isStatusBarLocked()) {
+//                Intent intent = new Intent(Intent.ACTION_MAIN);
+//                intent.addCategory(Intent.CATEGORY_HOME);
+                Intent intent = new Intent(DashboardActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }*/
 
         }
     }
@@ -911,8 +918,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mIsCollapse = false;
         if (!mIsUpgrading && PersistenceManager.getInstance().isStatusBarLocked()) {
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
+//            Intent intent = new Intent(Intent.ACTION_MAIN);
+//            intent.addCategory(Intent.CATEGORY_HOME);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent intent = new Intent(DashboardActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
@@ -1556,11 +1565,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mCroutonCreator.hideConnectivityCrouton();
         }
     }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
+//
+//    @Override
+//    protected void attachBaseContext(Context newBase) {
+//        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+//    }
 
     public void onFragmentAttached(DashboardUICallbackListener dashboardUICallbackListener) {
         mDashboardUICallbackListenerList.add(dashboardUICallbackListener);
@@ -2923,6 +2932,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mOnJobFinishedListener = onJobFinishedListener;
 
         getActiveJobs();
+    }
+
+    @Override
+    public void onNoInternetConnection() {
+        Toast.makeText(this, R.string.no_connection_msg, Toast.LENGTH_SHORT).show();
+//        onShowCrouton(getString(R.string.no_connection_msg), true);
     }
 
     @Override

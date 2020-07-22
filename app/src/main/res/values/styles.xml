@@ -22,7 +22,7 @@
         <!--<item name="android:textColorPrimary">@color/log_in_color_selector</item>-->
         <!--<item name="android:textColorSecondary">@color/log_in_color_selector</item>-->
         <!--<item name="android:textColorTertiary">@color/log_in_color_selector</item>-->
-        <item name="fontPath">fonts/ProximaNova-Regular.ttf</item>
+        <item name="android:path">fonts/ProximaNova-Regular.ttf</item>
         <item name="android:textAllCaps">false</item>
         <item name="textAllCaps">false</item>
     </style>
@@ -37,27 +37,27 @@
 
 
     <style name="BreeSerifRegular">
-        <item name="fontPath">fonts/ProximaNova-Regular.ttf</item>
+        <item name="android:path">fonts/ProximaNova-Regular.ttf</item>
     </style>
 
     <style name="DroidSans">
-        <item name="fontPath">fonts/ProximaNova-Regular.ttf</item>
+        <item name="android:path">fonts/ProximaNova-Regular.ttf</item>
     </style>
 
     <style name="DroidSansBold">
-        <item name="fontPath">fonts/ProximaNova-Semibold.ttf</item>
+        <item name="android:path">fonts/ProximaNova-Semibold.ttf</item>
     </style>
 
     <style name="RobotoMedium">
-        <item name="fontPath">fonts/ProximaNova-Semibold.ttf</item>
+        <item name="android:path">fonts/ProximaNova-Semibold.ttf</item>
     </style>
 
     <style name="RobotoRegular">
-        <item name="fontPath">fonts/ProximaNova-Regular.ttf</item>
+        <item name="android:path">fonts/ProximaNova-Regular.ttf</item>
     </style>
 
     <style name="ProximaNovaSemiBold">
-        <item name="fontPath">fonts/ProximaNova-Semibold.ttf</item>
+        <item name="android:path">fonts/ProximaNova-Semibold.ttf</item>
     </style>
 
     <style name="Roboto_Action_Bar_Title" parent="RobotoMedium">

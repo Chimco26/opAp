@@ -130,18 +130,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         // creating required tables
-        db.execSQL(CREATE_TABLE_EVENTS);
+        if (db.isOpen())
+            db.execSQL(CREATE_TABLE_EVENTS);
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        // on upgrade drop older tables
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT);
+        if (db.isOpen()) {
+            // on upgrade drop older tables
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT);
 
-        // create new tables
-        onCreate(db);
+            // create new tables
+            onCreate(db);
+        }
     }
 
 
@@ -198,23 +201,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor c = db.rawQuery(selectQuery, null);
+        if (db.isOpen()) {
+            Cursor c = db.rawQuery(selectQuery, null);
 
-        // looping through all rows and adding to list
-        if (c.moveToFirst()) {
-            do {
-                Event event = convertRawToEvent(c);
+            // looping through all rows and adding to list
+            if (c.moveToFirst()) {
+                do {
+                    Event event = convertRawToEvent(c);
 
-                events.add(event);
-            } while (c.moveToNext());
+                    events.add(event);
+                } while (c.moveToNext());
+            }
+            c.close();
+            return events;
+        }else {
+            return new ArrayList<>();
         }
-
-        return events;
     }
 
     public ArrayList<Event> getListFromCursor(Cursor cursor) {
-
+        Log.d(LOG, "getListFromCursor() ");
         ArrayList<Event> events = new ArrayList<>();
+
+        if (cursor == null){
+            return new ArrayList<>();
+        }
 
         if (cursor.moveToFirst()) {
             do {
@@ -236,11 +247,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = 0;
+        if (db.isOpen()) {
+            Cursor cursor = db.rawQuery(countQuery, null);
 
-        int count = cursor.getCount();
+            count = cursor.getCount();
 
-        cursor.close();
+            cursor.close();
+        }
 
         // return count
         return count;
@@ -251,12 +265,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public Cursor getCursorOrderByTime() {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT + " ORDER BY " + KEY_EVENT_ID + " DESC";
-
+        Log.d(LOG, countQuery);
         SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor c = db.rawQuery(countQuery, null);
-
-        return c;
+        if (db.isOpen()) {
+            Cursor c = db.rawQuery(countQuery, null);
+            return c;
+        }else {
+            return null;
+        }
 
     }
 
@@ -293,10 +309,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " OR (" + KEY_TYPE + " = 0 AND " + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
+        Log.d(LOG, countQuery);
         SQLiteDatabase db = this.getReadableDatabase();
-
-        return db.rawQuery(countQuery, null);
-
+        if (db.isOpen()) {
+            return db.rawQuery(countQuery, null);
+        }
+        return null;
     }
     public Cursor getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(int minEventDuration) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
@@ -305,10 +323,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " OR (" + KEY_TYPE + " = 0 AND " + KEY_GROUP_ID + " != 20 AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
+        Log.d(LOG, countQuery);
         SQLiteDatabase db = this.getReadableDatabase();
-
-        return db.rawQuery(countQuery, null);
-
+        if (db.isOpen()) {
+            return db.rawQuery(countQuery, null);
+        }
+        return null;
     }
 
     public Cursor getStopTypeShiftOrderByTimeFilterByDuration(int minEventDuration) {
@@ -346,6 +366,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ") OR (" + KEY_TYPE + " = 0 AND " + KEY_REASON_ID + " = " + reasonId + " AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
+        Log.d(LOG, countQuery);
         SQLiteDatabase db = this.getReadableDatabase();
 
         return db.rawQuery(countQuery, null);
@@ -360,6 +381,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " AND " +  KEY_GROUP_ID + " != 20 ))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
+        Log.d(LOG, countQuery);
         SQLiteDatabase db = this.getReadableDatabase();
 
         return db.rawQuery(countQuery, null);
@@ -400,7 +422,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Deleting a event
      */
     public void deleteEvent(float event_id) {
-
+        Log.d(LOG, "delete event id:" + event_id);
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.delete(TABLE_EVENT, KEY_EVENT_ID + " = ?",
