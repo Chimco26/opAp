@@ -100,8 +100,8 @@ import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResp
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
-import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
