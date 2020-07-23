@@ -803,9 +803,9 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
         if (isUpdating) {
             isUpdating = false;
             if (recipeResponse != null) {
-                ShowCrouton.showSimpleCrouton((DashboardActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
+                mListener.onShowCrouton(getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
             } else {
-                ShowCrouton.showSimpleCrouton((DashboardActivity) getActivity(), reason.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+                mListener.onShowCrouton(reason.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
         }
         if (recipeResponse != null) {
@@ -832,5 +832,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
         void onImageProductClick(List<String> fileUrl, String name);
 
         void onRefreshRecipe();
+
+        void onShowCrouton(String string, CroutonCreator.CroutonType type);
     }
 }

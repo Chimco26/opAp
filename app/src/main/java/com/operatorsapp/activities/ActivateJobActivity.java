@@ -3,17 +3,20 @@ package com.operatorsapp.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.common.ErrorResponse;
 import com.example.common.StandardResponse;
+import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectinfra.GetJobDetailsCallback;
 import com.operators.reportrejectinfra.GetPendingJobListCallback;
 import com.operators.reportrejectinfra.PostActivateJobCallback;
 import com.operators.reportrejectinfra.PostUpdtaeActionsCallback;
+import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Action;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsByJob;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsUpdateRequest;
@@ -57,7 +60,8 @@ public class ActivateJobActivity extends AppCompatActivity implements
         OnCroutonRequestListener,
         CroutonCreator.CroutonListener,
         JobDetailsFragment.JobDetailsFragmentListener,
-        JobListFragment.JobListFragmentListener {
+        JobListFragment.JobListFragmentListener,
+        RecipeFragment.OnRecipeFragmentListener {
 
     private static final String TAG = ActivateJobActivity.class.getSimpleName();
     public static final int EXTRA_ACTIVATE_JOB_CODE = 111;
@@ -85,6 +89,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
     private String mLastJobErpId = "";
     private String mLastProductName = "";
     private boolean isActive = true;
+    private RecipeFragment mRecipefragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -359,6 +364,13 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //Clear the Activity's bundle of the subsidiary fragments' bundles.
+        outState.clear();
+    }
+
     private void postActivateJob(final ActivateJobRequest activateJobRequest) {
 
         final PersistenceManager persistanceManager = PersistenceManager.getInstance();
@@ -435,17 +447,50 @@ public class ActivateJobActivity extends AppCompatActivity implements
     }
 
 
-    private void showRecipeFragment() {
+    private void showRecipeFragment(RecipeResponse recipe) {
 
         try {
-            RecipeFragment mRecipefragment = RecipeFragment.newInstance(mCurrentJobDetails.getJobs().get(0).getRecipe());
+            mRecipefragment = RecipeFragment.newInstance(recipe);
             getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, mRecipefragment).addToBackStack(RecipeFragment.TAG).commit();
         } catch (Exception e) {
             findViewById(R.id.AJA_no_data_tv).setVisibility(View.VISIBLE);
         }
     }
 
-    private void showJobListFragment(PendingJobStandardResponse mPendingJobsResponse, ArrayList<PendingJob> mPendingJobs, ArrayList<Header> headers) {
+    private void getAllRecipes(Integer jobId, final boolean update) {
+
+        ProgressDialogManager.show(this);
+
+        PersistenceManager persistanceManager = PersistenceManager.getInstance();
+
+        SimpleRequests simpleRequests = new SimpleRequests();
+
+        simpleRequests.getAllRecipe(persistanceManager.getSiteUrl(), persistanceManager.getSessionId(),
+                jobId, new GetAllRecipeCallback() {
+                    @Override
+                    public void onGetAllRecipeSuccess(Object response) {
+
+                        ProgressDialogManager.dismiss();
+                        if (mRecipefragment != null && update){
+                            mRecipefragment.updateRecipeResponse((RecipeResponse)response, null);
+                        }else {
+                            showRecipeFragment((RecipeResponse) response);
+                        }
+                    }
+
+                    @Override
+                    public void onGetAllRecipeFailed(StandardResponse reason) {
+                        ProgressDialogManager.dismiss();
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, getString(R.string.error_cant_show_recipe));
+                        ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
+                    }
+                }, NetworkManager.getInstance(), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
+
+    }
+
+
+    private void showJobListFragment(PendingJobStandardResponse
+                                             mPendingJobsResponse, ArrayList<PendingJob> mPendingJobs, ArrayList<Header> headers) {
 
         try {
             JobListFragment jobListFragment = JobListFragment.newInstance(mPendingJobsResponse, mPendingJobs, headers);
@@ -553,8 +598,13 @@ public class ActivateJobActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onShowRecipeFragment() {
-        showRecipeFragment();
+    public void onShowRecipeFragment(Integer jobId) {
+        getAllRecipes(jobId, false);
+    }
+
+    @Override
+    public void onShowCrouton(String string, CroutonCreator.CroutonType type) {
+        ShowCrouton.showSimpleCrouton(this, string, type);
     }
 
     @Override
@@ -576,5 +626,15 @@ public class ActivateJobActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         ChangeLang.initLanguage(this);
+    }
+
+    @Override
+    public void onImageProductClick(List<String> fileUrl, String name) {
+        startGalleryActivity(fileUrl, name);
+    }
+
+    @Override
+    public void onRefreshRecipe() {
+        getAllRecipes(mCurrentJobDetails.getJobs().get(0).getID(), true);
     }
 }

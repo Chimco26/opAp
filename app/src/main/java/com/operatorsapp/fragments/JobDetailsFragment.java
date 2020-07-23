@@ -35,6 +35,7 @@ import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
+import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Action;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Header;
@@ -66,8 +67,7 @@ import java.util.List;
 
 public class JobDetailsFragment extends Fragment implements JobActionsAdapter.JobActionsAdapterListener,
         View.OnClickListener,
-        DownloadHelper.DownloadFileListener,
-        RecipeFragment.OnRecipeFragmentListener {
+        DownloadHelper.DownloadFileListener{
 
     private static final String TAG = JobDetailsFragment.class.getSimpleName();
 
@@ -163,6 +163,7 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
         view.findViewById(R.id.AJA_title).setOnClickListener(this);
         view.findViewById(R.id.AJA_job_activate_btn).setOnClickListener(this);
         view.findViewById(R.id.AJA_item_material).setOnClickListener(this);
+        view.findViewById(R.id.AJA_display_recipe).setOnClickListener(this);
         mMoldItemImg.setOnClickListener(this);
         view.findViewById(R.id.AJA_img1).setOnClickListener(this);
         view.findViewById(R.id.AJA_img2).setOnClickListener(this);
@@ -604,8 +605,9 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
                 break;
 
             case R.id.AJA_item_material:
+            case R.id.AJA_display_recipe:
 
-                mListener.onShowRecipeFragment();
+                mListener.onShowRecipeFragment(mCurrentJobDetails.getJobs().get(0).getID());
 
                 break;
 
@@ -847,19 +849,9 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
         });
     }
 
-    @Override
-    public void onImageProductClick(List<String> fileUrl, String name) {
-        mListener.onStartGalleryActivity(fileUrl, name);
-    }
-
-    @Override
-    public void onRefreshRecipe() {
-
-    }
-
     public interface JobDetailsFragmentListener {
 
-        void onShowRecipeFragment();
+        void onShowRecipeFragment(Integer jobId);
 
         void onStartGalleryActivity(List<String> productFiles, String name);
 

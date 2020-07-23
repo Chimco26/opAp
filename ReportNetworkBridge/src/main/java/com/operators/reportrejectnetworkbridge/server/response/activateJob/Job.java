@@ -26,9 +26,6 @@ public class Job implements Parcelable {
     @SerializedName("ProductFiles")
     @Expose
     private List<String> productFiles = null;
-    @SerializedName("Recipe")
-    @Expose
-    private RecipeResponse recipe;
     @SerializedName("Notes")
     @Expose
     private String notes;
@@ -73,14 +70,6 @@ public class Job implements Parcelable {
         this.productFiles = productFiles;
     }
 
-    public RecipeResponse getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(RecipeResponse recipe) {
-        this.recipe = recipe;
-    }
-
     public String getNotes() {
         return notes;
     }
@@ -101,7 +90,6 @@ public class Job implements Parcelable {
         dest.writeTypedList(this.materials);
         dest.writeParcelable(this.mold, flags);
         dest.writeStringList(this.productFiles);
-        dest.writeParcelable(this.recipe, flags);
         dest.writeString(this.notes);
     }
 
@@ -114,7 +102,6 @@ public class Job implements Parcelable {
         this.materials = in.createTypedArrayList(Material.CREATOR);
         this.mold = in.readParcelable(Mold.class.getClassLoader());
         this.productFiles = in.createStringArrayList();
-        this.recipe = in.readParcelable(RecipeResponse.class.getClassLoader());
         this.notes = in.readString();
     }
 

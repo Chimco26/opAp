@@ -344,6 +344,8 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         graph.setBackgroundColor(Color.TRANSPARENT);
         graph.setTouchEnabled(false);
         graph.setDrawGridBackground(false);
+        Float min = null;
+        Float max = null;
 
         ArrayList<ILineDataSet> allDataSets = new ArrayList<>();
         ArrayList<FloatCouple> limits = new ArrayList<>();
@@ -388,7 +390,15 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
                             if (date != null) {
 
-                                values.add(new Entry((float) date.getTime(), (float) (items.get(i).getY().floatValue())));
+                                float value = (float) (items.get(i).getY().floatValue());
+                                values.add(new Entry((float) date.getTime(), value));
+                                if (max == null || value > max){
+                                    max = value;
+                                }
+                                if (min == null || value < min){
+                                    min = value;
+                                }
+
                             }
 
 
@@ -417,6 +427,17 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         setXAxisStyle(graph);
         setYAxisStyle(graph);
         graph.getAxisLeft().removeAllLimitLines();
+        if (showLimits) {
+            for (FloatCouple floatcouple : limits) {
+                setLimitLine(graph, floatcouple.a, floatcouple.b);
+                if (min == null || floatcouple.a < min){
+                    min = floatcouple.a;
+                }
+                if (max == null || floatcouple.b > max){
+                    max = floatcouple.b;
+                }
+            }
+        }
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
         if (persistenceManager.isShiftCustomY()) {
             graph.getAxisLeft().setAxisMinimum(persistenceManager.getShiftGraphMinY());
@@ -424,10 +445,17 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         }else {
             graph.getAxisLeft().resetAxisMinimum();
             graph.getAxisLeft().resetAxisMaximum();
-        }
-        if (showLimits) {
-            for (FloatCouple floatcouple : limits) {
-                setLimitLine(graph, floatcouple.a, floatcouple.b);
+            if (min == 0){min = -0.1f;}
+            if (max == 0){max = 0.1f;}
+            if (min != null) {
+                if (max != null) {
+                    graph.getAxisLeft().setAxisMinimum(min - Math.abs(max) / 10);
+                }else {
+                    graph.getAxisLeft().setAxisMinimum(min - Math.abs(min) / 10);
+                }
+            }
+            if (max != null) {
+                graph.getAxisLeft().setAxisMaximum(max + Math.abs(max) / 10);
             }
         }
         graph.notifyDataSetChanged();
