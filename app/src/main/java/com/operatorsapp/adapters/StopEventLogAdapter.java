@@ -83,7 +83,7 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
         Notification notification = checkTechCallForEvent(event);
         if (notification != null){
             setTechCallStatusForEvent(viewHolder, notification);
-            viewHolder.techCall.setVisibility(View.INVISIBLE);
+            viewHolder.techCall.setVisibility(View.GONE);
         }else {
             viewHolder.techCallStatusLil.setVisibility(View.GONE);
             viewHolder.techCall.setVisibility(View.VISIBLE);
