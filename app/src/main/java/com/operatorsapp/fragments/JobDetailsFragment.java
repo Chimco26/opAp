@@ -162,7 +162,6 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
         view.findViewById(R.id.AJA_back_btn).setOnClickListener(this);
         view.findViewById(R.id.AJA_title).setOnClickListener(this);
         view.findViewById(R.id.AJA_job_activate_btn).setOnClickListener(this);
-        view.findViewById(R.id.AJA_item_material).setOnClickListener(this);
         view.findViewById(R.id.AJA_display_recipe).setOnClickListener(this);
         mMoldItemImg.setOnClickListener(this);
         view.findViewById(R.id.AJA_img1).setOnClickListener(this);
@@ -604,7 +603,6 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
                 }
                 break;
 
-            case R.id.AJA_item_material:
             case R.id.AJA_display_recipe:
 
                 mListener.onShowRecipeFragment(mCurrentJobDetails.getJobs().get(0).getID());
