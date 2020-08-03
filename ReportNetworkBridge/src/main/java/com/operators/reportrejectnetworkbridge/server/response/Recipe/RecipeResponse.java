@@ -7,6 +7,8 @@ import com.example.common.ErrorResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Awesome Pojo Generator
  */
@@ -38,6 +40,9 @@ public class RecipeResponse implements Parcelable {
     @SerializedName("CanEditRecipe")
     @Expose
     private boolean canEditRecipe;
+    @SerializedName("ProductFiles")
+    @Expose
+    private List<String> productFiles;
 
     public RecipeResponse() {
     }
@@ -69,6 +74,10 @@ public class RecipeResponse implements Parcelable {
 
     public Integer getRecipeRefType() {
         return recipeRefType;
+    }
+
+    public List<String> getProductFiles() {
+        return productFiles;
     }
 
     public void setRecipeRefType(Integer recipeRefType) {
