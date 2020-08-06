@@ -2606,6 +2606,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void getLineEvents(){
         PersistenceManager pm = PersistenceManager.getInstance();
+        if (pm.getMachineLineId() < 1){
+            return;
+        }
         getLineShiftLog(pm.getSiteUrl(), new GetStopLogCallback() {
             @Override
             public void onGetStopLogSuccess(StopLogsResponse response) {
