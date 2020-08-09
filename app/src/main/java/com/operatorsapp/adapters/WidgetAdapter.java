@@ -205,7 +205,9 @@ public class WidgetAdapter extends Adapter {
                 case IMAGE:
                     final ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
 //                    setSizes(imageViewHolder.mParentLayout);
-                    ImageLoader.getInstance().displayImage(mWidgets.get(position).getCurrentValue(), imageViewHolder.mImageLayout);
+                    String path = mWidgets.get(position).getCurrentValue();
+                    if (!path.contains("http")){path = null;}
+                    ImageLoader.getInstance().displayImage(path, imageViewHolder.mImageLayout);
                     break;
                 case COUNTER:
                     final CounterViewHolder counterViewHolder = (CounterViewHolder) holder;
