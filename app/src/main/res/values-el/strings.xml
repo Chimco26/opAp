@@ -24,10 +24,10 @@
     <string name="network_error">πρόβλημα σύνδεσης</string>
     <string name="credentials_error">αναντιστοιχία ονόματος χρήστη/κωδικού</string>
     <string name="url_error">λάθος ιστοσελίδας URL</string>
-    <string name="could_not_log_in"></string>
-    <string name="could_not_get_data"></string>
-    <string name="could_not_reach_server_error"></string>
-    <string name="unrecognized_operator"></string>
+    <string name="could_not_log_in">Δεν ήταν δυνατή η σύνδεση -</string>
+    <string name="could_not_get_data">Δεν ήταν δυνατή η λήψη των δεδομένων -</string>
+    <string name="could_not_reach_server_error">Σφάλμα - δεν βρέθηκε ο εξυπηρετητής</string>
+    <string name="unrecognized_operator">Άγνωστος χειριστής</string>
 
     <!--Select machine screen -->
     <string name="select_machine_screen_title">επιλέξτε το μηχάνημά σας</string>
@@ -38,11 +38,11 @@
 
     <string name="go">πάμε/ξεκινάμε</string>
     <string name="machine_id_name">ταυτότητα μηχανήματος ή όνομα</string>
-    <string name="enter_machine_id_name"></string>
+    <string name="enter_machine_id_name">Πληκτρολογήστε Αναγνωριστικό\nή Όνομα Μηχανήματος</string>
     <string name="no_notifications">καμία ειδοποίηση</string>
     <string name="no_data">κανένα δεδομένο</string>
     <string name="error_rest">σφάλμα στην υπηρεσία ανάπαυσης</string>
-    <string name="jobs_actions">δράσεις εργασία</string>
+    <string name="jobs_actions">Ενέργειες Εργασίας</string>
     <string name="job_id">ταυτότητα εργασίας</string>
     <string name="product_name">ονομασία προιόντος</string>
     <string name="erp">ERP</string>
@@ -58,13 +58,13 @@
     <string name="product">Προϊόν</string>
     <string name="id"></string>
     <string name="job">Εργασία</string>
-    <string name="josh"></string>
+    <string name="josh">Τζος</string>
     <string name="shift">Βάρδια</string>
     <string name="operator_id">ID χειριστή</string>
     <string name="operator_name">Όνομα χειριστή</string>
-    <string name="error_shift_log"></string>
+    <string name="error_shift_log">Δεν ήταν δυνατή η εκτέλεση της λειτουργίας GetMachineShiftLog</string>
 
-    <string name="operator_sign_in"></string>
+    <string name="operator_sign_in">Σύνδεση\nΧειριστή</string>
     <string name="operator_sign_in_action_bar">Σύνδεση χειριστή</string>
     <string name="cancel">Ακύρωση</string>
     <string name="retry">Ξαναπροσπαθήστε</string>
@@ -73,7 +73,7 @@
     <string name="duration">Διάρκεια</string>
     <string name="report">ΑΝΑΦΟΡΑ</string>
     <string name="stop_event">Διακοπή Γεγονότος</string>
-    <string name="enter_with_your_id"></string>
+    <string name="enter_with_your_id">Πληκτρολογήστε\nΤο Αναγνωριστικό Σας</string>
     <string name="report_rejects">Αναφέρετε Απορρίψεις</string>
     <string name="reject_reason">Λόγος απόρριψης</string>
     <string name="cause">Σκοπός</string>
@@ -83,34 +83,34 @@
     <string name="material_weight_alarm">Συναγερμός Βάρους Υλικού</string>
     <string name="no_reasons">Καμία αναφορά δεν είναι διαθέσιμη</string>
     <string name="report_stop_event_reason">Αναφορά λόγου διακοπής συμβάντος</string>
-    <string name="report_stop_reason"></string>
-    <string name="report_reject_nreason"></string>
-    <string name="report_stop_start"></string>
-    <string name="report_stop_resume"></string>
+    <string name="report_stop_reason">Αναφορά Αιτιολογίας\nΔιακοπής</string>
+    <string name="report_reject_nreason">Αναφορά Αιτιολογίας\nΑπόρριψης</string>
+    <string name="report_stop_start">Έναρξη</string>
+    <string name="report_stop_resume">Τέλος</string>
     <string name="report_cycle_nunits">Αλλαξε μονάδες κυκλικά</string>
-    <string name="report_cycle_units"></string>
-    <string name="report_inventory_nitem_production"></string>
+    <string name="report_cycle_units">Αλλαγή Μονάδων σε \nΚύκλο</string>
+    <string name="report_inventory_nitem_production">Αναφορά Παραγωγής \n</string>
     <string name="report_inventory_item_production">Αναφορά Παραγωγής</string>
     <string name="package_type">Τύπος Συσκευασίας</string>
     <string name="settings">Ρυθμίσεις</string>
-    <string name="operator_app_settings"></string>
+    <string name="operator_app_settings">Ρυθμίσεις\nΕφαρμογής\nΧειριστή</string>
     <string name="language">Γλώσσα</string>
     <string name="factory_sign_in">Σύνδεση στο Εργοστασίου</string>
     <string name="change">Αλλαγή</string>
     <string name="advanced_settings">Προηγμένες Ρυθμίσεις</string>
     <string name="refresh_reporting_data">Ανανέωση Δεδομένων Αναφοράς</string>
-    <string name="operator_napp_nadvanced_nsettings"></string>
+    <string name="operator_napp_nadvanced_nsettings">Προηγμένες\nΡυθμίσεις\nΕφαρμογής\nΧειριστή</string>
     <string name="polling_frequency">Ρύθμιση Συχνότητας</string>
     <string name="request_timeout">Αίτημα Χρονικού Ορίου</string>
     <string name="request_timeout_range_error">Αίτημα χρονικού ορίου πρέπει να έχει διάρκεια 20-120 δευτερόλεπτα</string>
     <string name="polling_frequency_range_error">Ρύθμιση Συχνότητας πρέπει να έχει διάρκεια 20-60 δευτερόλεπτα</string>
     <string name="refreshed">Ανανέωση</string>
     <string name="one">1</string>
-    <string name="end_"></string>
-    <string name="start_"></string>
-    <string name="chart_min_"></string>
-    <string name="chart_standard_"></string>
-    <string name="chart_max_"></string>
+    <string name="end_">Τέλος:</string>
+    <string name="start_">Έναρξη:</string>
+    <string name="chart_min_">Ελάχ.:</string>
+    <string name="chart_standard_">Στάνταρ:</string>
+    <string name="chart_max_">Μεγ.:</string>
     <string name="switch_user">Αλλαγή Χρήστη</string>
     <string name="standard">Πρότυπο</string>
     <string name="total_required">Σύνολο που Απαιτείται</string>
@@ -122,9 +122,9 @@
     <string name="setup_end">Ορίστε Τέλος</string>
     <string name="first_item_approval">Ορίστε Τέλος</string>
     <string name="send_logs">Στείλτε Ετικέτες</string>
-    <string name="alarm"></string>
+    <string name="alarm">Ειδοποίηση</string>
     <string name="loading_data">Φόρτωση Δεδομένων</string>
-    <string name="no_data_chart"></string>
+    <string name="no_data_chart">Πρέπει να παρέχετε δεδομένα\nγια το γράφημα</string>
 
     <!--<array name="languages_spinner_array">-->
     <!--<item>English</item>-->
@@ -159,9 +159,9 @@
         <item>Δοκιμή παραγγελίας</item>
     </array>
 
-    <string name="approve_first_item">Ορίστε Τέλος</string>
+    <string name="approve_first_item">Τέλος Ρύθμισης</string>
     <string name="welcome">Καλώς ήρθατε</string>
-    <string name="log_in_to_nyour_factory"></string>
+    <string name="log_in_to_nyour_factory">Συνδεθείτε Στο\nΕργοστάσιό Σας</string>
 
     <plurals name="days">
         <item quantity="one">%d Tag</item>
@@ -178,7 +178,7 @@
     <string name="actions">Ενέργειες</string>
     <string name="actionnable_jobs">Εκκρεμείς Εργασίες</string>
     <string name="action_details">Λεπτομέρειες ενεργειών</string>
-    <string name="activate_job_dialog_message"></string>
+    <string name="activate_job_dialog_message">Πρόκειται Να Ενεργοποιήσετε μια Νέα Εργασία, \n Θέλετε Σίγουρα να Συνεχίσετε;</string>
     <string name="activate_job_dialog_title">Ενεργοποίηση νέας Εργασίας</string>
     <string name="add">Προσθέτω</string>
     <string name="add_note">Προσθέστε Σημείωση</string>
@@ -186,7 +186,7 @@
     <string name="amount">Ποσότητα</string>
     <string name="app_name">χειριστής MATICS</string>
     <string name="at_work">Σε εργασία</string>
-    <string name="attention_cycles_detected_in_a_non_production_status"></string>
+    <string name="attention_cycles_detected_in_a_non_production_status">Ανιχνεύθηκαν κύκλοι σε μη παραγωγική κατάσταση.\nΠαρακαλούμε μην ξεχνάτε να ενεργοποιείτε μία εργασία τη φορά!</string>
     <string name="call_for_technician_unresponsive">η κλήση σας για τεχνικό δεν είχε ανταπόκριση για 5\'</string>
     <string name="call_technician_text">Χρειάζετε να επιδιορθωθεί κάτι</string>
     <string name="call_technician_title">Κλήση Τεχνικού</string>
@@ -202,8 +202,8 @@
     <string name="edit_note">Διαμορφώστε τη Σημείωση</string>
     <string name="end_setup_success">Λήξη Setup με επιτυχία</string>
     <string name="enter_note_here">Εισάγετε τη Σημείωση σας Εδώ</string>
-    <string name="events_selected"></string>
-    <string name="fill_units_or_weight"></string>
+    <string name="events_selected">Επιλεγμένα συμβάντα:</string>
+    <string name="fill_units_or_weight">* Παρακαλούμε αναφέρετε Μονάδες ή Βάρος</string>
     <string name="general">Γενικά</string>
     <string name="get_jobs_details_failed_error">Ενημέρωση Λεπτομέρειες Εργασιών απέτυχε σφάλμα</string>
     <string name="get_panding_jobs_failed_error">Ενημέρωση Εκκρεμών Εργασιών απέτυχε σφάλμα</string>
@@ -216,8 +216,8 @@
     <string name="message_declined">Το μήνυμα απορρίφθηκε</string>
     <string name="message_from">Μήνυμα από:</string>
     <string name="message_received">Το μήνυμα παραδόθηκε</string>
-    <string name="min_duration_shiftlog"></string>
-    <string name="minutes"></string>
+    <string name="min_duration_shiftlog">Ελάχ. Διάρκεια Συμβάντος:</string>
+    <string name="minutes">Ελάχ.</string>
     <string name="mold">Καλούπι</string>
     <string name="mold_catalog">Κατάλογος καλουπιών</string>
     <string name="name">Όνομα</string>
@@ -271,10 +271,10 @@
     <string name="machine_status">Κατάσταση μηχανημάτων</string>
     <string name="events">γεγονότα</string>
     <string name="gram">γραμμάρια</string>
-    <string name="service_call_made_new"></string>
-    <string name="default_unanswered_technician_call"></string>
+    <string name="service_call_made_new">Στάλθηκε κλήση υπηρεσίας από τον χειριστή %1$s από το μηχάνημα</string>
+    <string name="default_unanswered_technician_call">Ο χειριστής %1$s άνοιξε μια κλήση υπηρεσίας. Αναμονή απάντησης από τεχνικό</string>
     <string name="midnight">μεσάνυχτα</string>
-    <string name="split_event_validation_text"></string>
+    <string name="split_event_validation_text">Πρόκειται να διαχωρίσετε ένα συμβάν, \n Θέλετε Σίγουρα να Συνεχίσετε;</string>
     <string name="version">Έκδοση</string>
     <string name="username">Όνομα χρήστη</string>
     <string name="incremented_successfully">Αυξήθηκε με επιτυχία</string>
@@ -283,18 +283,18 @@
     <string name="top_five_reject_reasons">Top 5 λόγοι απόρριψης</string>
     <string name="attention">Προσοχή!</string>
     <string name="activate_job">Ενεργοποιήστε την Εργασία</string>
-    <string name="total_amount">Gesamtbetrag:</string>
+    <string name="total_amount">Συνολικό Ποσό:</string>
     <string name="call_canceled">Η κλήση ακυρώθηκε</string>
     <string name="service_call_exists">Ανοιχτές κλήσεις σέρβις</string>
-    <string name="service_call_exists_subtitle"></string>
+    <string name="service_call_exists_subtitle">Βρέθηκαν Ανοιχτές Κλήσεις Υπηρεσίας, \n μπορείτε να αφαιρέσετε τις ανοιχτές κλήσεις ή να ανοίξετε μια νέα</string>
     <string name="open_new_call">Νέα κλήση σέρβις</string>
     <string name="empty_job_list_msg">Η λίστα αναμονής εργασίας είναι κενή</string>
-    <string name="call_approved2"></string>
+    <string name="call_approved2">Μια κλήση που πραγματοποιήθηκε από τον χειριστή %1$s έγινε δεκτή</string>
     <string name="call_declined">Η κλήση απορρίφθηκε</string>
-    <string name="call_declined2"></string>
-    <string name="started_service2"></string>
-    <string name="service_completed2"></string>
-    <string name="call_cancelled2"></string>
+    <string name="call_declined2">Μια κλήση που πραγματοποιήθηκε από τον χειριστή %1$s απορρίφθηκε</string>
+    <string name="started_service2">Βρίσκεται σε κλήση που έγινε από τον χειριστή %1$s</string>
+    <string name="service_completed2">Η κλήση υπηρεσίας που έγινε από τον χρήστη %1$s ολοκληρώθηκε</string>
+    <string name="call_cancelled2">Η κλήση που έγινε από τον χειριστή %1$s Ακυρώθηκε</string>
     <string name="more_details">Αναμονή για περισσότερες λεπτομέρειες</string>
     <string name="technician">Τεχνικός</string>
     <string name="time_left_to_current_job">Χρόνος που έμεινε για τη συγκεκριμένη εργασία</string>
@@ -302,25 +302,25 @@
     <string name="hr2">ώρα</string>
     <string name="see_pending_jobs">Δες εκκρεμείς εργασίες</string>
     <string name="pending_jobs">Εκκρεμείς Εργασίες</string>
-    <string name="end_setup">Setup beenden</string>
+    <string name="end_setup">Τέλος Ρύθμισης</string>
     <string name="you_are_in_setup_mode">Βρίσκεστε σε λειτουργία set up</string>
     <string name="get_ready_for_your_next_job">Eτοιμαστείτε για την επόμενη εργασία</string>
     <string name="see_job">Δείτε την εργασία</string>
-    <string name="dont_forget_to_activate_job"></string>
+    <string name="dont_forget_to_activate_job">Μην ξεχάσετε να ενεργοποιήσετε την εργασία!</string>
     <string name="change_material">Αλλαγή υλικού</string>
     <string name="more_info">Περισσότερες λεπτομέρειες</string>
     <string name="max_value_is">η μέγιστη τιμή είναι:</string>
     <string name="change_factory">Αλλαγή εργαστασίου</string>
-    <string name="NoProgressMinFromStartShift"></string>
-    <string name="SetupDurationMinActual"></string>
-    <string name="SetupInjectionsCount"></string>
-    <string name="UnReportedStopsPC"></string>
-    <string name="RejectsPC"></string>
-    <string name="OpenEventDuration"></string>
-    <string name="ProductionModeInjectionsCount"></string>
-    <string name="CycleTimeDeviation"></string>
-    <string name="ShortEventsFromProductionPC"></string>
-    <string name="WorkerNotSigned"></string>
+    <string name="NoProgressMinFromStartShift">Η βάρδια έχει ξεκινήσει εδώ και %2$s λεπτά και το μηχάνημα %1$s δεν έχει μπει ακόμη σε διαδικασία παραγωγής.</string>
+    <string name="SetupDurationMinActual">Το μηχάνημα %1$s βρίσκεται σε διαδικασία ρύθμισης για περισσότερα από %2$s λεπτά.</string>
+    <string name="SetupInjectionsCount">Το μηχάνημα %1$s έχει πραγματοποιήσει πάνω από %2$s κύκλους ρύθμισης.</string>
+    <string name="UnReportedStopsPC">Μηχάνημα %1$s: πάνω από %2$s %% του χρόνου διακοπής αυτής της βάρδιας δεν είναι κατηγοριοποιημένο.</string>
+    <string name="RejectsPC">Το μηχάνημα %1$s έχει πάνω από %2$s %% Απορρίψεις.</string>
+    <string name="OpenEventDuration">Ο τρέχων χρόνος διακοπής για το μηχάνημα %1$s είναι πάνω από %2$s λεπτά.</string>
+    <string name="ProductionModeInjectionsCount">Ανιχνεύθηκαν %2$s κύκλοι στο %1$s σε μη παραγωγική κατάσταση.</string>
+    <string name="CycleTimeDeviation">%2$s %% ξεπέρασε το στάνταρ Χρόνου Κύκλου στο %1$s.</string>
+    <string name="ShortEventsFromProductionPC">Μηχάνημα %1$s : Ο συνολικός χρόνος σύντομων διακοπών για το συνολικό χρόνο παραγωγής ξεπερνάει το %2$s %%.</string>
+    <string name="WorkerNotSigned">Μηχάνημα %1$s: Δεν έχει γίνει σύνδεση χειριστή στο μηχάνημα %2$s λεπτά μετά την έναρξη της βάρδιας.</string>
     <string name="open_calls">Ανοιχτές κλήσεις</string>
     <string name="last_24h">Τελευταίες 24 ώρες</string>
     <string name="you_ve_reached_the_production_target">Έχετε φτάσει στον στόχο της παραγωγής</string>
@@ -492,6 +492,12 @@
     <string name="execution_time_frame">Χρονικό πλαίσιο εκτέλεσης</string>
     <string name="activate_custom_y_axis_values"></string>
     <string name="max_value_must_be_greater_than_min"></string>
-    <string name="start_service"></string>
-    <string name="finish_service"></string>
+    <string name="start_service">έναρξη υπηρεσίας</string>
+    <string name="finish_service">λήξη υπηρεσίας</string>
+    <string name="deselect_all">Αποεπιλογή όλων</string>
+    <string name="root_cause">Κύρια Αιτία</string>
+    <string name="no_connection_msg">Η σύνδεση με τον διακομιστή δεν είναι εφικτή. Ελέγξτε τη σύνδεσή σας στο διαδίκτυο.</string>
+    <string name="only_to_this_event">Όχι, μόνο σε αυτό το γεγονός</string>
+    <string name="report_stop_reason_to_all_connected_events">Αναφορά αιτίας παύσης λειτουργίας σε όλα τα συνδεδεμένα γεγονότα</string>
+    <string name="source">Πηγή</string>
 </resources>

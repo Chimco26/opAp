@@ -31,6 +31,7 @@ import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 import com.operatorsapp.application.OperatorApplication;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.polling.EmeraldJobBase;
 import com.operatorsapp.server.NetworkManager;
@@ -43,6 +44,7 @@ import com.operatorsapp.server.pulling.interfaces.ShiftForMachineUICallback;
 import com.operatorsapp.server.pulling.interfaces.ShiftLogUICallback;
 import com.operatorsapp.server.pulling.timecounter.TimeToEndCounter;
 import com.operatorsapp.utils.ChangeLang;
+import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 
 import java.io.IOException;
@@ -199,32 +201,45 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         }
     }
 
-    private static void isOnline() {
-        HandlerThread handlerThread = new HandlerThread("HandlerThread");
-        handlerThread.start();
-
-        if (!isOnlineChecking) {
-            isOnlineChecking = true;
-            Handler handler = new Handler(handlerThread.getLooper());
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-
-                    try {
-                        int timeoutMs = 1500;
-                        Socket sock = new Socket();
-                        SocketAddress sockaddr = new InetSocketAddress("8.8.8.8", 53);
-
-                        sock.connect(sockaddr, timeoutMs);
-                        sock.close();
-                        isOnlineChecking = false;
-                    } catch (IOException e) {
-                        isOnlineChecking = false;
-                        OperatorApplication.showNoInternetMsg();
-                    }
-                }
-            });
+    private void isOnline() {
+        boolean isOnline = false;
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            isOnline = (exitValue == 0);
         }
+        catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+
+        if (!isOnline) mListener.onNoInternetConnection();
+
+//        HandlerThread handlerThread = new HandlerThread("HandlerThread");
+//        handlerThread.start();
+//
+//        if (!isOnlineChecking) {
+//            isOnlineChecking = true;
+//            Handler handler = new Handler(handlerThread.getLooper());
+//            handler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    try {
+//                        int timeoutMs = 1500;
+//                        Socket sock = new Socket();
+//                        SocketAddress sockaddr = new InetSocketAddress("8.8.8.8", 53);
+//
+//                        sock.connect(sockaddr, timeoutMs);
+//                        sock.close();
+//                        isOnlineChecking = false;
+//                    } catch (IOException e) {
+//                        isOnlineChecking = false;
+//                        OperatorApplication.showNoInternetMsg();
+//                        mListener.onNoInternetConnection();
+//                    }
+//                }
+//            });
+//        }
     }
 
     private void getStopEventsLine() {
@@ -525,5 +540,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     public interface AllDashboardDataCoreListener {
 
         void onExecuteJob(JobBase.OnJobFinishedListener onJobFinishedListener);
+
+        void onNoInternetConnection();
     }
 }

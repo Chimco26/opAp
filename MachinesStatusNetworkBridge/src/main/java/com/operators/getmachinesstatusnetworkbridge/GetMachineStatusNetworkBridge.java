@@ -46,6 +46,9 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
                 {
                     if(response.body() != null && response.body().getMachineStatus() != null)
                     {
+                        MachineStatus machineStatus = response.body().getMachineStatus();
+                        machineStatus.setTaskCountObject(response.body().getTaskCountObject());
+
                         if(response.body().getMachineStatus().getAllMachinesData().size() == 0)
                         {
                             OppAppLogger.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = 0");
@@ -54,12 +57,10 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
                         }
                         else
                         {
+                            machineStatus.setAllowReportingOnSetupEvents(response.body().getmAllMachinesData().get(0).isAllowReportingOnSetupEvents());
+                            machineStatus.setAllowReportingSetupAfterSetupEnd(response.body().getmAllMachinesData().get(0).ismAllowReportingSetupAfterSetupEnd());
                             OppAppLogger.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = " + response.body().getMachineStatus().getAllMachinesData().size());
                         }
-                        MachineStatus machineStatus = response.body().getMachineStatus();
-                        machineStatus.setTaskCountObject(response.body().getTaskCountObject());
-                        machineStatus.setAllowReportingOnSetupEvents(response.body().isAllowReportingOnSetupEvents());
-                        machineStatus.setAllowReportingSetupAfterSetupEnd(response.body().ismAllowReportingSetupAfterSetupEnd());
                         getMachineStatusCallback.onGetMachineStatusSucceeded(machineStatus);
                     }
                     else

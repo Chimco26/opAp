@@ -64,9 +64,10 @@ public class JobsCore {
                 }, mJobsPersistenceManagerInterface.getTotalRetries(), mJobsPersistenceManagerInterface.getRequestTimeout());
     }
 
-    public void startJobForMachine(int jobId) {
+    public void startJobForMachine(int jobId, boolean isMachineLine) {
+        int machineId = isMachineLine ? 0 : mJobsPersistenceManagerInterface.getMachineId();
         mJobsListForMachineNetworkBridgeInterface.startJobsForMachine(mJobsPersistenceManagerInterface.getSiteUrl(), mJobsPersistenceManagerInterface.getSessionId(),
-                mJobsPersistenceManagerInterface.getMachineId(), jobId, new StartJobForMachineCallback() {
+                machineId, jobId, new StartJobForMachineCallback() {
                     @Override
                     public void onStartJobForMachineSuccess() {
                         OppAppLogger.i(LOG_TAG, "Starting job success");
