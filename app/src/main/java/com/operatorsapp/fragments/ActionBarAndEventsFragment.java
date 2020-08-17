@@ -141,6 +141,7 @@ import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.EmeraldSpinner;
+import com.operatorsapp.view.LinearLayoutManagerNoPredictiveAnimation;
 import com.operatorsapp.view.PinchRecyclerView;
 import com.operatorsapp.view.TimeLineView;
 import com.ravtech.david.sqlcore.DatabaseHelper;
@@ -448,7 +449,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         });
 
         mShiftLogRecycler = view.findViewById(R.id.fragment_dashboard_shift_log);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManagerNoPredictiveAnimation linearLayoutManager = new LinearLayoutManagerNoPredictiveAnimation(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
         initEventRecycler(view);
         initLegendDialog(view);

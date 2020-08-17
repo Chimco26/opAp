@@ -1723,7 +1723,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
 //        mSelectJobId = jobId;
 
-        mJobsCore.startJobForMachine(jobId);
+
+        mJobsCore.startJobForMachine(jobId, PersistenceManager.getInstance().getMachineLineId() < 1);
 
     }
 
@@ -3435,8 +3436,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             return;
         }
         if (mSelectMachineFragment != null ) {
-            getSupportFragmentManager().beginTransaction().remove(mSelectMachineFragment).commit();
-            mSelectMachineFragment = null;
+            try {
+                getSupportFragmentManager().beginTransaction().remove(mSelectMachineFragment).commit();
+                mSelectMachineFragment = null;
+            }catch (NullPointerException e){
+                onBackPressed();
+            }
         }
         showReportBtn(true);
         mActionBarAndEventsFragment.setActionBar();

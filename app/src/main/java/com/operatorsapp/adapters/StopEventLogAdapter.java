@@ -71,7 +71,7 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
             }
         });
 
-        viewHolder.expand.setOnClickListener(new View.OnClickListener() {
+        viewHolder.expandBackgrnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 event.setExpand(!event.isExpand());
