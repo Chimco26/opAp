@@ -95,8 +95,12 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
             if (s.endsWith(".0")){
                 s = s.substring(0, s.length()-2);
             }
-            double number = Double.parseDouble(s);
-            return NumberFormat.getNumberInstance(Locale.getDefault()).format(number);
+            if (s.startsWith("Units")) {
+                double number = Double.parseDouble(s);
+                return NumberFormat.getNumberInstance(Locale.getDefault()).format(number);
+            }else {
+                return s;
+            }
         }catch (NullPointerException | NumberFormatException e){
             return s;
         }
