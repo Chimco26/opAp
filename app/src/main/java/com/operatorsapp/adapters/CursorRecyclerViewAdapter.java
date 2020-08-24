@@ -113,6 +113,13 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
         return oldCursor;
     }
 
+    public void closeCursor(){
+        if (mCursor != null){
+            mCursor.close();
+            mCursor = null;
+        }
+    }
+
     private class NotifyingDataSetObserver extends DataSetObserver {
         @Override
         public void onChanged() {

@@ -27,7 +27,9 @@ public class SaveAlarmsHelper {
         DatabaseHelper databaseHelper =DatabaseHelper.getInstance(context);
 
         Cursor tempCursor = databaseHelper.getCursorOrderByTime();
-
+        if (tempCursor == null){
+            return;
+        }
         ArrayList<Integer> alarmList = checkedAlarmHashMap.get(persistenceManager.getMachineId());
 
         if (alarmList == null){
