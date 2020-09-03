@@ -2373,6 +2373,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             setShiftLogAdapter(cursor);
 
             if (mShiftLogAdapter != null) {
+                mShiftLogRecycler.getRecycledViewPool().clear();
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
             }
         }
@@ -2668,6 +2669,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight,
                 mIsSelectionMode, mSelectedEvents, mCurrentMachineStatus != null && mCurrentMachineStatus.isAllowReportingOnSetupEvents());
 
+        mShiftLogRecycler.getRecycledViewPool().clear();
         mShiftLogRecycler.setAdapter(mShiftLogAdapter);
     }
 
@@ -2781,7 +2783,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mAsyncTask = new MyTask(events, actualBarExtraResponse, new MyTaskListener() {
                 @Override
                 public void onComplete() {
-                    if (isAdded() && getActivity() != null && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && getActivity() != null && mAsyncTask != null && !mAsyncTask.isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -2802,7 +2804,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onUpdateEventsRecyclerViews(final Cursor oldCursor, final ArrayList<Event> newEvents) {
-                    if (isAdded() && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && mAsyncTask != null && !mAsyncTask.isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -2817,7 +2819,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onStartSelectMode(final Event event) {
-                    if (isAdded() && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && mAsyncTask != null && !mAsyncTask.isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -2832,7 +2834,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onShowNotificationText(final boolean show) {
-                    if (isAdded() && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && mAsyncTask != null && !mAsyncTask.isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -2848,7 +2850,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onOpenDialog(final Event event) {
-                    if (isAdded() && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && mAsyncTask != null && !mAsyncTask.isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -2860,7 +2862,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onClearAllSelectedEvents() {
-                    if (isAdded() && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && mAsyncTask != null && !mAsyncTask.isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -3057,7 +3059,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     public void updateEvents(MyTask myTask, ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MyTaskListener myTaskListener) {
 
-        if (getActivity() == null || !isAdded() || myTask.isCancelled()) {
+        if (getActivity() == null || !isAdded() || myTask == null || myTask.isCancelled()) {
             return;
         }
 
@@ -3260,6 +3262,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mIsSelectionMode = false;
         mNoData = true;
         mSelectedEvents = new ArrayList<>();
+        mShiftLogRecycler.getRecycledViewPool().clear();
         mShiftLogRecycler.setAdapter(null);
     }
 

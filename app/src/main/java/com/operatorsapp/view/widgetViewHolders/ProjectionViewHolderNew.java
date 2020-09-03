@@ -11,6 +11,8 @@ import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.utils.WidgetAdapterUtils;
 
+import org.w3c.dom.Text;
+
 import static com.operatorsapp.utils.WidgetAdapterUtils.isNotNearestTextsNew;
 import static com.operatorsapp.utils.WidgetAdapterUtils.valueInK;
 
@@ -23,7 +25,7 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
     private final View mTheoricalView;
     private final View mProducedCompleteView;
     private final View mTargetRl;
-    private final View mTargetReachedTv;
+    private final TextView mTargetReachedTv;
     private final View mLegendGoodUnitsView;
     private View mDivider;
     private TextView mTitle;
@@ -95,6 +97,11 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
                     mProducedTv.setVisibility(View.GONE);
                     mTheoricalTv.setVisibility(View.GONE);
                     mTheoricalView.setVisibility(View.GONE);
+                    if (widget.getFieldEName().equals("josh Progress")){
+                        mTargetReachedTv.setText(OperatorApplication.getAppContext().getString(R.string.you_ve_reached_the_shift_production_target));
+                    }else {
+                        mTargetReachedTv.setText(OperatorApplication.getAppContext().getString(R.string.you_ve_reached_the_production_target));
+                    }
                 }
                 if (mCurrentValue == 0 && widget.getProjection() == 0) {
                     setEmptyMode();

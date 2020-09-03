@@ -356,6 +356,7 @@
     <string name="open_calls">Open Calls</string>
     <string name="last_24h">Last 24hrs</string>
     <string name="you_ve_reached_the_production_target">You’ve reached the production target!</string>
+    <string name="you_ve_reached_the_shift_production_target">You’ve reached the shift production target!</string>
     <string name="reported_stop_event">Reported stop event</string>
     <string name="time_min">Time (min)</string>
     <string name="report_events_reason">Report events reason</string>
