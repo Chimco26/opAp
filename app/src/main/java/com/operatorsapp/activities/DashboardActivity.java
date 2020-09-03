@@ -3,7 +3,10 @@ package com.operatorsapp.activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.app.admin.DeviceAdminReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -104,6 +107,7 @@ import com.operatorsapp.BuildConfig;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.NextJobTimerDialog;
 import com.operatorsapp.dialogs.SetupEndDialog;
 import com.operatorsapp.dialogs.TitleAndSubWithSelectableListDialog;
@@ -118,6 +122,7 @@ import com.operatorsapp.fragments.ReportShiftFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragment;
 import com.operatorsapp.fragments.SelectMachineFragment;
 import com.operatorsapp.fragments.SelectStopReasonFragment;
+import com.operatorsapp.fragments.SettingsFragment;
 import com.operatorsapp.fragments.SignInOperatorFragment;
 import com.operatorsapp.fragments.ViewPagerFragment;
 import com.operatorsapp.fragments.WidgetFragment;
@@ -159,6 +164,7 @@ import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
+import com.operatorsapp.utils.MyExceptionHandler;
 import com.operatorsapp.utils.SaveAlarmsHelper;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
@@ -222,7 +228,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         EasyPermissions.PermissionCallbacks,
         SelectStopReasonFragment.SelectStopReasonFragmentListener,
         SignInOperatorFragment.SignInOperatorFragmentListener,
-        SelectMachineFragment.SelectMachineFragmentListener {
+        SelectMachineFragment.SelectMachineFragmentListener,
+        Thread.UncaughtExceptionHandler{
 
     private static final String TAG = DashboardActivity.class.getSimpleName();
 
@@ -397,6 +404,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         super.onCreate(savedInstanceState);
         OppAppLogger.d(TAG, "onCreate(), start ");
 
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
         setContentView(R.layout.activity_dashboard);
         updateAndroidSecurityProvider(this);
 
@@ -2623,6 +2631,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
 
             if (!(visible instanceof ActionBarAndEventsFragment
+                    || visible instanceof SettingsFragment
                     || visible instanceof WidgetFragment
                     || visible instanceof RecipeFragment
                     || visible instanceof SelectStopReasonFragment
@@ -3456,6 +3465,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
         ProgressDialogManager.show(this);
         dashboardDataStartPolling();
+    }
+
+    @Override
+    public void uncaughtException(Thread t, Throwable e) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("crash", true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                | Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(OperatorApplication.getAppContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager mgr = (AlarmManager) OperatorApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+        finish();
+        System.exit(2);
     }
 
     private class DownloadFile extends AsyncTask<String, String, String> {

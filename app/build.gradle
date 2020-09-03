@@ -9,7 +9,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 28
         versionCode 39
-        versionName "2.32_debug"
+        versionName "2.32_release_300820"
         multiDexEnabled true
     }
     buildTypes {

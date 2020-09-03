@@ -286,6 +286,7 @@
     <string name="dont_forget_to_activate_job">אל תשכח להפעיל פקודות עבודה</string>
     <string name="change_factory">שנה מפעל</string>
     <string name="you_ve_reached_the_production_target">הגעת ליעד היצור של פקודת העבודה!</string>
+    <string name="you_ve_reached_the_shift_production_target">הגעת ליעד הייצור של המשמרת הנוכחית!</string>
     <string name="end_setup">סיום סט-אפ</string>
     <string name="you_are_in_setup_mode">אתה במצב סט-אפ</string>
     <string name="reported_stop_event">עצירות מדווחות</string>

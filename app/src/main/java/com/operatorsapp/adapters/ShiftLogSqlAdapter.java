@@ -77,8 +77,13 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     }
 
     public void updateTechCalls() {
-        mTechCallList = PersistenceManager.getInstance().getCalledTechnician();
-        notifyDataSetChanged();
+        if (!mClosedState) {
+            mTechCallList = PersistenceManager.getInstance().getCalledTechnician();
+            if (getRecycler() != null){
+                getRecycler().getRecycledViewPool().clear();
+                notifyDataSetChanged();
+            }
+        }
     }
 
 
@@ -183,7 +188,10 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         if (!mClosedState){
             mTechCallList = PersistenceManager.getInstance().getCalledTechnician();
         }
-        notifyDataSetChanged();
+        if (getRecycler() != null){
+            getRecycler().getRecycledViewPool().clear();
+            notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -584,7 +592,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
     @Override
     public int getItemViewType(int groupID) {
-        int type;
+        int type = STOPPED;
 
         switch (groupID) {
             case 20:

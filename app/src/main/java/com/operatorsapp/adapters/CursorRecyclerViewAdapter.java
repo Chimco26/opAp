@@ -19,6 +19,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
     private int mRowIdColumn;
 
     private DataSetObserver mDataSetObserver;
+    private RecyclerView mRecycler;
 
     public CursorRecyclerViewAdapter(Cursor cursor) {
         mCursor = cursor;
@@ -103,11 +104,17 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
             }
             mRowIdColumn = newCursor.getColumnIndexOrThrow("_id");
             mDataValid = true;
-            notifyDataSetChanged();
+            if (mRecycler != null){
+                mRecycler.getRecycledViewPool().clear();
+                notifyDataSetChanged();
+            }
         } else {
             mRowIdColumn = -1;
             mDataValid = false;
-            notifyDataSetChanged();
+            if (mRecycler != null){
+                mRecycler.getRecycledViewPool().clear();
+                notifyDataSetChanged();
+            }
             //There is no notifyDataSetInvalidated() method in RecyclerView.Adapter
         }
         return oldCursor;
@@ -125,15 +132,37 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
         public void onChanged() {
             super.onChanged();
             mDataValid = true;
-            notifyDataSetChanged();
+            if (mRecycler != null){
+                mRecycler.getRecycledViewPool().clear();
+                notifyDataSetChanged();
+            }
         }
 
         @Override
         public void onInvalidated() {
             super.onInvalidated();
             mDataValid = false;
-            notifyDataSetChanged();
+            if (mRecycler != null){
+                mRecycler.getRecycledViewPool().clear();
+                notifyDataSetChanged();
+            }
             //There is no notifyDataSetInvalidated() method in RecyclerView.Adapter
         }
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRecycler = recyclerView;
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        mRecycler = null;
+    }
+
+    public RecyclerView getRecycler() {
+        return mRecycler;
     }
 }

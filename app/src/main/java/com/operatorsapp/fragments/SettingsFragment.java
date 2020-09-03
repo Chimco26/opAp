@@ -209,7 +209,10 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                 buttonClose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        getChildFragmentManager().popBackStack();
+                        if (getActivity() != null) {
+                            getActivity().onBackPressed();
+                        }
+//                        getChildFragmentManager().popBackStack();
                     }
                 });
                 actionBar.setCustomView(view);
