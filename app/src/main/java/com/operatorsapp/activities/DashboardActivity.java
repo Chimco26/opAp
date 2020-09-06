@@ -927,7 +927,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //            Intent intent = new Intent(Intent.ACTION_MAIN);
 //            intent.addCategory(Intent.CATEGORY_HOME);
 //            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            Intent intent = new Intent(DashboardActivity.this, MainActivity.class);
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
