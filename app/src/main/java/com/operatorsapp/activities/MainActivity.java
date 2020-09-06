@@ -30,6 +30,7 @@ import com.operators.infra.Machine;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.LoginFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
@@ -41,6 +42,7 @@ import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.Consts;
+import com.operatorsapp.utils.MyExceptionHandler;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.BroadcastAlarmManager;
 
@@ -56,7 +58,7 @@ import retrofit2.Response;
 
 import static android.app.AlarmManager.INTERVAL_DAY;
 
-public class MainActivity extends AppCompatActivity implements GoToScreenListener, OnCroutonRequestListener {
+public class MainActivity extends AppCompatActivity implements GoToScreenListener, OnCroutonRequestListener, Thread.UncaughtExceptionHandler {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int STORAGE_REQUEST_CODE = 1;
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
 
         Log.d(TAG, "ChangeLang: ");
         ChangeLang.initLanguage(this);
@@ -320,4 +323,16 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         }
     }
 
+    @Override
+    public void uncaughtException(Thread t, Throwable e) {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(OperatorApplication.getAppContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager mgr = (AlarmManager) OperatorApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+        finish();
+        System.exit(2);
+    }
 }
