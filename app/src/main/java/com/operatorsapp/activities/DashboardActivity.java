@@ -2633,7 +2633,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
 
             if (!(visible instanceof ActionBarAndEventsFragment
-                    || visible instanceof SettingsFragment
                     || visible instanceof WidgetFragment
                     || visible instanceof RecipeFragment
                     || visible instanceof SelectStopReasonFragment
