@@ -20,5 +20,5 @@
             android:layout_height="wrap_content"/>
     </FrameLayout>
 
-    <include layout="@layout/machine_line_layout"/>
+<!--    <include layout="@layout/machine_line_layout"/>-->
 </LinearLayout>

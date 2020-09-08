@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -261,6 +262,13 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
 //            }
 
             case R.id.button_change_machine: {//todo kuti
+                mButtonChangeMachine.setOnClickListener(null);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mButtonChangeMachine.setOnClickListener(SettingsFragment.this);
+                    }
+                }, 2000);
                 mSettingsInterface.onChangeMachineRequest();
                 break;
             }

@@ -19,18 +19,6 @@ public class StandardResponse implements Parcelable {
     @Expose
     private Integer leaderRecordID;
 
-    public static final Creator<StandardResponse> CREATOR = new Creator<StandardResponse>() {
-        @Override
-        public StandardResponse createFromParcel(Parcel in) {
-            return new StandardResponse(in);
-        }
-
-        @Override
-        public StandardResponse[] newArray(int size) {
-            return new StandardResponse[size];
-        }
-    };
-
     public StandardResponse(boolean isSucceed, int leaderRecordID, ErrorResponse error) {
         this.error = error;
         this.leaderRecordID = leaderRecordID;

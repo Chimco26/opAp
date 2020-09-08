@@ -1,9 +1,12 @@
 package com.example.common.department;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class MachinesLineDetail {
+public class MachinesLineDetail implements Parcelable {
 
     @SerializedName("CurrentStatusTimeMin")
     @Expose
@@ -109,4 +112,52 @@ public class MachinesLineDetail {
     public boolean isRootStop() {
         return rootStop;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.currentStatusTimeMin);
+        dest.writeString(this.jobColor);
+        dest.writeValue(this.jobColoredShadow);
+        dest.writeValue(this.machineID);
+        dest.writeString(this.machineName);
+        dest.writeValue(this.machineStatusID);
+        dest.writeString(this.machineStatusName);
+        dest.writeValue(this.rowCounter);
+        dest.writeString(this.statusColor);
+        dest.writeByte(this.rootStop ? (byte) 1 : (byte) 0);
+    }
+
+    public MachinesLineDetail() {
+    }
+
+    protected MachinesLineDetail(Parcel in) {
+        this.currentStatusTimeMin = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.jobColor = in.readString();
+        this.jobColoredShadow = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.machineID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.machineName = in.readString();
+        this.machineStatusID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.machineStatusName = in.readString();
+        this.rowCounter = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.statusColor = in.readString();
+        this.rootStop = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<MachinesLineDetail> CREATOR = new Parcelable.Creator<MachinesLineDetail>() {
+        @Override
+        public MachinesLineDetail createFromParcel(Parcel source) {
+            return new MachinesLineDetail(source);
+        }
+
+        @Override
+        public MachinesLineDetail[] newArray(int size) {
+            return new MachinesLineDetail[size];
+        }
+    };
 }
