@@ -391,11 +391,6 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
         mLast24Tab.setTextColor(getResources().getColor(R.color.dark_indigo));
         mOpenUnderline.setVisibility(View.VISIBLE);
         mLast24Underline.setVisibility(View.INVISIBLE);
-//
-//        String machineName = "";
-//        if (mMachineLine != null && mMachineLine.getLineID() > 0){
-//            machineName = PersistenceManager.getInstance().getMachineName();
-//        }
 
         sortCalls(mSortSpnr.getSelectedItemPosition());
         mRecycler.setAdapter(new TechCallAdapter(getContext(), mTechCallList, isManageServiceCall, mMachineLine, new TechCallAdapter.TechCallItemListener() {
@@ -426,12 +421,12 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
         if (!(srcId != null && srcId.length() > 0)){
             srcId = pm.getUserId() + "";
         }
-        final int machineId = mMachineLine != null ? pm.getMachineId() : mMachineLine.getMachinesData().get(mSelectMachineSpnr.getSelectedItemPosition() -1).getMachineID();
+//        final int machineId = mMachineLine != null ? pm.getMachineId() : mMachineLine.getMachinesData().get(mSelectMachineSpnr.getSelectedItemPosition() -1).getMachineID();
 
         final RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
                 notification.getmTitle(),
                 notification.getmBody(getContext()),
-                machineId + "",
+                techCallInfo.getmMachineId() + "",
                 notification.getmNotificationID() + "",
                 Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE,
                 notification.getmNotificationType(),
@@ -472,9 +467,8 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                     }
                     pm.setCalledTechnicianList(mTechCallList);
                     mListener.onGetNotificationsFromServer();
-                    setOpenCalls(((LinearLayoutManager) mRecycler.getLayoutManager()).findFirstCompletelyVisibleItemPosition());
-
-
+                    setOpenCalls(0);
+//                    setOpenCalls(((LinearLayoutManager) mRecycler.getLayoutManager()).findFirstCompletelyVisibleItemPosition());
                 }else {
                     onFailure(call, new Throwable());
                 }
@@ -506,12 +500,12 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
             if (!(srcId != null && srcId.length() > 0)){
                 srcId = pm.getUserId() + "";
             }
-            int machineId = mMachineLine != null ? pm.getMachineId() : mMachineLine.getMachinesData().get(mSelectMachineSpnr.getSelectedItemPosition() -1).getMachineID();
+//            int machineId = mMachineLine != null ? pm.getMachineId() : mMachineLine.getMachinesData().get(mSelectMachineSpnr.getSelectedItemPosition() -1).getMachineID();
 
             RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
                     notificationToRemove.getmTitle(),
                     notificationToRemove.getmBody(getContext()),
-                    machineId + "",
+                    techCallInfo.getmMachineId() + "",
                     notificationToRemove.getmNotificationID() + "",
                     responseType,
                     notificationToRemove.getmNotificationType(),
@@ -534,7 +528,8 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                         }
                         mListener.onGetNotificationsFromServer();
                         if (mRecycler != null && mRecycler.getLayoutManager() != null)
-                            setOpenCalls(((LinearLayoutManager) mRecycler.getLayoutManager()).findFirstCompletelyVisibleItemPosition());
+                            setOpenCalls(0);
+//                            setOpenCalls(((LinearLayoutManager) mRecycler.getLayoutManager()).findFirstCompletelyVisibleItemPosition());
                     }else {
                         onFailure(call, new Throwable());
                     }
@@ -664,7 +659,8 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
             setMachineSpinner();
             setSortSpinner();
             if (isOpenCalls) {
-                setOpenCalls(mRecycler.getChildAdapterPosition(mRecycler.getLayoutManager().getFocusedChild()));
+                int position = mRecycler.getLayoutManager() != null && mRecycler.getLayoutManager().getFocusedChild() != null ? mRecycler.getChildAdapterPosition(mRecycler.getLayoutManager().getFocusedChild()) : 0;
+                setOpenCalls(position);
             }else {
                 setLast24Hrs();
             }

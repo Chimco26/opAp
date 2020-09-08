@@ -29,6 +29,7 @@ import com.operatorsapp.fragments.TechCallFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.responses.Notification;
@@ -58,12 +59,7 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
     private ReportFieldsForMachine mReportFieldsMachine;
     private List<Technician> mTechnicianList;
     private boolean isManageServiceCall;
-    private RelativeLayout mLineLy;
-    private TextView mLineNameTv;
-    private MachineLineAdapter mMachineLineAdapter;
-    private ProgressBar mLineProgress;
     private ArrayList<MachinesLineDetail> machineLineItems = new ArrayList<>();
-    private ProgressBar mProgressBar;
     private boolean isMachineChanged = false;
     private CroutonCreator mCroutonCreator;
     private MachineLineResponse mMachineLineResponse;
@@ -72,12 +68,10 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tech_call);
-        mProgressBar = findViewById(R.id.ATC_progress_bar_pb);
         mCroutonCreator = new CroutonCreator();
         setToolbar();
         getExtras();
-        initMachineLine();
-        openTechCallFragment();
+//        openTechCallFragment();
         getMachinesLineData();
     }
 
@@ -87,53 +81,21 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
         isManageServiceCall = getIntent().getBooleanExtra(EXTRA_MANAGE_SERVICE_CALL_FOR_TECHNICIAN, false);
     }
 
-    private void initMachineLine() {
-
-        mLineLy = findViewById(R.id.machine_line_ly);
-        mLineLy.setVisibility(View.GONE);
-
-//        RecyclerView recyclerView = findViewById(R.id.machine_line_rv);
-//        mLineNameTv = findViewById(R.id.machine_line_tv);
-//        mLineProgress = findViewById(R.id.line_progress);
-//        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-//            findViewById(R.id.line_arrow).setRotationY(180);
-//        }
-//
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-//        mMachineLineAdapter = new MachineLineAdapter(machineLineItems, new MachineLineAdapter.MachineLineAdapterListener() {
-//            @Override
-//            public void onMachineSelected(MachinesLineDetail departmentMachineValue) {
-//                isMachineChanged = true;
-//                ClearData.clearMachineData();
-//                PersistenceManager.getInstance().setMachineData(departmentMachineValue.getMachineID(), departmentMachineValue.getMachineName());
-//                onMachineChange(departmentMachineValue);
-//                mProgressBar.setVisibility(View.VISIBLE);
-//            }
-//        });
-//
-//        recyclerView.setAdapter(mMachineLineAdapter);
-    }
-
-    private void onMachineChange(MachinesLineDetail departmentMachineValue) {
-        mMachineLineAdapter.notifyDataSetChanged();
-//        getNotificationsFromServer();
-    }
-
     private void getMachinesLineData() {
-//        mLineProgress.setVisibility(View.VISIBLE);
+        ProgressDialogManager.show(this);
         PersistenceManager pm = PersistenceManager.getInstance();
         SimpleRequests.getMachineLine(pm.getSiteUrl(), new GetMachineLineCallback() {
             @Override
             public void onGetMachineLineSuccess(MachineLineResponse response) {
+                ProgressDialogManager.dismiss();
                 mMachineLineResponse = response;
                 setLineLayouts();
-//                mLineProgress.setVisibility(View.GONE);
                 getNotificationsFromServer(mMachineLineResponse != null && mMachineLineResponse.getLineID() != 0);
             }
 
             @Override
             public void onGetMachineLineFailed(StandardResponse reason) {
-//                mLineProgress.setVisibility(View.GONE);
+                ProgressDialogManager.dismiss();
                 ShowCrouton.showSimpleCrouton(TechCallActivity.this, reason.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
@@ -143,24 +105,15 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
         if (mMachineLineResponse != null && mMachineLineResponse.getLineID() != 0){
             machineLineItems.clear();
             machineLineItems.addAll(mMachineLineResponse.getMachinesData());
-//            mLineLy.setVisibility(View.VISIBLE);
-//            mMachineLineAdapter.notifyDataSetChanged();
-//            if (mMachineLineResponse.getLineName() != null && !mMachineLineResponse.getLineName().isEmpty()) {
-//                mLineNameTv.setText(mMachineLineResponse.getLineName());
-//            } else {
-//                mLineNameTv.setText(getResources().getString(R.string.production_line));
-//            }
             TechCallFragment fragment = (TechCallFragment) getSupportFragmentManager().findFragmentByTag(TechCallFragment.LOG_TAG);
             if (fragment != null && fragment.isVisible()){
                 fragment.setLineLayout(mMachineLineResponse);
             }
-        }else {
-            mLineLy.setVisibility(View.GONE);
         }
     }
 
     private void openTechCallFragment() {
-        mProgressBar.setVisibility(View.GONE);
+        ProgressDialogManager.dismiss();
         TechCallFragment fragment = TechCallFragment.newInstance();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(TechCallActivity.EXTRA_REPORT_FIELD_FOR_MACHINE, new ArrayList<Parcelable>(mTechnicianList));
@@ -168,7 +121,7 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
         bundle.putBoolean(TechCallActivity.EXTRA_MANAGE_SERVICE_CALL_FOR_TECHNICIAN, isManageServiceCall);
 
         fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, fragment.LOG_TAG).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, TechCallFragment.LOG_TAG).commit();
     }
 
     public void setToolbar() {
@@ -183,7 +136,7 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
     }
 
     private void getNotificationsFromServer(final boolean isLineMachine) {
-
+        ProgressDialogManager.show(this);
         Callback<NotificationHistoryResponse> notificationCallback = new Callback<NotificationHistoryResponse>() {
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
@@ -228,7 +181,6 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
                     PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
                     PersistenceManager.getInstance().setCalledTechnicianList(techList);
                     openTechCallFragment();
-
                 } else {
                     PersistenceManager.getInstance().setNotificationHistory(null);
                     if (response.body() != null) {
@@ -237,11 +189,13 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
                         ShowCrouton.showSimpleCrouton(TechCallActivity.this, getString(R.string.credentials_error), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                     }
                 }
+                ProgressDialogManager.dismiss();
             }
 
             @Override
             public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
                 openTechCallFragment();
+                ProgressDialogManager.dismiss();
                 ShowCrouton.showSimpleCrouton(TechCallActivity.this, t.getMessage(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
             }
         };
