@@ -64,6 +64,9 @@ public class StandardResponse implements Parcelable {
         this.leaderRecordID = leaderRecordID;
     }
 
+    public StandardResponse() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -72,11 +75,8 @@ public class StandardResponse implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(this.isSucceed);
-        dest.writeParcelable(this.error, 0);
+        dest.writeParcelable(this.error, flags);
         dest.writeValue(this.leaderRecordID);
-    }
-
-    public StandardResponse() {
     }
 
     protected StandardResponse(Parcel in) {
@@ -85,4 +85,15 @@ public class StandardResponse implements Parcelable {
         this.leaderRecordID = (Integer) in.readValue(Integer.class.getClassLoader());
     }
 
+    public static final Creator<StandardResponse> CREATOR = new Creator<StandardResponse>() {
+        @Override
+        public StandardResponse createFromParcel(Parcel source) {
+            return new StandardResponse(source);
+        }
+
+        @Override
+        public StandardResponse[] newArray(int size) {
+            return new StandardResponse[size];
+        }
+    };
 }
