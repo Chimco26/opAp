@@ -564,9 +564,12 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
         final Technician technician = mTechnicianList.get(mSelectedTech);
         final String techName = OperatorApplication.isEnglishLang() ? technician.getEName() : technician.getLName();
         String sourceUserId = PersistenceManager.getInstance().getOperatorId();
-        final int machineId = mMachineLine == null ? pm.getMachineId() : mMachineLine.getMachinesData().get(mSelectMachineSpnr.getSelectedItemPosition() -1).getMachineID();
+        final int[] machineId = {pm.getMachineId()};
+        if (mSelectMachineFrame.getVisibility() != View.GONE && mMachineLine != null && mMachineLine.getMachinesData() != null){
+            machineId[0] = mMachineLine.getMachinesData().get(mSelectMachineSpnr.getSelectedItemPosition() -1).getMachineID();
+        }
 
-        PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), machineId, title, technician.getID(), body, mDescriptionEt.getText().toString(), operatorName, technician.getEName(), sourceUserId);
+        PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), machineId[0], title, technician.getID(), body, mDescriptionEt.getText().toString(), operatorName, technician.getEName(), sourceUserId);
         NetworkManager.getInstance().postTechnicianCall(request, new Callback<StandardResponse>() {
             @Override
             public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
@@ -575,7 +578,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                     PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
                     PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
-                    TechCallInfo techCall = new TechCallInfo(machineId, 0, techName, getString(R.string.called_technician) + "\n" + techName,
+                    TechCallInfo techCall = new TechCallInfo(machineId[0], 0, techName, getString(R.string.called_technician) + "\n" + techName,
                             mDescriptionEt.getText().toString(), Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID(), 0);
                     PersistenceManager.getInstance().setCalledTechnician(techCall);
                     PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
