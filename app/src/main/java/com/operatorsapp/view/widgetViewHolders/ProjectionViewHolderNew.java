@@ -97,10 +97,10 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
                     mProducedTv.setVisibility(View.GONE);
                     mTheoricalTv.setVisibility(View.GONE);
                     mTheoricalView.setVisibility(View.GONE);
-                    if (widget.getFieldEName().equals("josh Progress")){
-                        mTargetReachedTv.setText(OperatorApplication.getAppContext().getString(R.string.you_ve_reached_the_shift_production_target));
+                    if (widget.getFieldName().equals("UnitsProducedOKjob")){
+                        mTargetReachedTv.setText(mTargetReachedTv.getContext().getResources().getString(R.string.you_ve_reached_the_production_target));
                     }else {
-                        mTargetReachedTv.setText(OperatorApplication.getAppContext().getString(R.string.you_ve_reached_the_production_target));
+                        mTargetReachedTv.setText(mTargetReachedTv.getContext().getResources().getString(R.string.you_ve_reached_the_shift_production_target));
                     }
                 }
                 if (mCurrentValue == 0 && widget.getProjection() == 0) {

@@ -35,12 +35,14 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final boolean isManageServiceCall;
 //    private final String mMachineName;
     private final MachineLineResponse mMachineLine;
+    private final boolean isViewOnly;
 
-    public TechCallAdapter(Context context, ArrayList<TechCallInfo> mTechList, boolean isManageServiceCall, MachineLineResponse machineLine, TechCallItemListener listener) {
+    public TechCallAdapter(Context context, ArrayList<TechCallInfo> mTechList, boolean isManageServiceCall, boolean isViewOnly, MachineLineResponse machineLine, TechCallItemListener listener) {
         mContext = context;
         this.mTechList = mTechList;
 //        mMachineName = machineName;
         this.isManageServiceCall = isManageServiceCall;
+        this.isViewOnly = isViewOnly;
         mListener = listener;
         mMachineLine = machineLine;
     }
@@ -57,13 +59,20 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final TechViewHolder techViewHolder = (TechViewHolder) holder;
 
-        if (isManageServiceCall){
+        if (isManageServiceCall || !isViewOnly){
             techViewHolder.mManageCallFl.setVisibility(View.VISIBLE);
             techViewHolder.mManageCallIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.wrench));
             techViewHolder.mManageCallTv.setText(mContext.getResources().getString(R.string.start_service));
         }else {
             techViewHolder.mManageCallFl.setVisibility(View.INVISIBLE);
         }
+
+        if (!isViewOnly){
+            techViewHolder.mRemoveIv.setVisibility(View.VISIBLE);
+        }else {
+            techViewHolder.mRemoveIv.setVisibility(View.INVISIBLE);
+        }
+
         techViewHolder.mManageCallFl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

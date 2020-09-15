@@ -165,7 +165,7 @@ public class Notification {
     }
 
     public String getmSentTime() {
-        return mSentTime;
+        return mSentTime != null ? mSentTime : "";
     }
 
     public int getmResponseType() {
