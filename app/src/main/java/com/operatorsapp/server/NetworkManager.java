@@ -93,11 +93,13 @@ import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.requests.SendNotificationRequest;
+import com.operatorsapp.server.requests.TechCall24HRequest;
 import com.operatorsapp.server.requests.TopNotificationRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.StopReasonsResponse;
+import com.operatorsapp.server.responses.TechCall24HResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
 import com.operatorsapp.utils.SendReportUtil;
 
@@ -1132,6 +1134,12 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     public void postQCSaveTestDetails(SaveTestDetailsRequest request, final Callback<SaveTestDetailsResponse> callback) {
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
         Call<SaveTestDetailsResponse> call = mRetrofit.create(OpAppServiceRequests.class).postQCSaveTestDetails(request);
+        call.enqueue(callback);
+    }
+
+    public void getTechCall24H(TechCall24HRequest request, final Callback<TechCall24HResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<TechCall24HResponse> call = mRetrofit.create(OpAppServiceRequests.class).getOpenCallsAnd24Hours(request);
         call.enqueue(callback);
     }
 

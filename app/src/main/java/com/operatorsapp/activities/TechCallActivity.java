@@ -32,8 +32,10 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.requests.TechCall24HRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
+import com.operatorsapp.server.responses.TechCall24HResponse;
 import com.operatorsapp.utils.ClearData;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.ShowCrouton;
@@ -220,6 +222,34 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
     @Override
     public void onGetNotificationsFromServer() {
         getNotificationsFromServer(mMachineLineResponse != null && mMachineLineResponse.getLineID() != 0);
+    }
+
+
+    @Override
+    public void onGetLast24HCalls(){
+        TechCall24HRequest request = new TechCall24HRequest(PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId() + "");
+        NetworkManager.getInstance().getTechCall24H(request, new Callback<TechCall24HResponse>() {
+            @Override
+            public void onResponse(Call<TechCall24HResponse> call, Response<TechCall24HResponse> response) {
+                if (response.body() != null && response.body().getError() == null){
+                    Fragment frag = getSupportFragmentManager().findFragmentByTag(TechCallFragment.LOG_TAG);
+                    if (frag != null && frag.isVisible()) {
+                        ((TechCallFragment)frag).setLast24hCallList(response.body().getCalls24Hours());
+                    }
+                }else {
+                    String msg = "General Response Error";
+                    if (response.body() != null){
+                        msg = response.body().getError().getMessage();
+                    }
+                    onFailure(call, new Throwable(msg));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TechCall24HResponse> call, Throwable t) {
+                onShowCroutonRequest(t.getMessage(), 5000, R.id.container, CroutonCreator.CroutonType.NETWORK_ERROR);
+            }
+        });
     }
 
     @Override

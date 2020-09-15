@@ -23,11 +23,13 @@ import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.requests.SendNotificationRequest;
+import com.operatorsapp.server.requests.TechCall24HRequest;
 import com.operatorsapp.server.requests.TopNotificationRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.StopReasonsResponse;
+import com.operatorsapp.server.responses.TechCall24HResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
 
 import okhttp3.ResponseBody;
@@ -100,4 +102,6 @@ public interface OpAppServiceRequests {
 
     @POST("/LeaderMESApi/GetEventReasonAndGroupsForMachine")
     Call<StopReasonsResponse> getStopReasons(@Body MachineIdRequest machineIdRequest);
-}
+
+    @POST("/LeaderMESApi/GetOpenCallsAnd24Hours")
+    Call<TechCall24HResponse> getOpenCallsAnd24Hours(@Body TechCall24HRequest request);}

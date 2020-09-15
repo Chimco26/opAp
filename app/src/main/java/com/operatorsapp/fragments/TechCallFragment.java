@@ -1,6 +1,5 @@
 package com.operatorsapp.fragments;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
@@ -13,13 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -30,26 +27,22 @@ import com.example.common.department.MachineLineResponse;
 import com.example.common.department.MachinesLineDetail;
 import com.operators.reportfieldsformachineinfra.Technician;
 import com.operatorsapp.R;
-import com.operatorsapp.adapters.NotificationHistoryAdapter;
 import com.operatorsapp.adapters.TechCallAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.GenericDialog;
-import com.operatorsapp.dialogs.NotificationsDialog;
 import com.operatorsapp.dialogs.TechCallFilter;
-import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
+import com.operatorsapp.server.requests.TechCall24HRequest;
 import com.operatorsapp.server.responses.Notification;
-import com.operatorsapp.server.responses.NotificationHistoryResponse;
+import com.operatorsapp.server.responses.TechCall24HResponse;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.Consts;
-import com.operatorsapp.utils.FilterStatus;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
-import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -95,6 +88,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
     private TextView mSortTv;
     private boolean isOpenCalls = true;
     private HashMap<Integer, Boolean> mFilteredOutMachines;
+    private ArrayList<Notification> mLast24hCallList = new ArrayList<>();
 
     public TechCallFragment() {
     }
@@ -171,6 +165,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.tech_fragment_tv_right_tab:
                 setLast24Hrs();
+                mListener.onGetLast24HCalls();
                 break;
             case R.id.tech_fragment_filter_iv:
                 openFilter();
@@ -201,6 +196,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                     setOpenCalls(0);
                 } else {
                     setLast24Hrs();
+                    mListener.onGetLast24HCalls();
                 }
             }
         });
@@ -255,6 +251,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                     setOpenCalls(0);
                 } else {
                     setLast24Hrs();
+                    mListener.onGetLast24HCalls();
                 }
             }
             @Override
@@ -355,16 +352,23 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
 
         ArrayList<TechCallInfo> techCallList = new ArrayList<>();
 
-        long millis24h = 1000 * 60 * 60 * 24;
-        long millisBefore24h = Calendar.getInstance().getTimeInMillis() - millis24h;
+//        long millis24h = 1000 * 60 * 60 * 24;
+//        long millisBefore24h = Calendar.getInstance().getTimeInMillis() - millis24h;
 
-        for (TechCallInfo techCall : mTechCallList) {
-            if (techCall.getmCallTime() > millisBefore24h) {
-                techCallList.add(techCall);
-            }
+//        for (TechCallInfo techCall : mTechCallList) {
+//            if (techCall.getmCallTime() > millisBefore24h) {
+//                techCallList.add(techCall);
+//            }
+//        }
+
+        Date date;
+        for (Notification call : mLast24hCallList) {
+            date = TimeUtils.getDateForNotification(call.getmSentTime());
+            techCallList.add(new TechCallInfo(call.getMachineID(), call.getmResponseType(), call.getmTargetName(), call.getmTitle(), call.getmAdditionalText(),
+                    date != null ? date.getTime() : 0, call.getmNotificationID(), call.getmTargetUserId(), call.getmEventID()));
         }
 
-        mRecycler.setAdapter(new TechCallAdapter(getContext(), techCallList, isManageServiceCall, mMachineLine, new TechCallAdapter.TechCallItemListener() {
+        mRecycler.setAdapter(new TechCallAdapter(getContext(), techCallList, isManageServiceCall, true, mMachineLine, new TechCallAdapter.TechCallItemListener() {
             @Override
             public void onRemoveCallPressed(TechCallInfo techCallInfo) {
                 removeCall(techCallInfo);
@@ -375,15 +379,34 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                 manageCall(techCallInfo);
             }
         }));
-
-//        for (Notification notification : PersistenceManager.getInstance().getNotificationHistory()) {
-//            Date date = TimeUtils.getDateForNotification(notification.getmResponseDate());
-//            if (date != null && notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN && date.after(date24hrs)) {
-//                notList.add(notification);
-//            }
-//        }
-//        mRecycler.setAdapter(new NotificationHistoryAdapter(getContext(), notList, null));
     }
+
+//    private void getLast24HCalls() {
+//        mListener.onGetLast24HCalls(TechCallFragment.this);
+//        TechCall24HRequest request = new TechCall24HRequest(PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId() + "");
+//        NetworkManager.getInstance().getTechCall24H(request, new Callback<TechCall24HResponse>() {
+//            @Override
+//            public void onResponse(Call<TechCall24HResponse> call, Response<TechCall24HResponse> response) {
+//                if (response.body() != null && response.body().getError() == null){
+//                    mLast24hCallList = response.body().getCalls24Hours();
+//                    if (!isOpenCalls){
+//                        setLast24Hrs();
+//                    }
+//                }else {
+//                    String msg = "General Response Error";
+//                    if (response.body() != null){
+//                        msg = response.body().getError().getMessage();
+//                    }
+//                    onFailure(call, new Throwable(msg));
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<TechCall24HResponse> call, Throwable t) {
+//
+//            }
+//        });
+//    }
 
     private void setOpenCalls(int position) {
         isOpenCalls = true;
@@ -393,7 +416,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
         mLast24Underline.setVisibility(View.INVISIBLE);
 
         sortCalls(mSortSpnr.getSelectedItemPosition());
-        mRecycler.setAdapter(new TechCallAdapter(getContext(), mTechCallList, isManageServiceCall, mMachineLine, new TechCallAdapter.TechCallItemListener() {
+        mRecycler.setAdapter(new TechCallAdapter(getContext(), mTechCallList, isManageServiceCall, false, mMachineLine, new TechCallAdapter.TechCallItemListener() {
             @Override
             public void onRemoveCallPressed(TechCallInfo techCallInfo) {
                 removeCall(techCallInfo);
@@ -675,9 +698,18 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    public void setLast24hCallList(ArrayList<Notification> mLast24hCallList) {
+        this.mLast24hCallList = mLast24hCallList;
+        if (!isOpenCalls){
+            setLast24Hrs();
+        }
+    }
+
     public interface TechCallListener {
         void onTechCallListener(Uri uri);
 
         void onGetNotificationsFromServer();
+
+        void onGetLast24HCalls();
     }
 }
