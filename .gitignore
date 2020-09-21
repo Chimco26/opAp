@@ -1396,3 +1396,4 @@ app/Lenox/release/output.json
 app/Lenox/release/app-Lenox-release.apk
 /oppapplog/build
 /.idea
+*.hprof

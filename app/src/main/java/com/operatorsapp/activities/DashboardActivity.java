@@ -3466,6 +3466,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
         ProgressDialogManager.show(this);
         dashboardDataStartPolling();
+        shiftForMachineTimer();
     }
 
     @Override
