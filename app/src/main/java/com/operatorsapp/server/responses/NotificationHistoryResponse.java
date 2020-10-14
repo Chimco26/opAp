@@ -26,7 +26,7 @@ public class NotificationHistoryResponse extends StandardResponse {
     }
 
     public ArrayList<Notification> getmNotificationsList() {
-        return mNotificationsList;
+        return mNotificationsList != null ? mNotificationsList : new ArrayList<Notification>();
     }
 
     public void setmNotificationsList(ArrayList<Notification> mNotificationsList) {

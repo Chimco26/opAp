@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
 
-                if (response != null && response.body() != null && response.body().getError().getErrorDesc() == null) {
+                if (response.body() != null && response.body().getError().getErrorDesc() == null) {
 
                     ArrayList<TechCallInfo> techList = PersistenceManager.getInstance().getCalledTechnician();
 

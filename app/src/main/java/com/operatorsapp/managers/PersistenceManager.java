@@ -118,6 +118,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String SHIFT_GRAPH_CUSTOM_Y_MAX = "SHIFT_GRAPH_CUSTOM_Y_MAX";
     private static final String LINE_LAST_EVENT = "LINE_LAST_EVENT";
     private static final String TECHNICIANS_LIST = "TECHNICIANS_LIST";
+    private static final String PENDING_JOB_SAVED_FILTERS = "PENDING_JOB_SAVED_FILTERS";
 
 
     private static PersistenceManager msInstance;
@@ -991,5 +992,19 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public void setTechnicianList(List<Technician> technicians) {
         SecurePreferences.getInstance().setString(TECHNICIANS_LIST, mGson.toJson(technicians));
+    }
+
+    public void setSavedPendingJobFilters(HashMap<String, String> savedFilters) {
+        SecurePreferences.getInstance().setString(PENDING_JOB_SAVED_FILTERS, mGson.toJson(savedFilters));
+    }
+
+    public HashMap<String, String> getSavedPendingJobFilters() {
+
+        String savedFilters = SecurePreferences.getInstance().getString(PENDING_JOB_SAVED_FILTERS, mGson.toJson(new HashMap<String,String>()));
+        Type listType = new TypeToken<HashMap<String, String>>() {
+        }.getType();
+
+        HashMap<String, String> map = mGson.fromJson(savedFilters, listType);
+        return map != null ? map : new HashMap<String, String>();
     }
 }

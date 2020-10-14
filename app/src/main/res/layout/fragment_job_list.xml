@@ -116,6 +116,20 @@
                 android:layout_height="1dp"
                 android:layout_weight="4" />
 
+            <TextView
+                android:id="@+id/AJA_clear_filters_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/clear_filters"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:textStyle="bold"
+                android:background="@color/blue1"/>
+
             <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
                 android:id="@+id/AJA_search_et_ll"
                 android:layout_width="0dp"
