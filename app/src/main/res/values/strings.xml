@@ -561,4 +561,5 @@
     <string name="display_recipe">Display recipe</string>
     <string name="error_cant_show_recipe">Error can\'t show recipe</string>
     <string name="select_machines_for_display">Select Machines for Display</string>
+    <string name="clear_filters">Clear all Filters</string>
 </resources>

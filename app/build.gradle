@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.operatorsapp"
         minSdkVersion 17
-        targetSdkVersion 28
-        versionCode 41
+        targetSdkVersion 29
+        versionCode 42 //birman site version code is 42. next version should be 43
         versionName "2.4"
         multiDexEnabled true
     }

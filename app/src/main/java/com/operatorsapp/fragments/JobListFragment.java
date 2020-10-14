@@ -3,7 +3,6 @@ package com.operatorsapp.fragments;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -25,6 +24,7 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.Prope
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.PendingJobsAdapter;
 import com.operatorsapp.adapters.PendingJobsListAdapter;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 
 import java.util.ArrayList;
@@ -38,6 +38,7 @@ public class JobListFragment extends Fragment implements
         View.OnClickListener, PendingJobsAdapter.PendingJobsAdapterListener {
 
     private static final String TAG = JobListFragment.class.getSimpleName();
+    private static final String GLOBAL_SEARCH_FIELD = "GLOBAL_SEARCH_FIELD";
     private EditText mSearchViewEt;
     private RecyclerView mPendingJobsRv;
     private PendingJobsListAdapter mPendingJobsAdapter;
@@ -49,6 +50,8 @@ public class JobListFragment extends Fragment implements
     private JobListFragmentListener mListener;
     private TextView mTitleTv;
     private String[] orderedHederasKey = new String[7];
+    private HashMap<String, String> mSavedFilters;
+    private TextView mClearFiltersTv;
 
     public static JobListFragment newInstance(PendingJobStandardResponse mPendingJobsResponse, ArrayList<PendingJob> mPendingJobs, ArrayList<Header> headers) {
 
@@ -66,6 +69,8 @@ public class JobListFragment extends Fragment implements
         super.onCreate(savedInstanceState);
         // Analytics
         new GoogleAnalyticsHelper().trackScreen(getActivity(), "Pending job list");
+
+        mSavedFilters = PersistenceManager.getInstance().getSavedPendingJobFilters();
 
         if (getArguments() != null) {
             if (getArguments().containsKey(PendingJobStandardResponse.TAG)) {
@@ -126,6 +131,7 @@ public class JobListFragment extends Fragment implements
         initTitleViews(view);
         initRecyclerViews();
         initListener(view);
+        checkFiltersIfCleared();
 
         if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
             view.findViewById(R.id.AJA_back_btn).setRotationY(180);
@@ -197,19 +203,28 @@ public class JobListFragment extends Fragment implements
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 header.setSearchExpression(charSequence.toString());
                 updateRvBySearchResult();
+                mSavedFilters.put(header.getName(), charSequence.toString());
+                PersistenceManager.getInstance().setSavedPendingJobFilters(mSavedFilters);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                checkFiltersIfCleared();
             }
         });
+
+        if (mSavedFilters.containsKey(header.getName())){
+            searchView.setText(mSavedFilters.get(header.getName()));
+        }else {
+            searchView.setText("");
+        }
     }
 
 
     private void initVarsSearch(View view) {
         mSearchViewEt = view.findViewById(R.id.AJA_search_et);
         mPendingJobsRv = view.findViewById(R.id.AJA_product_rv);
+        mClearFiltersTv = view.findViewById(R.id.AJA_clear_filters_tv);
 
     }
 
@@ -228,6 +243,7 @@ public class JobListFragment extends Fragment implements
 
         view.findViewById(R.id.AJA_search_btn).setOnClickListener(this);
         view.findViewById(R.id.AJA_back_btn).setOnClickListener(this);
+        mClearFiltersTv.setOnClickListener(this);
 
         mSearchViewEt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -242,11 +258,33 @@ public class JobListFragment extends Fragment implements
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                mSavedFilters.put(GLOBAL_SEARCH_FIELD, s.toString());
+                PersistenceManager.getInstance().setSavedPendingJobFilters(mSavedFilters);
                 updateRvBySearchResult();
-
+                checkFiltersIfCleared();
             }
         });
+        if (mSavedFilters.containsKey(GLOBAL_SEARCH_FIELD)){
+            mSearchViewEt.setText(mSavedFilters.get(GLOBAL_SEARCH_FIELD));
+        }
+    }
+
+    private void checkFiltersIfCleared() {
+        boolean isFilterEmpty = true;
+        for (String key : mSavedFilters.keySet()) {
+            if (!mSavedFilters.get(key).isEmpty()){
+                isFilterEmpty = false;
+                break;
+            }
+        }
+
+        if (isFilterEmpty && mSearchViewEt.getText().toString().isEmpty()) {
+            mClearFiltersTv.setBackgroundColor(getResources().getColor(R.color.white_five));
+            mClearFiltersTv.setOnClickListener(null);
+        }else {
+            mClearFiltersTv.setBackgroundColor(getResources().getColor(R.color.blue1));
+            mClearFiltersTv.setOnClickListener(JobListFragment.this);
+        }
     }
 
     private void sortHeaders(ArrayList<Header> headers) {
@@ -376,7 +414,14 @@ public class JobListFragment extends Fragment implements
                 getActivity().onBackPressed();
 
                 break;
-
+            case R.id.AJA_clear_filters_tv:
+                mSavedFilters = new HashMap<>();
+                PersistenceManager.getInstance().setSavedPendingJobFilters(mSavedFilters);
+                mSearchViewEt.setText("");
+//                initVarsSearch(getView());
+                initTitleViews(getView());
+                initRecyclerViews();
+                break;
         }
     }
 
