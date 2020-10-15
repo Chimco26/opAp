@@ -101,6 +101,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     private LinearLayoutManager mChannel0ItemsAdaptersLyManager;
     private boolean mIsEditMode;
     private List<Channel> mChannels1_99BaseChannelSplits = new ArrayList<>();
+    private Button mChan0GalleryBtn;
 
     public static RecipeFragment newInstance(RecipeResponse recipeResponse) {
         RecipeFragment recipeFragment = new RecipeFragment();
@@ -219,6 +220,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
 
         mLayoutChannel0Image = mLayoutChannel0.findViewById(R.id.C0L_img);
 
+        mChan0GalleryBtn = mLayoutChannel0.findViewById(R.id.C0L_gallery_btn);
+
         View mLayoutChannel0Item = mLayoutChannel0.findViewById(R.id.C0L_item);
 
         mLayoutChannel0NoDataImage = mLayoutChannel0.findViewById(R.id.C0L_no_data_img);
@@ -322,6 +325,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
             if (mRecipeResponse.getProductData() != null && mRecipeResponse.getProductData().getFileUrl() != null &&
                     mRecipeResponse.getProductData().getFileUrl().size() > 0) {
                 ImageLoader.getInstance().displayImage(mRecipeResponse.getProductData().getFileUrl().get(0), mLayoutChannel0Image);
+            }else if (mRecipeResponse.getProductFiles() != null && mRecipeResponse.getProductFiles().size() > 0){
+                ImageLoader.getInstance().displayImage(mRecipeResponse.getProductFiles().get(0), mLayoutChannel0Image);
             }
 
             if (getActivity() != null && getActivity().getResources() != null) {
@@ -633,7 +638,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
 
         view.findViewById(R.id.FR_channel_100_btn).setOnClickListener(this);
 
-        mLayoutChannel0Image.setOnClickListener(new View.OnClickListener() {
+        mChan0GalleryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
