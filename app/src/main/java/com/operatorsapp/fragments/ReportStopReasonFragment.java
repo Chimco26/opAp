@@ -189,6 +189,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
                     for (StopReasonsGroup item : response.body().getStopReasonsList()) {
 
+                        if (item.getSubReasons() == null || item.getSubReasons().isEmpty()){
+                            continue;
+                        }
                         if (isSetupMode){
                             if (isReportingOnSetupEvents && item.getId() == SETUP_GROUP_ID){
                                 mStopReasonsList.add(item);

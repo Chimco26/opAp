@@ -14,10 +14,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +36,7 @@ import com.example.common.task.TaskInfoObject;
 import com.example.common.task.TaskObjectForCreateOrEditContent;
 import com.example.common.task.TaskObjectsForCreateOrEditResponse;
 import com.example.common.task.TaskProgress;
+import com.google.android.material.snackbar.Snackbar;
 import com.operators.reportrejectnetworkbridge.interfaces.GetTaskFilesCallback;
 import com.operators.reportrejectnetworkbridge.interfaces.GetTaskObjectsForCreateCallback;
 import com.operatorsapp.R;
@@ -42,11 +45,16 @@ import com.operatorsapp.activities.TaskActivity;
 import com.operatorsapp.adapters.GalleryAdapter;
 import com.operatorsapp.adapters.SeverityCheckBoxFilterAdapter;
 import com.operatorsapp.adapters.TaskInfoObjectSpinnerAdapter;
+import com.operatorsapp.adapters.TaskNotesAdapter;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.GalleryModel;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.requests.CreateTaskNotesRequest;
+import com.operatorsapp.server.requests.GetTaskNoteRequest;
+import com.operatorsapp.server.responses.TaskNote;
+import com.operatorsapp.server.responses.TaskNotesResponse;
 import com.operatorsapp.utils.InputFilterMinMax;
 import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.ShowCrouton;
@@ -58,6 +66,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.example.common.task.TaskProgress.TaskPriority.VERY_HIGH;
 import static com.example.common.task.TaskProgress.TaskStatus.TODO;
@@ -92,6 +104,9 @@ public class TaskDetailsFragment extends Fragment {
     private TextView mTaskIdTv;
     private LinearLayout mTaskIdLy;
     private int operatorId;
+    private RecyclerView mNotesRv;
+    private ArrayList<TaskNote> mTaskNoteList;
+    private EditText mNotesAddNewEt;
 
     public static TaskDetailsFragment newInstance(TaskProgress taskProgress) {
         TaskDetailsFragment taskDetailsFragment = new TaskDetailsFragment();
@@ -169,6 +184,8 @@ public class TaskDetailsFragment extends Fragment {
         mTimeHr = view.findViewById(R.id.FTD_time_hr_et);
         mTimeMin = view.findViewById(R.id.FTD_time_min_et);
         mSeverityRv = view.findViewById(R.id.FTD_severity_rv);
+        mNotesRv = view.findViewById(R.id.FTD_task_notes_rv);
+        mNotesAddNewEt = view.findViewById(R.id.FTD_task_note_add_new_et);
         mAttachedFilesRv = view.findViewById(R.id.FTD_attached_files_rv);
         mAttachedFilesTv = view.findViewById(R.id.FTD_attached_files_tv);
         mSaveBtn = view.findViewById(R.id.FTD_add_task_btn);
@@ -208,6 +225,7 @@ public class TaskDetailsFragment extends Fragment {
                 mEndDate.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(task.getTaskEndTimeTarget(),
                         SQL_T_FORMAT_NO_SECOND), SQL_NO_T_FORMAT_NO_SECOND));
             }
+            getTaskNotes();
             getTaskFiles(task.getTaskID());
             initTotalTime(task);
             initAssignSpinner(task.getAssigneeDisplayName(), getResources().getColor(R.color.grey1));
@@ -475,6 +493,11 @@ public class TaskDetailsFragment extends Fragment {
         mTimeMin.setFilters(new InputFilter[]{new InputFilterMinMax(0, 59)});
     }
 
+    private void setNotesRecycler() {
+        mNotesRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mNotesRv.setAdapter(new TaskNotesAdapter(mTaskNoteList != null ? mTaskNoteList : new ArrayList<TaskNote>()));
+    }
+
     private void initAttachFiles(TaskFilesResponse taskFiles) {
 
         if (taskFiles == null || taskFiles.getResponseDictionaryDT() == null
@@ -563,6 +586,12 @@ public class TaskDetailsFragment extends Fragment {
     }
 
     private void initListener(View view) {
+        view.findViewById(R.id.FTD_task_note_add_new_iv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addNoteToTask();
+            }
+        });
         view.findViewById(R.id.FTD_close_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -592,6 +621,16 @@ public class TaskDetailsFragment extends Fragment {
                 return true;
             }
         });
+    }
+
+    private void addNoteToTask() {
+        int commentId = 0; //pass comment id for update comment. not in use for now.
+        if (mTaskNoteList == null) mTaskNoteList = new ArrayList<>();
+        TaskNote note = new TaskNote(0, mTask.getTaskID(), mTask.getHistoryID(), mNotesAddNewEt.getText().toString(),
+                         TimeUtils.getDateFromFormat(new Date(), TimeUtils.SQL_NO_T_FORMAT), PersistenceManager.getInstance().getOperatorName());
+        mTaskNoteList.add(note);
+        mNotesAddNewEt.setText("");
+        setNotesRecycler();
     }
 
     private boolean checkMandatoryFilled(Task task) {
@@ -642,8 +681,9 @@ public class TaskDetailsFragment extends Fragment {
             @Override
             public void onCreateTaskCallbackSuccess(StandardResponse response) {
                 ProgressDialogManager.dismiss();
-                ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
-                mListener.onUpdate();
+                postNotesForTask(response.getLeaderRecordID());
+//                ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
+//                mListener.onUpdate();
             }
 
             @Override
@@ -671,6 +711,58 @@ public class TaskDetailsFragment extends Fragment {
                 ProgressDialogManager.dismiss();
             }
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
+    }
+
+    private void getTaskNotes(){
+
+        GetTaskNoteRequest request = new GetTaskNoteRequest(PersistenceManager.getInstance().getSessionId(), mTask.getTaskID());
+        NetworkManager.getInstance().getTaskNotes(request, new Callback<TaskNotesResponse>() {
+            @Override
+            public void onResponse(Call<TaskNotesResponse> call, Response<TaskNotesResponse> response) {
+                if (response.body() != null && response.body().isNoError()){
+                    mTaskNoteList = response.body().getTaskNoteList();
+                    setNotesRecycler();
+                }else {
+                    String msg = getString(R.string.error_rest);
+                    if (response.body() != null && !response.body().isNoError()){
+                        msg = response.body().getError().getErrorDesc();
+                    }
+                    onFailure(call, new Throwable(msg));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TaskNotesResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void postNotesForTask(int taskId) {
+        for (TaskNote taskNote : mTaskNoteList) {
+            if (taskNote.getmNoteId() == 0) {
+                final int[] requestCounter = {0};
+                CreateTaskNotesRequest request = new CreateTaskNotesRequest(PersistenceManager.getInstance().getSessionId(), taskId, taskNote.getmNoteId(), mTask.getHistoryID(), taskNote.getmNoteText());
+                NetworkManager.getInstance().postNotesForNewTask(request, new Callback<StandardResponse>() {
+                    @Override
+                    public void onResponse(Call<StandardResponse> call, Response<StandardResponse> response) {
+                        requestCounter[0]++;
+                        if (requestCounter[0] == mTaskNoteList.size()){
+                            ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
+                            mListener.onUpdate();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<StandardResponse> call, Throwable t) {
+                        requestCounter[0]++;
+                        if (requestCounter[0] == mTaskNoteList.size()){
+                            mListener.onUpdate();
+                        }
+                    }
+                });
+            }
+        }
     }
 
     private void getTaskFiles(int taskID) {

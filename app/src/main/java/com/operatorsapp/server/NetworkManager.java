@@ -1,10 +1,7 @@
 package com.operatorsapp.server;
 
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.common.QCModels.SaveTestDetailsRequest;
 import com.example.common.QCModels.SaveTestDetailsResponse;
@@ -80,12 +77,11 @@ import com.operators.shiftlognetworkbridge.interfaces.EmeraldActualBarExtraDetai
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftForMachineServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftLogServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
-import com.operatorsapp.application.OperatorApplication;
-import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
-import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.interfaces.OpAppServiceRequests;
+import com.operatorsapp.server.requests.CreateTaskNotesRequest;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
+import com.operatorsapp.server.requests.GetTaskNoteRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
@@ -99,6 +95,7 @@ import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.StopReasonsResponse;
+import com.operatorsapp.server.responses.TaskNotesResponse;
 import com.operatorsapp.server.responses.TechCall24HResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
 import com.operatorsapp.utils.SendReportUtil;
@@ -1143,4 +1140,15 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         call.enqueue(callback);
     }
 
+    public void getTaskNotes(GetTaskNoteRequest request, final Callback<TaskNotesResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<TaskNotesResponse> call = mRetrofit.create(OpAppServiceRequests.class).getTaskNotes(request);
+        call.enqueue(callback);
+    }
+
+    public void postNotesForNewTask(CreateTaskNotesRequest request, final Callback<StandardResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<StandardResponse> call = mRetrofit.create(OpAppServiceRequests.class).createTaskNotes(request);
+        call.enqueue(callback);
+    }
 }

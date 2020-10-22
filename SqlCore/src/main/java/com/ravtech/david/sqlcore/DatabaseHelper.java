@@ -288,7 +288,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getCursorOrderByTimeFilterByDurationStartFromOneEvent(int minEventDuration, float eventId) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
-                " WHERE (" + KEY_DURATION + " >= " + minEventDuration +
+                " WHERE (" + KEY_DURATION + " > " + minEventDuration +
                 " AND " + KEY_EVENT_ID + " >= " + eventId +
                 " AND " + KEY_GROUP_ID + " != 20 " +
                 " OR (" + KEY_EVENT_ID + " >= " + eventId +
@@ -304,7 +304,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getCursorOrderByTimeFilterByDurationWithoutWork(int minEventDuration) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
-                " WHERE (" + KEY_TYPE + " = 0 AND " + KEY_DURATION + " >= " + minEventDuration +
+                " WHERE (" + KEY_TYPE + " = 0 AND " + KEY_DURATION + " > " + minEventDuration +
                 " OR (" + KEY_GROUP_ID + " = 20)" +
                 " OR (" + KEY_TYPE + " = 0 AND " + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
@@ -319,7 +319,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(int minEventDuration) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
                 " WHERE (" + KEY_TYPE + " = 0 AND " + KEY_GROUP_ID + " != 20 AND " +
-                KEY_DURATION + " >= " + minEventDuration + ")" +
+                KEY_DURATION + " > " + minEventDuration + ")" +
                 " OR (" + KEY_TYPE + " = 0 AND " + KEY_GROUP_ID + " != 20 AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
@@ -334,7 +334,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getStopTypeShiftOrderByTimeFilterByDuration(int minEventDuration) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
                 " WHERE (" + KEY_GROUP_ID + " != 20 AND " +
-                KEY_DURATION + " >= " + minEventDuration + ")" +
+                KEY_DURATION + " > " + minEventDuration + ")" +
                 " OR (" + KEY_GROUP_ID + " != 20 AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
@@ -348,7 +348,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
                 " WHERE (" + KEY_GROUP_ID + " != 20 AND " +
                 KEY_TIME + " >= " + newEventsStartTime + " AND " +
-                KEY_DURATION + " >= " + minEventDuration + ")" +
+                KEY_DURATION + " > " + minEventDuration + ")" +
                 " OR (" + KEY_TIME + " >= " + newEventsStartTime + " AND "
                 + KEY_GROUP_ID + " != 20 AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
@@ -362,7 +362,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getStopByReasonIdShiftOrderByTimeFilterByDuration(int minEventDuration, int reasonId) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
                 " WHERE (" + KEY_TYPE + " = 0 AND " + KEY_REASON_ID + " = " + reasonId + " AND " +
-                KEY_DURATION + " >= " + minEventDuration +
+                KEY_DURATION + " > " + minEventDuration +
                 ") OR (" + KEY_TYPE + " = 0 AND " + KEY_REASON_ID + " = " + reasonId + " AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
@@ -375,7 +375,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getCursorOrderByTimeFilterByDuration(int minEventDuration) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
-                " WHERE (" + KEY_DURATION + " >= " + minEventDuration +
+                " WHERE (" + KEY_DURATION + " > " + minEventDuration +
                 " AND " +  KEY_GROUP_ID + " != 20 " +
                 " OR (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''" +
                 " AND " +  KEY_GROUP_ID + " != 20 ))" +
