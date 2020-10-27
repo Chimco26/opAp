@@ -96,6 +96,7 @@ import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.StopReasonsResponse;
 import com.operatorsapp.server.responses.TaskNotesResponse;
+import com.example.common.task.TaskStepResponse;
 import com.operatorsapp.server.responses.TechCall24HResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
 import com.operatorsapp.utils.SendReportUtil;
@@ -1151,4 +1152,11 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         Call<StandardResponse> call = mRetrofit.create(OpAppServiceRequests.class).createTaskNotes(request);
         call.enqueue(callback);
     }
+
+    public void getTaskSteps(GetTaskNoteRequest request, final Callback<TaskStepResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<TaskStepResponse> call = mRetrofit.create(OpAppServiceRequests.class).getTaskSteps(request);
+        call.enqueue(callback);
+    }
+
 }

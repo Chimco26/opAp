@@ -14,12 +14,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,7 +34,6 @@ import com.example.common.task.TaskInfoObject;
 import com.example.common.task.TaskObjectForCreateOrEditContent;
 import com.example.common.task.TaskObjectsForCreateOrEditResponse;
 import com.example.common.task.TaskProgress;
-import com.google.android.material.snackbar.Snackbar;
 import com.operators.reportrejectnetworkbridge.interfaces.GetTaskFilesCallback;
 import com.operators.reportrejectnetworkbridge.interfaces.GetTaskObjectsForCreateCallback;
 import com.operatorsapp.R;
@@ -46,6 +43,7 @@ import com.operatorsapp.adapters.GalleryAdapter;
 import com.operatorsapp.adapters.SeverityCheckBoxFilterAdapter;
 import com.operatorsapp.adapters.TaskInfoObjectSpinnerAdapter;
 import com.operatorsapp.adapters.TaskNotesAdapter;
+import com.operatorsapp.adapters.TaskStepsAdapter;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
@@ -55,6 +53,8 @@ import com.operatorsapp.server.requests.CreateTaskNotesRequest;
 import com.operatorsapp.server.requests.GetTaskNoteRequest;
 import com.operatorsapp.server.responses.TaskNote;
 import com.operatorsapp.server.responses.TaskNotesResponse;
+import com.example.common.task.TaskStep;
+import com.example.common.task.TaskStepResponse;
 import com.operatorsapp.utils.InputFilterMinMax;
 import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.ShowCrouton;
@@ -105,8 +105,11 @@ public class TaskDetailsFragment extends Fragment {
     private LinearLayout mTaskIdLy;
     private int operatorId;
     private RecyclerView mNotesRv;
+    private RecyclerView mTaskStepRv;
     private ArrayList<TaskNote> mTaskNoteList;
     private EditText mNotesAddNewEt;
+    private ArrayList<TaskStep> mTaskStepList;
+    private EditText mTaskStepAddNewEt;
 
     public static TaskDetailsFragment newInstance(TaskProgress taskProgress) {
         TaskDetailsFragment taskDetailsFragment = new TaskDetailsFragment();
@@ -184,6 +187,8 @@ public class TaskDetailsFragment extends Fragment {
         mTimeHr = view.findViewById(R.id.FTD_time_hr_et);
         mTimeMin = view.findViewById(R.id.FTD_time_min_et);
         mSeverityRv = view.findViewById(R.id.FTD_severity_rv);
+        mTaskStepRv = view.findViewById(R.id.FTD_sub_task_rv);
+        mTaskStepAddNewEt = view.findViewById(R.id.FTD_sub_task_add_new_et);
         mNotesRv = view.findViewById(R.id.FTD_task_notes_rv);
         mNotesAddNewEt = view.findViewById(R.id.FTD_task_note_add_new_et);
         mAttachedFilesRv = view.findViewById(R.id.FTD_attached_files_rv);
@@ -226,6 +231,7 @@ public class TaskDetailsFragment extends Fragment {
                         SQL_T_FORMAT_NO_SECOND), SQL_NO_T_FORMAT_NO_SECOND));
             }
             getTaskNotes();
+            getTaskSteps();
             getTaskFiles(task.getTaskID());
             initTotalTime(task);
             initAssignSpinner(task.getAssigneeDisplayName(), getResources().getColor(R.color.grey1));
@@ -452,6 +458,14 @@ public class TaskDetailsFragment extends Fragment {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         int selectedId = finalStatus.get(adapterView.getSelectedItemPosition()).getID();
+                        if (selectedId == TaskProgress.TaskStatus.DONE.getValue()){
+                            for (TaskStep step : ((TaskStepsAdapter)mTaskStepRv.getAdapter()).getTaskSteps()) {
+                                if (step.IsOpen){
+                                    ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(), getString(R.string.step_task_not_finished), CroutonCreator.CroutonType.ALERT_DIALOG);
+                                    return;
+                                }
+                            }
+                        }
                         dataAdapter.setTitle(adapterView.getSelectedItemPosition());
                         mTask.setTaskStatus(selectedId);
                     }
@@ -485,10 +499,15 @@ public class TaskDetailsFragment extends Fragment {
 
     private void initTotalTime(TaskProgress task) {
         if (task.getEstimatedExecutionTime() > 0) {
-            int hours = ((int) task.getEstimatedExecutionTime());
-            int min = (int) (((task.getEstimatedExecutionTime()) - ((int) task.getEstimatedExecutionTime()) + 0.001) * 100);
+
+            int hours = (int) (task.getEstimatedExecutionTime() / 60);
             mTimeHr.setText(String.valueOf(hours));
-            mTimeMin.setText(String.valueOf(min));
+            mTimeMin.setText(String.valueOf(((int)task.getEstimatedExecutionTime()) -  (hours * 60)));
+
+//            int hours = ((int) task.getEstimatedExecutionTime());
+//            int min = (int) (((task.getEstimatedExecutionTime()) - ((int) task.getEstimatedExecutionTime()) + 0.001) * 100);
+//            mTimeHr.setText(String.valueOf(hours));
+//            mTimeMin.setText(String.valueOf(min));
         }
         mTimeMin.setFilters(new InputFilter[]{new InputFilterMinMax(0, 59)});
     }
@@ -496,6 +515,11 @@ public class TaskDetailsFragment extends Fragment {
     private void setNotesRecycler() {
         mNotesRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         mNotesRv.setAdapter(new TaskNotesAdapter(mTaskNoteList != null ? mTaskNoteList : new ArrayList<TaskNote>()));
+    }
+
+    private void setTaskStepsRecycler() {
+        mTaskStepRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mTaskStepRv.setAdapter(new TaskStepsAdapter(mTaskStepList != null ? mTaskStepList : new ArrayList<TaskStep>()));
     }
 
     private void initAttachFiles(TaskFilesResponse taskFiles) {
@@ -586,6 +610,12 @@ public class TaskDetailsFragment extends Fragment {
     }
 
     private void initListener(View view) {
+        view.findViewById(R.id.FTD_sub_task_add_new_iv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addTaskStep();
+            }
+        });
         view.findViewById(R.id.FTD_task_note_add_new_iv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -623,11 +653,23 @@ public class TaskDetailsFragment extends Fragment {
         });
     }
 
+    private void addTaskStep() {
+        mTaskStepList = mTaskStepList == null ? new ArrayList<TaskStep>() : mTaskStepList;
+        if (mTask.getTaskID() == 0) {
+            mTaskStepList.add(new TaskStep(0, 0, 0, mTaskStepAddNewEt.getText().toString(), true));
+        }else {
+            mTaskStepList.add(new TaskStep(0, mTask.getTaskID(), mTask.getHistoryID(), mTaskStepAddNewEt.getText().toString(), true));
+        }
+
+        setTaskStepsRecycler();
+        mTaskStepAddNewEt.setText("");
+    }
+
     private void addNoteToTask() {
         int commentId = 0; //pass comment id for update comment. not in use for now.
         if (mTaskNoteList == null) mTaskNoteList = new ArrayList<>();
         TaskNote note = new TaskNote(0, mTask.getTaskID(), mTask.getHistoryID(), mNotesAddNewEt.getText().toString(),
-                         TimeUtils.getDateFromFormat(new Date(), TimeUtils.SQL_NO_T_FORMAT), PersistenceManager.getInstance().getOperatorName());
+                         TimeUtils.getDateFromFormat(new Date(), TimeUtils.SQL_T_FORMAT), PersistenceManager.getInstance().getOperatorName());
         mTaskNoteList.add(note);
         mNotesAddNewEt.setText("");
         setNotesRecycler();
@@ -667,7 +709,7 @@ public class TaskDetailsFragment extends Fragment {
     private double getTotalTime() {
         double totalTime;
         try {
-            totalTime = Integer.parseInt(mTimeHr.getText().toString()) + (Integer.valueOf(mTimeMin.getText().toString()) / 100d);
+            totalTime = (Integer.parseInt(mTimeHr.getText().toString()) * 60)  + (Integer.parseInt(mTimeMin.getText().toString()));
         } catch (NumberFormatException e) {
             totalTime = 0;
         }
@@ -677,6 +719,7 @@ public class TaskDetailsFragment extends Fragment {
     private void createTask(Task task) {
         PersistenceManager pm = PersistenceManager.getInstance();
         ProgressDialogManager.show(getActivity());
+        task.setTaskSteps(((TaskStepsAdapter)mTaskStepRv.getAdapter()).getTaskSteps());
         SimpleRequests.createOrUpdateTask(task, pm.getSiteUrl(), new CreateTaskCallback() {
             @Override
             public void onCreateTaskCallbackSuccess(StandardResponse response) {
@@ -713,8 +756,26 @@ public class TaskDetailsFragment extends Fragment {
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
     }
 
-    private void getTaskNotes(){
+    private void getTaskSteps(){
+        GetTaskNoteRequest request = new GetTaskNoteRequest(PersistenceManager.getInstance().getSessionId(), mTask.getTaskID());
+        NetworkManager.getInstance().getTaskSteps(request, new Callback<TaskStepResponse>() {
+            @Override
+            public void onResponse(Call<TaskStepResponse> call, Response<TaskStepResponse> response) {
+                if (response.body() != null && response.body().isNoError()) {
+                    mTaskStepList = response.body().getTaskStepList();
+                    setTaskStepsRecycler();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<TaskStepResponse> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void getTaskNotes(){
         GetTaskNoteRequest request = new GetTaskNoteRequest(PersistenceManager.getInstance().getSessionId(), mTask.getTaskID());
         NetworkManager.getInstance().getTaskNotes(request, new Callback<TaskNotesResponse>() {
             @Override

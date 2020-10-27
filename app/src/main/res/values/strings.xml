@@ -563,4 +563,7 @@
     <string name="select_machines_for_display">Select Machines for Display</string>
     <string name="clear_filters">Clear all Filters</string>
     <string name="open_gallery">Open Gallery</string>
+    <string name="sub_task">Sub Task</string>
+    <string name="add_sub_task">Add Sub-Task</string>
+    <string name="step_task_not_finished">Please finish all task steps</string>
 </resources>

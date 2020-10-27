@@ -59,7 +59,8 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final TechViewHolder techViewHolder = (TechViewHolder) holder;
 
-        if (isManageServiceCall || !isViewOnly){
+        boolean isNewestCall = !isNewerCallExists(mTechList.get(position));
+        if ((isManageServiceCall || !isViewOnly) && isNewestCall){
             techViewHolder.mManageCallFl.setVisibility(View.VISIBLE);
             techViewHolder.mManageCallIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.wrench));
             techViewHolder.mManageCallTv.setText(mContext.getResources().getString(R.string.start_service));
@@ -67,8 +68,14 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             techViewHolder.mManageCallFl.setVisibility(View.INVISIBLE);
         }
 
-        if (!isViewOnly){
+        if (!isViewOnly && isNewestCall){
             techViewHolder.mRemoveIv.setVisibility(View.VISIBLE);
+            techViewHolder.mRemoveIv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onRemoveCallPressed(mTechList.get(position));
+                }
+            });
         }else {
             techViewHolder.mRemoveIv.setVisibility(View.INVISIBLE);
         }
@@ -80,16 +87,9 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         });
 
-        techViewHolder.mRemoveIv.setVisibility(View.VISIBLE);
         techViewHolder.mMoreInfoTv.setText(mTechList.get(position).getmAdditionalText());
         techViewHolder.mTextTv.setText(mTechList.get(position).getmName());
         techViewHolder.mTimeTv.setText(TimeUtils.getDate(mTechList.get(position).getmCallTime(), TimeUtils.COMMON_DATE_FORMAT));
-        techViewHolder.mRemoveIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onRemoveCallPressed(mTechList.get(position));
-            }
-        });
 
         int icon = R.drawable.technician_blue_svg;
         String txt = mContext.getResources().getString(R.string.waiting_for_replay);
@@ -136,6 +136,14 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             }
         }
+    }
+
+    private boolean isNewerCallExists(TechCallInfo techCallInfo) {
+        for (TechCallInfo call : mTechList) {
+            if (call.getmNotificationId() == techCallInfo.getmNotificationId() && call.getmResponseType() > techCallInfo.getmResponseType())
+               return true;
+        }
+        return false;
     }
 
     @Override

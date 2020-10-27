@@ -145,39 +145,39 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
 
                 if (response.body() != null && response.body().getError().getErrorDesc() == null) {
 
-                    // TODO: 28/03/2019 update tech list for new calls
-                    ArrayList<TechCallInfo> techList = PersistenceManager.getInstance().getCalledTechnician();
+//                    ArrayList<TechCallInfo> techList = PersistenceManager.getInstance().getCalledTechnician();
                     ArrayList<TechCallInfo> techListCopy = new ArrayList<>();
-                    techListCopy = techList;
+//                    techListCopy = techList;
+                    ArrayList<TechCallInfo> techList = new ArrayList<>();
                     for (Notification not : response.body().getmNotificationsList()) {
 
                             not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
                             not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
 
                             if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
-                                boolean isNew = true;
-                                if (techList != null && techListCopy.size() > 0) {
-                                    for (int i = 0; i < techListCopy.size(); i++) {
-                                        TechCallInfo tech = techListCopy.get(i);
-                                        if (tech.getmNotificationId() == not.getmNotificationID() && tech.getmResponseType() == not.getmResponseType()
-                                                && tech.getmTechnicianId() == not.getmTargetUserId()) {
-                                            isNew = false;
-                                            tech.setmCallTime(TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT));
-                                            tech.setmResponseType(not.getmResponseType());
-                                            techList.set(i, tech);
-                                        } else if (tech.getmTechnicianId() == not.getmTargetUserId() && not.getmNotificationID() > tech.getmNotificationId()) {
-                                            techList.remove(i);
-//                                        } else if (tech.getmNotificationId() == not.getmNotificationID() && not.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED) {
-                                        } else if (tech.getmNotificationId() == not.getmNotificationID()) {
-                                            techList.remove(i);
-                                        }
-                                    }
-                                }
-                                if (isNew) {
-                                    techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmTitle(),
-                                            not.getmAdditionalText(), TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
-                                            not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID()));
-                                }
+                                techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmTitle(),
+                                        not.getmAdditionalText(), TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
+                                        not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID()));
+
+//                                boolean isNew = true;
+//                                if (techList != null && techListCopy.size() > 0) {
+//                                    for (int i = 0; i < techListCopy.size(); i++) {
+//                                        TechCallInfo tech = techListCopy.get(i);
+//                                        if (tech.getmNotificationId() == not.getmNotificationID() && tech.getmResponseType() == not.getmResponseType()
+//                                                && tech.getmTechnicianId() == not.getmTargetUserId()) {
+//                                            isNew = false;
+//                                            tech.setmCallTime(TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT));
+//                                            tech.setmResponseType(not.getmResponseType());
+//                                            techList.set(i, tech);
+//                                        } else if (tech.getmTechnicianId() == not.getmTargetUserId() && not.getmNotificationID() > tech.getmNotificationId()) {
+//                                            techList.remove(i);
+//                                        } else if (tech.getmNotificationId() == not.getmNotificationID()) {
+//                                            techList.remove(i);
+//                                        }
+//                                    }
+//                                }
+//                                if (isNew) {
+//                                }
                             }
                         }
                     PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());

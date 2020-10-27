@@ -72,7 +72,11 @@ public class NextJobTimerDialog implements View.OnClickListener {
         }
         imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_production_blue1));
         title.setText(mTitle);
-        subTitle.setText(String.format("%s : ERPJobId: %s", mSubtitle, mMessage));
+        if (mMessage == null || mMessage.isEmpty()){
+            subTitle.setText("");
+        }else {
+            subTitle.setText(String.format("%s : ERPJobId: %s", mSubtitle, mMessage));
+        }
         if (mPositiveBtnTxt != null) {
             positiveBtn.setText(mPositiveBtnTxt);
         } else {
