@@ -129,11 +129,17 @@ public class TaskProgress implements Parcelable {
     @SerializedName("EstimatedExecutionTime")
     @Expose
     private double estimatedExecutionTime;
+    @SerializedName("NumOfOpenSubTasks")
+    @Expose
+    private int mNumOfOpenSubTasks;
 
     public TaskProgress(int taskID) {
         this.taskID = taskID;
     }
 
+    public int getNumOfOpenSubTasks() {
+        return mNumOfOpenSubTasks;
+    }
 
     public String getAssigneeDisplayName() {
         if (assigneeDisplayName == null){

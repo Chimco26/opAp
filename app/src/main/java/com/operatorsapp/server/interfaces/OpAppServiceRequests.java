@@ -14,7 +14,6 @@ import com.example.common.reportShift.DepartmentShiftGraphResponse;
 import com.example.common.reportShift.ServiceCallsResponse;
 import com.example.common.request.BaseTimeRequest;
 import com.example.common.request.MachineIdRequest;
-import com.operators.reportfieldsformachineinfra.StopReasons;
 import com.operatorsapp.server.requests.CreateTaskNotesRequest;
 import com.operatorsapp.server.requests.GetTaskNoteRequest;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
@@ -32,15 +31,14 @@ import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.StopReasonsResponse;
 import com.operatorsapp.server.responses.TaskNotesResponse;
+import com.example.common.task.TaskStepResponse;
 import com.operatorsapp.server.responses.TechCall24HResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Streaming;
 
 /**
  * Created by alex on 07/10/2018.
@@ -114,4 +112,7 @@ public interface OpAppServiceRequests {
 
     @POST("/LeaderMESApi/CreateTaskNotes")
     Call<StandardResponse> createTaskNotes(@Body CreateTaskNotesRequest request);
+
+    @POST("/LeaderMESApi/GetTaskSteps")
+    Call<TaskStepResponse> getTaskSteps(@Body GetTaskNoteRequest request);
 }
