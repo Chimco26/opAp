@@ -46,7 +46,7 @@
     <string name="product_name">Nom du produit</string>
     <string name="erp">ERP</string>
     <string name="planned_start">Début prévu</string>
-    <string name="number_of_units">nombre d\'unités</string>
+    <string name="number_of_units">Nombre de &placeholder1;</string>
     <string name="new_job">Nouvelle tâche</string>
     <string name="new_job_details">Détails de la nouvelle tâche</string>
     <string name="product_id">Produit ID</string>
@@ -86,8 +86,8 @@
     <string name="report_reject_nreason">Raison Des\nRebuts</string>
     <string name="report_stop_start">"Début "</string>
     <string name="report_stop_resume">"Fin"</string>
-    <string name="report_cycle_nunits">changer des unités\ndu cycle</string>
-    <string name="report_cycle_units">changer des unités du cycle</string>
+    <string name="report_cycle_nunits">&placeholder1; modifiées au cours du cycle</string>
+    <string name="report_cycle_units">&placeholder1; modifiées au cours du cycle</string>
     <string name="report_inventory_nitem_production">Informer inventaire</string>
     <string name="report_inventory_item_production">Informer inventaire</string>
     <string name="package_type">Type d\'emballage</string>
@@ -192,8 +192,8 @@
     <string name="call_technician_title">Appel d\'un technicien</string>
     <string name="called_technician">Technicien appelé</string>
     <string name="catalog">Catalogue</string>
-    <string name="cavities_actual">Unités dans le cycle réel</string>
-    <string name="cavities_standard">Unités dans le cycle STD</string>
+    <string name="cavities_actual">&placeholder1; réelles au cours du cycle</string>
+    <string name="cavities_standard">&placeholder1; STD au cours du cycle</string>
     <string name="channel_0">Canal 0</string>
     <string name="channel_1_99">Canal 1-99</string>
     <string name="channel_100">Canal 100</string>
@@ -203,7 +203,7 @@
     <string name="end_setup_success">Installation terminée avec succès</string>
     <string name="enter_note_here">Saisissez votre remarque ici</string>
     <string name="events_selected">Evénements sélectionnés :</string>
-    <string name="fill_units_or_weight">* Veuillez signaler les unités ou le poids</string>
+    <string name="fill_units_or_weight">* Signaler &placeholder1; ou Poids</string>
     <string name="general">Général</string>
     <string name="get_jobs_details_failed_error">Obtenir les détails d\'une erreur d\'une tâche échouée</string>
     <string name="get_panding_jobs_failed_error">Obtenir les détails d\'une erreur d\'une tâche en attente</string>
@@ -330,7 +330,7 @@
     <string name="keep_reporting_events_reason">Continuer à signaler le motif des événements</string>
     <string name="target_reached">Objectif atteint!</string>
     <string name="setup_rejects_dialog_text">Voulez-vous signaler certains d\'entre eux comme rejets ?</string>
-    <string name="setup_good_units_dialog_text">Voulez-vous signaler certaines d\'entre elles comme bonnes unités ?</string>
+    <string name="setup_good_units_dialog_text">Voulez-vous en signaler certaines comme &placeholder1; ?</string>
     <string name="on_the_setup_you_produced">Sur la configuration que vous avez produite</string>
     <string name="from_the">du</string>
     <string name="activate_last_job">Activer le dernier projet</string>
@@ -383,8 +383,8 @@
     <string name="filter_by">Filtrer par</string>
     <string name="index">INDEX</string>
     <string name="catalog_maj">CATALOGUE</string>
-    <string name="units_target">UNITÉS CIBLES</string>
-    <string name="units_produced">UNITÉS PRODUITES</string>
+    <string name="units_target">Objectif &placeholder1;</string>
+    <string name="units_produced">&placeholder1; produites</string>
     <string name="end_time_actual">HEURE DE FIN (RÉELLE)</string>
     <string name="job_left_time">TEMPS RESTANT</string>
     <string name="number_of_jobs">Nombre de tâches</string>
@@ -394,8 +394,8 @@
     <string name="shift_report">Rapport de l\'équipe de quart</string>
     <string name="you_have">Vous avez</string>
     <string name="jobs_on_this_shift">Tâches pour cette équipe</string>
-    <string name="report_cycle_failed_but_max_reported">La valeur que vous définissez pour indiquer l\'unité du cycle est supérieure à la valeur maximale ; la valeur maximale a été indiquée</string>
-    <string name="report_cycle_failed_but_min_reported">La valeur que vous définissez pour indiquer l\'unité du cycle est inférieure à la valeur minimale ; la valeur minimale a été indiquée</string>
+    <string name="report_cycle_failed_but_max_reported">La valeur définie à reporter pour le cycle &placeholder1; dépasse la valeur maximale. La valeur maximale a été consignée</string>
+    <string name="report_cycle_failed_but_min_reported">La valeur définie à reporter pour le cycle &placeholder1; est inférieure à la valeur minimale. La valeur minimale a été consignée</string>
     <string name="min_value_is">La valeur minimale est</string>
     <string name="next_job_will_start_in">La prochaine tâche commencera dans</string>
     <string name="start_job_now">Démarrer la tâche maintenant</string>

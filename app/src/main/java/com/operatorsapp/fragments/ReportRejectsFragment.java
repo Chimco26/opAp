@@ -144,6 +144,12 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
             view.findViewById(R.id.cause_spinner).setVisibility(View.GONE);
             view.findViewById(R.id.cause_rl).setVisibility(View.GONE);
         }
+
+        ((TextView)view.findViewById(R.id.FRR_units_tv)).setText(PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units"));
+        String txt = getResources().getString(R.string.fill_units_or_weight);
+        txt = txt.replace(getResources().getString(R.string.placeholder1), PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units"));
+        ((TextView)view.findViewById(R.id.FRR_units_or_weight_tv)).setText(txt);
+
         mActiveJobsProgressBar = view.findViewById(R.id.active_jobs_progressBar);
         mCancelButton = view.findViewById(R.id.button_cancel);
         mNextButton = view.findViewById(R.id.button_approve);

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.OnKeyboardManagerListener;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.util.List;
@@ -51,6 +52,7 @@ public class ReportNumericAdapter extends PagerAdapter {
         TextView boxTitle = itemView.findViewById(R.id.IRN_edit_number_title_tv);
         final EditText editNumericEt = itemView.findViewById(R.id.IRN_edit_number_et);
         RadioGroup radioGroup = itemView.findViewById(R.id.IRN_radio_group);
+        ((TextView)itemView.findViewById(R.id.IRN_edit_unit_btn)).setText(PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units"));
         initTitle(title, boxTitle, position, context);
 //        setText(String.valueOf(mActiveJobs.get(position).getEditedValue()), position, editNumericEt, context);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -129,13 +131,16 @@ public class ReportNumericAdapter extends PagerAdapter {
 
     private void initTitle(@NonNull TextView textView, TextView boxTitle, int position, Context context) {
         if (isReject) {
+            String txt = context.getResources().getString(R.string.setup_good_units_dialog_text);
+            txt = txt.replace(context.getResources().getString(R.string.placeholder1), PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units"));
+
             textView.setText(Html.fromHtml(String.format(Locale.getDefault(), "%s <b>%s</b> %s %s <b>%s</b>.<br /> %s",
                     context.getString(R.string.on_the_setup_you_produced),
                     mActiveJobs.get(position).getJobUnitsProducedOK(),
                     context.getString(R.string.rejects),
                     context.getString(R.string.from_the),
                     mActiveJobs.get(position).getProductName(),
-                    context.getString(R.string.setup_good_units_dialog_text))));
+                    txt)));
             boxTitle.setText(context.getString(R.string.good_units));
         } else {
             textView.setText(Html.fromHtml(String.format(Locale.getDefault(), "%s <b>%s</b> %s %s <b>%s</b>.<br /> %s",

@@ -50,7 +50,8 @@
     <string name="product_name">Product eName</string>
     <string name="erp">ERP</string>
     <string name="planned_start">Planned Start</string>
-    <string name="number_of_units">Number Of Units</string>
+    <!--<string name="number_of_units">Number Of Units</string>-->
+    <string name="number_of_units">Number Of &placeholder1;</string> <!--take text from KPIresponse with key "units" and replace the placeholder-->
     <string name="new_job">New Job</string>
     <string name="new_job_details">New job details</string>
     <string name="product_id">Product id</string>
@@ -92,8 +93,8 @@
     <string name="report_reject_nreason">Report Reject\nReason</string>
     <string name="report_stop_start">"Start "</string>
     <string name="report_stop_resume">"End"</string>
-    <string name="report_cycle_nunits">Report Cycle Units</string>
-    <string name="report_cycle_units">Change Units in Cycle</string>
+    <string name="report_cycle_nunits">Change &placeholder1; in \\nCycle</string><!--take text from KPIresponse with key "units" and replace the placeholder-->
+    <string name="report_cycle_units">Change &placeholder1; in \nCycle</string><!--take text from KPIresponse with key "units" and replace the placeholder-->
     <string name="report_inventory_nitem_production">Report Production \n</string>
     <string name="report_inventory_item_production">Report Production</string>
     <string name="package_type">Package Type</string>
@@ -222,8 +223,8 @@
     <string name="materials">Materials</string>
     <string name="mold">Mold</string>
     <string name="mold_catalog">Mold Catalog</string>
-    <string name="cavities_actual">Units In Cycle Actual</string>
-    <string name="cavities_standard">Units In Cycle STD</string>
+    <string name="cavities_actual">&placeholder1; In Cycle Actual</string><!--take text from KPIresponse with key "units" and replace the placeholder-->
+    <string name="cavities_standard">&placeholder1; In Cycle STD</string><!--take text from KPIresponse with key "units" and replace the placeholder-->
     <string name="actions">Actions</string>
     <string name="action_details">Action details</string>
     <string name="you_can_add_a_note">You can add a note</string>
@@ -256,7 +257,7 @@
     <string name="submit">submit</string>
     <string name="edit_note">Edit Note</string>
     <string name="enter_note_here">Enter Your Note Here</string>
-    <string name="fill_units_or_weight">* Please report Units or Weight</string>
+    <string name="fill_units_or_weight">* Please report &placeholder1; or Weight</string><!--take text from KPIresponse with key "units" and replace the placeholder-->
     <string name="emerald_flavor_name" translatable="false">emerald</string>
     <string name="lenox_flavor_name" translatable="false">Lenox</string>
     <string name="machine">Machine</string>
@@ -363,7 +364,7 @@
     <string name="keep_reporting_events_reason">Keep Reporting events reason</string>
     <string name="target_reached">Target  Reached!</string>
     <string name="setup_rejects_dialog_text">Do you want to report some of them as rejects?</string>
-    <string name="setup_good_units_dialog_text">Do you want to report some of them as good units?</string>
+    <string name="setup_good_units_dialog_text">Do you want to report some of them as &placeholder1;?</string><!--take text from KPIresponse with key "GoodUnits" and replace the placeholder-->
     <string name="on_the_setup_you_produced">On the setup you produced</string>
     <string name="from_the">from the</string>
     <string name="activate_last_job">Activate last job</string>
@@ -421,8 +422,8 @@
     <string name="active_jobs">Active Jobs</string>
     <string name="index">INDEX</string>
     <string name="catalog_maj">CATALOG</string>
-    <string name="units_target">UNITS TARGET</string>
-    <string name="units_produced">UNITS PRODUCED</string>
+    <string name="units_target">&placeholder1; TARGET</string><!--take text from KPIresponse with key "units" and replace the placeholder-->
+    <string name="units_produced">&placeholder1; PRODUCED</string><!--take text from KPIresponse with key "units" and replace the placeholder-->
     <string name="end_time_actual">END TIME (ACTUAL)</string>
     <string name="job_left_time">JOB LEFT TIME</string>
     <string name="number_of_jobs">number of Jobs</string>
@@ -439,8 +440,8 @@
     </string-array>
     <string name="cycle_time">Cycle time</string>
     <string name="jobs_on_this_shift">Jobs on this shift</string>
-    <string name="report_cycle_failed_but_max_reported">the value you set to report cycle unit is over max value, the max value was reported</string>
-    <string name="report_cycle_failed_but_min_reported">the value you set to report cycle unit is under min value, the min value was reported</string>
+    <string name="report_cycle_failed_but_max_reported">the value you set to report cycle &placeholder1; is over max value, the max value was reported</string><!--take text from KPIresponse with key "units" and replace the placeholder-->
+    <string name="report_cycle_failed_but_min_reported">the value you set to report cycle &placeholder1; is under min value, the min value was reported</string><!--take text from KPIresponse with key "units" and replace the placeholder-->
     <string name="min_value_is">min value is</string>
     <string name="next_job_will_start_in">Next Job will start in</string>
     <string name="start_job_now">Start Job Now</string>

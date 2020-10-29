@@ -47,7 +47,7 @@
     <string name="product_name">اسم المُنتج</string>
     <string name="erp">ERP</string>
     <string name="planned_start">بدء المخطط</string>
-    <string name="number_of_units">عدد الوحدات</string>
+    <string name="number_of_units">عدد &placeholder1;</string>
     <string name="new_job">أمر عمل جديد</string>
     <string name="new_job_details">تفاصيل امرالعمل الجديد</string>
     <string name="product_id">معرف المنتج</string>
@@ -87,8 +87,8 @@
     <string name="report_reject_nreason">تقرير تجاهل\nسبب</string>
     <string name="report_stop_start">"البدايه"</string>
     <string name="report_stop_resume">"النهايه"</string>
-    <string name="report_cycle_nunits">تقرير دورات\nوحدات</string>
-    <string name="report_cycle_units">تقرير وجدات الدورات</string>
+    <string name="report_cycle_nunits">تغيير &placeholder1; فيn\\ الدورة</string>
+    <string name="report_cycle_units">تغيير &placeholder1; فيn\\ الدورة</string>
     <string name="report_inventory_nitem_production">تسجيل مخزون\nالمنتج</string>
     <string name="report_inventory_item_production">تسجيل محزون المنتج</string>
     <string name="package_type">نوع الرزمه</string>
@@ -193,8 +193,8 @@
     <string name="call_technician_title">نداء للتقني</string>
     <string name="called_technician">تقني مدعو</string>
     <string name="catalog">رقم المنتج</string>
-    <string name="cavities_actual">الوحدات الفعاله في الدوره</string>
-    <string name="cavities_standard">الوحدات المعيار في الدوره</string>
+    <string name="cavities_actual">&placeholder1;في الدورة الفعلي</string>
+    <string name="cavities_standard">&placeholder1; في الدورة القياسي</string>
     <string name="channel_1_99">قناه1-99</string>
     <string name="channel_0">قناه 0</string>
     <string name="channel_100">قناه 100</string>
@@ -204,7 +204,7 @@
     <string name="end_setup_success">تم تنفيذ شهادة الإعداد بنجاح</string>
     <string name="enter_note_here">saادخل/ي الملاحظه هنا</string>
     <string name="events_selected">الاحداث التي اختيرت</string>
-    <string name="fill_units_or_weight">يجب ادخال الوحدات او الوزن</string>
+    <string name="fill_units_or_weight">* يُرجى إبلاغ &placeholder1; أو الوزن</string>
     <string name="general">عام</string>
     <string name="get_jobs_details_failed_error">فشل في الحصول على تفاصيل المهمه</string>
     <string name="get_panding_jobs_failed_error">فشل في الحصول على تفاصيل المهام القادمه</string>
@@ -337,7 +337,7 @@
     <string name="keep_reporting_events_reason">تابع الإبلاغ عن اسباب الوقوف</string>
     <string name="target_reached">لقد وصلت إلى الغاية!</string>
     <string name="setup_rejects_dialog_text">هل تريد الإبلاغ عن بعضها كوحدات غير صالحة؟</string>
-    <string name="setup_good_units_dialog_text">هل ترغب في الإبلاغ عن بعض وحدات الإنتاج الجيدة؟</string>
+    <string name="setup_good_units_dialog_text">هل تريد الإبلاغ عن بعضهم كـ &placeholder1;?</string>
     <string name="on_the_setup_you_produced">تم إنشاؤها أثناء الاعدادات</string>
     <string name="from_the">من المنتج</string>
     <string name="activate_last_job">تشغيل المهمه الاخيره</string>
@@ -379,8 +379,8 @@
     <string name="filter_by">التصفية حسب</string>
     <string name="index">فهرس</string>
     <string name="catalog_maj">كتالوج</string>
-    <string name="units_target">الوحدات الهدف</string>
-    <string name="units_produced">الوحدات التي تم إنتاجها</string>
+    <string name="units_target">&placeholder1; المستهدف</string>
+    <string name="units_produced">تم إنتاج &placeholder1;</string>
     <string name="end_time_actual">وقت الانتهاء (الفعلي)</string>
     <string name="job_left_time">الوقت المنتهي للعمل</string>
     <string name="number_of_jobs">عدد الأعمال</string>
@@ -390,8 +390,8 @@
     <string name="shift_report">تقرير المناوبة</string>
     <string name="you_have">لديك</string>
     <string name="jobs_on_this_shift">الأعمال في هذه المناوبة</string>
-    <string name="report_cycle_failed_but_max_reported">القيمة التي حددتها للإعلام بوحدة الدورة أعلى من القيمة الأعلى، تم الإعلام بالوحدة العليا</string>
-    <string name="report_cycle_failed_but_min_reported">القيمة التي حددتها للإعلام بوحدة الدورة أقل من القيمة الأعلى، تم الإعلام بالوحدة الدنيا</string>
+    <string name="report_cycle_failed_but_max_reported">تتجاوز القيمة التي عينتها للإبلاغ عن دورة &placeholder1; القيمة القصوى، تم الإبلاغ عن القيمة القصوى</string>
+    <string name="report_cycle_failed_but_min_reported">تقل القيمة التي عينتها للإبلاغ عن دورة &placeholder1; القيمة الدنيا، تم الإبلاغ عن القيمة الدنيا</string>
     <string name="min_value_is">القيمة الصغرى هي</string>
     <string name="next_job_will_start_in">العمل التالي يبدأ في</string>
     <string name="start_job_now">ابدأ عملًا الآن</string>

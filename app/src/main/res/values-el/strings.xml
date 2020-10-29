@@ -47,7 +47,7 @@
     <string name="product_name">ονομασία προιόντος</string>
     <string name="erp">ERP</string>
     <string name="planned_start">προγραμματισμένη εκκίνηση</string>
-    <string name="number_of_units">αριθμός μονάδων</string>
+    <string name="number_of_units">Αριθμός &placeholder1;</string>
     <string name="new_job">νέα εργασία</string>
     <string name="new_job_details">λεπτομέρειες νέας εργασίας</string>
     <string name="product_id">ταυτότητα προιόντος</string>
@@ -87,8 +87,8 @@
     <string name="report_reject_nreason">Αναφορά Αιτιολογίας\nΑπόρριψης</string>
     <string name="report_stop_start">Έναρξη</string>
     <string name="report_stop_resume">Τέλος</string>
-    <string name="report_cycle_nunits">Αλλαξε μονάδες κυκλικά</string>
-    <string name="report_cycle_units">Αλλαγή Μονάδων σε \nΚύκλο</string>
+    <string name="report_cycle_nunits">Αλλαγή &placeholder1; στον Κύκλο Παραγωγής</string>
+    <string name="report_cycle_units">Αλλαγή &placeholder1; στον Κύκλο Παραγωγής</string>
     <string name="report_inventory_nitem_production">Αναφορά Παραγωγής \n</string>
     <string name="report_inventory_item_production">Αναφορά Παραγωγής</string>
     <string name="package_type">Τύπος Συσκευασίας</string>
@@ -192,8 +192,8 @@
     <string name="call_technician_title">Κλήση Τεχνικού</string>
     <string name="called_technician">Καλέσθηκε τεχνικός</string>
     <string name="catalog">Κατάλογος</string>
-    <string name="cavities_actual">Μονάδες σε πραγματικό κύκλο</string>
-    <string name="cavities_standard">Μονάδες σε τυποποιημένο κύκλο</string>
+    <string name="cavities_actual">Πραγματικές &placeholder1; Στον Κύκλο Παραγωγής</string>
+    <string name="cavities_standard">&placeholder1; Στον Κύκλο Παραγωγής ΣΤΑΝΤΑΡ</string>
     <string name="channel_0">κανάλι 0</string>
     <string name="channel_1_99">κανάλι 1-99</string>
     <string name="channel_100">κανάλι 100</string>
@@ -203,7 +203,7 @@
     <string name="end_setup_success">Λήξη Setup με επιτυχία</string>
     <string name="enter_note_here">Εισάγετε τη Σημείωση σας Εδώ</string>
     <string name="events_selected">Επιλεγμένα συμβάντα:</string>
-    <string name="fill_units_or_weight">* Παρακαλούμε αναφέρετε Μονάδες ή Βάρος</string>
+    <string name="fill_units_or_weight">* Παρακαλούμε αναφέρετε &placeholder1; ή Βάρος</string>
     <string name="general">Γενικά</string>
     <string name="get_jobs_details_failed_error">Ενημέρωση Λεπτομέρειες Εργασιών απέτυχε σφάλμα</string>
     <string name="get_panding_jobs_failed_error">Ενημέρωση Εκκρεμών Εργασιών απέτυχε σφάλμα</string>
@@ -330,7 +330,7 @@
     <string name="keep_reporting_events_reason">Συνεχίστε να αναφέρετε αιτία συμβάντων</string>
     <string name="target_reached">Στόχος επετεύχθει!</string>
     <string name="setup_rejects_dialog_text">Θέλετε να αναφέρετε κάποια από αυτά ως απορρίψεις?</string>
-    <string name="setup_good_units_dialog_text">Θέλετε να αναφέρετε κάποια από αυτά ως καλές μονάδες?</string>
+    <string name="setup_good_units_dialog_text">Θέλετε να αναφέρετε ορισμένες από αυτές ως &placeholder1;;</string>
     <string name="on_the_setup_you_produced">Σχετικά με τη ρύθμιση που παράχθει</string>
     <string name="from_the">από</string>
     <string name="activate_last_job">Ενεργοποίηση τελευταίας εργασίας</string>
@@ -383,8 +383,8 @@
     <string name="filter_by">Φιλτραρισμένο από</string>
     <string name="index">ΔΕΙΚΤΗΣ</string>
     <string name="catalog_maj">Κατάλογος</string>
-    <string name="units_target">ΣΤΟΧΟΣ ΜΟΝΑΔΩΝ</string>
-    <string name="units_produced">ΜΟΝΑΔΕΣ ΠΟΥ ΠΑΡΗΧΘΗΣΑΝ</string>
+    <string name="units_target">Στόχος &placeholder1;</string>
+    <string name="units_produced">&placeholder1; Παράχθηκαν</string>
     <string name="end_time_actual">ΤΕΛΟΣ ΧΡΟΝΟΥ (ΠΡΑΓΜΑΤΙΚΟΥ)</string>
     <string name="job_left_time">ΧΡΟΝΟΣ ΠΟΥ ΑΠΟΜΕΝΕΙ ΜΕΧΡΙ ΤΗΝ ΟΛΟΚΛΗΡΩΣΗ ΕΡΓΑΣΙΑΣ</string>
     <string name="number_of_jobs">νούμερο εργασιών</string>
@@ -394,8 +394,8 @@
     <string name="shift_report">Αναφορά βάρδιας</string>
     <string name="you_have">Έχεις</string>
     <string name="jobs_on_this_shift">Εργασίες για αυτή τη βάρδια</string>
-    <string name="report_cycle_failed_but_max_reported">η αξία που θέσατε για να αναφέρετε τις μονάδες κύκλου είναι πάνω από τη μέγιστη αξία, η μέγιστη αξία αναφέρθηκε</string>
-    <string name="report_cycle_failed_but_min_reported">η αξία που θέσατε για να αναφέρετε τις μονάδες κύκλου είναι κάτω από την ελάχιστη αξία, η ελάχιστη αξία αναφέρθηκε</string>
+    <string name="report_cycle_failed_but_max_reported">η τιμή που ορίσατε για αναφορά κύκλου σε &placeholder1; είναι μεγαλύτερη από τη μέγιστη τιμή, η μέγιστη τιμή έχει οριστεί</string>
+    <string name="report_cycle_failed_but_min_reported">η τιμή που ορίσατε για αναφορά κύκλου σε &placeholder1; είναι μικρότερη από την ελάχιστη τιμή, η ελάχιστη τιμή έχει οριστεί</string>
     <string name="min_value_is">η ελάχιστη αξία είναι</string>
     <string name="next_job_will_start_in">Η επόμενη εργασία θα ξεκινήσει σε</string>
     <string name="start_job_now">Η εργασία ξεκινάει τώρα</string>
