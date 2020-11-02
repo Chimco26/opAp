@@ -3,6 +3,8 @@ package com.example.common.task;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class Task {
 
     @SerializedName("ID")
@@ -53,6 +55,17 @@ public class Task {
     @SerializedName("Status")
     @Expose
     private Integer status;
+    @SerializedName("TaskSteps")
+    @Expose
+    private ArrayList<TaskStep> taskSteps;
+
+    public ArrayList<TaskStep> getTaskSteps() {
+        return taskSteps;
+    }
+
+    public void setTaskSteps(ArrayList<TaskStep> taskSteps) {
+        this.taskSteps = taskSteps;
+    }
 
     public Task(String text) {
         this.text = text;

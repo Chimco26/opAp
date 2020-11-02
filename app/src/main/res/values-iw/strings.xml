@@ -479,7 +479,7 @@
     <string name="done_for_task">בוצע</string>
     <string name="cancelled">בוטל</string>
     <string name="task_manager">משימת מנהל</string>
-    <string name="order_by">הוזמן על ידי</string>
+    <string name="order_by">מיון לפי</string>
     <string name="search_tasks">חפש משימה</string>
     <string name="date">תאריך</string>
     <string name="priority">רמת דחיפות</string>

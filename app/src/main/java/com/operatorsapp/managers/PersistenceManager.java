@@ -616,7 +616,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
                 if (date != null && date.after(cal.getTime())) {
                     filteredList.add(not);
                 } else if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN &&
-                        (not.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE || not.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE)) {
+                        (not.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE && not.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE)) {
                     filteredList.add(not);
                 }
             }

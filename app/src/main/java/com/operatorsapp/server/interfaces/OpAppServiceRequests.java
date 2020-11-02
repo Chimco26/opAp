@@ -14,7 +14,8 @@ import com.example.common.reportShift.DepartmentShiftGraphResponse;
 import com.example.common.reportShift.ServiceCallsResponse;
 import com.example.common.request.BaseTimeRequest;
 import com.example.common.request.MachineIdRequest;
-import com.operators.reportfieldsformachineinfra.StopReasons;
+import com.operatorsapp.server.requests.CreateTaskNotesRequest;
+import com.operatorsapp.server.requests.GetTaskNoteRequest;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
@@ -29,15 +30,15 @@ import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.StopReasonsResponse;
+import com.operatorsapp.server.responses.TaskNotesResponse;
+import com.example.common.task.TaskStepResponse;
 import com.operatorsapp.server.responses.TechCall24HResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Streaming;
 
 /**
  * Created by alex on 07/10/2018.
@@ -104,4 +105,14 @@ public interface OpAppServiceRequests {
     Call<StopReasonsResponse> getStopReasons(@Body MachineIdRequest machineIdRequest);
 
     @POST("/LeaderMESApi/GetOpenCallsAnd24Hours")
-    Call<TechCall24HResponse> getOpenCallsAnd24Hours(@Body TechCall24HRequest request);}
+    Call<TechCall24HResponse> getOpenCallsAnd24Hours(@Body TechCall24HRequest request);
+
+    @POST("/LeaderMESApi/GetTaskNotes")
+    Call<TaskNotesResponse> getTaskNotes(@Body GetTaskNoteRequest request);
+
+    @POST("/LeaderMESApi/CreateTaskNotes")
+    Call<StandardResponse> createTaskNotes(@Body CreateTaskNotesRequest request);
+
+    @POST("/LeaderMESApi/GetTaskSteps")
+    Call<TaskStepResponse> getTaskSteps(@Body GetTaskNoteRequest request);
+}

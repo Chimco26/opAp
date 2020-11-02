@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
                 if (response.body() != null && response.body().getError().getErrorDesc() == null) {
 
-                    ArrayList<TechCallInfo> techList = PersistenceManager.getInstance().getCalledTechnician();
+                    ArrayList<TechCallInfo> techList = new ArrayList<>();
 
                     for (Notification not : response.body().getmNotificationsList()) {
                         not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));

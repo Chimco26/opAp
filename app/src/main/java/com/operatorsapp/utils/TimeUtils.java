@@ -489,4 +489,26 @@ public class TimeUtils {
 
 
     }
+
+    public static String getShortDateWithTimeByFormat(String date, String format) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        try {
+            String returnDate = "";
+            Date formatDate = dateFormat.parse(date);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(formatDate);
+
+            String month = (cal.get(Calendar.MONTH) + 1) < 10 ? ("0" + (cal.get(Calendar.MONTH) + 1)) : (cal.get(Calendar.MONTH) + 1) + "";
+            String day = cal.get(Calendar.DAY_OF_MONTH) < 10 ? ("0" + cal.get(Calendar.DAY_OF_MONTH)) : cal.get(Calendar.DAY_OF_MONTH) + "";
+            String hour = cal.get(Calendar.HOUR_OF_DAY) < 10 ? ("0" + cal.get(Calendar.HOUR_OF_DAY)) : cal.get(Calendar.HOUR_OF_DAY) + "";
+            String minute = cal.get(Calendar.MINUTE) < 10 ? ("0" + cal.get(Calendar.MINUTE)) : cal.get(Calendar.MINUTE) + "";
+
+            returnDate = hour + ":" + minute + " " + day + "/" + month + " ";
+            return returnDate;
+        } catch (java.text.ParseException e) {
+            //e.printStackTrace();
+        }
+        return "";
+    }
 }
