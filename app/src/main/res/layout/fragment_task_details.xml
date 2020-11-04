@@ -251,7 +251,7 @@
                     android:background="@drawable/box_grey_stroke"
                     android:padding="15dp" />
 
-                <View
+               <!-- <View
                     android:layout_width="match_parent"
                     android:layout_height="10dp" />
 
@@ -297,7 +297,7 @@
                             android:layout_gravity="bottom"
                             android:padding="10dp"/>
                     </LinearLayout>
-                </LinearLayout>
+                </LinearLayout>-->
 
                 <View
                     android:layout_width="match_parent"
@@ -577,7 +577,7 @@
                         android:id="@+id/FTD_attached_files_rv"
                         android:layout_width="match_parent"
                         android:layout_height="80dp" />
-
+<!--
                     <TextView
                         android:id="@+id/FTD_task_notes_tv"
                         android:layout_width="match_parent"
@@ -613,7 +613,7 @@
                             android:src="@drawable/send"
                             android:layout_gravity="bottom"
                             android:padding="10dp"/>
-                    </LinearLayout>
+                    </LinearLayout>-->
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
 
