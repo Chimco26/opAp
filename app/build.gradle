@@ -8,7 +8,7 @@ android {
         applicationId "com.operatorsapp"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 42 //birman site version code is 42. next version should be 43
+        versionCode 43 //birman site version code is 42. next version should be 43
         versionName "2.4"
         multiDexEnabled true
     }
