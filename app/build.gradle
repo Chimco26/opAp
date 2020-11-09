@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+//apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 29
@@ -8,8 +10,8 @@ android {
         applicationId "com.operatorsapp"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 43 //birman site version code is 42. next version should be 43
-        versionName "2.4"
+        versionCode 43 //2 sites upgraded to version code 43. next version should be 44
+        versionName "2.43"
         multiDexEnabled true
     }
     buildTypes {
@@ -134,9 +136,9 @@ dependencies {
     implementation 'com.github.barteksc:android-pdf-viewer:3.0.0-beta.5'
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
     implementation 'com.google.android.gms:play-services-analytics:17.0.0'
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
-        transitive = true;
-    }
+    implementation 'com.google.firebase:firebase-crashlytics:17.2.2'
+    implementation 'com.google.firebase:firebase-analytics:18.0.0'
+
     implementation 'com.github.halilozercan:BetterVideoPlayer:1.1.0'
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
     implementation 'com.jcminarro:RoundKornerLayouts:0.4.0'
