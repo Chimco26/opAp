@@ -92,6 +92,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         final View rootView = inflater.inflate(R.layout.fragment_select_machine, container, false);
         setActionBar();
 
+        rootView.findViewById(R.id.FSM_qc_test_btn).setOnClickListener(this);
         rootView.findViewById(R.id.FSM_change_factory_btn).setOnClickListener(this);
         departementRecyclerView = rootView.findViewById(R.id.FSM_department_rv);
         mSearchField = rootView.findViewById(R.id.machine_id_name);
@@ -230,6 +231,9 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     public void onClick(View v) {
 
         switch (v.getId()) {
+            case R.id.FSM_qc_test_btn:
+                mListener.onQCTestSelected();
+                break;
             case R.id.FSM_change_factory_btn:
 
 //                if (mNavigationCallback != null){
@@ -262,5 +266,6 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         void onChangeFactory();
         void onCloseSelectMachine();
         void onMachineSelected();
+        void onQCTestSelected();
     }
 }

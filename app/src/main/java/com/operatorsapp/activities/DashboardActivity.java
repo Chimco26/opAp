@@ -3459,6 +3459,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
+    public void onQCTestSelected() {
+        onOpenQCActivity();
+    }
+
+    @Override
     public void onCloseSelectMachine() {
         if (PersistenceManager.getInstance().getMachineId() == -1) {
             return;
