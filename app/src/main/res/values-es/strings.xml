@@ -46,7 +46,7 @@
     <string name="product_name">Nombre del Producto</string>
     <string name="erp">ERP</string>
     <string name="planned_start">Inicio previsto</string>
-    <string name="number_of_units">Cantidad de Unidades</string>
+    <string name="number_of_units">Número de &placeholder1;</string>
     <string name="new_job">Nuevo Trabajo</string>
     <string name="new_job_details">Detalles del nuevo trabajo</string>
     <string name="product_id">Identificacion del Producto</string>
@@ -86,8 +86,8 @@
     <string name="report_reject_nreason">Informar Motivo\nRechazos</string>
     <string name="report_stop_start">"Comienzo "</string>
     <string name="report_stop_resume">"Final"</string>
-    <string name="report_cycle_nunits">Cambiar unidades\nciclo</string>
-    <string name="report_cycle_units">Cambiar unidades del ciclo</string>
+    <string name="report_cycle_nunits">Cambiar &placeholder1; en ciclo</string>
+    <string name="report_cycle_units">Cambiar &placeholder1; en ciclo</string>
     <string name="report_inventory_nitem_production">Informar Inventario</string>
     <string name="report_inventory_item_production">Informar Inventario</string>
     <string name="package_type">Tipo de Envase</string>
@@ -182,8 +182,8 @@
     <string name="amount">Cantidad</string>
     <string name="at_work">En tratamiento</string>
     <string name="catalog">Catálogo</string>
-    <string name="cavities_actual">Cavidades Activos</string>
-    <string name="cavities_standard">Cavidades estándar</string>
+    <string name="cavities_actual">&placeholder1;reales en el ciclo</string>
+    <string name="cavities_standard">&placeholder1; en ciclo STD</string>
     <string name="events_selected">Eventos seleccionados</string>
     <string name="general">General</string>
     <string name="kg">kg</string>
@@ -208,7 +208,7 @@
     <string name="edit_note">Editar nota</string>
     <string name="end_setup_success">Configuración finalizada correctamente</string>
     <string name="enter_note_here">Introduce tu nota aquí</string>
-    <string name="fill_units_or_weight">* Por favor, declara las Unidades o el Peso</string>
+    <string name="fill_units_or_weight">* Notificar &placeholder1; o peso</string>
     <string name="get_jobs_details_failed_error">Obtener error de detalles de trabajo</string>
     <string name="get_panding_jobs_failed_error">Obtener error de trabajos pendientes</string>
     <string name="loading_error">Error al cargar</string>
@@ -327,7 +327,7 @@
     <string name="keep_reporting_events_reason">Seguir informando motivo de eventos</string>
     <string name="target_reached">¡Objetivo alcanzado!</string>
     <string name="setup_rejects_dialog_text">¿Quiere informar algunos como rechazos?</string>
-    <string name="setup_good_units_dialog_text">¿Quiere informar alguno de ellos como buenas unidades?</string>
+    <string name="setup_good_units_dialog_text">¿Desea notificar algunos como &placeholder1;?</string>
     <string name="on_the_setup_you_produced">En la configuración que produjo</string>
     <string name="from_the">desde el</string>
     <string name="activate_last_job">Activar último trabajo</string>
@@ -380,8 +380,8 @@
     <string name="filter_by">Filtrar por</string>
     <string name="index">ÍNDICE</string>
     <string name="catalog_maj">CATÁLOGO</string>
-    <string name="units_target">OBJETIVO DE UNIDADES</string>
-    <string name="units_produced">UNIDADES PRODUCIDAS</string>
+    <string name="units_target">&placeholder1; objetivo</string>
+    <string name="units_produced">&placeholder1; producidas</string>
     <string name="end_time_actual">HORA DE FINALIZACIÓN (REAL)</string>
     <string name="job_left_time">TIEMPO RESTANTE DEL TRABAJO</string>
     <string name="number_of_jobs">número de trabajos</string>
@@ -391,8 +391,8 @@
     <string name="shift_report">Informe de turnos</string>
     <string name="you_have">Tiene</string>
     <string name="jobs_on_this_shift">Trabajos en este turno</string>
-    <string name="report_cycle_failed_but_max_reported">el valor que eligió para informar la unidad del ciclo supera el valor máximo. Se informó el valor máximo.</string>
-    <string name="report_cycle_failed_but_min_reported">el valor que eligió para informar la unidad del ciclo no llega al valor mínimo. Se informó el valor mínimo.</string>
+    <string name="report_cycle_failed_but_max_reported">el valor que fijó para notificar las &placeholder1; del ciclo está por encima del valor máx.; el valor máx. se notificó</string>
+    <string name="report_cycle_failed_but_min_reported">el valor que fijó para notificar las &placeholder1; del ciclo está por debajo del valor mín.; el valor mín. se notificó</string>
     <string name="min_value_is">el valor mínimo es</string>
     <string name="next_job_will_start_in">El próximo trabajo empezará en</string>
     <string name="start_job_now">Empezar trabajo ahora</string>

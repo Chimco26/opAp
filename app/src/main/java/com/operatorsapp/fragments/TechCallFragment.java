@@ -490,15 +490,18 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                     }
                     pm.setCalledTechnicianList(mTechCallList);
                     mListener.onGetNotificationsFromServer();
-                    setOpenCalls(0);
-//                    setOpenCalls(((LinearLayoutManager) mRecycler.getLayoutManager()).findFirstCompletelyVisibleItemPosition());
                 }else {
-                    onFailure(call, new Throwable());
+                    String msg = "failed";
+                    if (response.body()!= null && !response.body().isNoError()){
+                        msg = response.body().getError().getErrorDesc();
+                    }
+                    onFailure(call, new Throwable(msg));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
+                mListener.onGetNotificationsFromServer();
             }
         });
     }
@@ -550,9 +553,6 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                             PersistenceManager.getInstance().setRecentTechCallId(mTechCallList.get(0).getmNotificationId());
                         }
                         mListener.onGetNotificationsFromServer();
-                        if (mRecycler != null && mRecycler.getLayoutManager() != null)
-                            setOpenCalls(0);
-//                            setOpenCalls(((LinearLayoutManager) mRecycler.getLayoutManager()).findFirstCompletelyVisibleItemPosition());
                     }else {
                         onFailure(call, new Throwable());
                     }
@@ -560,6 +560,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
 
                 @Override
                 public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
+                    mListener.onGetNotificationsFromServer();
                 }
             });
         }else {

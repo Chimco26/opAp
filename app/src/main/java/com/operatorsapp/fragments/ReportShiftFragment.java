@@ -448,14 +448,10 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             if (min != null && min == 0){min = -0.1f;}
             if (max != null && max == 0){max = 0.1f;}
             if (min != null) {
-                if (max != null) {
-                    graph.getAxisLeft().setAxisMinimum(min - Math.abs(max) / 10);
-                }else {
-                    graph.getAxisLeft().setAxisMinimum(min - Math.abs(min) / 10);
-                }
+                graph.getAxisLeft().setAxisMinimum(min - (max - min) / 10);
             }
             if (max != null) {
-                graph.getAxisLeft().setAxisMaximum(max + Math.abs(max) / 10);
+                graph.getAxisLeft().setAxisMaximum(max + (max - min) / 10);
             }
         }
         graph.notifyDataSetChanged();

@@ -134,6 +134,7 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
 
         mUnitsEditText = (EditText) view.findViewById(R.id.units_edit_text);
         mWeightEditText = (EditText) view.findViewById(R.id.weight_edit_text);
+        ((TextView)view.findViewById(R.id.FRRSP_units_tv)).setText(PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units"));
 
         mUnitsEditText.setFocusableInTouchMode(true);
         mUnitsEditText.requestFocus();

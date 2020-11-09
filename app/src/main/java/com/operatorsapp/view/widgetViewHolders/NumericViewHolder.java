@@ -115,6 +115,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mWeightRadioBtn = itemView.findViewById(R.id.NWC_edit_weight_btn);
         mWeightRadioBtn.setChecked(PersistenceManager.getInstance().getReportRejectDefaultUnits() != 1);
         mStep1CancelBtn = itemView.findViewById(R.id.NWC_edit_cancel_btn);
+        ((TextView)itemView.findViewById(R.id.NWC_units_tv)).setText(PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units"));
 
         mEditStep2Ly = itemView.findViewById(R.id.NWC_edit_step_2_ly);
         mSpinner1 = itemView.findViewById(R.id.NWC_reason_spinner);
@@ -416,7 +417,9 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
                 case REPORT_UNIT_CYCLE_TAG:
                     if (mShowChangeUnitInCycle) {
                         mEditLy.setVisibility(View.VISIBLE);
-                        mEditBtn.setText(mEditBtn.getContext().getResources().getString(R.string.report_cycle_units));
+                        String txt = mEditBtn.getContext().getResources().getString(R.string.report_cycle_nunits);
+                        txt = txt.replace(mEditBtn.getContext().getResources().getString(R.string.placeholder1), PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units"));
+                        mEditBtn.setText(txt);
                         addEditClickListener(widget);
                     } else {
                         mEditLy.setVisibility(View.GONE);

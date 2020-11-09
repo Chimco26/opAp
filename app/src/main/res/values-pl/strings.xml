@@ -62,7 +62,7 @@
     <string name="product_name">Nazwa produktu</string>
     <string name="erp">ERP</string>
     <string name="planned_start">Zaplanowane uruchomienie</string>
-    <string name="number_of_units">Liczba jednostek</string>
+    <string name="number_of_units">Liczba &placeholder1;</string>
     <string name="new_job">Nowe zadanie</string>
     <string name="new_job_details">Szczegóły nowego zadania</string>
     <string name="product_id">Ident. produktu</string>
@@ -100,8 +100,8 @@
     <string name="report_stop_event_reason">Zgłoś powód zatrzymania zdarzenia</string>
     <string name="report_stop_reason">Zgłoś powód\nzatrzymania</string>
     <string name="report_reject_nreason">Zgłoś powód\nodrzucenia</string>
-    <string name="report_cycle_nunits">Zmień jednostki w \ncyklu</string>
-    <string name="report_cycle_units">Zmień jednostki w cyklu</string>
+    <string name="report_cycle_nunits">Zmiana &placeholder1; w cyklu</string>
+    <string name="report_cycle_units">Zmiana &placeholder1; w cyklu</string>
     <string name="report_inventory_nitem_production">Zgłoś produkcję \n</string>
     <string name="report_inventory_item_production">Zgłoś produkcję</string>
     <string name="package_type">Typ pakietu</string>
@@ -162,8 +162,8 @@
     <string name="materials">Materiały</string>
     <string name="mold">Forma</string>
     <string name="mold_catalog">Katalog form</string>
-    <string name="cavities_actual">Jednostki w aktualnym cyklu</string>
-    <string name="cavities_standard">Jednostki w STD cyklu</string>
+    <string name="cavities_actual">&placeholder1;rzeczywiście w cyklu</string>
+    <string name="cavities_standard">&placeholder1; standardowo w cyklu</string>
     <string name="actions">Działania</string>
     <string name="action_details">Szczegóły działań</string>
     <string name="you_can_add_a_note">Można dodać notatkę</string>
@@ -195,7 +195,7 @@
     <string name="submit">zatwierdź</string>
     <string name="edit_note">Edytuj notatkę</string>
     <string name="enter_note_here">Wprowadź notatkę w tym miejscu</string>
-    <string name="fill_units_or_weight">* Raportuj Jednostki lub Wagę</string>
+    <string name="fill_units_or_weight">* Zgłoś &placeholder1; lub wagę</string>
     <string name="machine">Urządzenie</string>
     <string name="activate_job_dialog_message">Aktywujesz nowe zadanie, \n czy na pewno chcesz kontynuować?</string>
     <string name="activate_job_dialog_title">Aktywuj nowe zadanie</string>
@@ -291,7 +291,7 @@
     <string name="keep_reporting_events_reason">Zgłaszaj powód zdarzeń</string>
     <string name="target_reached">Cel osiągnięty!</string>
     <string name="setup_rejects_dialog_text">Czy chcesz zgłosić kilka z nich jako odrzucone?</string>
-    <string name="setup_good_units_dialog_text">Czy chcesz zgłosić kilka z nich jako prawidłowe jednostki?</string>
+    <string name="setup_good_units_dialog_text">Czy chcesz zgłosić niektóre z nich jako &placeholder1;?</string>
     <string name="on_the_setup_you_produced">W trybie konfiguracji wyprodukowałeś(-aś)</string>
     <string name="from_the">z</string>
     <string name="activate_last_job">Aktywuj ostatnie zadanie</string>
@@ -347,8 +347,8 @@
     <string name="active_jobs">Aktywne zadania</string>
     <string name="index">INDEKS</string>
     <string name="catalog_maj">KATALOG</string>
-    <string name="units_target">CEL W JEDNOSTKACH</string>
-    <string name="units_produced">WYPRODUKOWANO JEDNOSTEK</string>
+    <string name="units_target">Cel: &placeholder1;</string>
+    <string name="units_produced">Wyprodukowano: &placeholder1;</string>
     <string name="end_time_actual">CZAS ZAKOŃCZENIA (AKTUALNY)</string>
     <string name="job_left_time">POZOSTAŁY CZAS ZADANIA</string>
     <string name="number_of_jobs">liczba zadań</string>
@@ -358,8 +358,8 @@
     <string name="you_have">Masz</string>
     <string name="cycle_time">czas cyklu</string>
     <string name="jobs_on_this_shift">zadania/zadań dla tej zmiany</string>
-    <string name="report_cycle_failed_but_max_reported">wartość, za pomocą której ustawiłeś(-aś) zgłaszanie jednostki cyklu, jest większa od wartości maksymalnej, zgłoszono maks. wartość</string>
-    <string name="report_cycle_failed_but_min_reported">wartość, za pomocą której ustawiłeś(-aś) zgłaszanie jednostki cyklu, jest mniejsza od wartości minimalnej, zgłoszono min. wartość</string>
+    <string name="report_cycle_failed_but_max_reported">wartość, którą ustawiłeś(-aś) w celu zgłoszenia cyklu &placeholder1; przekracza wartość maks., zgłoszono maks. wartość</string>
+    <string name="report_cycle_failed_but_min_reported">wartość, którą ustawiłeś(-aś) w celu zgłoszenia cyklu &placeholder1; jest mniejsza od wartości min., zgłoszono min. wartość</string>
     <string name="min_value_is">min. wartość to</string>
     <string name="next_job_will_start_in">Kolejne zadanie rozpocznie się za</string>
     <string name="start_job_now">Rozpocznij zadanie teraz</string>

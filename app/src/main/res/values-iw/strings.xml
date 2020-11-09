@@ -49,7 +49,7 @@
     <string name="product_name">שם מוצר</string>
     <string name="erp">מזהה ERP</string>
     <string name="planned_start">התחלה מתוכננת</string>
-    <string name="number_of_units">מספר יחידות</string>
+    <string name="number_of_units">מספר &placeholder1;</string>
     <string name="new_job">פק"ע חדשה</string>
     <string name="new_job_details">פרטי פק"ע חדשה</string>
     <string name="product_id">מזהה מוצר</string>
@@ -91,8 +91,8 @@
 
 
     <string name="material_weight_alarm">התראת משקל חומר גלם</string>
-    <string name="report_cycle_nunits">שינוי יחידות\nבמחזור</string>
-    <string name="report_cycle_units">שינוי יחידות במחזור</string>
+    <string name="report_cycle_nunits">שינוי &placeholder1;\\nבמחזור</string>
+    <string name="report_cycle_units">שינוי &placeholder1; במחזור</string>
     <string name="report_inventory_nitem_production">דיווח\nייצור</string>
     <string name="report_inventory_item_production">דיווח ייצור</string>
     <string name="settings">הגדרות</string>
@@ -211,8 +211,8 @@
     <string name="materials">חומרים</string>
     <string name="mold">תבנית</string>
     <string name="mold_catalog">מק״ט תבנית</string>
-    <string name="cavities_actual">יחידות בפועל</string>
-    <string name="cavities_standard">תקן יחידות</string>
+    <string name="cavities_actual">&placeholder1;במחזור בפועל</string>
+    <string name="cavities_standard">תקן &placeholder1; במחזור</string>
     <string name="actions">פעולות</string>
     <string name="action_details">פרטי פעולה</string>
     <string name="you_can_add_a_note">ניתן להוסיף הערה</string>
@@ -232,7 +232,7 @@
     <string name="submit">שמור</string>
     <string name="sign_out">התנתקות</string>
     <string name="add_note">הוסף הערה</string>
-    <string name="fill_units_or_weight">* נא להזין יחידות או משקל</string>
+    <string name="fill_units_or_weight">* נא להזין &placeholder1; או משקל</string>
     <string name="loading_file">טוען קובץ...</string>
     <string name="loading_error">תקלת טעינה</string>
     <string name="tutorial_swipe">החלק ימינה את לוח המכוונים כדי לראות את המתכון של פקודת העבודה הנוכחית</string>
@@ -295,7 +295,7 @@
     <string name="keep_reporting_events_reason">המשך דיווח סיבות עצירה</string>
     <string name="target_reached">היעד הגיע!</string>
     <string name="setup_rejects_dialog_text">האם ברצונך לדווח חלק כיחידות פסולות?</string>
-    <string name="setup_good_units_dialog_text">האם ברצונך לדווח חלק כיחידות ייצור טובות?</string>
+    <string name="setup_good_units_dialog_text">האם ברצונך לדווח חלק כ&placeholder1;?</string>
     <string name="on_the_setup_you_produced">בזמן הסט-אפ נוצרו</string>
     <string name="from_the">מהמוצר</string>
     <string name="good_units">יחידות ייצור טובות</string>
@@ -403,16 +403,16 @@
     <string name="filter_by">סינון לפי</string>
     <string name="index">אינדקס</string>
     <string name="catalog_maj">קטלוג</string>
-    <string name="units_target">יעד היחידות</string>
-    <string name="units_produced">יחידות מיוצרות</string>
+    <string name="units_target">יעד &placeholder1;</string>
+    <string name="units_produced">&placeholder1; שיוצרו</string>
     <string name="end_time_actual">זמן סיום (בפועל)</string>
     <string name="job_left_time">זמן שנותר לסיום הפק\"ע</string>
     <string name="number_of_jobs">מספר פק\"עות</string>
     <string name="type_something">הקלד..</string>
     <string name="cycle_time">זמן מחזור</string>
     <string name="jobs_on_this_shift">פק\"עות במשמרת הנוכחית</string>
-    <string name="report_cycle_failed_but_max_reported">הערך שהגדרת ליחידות במחזור הוא מעל לערך המקסימלי, הערך המקסימלי לדיווח</string>
-    <string name="report_cycle_failed_but_min_reported">הערך שהגדרת ליחידות במחזור הוא מתחת לערך המינימלי, הערך המינימלי לדיווח</string>
+    <string name="report_cycle_failed_but_max_reported">הערך שהגדרת ל&placeholder1; במחזור הוא מעל לערך המקסימלי, הערך המקסימלי לדיווח</string>
+    <string name="report_cycle_failed_but_min_reported">הערך שהגדרת ל&placeholder1; במחזור הוא מתחת לערך המינימלי, הערך המינימלי לדיווח</string>
     <string name="min_value_is">הערך המינימלי הוא</string>
     <string name="next_job_will_start_in">הפק\"ע הבאה תחל בעוד</string>
     <string name="start_job_now">התחל פק\"ע עכשיו</string>

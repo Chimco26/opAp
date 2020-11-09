@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Material;
 import com.operatorsapp.R;
+import com.operatorsapp.managers.PersistenceManager;
 
 import java.util.List;
 
@@ -44,7 +45,8 @@ public class JobMaterialsSplitAdapter extends RecyclerView.Adapter<JobMaterialsS
 
         String str = mMaterials.get(position).getAmount() + " ";
         if (mMaterials.get(position).getAmountUnits().contains("1")){
-            str += mContext.getString(R.string.units);
+            str += PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units");
+//            str += mContext.getString(R.string.units);
         }else {
             str += mContext.getString(R.string.kg);
         }

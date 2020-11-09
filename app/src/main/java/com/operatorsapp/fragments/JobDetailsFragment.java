@@ -231,6 +231,13 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
         mMoldCavitiesActualTv = mMoldItem.findViewById(R.id.IJAM_mold3_tv2);
 
         mMoldCavitiesStandardTv = mMoldItem.findViewById(R.id.IJAM_mold4_tv2);
+
+        String txt = getResources().getString(R.string.cavities_actual);
+        txt = txt.replace(getResources().getString(R.string.placeholder1), PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units"));
+        ((TextView)view.findViewById(R.id.IJAM_mold3_tv1)).setText(txt);
+        txt = getResources().getString(R.string.cavities_standard);
+        txt = txt.replace(getResources().getString(R.string.placeholder1), PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units"));
+        ((TextView)view.findViewById(R.id.IJAM_mold4_tv1)).setText(txt);
     }
 
     private void initVarsMaterialItem(View view) {

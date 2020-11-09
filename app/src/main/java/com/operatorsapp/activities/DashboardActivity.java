@@ -159,6 +159,7 @@ import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
+import com.operatorsapp.server.responses.ResponseKPIS;
 import com.operatorsapp.server.responses.StopReasonsGroup;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.Consts;
@@ -197,6 +198,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 import ravtech.co.il.publicutils.JobBase;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 //import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
@@ -871,6 +873,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         OppAppLogger.d(TAG, "onResume()");
 
         pollingBackup(true);
+        getKPIS();
 
         if (!ignoreFromOnPause) {
 
@@ -3341,6 +3344,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     }
 
+    private void getKPIS() {
+        NetworkManager.getInstance().getKPIs(new Callback<ResponseKPIS>() {
+            @Override
+            public void onResponse(Call<ResponseKPIS> call, Response<ResponseKPIS> response) {
+                PersistenceManager.getInstance().setTranslationForKPIS(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseKPIS> call, Throwable t) {
+                PersistenceManager.getInstance().setTranslationForKPIS(null);
+            }
+        });
+    }
+
     private void setupVersionCheck() {
         if (mVersionCheckHandler != null) {
             mVersionCheckHandler.removeCallbacksAndMessages(null);
@@ -3350,6 +3367,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mCheckAppVersionRunnable = new Runnable() {
             @Override
             public void run() {
+                getKPIS();
                 NetworkManager.getInstance().GetApplicationVersion(new Callback<AppVersionResponse>() {
                     @Override
                     public void onResponse(Call<AppVersionResponse> call, retrofit2.Response<AppVersionResponse> response) {
@@ -3438,6 +3456,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         myIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(myIntent);
         finish();
+    }
+
+    @Override
+    public void onQCTestSelected() {
+        onOpenQCActivity();
     }
 
     @Override

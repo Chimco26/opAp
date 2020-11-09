@@ -142,6 +142,7 @@
                         android:layout_weight="0.25" />
 
                     <TextView
+                        android:id="@+id/FRCU_units_subtitle_tv"
                         style="@style/FontStyle_T120"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
@@ -195,6 +196,7 @@
                         android:weightSum="4">
 
                         <TextView
+                            android:id="@+id/FRCU_units_tv"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1.5"

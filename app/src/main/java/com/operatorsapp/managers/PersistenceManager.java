@@ -22,6 +22,7 @@ import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.server.responses.Notification;
+import com.operatorsapp.server.responses.ResponseKPIS;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.SecurePreferences;
 import com.operatorsapp.utils.SendReportUtil;
@@ -119,6 +120,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String LINE_LAST_EVENT = "LINE_LAST_EVENT";
     private static final String TECHNICIANS_LIST = "TECHNICIANS_LIST";
     private static final String PENDING_JOB_SAVED_FILTERS = "PENDING_JOB_SAVED_FILTERS";
+    private static final String KPI_LIST = "KPI_LIST";
 
 
     private static PersistenceManager msInstance;
@@ -1006,5 +1008,14 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
         HashMap<String, String> map = mGson.fromJson(savedFilters, listType);
         return map != null ? map : new HashMap<String, String>();
+    }
+
+    public void setTranslationForKPIS(ResponseKPIS kpiList) {
+        SecurePreferences.getInstance().setString(KPI_LIST, mGson.toJson(kpiList));
+    }
+
+    public ResponseKPIS getTranslationForKPIS() {
+        String str = SecurePreferences.getInstance().getString(KPI_LIST, "");
+        return mGson.fromJson(str, ResponseKPIS.class);
     }
 }

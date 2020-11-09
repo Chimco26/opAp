@@ -4,6 +4,14 @@
     <!ENTITY placeholder2 "matics_placeholder_matics_number_2">
     ]>
 <resources>
+    <array name="jobs_spinner_array">
+        <item>Attivare Lavoro</item>
+        <item>Dichiara sottoprodotto</item>
+        <item>Cambia unità nel ciclo</item>
+        <item>Rapporto Produzione</item>
+        <item>Test dell\'ordine</item>
+    </array>
+
     <string name="app_name">Operatore Matics</string>
     <string name="_100">100%</string>
     <string name="action_details">Dettaglio Azioni</string>
@@ -41,10 +49,10 @@
     <string name="started_service">Chiamata in attesa</string>
     <string name="call_declined2">Una chiamata fatta dall\'operatore 51$s è stata rifiutata</string>
     <string name="call_approved2">Una chiamata fatta dall\'operatore &placeholder1; è stata approvata</string>
-    <string name="fill_units_or_weight">* per favore indica Unità o Peso</string>
+    <string name="fill_units_or_weight">* Indica &placeholder1; o Peso</string>
     <string name="change_factory">Cambio Fabbrica</string>
     <string name="change_material">Cambio materiale</string>
-    <string name="report_cycle_units">Cambio Unità in Ciclo</string>
+    <string name="report_cycle_units">Cambia &placeholder1; in Ciclo</string>
     <string name="channel_0">Canale 0</string>
     <string name="channel_100">Canale 100</string>
     <string name="channel_1_99">Canale 1-99</string>
@@ -59,7 +67,7 @@
     <string name="login_dialog_dismiss_all">DISMISS PER QUESTO TURNO</string>
     <string name="required_setup">Il lavoro richiede settaggio prima dell\'attivazione?</string>
     <string name="do_you_want_to_activate_the_last_job_you_work_on_job">Vuoi attivare l\'ultimo lavoro sul quale hai lavorato?</string>
-    <string name="setup_good_units_dialog_text">Voui registrare alcuni di questi come buoni?</string>
+    <string name="setup_good_units_dialog_text">Vuoi segnalare alcuni di loro come &placeholder1;?</string>
     <string name="setup_rejects_dialog_text">Vuoi registrare alcuni di questi come scarti?</string>
     <string name="do_you_need_to_end_setup_before">Devi fare il settaggio prima di ricominciare la produzione di questo lavoro?</string>
     <string name="dont_activate">Non attivare</string>
@@ -171,7 +179,7 @@
     <string name="no_reasons">No rapporti disponibili</string>
     <string name="no_setup">No Settaggio</string>
     <string name="notes">Note</string>
-    <string name="number_of_units">Numero di Unità</string>
+    <string name="number_of_units">Numero di &placeholder1;</string>
     <string name="ok">OK</string>
     <string name="on_the_setup_you_produced">Prodotto durante l\'avvio</string>
     <string name="open_calls">Chiamate aperte</string>
@@ -283,8 +291,8 @@
     <string name="total_required">Totale richiesto</string>
     <string name="under_maintenance">In manutenzione</string>
     <string name="units">Unità</string>
-    <string name="cavities_actual">Unità nel Ciclo Attuale</string>
-    <string name="cavities_standard">Unità nel Ciclo STD</string>
+    <string name="cavities_actual">&placeholder1; in Ciclo effettivo</string>
+    <string name="cavities_standard">&placeholder1; in Ciclo STD</string>
     <string name="unknown">Sconosciuto</string>
     <string name="unrecognized_operator">Operatore non riconosciuto</string>
     <string name="unreported">Non registrato</string>
@@ -326,8 +334,8 @@
     <string name="filter_by">Filtra per</string>
     <string name="index">INDICE</string>
     <string name="catalog_maj">CATALOGO</string>
-    <string name="units_target">UNITÀ TARGET</string>
-    <string name="units_produced">UNITÀ PRODOTTA</string>
+    <string name="units_target">&placeholder1; obiettivo</string>
+    <string name="units_produced">&placeholder1; prodotti</string>
     <string name="end_time_actual">ORA DI FINE (ATTUALE)</string>
     <string name="job_left_time">TEMPO RIMANENTE LAVORO</string>
     <string name="number_of_jobs">numero di lavori</string>
@@ -337,8 +345,8 @@
     <string name="shift_report">Rapporto turni</string>
     <string name="you_have">Hai</string>
     <string name="jobs_on_this_shift">Lavori in questo turno</string>
-    <string name="report_cycle_failed_but_max_reported">il valore da te definito per segnalare la unità di ciclo supera il valore massimo. Il valore massimo è stato segnalato</string>
-    <string name="report_cycle_failed_but_min_reported">il valore da te definito per segnalare l\'unità di ciclo è inferiore al valore minimo. Il valore minimo è stato segnalato</string>
+    <string name="report_cycle_failed_but_max_reported">il valore configurato nella segnalzione Ciclo &placeholder1; supera il valore max; è stato segnalato il valore max</string>
+    <string name="report_cycle_failed_but_min_reported">il valore configurato nella segnalazione Ciclo &placeholder1; è inferiore al valore min.; è stato segnalato il valore min.</string>
     <string name="min_value_is">il valore minimo è</string>
     <string name="next_job_will_start_in">Il lavoro successivo inizierà tra</string>
     <string name="start_job_now">Inizia il lavoro adesso</string>
@@ -367,7 +375,7 @@
     <string name="activate_job_dialog_title">Inizia Nuovo Lavoro</string>
     <string name="alarm">Allarmi</string>
     <string name="recipe_fields">Campi ricetta</string>
-    <string name="report_cycle_nunits">Cambio Unità in\\nCiclo</string>
+    <string name="report_cycle_nunits">Cambia &placeholder1; in Ciclo</string>
     <string name="quality_group">Gruppo qualità</string>
     <string name="product_group">Gruppo di prodotti</string>
     <string name="already_in_the_perators_list">Già inserito nell\'elenco degli operatori</string>

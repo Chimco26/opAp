@@ -8,23 +8,50 @@
     android:orientation="vertical"
     android:weightSum="10">
 
-    <Button
-        android:id="@+id/FSM_change_factory_btn"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="end"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
-        android:layout_weight="1.25"
-        android:background="@color/blue1"
-        android:padding="10dp"
-        android:text="@string/change_factory"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="22sp"
-        android:visibility="visible"
-        app:autoSizeMaxTextSize="22sp"
-        app:autoSizeTextType="uniform" />
+        android:layout_marginStart="30dp"
+        android:layout_weight="1.25">
+
+        <Button
+            android:id="@+id/FSM_qc_test_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/blue1"
+            android:padding="10dp"
+            android:text="@string/quality_test"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:visibility="visible"
+            app:autoSizeMaxTextSize="22sp"
+            app:autoSizeTextType="uniform" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/FSM_change_factory_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/blue1"
+            android:padding="10dp"
+            android:text="@string/change_factory"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:visibility="visible"
+            app:autoSizeMaxTextSize="22sp"
+            app:autoSizeTextType="uniform" />
+    </LinearLayout>
+
 
     <View
         android:layout_width="match_parent"

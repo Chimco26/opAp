@@ -42,7 +42,7 @@
     <string name="product_name">Найменування продукту</string>
     <string name="erp">ERP</string>
     <string name="planned_start">Запланований старт</string>
-    <string name="number_of_units">Кількість одиниць</string>
+    <string name="number_of_units">Кількість &placeholder1;</string>
     <string name="new_job">Нове завдання</string>
     <string name="new_job_details">Деталі нового завдання</string>
     <string name="product_id">ID продукту</string>
@@ -81,8 +81,8 @@
     <string name="report_reject_nreason">Звіт з\nбраку</string>
     <string name="report_stop_start">"Старт "</string>
     <string name="report_stop_resume">"Закінчення"</string>
-    <string name="report_cycle_nunits">Змінити кількість\nодиниць в циклі</string>
-    <string name="report_cycle_units">Змінити кількість одиниць в циклі</string>
+    <string name="report_cycle_nunits">Змінити &placeholder1; в циклі</string>
+    <string name="report_cycle_units">Змінити &placeholder1; в циклі</string>
     <string name="report_inventory_nitem_production">Виробничий звіт</string>
     <string name="report_inventory_item_production">Інвентаризаційний звіт</string>
     <string name="package_type">Тип пакету</string>
@@ -191,8 +191,8 @@
     <string name="call_technician_title">Виклик техніка</string>
     <string name="called_technician">Викликано техніка</string>
     <string name="catalog">Каталог</string>
-    <string name="cavities_actual">Фактичний час циклу</string>
-    <string name="cavities_standard">Стандартний час циклу</string>
+    <string name="cavities_actual">&placeholder1; в циклі поточно</string>
+    <string name="cavities_standard">&placeholder1; в циклі СТАНД</string>
     <string name="channel_0">Канал-0</string>
     <string name="channel_1_99">Канал 1-99</string>
     <string name="channel_100">Канал 100</string>
@@ -202,7 +202,7 @@
     <string name="end_setup_success">Налаштування завершено успішно</string>
     <string name="enter_note_here">Введить тут свої нотатки</string>
     <string name="events_selected">Обрано події:</string>
-    <string name="fill_units_or_weight">*Введіть кількість чи вагу</string>
+    <string name="fill_units_or_weight">*Будь ласка, повідомте &placeholder1; або вагу</string>
     <string name="general">Загальні</string>
     <string name="get_jobs_details_failed_error">Помилка імпорту відомостей про роботу</string>
     <string name="get_panding_jobs_failed_error">Помилка імпорту списку робочих завдань</string>
@@ -325,7 +325,7 @@
     <string name="keep_reporting_events_reason">Продовжити звітувати про подію</string>
     <string name="target_reached">Досягнуто мети!</string>
     <string name="setup_rejects_dialog_text">Хочете повідомити про деякі з них як про відхилення?</string>
-    <string name="setup_good_units_dialog_text">Хочете повідомити про деякі з них як про хороші одиниці?</string>
+    <string name="setup_good_units_dialog_text">Хочете повідомити про деякі з них як &placeholder1;?</string>
     <string name="on_the_setup_you_produced">Під час налаштування</string>
     <string name="from_the">від</string>
     <string name="activate_last_job">Активувати останнє завдання</string>
@@ -378,8 +378,8 @@
     <string name="filter_by">Фільтрувати за</string>
     <string name="index">ІНДЕКС</string>
     <string name="catalog_maj">КАТАЛОГ</string>
-    <string name="units_target">ЦІЛЬОВІ ОДИНИЦІ</string>
-    <string name="units_produced">ВИРОБЛЕНІ ОДИНИЦІ</string>
+    <string name="units_target">&placeholder1; ціль</string>
+    <string name="units_produced">&placeholder1; вироблено</string>
     <string name="end_time_actual">ЧАС ЗАКІНЧЕННЯ (ФАКТИЧНИЙ)</string>
     <string name="job_left_time">ЧАС ДО ЗАКІНЧЕННЯ ЗАВДАННЯ</string>
     <string name="number_of_jobs">кількість робочих місць</string>
@@ -389,8 +389,8 @@
     <string name="shift_report">Звіт за зміну</string>
     <string name="you_have">Ви маєте</string>
     <string name="jobs_on_this_shift">Завдання протягом цієї зміни</string>
-    <string name="report_cycle_failed_but_max_reported">значення, яке ви встановили для повідомлення про одиницю циклу, перебільшує максимальне значення; було повідомлено максимальне значення</string>
-    <string name="report_cycle_failed_but_min_reported">значення, яке ви встановили для повідомлення про одиницю циклу, нижче за мінімальне значення; було повідомлено мінімальне значення</string>
+    <string name="report_cycle_failed_but_max_reported">значення, яке ви встановили для звіту про цикл &placeholder1;, перевищує максимальне значення, максимальне значення було повідомлено</string>
+    <string name="report_cycle_failed_but_min_reported">значення, яке ви встановили для звіту про цикл &placeholder1;, знаходиться нижче мінімального значення, мінімальне значення було повідомлено</string>
     <string name="min_value_is">мінімальне значення</string>
     <string name="next_job_will_start_in">Наступне завдання почнеться через</string>
     <string name="start_job_now">Почати завдання зараз</string>

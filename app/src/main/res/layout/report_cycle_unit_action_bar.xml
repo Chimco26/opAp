@@ -31,6 +31,7 @@
         </LinearLayout>
 
         <me.grantland.widget.AutofitTextView
+            android:id="@+id/report_cycle_unit_actionbar_units_tv"
             style="@style/Roboto_Action_Bar_Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

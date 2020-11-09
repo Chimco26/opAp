@@ -47,7 +47,7 @@
     <string name="product_name">Produktname</string>
     <string name="erp">ERP</string>
     <string name="planned_start">Geplanter Beginn</string>
-    <string name="number_of_units">Anzahl der Einheiten</string>
+    <string name="number_of_units">Anzahl der &placeholder1;</string>
     <string name="new_job">Neue Aktivitaeten</string>
     <string name="new_job_details">Details - Neuer Auftrag</string>
     <string name="product_id">Produkt-ID</string>
@@ -87,8 +87,8 @@
     <string name="report_reject_nreason">Report Reject\nReason</string>
     <string name="report_stop_start">"Beginn "</string>
     <string name="report_stop_resume">"Ende"</string>
-    <string name="report_cycle_nunits">Report: Zykluszeiten \n</string>
-    <string name="report_cycle_units">Report: Zykluszeiten</string>
+    <string name="report_cycle_nunits">&placeholder1; im Zyklus ändern</string>
+    <string name="report_cycle_units">&placeholder1; im Zyklus ändern</string>
     <string name="report_inventory_nitem_production">Report: Produktion \n</string>
     <string name="report_inventory_item_production">Report: Produktion</string>
     <string name="package_type">Verpackungstyp</string>
@@ -192,8 +192,8 @@
     <string name="call_technician_title">Einrichter benachrichtigen</string>
     <string name="called_technician">Benachrichtigter Einrichter</string>
     <string name="catalog">Katalog</string>
-    <string name="cavities_actual">Aktuelle Kavität</string>
-    <string name="cavities_standard">Bauteile je Stunde</string>
+    <string name="cavities_actual">Tatsächliche &placeholder1; in Zyklus</string>
+    <string name="cavities_standard">&placeholder1; in Zyklus STD</string>
     <string name="channel_0">Kanal 0</string>
     <string name="channel_1_99">Kanal 1-99</string>
     <string name="channel_100">Kanal 100</string>
@@ -203,7 +203,7 @@
     <string name="end_setup_success">Rüstvorgang erfolgreich beendet</string>
     <string name="enter_note_here">Hier können Sie eine Notiz eingeben</string>
     <string name="events_selected">Ausgewählte Ereignisse:</string>
-    <string name="fill_units_or_weight">Bitte geben Sie die Stückzahl oder das Gewicht an.</string>
+    <string name="fill_units_or_weight">* Bitte melden Sie &placeholder1; oder Gewicht</string>
     <string name="general">Allgemeines</string>
     <string name="get_jobs_details_failed_error">Fehler beim Öffnen der Auftrags-Details.</string>
     <string name="get_panding_jobs_failed_error">Fehler beim Importieren der Liste mit ausstehenden Arbeitsaufträgen.</string>
@@ -330,7 +330,7 @@
     <string name="keep_reporting_events_reason">Grund für die Meldung von Ereignissen aufbewahren</string>
     <string name="target_reached">Ziel erreicht!</string>
     <string name="setup_rejects_dialog_text">Möchten Sie einige von ihnen als Ausschuss melden?</string>
-    <string name="setup_good_units_dialog_text">Möchten Sie einige von ihnen als gute Einheiten melden?</string>
+    <string name="setup_good_units_dialog_text">Möchten Sie einige von ihnen als &placeholder1; melden?</string>
     <string name="on_the_setup_you_produced">Auf dem Setup, das Sie produziert haben</string>
     <string name="from_the">von der/dem</string>
     <string name="activate_last_job">Letzten Auftrag aktivieren</string>
@@ -383,8 +383,8 @@
     <string name="filter_by">Filtern nach</string>
     <string name="index">INDEX</string>
     <string name="catalog_maj">KATALOG</string>
-    <string name="units_target">EINHEITEN-ZIEL</string>
-    <string name="units_produced">PRODUZIERTE EINHEITEN</string>
+    <string name="units_target">&placeholder1;-Ziel</string>
+    <string name="units_produced">&placeholder1; produziert</string>
     <string name="end_time_actual">ENDZEIT (IST)</string>
     <string name="job_left_time">JOB – VERBLEIBENDE ZEIT</string>
     <string name="number_of_jobs">Anzahl der Jobs</string>
@@ -394,8 +394,8 @@
     <string name="shift_report">Schichtbericht</string>
     <string name="you_have">Sie haben</string>
     <string name="jobs_on_this_shift">Jobs in dieser Schicht</string>
-    <string name="report_cycle_failed_but_max_reported">Der Wert, den Sie für die Anzeige der Zykluseinheit festlegen, liegt über dem Maximalwert. Der Maximalwert wurde gemeldet.</string>
-    <string name="report_cycle_failed_but_min_reported">Der Wert, den Sie für die Anzeige der Zykluseinheit festlegen, liegt unter dem Mindestwert. Der Mindestwert wurde gemeldet.</string>
+    <string name="report_cycle_failed_but_max_reported">Der Wert, den Sie für den Berichtszyklus &placeholder1; festgelegt haben, liegt über dem Maximalwert. Der Maximalwert wurde gemeldet</string>
+    <string name="report_cycle_failed_but_min_reported">Der Wert, den Sie für den Berichtszyklus &placeholder1; festgelegt haben, liegt unter dem Mindestwert. Der Mindestwert wurde gemeldet</string>
     <string name="min_value_is">Mindestwert ist</string>
     <string name="next_job_will_start_in">Nächster Job startet in</string>
     <string name="start_job_now">Job jetzt starten</string>

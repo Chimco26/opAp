@@ -12,6 +12,7 @@ import com.example.common.permissions.PermissionResponse;
 import com.example.common.reportShift.DepartmentShiftGraphRequest;
 import com.example.common.reportShift.DepartmentShiftGraphResponse;
 import com.example.common.reportShift.ServiceCallsResponse;
+import com.example.common.request.BaseRequest;
 import com.example.common.request.BaseTimeRequest;
 import com.example.common.request.MachineIdRequest;
 import com.operatorsapp.server.requests.CreateTaskNotesRequest;
@@ -28,6 +29,7 @@ import com.operatorsapp.server.requests.TechCall24HRequest;
 import com.operatorsapp.server.requests.TopNotificationRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
+import com.operatorsapp.server.responses.ResponseKPIS;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.StopReasonsResponse;
 import com.operatorsapp.server.responses.TaskNotesResponse;
@@ -115,4 +117,7 @@ public interface OpAppServiceRequests {
 
     @POST("/LeaderMESApi/GetTaskSteps")
     Call<TaskStepResponse> getTaskSteps(@Body GetTaskNoteRequest request);
+
+    @POST("/LeaderMESApi/GetTaskSteps")
+    Call<ResponseKPIS> getKPIs(@Body BaseRequest request);
 }

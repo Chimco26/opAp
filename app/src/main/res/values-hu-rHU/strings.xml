@@ -50,7 +50,7 @@
     <string name="product_name">termék név</string>
     <string name="erp">ERP</string>
     <string name="planned_start">Tervezett indítás</string>
-    <string name="number_of_units">Egységek száma</string>
+    <string name="number_of_units">&placeholder1; száma</string>
     <string name="new_job">Új Munka</string>
     <string name="new_job_details">Új munkakörök</string>
     <string name="product_id">Termék azonosító</string>
@@ -92,8 +92,8 @@
     <string name="report_reject_nreason">Jelentés elutasítása</string>
     <string name="report_stop_start">"Rajt"</string>
     <string name="report_stop_resume">"Vége"</string>
-    <string name="report_cycle_nunits">Egységek módosítása a ciklusban</string>
-    <string name="report_cycle_units">Egységek módosítása ciklusban</string>
+    <string name="report_cycle_nunits">&placeholder1; módosítása a ciklusban</string>
+    <string name="report_cycle_units">&placeholder1; módosítása a ciklusban</string>
     <string name="report_inventory_nitem_production">Jelentés készítése</string>
     <string name="report_inventory_item_production">Jelentés készítése</string>
     <string name="package_type">csomag Típus</string>
@@ -179,8 +179,8 @@
     <string name="materials">anyagok</string>
     <string name="mold">Öntőforma</string>
     <string name="mold_catalog">Mold Katalógus</string>
-    <string name="cavities_actual">Egységek ciklusban</string>
-    <string name="cavities_standard">Egységek ciklusban STD</string>
+    <string name="cavities_actual">&placeholder1; ciklusban, tényleges</string>
+    <string name="cavities_standard">&placeholder1; ciklusban STD</string>
     <string name="actions">Hozzászólások</string>
     <string name="action_details">Művelet részletei</string>
     <string name="you_can_add_a_note">Megadhat megjegyzést</string>
@@ -213,7 +213,7 @@
     <string name="submit">beküldése</string>
     <string name="edit_note">Megjegyzés módosítása</string>
     <string name="enter_note_here">Írja be ide</string>
-    <string name="fill_units_or_weight">* Kérjük, jelentse az egységeket vagy a súlyt</string>
+    <string name="fill_units_or_weight">* Jelentse a(z) &placeholder1;-t vagy a súlyt</string>
     <string name="machine">Gép</string>
     <string name="activate_job_dialog_message">Ha új dolgot akarsz aktiválni, biztosan folytatni akarod?</string>
     <string name="activate_job_dialog_title">Új munka aktiválása</string>
@@ -313,7 +313,7 @@
     <string name="keep_reporting_events_reason">Tartsa be a jelentési események okát</string>
     <string name="target_reached">A cél elérte!</string>
     <string name="setup_rejects_dialog_text">Szeretne néhányat elutasításként jelenteni?</string>
-    <string name="setup_good_units_dialog_text">Szeretne néhányat jó egységként jelenteni?</string>
+    <string name="setup_good_units_dialog_text">Bizonyos tételeket &placeholder1;-ként szeretné jelenteni?</string>
     <string name="on_the_setup_you_produced">A létrehozott beállításon</string>
     <string name="from_the">tól</string>
     <string name="activate_last_job">Aktiválja az utolsó munkát</string>
@@ -370,8 +370,8 @@
     <string name="active_jobs">Aktív munkák</string>
     <string name="index">INDEX</string>
     <string name="catalog_maj">Katalógus</string>
-    <string name="units_target">EGYSÉGEK TARGET</string>
-    <string name="units_produced">A TERMÉKEK TERMELÉSE</string>
+    <string name="units_target">&placeholder1; cél</string>
+    <string name="units_produced">&placeholder1; gyártva</string>
     <string name="number_of_jobs">munkahelyek száma</string>
     <string name="type_something">Gépelj valamit</string>
     <string name="service_calls_distribution">Szolgáltatáshívások terjesztése</string>
@@ -380,8 +380,8 @@
     <string name="cycle_time">Ciklusidő</string>
     <string name="you_have">Rendelkezésre áll:</string>
     <string name="jobs_on_this_shift">Feladat ebben a műszakban</string>
-    <string name="report_cycle_failed_but_max_reported">a ciklusegység-jelentéshez beállított érték túllépte a max. értéket, max. érték jelentve</string>
-    <string name="report_cycle_failed_but_min_reported">a ciklusegység-jelentéshez beállított érték a min. értéket nem érte el, min. érték jelentve</string>
+    <string name="report_cycle_failed_but_max_reported">a ciklus &placeholder1; jelentéshez beállított érték nagyobb, mint a maximum, a max. értéket jelentettük</string>
+    <string name="report_cycle_failed_but_min_reported">a ciklus &placeholder1; jelentéshez beállított érték kisebb, mint a minimum, a min. értéket jelentettük</string>
     <string name="min_value_is">min. érték</string>
     <string name="next_job_will_start_in">Következő feladat ennyi idő múlva kezdődik:</string>
     <string name="start_job_now">Feladat kezdése most</string>

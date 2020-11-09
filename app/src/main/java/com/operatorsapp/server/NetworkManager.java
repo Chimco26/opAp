@@ -15,6 +15,7 @@ import com.example.common.permissions.PermissionResponse;
 import com.example.common.reportShift.DepartmentShiftGraphRequest;
 import com.example.common.reportShift.DepartmentShiftGraphResponse;
 import com.example.common.reportShift.ServiceCallsResponse;
+import com.example.common.request.BaseRequest;
 import com.example.common.request.BaseTimeRequest;
 import com.example.common.request.MachineIdRequest;
 import com.example.oppapplog.OppAppLogger;
@@ -93,6 +94,7 @@ import com.operatorsapp.server.requests.TechCall24HRequest;
 import com.operatorsapp.server.requests.TopNotificationRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
+import com.operatorsapp.server.responses.ResponseKPIS;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.StopReasonsResponse;
 import com.operatorsapp.server.responses.TaskNotesResponse;
@@ -1156,6 +1158,13 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     public void getTaskSteps(GetTaskNoteRequest request, final Callback<TaskStepResponse> callback) {
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
         Call<TaskStepResponse> call = mRetrofit.create(OpAppServiceRequests.class).getTaskSteps(request);
+        call.enqueue(callback);
+    }
+
+    public void getKPIs(final Callback<ResponseKPIS> callback) {
+        BaseRequest request = new BaseRequest(PersistenceManager.getInstance().getSessionId());
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<ResponseKPIS> call = mRetrofit.create(OpAppServiceRequests.class).getKPIs(request);
         call.enqueue(callback);
     }
 

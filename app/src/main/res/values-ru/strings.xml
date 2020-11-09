@@ -42,7 +42,7 @@
     <string name="product_name">Наименование продукта</string>
     <string name="erp">ERP</string>
     <string name="planned_start">Запланированный старт</string>
-    <string name="number_of_units">Количество единиц</string>
+    <string name="number_of_units">Количество &placeholder1;</string>
     <string name="new_job">Новое задание</string>
     <string name="new_job_details">Детали нового задания</string>
     <string name="product_id">ID продукта</string>
@@ -81,8 +81,8 @@
     <string name="report_reject_nreason">Отчет о\nбраке</string>
     <string name="report_stop_start">"Старт "</string>
     <string name="report_stop_resume">"Окончание"</string>
-    <string name="report_cycle_nunits">Изменить количество\nединиц в цикле</string>
-    <string name="report_cycle_units">Изменить количество единиц в цикле</string>
+    <string name="report_cycle_nunits">Изменить &placeholder1; в цикле</string>
+    <string name="report_cycle_units">Изменить &placeholder1; в цикле</string>
     <string name="report_inventory_nitem_production">Инв.\nотчет</string>
     <string name="report_inventory_item_production">Инвентаризационный отчет</string>
     <string name="package_type">Тип пакета</string>
@@ -188,8 +188,8 @@
     <string name="call_technician_title">Вызов техника</string>
     <string name="called_technician">Вызванный техник</string>
     <string name="catalog">Каталог</string>
-    <string name="cavities_actual">Фактическое время цикла</string>
-    <string name="cavities_standard">Стандартное время цикла</string>
+    <string name="cavities_actual">&placeholder1; в цикле по факту</string>
+    <string name="cavities_standard">&placeholder1; в цикле стандарт.</string>
     <string name="channel_0">Канал-0</string>
     <string name="channel_1_99">Канал 1-99</string>
     <string name="channel_100">Канал 100</string>
@@ -198,7 +198,7 @@
     <string name="edit_note">Заметки</string>
     <string name="enter_note_here">Введите здесь свои заметки</string>
     <string name="events_selected">Выбраны события:</string>
-    <string name="fill_units_or_weight">*Введите количество или вес</string>
+    <string name="fill_units_or_weight">* Пожалуйста, укажите &placeholder1; или вес</string>
     <string name="general">Общее</string>
     <string name="get_jobs_details_failed_error">Ошибка импорта сведений о работе</string>
     <string name="get_panding_jobs_failed_error">Ошибка импорта списка рабочих заданий</string>
@@ -324,7 +324,7 @@
     <string name="keep_reporting_events_reason">Продолжить сообщать причину событий</string>
     <string name="target_reached">Цель достигнута!</string>
     <string name="setup_rejects_dialog_text">Вы хотите сообщить о некоторых из них как о браке?</string>
-    <string name="setup_good_units_dialog_text">Вы хотите сообщить о некоторых из них как о хороших единицах?</string>
+    <string name="setup_good_units_dialog_text">Вы хотите сообщить о некоторых из них как о &placeholder1;?</string>
     <string name="on_the_setup_you_produced">Во время настройки произведено</string>
     <string name="from_the">От</string>
     <string name="activate_last_job">Активировать последнюю работу</string>
@@ -377,8 +377,8 @@
     <string name="filter_by">Фильтровать по</string>
     <string name="index">УКАЗАТЕЛЬ</string>
     <string name="catalog_maj">КАТАЛОГ</string>
-    <string name="units_target">ЦЕЛЕВОЕ КОЛИЧЕСТВО ЕДИНИЦ</string>
-    <string name="units_produced">ПРОИЗВЕДЕНО ЕДИНИЦ</string>
+    <string name="units_target">Цель &placeholder1;</string>
+    <string name="units_produced">Произведено &placeholder1;</string>
     <string name="end_time_actual">ВРЕМЯ ОКОНЧАНИЯ (ФАКТИЧЕСКОЕ)</string>
     <string name="job_left_time">ОСТАЛОСЬ ВРЕМЕНИ ВЫПОЛНЕНИЯ ЗАДАНИЯ</string>
     <string name="number_of_jobs">число заданий</string>
@@ -388,8 +388,8 @@
     <string name="shift_report">Отчет о смене</string>
     <string name="you_have">У вас есть</string>
     <string name="jobs_on_this_shift">Задания в эту смену</string>
-    <string name="report_cycle_failed_but_max_reported">установленное вами значение для сообщения об единице измерения цикла превышает максимальное значение, сообщено максимальное значение</string>
-    <string name="report_cycle_failed_but_min_reported">установленное вами значение для сообщения об единице измерения цикла меньше минимального значение, сообщено минимальное значение</string>
+    <string name="report_cycle_failed_but_max_reported">установленное вами значение для сообщения о цикле &placeholder1; превышает максимальное значение, сообщено максимальное значение</string>
+    <string name="report_cycle_failed_but_min_reported">установленное вами значение для сообщения о цикле &placeholder1; меньше минимального значение, сообщено минимальное значение</string>
     <string name="min_value_is">минимальное значение —</string>
     <string name="next_job_will_start_in">Выполнение следующего задания начнется через</string>
     <string name="start_job_now">Начать выполнение задания сейчас</string>

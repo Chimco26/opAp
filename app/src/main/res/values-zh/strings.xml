@@ -42,7 +42,7 @@
     <string name="product_name">產品名稱</string>
     <string name="erp">ERP</string>
     <string name="planned_start">計畫開始</string>
-    <string name="number_of_units">件數</string>
+    <string name="number_of_units">&placeholder1; 的数量</string>
     <string name="new_job">新作業</string>
     <string name="new_job_details">新作業的詳細資訊</string>
     <string name="product_id">產品編號</string>
@@ -79,8 +79,8 @@
     <string name="report_reject_nreason">報告拒絕原因</string>
     <string name="report_stop_start">開始</string>
     <string name="report_stop_resume">結束</string>
-    <string name="report_cycle_nunits">報告週期單位</string>
-    <string name="report_cycle_units">報告週期單位</string>
+    <string name="report_cycle_nunits">在周期中更改 &placeholder1;</string>
+    <string name="report_cycle_units">在周期中更改 &placeholder1;</string>
     <string name="report_inventory_nitem_production">報告生產</string>
     <string name="report_inventory_item_production">將生產報告至庫存</string>
     <string name="package_type">封裝類型</string>
@@ -183,8 +183,8 @@
     <string name="call_technician_title">技術人員呼叫</string>
     <string name="cancel">取消</string>
     <string name="cause">原因</string>
-    <string name="cavities_actual">實際的週期單位</string>
-    <string name="cavities_standard">STD的週期單位</string>
+    <string name="cavities_actual">周期中实际 &placeholder1;</string>
+    <string name="cavities_standard">周期中标准 &placeholder1;</string>
     <string name="channel_0">頻道0</string>
     <string name="channel_1_99">頻道1-99</string>
     <string name="channel_100">頻道100</string>
@@ -195,7 +195,7 @@
     <string name="end_setup_success">成功結束安裝</string>
     <string name="enter_note_here">在此輸入您的備註</string>
     <string name="events_selected">已選擇的事件：</string>
-    <string name="fill_units_or_weight">* 請報告單位或重量</string>
+    <string name="fill_units_or_weight">* 请报告 &placeholder1; 或重量</string>
     <string name="general">通用</string>
     <string name="get_jobs_details_failed_error">獲取作業詳細資訊失敗的錯誤</string>
     <string name="get_panding_jobs_failed_error">獲取Panding作業失敗的錯誤</string>
@@ -322,7 +322,7 @@
     <string name="keep_reporting_events_reason">保持報告事件原因</string>
     <string name="target_reached">達成目標！</string>
     <string name="setup_rejects_dialog_text">您想要報告它們的其中一部分為拒絕嗎？</string>
-    <string name="setup_good_units_dialog_text">您想要報告它們的其中一部分為良好單位嗎？</string>
+    <string name="setup_good_units_dialog_text">您想要将其中一些报告为 &placeholder1; 吗？</string>
     <string name="on_the_setup_you_produced">在您所製作的設定上</string>
     <string name="from_the">來自於</string>
     <string name="activate_last_job">啟動前一項工作</string>
@@ -375,8 +375,8 @@
     <string name="filter_by">過濾</string>
     <string name="index">指數</string>
     <string name="catalog_maj">目錄</string>
-    <string name="units_target">單位目標</string>
-    <string name="units_produced">已生產單位</string>
+    <string name="units_target">&placeholder1; 目标</string>
+    <string name="units_produced">已生产 &placeholder1;</string>
     <string name="end_time_actual">結束時間（實際）</string>
     <string name="job_left_time">工作剩餘時間</string>
     <string name="number_of_jobs">工作數量</string>
@@ -386,8 +386,8 @@
     <string name="shift_report">輪班報告</string>
     <string name="you_have">您有</string>
     <string name="jobs_on_this_shift">此輪中的工作</string>
-    <string name="report_cycle_failed_but_max_reported">您設定的報告週期單位的值超過最大值，已報告為最大值</string>
-    <string name="report_cycle_failed_but_min_reported">您設定的報告週期單位的值低於最小值，已報告為最小值</string>
+    <string name="report_cycle_failed_but_max_reported">您设置的报告周期 &placeholder1; 值超过最大值，已报告最大值</string>
+    <string name="report_cycle_failed_but_min_reported">您设置的报告周期 &placeholder1; 值小于最小值，已报告最小值</string>
     <string name="min_value_is">最小值為</string>
     <string name="next_job_will_start_in">下一次工作將開始於</string>
     <string name="start_job_now">立即開始工作</string>

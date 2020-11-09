@@ -44,7 +44,7 @@
     <string name="product_name">Productnaam</string>
     <string name="erp">ERP ID</string>
     <string name="planned_start">Geplande start</string>
-    <string name="number_of_units">Aantal eenheden</string>
+    <string name="number_of_units">Aantal &placeholder1;</string>
     <string name="new_job">Nieuwe taak</string>
     <string name="new_job_details">Nieuwe order details</string>
     <string name="product_id">Productnr.</string>
@@ -86,8 +86,8 @@
 
 
     <string name="material_weight_alarm">Materiaal gewicht alarm</string>
-    <string name="report_cycle_nunits">Update stuks\nper cyclus</string>
-    <string name="report_cycle_units">Update stuks per cyclus</string>
+    <string name="report_cycle_nunits">Wijzig &placeholder1; in cyclus</string>
+    <string name="report_cycle_units">Wijzig &placeholder1; in cyclus</string>
     <string name="report_inventory_nitem_production">Production\nReporting</string>
     <string name="report_inventory_item_production">Production Reporting</string>
     <string name="package_type">Verpakkings type</string>
@@ -193,8 +193,8 @@
     <string name="call_technician_title">Bel technicus</string>
     <string name="called_technician">Technicus gebeld</string>
     <string name="catalog">Catalogus</string>
-    <string name="cavities_actual">Eenheden In actuele cyclus</string>
-    <string name="cavities_standard">Eenheden in cyclus STD</string>
+    <string name="cavities_actual">&placeholder1; in cyclus werkelijk</string>
+    <string name="cavities_standard">&placeholder1; in cyclus STD</string>
     <string name="channel_0">Kanaal 0</string>
     <string name="channel_1_99">Kanaal 1-99</string>
     <string name="channel_100">Kanaal 100</string>
@@ -204,7 +204,7 @@
     <string name="end_setup_success">Eindconfiguratie succesvol</string>
     <string name="enter_note_here">Voer hier uw opmerking in</string>
     <string name="events_selected">Evenementen geselecteerd:</string>
-    <string name="fill_units_or_weight">*Meld eenheden of gewicht</string>
+    <string name="fill_units_or_weight">* Rapporteer &placeholder1; of gewicht</string>
     <string name="general">Algemeen</string>
     <string name="get_jobs_details_failed_error">Taakinformatie ophalen mislukt</string>
     <string name="get_panding_jobs_failed_error">Taken in afwachting ophalen mislukt</string>
@@ -337,7 +337,7 @@
     <string name="keep_reporting_events_reason">Blijf reden evenementen rapporteren</string>
     <string name="target_reached">Doel gehaald!</string>
     <string name="setup_rejects_dialog_text">Wilt u sommigen rapporteren als afgewezen?</string>
-    <string name="setup_good_units_dialog_text">Wilt u sommigen rapporteren als goede eenheden?</string>
+    <string name="setup_good_units_dialog_text">Wilt u sommige melden als &placeholder1;?</string>
     <string name="on_the_setup_you_produced">Op de setup die u geproduceerd hebt</string>
     <string name="from_the">van de</string>
     <string name="activate_last_job">Activeer laatste job</string>
@@ -390,8 +390,8 @@
     <string name="filter_by">Filteren op</string>
     <string name="index">INDEX</string>
     <string name="catalog_maj">CATALOGUS</string>
-    <string name="units_target">EENHEDEN DOEL</string>
-    <string name="units_produced">EENHEDEN GEPRODUCEERD</string>
+    <string name="units_target">&placeholder1; doel</string>
+    <string name="units_produced">&placeholder1; geproduceerd</string>
     <string name="end_time_actual">EINDTIJD (WERKELIJK)</string>
     <string name="job_left_time">TAAK RESTERENDE TIJD</string>
     <string name="number_of_jobs">aantal taken</string>
@@ -401,8 +401,8 @@
     <string name="shift_report">Ploegrapport</string>
     <string name="you_have">U hebt</string>
     <string name="jobs_on_this_shift">Opdrachten tijdens deze dienst</string>
-    <string name="report_cycle_failed_but_max_reported">de waarde die u hebt ingesteld om cycluseenheid te melden is hoger dan max waarde, de max waarde werd gemeld</string>
-    <string name="report_cycle_failed_but_min_reported">de waarde die u hebt ingesteld om cycluseenheid te melden is lager dan min waarde, de min waarde werd gemeld</string>
+    <string name="report_cycle_failed_but_max_reported">de waarde die u hebt ingesteld om cyclus &placeholder1; te rapporteren, is hoger dan de maximale waarde. De maximale waarde is gerapporteerd</string>
+    <string name="report_cycle_failed_but_min_reported">de waarde die u hebt ingesteld om cyclus &placeholder1; te rapporteren, is lager dan de minimale waarde. De minimale waarde is gerapporteerd</string>
     <string name="min_value_is">min waarde is</string>
     <string name="next_job_will_start_in">Volgende opdracht begint over</string>
     <string name="start_job_now">Start opdracht nu</string>
