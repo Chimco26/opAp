@@ -4,6 +4,14 @@
     <!ENTITY placeholder2 "matics_placeholder_matics_number_2">
     ]>
 <resources>
+    <array name="jobs_spinner_array">
+        <item>Attivare Lavoro</item>
+        <item>Dichiara sottoprodotto</item>
+        <item>Cambia unità nel ciclo</item>
+        <item>Rapporto Produzione</item>
+        <item>Test dell\'ordine</item>
+    </array>
+
     <string name="app_name">Operatore Matics</string>
     <string name="_100">100%</string>
     <string name="action_details">Dettaglio Azioni</string>

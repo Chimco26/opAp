@@ -6,7 +6,6 @@ import androidx.multidex.MultiDexApplication;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -26,7 +25,6 @@ import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
 import org.litepal.LitePal;
 
-import io.fabric.sdk.android.Fabric;
 //import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 import static com.operatorsapp.utils.SendReportUtil.IS_APP_CRASH;
@@ -65,7 +63,7 @@ public class OperatorApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
-        Fabric.with(this, new Crashlytics());
+//        Fabric.with(this, new Crashlytics());
 
         LitePal.initialize(this);
 
