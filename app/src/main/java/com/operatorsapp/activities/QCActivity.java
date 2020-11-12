@@ -24,9 +24,12 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         QCTestOrderFragment.QCTestOrderFragmentListener,
         QCDetailsFragment.QCDetailsFragmentListener {
 
+    public static final String QC_IS_FROM_SELECT_MACHINE_SCREEN = "QC_IS_FROM_SELECT_MACHINE_SCREEN";
+
     private CroutonCreator mCroutonCreator;
     private QCDetailsFragment mQcDetailsFragment;
     private QCTestOrderFragment mQcTestOrderFragment;
+    private boolean isOnlyQC;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         setContentView(R.layout.activity_qc);
         this.configureToolbar();
         mCroutonCreator = new CroutonCreator();
+        isOnlyQC = getIntent().getBooleanExtra(QC_IS_FROM_SELECT_MACHINE_SCREEN, false);
         showQCTestOrderFragment();
     }
 
@@ -60,7 +64,7 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
     private void showQCTestOrderFragment() {
 
         try {
-            mQcTestOrderFragment = QCTestOrderFragment.newInstance();
+            mQcTestOrderFragment = QCTestOrderFragment.newInstance(isOnlyQC);
             getSupportFragmentManager().beginTransaction().add(R.id.AQC_container, mQcTestOrderFragment).addToBackStack(QCTestOrderFragment.TAG).commit();
         } catch (Exception e) {
             //todo

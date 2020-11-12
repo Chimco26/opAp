@@ -29,6 +29,8 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.QCActivity;
 import com.operatorsapp.adapters.DictionarySpinnerAdapter;
 import com.operatorsapp.adapters.SubTypeAdapter;
+import com.operatorsapp.dialogs.Alert2BtnDialog;
+import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
@@ -36,6 +38,8 @@ import com.operatorsapp.utils.QCRequests;
 import com.operatorsapp.utils.ShowCrouton;
 
 import java.util.List;
+
+import static com.operatorsapp.activities.QCActivity.QC_IS_FROM_SELECT_MACHINE_SCREEN;
 
 
 public class QCTestOrderFragment extends Fragment implements
@@ -58,12 +62,14 @@ public class QCTestOrderFragment extends Fragment implements
     private Spinner mProductsSpinner;
     private Spinner mTestSpinner;
     private View mSamplesLy;
+    private boolean isOnlyQC;
 
-    public static QCTestOrderFragment newInstance() {
+    public static QCTestOrderFragment newInstance(boolean isOnlyQC) {
 
         QCTestOrderFragment qcTestOrderFragment = new QCTestOrderFragment();
         Bundle bundle = new Bundle();
-//        qcTestOrderFragment.setArguments(bundle);
+        bundle.putBoolean(QC_IS_FROM_SELECT_MACHINE_SCREEN, isOnlyQC);
+        qcTestOrderFragment.setArguments(bundle);
         return qcTestOrderFragment;
     }
 
@@ -74,6 +80,7 @@ public class QCTestOrderFragment extends Fragment implements
         new GoogleAnalyticsHelper().trackScreen(getActivity(), TAG);
 
         if (getArguments() != null) {
+            isOnlyQC = getArguments().getBoolean(QC_IS_FROM_SELECT_MACHINE_SCREEN, false);
         }
     }
 
@@ -101,8 +108,28 @@ public class QCTestOrderFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
         initVars(view);
         mQcRequests = new QCRequests();
-        mTestOrderRequest = new TestOrderRequest(PersistenceManager.getInstance().getJobId());
-        getTestOrder(mTestOrderRequest);
+        if (isOnlyQC){
+            openJobOrMachineDialog();
+        }else {
+            mTestOrderRequest = new TestOrderRequest(PersistenceManager.getInstance().getJobId());
+            getTestOrder(mTestOrderRequest);
+        }
+    }
+
+    private void openJobOrMachineDialog() {
+        Alert2BtnDialog dialog = new Alert2BtnDialog(getActivity(), new Alert2BtnDialog.Alert2BtnDialogListener() {
+            @Override
+            public void onClickPositiveBtn() {
+
+            }
+
+            @Override
+            public void onClickNegativeBtn() {
+
+            }
+        }, "Choose one", "Material", "Job");
+
+        dialog.showAlert2BtnDialog().show();
     }
 
     @Override
