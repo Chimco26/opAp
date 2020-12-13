@@ -72,7 +72,7 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
     private ImageView mFilterIc;
     private TaskBoardFragmentListener mListener;
     private ImageView mOrderAscIc;
-//    private TaskProgress mDraggingTask;
+    private TaskProgress mDraggingTask;
 
     public static TaskBoardFragment newInstance() {
         return new TaskBoardFragment();
@@ -317,18 +317,18 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
         mBoardView.setBoardListener(new BoardView.BoardListener() {
             @Override
             public void onItemDragStarted(int column, int row) {
-//                mDraggingTask = (TaskProgress) mBoardView.getAdapter(column).getItemList().get(row);
+                mDraggingTask = (TaskProgress) mBoardView.getAdapter(column).getItemList().get(row);
             }
 
             @Override
             public void onItemDragEnded(int fromColumn, int fromRow, int toColumn, int toRow) {
-//                if (mDraggingTask == null || fromColumn == toColumn || mColumnsObjectList.size() <= toColumn
-//                        || mColumnsObjectList.get(toColumn).getAdapter().getListFiltered().size() <= toRow) {
-//                    mBoardView.moveItem(toColumn, toRow, fromColumn, fromRow, false);
-//                } else {
-//                    updateTaskStatus(mColumnsObjectList.get(toColumn).getAdapter().getListFiltered().get(toRow), fromColumn, fromRow, toColumn, toRow);
-//                    mDraggingTask = null;
-//                }
+                if (mDraggingTask == null || fromColumn == toColumn || mColumnsObjectList.size() <= toColumn
+                        || mColumnsObjectList.get(toColumn).getAdapter().getListFiltered().size() <= toRow) {
+                    mBoardView.moveItem(toColumn, toRow, fromColumn, fromRow, false);
+                } else {
+                    updateTaskStatus(mColumnsObjectList.get(toColumn).getAdapter().getListFiltered().get(toRow), fromColumn, fromRow, toColumn, toRow);
+                    mDraggingTask = null;
+                }
                 if (fromColumn == toColumn || mColumnsObjectList.size() <= toColumn
                         || mColumnsObjectList.get(toColumn).getAdapter().getListFiltered().size() <= toRow) {
                     mBoardView.moveItem(toColumn, toRow, fromColumn, fromRow, false);
@@ -370,13 +370,13 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
 
             @Override
             public boolean canDropItemAtPosition(int oldColumn, int oldRow, int newColumn, int newRow) {
-//                if (mDraggingTask == null) return false;
-//                if (newColumn == TaskProgress.TaskStatus.DONE.getValue() -1 && mDraggingTask.getNumOfOpenSubTasks() > 0) {
-//                    if (getActivity() != null)
-//                        Crouton.makeText(getActivity(), getString(R.string.step_task_not_finished), Style.ALERT).show();
-//                    mDraggingTask = null;
-//                    return false;
-//                }
+                if (mDraggingTask == null) return false;
+                if (newColumn == TaskProgress.TaskStatus.DONE.getValue() -1 && mDraggingTask.getNumOfOpenSubTasks() > 0) {
+                    if (getActivity() != null)
+                        Crouton.makeText(getActivity(), getString(R.string.step_task_not_finished), Style.ALERT).show();
+                    mDraggingTask = null;
+                    return false;
+                }
                 return true;
             }
         });

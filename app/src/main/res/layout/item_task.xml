@@ -19,6 +19,7 @@
 
         <TextView
             android:id="@+id/ITask_title"
+            android:layout_toStartOf="@+id/ITask_sub_task_iv"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginStart="10dp"
@@ -26,6 +27,17 @@
             android:layout_marginEnd="10dp"
             android:textColor="@color/black"
             android:textSize="25sp" />
+
+        <ImageView
+            android:id="@+id/ITask_sub_task_iv"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:src="@drawable/ic_sub_task" />
 
         <TextView
             android:id="@+id/ITask_text"
