@@ -42,7 +42,14 @@ public class TestDetailsForm {
     @SerializedName("CurrentValue")
     @Expose
     private String currentValue;
-    private List<StatusList> statusList;
+    @SerializedName("ListValues")
+    @Expose
+    private ArrayList<ValueList> listValues;
+//    private List<StatusList> statusList;
+
+    public ArrayList<ValueList> getListValues() {
+        return listValues;
+    }
 
     public String getName() {
         return name;
@@ -115,13 +122,4 @@ public class TestDetailsForm {
     public void setCurrentValue(String currentValue) {
         this.currentValue = currentValue;
     }
-
-    public void setComboList(List<StatusList> statusList) {
-        this.statusList = statusList;
-    }
-
-    public List<StatusList> getStatusList() {
-        return statusList;
-    }
-
 }

@@ -180,12 +180,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:weightSum="100">
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/FJL_index_search_lil"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
@@ -199,7 +199,9 @@
                     android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeTextType="uniform"/>
 
                 <EditText
                     android:id="@+id/FJL_index_search"
@@ -219,9 +221,10 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="4" />
+                android:layout_weight="2" />
 
             <LinearLayout
+                android:id="@+id/FJL_catalog_lil"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
@@ -235,7 +238,9 @@
                     android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeTextType="uniform"/>
 
                 <EditText
                     android:id="@+id/FJL_catalog_search"
@@ -256,9 +261,10 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="4" />
+                android:layout_weight="2" />
 
             <LinearLayout
+                android:id="@+id/FJL_target_search_lil"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
@@ -272,7 +278,9 @@
                     android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeTextType="uniform"/>
 
                 <EditText
                     android:id="@+id/FJL_target_search"
@@ -292,9 +300,10 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="4" />
+                android:layout_weight="2" />
 
             <LinearLayout
+                android:id="@+id/FJL_produced_search_lil"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
@@ -308,7 +317,9 @@
                     android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeTextType="uniform"/>
 
                 <EditText
                     android:id="@+id/FJL_produced_search"
@@ -328,9 +339,10 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="4" />
+                android:layout_weight="2" />
 
             <LinearLayout
+                android:id="@+id/FJL_end_search_lil"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
@@ -344,7 +356,9 @@
                     android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeTextType="uniform"/>
 
                 <EditText
                     android:id="@+id/FJL_end_search"
@@ -364,9 +378,10 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="4" />
+                android:layout_weight="2" />
 
             <LinearLayout
+                android:id="@+id/FJL_job_search_lil"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
@@ -380,7 +395,9 @@
                     android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeTextType="uniform"/>
 
                 <EditText
                     android:id="@+id/FJL_job_search"
@@ -401,9 +418,10 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="4" />
+                android:layout_weight="2" />
 
             <LinearLayout
+                android:id="@+id/FJL_image_search_lil"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
@@ -413,12 +431,13 @@
                     android:id="@+id/FJL_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="10"
                     android:gravity="center"
                     android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeTextType="uniform"/>
 
                 <EditText
                     android:id="@+id/FJL_image_search"
@@ -434,10 +453,122 @@
                     android:textSize="16sp" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="5" />
+                android:layout_weight="2" />
+
+            <LinearLayout
+                android:id="@+id/FJL_search_extra_1_lil"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/FJL_extra_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeTextType="uniform"/>
+
+                <EditText
+                    android:id="@+id/FJL_search_extra_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/box_grey_stroke"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
+
+            <LinearLayout
+                android:id="@+id/FJL_search_extra_2_lil"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/FJL_extra_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeTextType="uniform"/>
+
+                <EditText
+                    android:id="@+id/FJL_search_extra_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/box_grey_stroke"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+        </LinearLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
+
+            <LinearLayout
+                android:id="@+id/FJL_search_extra_3_lil"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/FJL_extra_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeTextType="uniform"/>
+
+                <EditText
+                    android:id="@+id/FJL_search_extra_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/box_grey_stroke"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+        </LinearLayout>
+
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

@@ -83,6 +83,7 @@ import com.operatorsapp.server.interfaces.OpAppServiceRequests;
 import com.operatorsapp.server.requests.CreateTaskNotesRequest;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
 import com.operatorsapp.server.requests.GetTaskNoteRequest;
+import com.operatorsapp.server.requests.JobTestRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
@@ -91,8 +92,12 @@ import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.requests.SendNotificationRequest;
 import com.operatorsapp.server.requests.TechCall24HRequest;
+import com.operatorsapp.server.requests.TestOrderMaterialRequest;
 import com.operatorsapp.server.requests.TopNotificationRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
+import com.operatorsapp.server.responses.JobListForMaterialResponse;
+import com.operatorsapp.server.responses.JobListForTestResponse;
+import com.operatorsapp.server.responses.JobTestResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.ResponseKPIS;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
@@ -1165,6 +1170,24 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         BaseRequest request = new BaseRequest(PersistenceManager.getInstance().getSessionId());
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
         Call<ResponseKPIS> call = mRetrofit.create(OpAppServiceRequests.class).getKPIs(request);
+        call.enqueue(callback);
+    }
+
+    public void getJobsForTest(final Callback<JobListForTestResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<JobListForTestResponse> call = mRetrofit.create(OpAppServiceRequests.class).getJobsForTest(new BaseRequest(PersistenceManager.getInstance().getSessionId()));
+        call.enqueue(callback);
+    }
+
+    public void getMaterialsForTestOrder(final Callback<JobListForMaterialResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<JobListForMaterialResponse> call = mRetrofit.create(OpAppServiceRequests.class).getMaterialsForTestOrder(new BaseRequest(PersistenceManager.getInstance().getSessionId()));
+        call.enqueue(callback);
+    }
+
+    public void getMaterialTestOrder(TestOrderMaterialRequest request, final Callback<TestOrderResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<TestOrderResponse> call = mRetrofit.create(OpAppServiceRequests.class).getMaterialTestOrder(request);
         call.enqueue(callback);
     }
 

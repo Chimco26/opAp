@@ -11,6 +11,7 @@ import com.example.common.QCModels.TestOrderSendRequest;
 import com.example.common.StandardResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.requests.TestOrderMaterialRequest;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,6 +22,31 @@ public class QCRequests {
 
     public void getQCTestOrder(final TestOrderRequest request, final QCTestOrderCallback callback) {
         NetworkManager.getInstance().getQCTestOrder(request, new Callback<TestOrderResponse>() {
+            @Override
+            public void onResponse(Call<TestOrderResponse> call, Response<TestOrderResponse> response) {
+
+                if (callback != null) {
+                    if (response.body() != null && (response.body().getError() == null || response.body().getError().getErrorDesc() == null)) {
+                        callback.onSuccess(response.body());
+                    } else {
+                        onFailure(call, new Throwable(getErrorMessage(response.body(), "getQCTestOrder() failed")));
+                    }
+                }else {
+                    OppAppLogger.w(TAG, "getQCTestOrder() failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TestOrderResponse> call, Throwable t) {
+                OppAppLogger.w(TAG, t.getMessage());
+                StandardResponse errorResponse = new StandardResponse(ErrorResponse.ErrorCode.No_data, t.getMessage());
+                callback.onFailure(errorResponse);
+            }
+        });
+    }
+
+    public void getQCTestOrderMaterial(TestOrderMaterialRequest request, final QCTestOrderCallback callback) {
+        NetworkManager.getInstance().getMaterialTestOrder(request, new Callback<TestOrderResponse>() {
             @Override
             public void onResponse(Call<TestOrderResponse> call, Response<TestOrderResponse> response) {
 

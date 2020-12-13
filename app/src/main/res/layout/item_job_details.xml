@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="132dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
@@ -11,13 +11,11 @@
         android:background="@color/grey_transparent"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingStart="20dp"
         android:paddingTop="5dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="5dp"
-        android:weightSum="100">
+        android:paddingBottom="5dp">
 
         <RelativeLayout
+            android:id="@+id/FJL_1_rl"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="10">
@@ -34,9 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:maxLines="3"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
+                android:maxLines="5"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:autoSizeMaxTextSize="16sp"
@@ -47,9 +43,10 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="4" />
+            android:layout_weight="2" />
 
         <RelativeLayout
+            android:id="@+id/FJL_2_rl"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="10">
@@ -66,9 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:maxLines="3"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
+                android:maxLines="5"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:autoSizeMaxTextSize="16sp"
@@ -78,9 +73,10 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="4" />
+            android:layout_weight="2" />
 
         <RelativeLayout
+            android:id="@+id/FJL_3_rl"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="10">
@@ -97,9 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:maxLines="3"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
+                android:maxLines="5"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:autoSizeMaxTextSize="16sp"
@@ -109,9 +103,10 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="4" />
+            android:layout_weight="2" />
 
         <RelativeLayout
+            android:id="@+id/FJL_4_rl"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="10">
@@ -128,9 +123,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:maxLines="3"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
+                android:maxLines="5"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:autoSizeMaxTextSize="16sp"
@@ -140,9 +133,10 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="4" />
+            android:layout_weight="2" />
 
         <RelativeLayout
+            android:id="@+id/FJL_5_rl"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="10">
@@ -159,9 +153,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:maxLines="3"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
+                android:maxLines="5"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:autoSizeMaxTextSize="16sp"
@@ -171,9 +163,10 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="4" />
+            android:layout_weight="2" />
 
         <RelativeLayout
+            android:id="@+id/FJL_6_rl"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="10">
@@ -190,9 +183,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:maxLines="3"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
+                android:maxLines="5"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:autoSizeMaxTextSize="16sp"
@@ -202,10 +193,11 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="4" />
+            android:layout_weight="2" />
 
 
         <RelativeLayout
+            android:id="@+id/FJL_7_rl"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="10">
@@ -221,15 +213,103 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:maxLines="3"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
+                android:maxLines="5"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:autoSizeMaxTextSize="16sp"
                 app:autoSizeTextType="uniform" />
         </RelativeLayout>
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="2" />
+
+
+        <RelativeLayout
+            android:id="@+id/FJL_8_rl"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10">
+
+            <ImageView
+                android:id="@+id/FJL_img_8"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"/>
+
+            <TextView
+                android:id="@+id/FJL_8"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:maxLines="5"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:autoSizeMaxTextSize="16sp"
+                app:autoSizeTextType="uniform" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="2" />
+
+
+        <RelativeLayout
+            android:id="@+id/FJL_9_rl"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10">
+
+            <ImageView
+                android:id="@+id/FJL_img_9"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"/>
+
+            <TextView
+                android:id="@+id/FJL_9"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:maxLines="5"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:autoSizeMaxTextSize="16sp"
+                app:autoSizeTextType="uniform" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="2" />
+
+
+        <RelativeLayout
+            android:id="@+id/FJL_10_rl"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10">
+
+            <ImageView
+                android:id="@+id/FJL_img_10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"/>
+
+            <TextView
+                android:id="@+id/FJL_10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:maxLines="5"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:autoSizeMaxTextSize="16sp"
+                app:autoSizeTextType="uniform" />
+        </RelativeLayout>
+<!--
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
@@ -240,7 +320,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:src="@drawable/ic_arrow" />
+            android:src="@drawable/ic_arrow" />-->
     </LinearLayout>
 
     <View

@@ -187,29 +187,33 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
                     ArrayList<TechCallInfo> techList = new ArrayList<>();
 
-                    for (Notification not : response.body().getmNotificationsList()) {
-                        not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
-                        not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
+                    if (response.body().getmNotificationsList() != null) {
+                        for (Notification not : response.body().getmNotificationsList()) {
+                            not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
+                            not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
 
-                        if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN && not.isOpenCall()) {
-                            boolean isNew = true;
-                            for (TechCallInfo techCall : techList) {
-                                if (techCall.getmMachineId() == 0){
-                                    techCall.setmMachineId(not.getMachineID());
+                            if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN && not.isOpenCall()) {
+                                boolean isNew = true;
+                                for (TechCallInfo techCall : techList) {
+                                    if (techCall.getmMachineId() == 0) {
+                                        techCall.setmMachineId(not.getMachineID());
+                                    }
+                                    if (not.getmNotificationID() == techCall.getmNotificationId()) {
+                                        isNew = false;
+                                        break;
+                                    }
                                 }
-                                if (not.getmNotificationID() == techCall.getmNotificationId()) {
-                                    isNew = false;
-                                    break;
+                                if (isNew) {
+                                    techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmTitle(), not.getmAdditionalText(),
+                                            TimeUtils.getDateForNotification(not.getmSentTime()).getTime(), not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID()));
                                 }
-                            }
-                            if (isNew) {
-                                techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmTitle(), not.getmAdditionalText(),
-                                        TimeUtils.getDateForNotification(not.getmSentTime()).getTime(), not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID()));
                             }
                         }
+                        PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
+                    }else {
+                        PersistenceManager.getInstance().setNotificationHistory(new ArrayList<Notification>());
                     }
 
-                    PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
                     PersistenceManager.getInstance().setCalledTechnicianList(techList);
                     if (techList.size() > 0) {
                         PersistenceManager.getInstance().setRecentTechCallId(techList.get(0).getmNotificationId());

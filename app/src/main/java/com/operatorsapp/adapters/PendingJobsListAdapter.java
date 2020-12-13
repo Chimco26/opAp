@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -52,16 +53,19 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
     @Override
     public void onBindViewHolder(@NonNull final PendingJobsListAdapter.ViewHolder viewHolder, final int position) {
 
-        ArrayList<Property> properties = (ArrayList<Property>) mPandingjobs.get(viewHolder.getAdapterPosition()).getProperties();
+        ArrayList<Property> properties = (ArrayList<Property>) mPandingjobs.get(position).getProperties();
         HashMap<String, String> propertiesHashMap = listToHashMap(properties);
 
-        setImageOrText(propertiesHashMap, 0, viewHolder.m1Img, viewHolder.m1Tv);
-        setImageOrText(propertiesHashMap, 1, viewHolder.m2Img, viewHolder.m2Tv);
-        setImageOrText(propertiesHashMap, 2, viewHolder.m3Img, viewHolder.m3Tv);
-        setImageOrText(propertiesHashMap, 3, viewHolder.m4Img, viewHolder.m4Tv);
-        setImageOrText(propertiesHashMap, 4, viewHolder.m5Img, viewHolder.m5Tv);
-        setImageOrText(propertiesHashMap, 5, viewHolder.m6Img, viewHolder.m6Tv);
-        setImageOrText(propertiesHashMap, 6, viewHolder.m7Img, viewHolder.m7Tv);
+        setImageOrText(propertiesHashMap, 0, viewHolder.m1Img, viewHolder.m1Tv, viewHolder.m1Rl);
+        setImageOrText(propertiesHashMap, 1, viewHolder.m2Img, viewHolder.m2Tv, viewHolder.m2Rl);
+        setImageOrText(propertiesHashMap, 2, viewHolder.m3Img, viewHolder.m3Tv, viewHolder.m3Rl);
+        setImageOrText(propertiesHashMap, 3, viewHolder.m4Img, viewHolder.m4Tv, viewHolder.m4Rl);
+        setImageOrText(propertiesHashMap, 4, viewHolder.m5Img, viewHolder.m5Tv, viewHolder.m5Rl);
+        setImageOrText(propertiesHashMap, 5, viewHolder.m6Img, viewHolder.m6Tv, viewHolder.m6Rl);
+        setImageOrText(propertiesHashMap, 6, viewHolder.m7Img, viewHolder.m7Tv, viewHolder.m7Rl);
+        setImageOrText(propertiesHashMap, 7, viewHolder.m8Img, viewHolder.m8Tv, viewHolder.m8Rl);
+        setImageOrText(propertiesHashMap, 8, viewHolder.m9Img, viewHolder.m9Tv, viewHolder.m9Rl);
+        setImageOrText(propertiesHashMap, 9, viewHolder.m10Img, viewHolder.m10Tv, viewHolder.m10Rl);
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +77,14 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
         });
     }
 
-    private void setImageOrText(HashMap<String, String> propertiesHashMap, int i, ImageView imageView, TextView textView) {
+    private void setImageOrText(HashMap<String, String> propertiesHashMap, int i, ImageView imageView, TextView textView, View parent) {
+        if(mOrderedHederasKey.length <= i){
+            parent.setVisibility(View.GONE);
+//            imageView.setVisibility(View.GONE);
+//            textView.setVisibility(View.GONE);
+            return;
+        }
+
         if (mOrderedHederasKey[i] != null && mOrderedHederasKey[i].toLowerCase().equals(PRODUCT_IMAGE_PATH)) {
             ImageLoader.getInstance().displayImage(propertiesHashMap.get(mOrderedHederasKey[i]), imageView);
             textView.setText("");
@@ -87,6 +98,7 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
         }else {
             ImageLoader.getInstance().displayImage("", imageView);
             textView.setText("");
+            parent.setVisibility(View.GONE);
         }
     }
 
@@ -135,6 +147,9 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
         private final TextView m5Tv;
         private final TextView m6Tv;
         private final TextView m7Tv;
+        private final TextView m8Tv;
+        private final TextView m9Tv;
+        private final TextView m10Tv;
         private final ImageView m1Img;
         private final ImageView m2Img;
         private final ImageView m3Img;
@@ -142,7 +157,20 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
         private final ImageView m5Img;
         private final ImageView m6Img;
         private final ImageView m7Img;
-        private final View mArrow;
+        private final ImageView m8Img;
+        private final ImageView m9Img;
+        private final ImageView m10Img;
+        private final RelativeLayout m1Rl;
+        private final RelativeLayout m2Rl;
+        private final RelativeLayout m3Rl;
+        private final RelativeLayout m4Rl;
+        private final RelativeLayout m5Rl;
+        private final RelativeLayout m6Rl;
+        private final RelativeLayout m7Rl;
+        private final RelativeLayout m8Rl;
+        private final RelativeLayout m9Rl;
+        private final RelativeLayout m10Rl;
+//        private final View mArrow;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -154,6 +182,9 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
             m5Img = itemView.findViewById(R.id.FJL_img_5);
             m6Img = itemView.findViewById(R.id.FJL_img_6);
             m7Img = itemView.findViewById(R.id.FJL_img_7);
+            m8Img = itemView.findViewById(R.id.FJL_img_8);
+            m9Img = itemView.findViewById(R.id.FJL_img_9);
+            m10Img = itemView.findViewById(R.id.FJL_img_10);
             m1Tv = itemView.findViewById(R.id.FJL_1);
             m2Tv = itemView.findViewById(R.id.FJL_2);
             m3Tv = itemView.findViewById(R.id.FJL_3);
@@ -161,7 +192,21 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
             m5Tv = itemView.findViewById(R.id.FJL_5);
             m6Tv = itemView.findViewById(R.id.FJL_6);
             m7Tv = itemView.findViewById(R.id.FJL_7);
-            mArrow = itemView.findViewById(R.id.FJL_arrow);
+            m8Tv = itemView.findViewById(R.id.FJL_8);
+            m9Tv = itemView.findViewById(R.id.FJL_9);
+            m10Tv = itemView.findViewById(R.id.FJL_10);
+
+            m1Rl = itemView.findViewById(R.id.FJL_1_rl);
+            m2Rl = itemView.findViewById(R.id.FJL_2_rl);
+            m3Rl = itemView.findViewById(R.id.FJL_3_rl);
+            m4Rl = itemView.findViewById(R.id.FJL_4_rl);
+            m5Rl = itemView.findViewById(R.id.FJL_5_rl);
+            m6Rl = itemView.findViewById(R.id.FJL_6_rl);
+            m7Rl = itemView.findViewById(R.id.FJL_7_rl);
+            m8Rl = itemView.findViewById(R.id.FJL_8_rl);
+            m9Rl = itemView.findViewById(R.id.FJL_9_rl);
+            m10Rl = itemView.findViewById(R.id.FJL_10_rl);
+//            mArrow = itemView.findViewById(R.id.FJL_arrow);
         }
 
     }

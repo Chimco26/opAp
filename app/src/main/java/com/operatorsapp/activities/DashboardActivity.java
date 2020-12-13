@@ -3460,7 +3460,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onQCTestSelected() {
-        onOpenQCActivity();
+        Intent intent = new Intent(DashboardActivity.this, QCActivity.class);
+        intent.putExtra(QCActivity.QC_IS_FROM_SELECT_MACHINE_SCREEN, true);
+        ignoreFromOnPause = true;
+
+        if (mActionBarAndEventsFragment != null) {
+
+            mActionBarAndEventsFragment.setFromAnotherActivity(true);
+        }
+        startActivityForResult(intent, QC_ACTIVITY_RESULT_CODE);
     }
 
     @Override

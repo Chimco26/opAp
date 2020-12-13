@@ -18,6 +18,7 @@ import com.example.common.request.MachineIdRequest;
 import com.operatorsapp.server.requests.CreateTaskNotesRequest;
 import com.operatorsapp.server.requests.GetTaskNoteRequest;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
+import com.operatorsapp.server.requests.JobTestRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
@@ -26,8 +27,12 @@ import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.requests.SendNotificationRequest;
 import com.operatorsapp.server.requests.TechCall24HRequest;
+import com.operatorsapp.server.requests.TestOrderMaterialRequest;
 import com.operatorsapp.server.requests.TopNotificationRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
+import com.operatorsapp.server.responses.JobListForMaterialResponse;
+import com.operatorsapp.server.responses.JobListForTestResponse;
+import com.operatorsapp.server.responses.JobTestResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.ResponseKPIS;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
@@ -120,4 +125,13 @@ public interface OpAppServiceRequests {
 
     @POST("/LeaderMESApi/GetTaskSteps")
     Call<ResponseKPIS> getKPIs(@Body BaseRequest request);
+
+    @POST("/LeaderMESApi/GetJobsForTestOrder")
+    Call<JobListForTestResponse> getJobsForTest(@Body BaseRequest request);
+
+    @POST("/LeaderMESApi/GetMaterialsForTestOrder")
+    Call<JobListForMaterialResponse> getMaterialsForTestOrder(@Body BaseRequest request);
+
+    @POST("/LeaderMESApi/GetMaterialTestOrder")
+    Call<TestOrderResponse> getMaterialTestOrder(@Body TestOrderMaterialRequest request);
 }

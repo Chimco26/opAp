@@ -1,6 +1,7 @@
 package com.operatorsapp.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.common.StandardResponse;
 import com.example.common.StopLogs.Event;
@@ -54,6 +56,8 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
     private View mNoDataTv;
     private HashMap<Integer, ArrayList<Event>> rootMap = new HashMap<Integer, ArrayList<Event>>();
     private EventTechCallDialog mTechCalldialog;
+    private TextView mUnreportedTv;
+    private boolean isUnreportedOnly = false;
 
     public static StopEventLogFragment newInstance() {
         StopEventLogFragment stopEventLogFragment = new StopEventLogFragment();
@@ -135,6 +139,7 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
                 } else {
                     mNoDataTv.setVisibility(View.GONE);
                 }
+                initAdapter();
             }
 
             @Override
@@ -182,11 +187,11 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
     private void initVars(View view) {
         mProgressBar = view.findViewById(R.id.FSEL_progressBar);
         mNoDataTv = view.findViewById(R.id.FSEL_no_data_tv);
+        mUnreportedTv = view.findViewById(R.id.FSEL_unreported_tv);
         mRv = view.findViewById(R.id.FSEL_rv);
         mRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mStopLogsItems = new ArrayList<>();
-        mAdapter = new StopEventLogAdapter(mStopLogsItems, StopEventLogFragment.this);
-        mRv.setAdapter(mAdapter);
+        initAdapter();
     }
 
     private void initView() {
@@ -195,7 +200,33 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
     }
 
     private void initListener(View view) {
+        mUnreportedTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isUnreportedOnly = !isUnreportedOnly;
+                if (isUnreportedOnly){
+                    mUnreportedTv.setBackgroundColor(getResources().getColor(R.color.blue1));
+                }else {
+                    mUnreportedTv.setBackgroundColor(getResources().getColor(R.color.white_five));
+                }
+                initAdapter();
+            }
+        });
+    }
 
+    private void initAdapter(){
+        ArrayList<Event> stopLogTempList = new ArrayList<>();
+        if (isUnreportedOnly){
+            for (Event event : mStopLogsItems) {
+                if (event.getEventGroupID() == 6){
+                    stopLogTempList.add(event);
+                }
+            }
+        }else {
+            stopLogTempList = mStopLogsItems;
+        }
+        mAdapter = new StopEventLogAdapter(stopLogTempList, StopEventLogFragment.this);
+        mRv.setAdapter(mAdapter);
     }
 
     @Override
