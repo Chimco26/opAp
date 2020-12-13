@@ -25,6 +25,7 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.server.responses.ResponseKPIS;
 import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.text.DecimalFormat;
@@ -115,8 +116,10 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mWeightRadioBtn = itemView.findViewById(R.id.NWC_edit_weight_btn);
         mWeightRadioBtn.setChecked(PersistenceManager.getInstance().getReportRejectDefaultUnits() != 1);
         mStep1CancelBtn = itemView.findViewById(R.id.NWC_edit_cancel_btn);
-        ((TextView)itemView.findViewById(R.id.NWC_units_tv)).setText(PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units"));
-
+        ResponseKPIS trans = PersistenceManager.getInstance().getTranslationForKPIS();
+        if (trans != null) {
+            ((TextView) itemView.findViewById(R.id.NWC_units_tv)).setText(trans.getKPIByName("units"));
+        }
         mEditStep2Ly = itemView.findViewById(R.id.NWC_edit_step_2_ly);
         mSpinner1 = itemView.findViewById(R.id.NWC_reason_spinner);
         mSpinner1BtnRv = itemView.findViewById(R.id.NWC_reason2_spinner_rl);
