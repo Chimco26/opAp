@@ -177,6 +177,29 @@
         <item>Order Test</item>
     </array>
 
+    <array name="pending_job_headers_for_qc_array">
+        <item>Index</item>
+        <item>Catalog</item>
+        <item>Status</item>
+        <item>Machine Name</item>
+        <item>Product Name</item>
+        <item>Units Target</item>
+        <item>Units Produced</item>
+        <item>ERP Job ID</item>
+        <item>Notes</item>
+        <item>ERP Job Index Key</item>
+    </array>
+
+    <array name="material_headers_for_qc_array">
+        <item>Index</item>
+        <item>Material Name</item>
+        <item>Description</item>
+        <item>Material Group</item>
+        <item>Catalog</item>
+        <item>ERP ID</item>
+        <item>Erp Amount</item>
+    </array>
+
     <array name="shiftlog_spinner_items">
 
         <item>All Events</item>

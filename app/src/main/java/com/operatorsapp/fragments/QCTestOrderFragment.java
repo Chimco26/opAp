@@ -33,6 +33,7 @@ import com.operatorsapp.dialogs.Alert2BtnDialog;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.server.requests.TestOrderMaterialRequest;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.QCRequests;
 import com.operatorsapp.utils.ShowCrouton;
@@ -50,6 +51,8 @@ public class QCTestOrderFragment extends Fragment implements
     private static final int TYPE_QUALITY = 1;
     private static final int TYPE_PRODUCT_GROUP = 2;
     private static final int TYPE_PRODUCTS = 3;
+    private static final String ID_FOR_TEST_LIST = "ID_FOR_TEST_LIST";
+    private static final String ID_FOR_MATERIAL = "ID_FOR_MATERIAL";
     private QCRequests mQcRequests;
     private TestOrderResponse mTestOrder;
     private TestOrderRequest mTestOrderRequest;
@@ -62,13 +65,14 @@ public class QCTestOrderFragment extends Fragment implements
     private Spinner mProductsSpinner;
     private Spinner mTestSpinner;
     private View mSamplesLy;
-    private boolean isOnlyQC;
+    private boolean isOnlyQCMaterial;
 
-    public static QCTestOrderFragment newInstance(boolean isOnlyQC) {
+    public static QCTestOrderFragment newInstance(int idForTests, boolean isMaterial) {
 
         QCTestOrderFragment qcTestOrderFragment = new QCTestOrderFragment();
         Bundle bundle = new Bundle();
-        bundle.putBoolean(QC_IS_FROM_SELECT_MACHINE_SCREEN, isOnlyQC);
+        bundle.putInt(ID_FOR_TEST_LIST, idForTests);
+        bundle.putBoolean(ID_FOR_MATERIAL, isMaterial);
         qcTestOrderFragment.setArguments(bundle);
         return qcTestOrderFragment;
     }
@@ -79,9 +83,6 @@ public class QCTestOrderFragment extends Fragment implements
         // Analytics
         new GoogleAnalyticsHelper().trackScreen(getActivity(), TAG);
 
-        if (getArguments() != null) {
-            isOnlyQC = getArguments().getBoolean(QC_IS_FROM_SELECT_MACHINE_SCREEN, false);
-        }
     }
 
     @Nullable
@@ -108,28 +109,14 @@ public class QCTestOrderFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
         initVars(view);
         mQcRequests = new QCRequests();
-        if (isOnlyQC){
-            openJobOrMachineDialog();
-        }else {
-            mTestOrderRequest = new TestOrderRequest(PersistenceManager.getInstance().getJobId());
-            getTestOrder(mTestOrderRequest);
+
+        int idForTest = PersistenceManager.getInstance().getJobId();
+        if (getArguments() != null) {
+            idForTest = getArguments().getInt(ID_FOR_TEST_LIST, PersistenceManager.getInstance().getJobId());
+            isOnlyQCMaterial = getArguments().getBoolean(ID_FOR_MATERIAL, false);
         }
-    }
-
-    private void openJobOrMachineDialog() {
-        Alert2BtnDialog dialog = new Alert2BtnDialog(getActivity(), new Alert2BtnDialog.Alert2BtnDialogListener() {
-            @Override
-            public void onClickPositiveBtn() {
-
-            }
-
-            @Override
-            public void onClickNegativeBtn() {
-
-            }
-        }, "Choose one", "Material", "Job");
-
-        dialog.showAlert2BtnDialog().show();
+        mTestOrderRequest = new TestOrderRequest(idForTest != 0 ? idForTest : PersistenceManager.getInstance().getJobId());
+        getTestOrder(mTestOrderRequest);
     }
 
     @Override
@@ -171,6 +158,10 @@ public class QCTestOrderFragment extends Fragment implements
     }
 
     private void getTestOrder(final TestOrderRequest testOrderRequest) {
+        if (isOnlyQCMaterial){
+            getMaterialTestOrder(testOrderRequest);
+            return;
+        }
         mProgressBar.setVisibility(View.VISIBLE);
         mQcRequests.getQCTestOrder(testOrderRequest, new QCRequests.QCTestOrderCallback() {
             @Override
@@ -194,6 +185,44 @@ public class QCTestOrderFragment extends Fragment implements
                 initSpinner(mQualitySpinner, mTestOrder.getResponseDictionaryDT().getQualityGroups(), TYPE_QUALITY);
                 initSpinner(mProductGroupSpinner, mTestOrder.getResponseDictionaryDT().getProductGroups(), TYPE_PRODUCT_GROUP);
                 initSpinner(mProductsSpinner, mTestOrder.getResponseDictionaryDT().getProducts(), TYPE_PRODUCTS);
+            }
+
+            @Override
+            public void onFailure(StandardResponse standardResponse) {
+                mProgressBar.setVisibility(View.GONE);
+                if (mTestOrder != null) {
+                    ShowCrouton.showSimpleCrouton((QCActivity) getActivity(), standardResponse);
+                } else {
+                }
+            }
+        });
+    }
+
+    private void getMaterialTestOrder(TestOrderRequest testOrderRequest) {
+
+        mProgressBar.setVisibility(View.VISIBLE);
+        mQcRequests.getQCTestOrderMaterial(new TestOrderMaterialRequest((int) testOrderRequest.getJobID(), 0, -1), new QCRequests.QCTestOrderCallback() {
+            @Override
+            public void onSuccess(TestOrderResponse testOrderResponse) {
+                mProgressBar.setVisibility(View.GONE);
+                if (mTestOrder == null) {
+                    testOrderResponse.getResponseDictionaryDT().getSubTypes().add(0, new SubType());
+                    initTestSpinner(testOrderResponse);
+                }
+                mTestOrder = testOrderResponse;
+                if (mTestOrderRequest.getSubType() == -1) {
+                    mTestOrderRequest.setSubType(mTestOrder.getResponseDictionaryDT().getSubTypes().get(0).getId());
+                }
+//                mTestOrderRequest.setJoshID(mTestOrder.getJoshID());
+//                mTestOrderRequest.setProductGroupID(mTestOrder.getProductGroupID());
+                mTestOrderRequest.setQualityGroupID(mTestOrder.getQualityGroupID());
+//                mTestOrderRequest.setProductID(mTestOrder.getProductID());
+                mTestOrder.getResponseDictionaryDT().getQualityGroups().add(0, new ResponseDictionnaryItemsBaseModel());
+                initSpinner(mQualitySpinner, mTestOrder.getResponseDictionaryDT().getQualityGroups(), TYPE_QUALITY);
+//                mTestOrder.getResponseDictionaryDT().getProductGroups().add(0, new ResponseDictionnaryItemsBaseModel());
+//                initSpinner(mJoshSpinner, mTestOrder.getResponseDictionaryDT().getJoshIDs(), TYPE_JOSH);
+//                initSpinner(mProductGroupSpinner, mTestOrder.getResponseDictionaryDT().getProductGroups(), TYPE_PRODUCT_GROUP);
+//                initSpinner(mProductsSpinner, mTestOrder.getResponseDictionaryDT().getProducts(), TYPE_PRODUCTS);
             }
 
             @Override
@@ -348,6 +377,12 @@ public class QCTestOrderFragment extends Fragment implements
             getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         }
+
+        if (isOnlyQCMaterial){
+            testOrderSendRequest.setMaterialID(String.valueOf(mTestOrderRequest.getJobID()));
+            testOrderSendRequest.setJobID(0);
+        }
+
         mQcRequests.postQCSendTestOrder(testOrderSendRequest, new QCRequests.QCTestSendOrderCallback() {
             @Override
             public void onSuccess(StandardResponse standardResponse) {

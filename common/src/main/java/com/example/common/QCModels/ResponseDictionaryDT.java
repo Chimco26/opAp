@@ -3,6 +3,7 @@ package com.example.common.QCModels;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ResponseDictionaryDT {
@@ -23,7 +24,7 @@ public class ResponseDictionaryDT {
     private List<SubType> subTypes = null;
 
     public List<ResponseDictionnaryItemsBaseModel> getJoshIDs() {
-        return joshIDs;
+        return joshIDs != null ? joshIDs : new ArrayList<ResponseDictionnaryItemsBaseModel>();
     }
 
     public void setJoshIDs(List<ResponseDictionnaryItemsBaseModel> joshIDs) {
@@ -31,7 +32,7 @@ public class ResponseDictionaryDT {
     }
 
     public List<ResponseDictionnaryItemsBaseModel> getQualityGroups() {
-        return qualityGroups;
+        return qualityGroups != null ? qualityGroups : new ArrayList<ResponseDictionnaryItemsBaseModel>();
     }
 
     public void setQualityGroups(List<ResponseDictionnaryItemsBaseModel> qualityGroups) {
@@ -39,7 +40,7 @@ public class ResponseDictionaryDT {
     }
 
     public List<ResponseDictionnaryItemsBaseModel> getProductGroups() {
-        return productGroups;
+        return productGroups != null ? productGroups : new ArrayList<ResponseDictionnaryItemsBaseModel>();
     }
 
     public void setProductGroups(List<ResponseDictionnaryItemsBaseModel> productGroups) {
@@ -47,7 +48,7 @@ public class ResponseDictionaryDT {
     }
 
     public List<ResponseDictionnaryItemsBaseModel> getProducts() {
-        return products;
+        return products != null ? products : new ArrayList<ResponseDictionnaryItemsBaseModel>();
     }
 
     public void setProducts(List<ResponseDictionnaryItemsBaseModel> products) {
@@ -55,7 +56,7 @@ public class ResponseDictionaryDT {
     }
 
     public List<SubType> getSubTypes() {
-        return subTypes;
+        return subTypes != null ? subTypes : new ArrayList<SubType>();
     }
 
     public void setSubTypes(List<SubType> subTypes) {

@@ -8,19 +8,35 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.view.View;
+import android.widget.ProgressBar;
 
+import com.google.android.gms.dynamic.SupportFragmentWrapper;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
 import com.operatorsapp.R;
+import com.operatorsapp.dialogs.Alert2BtnDialog;
+import com.operatorsapp.dialogs.ProgressDialogFragment;
+import com.operatorsapp.fragments.JobListFragment;
 import com.operatorsapp.fragments.QCDetailsFragment;
 import com.operatorsapp.fragments.QCTestOrderFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.CroutonCreator;
+import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.requests.JobTestRequest;
+import com.operatorsapp.server.responses.JobListForMaterialResponse;
+import com.operatorsapp.server.responses.JobListForTestResponse;
+import com.operatorsapp.server.responses.JobTestResponse;
 import com.operatorsapp.utils.KeyboardUtils;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class QCActivity extends AppCompatActivity implements OnCroutonRequestListener,
-        CroutonCreator.CroutonListener,
+        CroutonCreator.CroutonListener, JobListFragment.JobListFragmentListener,
         QCTestOrderFragment.QCTestOrderFragmentListener,
         QCDetailsFragment.QCDetailsFragmentListener {
 
@@ -30,6 +46,8 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
     private QCDetailsFragment mQcDetailsFragment;
     private QCTestOrderFragment mQcTestOrderFragment;
     private boolean isOnlyQC;
+    private boolean isOnlyQCMaterial = false;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +55,70 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         setContentView(R.layout.activity_qc);
         this.configureToolbar();
         mCroutonCreator = new CroutonCreator();
+        mProgressBar = findViewById(R.id.AQA_progress);
         isOnlyQC = getIntent().getBooleanExtra(QC_IS_FROM_SELECT_MACHINE_SCREEN, false);
-        showQCTestOrderFragment();
+        if (isOnlyQC){
+            openJobOrMaterialDialog();
+        }else {
+            showQCTestOrderFragment(0);
+        }
+    }
+
+    private void openJobOrMaterialDialog() {
+        Alert2BtnDialog dialog = new Alert2BtnDialog(this, new Alert2BtnDialog.Alert2BtnDialogListener() {
+            @Override
+            public void onClickPositiveBtn() {
+                isOnlyQCMaterial = true;
+                chooseMaterial();
+            }
+
+            @Override
+            public void onClickNegativeBtn() {
+                chooseJob();
+            }
+        }, "What test would you like to run?", "Material", "Job");
+
+        dialog.showAlert2BtnDialog().show();
+    }
+
+    private void chooseJob() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        NetworkManager.getInstance().getJobsForTest(new Callback<JobListForTestResponse>() {
+            @Override
+            public void onResponse(Call<JobListForTestResponse> call, Response<JobListForTestResponse> response) {
+
+                if (response.body() != null && response.body().isNoError()){
+                    JobListFragment jobListFragment = JobListFragment.newInstance(response.body().getJobForTestList());
+                    getSupportFragmentManager().beginTransaction().add(R.id.AQC_container, jobListFragment).addToBackStack(JobListFragment.class.getSimpleName()).commit();
+                }
+                mProgressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<JobListForTestResponse> call, Throwable t) {
+                mProgressBar.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void chooseMaterial() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        NetworkManager.getInstance().getMaterialsForTestOrder(new Callback<JobListForMaterialResponse>() {
+            @Override
+            public void onResponse(Call<JobListForMaterialResponse> call, Response<JobListForMaterialResponse> response) {
+
+                if (response.body() != null && response.body().isNoError()){
+                    JobListFragment jobListFragment = JobListFragment.newInstance(response.body().getMaterialForTestList(), 0);
+                    getSupportFragmentManager().beginTransaction().add(R.id.AQC_container, jobListFragment).addToBackStack(JobListFragment.class.getSimpleName()).commit();
+                }
+                mProgressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<JobListForMaterialResponse> call, Throwable t) {
+                mProgressBar.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void configureToolbar(){
@@ -61,10 +141,10 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         // Sets the Toolbar
     }
 
-    private void showQCTestOrderFragment() {
+    private void showQCTestOrderFragment(int idForTests) {
 
         try {
-            mQcTestOrderFragment = QCTestOrderFragment.newInstance(isOnlyQC);
+            mQcTestOrderFragment = QCTestOrderFragment.newInstance(idForTests, isOnlyQCMaterial);
             getSupportFragmentManager().beginTransaction().add(R.id.AQC_container, mQcTestOrderFragment).addToBackStack(QCTestOrderFragment.TAG).commit();
         } catch (Exception e) {
             //todo
@@ -155,5 +235,11 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
     @Override
     public void onSaved() {
 
+    }
+
+    @Override
+    public void onPendingJobSelected(PendingJob pendingJob) {
+        getSupportFragmentManager().popBackStack();
+        showQCTestOrderFragment(pendingJob.getID());
     }
 }

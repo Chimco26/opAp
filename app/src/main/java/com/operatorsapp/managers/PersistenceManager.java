@@ -8,6 +8,7 @@ import com.example.common.Event;
 import com.example.common.SelectableString;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachinePersistenceManagerInterface;
 import com.operators.infra.PersistenceManagerInterface;
@@ -1006,8 +1007,12 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         Type listType = new TypeToken<HashMap<String, String>>() {
         }.getType();
 
-        HashMap<String, String> map = mGson.fromJson(savedFilters, listType);
-        return map != null ? map : new HashMap<String, String>();
+        try {
+            HashMap<String, String> map = mGson.fromJson(savedFilters, listType);
+            return map != null ? map : new HashMap<String, String>();
+        }catch (JsonSyntaxException e){
+            return new HashMap<>();
+        }
     }
 
     public void setTranslationForKPIS(ResponseKPIS kpiList) {
@@ -1016,6 +1021,10 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public ResponseKPIS getTranslationForKPIS() {
         String str = SecurePreferences.getInstance().getString(KPI_LIST, "");
-        return mGson.fromJson(str, ResponseKPIS.class);
+        ResponseKPIS kpi = mGson.fromJson(str, ResponseKPIS.class);
+        if (kpi == null){
+            kpi = new ResponseKPIS();
+        }
+        return kpi;
     }
 }

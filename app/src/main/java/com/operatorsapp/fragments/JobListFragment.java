@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,8 @@ import com.operatorsapp.R;
 import com.operatorsapp.adapters.PendingJobsAdapter;
 import com.operatorsapp.adapters.PendingJobsListAdapter;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.server.responses.JobForTest;
+import com.operatorsapp.server.responses.MaterialForTest;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 
 import java.util.ArrayList;
@@ -39,6 +42,7 @@ public class JobListFragment extends Fragment implements
 
     private static final String TAG = JobListFragment.class.getSimpleName();
     private static final String GLOBAL_SEARCH_FIELD = "GLOBAL_SEARCH_FIELD";
+    private static final String IS_FOR_QC_NO_MACHINE = "IS_FOR_QC_NO_MACHINE";
     private EditText mSearchViewEt;
     private RecyclerView mPendingJobsRv;
     private PendingJobsListAdapter mPendingJobsAdapter;
@@ -49,9 +53,14 @@ public class JobListFragment extends Fragment implements
 //    private ArrayList<Header> headers;
     private JobListFragmentListener mListener;
     private TextView mTitleTv;
-    private String[] orderedHederasKey = new String[7];
+    private String[] orderedHeadersKey = new String[7];
     private HashMap<String, String> mSavedFilters;
     private TextView mClearFiltersTv;
+    private ArrayList<PendingJob> mJobForTestList;
+    private boolean isQcFromJob = false;
+    private boolean isQcFromMaterial = false;
+    private ArrayList<JobForTest> mJobForTestListOrigin;
+    private ArrayList<MaterialForTest> mMaterialsForTestListOrigin;
 
     public static JobListFragment newInstance(PendingJobStandardResponse mPendingJobsResponse, ArrayList<PendingJob> mPendingJobs, ArrayList<Header> headers) {
 
@@ -64,6 +73,40 @@ public class JobListFragment extends Fragment implements
         return jobListFragment;
     }
 
+    public static JobListFragment newInstance(ArrayList<JobForTest> jobForTestList) {
+        JobListFragment jobListFragment = new JobListFragment();
+        jobListFragment.setDataForQcTest(jobForTestList);
+        return jobListFragment;
+    }
+
+    public static JobListFragment newInstance(ArrayList<MaterialForTest> materialForTestList, int junkParam) {
+        JobListFragment jobListFragment = new JobListFragment();
+        jobListFragment.setMaterialsForQcTest(materialForTestList);
+        return jobListFragment;
+    }
+
+    private void setMaterialsForQcTest(ArrayList<MaterialForTest> materialForTestList) {
+        mMaterialsForTestListOrigin = new ArrayList<>();
+        mMaterialsForTestListOrigin.addAll(materialForTestList);
+        isQcFromMaterial = true;
+    }
+
+    private void setDataForQcTest(ArrayList<JobForTest> jobForTestList) {
+        mJobForTestListOrigin = new ArrayList<>();
+        // TODO: 30/11/2020 DEV is A Mess, to many results (20,000)
+        if (PersistenceManager.getInstance().getSiteName().equals("DEV")) {
+            for (int i = 0; i < 100; i++) {
+
+//                if (jobForTestList.get(i).getId() == 20157 || mJobForTestListOrigin.size() < 50) {
+//                }
+                mJobForTestListOrigin.add(jobForTestList.get(i));
+            }
+        }else {
+            mJobForTestListOrigin.addAll(jobForTestList);
+        }
+        isQcFromJob = true;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +115,9 @@ public class JobListFragment extends Fragment implements
 
         mSavedFilters = PersistenceManager.getInstance().getSavedPendingJobFilters();
 
-        if (getArguments() != null) {
+        if (isQcFromJob || isQcFromMaterial){
+            setHeadersForQc();
+        }else if (getArguments() != null) {
             if (getArguments().containsKey(PendingJobStandardResponse.TAG)) {
                 mPendingJobsResponse = getArguments().getParcelable(PendingJobStandardResponse.TAG);
             }
@@ -87,7 +132,7 @@ public class JobListFragment extends Fragment implements
                 int counter = 0;// max 7
                 while (counter < 7 && i < headers.size()) {
                     if (headers.get(i).isShowOnHeader()) {
-                        orderedHederasKey[counter] = headers.get(i).getName();
+                        orderedHeadersKey[counter] = headers.get(i).getName();
                         counter++;
                     }
                     i++;
@@ -97,12 +142,47 @@ public class JobListFragment extends Fragment implements
         }
     }
 
+    private void setHeadersForQc() {
+        ArrayList<Header> headers = new ArrayList<>();
+        if (isQcFromJob) {
+            orderedHeadersKey = getResources().getStringArray(R.array.pending_job_headers_for_qc_array);
+        }else{
+            orderedHeadersKey = getResources().getStringArray(R.array.material_headers_for_qc_array);
+        }
+        for (int i = 0; i< orderedHeadersKey.length; i++) {
+            Header header = new Header(orderedHeadersKey[i], i);
+            header.setName(orderedHeadersKey[i]);
+            header.setShowOnHeader(true);
+            headers.add(header);
+        }
+
+        mPendingJobs = new ArrayList<>();
+        mJobForTestList = new ArrayList<>();
+        if (isQcFromJob) {
+            for (JobForTest job : mJobForTestListOrigin) {
+                PendingJob pj = new PendingJob();
+                pj.setID(job.getId());
+                pj.setProperties(job.getProperties(getActivity()));
+                mPendingJobs.add(pj);
+            }
+        }else {
+            for (MaterialForTest test : mMaterialsForTestListOrigin) {
+                PendingJob pj = new PendingJob();
+                pj.setID(test.getId());
+                pj.setProperties(test.getProperties(getActivity()));
+                mPendingJobs.add(pj);
+            }
+        }
+        mJobForTestList.addAll(mPendingJobs);
+        mHashMapHeaders = headerListToHashMap(headers);
+        mPendingJobsNoHeadersFiltered.addAll(mPendingJobs);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_job_list, container, false);
 
-        return rootView;
+        return inflater.inflate(R.layout.fragment_job_list, container, false);
     }//@+id/pending_jobs_tv"/>//you have a pending jobs
 
     @Override
@@ -140,55 +220,76 @@ public class JobListFragment extends Fragment implements
 
     private void initTitleViews(View view) {
         if (mHashMapHeaders != null) {
-            if (mHashMapHeaders.get(orderedHederasKey[0]) != null) {
-                ((TextView) view.findViewById(R.id.FJL_index)).setText(mHashMapHeaders.get(orderedHederasKey[0]).getDisplayName());
-                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_index_search)), mHashMapHeaders.get(orderedHederasKey[0]));
+            if (mHashMapHeaders.get(orderedHeadersKey[0]) != null) {
+                ((TextView) view.findViewById(R.id.FJL_index)).setText(mHashMapHeaders.get(orderedHeadersKey[0]).getDisplayName());
+                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_index_search)), mHashMapHeaders.get(orderedHeadersKey[0]));
             } else {
-                ((TextView) view.findViewById(R.id.FJL_index)).setText("");
-                view.findViewById(R.id.FJL_index_search).setVisibility(View.GONE);
+//                ((TextView) view.findViewById(R.id.FJL_index)).setText("");
+                view.findViewById(R.id.FJL_index_search_lil).setVisibility(View.GONE);
             }
-            if (mHashMapHeaders.get(orderedHederasKey[1]) != null) {
-                ((TextView) view.findViewById(R.id.FJL_catalog)).setText(mHashMapHeaders.get(orderedHederasKey[1]).getDisplayName());
-                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_catalog_search)), mHashMapHeaders.get(orderedHederasKey[1]));
+            if (mHashMapHeaders.get(orderedHeadersKey[1]) != null) {
+                ((TextView) view.findViewById(R.id.FJL_catalog)).setText(mHashMapHeaders.get(orderedHeadersKey[1]).getDisplayName());
+                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_catalog_search)), mHashMapHeaders.get(orderedHeadersKey[1]));
             } else {
-                ((TextView) view.findViewById(R.id.FJL_catalog)).setText("");
-                view.findViewById(R.id.FJL_catalog_search).setVisibility(View.GONE);
+//                ((TextView) view.findViewById(R.id.FJL_catalog)).setText("");
+                view.findViewById(R.id.FJL_catalog_lil).setVisibility(View.GONE);
             }
-            if (mHashMapHeaders.get(orderedHederasKey[2]) != null) {
-                ((TextView) view.findViewById(R.id.FJL_target)).setText(mHashMapHeaders.get(orderedHederasKey[2]).getDisplayName());
-                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_target_search)), mHashMapHeaders.get(orderedHederasKey[2]));
+            if (mHashMapHeaders.get(orderedHeadersKey[2]) != null) {
+                ((TextView) view.findViewById(R.id.FJL_target)).setText(mHashMapHeaders.get(orderedHeadersKey[2]).getDisplayName());
+                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_target_search)), mHashMapHeaders.get(orderedHeadersKey[2]));
             } else {
-                ((TextView) view.findViewById(R.id.FJL_target)).setText("");
-                view.findViewById(R.id.FJL_target_search).setVisibility(View.GONE);
+//                ((TextView) view.findViewById(R.id.FJL_target)).setText("");
+                view.findViewById(R.id.FJL_target_search_lil).setVisibility(View.GONE);
             }
-            if (mHashMapHeaders.get(orderedHederasKey[3]) != null) {
-                ((TextView) view.findViewById(R.id.FJL_produced)).setText(mHashMapHeaders.get(orderedHederasKey[3]).getDisplayName());
-                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_produced_search)), mHashMapHeaders.get(orderedHederasKey[3]));
+            if (mHashMapHeaders.get(orderedHeadersKey[3]) != null) {
+                ((TextView) view.findViewById(R.id.FJL_produced)).setText(mHashMapHeaders.get(orderedHeadersKey[3]).getDisplayName());
+                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_produced_search)), mHashMapHeaders.get(orderedHeadersKey[3]));
             } else {
-                ((TextView) view.findViewById(R.id.FJL_produced)).setText("");
-                view.findViewById(R.id.FJL_produced_search).setVisibility(View.GONE);
+//                ((TextView) view.findViewById(R.id.FJL_produced)).setText("");
+                view.findViewById(R.id.FJL_produced_search_lil).setVisibility(View.GONE);
             }
-            if (mHashMapHeaders.get(orderedHederasKey[4]) != null) {
-                ((TextView) view.findViewById(R.id.FJL_end_time)).setText(mHashMapHeaders.get(orderedHederasKey[4]).getDisplayName());
-                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_end_search)), mHashMapHeaders.get(orderedHederasKey[04]));
+            if (mHashMapHeaders.get(orderedHeadersKey[4]) != null) {
+                ((TextView) view.findViewById(R.id.FJL_end_time)).setText(mHashMapHeaders.get(orderedHeadersKey[4]).getDisplayName());
+                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_end_search)), mHashMapHeaders.get(orderedHeadersKey[04]));
             } else {
-                ((TextView) view.findViewById(R.id.FJL_end_time)).setText("");
-                view.findViewById(R.id.FJL_end_search).setVisibility(View.GONE);
+//                ((TextView) view.findViewById(R.id.FJL_end_time)).setText("");
+                view.findViewById(R.id.FJL_end_search_lil).setVisibility(View.GONE);
             }
-            if (mHashMapHeaders.get(orderedHederasKey[5]) != null) {
-                ((TextView) view.findViewById(R.id.FJL_job_left)).setText(mHashMapHeaders.get(orderedHederasKey[5]).getDisplayName());
-                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_job_search)), mHashMapHeaders.get(orderedHederasKey[5]));
+            if (mHashMapHeaders.get(orderedHeadersKey[5]) != null) {
+                ((TextView) view.findViewById(R.id.FJL_job_left)).setText(mHashMapHeaders.get(orderedHeadersKey[5]).getDisplayName());
+                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_job_search)), mHashMapHeaders.get(orderedHeadersKey[5]));
             } else {
-                ((TextView) view.findViewById(R.id.FJL_job_left)).setText("");
-                view.findViewById(R.id.FJL_job_search).setVisibility(View.GONE);
+//                ((TextView) view.findViewById(R.id.FJL_job_left)).setText("");
+                view.findViewById(R.id.FJL_job_search_lil).setVisibility(View.GONE);
             }
-            if (mHashMapHeaders.get(orderedHederasKey[6]) != null) {
-                ((TextView) view.findViewById(R.id.FJL_image)).setText(mHashMapHeaders.get(orderedHederasKey[6]).getDisplayName());
-                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_image_search)), mHashMapHeaders.get(orderedHederasKey[6]));
+            if (mHashMapHeaders.get(orderedHeadersKey[6]) != null) {
+                ((TextView) view.findViewById(R.id.FJL_image)).setText(mHashMapHeaders.get(orderedHeadersKey[6]).getDisplayName());
+                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_image_search)), mHashMapHeaders.get(orderedHeadersKey[6]));
             } else {
-                ((TextView) view.findViewById(R.id.FJL_image)).setText("");
-                view.findViewById(R.id.FJL_image_search).setVisibility(View.GONE);
+//                ((TextView) view.findViewById(R.id.FJL_image)).setText("");
+                view.findViewById(R.id.FJL_image_search_lil).setVisibility(View.GONE);
             }
+
+            if (orderedHeadersKey.length > 7 && mHashMapHeaders.get(orderedHeadersKey[7]) != null) {
+                ((TextView) view.findViewById(R.id.FJL_extra_1)).setText(mHashMapHeaders.get(orderedHeadersKey[7]).getDisplayName());
+                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_search_extra_1)), mHashMapHeaders.get(orderedHeadersKey[7]));
+            } else {
+//                ((TextView) view.findViewById(R.id.FJL_extra_1)).setText("");
+                view.findViewById(R.id.FJL_search_extra_1_lil).setVisibility(View.GONE);
+            }if (orderedHeadersKey.length > 8 && mHashMapHeaders.get(orderedHeadersKey[8]) != null) {
+                ((TextView) view.findViewById(R.id.FJL_extra_2)).setText(mHashMapHeaders.get(orderedHeadersKey[8]).getDisplayName());
+                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_search_extra_2)), mHashMapHeaders.get(orderedHeadersKey[8]));
+            } else {
+//                ((TextView) view.findViewById(R.id.FJL_extra_2)).setText("");
+                view.findViewById(R.id.FJL_search_extra_2_lil).setVisibility(View.GONE);
+            }if (orderedHeadersKey.length > 9 && mHashMapHeaders.get(orderedHeadersKey[9]) != null) {
+                ((TextView) view.findViewById(R.id.FJL_extra_3)).setText(mHashMapHeaders.get(orderedHeadersKey[9]).getDisplayName());
+                setHeaderSearchViewListener(((EditText) view.findViewById(R.id.FJL_search_extra_3)), mHashMapHeaders.get(orderedHeadersKey[9]));
+            } else {
+//                ((TextView) view.findViewById(R.id.FJL_extra_3)).setText("");
+                view.findViewById(R.id.FJL_search_extra_3_lil).setVisibility(View.GONE);
+            }
+
         }
     }
 
@@ -233,7 +334,7 @@ public class JobListFragment extends Fragment implements
         if (mPendingJobs != null && mPendingJobs.size() > 0) {
             mPendingJobs.get(0).setSelected(true);
             RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-            mPendingJobsAdapter = new PendingJobsListAdapter(mPendingJobs, orderedHederasKey, this, getActivity());
+            mPendingJobsAdapter = new PendingJobsListAdapter(mPendingJobs, orderedHeadersKey, this, getActivity());
             mPendingJobsRv.setLayoutManager(layoutManager2);
             mPendingJobsRv.setAdapter(mPendingJobsAdapter);
         }
@@ -362,10 +463,10 @@ public class JobListFragment extends Fragment implements
     public void updateRvBySearchResult() {
 
         mPendingJobs.clear();
-
-        if (mPendingJobsResponse != null) {
+        if (mPendingJobsResponse != null || ((isQcFromMaterial || isQcFromJob) && mJobForTestList != null)) {
+            List<PendingJob> jobList = (isQcFromJob || isQcFromMaterial) ? mJobForTestList : mPendingJobsResponse.getPendingJobs();
             outerLoop:
-            for (PendingJob pendingJob : mPendingJobsResponse.getPendingJobs()) {
+            for (PendingJob pendingJob : jobList) {
 
                 boolean atLeastOne = false;
                 for (Property property : pendingJob.getProperties()) {

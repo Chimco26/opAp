@@ -265,13 +265,13 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         initPassedView(mTestOrderDetails.getTestDetails().get(0).getPassed());
         initSamplesTestRv();
         initTestRv();
-        initDetailsRv();
+//        initDetailsRv();
     }
 
-    private void initDetailsRv() {
-        QCDetailsMultiTypeAdapter testAdapter = new QCDetailsMultiTypeAdapter(mTestOrderDetails.getTestDetailsForm(), mTestOrderDetails.getTestDetails().get(0).getTestStatus());
-        mDetailsRv.setAdapter(testAdapter);
-    }
+//    private void initDetailsRv() {
+//        QCDetailsMultiTypeAdapter testAdapter = new QCDetailsMultiTypeAdapter(mTestOrderDetails.getTestDetailsForm(), mTestOrderDetails.getTestDetails().get(0).getTestStatus());
+//        mDetailsRv.setAdapter(testAdapter);
+//    }
 
     private void initPassedView(Boolean status) {
         if (getActivity() == null){
@@ -305,7 +305,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             }
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            mSamplesAdapter = new QCParametersHorizontalAdapter(mTestOrderDetails.getTestDetails().get(0).getSamples(),
+            mSamplesAdapter = new QCParametersHorizontalAdapter(mTestOrderDetails.getTestSampleFieldsData().size(),
                     mTestOrderDetails.getTestSampleFieldsData(), this, displayMetrics.widthPixels);
             mSamplesTestRV.setAdapter(mSamplesAdapter);
         }
@@ -387,7 +387,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                     initFieldsData();
                     initDetailsData();
                     initView();
-                    initIncrementSamples(testDetailsResponse.getTestDetails().get(0).getAllowEditSamples());
+                    initIncrementSamples(testDetailsResponse.getAllowEditSamples());
+//                    initIncrementSamples(testDetailsResponse.getTestSampleFieldsData().get(0).getAllowEditSamples());
                 }
             }
 
@@ -409,7 +410,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             }
             if (testDetail.getDisplayType().equals(FIELD_TYPE_NUMBER_INT) && testDetail.getName().equals("TestStatus")) {
                 testDetail.setDisplayType(FIELD_TYPE_COMBO_INT);
-                testDetail.setComboList(mTestOrderDetails.getStatusList());
+//                testDetail.setComboList(mTestOrderDetails.getStatusList());
             }
         }
 
@@ -478,7 +479,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             mTestOrderDetails.setOriginalSampleFields((List<TestSampleFieldsDatum>) new Gson().fromJson(GsonHelper.toJson(mTestOrderDetails.getTestSampleFieldsData()), listType));
         } catch (Exception ignored) {
         }
-        mSamplesCount = mTestOrderDetails.getTestDetails().get(0).getSamples();
+        mSamplesCount = mTestOrderDetails.getTestSampleFieldsData().size();
     }
 
     private void saveTestOrderDetails(TestDetailsResponse testDetailsResponse) {

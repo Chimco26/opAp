@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.common.QCModels.StatusList;
 import com.example.common.QCModels.TestDetailsForm;
+import com.example.common.QCModels.ValueList;
 import com.example.common.SelectableString;
 import com.operatorsapp.R;
 import com.operatorsapp.utils.TimeUtils;
@@ -132,7 +133,9 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
             case FIELD_TYPE_COMBO_INT:
                 ((ComboViewHolder) viewHolder).title.setText(item.getDisplayEName());
                 TooltipCompat.setTooltipText(((ComboViewHolder) viewHolder).title, item.getDisplayEName());
-                ((ComboViewHolder) viewHolder).initSpinner(((ComboViewHolder) viewHolder).mSpinner, item);
+                if (item.getListValues() != null && item.getListValues().size() > 0) {
+                    ((ComboViewHolder) viewHolder).initSpinner(((ComboViewHolder) viewHolder).mSpinner, item);
+                }
                 break;
             case FIELD_TYPE_TIME_INT:
                 if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty()) {
@@ -274,7 +277,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
             if (item == null) {
                 return;
             }
-            final List<SelectableString> list = buildSelectableStringList(item.getStatusList());
+            final List<SelectableString> list = buildSelectableStringList(item.getListValues());
             final SimpleSpinnerAdapter dataAdapter = new SimpleSpinnerAdapter(spinner.getContext(), R.layout.base_spinner_item, list);
             dataAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -300,14 +303,13 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
             });
         }
 
-        private List<SelectableString> buildSelectableStringList(List<StatusList> statusLists) {
+        private List<SelectableString> buildSelectableStringList(List<ValueList> listValues) {
             ArrayList<SelectableString> selectableStrings = new ArrayList<>();
-            for (StatusList statusList : statusLists) {
-                selectableStrings.add(new SelectableString(statusList.getName(), false, String.valueOf(statusList.getID())));
+            for (ValueList value : listValues) {
+                selectableStrings.add(new SelectableString(value.getValue(), false, String.valueOf(value.getID())));
             }
             return selectableStrings;
         }
-
     }
 
     public class NumViewHolder extends CustomViewHolder {

@@ -23,9 +23,10 @@ public class TestDetailsResponse extends StandardResponse {
     public static final String FIELD_TYPE_LAST = "last";
     public static final int FIELD_TYPE_LAST_INT = 6;
 
-    @SerializedName("StatusList")
-    @Expose
-    private List<StatusList> statusList = null;
+
+//    @SerializedName("StatusList")
+//    @Expose
+//    private List<StatusList> statusList = null;
     @SerializedName("TestDetails")
     @Expose
     private List<TestDetail> testDetails = null;
@@ -47,6 +48,10 @@ public class TestDetailsResponse extends StandardResponse {
     @SerializedName("TestName")
     @Expose
     private String testName = null;
+    @SerializedName("AllowEditSamplesCount")
+    @Expose
+    private Boolean allowEditSamples;
+
     private List<TestSampleFieldsDatum> originalSampleFields;
     private ArrayList<ArrayList<TestFieldsDatum>> testFieldsSamplesComplete;
 
@@ -58,20 +63,13 @@ public class TestDetailsResponse extends StandardResponse {
         this.error = error;
     }
 
-    public List<StatusList> getStatusList() {
-        return statusList;
-    }
-
-    public void setStatusList(List<StatusList> statusList) {
-        this.statusList = statusList;
-    }
-
     public List<TestDetail> getTestDetails() {
         return testDetails;
     }
 
-    public void setTestDetails(List<TestDetail> testDetails) {
-        this.testDetails = testDetails;
+
+    public Boolean getAllowEditSamples() {
+        return allowEditSamples;
     }
 
     public List<TestDetailsForm> getTestDetailsForm() {
