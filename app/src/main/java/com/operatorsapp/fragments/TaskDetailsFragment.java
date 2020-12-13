@@ -187,10 +187,10 @@ public class TaskDetailsFragment extends Fragment {
         mTimeHr = view.findViewById(R.id.FTD_time_hr_et);
         mTimeMin = view.findViewById(R.id.FTD_time_min_et);
         mSeverityRv = view.findViewById(R.id.FTD_severity_rv);
-//        mTaskStepRv = view.findViewById(R.id.FTD_sub_task_rv);
-//        mTaskStepAddNewEt = view.findViewById(R.id.FTD_sub_task_add_new_et);
-//        mNotesRv = view.findViewById(R.id.FTD_task_notes_rv);
-//        mNotesAddNewEt = view.findViewById(R.id.FTD_task_note_add_new_et);
+        mTaskStepRv = view.findViewById(R.id.FTD_sub_task_rv);
+        mTaskStepAddNewEt = view.findViewById(R.id.FTD_sub_task_add_new_et);
+        mNotesRv = view.findViewById(R.id.FTD_task_notes_rv);
+        mNotesAddNewEt = view.findViewById(R.id.FTD_task_note_add_new_et);
         mAttachedFilesRv = view.findViewById(R.id.FTD_attached_files_rv);
         mAttachedFilesTv = view.findViewById(R.id.FTD_attached_files_tv);
         mSaveBtn = view.findViewById(R.id.FTD_add_task_btn);
@@ -230,8 +230,8 @@ public class TaskDetailsFragment extends Fragment {
                 mEndDate.setText(TimeUtils.getDate(TimeUtils.convertDateToMillisecond(task.getTaskEndTimeTarget(),
                         SQL_T_FORMAT_NO_SECOND), SQL_NO_T_FORMAT_NO_SECOND));
             }
-//            getTaskNotes();
-//            getTaskSteps();
+            getTaskNotes();
+            getTaskSteps();
             getTaskFiles(task.getTaskID());
             initTotalTime(task);
             initAssignSpinner(task.getAssigneeDisplayName(), getResources().getColor(R.color.grey1));
@@ -458,14 +458,14 @@ public class TaskDetailsFragment extends Fragment {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         int selectedId = finalStatus.get(adapterView.getSelectedItemPosition()).getID();
-//                        if (selectedId == TaskProgress.TaskStatus.DONE.getValue()){
-//                            for (TaskStep step : ((TaskStepsAdapter)mTaskStepRv.getAdapter()).getTaskSteps()) {
-//                                if (step.IsOpen){
-//                                    ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(), getString(R.string.step_task_not_finished), CroutonCreator.CroutonType.ALERT_DIALOG);
-//                                    return;
-//                                }
-//                            }
-//                        }
+                        if (selectedId == TaskProgress.TaskStatus.DONE.getValue()){
+                            for (TaskStep step : ((TaskStepsAdapter)mTaskStepRv.getAdapter()).getTaskSteps()) {
+                                if (step.IsOpen){
+                                    ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(), getString(R.string.step_task_not_finished), CroutonCreator.CroutonType.ALERT_DIALOG);
+                                    return;
+                                }
+                            }
+                        }
                         dataAdapter.setTitle(adapterView.getSelectedItemPosition());
                         mTask.setTaskStatus(selectedId);
                     }
@@ -610,18 +610,18 @@ public class TaskDetailsFragment extends Fragment {
     }
 
     private void initListener(View view) {
-//        view.findViewById(R.id.FTD_sub_task_add_new_iv).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                addTaskStep();
-//            }
-//        });
-//        view.findViewById(R.id.FTD_task_note_add_new_iv).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                addNoteToTask();
-//            }
-//        });
+        view.findViewById(R.id.FTD_sub_task_add_new_iv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addTaskStep();
+            }
+        });
+        view.findViewById(R.id.FTD_task_note_add_new_iv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addNoteToTask();
+            }
+        });
         view.findViewById(R.id.FTD_close_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -719,12 +719,12 @@ public class TaskDetailsFragment extends Fragment {
     private void createTask(Task task) {
         PersistenceManager pm = PersistenceManager.getInstance();
         ProgressDialogManager.show(getActivity());
-//        task.setTaskSteps(((TaskStepsAdapter)mTaskStepRv.getAdapter()).getTaskSteps());
+        task.setTaskSteps(((TaskStepsAdapter)mTaskStepRv.getAdapter()).getTaskSteps());
         SimpleRequests.createOrUpdateTask(task, pm.getSiteUrl(), new CreateTaskCallback() {
             @Override
             public void onCreateTaskCallbackSuccess(StandardResponse response) {
                 ProgressDialogManager.dismiss();
-//                postNotesForTask(response.getLeaderRecordID());
+                postNotesForTask(response.getLeaderRecordID());
 //                ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
 //                mListener.onUpdate();
             }

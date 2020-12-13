@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -70,6 +71,12 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
+        if (mListFiltered.get(position).getNumOfOpenSubTasks() > 0){
+            holder.mSubTaskIconIv.setVisibility(View.VISIBLE);
+        }else {
+            holder.mSubTaskIconIv.setVisibility(View.GONE);
+        }
+
         holder.mTitle.setText(String.format(Locale.getDefault(), "%s - %d", mListFiltered.get(position).getSubjectTrans(),
                 mListFiltered.get(position).getTaskID()));
         holder.mText.setText(mListFiltered.get(position).getText());
@@ -103,6 +110,7 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
         private TextView mAssignee;
         private TextView mPriorityTv;
         private View mAlertMarge;
+        private ImageView mSubTaskIconIv;
 
         public ViewHolder(View itemView, int handleResId, boolean dragOnLongPress) {
             super(itemView, handleResId, dragOnLongPress);
@@ -112,6 +120,7 @@ public class TaskColumnAdapter extends DragItemAdapter<TaskProgress, TaskColumnA
             mPriorityTv = itemView.findViewById(R.id.ITask_priority_tv);
             mAlertMarge = itemView.findViewById(R.id.ITask_priority_view);
             mAssigneeTitle = itemView.findViewById(R.id.ITask_assign_title);
+            mSubTaskIconIv = itemView.findViewById(R.id.ITask_sub_task_iv);
 
             itemView.findViewById(R.id.ITask_main_rl).setOnClickListener(new View.OnClickListener() {
                 @Override
