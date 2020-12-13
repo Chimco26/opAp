@@ -2,13 +2,14 @@ package com.operatorsapp.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import androidx.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import androidx.annotation.NonNull;
 
 import com.example.common.permissions.WidgetInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -20,6 +21,7 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.view.widgetViewHolders.CounterViewHolder;
+import com.operatorsapp.view.widgetViewHolders.FreeTextViewHolder;
 import com.operatorsapp.view.widgetViewHolders.GenericTimeViewHolder;
 import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
 import com.operatorsapp.view.widgetViewHolders.ProjectionViewHolderNew;
@@ -49,6 +51,7 @@ public class WidgetAdapter extends Adapter {
     private final int TIME_LEFT = 6; // current value is the time left in minutes
     private static final int REPORT_PERCENT = 7;
     private static final int GENERIC_TIME = 8;
+    private static final int FREE_TEXT = 9;
     private GoToScreenListener mGoToScreenListener;
     private int mRangeCapsuleWidth = 0;
     private int mProjectionCapsuleWidth = 0;
@@ -154,8 +157,8 @@ public class WidgetAdapter extends Adapter {
             case NUMERIC: {
                 return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
                         mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth,
-                        WidgetInfo.getWidgetInfo(mPermissionResponse,WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(),
-                        WidgetInfo.getWidgetInfo(mPermissionResponse,WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean());
+                        WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(),
+                        WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean());
             }
             case RANGE: {
                 return new RangeViewHolder(inflater.inflate(R.layout.range_widget_cardview, parent, false),
@@ -176,8 +179,8 @@ public class WidgetAdapter extends Adapter {
             case TIME_LEFT: {
                 return new TimeLeftViewHolder(inflater.inflate(R.layout.time_left_widget_cardview, parent, false),
                         mDashboardCentralContainerListener, mMachineStatus, mEndSetupDisable, mHeight, mWidth,
-                        WidgetInfo.getWidgetInfo(mPermissionResponse,WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean(),
-                        WidgetInfo.getWidgetInfo(mPermissionResponse,WidgetInfo.PermissionId.ACTIVATE_JOB.getId()).getHaspermissionBoolean());
+                        WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean(),
+                        WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.ACTIVATE_JOB.getId()).getHaspermissionBoolean());
             }
             case REPORT_PERCENT: {
                 return new ReportStopViewHolder(inflater.inflate(R.layout.report_percent_widget_cardview, parent, false),
@@ -186,11 +189,14 @@ public class WidgetAdapter extends Adapter {
             case GENERIC_TIME: {
                 return new GenericTimeViewHolder(inflater.inflate(R.layout.holder_generic_time, parent, false), mHeight, mWidth);
             }
+            case FREE_TEXT: {
+                return new FreeTextViewHolder(inflater.inflate(R.layout.holder_free_text, parent, false), mHeight, mWidth);
+            }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
                 mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth,
-                WidgetInfo.getWidgetInfo(mPermissionResponse,WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(),
-                WidgetInfo.getWidgetInfo(mPermissionResponse,WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean());
+                WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(),
+                WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean());
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -206,7 +212,9 @@ public class WidgetAdapter extends Adapter {
                     final ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
 //                    setSizes(imageViewHolder.mParentLayout);
                     String path = mWidgets.get(position).getCurrentValue();
-                    if (!path.contains("http")){path = null;}
+                    if (!path.contains("http")) {
+                        path = null;
+                    }
                     ImageLoader.getInstance().displayImage(path, imageViewHolder.mImageLayout);
                     break;
                 case COUNTER:
@@ -215,8 +223,8 @@ public class WidgetAdapter extends Adapter {
                     break;
                 case NUMERIC:
                     final NumericViewHolder numericViewHolder = (NumericViewHolder) holder;
-                    numericViewHolder.setNumericItem(widget, WidgetInfo.getWidgetInfo(mPermissionResponse,WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(),
-                            WidgetInfo.getWidgetInfo(mPermissionResponse,WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean());
+                    numericViewHolder.setNumericItem(widget, WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(),
+                            WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean());
                     break;
                 case TIME:
                     final TimeViewHolder timeViewHolder = (TimeViewHolder) holder;
@@ -233,8 +241,8 @@ public class WidgetAdapter extends Adapter {
                 case TIME_LEFT:
                     final TimeLeftViewHolder timeLeftViewHolder = (TimeLeftViewHolder) holder;
                     timeLeftViewHolder.setData(widget, mMachineStatus, mEndSetupDisable,
-                            WidgetInfo.getWidgetInfo(mPermissionResponse,WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean(),
-                            WidgetInfo.getWidgetInfo(mPermissionResponse,WidgetInfo.PermissionId.ACTIVATE_JOB.getId()).getHaspermissionBoolean());
+                            WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean(),
+                            WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.ACTIVATE_JOB.getId()).getHaspermissionBoolean());
                     mEndSetupDisable = false;
                 case REPORT_PERCENT:
                     final ReportStopViewHolder reportStopViewHolder = (ReportStopViewHolder) holder;
@@ -242,6 +250,9 @@ public class WidgetAdapter extends Adapter {
                 case GENERIC_TIME:
                     final GenericTimeViewHolder genericTimeViewHolder = (GenericTimeViewHolder) holder;
                     genericTimeViewHolder.setData(widget);
+                case FREE_TEXT:
+                    final FreeTextViewHolder freeTextViewHolder = (FreeTextViewHolder) holder;
+                    freeTextViewHolder.setData(widget);
             }
             //        final View itemview= holder.itemView;
             //        Log.clearPollingRequest("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
@@ -313,6 +324,9 @@ public class WidgetAdapter extends Adapter {
                 break;
             case 8:
                 type = GENERIC_TIME;
+                break;
+            case 9:
+                type = FREE_TEXT;
                 break;
             default:
                 type = NUMERIC;
