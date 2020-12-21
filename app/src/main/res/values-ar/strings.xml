@@ -87,7 +87,7 @@
     <string name="report_reject_nreason">تقرير تجاهل\nسبب</string>
     <string name="report_stop_start">"البدايه"</string>
     <string name="report_stop_resume">"النهايه"</string>
-    <string name="report_cycle_nunits">تغيير &placeholder1; فيn\\ الدورة</string>
+    <string name="report_cycle_nunits">تغيير &placeholder1; فيn\ الدورة</string>
     <string name="report_cycle_units">تغيير &placeholder1; فيn\\ الدورة</string>
     <string name="report_inventory_nitem_production">تسجيل مخزون\nالمنتج</string>
     <string name="report_inventory_item_production">تسجيل محزون المنتج</string>

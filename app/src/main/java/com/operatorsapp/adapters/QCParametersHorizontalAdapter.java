@@ -31,9 +31,10 @@ public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParame
         list = (ArrayList<TestSampleFieldsDatum>) testSampleFieldsData;
         mQcSamplesMultiTypeAdapterListener = qcSamplesMultiTypeAdapterListener;
         this.samples = samples;
-        updateMinusLastColumn();
+//        updateMinusLastColumn(); todo why is it here???
+        int divide = list.size() == 0 ? 1 : list.size();
         if (widthPixels > 0) {
-            itemWidth = widthPixels / list.size();
+            itemWidth = widthPixels / divide;
         }
     }
 

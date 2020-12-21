@@ -93,7 +93,7 @@
     <string name="report_reject_nreason">Report Reject\nReason</string>
     <string name="report_stop_start">"Start "</string>
     <string name="report_stop_resume">"End"</string>
-    <string name="report_cycle_nunits">Change &placeholder1; in \\nCycle</string><!--take text from KPIresponse with key "units" and replace the placeholder-->
+    <string name="report_cycle_nunits">Change &placeholder1; in \nCycle</string><!--take text from KPIresponse with key "units" and replace the placeholder-->
     <string name="report_cycle_units">Change &placeholder1; in \nCycle</string><!--take text from KPIresponse with key "units" and replace the placeholder-->
     <string name="report_inventory_nitem_production">Report Production \n</string>
     <string name="report_inventory_item_production">Report Production</string>
@@ -590,4 +590,8 @@
     <string name="sub_task">Sub Task</string>
     <string name="add_sub_task">Add Sub-Task</string>
     <string name="step_task_not_finished">Please finish all task steps</string>
+    <string name="select_job">Select Job</string>
+    <string name="select_material">Select Material</string>
+    <string name="run_test_for">Run a test for:</string>
+    <string name="material">Material</string>
 </resources>

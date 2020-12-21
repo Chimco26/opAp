@@ -93,7 +93,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         setActionBar();
 
         rootView.findViewById(R.id.FSM_qc_test_btn).setOnClickListener(this);
-        rootView.findViewById(R.id.FSM_change_factory_btn).setOnClickListener(this);
+//        rootView.findViewById(R.id.FSM_change_factory_btn).setOnClickListener(this);
         departementRecyclerView = rootView.findViewById(R.id.FSM_department_rv);
         mSearchField = rootView.findViewById(R.id.machine_id_name);
         mGoButton = rootView.findViewById(R.id.goBtn);
@@ -182,6 +182,16 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 ((TextView) view.findViewById(R.id.title)).setText(getString(R.string.link_machine));
                 actionBar.setCustomView(view);
                 actionBar.setIcon(null);
+
+                TextView changeFactoryTv = view.findViewById(R.id.change_factory);
+                changeFactoryTv.setVisibility(View.VISIBLE);
+                changeFactoryTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ClearData.clearData();
+                        mListener.onChangeFactory();
+                    }
+                });
 
             }
         }

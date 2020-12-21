@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -107,7 +108,6 @@ public class QCTestOrderFragment extends Fragment implements
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initVars(view);
         mQcRequests = new QCRequests();
 
         int idForTest = PersistenceManager.getInstance().getJobId();
@@ -115,6 +115,7 @@ public class QCTestOrderFragment extends Fragment implements
             idForTest = getArguments().getInt(ID_FOR_TEST_LIST, PersistenceManager.getInstance().getJobId());
             isOnlyQCMaterial = getArguments().getBoolean(ID_FOR_MATERIAL, false);
         }
+        initVars(view);
         mTestOrderRequest = new TestOrderRequest(idForTest != 0 ? idForTest : PersistenceManager.getInstance().getJobId());
         getTestOrder(mTestOrderRequest);
     }
@@ -155,6 +156,12 @@ public class QCTestOrderFragment extends Fragment implements
         mProductGroupSpinner = view.findViewById(R.id.FQCTO_spin_product_spin);
         mProductsSpinner = view.findViewById(R.id.FQCTO_spin_products);
         mTestSpinner = view.findViewById(R.id.FQCTO_spin_test);
+
+        if (isOnlyQCMaterial){
+            view.findViewById(R.id.FQCTO_josh_lil).setVisibility(View.GONE);
+            view.findViewById(R.id.FQCTO_product_lil).setVisibility(View.GONE);
+            ((TextView)view.findViewById(R.id.FQCTO_spin_product_tv)).setText(getString(R.string.materials));
+        }
     }
 
     private void getTestOrder(final TestOrderRequest testOrderRequest) {

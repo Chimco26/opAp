@@ -47,9 +47,8 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
     private Integer testStatus;
     private List<TestDetailsForm> list;
 
-    public QCDetailsMultiTypeAdapter(List<TestDetailsForm> list, Integer testStatus) {
+    public QCDetailsMultiTypeAdapter(List<TestDetailsForm> list) {
         this.list = list;
-        this.testStatus = testStatus;
     }
 
     @NonNull
@@ -282,7 +281,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
             dataAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(dataAdapter);
-            SelectableString.getById((ArrayList<SelectableString>) list, String.valueOf(testStatus)).setSelected(true);
+            SelectableString.getById((ArrayList<SelectableString>) list, String.valueOf(item.getCurrentValue())).setSelected(true);
             int selectedPosition = SelectableString.getSelectedItemPosition((ArrayList<SelectableString>) list);
             spinner.setSelection(selectedPosition, false);
             dataAdapter.setTitle(selectedPosition);
@@ -292,7 +291,6 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     dataAdapter.setTitle(i);
                     list.get(i).selectThisItemOnly((ArrayList<SelectableString>) list);
-                    testStatus = Integer.valueOf(list.get(i).getId());
                     item.setCurrentValue(list.get(i).getId());
                 }
 
