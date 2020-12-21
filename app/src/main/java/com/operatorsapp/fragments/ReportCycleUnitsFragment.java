@@ -156,9 +156,9 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         mPlusButton = view.findViewById(R.id.button_plus);
         mMinusButton = view.findViewById(R.id.button_minus);
 
-        ((TextView)view.findViewById(R.id.FRCU_units_tv)).setText(PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units"));
+        ((TextView)view.findViewById(R.id.FRCU_units_tv)).setText(PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("Units"));
         String txt = getResources().getString(R.string.report_cycle_nunits);
-        txt = txt.replace(getResources().getString(R.string.placeholder1), PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units"));
+        txt = txt.replace(getResources().getString(R.string.placeholder1), PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("Units"));
         ((TextView)view.findViewById(R.id.FRCU_units_subtitle_tv)).setText(txt);
 
         mButtonReport = view.findViewById(R.id.button_report);

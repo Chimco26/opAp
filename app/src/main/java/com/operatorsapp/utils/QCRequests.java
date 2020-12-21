@@ -142,7 +142,7 @@ public class QCRequests {
             public void onResponse(Call<SaveTestDetailsResponse> call, Response<SaveTestDetailsResponse> response) {
 
                 if (callback != null) {
-                    if (response.body() != null && (response.body().getError() == null || response.body().getError().getErrorDesc() == null)) {
+                    if (response.body() != null && response.body().isNoError()) {
                         callback.onSuccess(response.body());
                     } else {
                         onFailure(call, new Throwable(getErrorMessage(response.body(), "postQCSaveTestDetails() failed")));

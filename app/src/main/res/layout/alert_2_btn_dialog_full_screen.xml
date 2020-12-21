@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/report_reject_screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:padding="150dp">
+
+        <RelativeLayout
+            android:id="@+id/button_cancel"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/close" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/DALJ_title_ic"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/attention"/>
+
+        <TextView
+            android:id="@+id/DALJ_text_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_above="@+id/TTBD_btn_ly"
+            android:padding="15dp"
+            android:layout_below="@+id/DALJ_title_ic"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="25dp"
+            android:maxLines="2"
+            android:gravity="center"/>
+
+        <RelativeLayout
+            android:id="@+id/TTBD_btn_ly"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginStart="100dp"
+            android:layout_alignParentBottom="true">
+
+            <TextView
+                android:id="@+id/DALJ_negative_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:maxWidth="200dp"
+                android:minWidth="150dp"
+                android:textSize="22sp"
+                android:textColor="@color/blue1"
+                android:background="@drawable/stroke_blue"
+                android:text="@string/no"
+                android:layout_alignParentStart="true"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:gravity="center"
+                app:autoSizeMaxTextSize="22sp"
+                app:autoSizeTextType="uniform"/>
+
+            <TextView
+                android:id="@+id/DALJ_positive_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:maxWidth="200dp"
+                android:minWidth="150dp"
+                android:layout_alignParentEnd="true"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@color/blue1"
+                android:text="@string/yes"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:gravity="center"
+                app:autoSizeMaxTextSize="22sp"
+                app:autoSizeTextType="uniform"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -176,7 +176,7 @@ public class StopEventLogActivity extends AppCompatActivity
                 }
             }, title, getString(R.string.yes), getString(R.string.only_to_this_event));
 
-            alert2BtnDialog.showAlert2BtnDialog().show();
+            alert2BtnDialog.showAlert2BtnDialog(false).show();
         }else {
             sendReport(position, mSelectedSubreason, false);
         }

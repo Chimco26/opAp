@@ -28,24 +28,31 @@
                     android:layout_width="match_parent"
                     android:layout_height="10dp" />
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/FQCTO_josh_lil"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:text="@string/josh"
-                    android:textColor="@color/black"
-                    app:autoSizeMaxTextSize="25sp"
-                    app:autoSizeTextType="uniform" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:background="@drawable/edit_text_background_selector">
-
-                    <Spinner
-                        android:id="@+id/FQCTO_spin_josh"
+                    <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </RelativeLayout>
+                        android:layout_height="20dp"
+                        android:text="@string/josh"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="25sp"
+                        app:autoSizeTextType="uniform" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="@drawable/edit_text_background_selector">
+
+                        <Spinner
+                            android:id="@+id/FQCTO_spin_josh"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </RelativeLayout>
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -75,6 +82,7 @@
                     android:layout_height="10dp" />
 
                 <TextView
+                    android:id="@+id/FQCTO_spin_product_tv"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:text="@string/product_group"
@@ -97,24 +105,32 @@
                     android:layout_width="match_parent"
                     android:layout_height="10dp" />
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/FQCTO_product_lil"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:text="@string/product"
-                    android:textColor="@color/black"
-                    app:autoSizeMaxTextSize="25sp"
-                    app:autoSizeTextType="uniform" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:background="@drawable/edit_text_background_selector">
-
-                    <Spinner
-                        android:id="@+id/FQCTO_spin_products"
+                    <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </RelativeLayout>
+                        android:layout_height="20dp"
+                        android:text="@string/product"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="25sp"
+                        app:autoSizeTextType="uniform" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="@drawable/edit_text_background_selector">
+
+                        <Spinner
+                            android:id="@+id/FQCTO_spin_products"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </RelativeLayout>
+                </LinearLayout>
+
 
                 <View
                     android:layout_width="match_parent"

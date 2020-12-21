@@ -1402,6 +1402,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 for (int i = 0; i < options.length; i++) {
                     mJobActionsSpinnerItems.add(new JobActionsSpinnerItem(i, options[i]));
+                    if (i == 2 && mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData() != null
+                            && mCurrentMachineStatus.getAllMachinesData().get(0).getConfigName() != null){
+                        mJobActionsSpinnerItems.get(i).setEnabled(false);
+                    }
                 }
                 // add approve first item with unique ID;
                 mApproveItemID = mJobActionsSpinnerItems.size();
@@ -3005,7 +3009,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         @Override
         protected String doInBackground(Void... params) {
-            if (isAdded() && !isCancelled()) {
+            if (isAdded() && !isCancelled() && isVisible()) {
                 updateEvents(this, events, actualBarExtraResponse, myTaskListener);
             }
             return "";

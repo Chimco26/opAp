@@ -1,11 +1,17 @@
 package com.operatorsapp.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -13,7 +19,9 @@ import android.widget.ProgressBar;
 import com.google.android.gms.dynamic.SupportFragmentWrapper;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.Alert2BtnDialog;
+import com.operatorsapp.dialogs.GenericDialog;
 import com.operatorsapp.dialogs.ProgressDialogFragment;
 import com.operatorsapp.fragments.JobListFragment;
 import com.operatorsapp.fragments.QCDetailsFragment;
@@ -38,7 +46,8 @@ import retrofit2.Response;
 public class QCActivity extends AppCompatActivity implements OnCroutonRequestListener,
         CroutonCreator.CroutonListener, JobListFragment.JobListFragmentListener,
         QCTestOrderFragment.QCTestOrderFragmentListener,
-        QCDetailsFragment.QCDetailsFragmentListener {
+        QCDetailsFragment.QCDetailsFragmentListener,
+        Thread.UncaughtExceptionHandler{
 
     public static final String QC_IS_FROM_SELECT_MACHINE_SCREEN = "QC_IS_FROM_SELECT_MACHINE_SCREEN";
 
@@ -76,9 +85,9 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
             public void onClickNegativeBtn() {
                 chooseJob();
             }
-        }, "What test would you like to run?", "Material", "Job");
+        }, getString(R.string.run_test_for), getString(R.string.material), getString(R.string.job));
 
-        dialog.showAlert2BtnDialog().show();
+        dialog.showAlert2BtnDialog(true).show();
     }
 
     private void chooseJob() {
@@ -135,8 +144,10 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setResult(RESULT_CANCELED, getIntent());
-                finish();            }
+                onBackPressed();
+//                setResult(RESULT_CANCELED, getIntent());
+//                finish();
+            }
         });
         // Sets the Toolbar
     }
@@ -145,7 +156,7 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
 
         try {
             mQcTestOrderFragment = QCTestOrderFragment.newInstance(idForTests, isOnlyQCMaterial);
-            getSupportFragmentManager().beginTransaction().add(R.id.AQC_container, mQcTestOrderFragment).addToBackStack(QCTestOrderFragment.TAG).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.AQC_container, mQcTestOrderFragment, mQcTestOrderFragment.getTag()).addToBackStack(QCTestOrderFragment.TAG).commit();
         } catch (Exception e) {
             //todo
         }
@@ -154,7 +165,7 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
 
         try {
             mQcDetailsFragment = QCDetailsFragment.newInstance(testId);
-            getSupportFragmentManager().beginTransaction().add(R.id.AQC_container, mQcDetailsFragment).addToBackStack(QCDetailsFragment.TAG).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.AQC_container, mQcDetailsFragment, mQcDetailsFragment.getTag()).addToBackStack(QCDetailsFragment.TAG).commit();
         } catch (Exception e) {
             //todo
         }
@@ -172,8 +183,17 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
 //            return;
 //        }
         if (count <= 1) {
-            setResult(RESULT_CANCELED, getIntent());
-            finish();
+            if (isOnlyQC){
+                if (getSupportFragmentManager().getFragments().size() > 1){
+                    getSupportFragmentManager().popBackStack();
+                }else {
+                    super.onBackPressed();
+                    openJobOrMaterialDialog();
+                }
+            }else {
+                setResult(RESULT_CANCELED, getIntent());
+                finish();
+            }
             //additional code
         } else {
             getSupportFragmentManager().popBackStack();
@@ -239,7 +259,21 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
 
     @Override
     public void onPendingJobSelected(PendingJob pendingJob) {
-        getSupportFragmentManager().popBackStack();
+//        getSupportFragmentManager().popBackStack();
         showQCTestOrderFragment(pendingJob.getID());
+    }
+
+    @Override
+    public void uncaughtException(Thread t, Throwable e) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("crash", true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                | Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(OperatorApplication.getAppContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager mgr = (AlarmManager) OperatorApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+        finish();
+        System.exit(2);
     }
 }
