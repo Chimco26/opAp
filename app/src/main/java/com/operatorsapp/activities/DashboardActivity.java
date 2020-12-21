@@ -2410,7 +2410,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             machineLineItems.remove(current);
         }
 
-        if (machineLineItems != null && machineLineItems.size() > 1) {
+        if (machineLineItems != null && machineLineItems.size() > 0) {
 
             TitleAndSubWithSelectableListDialog titleAndSubWithSelectableListDialog = new TitleAndSubWithSelectableListDialog(
                     this, new TitleAndSubWithSelectableListDialog.TitleAndSubWithSelectableListDialogListener() {
@@ -2903,6 +2903,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (resultCode == RESULT_OK && requestCode == QC_ACTIVITY_RESULT_CODE) {
 
             ShowCrouton.showSimpleCrouton(this, getString(R.string.send_test_success), CroutonCreator.CroutonType.SUCCESS);
+            pollingBackup(true);
+            dashboardDataStartPolling();
+            mReportFieldsForMachineCore.startPolling();
+            mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
 
         }
 
@@ -3476,6 +3480,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onQCTestSelected() {
+        pollingBackup(false);
+        mAllDashboardDataCore.stopPolling();
+        mAllDashboardDataCore.unregisterListener();
+        mAllDashboardDataCore.stopTimer();
+        mReportFieldsForMachineCore.stopPolling();
+        mReportFieldsForMachineCore.unregisterListener();
+        NetworkManager.getInstance().clearPollingRequest();
+
         Intent intent = new Intent(DashboardActivity.this, QCActivity.class);
         intent.putExtra(QCActivity.QC_IS_FROM_SELECT_MACHINE_SCREEN, true);
         ignoreFromOnPause = true;

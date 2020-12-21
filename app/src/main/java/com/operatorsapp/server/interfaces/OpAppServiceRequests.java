@@ -123,7 +123,7 @@ public interface OpAppServiceRequests {
     @POST("/LeaderMESApi/GetTaskSteps")
     Call<TaskStepResponse> getTaskSteps(@Body GetTaskNoteRequest request);
 
-    @POST("/LeaderMESApi/GetTaskSteps")
+    @POST("/LeaderMESApi/GetTranslationForKPIS")
     Call<ResponseKPIS> getKPIs(@Body BaseRequest request);
 
     @POST("/LeaderMESApi/GetJobsForTestOrder")

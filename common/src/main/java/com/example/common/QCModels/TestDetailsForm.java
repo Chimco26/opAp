@@ -116,7 +116,7 @@ public class TestDetailsForm {
     }
 
     public String getCurrentValue() {
-        return currentValue;
+        return currentValue != null ? currentValue : "";
     }
 
     public void setCurrentValue(String currentValue) {

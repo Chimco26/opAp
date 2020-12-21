@@ -38,6 +38,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.QCActivity;
+import com.operatorsapp.adapters.QCDetailsMultiTypeAdapter;
 import com.operatorsapp.adapters.QCMultiTypeAdapter;
 import com.operatorsapp.adapters.QCParametersHorizontalAdapter;
 import com.operatorsapp.adapters.QCSamplesMultiTypeAdapter;
@@ -152,7 +153,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         view.findViewById(R.id.FQCD_close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().finish();
+                getActivity().onBackPressed();
             }
         });
         initIncrementSamplesView(view);
@@ -170,8 +171,16 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     }
 
     private boolean isMandatoryFieldsCompleted() {
+        List<TestDetailsForm> testDetailsForm = mTestOrderDetails.getTestDetailsForm();
         List<TestFieldsDatum> testFields = mTestOrderDetails.getTestFieldsData();
         List<TestSampleFieldsDatum> testSamplesFields = mTestOrderDetails.getTestSampleFieldsData();
+
+        for (TestDetailsForm form : testDetailsForm) {
+            if (!form.getAllowNull() && form.getAllowEntry()
+                    && (form.getCurrentValue() == null || form.getCurrentValue().isEmpty())) {
+                return false;
+            }
+        }
 
         for (TestFieldsDatum testFieldsDatum : testFields) {
             if (testFieldsDatum.getRequiredField() && testFieldsDatum.getAllowEntry()
@@ -276,13 +285,13 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         initPassedView(mTestOrderDetails.getTestDetails().get(0).getPassed());
         initSamplesTestRv();
         initTestRv();
-//        initDetailsRv();
+        initDetailsRv();
     }
 
-//    private void initDetailsRv() {
-//        QCDetailsMultiTypeAdapter testAdapter = new QCDetailsMultiTypeAdapter(mTestOrderDetails.getTestDetailsForm(), mTestOrderDetails.getTestDetails().get(0).getTestStatus());
-//        mDetailsRv.setAdapter(testAdapter);
-//    }
+    private void initDetailsRv() {
+        QCDetailsMultiTypeAdapter testAdapter = new QCDetailsMultiTypeAdapter(mTestOrderDetails.getTestDetailsForm(), isEditMode);
+        mDetailsRv.setAdapter(testAdapter);
+    }
 
     private void initPassedView(Boolean status) {
         if (getActivity() == null) {
@@ -316,7 +325,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             }
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            mSamplesAdapter = new QCParametersHorizontalAdapter(mTestOrderDetails.getTestSampleFieldsData().size(),
+
+            mSamplesAdapter = new QCParametersHorizontalAdapter(mTestOrderDetails.getTestDetails().get(0).getSamples(),
                     mTestOrderDetails.getTestSampleFieldsData(), this, displayMetrics.widthPixels, isEditMode);
             mSamplesTestRV.setAdapter(mSamplesAdapter);
         }
@@ -450,11 +460,6 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                 list.add(testFieldsDatum);
                 testFieldsDatumHashMap.put(testFieldsDatum.getGroupId(), list);
 
-                //for test
-//                ArrayList<TestFieldsGroup> testFieldsGroups = new ArrayList<>();
-//                testFieldsGroups.add(new TestFieldsGroup(1, "1", 0));
-//                testFieldsGroups.add(new TestFieldsGroup(2, "2", 0));
-//                mTestOrderDetails.setTestFieldsGroups(testFieldsGroups);
                 for (TestFieldsGroup testFieldsGroup : mTestOrderDetails.getTestFieldsGroups()) {
                     if (testFieldsGroup.getId() == testFieldsDatum.getGroupId()) {
                         testFieldsDatum.setGroupName(testFieldsGroup.getName());
@@ -490,7 +495,11 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             mTestOrderDetails.setOriginalSampleFields((List<TestSampleFieldsDatum>) new Gson().fromJson(GsonHelper.toJson(mTestOrderDetails.getTestSampleFieldsData()), listType));
         } catch (Exception ignored) {
         }
-        mSamplesCount = mTestOrderDetails.getTestSampleFieldsData().size();
+        mSamplesCount = 0;
+        if (mTestOrderDetails.getTestSampleFieldsData() != null && mTestOrderDetails.getTestSampleFieldsData().size() > 0
+                && mTestOrderDetails.getTestSampleFieldsData().get(0).getSamplesData() != null) {
+            mSamplesCount = mTestOrderDetails.getTestSampleFieldsData().get(0).getSamplesData().size();
+            }
     }
 
     private void saveTestOrderDetails(TestDetailsResponse testDetailsResponse) {

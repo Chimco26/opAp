@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.TooltipCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.common.QCModels.StatusList;
 import com.example.common.QCModels.TestDetailsForm;
 import com.example.common.QCModels.ValueList;
 import com.example.common.SelectableString;
@@ -44,13 +43,11 @@ import static com.operatorsapp.utils.TimeUtils.SQL_NO_T_FORMAT;
 public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
 
     private static final String TAG = QCDetailsMultiTypeAdapter.class.getSimpleName();
-    private Integer testStatus;
     private List<TestDetailsForm> list;
     private boolean isEditMode = true;
 
-    public QCDetailsMultiTypeAdapter(List<TestDetailsForm> list, Integer testStatus, boolean isEditMode) {
+    public QCDetailsMultiTypeAdapter(List<TestDetailsForm> list, boolean isEditMode) {
         this.list = list;
-        this.testStatus = testStatus;
         this.isEditMode = isEditMode;
     }
 
@@ -76,10 +73,30 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
         }
     }
 
+    /**
+     * Enables/Disables all child views in a view group.
+     *
+     * @param viewGroup the view group
+     * @param enabled   <code>true</code> to enable, <code>false</code> to disable
+     *                  the views.
+     */
+    public static void enableDisableViewGroup(ViewGroup viewGroup, boolean enabled) {
+        int childCount = viewGroup.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View view = viewGroup.getChildAt(i);
+            view.setEnabled(enabled);
+            if (view instanceof ViewGroup) {
+                enableDisableViewGroup((ViewGroup) view, enabled);
+            }
+        }
+    }
+
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int position) {
         int type = getItemViewType(position);
         final TestDetailsForm item = list.get(position);
+
+        enableDisableViewGroup((ViewGroup) viewHolder.itemView, isEditMode && item.getAllowEntry());
 
 //        if (item.isFailed()) {
 //            ((CustomViewHolder) viewHolder).title.setTextColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
@@ -286,7 +303,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
             dataAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(dataAdapter);
-            SelectableString.getById((ArrayList<SelectableString>) list, String.valueOf(testStatus)).setSelected(true);
+            SelectableString.getById((ArrayList<SelectableString>) list, String.valueOf(item.getCurrentValue())).setSelected(true);
             int selectedPosition = SelectableString.getSelectedItemPosition((ArrayList<SelectableString>) list);
             spinner.setSelection(selectedPosition, false);
             dataAdapter.setTitle(selectedPosition);
@@ -296,7 +313,6 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     dataAdapter.setTitle(i);
                     list.get(i).selectThisItemOnly((ArrayList<SelectableString>) list);
-                    testStatus = Integer.valueOf(list.get(i).getId());
                     item.setCurrentValue(list.get(i).getId());
                 }
 
@@ -365,7 +381,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
             final Calendar calendar = Calendar.getInstance();
             if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty() && !item.getCurrentValue().equals("0")) {
                 long time = TimeUtils.getLongFromDateString(item.getCurrentValue(), SQL_NO_T_FORMAT);
-                if (time == 0){
+                if (time == 0) {
                     time = TimeUtils.getLongFromDateString(item.getCurrentValue(), SIMPLE_FORMAT_FORMAT);
                 }
                 calendar.setTime(new Date(time));

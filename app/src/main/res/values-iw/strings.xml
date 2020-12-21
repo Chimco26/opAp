@@ -91,7 +91,7 @@
 
 
     <string name="material_weight_alarm">התראת משקל חומר גלם</string>
-    <string name="report_cycle_nunits">שינוי &placeholder1;\\nבמחזור</string>
+    <string name="report_cycle_nunits">שינוי &placeholder1;\nבמחזור</string>
     <string name="report_cycle_units">שינוי &placeholder1; במחזור</string>
     <string name="report_inventory_nitem_production">דיווח\nייצור</string>
     <string name="report_inventory_item_production">דיווח ייצור</string>

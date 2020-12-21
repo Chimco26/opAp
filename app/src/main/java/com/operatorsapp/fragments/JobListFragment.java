@@ -203,10 +203,15 @@ public class JobListFragment extends Fragment implements
     private void initVars(View view) {
 
         mTitleTv = view.findViewById(R.id.pending_jobs_tv);
-        if (mPendingJobsResponse != null && mPendingJobsResponse.getPendingJobs() != null) {
-            mTitleTv.setText(String.format(Locale.getDefault(), "%s %d %s",
-                    getString(R.string.you_have), mPendingJobsResponse.getPendingJobs().size(), getString(R.string.pending_jobs)));
+        if (isQcFromMaterial){
+            mTitleTv.setText(getString(R.string.select_material));
+        }else {
+            mTitleTv.setText(getString(R.string.select_job));
         }
+//        if (mPendingJobsResponse != null && mPendingJobsResponse.getPendingJobs() != null) {
+//            mTitleTv.setText(String.format(Locale.getDefault(), "%s %d %s",
+//                    getString(R.string.you_have), mPendingJobsResponse.getPendingJobs().size(), getString(R.string.pending_jobs)));
+//        }
         initVarsSearch(view);
         initTitleViews(view);
         initRecyclerViews();
