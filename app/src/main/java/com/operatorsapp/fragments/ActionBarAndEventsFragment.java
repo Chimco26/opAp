@@ -279,7 +279,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private Switch mTimeLineType;
     private boolean mIsTimeLine;
     private ActualBarExtraResponse mActualBarExtraResponse;
-    private CheckBox mSelectAll, mServiceCalls, mMessages, mRejects, mProductionReport;
+    private CheckBox mSelectAll, mServiceCalls, mMessages, mRejects, mProductionReport, mQualityTests;
     private View mFilterLy;
     private View mFilterBtn;
     private View mFiltersView;
@@ -1461,7 +1461,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 break;
                             }
                             case 4: {
-                                mListener.onOpenQCActivity();
+                                mListener.onOpenQCActivity(0, true);
                                 break;
                             }
                             case 5: {
@@ -3207,7 +3207,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private boolean isActualBarExtraResponse(ActualBarExtraResponse actualBarExtraResponse) {
         return actualBarExtraResponse != null && (actualBarExtraResponse.getNotification() != null ||
-                actualBarExtraResponse.getRejects() != null || actualBarExtraResponse.getInventory() != null);
+                actualBarExtraResponse.getRejects() != null || actualBarExtraResponse.getInventory() != null
+                || actualBarExtraResponse.getQualityTests() != null);
     }
 
     private void initEventRecycler(View view) {
@@ -3284,16 +3285,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         mMessages.setChecked(checked);
                         mRejects.setChecked(checked);
                         mProductionReport.setChecked(checked);
+                        mQualityTests.setChecked(checked);
                         break;
                 }
-                mSelectAll.setChecked(mServiceCalls.isChecked() && mMessages.isChecked() && mRejects.isChecked() && mProductionReport.isChecked());
-                mEventsAdapter.setCheckedFilters(mServiceCalls.isChecked(), mMessages.isChecked(), mRejects.isChecked(), mProductionReport.isChecked());
+                mSelectAll.setChecked(mServiceCalls.isChecked() && mMessages.isChecked() && mRejects.isChecked() && mProductionReport.isChecked() && mQualityTests.isChecked());
+                mEventsAdapter.setCheckedFilters(mServiceCalls.isChecked(), mMessages.isChecked(), mRejects.isChecked(), mProductionReport.isChecked(), mQualityTests.isChecked());
             }
         };
         mSelectAll = view.findViewById(R.id.FAAE_select_all);
         mSelectAll.setOnClickListener(onClickListener);
         mServiceCalls = view.findViewById(R.id.FAAE_service_alls);
         mServiceCalls.setOnClickListener(onClickListener);
+        mQualityTests = view.findViewById(R.id.FAAE_quality_test);
+        mQualityTests.setOnClickListener(onClickListener);
         mMessages = view.findViewById(R.id.FAAE_messages);
         mMessages.setOnClickListener(onClickListener);
         mRejects = view.findViewById(R.id.FAAE_rejects);
@@ -3970,7 +3974,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         void onChangeMachineRequest();
 
-        void onOpenQCActivity();
+        void onOpenQCActivity(int id, boolean editMode);
 
         void onRefreshMachineLinePolling();
 

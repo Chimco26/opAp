@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.example.common.actualBarExtraResponse.Inventory;
 import com.example.common.actualBarExtraResponse.Notification;
+import com.example.common.actualBarExtraResponse.QualityTest;
 import com.example.common.actualBarExtraResponse.Reject;
 import com.example.common.machineJoshDataResponse.JobDataItem;
 import com.google.gson.Gson;
@@ -78,6 +79,8 @@ public class Event extends DataSupport implements Parcelable {
     private String rejects;
 
     private String inventories;
+
+    private String qualityTests;
 
     private String alarmEvents;
 
@@ -376,6 +379,7 @@ public class Event extends DataSupport implements Parcelable {
         dest.writeString(this.notifications);
         dest.writeString(this.rejects);
         dest.writeString(this.inventories);
+        dest.writeString(this.qualityTests);
         dest.writeString(this.jobDataItems);
         dest.writeByte(this.extra ? (byte) 1 : (byte) 0);
 
@@ -409,6 +413,7 @@ public class Event extends DataSupport implements Parcelable {
         this.notifications = in.readString();
         this.rejects = in.readString();
         this.inventories = in.readString();
+        this.qualityTests = in.readString();
         this.jobDataItems = in.readString();
         this.extra = in.readByte() != 0;
 
@@ -456,6 +461,12 @@ public class Event extends DataSupport implements Parcelable {
         return new Gson().fromJson(inventories, new TypeToken<ArrayList<Inventory>>() {
         }.getType());
     }
+
+    public ArrayList<QualityTest> getQualityTests() {
+        return new Gson().fromJson(qualityTests, new TypeToken<ArrayList<QualityTest>>() {
+        }.getType());
+    }
+
     public ArrayList<Event> getAlarmsEvents() {
         return new Gson().fromJson(alarmEvents, new TypeToken<ArrayList<Event>>() {
         }.getType());
@@ -478,6 +489,11 @@ public class Event extends DataSupport implements Parcelable {
         return inventories;
     }
 
+
+    public String getQualityTestsJson() {
+        return qualityTests;
+    }
+
     public String getAlarmsEventsJson() {
         return alarmEvents;
     }
@@ -495,6 +511,10 @@ public class Event extends DataSupport implements Parcelable {
 
     public void setInventories(ArrayList<Inventory> inventories) {
         this.inventories = new Gson().toJson(inventories);
+    }
+
+    public void setQualityTests(ArrayList<QualityTest> qualityTests) {
+        this.qualityTests = new Gson().toJson(qualityTests);
     }
 
     public void setAlarmsEvents(ArrayList<Event> alarmsEvents) {
@@ -521,6 +541,9 @@ public class Event extends DataSupport implements Parcelable {
     }
     public void setJobDataItemsJson(String jobDataItems) {
         this.jobDataItems = jobDataItems;
+    }
+    public void setQualityTestsJson(String qualityTestsItems) {
+        this.qualityTests = qualityTestsItems;
     }
 
     public void setHaveExtra(boolean haveInventoryToEvents) {

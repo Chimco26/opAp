@@ -33,13 +33,15 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
     private final QCSamplesMultiTypeAdapterListener mQcSamplesMultiTypeAdapterListener;
     private final TestSampleFieldsDatum mTestSample;
     private ArrayList<SamplesDatum> list;
+    private boolean isEditMode = true;
 
     public QCSamplesMultiTypeAdapter(String inputType, TestSampleFieldsDatum testSample,
-                                     QCSamplesMultiTypeAdapterListener qcSamplesMultiTypeAdapterListener) {
+                                     QCSamplesMultiTypeAdapterListener qcSamplesMultiTypeAdapterListener, boolean isEditMode) {
         mInputType = inputType;
         mQcSamplesMultiTypeAdapterListener = qcSamplesMultiTypeAdapterListener;
         mTestSample = testSample;
         this.list = (ArrayList<SamplesDatum>) testSample.getSamplesData();
+        this.isEditMode = isEditMode;
     }
 
     @NonNull
@@ -77,7 +79,7 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(false);
                     ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(true);
                 }
-                if (mTestSample.getAllowEntry()) {
+                if (mTestSample.getAllowEntry() && isEditMode) {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setEnabled(true);
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
@@ -102,6 +104,8 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
                 } else {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(null);
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setEnabled(false);
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setOnCheckedChangeListener(null);
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setEnabled(false);
                 }
 //                if (item.isFailed()) {
 //                    ((BooleanViewHolder) viewHolder).mBooleanCheckBox.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
@@ -140,7 +144,7 @@ public class QCSamplesMultiTypeAdapter extends RecyclerView.Adapter {
     }
 
     public void setEditableMode(int position, SamplesDatum item, EditText mEditNumberEt) {
-        if (mTestSample.getAllowEntry()) {
+        if (mTestSample.getAllowEntry() && isEditMode) {
             setTextWatcher(position, mEditNumberEt);
             mEditNumberEt.setEnabled(true);
             mEditNumberEt.setFocusable(true);

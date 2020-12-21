@@ -253,15 +253,15 @@ public class SaveHelperNew {
 
             boolean haveRejects = addRejectsToEvents(eventStart, eventEnd, event, actualBarExtraResponse);
             boolean haveInventory = addInventoryToEvents(eventStart, eventEnd, event, actualBarExtraResponse);
-            if (haveRejects || haveInventory) {
+            boolean haveTests = addQTestsToEvents(eventStart, eventEnd, event, actualBarExtraResponse);
+            if (haveRejects || haveInventory || haveTests) {
                 event.setHaveExtra(true);
             }
-            if (addNotificationsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)//addAlarmEvents(eventStart, eventEnd, event, actualBarExtraResponse)|| for add alarms in shiftlog
+            return addNotificationsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)//addAlarmEvents(eventStart, eventEnd, event, actualBarExtraResponse)|| for add alarms in shiftlog
                     | haveRejects
+                    | haveTests
                     | haveInventory//| addDetailsToWorking(eventStart, eventEnd, event, actualBarExtraResponse)
-                    | addStartProductToEvents(eventStart, eventEnd, event, actualBarExtraResponse)) {
-                return true;
-            }
+                    | addStartProductToEvents(eventStart, eventEnd, event, actualBarExtraResponse);
         }
         return false;
     }
@@ -362,6 +362,41 @@ public class SaveHelperNew {
 //                notifications.removeAll(toDelete);
                 if (notifications.size() == 0) {
                     notifications = null;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean addQTestsToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
+        if (actualBarExtraResponse == null) {
+            return false;
+        }
+        ArrayList<com.example.common.actualBarExtraResponse.QualityTest> qTests = actualBarExtraResponse.getQualityTests();
+        ArrayList<com.example.common.actualBarExtraResponse.QualityTest> toDelete = new ArrayList<>();
+        if (qTests != null && qTests.size() > 0) {
+
+            ArrayList<com.example.common.actualBarExtraResponse.QualityTest> testsArrayList = event.getQualityTests();
+
+            for (com.example.common.actualBarExtraResponse.QualityTest qualityTest : qTests) {
+                Long testTime = convertDateToMillisecond(qualityTest.getReportTime(), SQL_T_FORMAT);
+
+                if (eventStart < testTime && testTime <= eventEnd) {
+
+                    if (testsArrayList == null) {
+                        testsArrayList = new ArrayList<>();
+                    }
+
+                    testsArrayList.add(qualityTest);
+                    toDelete.add(qualityTest);
+                }
+            }
+            if (testsArrayList != null) {
+                event.setQualityTests(testsArrayList);
+//                notifications.removeAll(toDelete);
+                if (qTests.size() == 0) {
+                    qTests = null;
                 }
                 return true;
             }

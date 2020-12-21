@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.TooltipCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.common.QCModels.StatusList;
 import com.example.common.QCModels.TestDetailsForm;
 import com.example.common.QCModels.ValueList;
 import com.example.common.SelectableString;
@@ -44,11 +43,12 @@ import static com.operatorsapp.utils.TimeUtils.SQL_NO_T_FORMAT;
 public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
 
     private static final String TAG = QCDetailsMultiTypeAdapter.class.getSimpleName();
-    private Integer testStatus;
     private List<TestDetailsForm> list;
+    private boolean isEditMode = true;
 
-    public QCDetailsMultiTypeAdapter(List<TestDetailsForm> list) {
+    public QCDetailsMultiTypeAdapter(List<TestDetailsForm> list, boolean isEditMode) {
         this.list = list;
+        this.isEditMode = isEditMode;
     }
 
     @NonNull
@@ -73,10 +73,30 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
         }
     }
 
+    /**
+     * Enables/Disables all child views in a view group.
+     *
+     * @param viewGroup the view group
+     * @param enabled   <code>true</code> to enable, <code>false</code> to disable
+     *                  the views.
+     */
+    public static void enableDisableViewGroup(ViewGroup viewGroup, boolean enabled) {
+        int childCount = viewGroup.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View view = viewGroup.getChildAt(i);
+            view.setEnabled(enabled);
+            if (view instanceof ViewGroup) {
+                enableDisableViewGroup((ViewGroup) view, enabled);
+            }
+        }
+    }
+
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int position) {
         int type = getItemViewType(position);
         final TestDetailsForm item = list.get(position);
+
+        enableDisableViewGroup((ViewGroup) viewHolder.itemView, isEditMode && item.getAllowEntry());
 
 //        if (item.isFailed()) {
 //            ((CustomViewHolder) viewHolder).title.setTextColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
@@ -98,7 +118,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(false);
                     ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(true);
                 }
-                if (item.getAllowEntry()) {
+                if (item.getAllowEntry() && isEditMode) {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setEnabled(true);
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
@@ -115,6 +135,8 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
                 } else {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(null);
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setEnabled(false);
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setOnCheckedChangeListener(null);
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setEnabled(false);
                 }
                 break;
             case FIELD_TYPE_NUMBER_INT:
@@ -142,7 +164,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
                 }
                 ((TimeTextViewHolder) viewHolder).title.setText(item.getDisplayEName());
                 TooltipCompat.setTooltipText(((TimeTextViewHolder) viewHolder).title, item.getDisplayEName());
-                if (item.getAllowEntry()) {
+                if (item.getAllowEntry() && isEditMode) {
                     ((TimeTextViewHolder) viewHolder).mTextTimeTv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -159,7 +181,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
     }
 
     private void setEditableMode(int position, TestDetailsForm item, EditText mEditNumberEt, RecyclerView.ViewHolder viewHolder) {
-        if (item.getAllowEntry()) {
+        if (item.getAllowEntry() && isEditMode) {
             setTextWatcher(position, mEditNumberEt, viewHolder, item);
             mEditNumberEt.setEnabled(true);
             mEditNumberEt.setFocusable(true);
@@ -359,7 +381,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
             final Calendar calendar = Calendar.getInstance();
             if (item.getCurrentValue() != null && !item.getCurrentValue().isEmpty() && !item.getCurrentValue().equals("0")) {
                 long time = TimeUtils.getLongFromDateString(item.getCurrentValue(), SQL_NO_T_FORMAT);
-                if (time == 0){
+                if (time == 0) {
                     time = TimeUtils.getLongFromDateString(item.getCurrentValue(), SIMPLE_FORMAT_FORMAT);
                 }
                 calendar.setTime(new Date(time));

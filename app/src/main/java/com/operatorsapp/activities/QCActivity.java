@@ -50,6 +50,8 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         Thread.UncaughtExceptionHandler{
 
     public static final String QC_IS_FROM_SELECT_MACHINE_SCREEN = "QC_IS_FROM_SELECT_MACHINE_SCREEN";
+    public static final String QC_TEST_ID = "QC_TEST_ID";
+    public static final String QC_EDIT_MODE = "QC_EDIT_MODE";
 
     private CroutonCreator mCroutonCreator;
     private QCDetailsFragment mQcDetailsFragment;
@@ -69,7 +71,12 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         if (isOnlyQC){
             openJobOrMaterialDialog();
         }else {
-            showQCTestOrderFragment(0);
+            int testId = getIntent().getIntExtra(QC_TEST_ID, 0);
+            if (testId != 0) {
+                showQCDetailsFragment(testId, getIntent().getBooleanExtra(QC_EDIT_MODE, true));
+            } else {
+                showQCTestOrderFragment(0);
+            }
         }
     }
 
@@ -161,10 +168,10 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
             //todo
         }
     }
-    private void showQCDetailsFragment(int testId) {
 
+    private void showQCDetailsFragment(int testId, boolean editMode) {
         try {
-            mQcDetailsFragment = QCDetailsFragment.newInstance(testId);
+            mQcDetailsFragment = QCDetailsFragment.newInstance(testId, editMode);
             getSupportFragmentManager().beginTransaction().replace(R.id.AQC_container, mQcDetailsFragment, mQcDetailsFragment.getTag()).addToBackStack(QCDetailsFragment.TAG).commit();
         } catch (Exception e) {
             //todo
@@ -249,7 +256,7 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
     @Override
     public void onSent(int testId) {
         KeyboardUtils.closeKeyboard(this);
-        showQCDetailsFragment(testId);
+        showQCDetailsFragment(testId, true);
     }
 
     @Override

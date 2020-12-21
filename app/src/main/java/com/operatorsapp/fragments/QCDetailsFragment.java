@@ -64,6 +64,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener {
     public static final String TAG = QCDetailsFragment.class.getSimpleName();
     private static final String EXTRA_TEST_ID = "EXTRA_TEST_ID";
+    private static final String EXTRA_QC_EDIT_MODE = "EXTRA_QC_EDIT_MODE";
     private TestDetailsRequest mTestDetailsRequest;
     private QCRequests mQcRequests;
     private View mNoDataTv;
@@ -82,12 +83,14 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private View mMinusSamplesBtn;
     private View mPlusSamplesBtn;
     private RecyclerView mDetailsRv;
+    private boolean isEditMode = true;
 
-    public static QCDetailsFragment newInstance(int testId) {
+    public static QCDetailsFragment newInstance(int testId, boolean editMode) {
 
         QCDetailsFragment qcDetailsFragment = new QCDetailsFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(EXTRA_TEST_ID, testId);
+        bundle.putBoolean(EXTRA_QC_EDIT_MODE, editMode);
         qcDetailsFragment.setArguments(bundle);
         return qcDetailsFragment;
     }
@@ -98,8 +101,13 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         // Analytics
         new GoogleAnalyticsHelper().trackScreen(getActivity(), TAG);
 
-        if (getArguments() != null && getArguments().containsKey(EXTRA_TEST_ID)) {
-            mTestDetailsRequest = new TestDetailsRequest(getArguments().getInt(EXTRA_TEST_ID));
+        if (getArguments() != null) {
+            if (getArguments().containsKey(EXTRA_TEST_ID)) {
+                mTestDetailsRequest = new TestDetailsRequest(getArguments().getInt(EXTRA_TEST_ID));
+            }
+            if (getArguments().containsKey(EXTRA_QC_EDIT_MODE)) {
+                isEditMode = getArguments().getBoolean(EXTRA_QC_EDIT_MODE, true);
+            }
         }
     }
 
@@ -125,7 +133,11 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private void initVars(View view) {
         mNoDataTv = view.findViewById(R.id.FQCD_no_data_tv);
         mProgressBar = view.findViewById(R.id.FQCD_progress);
-        view.findViewById(R.id.FQCD_save_tv).setOnClickListener(new View.OnClickListener() {
+        View saveBtn = view.findViewById(R.id.FQCD_save_tv);
+        if (!isEditMode){
+            saveBtn.setVisibility(View.INVISIBLE);
+        }
+        saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isMandatoryFieldsCompleted()) {
@@ -277,12 +289,12 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     }
 
     private void initDetailsRv() {
-        QCDetailsMultiTypeAdapter testAdapter = new QCDetailsMultiTypeAdapter(mTestOrderDetails.getTestDetailsForm());
+        QCDetailsMultiTypeAdapter testAdapter = new QCDetailsMultiTypeAdapter(mTestOrderDetails.getTestDetailsForm(), isEditMode);
         mDetailsRv.setAdapter(testAdapter);
     }
 
     private void initPassedView(Boolean status) {
-        if (getActivity() == null){
+        if (getActivity() == null) {
             return;
         }
 
@@ -313,8 +325,9 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
             }
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
             mSamplesAdapter = new QCParametersHorizontalAdapter(mTestOrderDetails.getTestDetails().get(0).getSamples(),
-                    mTestOrderDetails.getTestSampleFieldsData(), this, displayMetrics.widthPixels);
+                    mTestOrderDetails.getTestSampleFieldsData(), this, displayMetrics.widthPixels, isEditMode);
             mSamplesTestRV.setAdapter(mSamplesAdapter);
         }
     }
@@ -339,7 +352,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                 } else {
                     addTextViewTitleToSample(testFieldsData.get(0).getGroupName(), getContext().getResources().getColor(R.color.black));
                 }
-                QCMultiTypeAdapter testAdapter = new QCMultiTypeAdapter(testFieldsData);
+                QCMultiTypeAdapter testAdapter = new QCMultiTypeAdapter(testFieldsData, isEditMode);
                 RecyclerView recyclerView = new RecyclerView(getActivity());
                 recyclerView.setAdapter(testAdapter);
                 recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -395,7 +408,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                     initFieldsData();
                     initDetailsData();
                     initView();
-                    initIncrementSamples(testDetailsResponse.getAllowEditSamples());
+                    initIncrementSamples(isEditMode && testDetailsResponse.getAllowEditSamples());
 //                    initIncrementSamples(testDetailsResponse.getTestSampleFieldsData().get(0).getAllowEditSamples());
                 }
             }

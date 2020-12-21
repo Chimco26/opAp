@@ -23,13 +23,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.Inventory;
 import com.example.common.actualBarExtraResponse.Notification;
+import com.example.common.actualBarExtraResponse.QualityTest;
 import com.example.common.actualBarExtraResponse.Reject;
 import com.example.common.machineJoshDataResponse.JobDataItem;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.OnStopClickListener;
+import com.operatorsapp.model.event.QCTestEvent;
 import com.operatorsapp.utils.StringUtil;
 import com.operatorsapp.utils.TimeUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,7 +52,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
     private Context mContext;
     private ArrayList<Float> mSelectedEvents;
-    private boolean mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
+    private boolean mIsServiceCallsChecked = true, mIsmMessagesChecked = true,
+            mIsRejectsChecked = true, mIsProductionReportChecked = true, mIsQualityTestsChecked = true;
     private ArrayList<Event> mEventsFiltered = new ArrayList<>();
     private float mFactor = 1;
 
@@ -71,13 +76,17 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         this.mIsSelectionMode = mIsSelectionMode;
     }
 
-    public void setCheckedFilters(boolean isServiceCallsChecked, boolean isMessagesChecked, boolean isRejectsChecked, boolean isProductionReportChecked) {
+    public void setCheckedFilters(boolean isServiceCallsChecked, boolean isMessagesChecked,
+                                  boolean isRejectsChecked, boolean isProductionReportChecked,
+                                  boolean isQualityTestsChecked) {
 
         mIsServiceCallsChecked = isServiceCallsChecked;
         mIsmMessagesChecked = isMessagesChecked;
         mIsRejectsChecked = isRejectsChecked;
         mIsProductionReportChecked = isProductionReportChecked;
+        mIsQualityTestsChecked = isQualityTestsChecked;
 
+        notifyDataSetChanged();
     }
 
     public void setClosedState(boolean isSelectionMode) {
@@ -149,7 +158,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             if (event.getEventEndTime() == null || event.getEventEndTime().length() == 0) {
                 event.setEventEndTime(TimeUtils.getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT));
             }
-            if (event.getEventTime() == null || event.getEventTime().length() == 0){
+            if (event.getEventTime() == null || event.getEventTime().length() == 0) {
                 event.setEventTime(event.getEventEndTime());
             }
             holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -311,6 +320,23 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     setNotification(event, 4, reject.getTime().substring(11, 16), getTextByState(reject.getAmount() + " " + name, 6), 0, reject.getTime());
                 }
             }
+
+            if (mIsQualityTestsChecked && event.getQualityTests() != null && event.getQualityTests().size() > 0) {
+                for (final QualityTest qualityTest : event.getQualityTests()) {
+
+                    String isPassed = qualityTest.getPassed() ? mContext.getString(R.string.passed) : mContext.getString(R.string.failed);
+                    int typeByPassed = qualityTest.getPassed() ? 7 : 8;
+                    String name = OperatorApplication.isEnglishLang() ? qualityTest.getEName() : qualityTest.getLName();
+                    View view = setNotification(event, typeByPassed, qualityTest.getReportTime().substring(11, 16), getTextByState(isPassed + " " + name, 6), 0, qualityTest.getReportTime());
+                    view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            EventBus.getDefault().post(new QCTestEvent(qualityTest.getID()));
+                        }
+                    });
+                }
+            }
+
             if (event.getJobDataItems() != null && event.getJobDataItems().size() > 0) {
                 for (JobDataItem jobDataItem : event.getJobDataItems()) {
                     setNotification(event, 6, jobDataItem.getStartTime().substring(11, 16),
@@ -320,7 +346,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         }
 
-        private void setNotification(Event event, int type, String time, String details, int icon, String completeTime) {
+        private View setNotification(Event event, int type, String time, String details, int icon, String completeTime) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.service_call_item, mTechContainer, false);
             TextView timeTV = view.findViewById(R.id.SCI_time);
             TextView detailsTV = view.findViewById(R.id.SCI_details);
@@ -406,8 +432,17 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     }
 
                     break;
+                case 7:
+                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.order_test));
+                    detailsTV.setBackgroundColor(mContext.getResources().getColor(R.color.new_green));
+                    break;
+                case 8:
+                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.order_test));
+                    detailsTV.setBackgroundColor(mContext.getResources().getColor(R.color.red_line));
+                    break;
             }
             mTechContainer.addView(view);
+            return view;
         }
 
         private void validateDialog(final float eventID) {

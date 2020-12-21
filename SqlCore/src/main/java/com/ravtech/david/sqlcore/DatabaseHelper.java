@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     // Database Version
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 18;
 
     // Database Name
     private static final String DATABASE_NAME = "events.db";
@@ -71,6 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_REJECTS = "rejects";
     private static final String KEY_ALARMS_EVENTS = "alarmEvents";
     private static final String KEY_JOB_DATA_ITEMS = "jobdataitems";
+    private static final String KEY_QUALITY_TEST_ITEMS = "qualitytestitems";
     private static final String KEY_HAVE_EXTRA = "extra";
 
 
@@ -111,6 +112,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_REJECTS + " TEXT," +
             KEY_ALARMS_EVENTS + " TEXT," +
             KEY_JOB_DATA_ITEMS + " TEXT," +
+            KEY_QUALITY_TEST_ITEMS + " TEXT," +
             KEY_INVENTORY + " TEXT" +
             ")";
 
@@ -482,6 +484,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_INVENTORY, event.getInventoriesJson());
         values.put(KEY_ALARMS_EVENTS, event.getAlarmsEventsJson());
         values.put(KEY_JOB_DATA_ITEMS, event.getJobDataItemsJson());
+        values.put(KEY_QUALITY_TEST_ITEMS, event.getQualityTestsJson());
         values.put(KEY_HAVE_EXTRA, event.haveExtra());
 
         return values;
@@ -539,6 +542,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             event.setInventoriesJson(c.getString(c.getColumnIndex(KEY_INVENTORY)));
             event.setAlarmsEventsJson(c.getString(c.getColumnIndex(KEY_ALARMS_EVENTS)));
             event.setJobDataItemsJson(c.getString(c.getColumnIndex(KEY_JOB_DATA_ITEMS)));
+            event.setQualityTestsJson(c.getString(c.getColumnIndex(KEY_QUALITY_TEST_ITEMS)));
             event.setHaveExtra(c.getInt(c.getColumnIndex(KEY_HAVE_EXTRA)) > 0);
 
 

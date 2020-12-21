@@ -144,6 +144,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.model.SendRejectObject;
+import com.operatorsapp.model.event.QCTestEvent;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
 import com.operatorsapp.server.pulling.AllDashboardDataCore;
@@ -174,6 +175,8 @@ import com.operatorsapp.utils.broadcast.RefreshPollingBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.SingleLineKeyboard;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.litepal.crud.DataSupport;
 
 import java.io.BufferedInputStream;
@@ -207,6 +210,8 @@ import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_IS_NO_PRODUC
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_ERP_JOB_ID;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_JOB_ID;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_PRODUCT_NAME;
+import static com.operatorsapp.activities.QCActivity.QC_EDIT_MODE;
+import static com.operatorsapp.activities.QCActivity.QC_TEST_ID;
 import static com.operatorsapp.fragments.ActionBarAndEventsFragment.EXTRA_FIELD_FOR_MACHINE;
 import static com.operatorsapp.fragments.ReportStopReasonFragment.IS_REPORTING_ON_SETUP_END;
 import static com.operatorsapp.fragments.ReportStopReasonFragment.IS_REPORTING_ON_SETUP_EVENTS;
@@ -838,6 +843,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     protected void onPause() {
         super.onPause();
 
+        EventBus.getDefault().unregister(this);
+
         pollingBackup(false);
 
         if (!ignoreFromOnPause && mGalleryIntent == null) {
@@ -872,6 +879,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     protected void onResume() {
         OppAppLogger.d(TAG, "onResume()");
 
+        EventBus.getDefault().register(this);
+
         pollingBackup(true);
         getKPIS();
 
@@ -903,6 +912,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
 
         ChangeLang.initLanguage(this);
+    }
+
+    @Subscribe
+    public void onOpenQcById(QCTestEvent event){
+        onOpenQCActivity(event.getiD(), false);
     }
 
     private void registerReceiver() {
@@ -1874,8 +1888,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onOpenQCActivity() {
+    public void onOpenQCActivity(int id, boolean editMode) {
         Intent intent = new Intent(DashboardActivity.this, QCActivity.class);
+        intent.putExtra(QC_TEST_ID, id);
+        intent.putExtra(QC_EDIT_MODE, editMode);
         ignoreFromOnPause = true;
 
         if (mActionBarAndEventsFragment != null) {
