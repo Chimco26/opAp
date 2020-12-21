@@ -25,9 +25,11 @@ public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParame
     private int itemWidth = 120;
     private Integer samples;
     private ArrayList<TestSampleFieldsDatum> list;
+    private boolean isEditMode = true;
 
     public QCParametersHorizontalAdapter(Integer samples, List<TestSampleFieldsDatum> testSampleFieldsData,
-                                         QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener qcSamplesMultiTypeAdapterListener, int widthPixels) {
+                                         QCSamplesMultiTypeAdapter.QCSamplesMultiTypeAdapterListener qcSamplesMultiTypeAdapterListener,
+                                         int widthPixels, boolean isEditMode) {
         list = (ArrayList<TestSampleFieldsDatum>) testSampleFieldsData;
         mQcSamplesMultiTypeAdapterListener = qcSamplesMultiTypeAdapterListener;
         this.samples = samples;
@@ -35,6 +37,7 @@ public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParame
         if (widthPixels > 0) {
             itemWidth = widthPixels / list.size();
         }
+        this.isEditMode = isEditMode;
     }
 
 
@@ -52,7 +55,7 @@ public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParame
 
         if (list.get(position).isFailed()){
             (viewHolder).mTitleTv.setTextColor(viewHolder.itemView.getResources().getColor(R.color.red_line_alpha));
-        }else if (list.get(position).getRequiredField() && list.get(position).getAllowEntry()){
+        }else if (list.get(position).getRequiredField() && list.get(position).getAllowEntry() && isEditMode){
             (viewHolder).mTitleTv.setTextColor(viewHolder.itemView.getResources().getColor(R.color.blue1));
         }else {
             (viewHolder).mTitleTv.setTextColor(viewHolder.itemView.getResources().getColor(R.color.black));
@@ -61,7 +64,7 @@ public class QCParametersHorizontalAdapter extends RecyclerView.Adapter<QCParame
         viewHolder.mTitleTv.setText(list.get(position).getLName());
         viewHolder.mRv.setLayoutManager(new LinearLayoutManager(viewHolder.mRv.getContext()));
         viewHolder.mRv.setAdapter(new QCSamplesMultiTypeAdapter(list.get(position).getFieldType(),
-                list.get(position), mQcSamplesMultiTypeAdapterListener));
+                list.get(position), mQcSamplesMultiTypeAdapterListener, isEditMode));
 
     }
 

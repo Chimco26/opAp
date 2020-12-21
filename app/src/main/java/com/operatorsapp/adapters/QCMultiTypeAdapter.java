@@ -47,9 +47,11 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
 
     private static final String TAG = QCMultiTypeAdapter.class.getSimpleName();
     private List<TestFieldsDatum> list;
+    private boolean isEditMode = true;
 
-    public QCMultiTypeAdapter(List<TestFieldsDatum> list) {
+    public QCMultiTypeAdapter(List<TestFieldsDatum> list, boolean isEditMode) {
         this.list = list;
+        this.isEditMode = isEditMode;
     }
 
     @NonNull
@@ -100,7 +102,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(false);
                     ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(true);
                 }
-                if (item.getAllowEntry()) {
+                if (item.getAllowEntry() && isEditMode) {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setEnabled(true);
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
@@ -119,6 +121,8 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                 } else {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(null);
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setEnabled(false);
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setOnCheckedChangeListener(null);
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setEnabled(false);
                 }
                 break;
             case FIELD_TYPE_NUM_INT:
@@ -151,7 +155,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                 }
                 ((TimeTextViewHolder) viewHolder).title.setText(item.getLName());
                 TooltipCompat.setTooltipText(((TimeTextViewHolder) viewHolder).title, item.getLName());
-                if (item.getAllowEntry()) {
+                if (item.getAllowEntry() && isEditMode) {
                     ((TimeTextViewHolder) viewHolder).mTextTimeTv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -172,7 +176,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
                             TimeUtils.convertDateToMillisecond(item.getCurrentValue(), SQL_NO_T_FORMAT),
                             ONLY_DATE_FORMAT));
                 }
-                if (item.getAllowEntry()) {
+                if (item.getAllowEntry() && isEditMode) {
                     ((DateViewHolder) viewHolder).itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -190,7 +194,7 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
     }
 
     public void setEditableMode(int position, TestFieldsDatum item, EditText mEditNumberEt, RecyclerView.ViewHolder viewHolder) {
-        if (item.getAllowEntry()) {
+        if (item.getAllowEntry() && isEditMode) {
             setTextWatcher(position, mEditNumberEt, viewHolder, item);
             mEditNumberEt.setEnabled(true);
             mEditNumberEt.setFocusable(true);

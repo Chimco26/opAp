@@ -29,6 +29,9 @@ public class ActualBarExtraResponse implements Parcelable {
     @SerializedName("WorkingEvents")
     @Expose
     private ArrayList<WorkingEvent> workingEvents = null;
+    @SerializedName("QualityTests")
+    @Expose
+    private ArrayList<QualityTest> qualityTests = null;
     private ArrayList<Event> alarmsEvents = null;
     private List<JobDataItem> depMachineItems = null;
 
@@ -87,6 +90,11 @@ public class ActualBarExtraResponse implements Parcelable {
 
     public void setNotification(ArrayList<Notification> notification) {
         this.notification = notification;
+    }
+
+    public ArrayList<QualityTest> getQualityTests() {
+        if (qualityTests == null){return new ArrayList<>();}
+        return qualityTests;
     }
 
     @Override

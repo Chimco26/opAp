@@ -46,10 +46,12 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
     private static final String TAG = QCDetailsMultiTypeAdapter.class.getSimpleName();
     private Integer testStatus;
     private List<TestDetailsForm> list;
+    private boolean isEditMode = true;
 
-    public QCDetailsMultiTypeAdapter(List<TestDetailsForm> list, Integer testStatus) {
+    public QCDetailsMultiTypeAdapter(List<TestDetailsForm> list, Integer testStatus, boolean isEditMode) {
         this.list = list;
         this.testStatus = testStatus;
+        this.isEditMode = isEditMode;
     }
 
     @NonNull
@@ -99,7 +101,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setChecked(false);
                     ((BooleanViewHolder) viewHolder).mRadioFailed.setChecked(true);
                 }
-                if (item.getAllowEntry()) {
+                if (item.getAllowEntry() && isEditMode) {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setEnabled(true);
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
@@ -116,6 +118,8 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
                 } else {
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setOnCheckedChangeListener(null);
                     ((BooleanViewHolder) viewHolder).mRadioPassed.setEnabled(false);
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setOnCheckedChangeListener(null);
+                    ((BooleanViewHolder) viewHolder).mRadioFailed.setEnabled(false);
                 }
                 break;
             case FIELD_TYPE_NUMBER_INT:
@@ -143,7 +147,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
                 }
                 ((TimeTextViewHolder) viewHolder).title.setText(item.getDisplayEName());
                 TooltipCompat.setTooltipText(((TimeTextViewHolder) viewHolder).title, item.getDisplayEName());
-                if (item.getAllowEntry()) {
+                if (item.getAllowEntry() && isEditMode) {
                     ((TimeTextViewHolder) viewHolder).mTextTimeTv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -160,7 +164,7 @@ public class QCDetailsMultiTypeAdapter extends RecyclerView.Adapter {
     }
 
     private void setEditableMode(int position, TestDetailsForm item, EditText mEditNumberEt, RecyclerView.ViewHolder viewHolder) {
-        if (item.getAllowEntry()) {
+        if (item.getAllowEntry() && isEditMode) {
             setTextWatcher(position, mEditNumberEt, viewHolder, item);
             mEditNumberEt.setEnabled(true);
             mEditNumberEt.setFocusable(true);
