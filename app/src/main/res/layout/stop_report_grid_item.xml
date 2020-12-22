@@ -11,7 +11,7 @@
         android:id="@+id/grid_reason_image_view"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:background="@drawable/stop_general_selector" />
+        android:background="@drawable/general_copy_4" />
 
     <TextView
         android:id="@+id/stop_reason_title"
