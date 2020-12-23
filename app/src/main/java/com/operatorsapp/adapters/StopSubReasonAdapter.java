@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +15,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.operators.reportfieldsformachineinfra.StopReasons;
-import com.operators.reportfieldsformachineinfra.SubReasons;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
@@ -23,7 +23,6 @@ import com.operatorsapp.server.responses.StopReasonsGroup;
 import com.operatorsapp.utils.ReasonImageLenox;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdapter.ViewHolder> {
 
@@ -72,17 +71,26 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
 
         } else {
             holder.mStopTitle.setTextColor(mContext.getResources().getColor(R.color.color_jobs_row));
+            String color = mStopReason.getmColorID();
             if (mSelectedPosition == position) {
-                holder.mReasonImage.setBackground(mContext.getDrawable(R.drawable.btn_pressed));
-                holder.mImageTitle.setTextColor(Color.WHITE);
+//                holder.mImageTitle.setTextColor(Color.WHITE);
+                GradientDrawable selector = (GradientDrawable) mContext.getDrawable(R.drawable.circle_withe_stroke);
+                if (color != null && !color.isEmpty()) {
+                    selector.setColor(Color.parseColor(color));
+                }
+                holder.mReasonImage.setBackground(selector);
             } else {
-                holder.mReasonImage.setBackground(mContext.getDrawable(R.drawable.stop_sub_selector));
-                holder.mImageTitle.setTextColor(ContextCompat.getColorStateList(mContext, R.color.button_stop_text_selector));
+                Drawable selector = mContext.getDrawable(R.drawable.simple_circle);
+                if (color != null && !color.isEmpty()) {
+                    selector.setTint(Color.parseColor(color));
+                }
+                holder.mReasonImage.setBackground(selector);
+//                holder.mImageTitle.setTextColor(ContextCompat.getColorStateList(mContext, R.color.button_stop_text_selector));
             }
-            if (nameByLang != null) {
-                char firstLetter = nameByLang.charAt(0);
-                holder.mImageTitle.setText(String.valueOf(firstLetter));
-            }
+//            if (nameByLang != null) {
+//                char firstLetter = nameByLang.charAt(0);
+////                holder.mImageTitle.setText(String.valueOf(firstLetter));
+//            }
         }
         try {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -112,13 +120,13 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView mStopTitle;
         private ImageView mReasonImage;
-        private TextView mImageTitle;
+//        private TextView mImageTitle;
 
         public ViewHolder(View view) {
             super(view);
             mStopTitle = view.findViewById(R.id.stop_reason_title);
             mReasonImage = view.findViewById(R.id.grid_reason_image_view);
-            mImageTitle = view.findViewById(R.id.stop_reason_image_title);
+//            mImageTitle = view.findViewById(R.id.stop_reason_image_title);
         }
     }
 
