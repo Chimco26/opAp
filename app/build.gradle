@@ -10,8 +10,8 @@ android {
         applicationId "com.operatorsapp"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 43 //2 sites upgraded to version code 43. next version should be 44
-        versionName "2.43"
+        versionCode 44      //2 sites upgraded to version code 43. tadiran 44, next version should be 45
+        versionName "2.45"
         multiDexEnabled true
     }
     buildTypes {

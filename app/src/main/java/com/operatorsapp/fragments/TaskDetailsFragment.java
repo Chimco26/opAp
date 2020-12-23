@@ -211,6 +211,7 @@ public class TaskDetailsFragment extends Fragment {
             mAssignSpinner.setEnabled(false);
             initStartAndEndTimeViews();
             initTotalTime(task);
+            setTaskStepsRecycler();
             mAttachedFilesTv.setVisibility(View.GONE);
         } else {
             mSaveBtn.setText(getString(R.string.save));
@@ -725,8 +726,8 @@ public class TaskDetailsFragment extends Fragment {
             public void onCreateTaskCallbackSuccess(StandardResponse response) {
                 ProgressDialogManager.dismiss();
                 postNotesForTask(response.getLeaderRecordID());
-//                ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
-//                mListener.onUpdate();
+                ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
+                mListener.onUpdate();
             }
 
             @Override
@@ -800,6 +801,10 @@ public class TaskDetailsFragment extends Fragment {
     }
 
     private void postNotesForTask(int taskId) {
+        if (mTaskNoteList == null || mTaskNoteList.isEmpty()){
+            return;
+        }
+
         for (TaskNote taskNote : mTaskNoteList) {
             if (taskNote.getmNoteId() == 0) {
                 final int[] requestCounter = {0};

@@ -444,7 +444,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mShiftLogSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                SendBroadcast.refreshPolling(getActivity());
+                mListener.onRefreshMachineLinePolling();
+//                SendBroadcast.refreshPolling(getActivity());
             }
         });
 
