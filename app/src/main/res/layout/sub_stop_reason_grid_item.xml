@@ -8,8 +8,8 @@
     android:padding="20dp">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:layout_gravity="center"
         android:gravity="center">
 
@@ -20,22 +20,22 @@
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/btnletters_normal" />
+            android:background="@drawable/simple_circle" />
 
-        <TextView
-            android:id="@+id/stop_reason_image_title"
-            style="@style/FontStyle_T36"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:text="S"
-            android:maxLines="1"
-            android:textSize="60sp"
-            app:autoSizeMaxTextSize="60sp"
-            app:autoSizeTextType="uniform" />
+<!--        <TextView-->
+<!--            android:id="@+id/stop_reason_image_title"-->
+<!--            style="@style/FontStyle_T36"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:gravity="center"-->
+<!--            android:text="S"-->
+<!--            android:maxLines="1"-->
+<!--            android:textSize="60sp"-->
+<!--            app:autoSizeMaxTextSize="60sp"-->
+<!--            app:autoSizeTextType="uniform" />-->
 
     </RelativeLayout>
 

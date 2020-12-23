@@ -29,6 +29,9 @@ public class QualityTest implements Parcelable {
     @SerializedName("Passed")
     @Expose
     private Boolean passed;
+    @SerializedName("Amount")
+    @Expose
+    private Float amount;
 
     /**
      * No args constructor for use in serialization
@@ -104,6 +107,10 @@ public class QualityTest implements Parcelable {
         this.testTime = testTime;
     }
 
+    public Float getAmount() {
+        return amount;
+    }
+
     public Boolean getPassed() {
         if (passed == null){
             return false;
@@ -125,6 +132,7 @@ public class QualityTest implements Parcelable {
         testTime = in.readString();
         byte passedVal = in.readByte();
         passed = passedVal == 0x02 ? null : passedVal != 0x00;
+        amount = in.readFloat();
     }
 
     @Override
@@ -155,6 +163,7 @@ public class QualityTest implements Parcelable {
         } else {
             dest.writeByte((byte) (passed ? 0x01 : 0x00));
         }
+        dest.writeFloat(amount);
     }
 
     @SuppressWarnings("unused")

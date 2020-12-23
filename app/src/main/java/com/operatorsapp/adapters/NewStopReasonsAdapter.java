@@ -1,9 +1,13 @@
 package com.operatorsapp.adapters;
 
 import android.content.Context;
+
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,6 +134,9 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
 
         @Override
         public void onBindViewHolder(@NonNull VerticalAdapter.VerticalViewHolder holder, final int position) {
+
+            holder.itemView.setBackgroundColor(adjustAlpha(mStopItemsList.get(mGroupReasonPosition).getGroupColor(),
+                    (mVerticalList.size() - position) * 100 / mVerticalList.size()));
             String title = OperatorApplication.isEnglishLang() ? mVerticalList.get(position).getEName() : mVerticalList.get(position).getLName();
             holder.mVerticalTitle.setText(title);
 
@@ -167,5 +174,15 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
 
             }
         }
+
+
+    }
+    @ColorInt
+    public static int adjustAlpha(@ColorInt int color, float factor) {
+        int alpha = Math.round(Color.alpha(color) * factor);
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+        return Color.argb(alpha, red, green, blue);
     }
 }
