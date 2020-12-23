@@ -67,7 +67,8 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
 
             int imgId = mStopItemsList.get(position).getGroupIcon(mContext);
             if (imgId == 0){
-                imgId = ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
+//                imgId = ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
+                imgId = R.drawable.general_copy_4;
             }
             holder.mReasonImage.setImageResource(imgId);
             holder.mReasonImage.setBackgroundColor(mStopItemsList.get(position).getGroupColor());
