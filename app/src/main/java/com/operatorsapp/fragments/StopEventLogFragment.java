@@ -216,9 +216,17 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
 
     private void initAdapter(){
         ArrayList<Event> stopLogTempList = new ArrayList<>();
+        ArrayList<Integer> rootIdList = new ArrayList<>();
         if (isUnreportedOnly){
+
             for (Event event : mStopLogsItems) {
-                if (event.getEventGroupID() == 6){
+                if (event.getEventGroupID() == 6 && !rootIdList.contains(event.getRootEventID())){
+                    rootIdList.add(event.getRootEventID());
+                }
+            }
+
+            for (Event event : mStopLogsItems) {
+                if (rootIdList.contains(event.getRootEventID()) && (event.getRootEventID() != 0 || event.getEventGroupID() == 6)){
                     stopLogTempList.add(event);
                 }
             }

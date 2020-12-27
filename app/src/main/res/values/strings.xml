@@ -594,4 +594,5 @@
     <string name="select_material">Select Material</string>
     <string name="run_test_for">Run a test for:</string>
     <string name="material">Material</string>
+    <string name="quality_control">Quality Control</string>
 </resources>

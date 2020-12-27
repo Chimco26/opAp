@@ -10,10 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:padding="150dp">
+        android:paddingTop="150dp"
+        android:paddingBottom="150dp">
 
         <RelativeLayout
             android:id="@+id/button_cancel"
+            android:layout_toEndOf="@+id/DALJ_title_tv"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true">
@@ -25,13 +27,20 @@
                 android:src="@drawable/close" />
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/DALJ_title_ic"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+        <TextView
+            android:id="@+id/DALJ_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/attention"/>
+            android:padding="15dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="25dp"
+            android:text="@string/quality_control"
+            android:textAlignment="center"
+            android:maxLines="1"
+            android:gravity="center"/>
 
         <TextView
             android:id="@+id/DALJ_text_tv"
@@ -40,7 +49,7 @@
             android:layout_centerInParent="true"
             android:layout_above="@+id/TTBD_btn_ly"
             android:padding="15dp"
-            android:layout_below="@+id/DALJ_title_ic"
+            android:layout_below="@+id/DALJ_title_tv"
             android:textColor="@color/black"
             android:textSize="20sp"
             app:autoSizeTextType="uniform"
@@ -52,8 +61,8 @@
             android:id="@+id/TTBD_btn_ly"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginEnd="100dp"
-            android:layout_marginStart="100dp"
+            android:layout_marginEnd="150dp"
+            android:layout_marginStart="150dp"
             android:layout_alignParentBottom="true">
 
             <TextView
