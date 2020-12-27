@@ -10,31 +10,24 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.google.android.gms.dynamic.SupportFragmentWrapper;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.Alert2BtnDialog;
-import com.operatorsapp.dialogs.GenericDialog;
-import com.operatorsapp.dialogs.ProgressDialogFragment;
 import com.operatorsapp.fragments.JobListFragment;
 import com.operatorsapp.fragments.QCDetailsFragment;
 import com.operatorsapp.fragments.QCTestOrderFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.CroutonCreator;
-import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
-import com.operatorsapp.server.requests.JobTestRequest;
 import com.operatorsapp.server.responses.JobListForMaterialResponse;
 import com.operatorsapp.server.responses.JobListForTestResponse;
-import com.operatorsapp.server.responses.JobTestResponse;
 import com.operatorsapp.utils.KeyboardUtils;
 
 import java.util.List;
