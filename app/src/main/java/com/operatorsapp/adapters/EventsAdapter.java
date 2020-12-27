@@ -320,14 +320,16 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     setNotification(event, 4, reject.getTime().substring(11, 16), getTextByState(reject.getAmount() + " " + name, 6), 0, reject.getTime());
                 }
             }
-
+            
             if (mIsQualityTestsChecked && event.getQualityTests() != null && event.getQualityTests().size() > 0) {
                 for (final QualityTest qualityTest : event.getQualityTests()) {
 
                     String isPassed = qualityTest.getPassed() ? mContext.getString(R.string.passed) : mContext.getString(R.string.failed);
                     int typeByPassed = qualityTest.getPassed() ? 7 : 8;
                     String name = OperatorApplication.isEnglishLang() ? qualityTest.getEName() : qualityTest.getLName();
-                    View view = setNotification(event, typeByPassed, qualityTest.getReportTime().substring(11, 16), getTextByState(isPassed + " " + name, 6), 0, qualityTest.getReportTime());
+                    View view = setNotification(event, typeByPassed, qualityTest.getReportTime().substring(11, 16),
+                            getTextByState(String.format(Locale.getDefault(), "%s: %s %s", isPassed, qualityTest.getAmount(), name), 6)
+                            , 0, qualityTest.getReportTime());
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
