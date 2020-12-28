@@ -3,9 +3,6 @@ package com.operatorsapp.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
@@ -14,6 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
@@ -71,19 +72,20 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
 
         } else {
             holder.mStopTitle.setTextColor(mContext.getResources().getColor(R.color.color_jobs_row));
-            String color = mStopReason.getmColorID();
+            String color = mSubReasonsList.get(position).getmColorID();
+            if (color == null || color.isEmpty()) {
+                color = String.format("#%06x", mContext.getColor(R.color.C2) & 0xffffff);
+            }
             if (mSelectedPosition == position) {
 //                holder.mImageTitle.setTextColor(Color.WHITE);
                 GradientDrawable selector = (GradientDrawable) mContext.getDrawable(R.drawable.circle_withe_stroke);
-                if (color != null && !color.isEmpty()) {
-                    selector.setColor(Color.parseColor(color));
-                }
+                selector.setColor(Color.parseColor(color));
+
                 holder.mReasonImage.setBackground(selector);
             } else {
                 Drawable selector = mContext.getDrawable(R.drawable.simple_circle);
-                if (color != null && !color.isEmpty()) {
-                    selector.setTint(Color.parseColor(color));
-                }
+                selector.setTint(Color.parseColor(color));
+
                 holder.mReasonImage.setBackground(selector);
 //                holder.mImageTitle.setTextColor(ContextCompat.getColorStateList(mContext, R.color.button_stop_text_selector));
             }
