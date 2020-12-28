@@ -1403,16 +1403,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 for (int i = 0; i < options.length; i++) {
                     mJobActionsSpinnerItems.add(new JobActionsSpinnerItem(i, options[i]));
-                    if (i == 2 && mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData() != null
-                            && mCurrentMachineStatus.getAllMachinesData().get(0).getConfigName() != null){
-                        mJobActionsSpinnerItems.get(i).setEnabled(false);
-                    }
                 }
                 // add approve first item with unique ID;
                 mApproveItemID = mJobActionsSpinnerItems.size();
                 mJobActionsSpinnerItems.add(new JobActionsSpinnerItem(mApproveItemID, getString(R.string.approve_first_item)));
 
-                mJobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, mJobActionsSpinnerItems);
+                mJobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, mJobActionsSpinnerItems, mCurrentMachineStatus);
 
             }
 
@@ -2709,7 +2705,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             enableActionSpinner();
         }
-
+        mJobsSpinnerAdapter.updateMachineStatus(machineStatus);
     }
 
     public void enableActionSpinner() {

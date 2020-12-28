@@ -506,7 +506,7 @@
     <string name="start_date">תאריך התחלה</string>
     <string name="end_date">תאריך סיום</string>
     <string name="filter_tasks">סינון משימות</string>
-    <string name="create_date">תאריך היווצרות</string>
+    <string name="create_date">תאריך יצירה</string>
     <string name="assign_to">שייך ל</string>
     <string name="task_id">מזהה משימה</string>
     <string name="test_details">פרטי בדיקה</string>

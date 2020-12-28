@@ -30,8 +30,6 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.QCActivity;
 import com.operatorsapp.adapters.DictionarySpinnerAdapter;
 import com.operatorsapp.adapters.SubTypeAdapter;
-import com.operatorsapp.dialogs.Alert2BtnDialog;
-import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.requests.TestOrderMaterialRequest;
@@ -40,8 +38,6 @@ import com.operatorsapp.utils.QCRequests;
 import com.operatorsapp.utils.ShowCrouton;
 
 import java.util.List;
-
-import static com.operatorsapp.activities.QCActivity.QC_IS_FROM_SELECT_MACHINE_SCREEN;
 
 
 public class QCTestOrderFragment extends Fragment implements
@@ -67,6 +63,7 @@ public class QCTestOrderFragment extends Fragment implements
     private Spinner mTestSpinner;
     private View mSamplesLy;
     private boolean isOnlyQCMaterial;
+    private boolean isFragmentRecreated = false;
 
     public static QCTestOrderFragment newInstance(int idForTests, boolean isMaterial) {
 
@@ -118,6 +115,13 @@ public class QCTestOrderFragment extends Fragment implements
         initVars(view);
         mTestOrderRequest = new TestOrderRequest(idForTest != 0 ? idForTest : PersistenceManager.getInstance().getJobId());
         getTestOrder(mTestOrderRequest);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null)
+            isFragmentRecreated = true;
     }
 
     @Override
@@ -176,6 +180,9 @@ public class QCTestOrderFragment extends Fragment implements
                 mProgressBar.setVisibility(View.GONE);
                 if (mTestOrder == null) {
                     testOrderResponse.getResponseDictionaryDT().getSubTypes().add(0, new SubType());
+                    initTestSpinner(testOrderResponse);
+                }else if (isFragmentRecreated){
+                    isFragmentRecreated = false;
                     initTestSpinner(testOrderResponse);
                 }
                 mTestOrder = testOrderResponse;

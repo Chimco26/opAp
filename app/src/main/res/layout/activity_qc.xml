@@ -21,9 +21,14 @@
     </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
-        android:id="@+id/AQC_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/AQC_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </FrameLayout>
 
         <ProgressBar
             android:id="@+id/AQA_progress"
@@ -32,5 +37,6 @@
             android:visibility="gone"
             android:layout_gravity="center" />
     </FrameLayout>
+
 
 </LinearLayout>

@@ -40,6 +40,7 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         CroutonCreator.CroutonListener, JobListFragment.JobListFragmentListener,
         QCTestOrderFragment.QCTestOrderFragmentListener,
         QCDetailsFragment.QCDetailsFragmentListener,
+        JobOrMaterialFragment.JobOrMaterialFragmentListener,
         Thread.UncaughtExceptionHandler{
 
     public static final String QC_IS_FROM_SELECT_MACHINE_SCREEN = "QC_IS_FROM_SELECT_MACHINE_SCREEN";
@@ -74,20 +75,26 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
     }
 
     private void openJobOrMaterialDialog() {
-        Alert2BtnDialog dialog = new Alert2BtnDialog(this, new Alert2BtnDialog.Alert2BtnDialogListener() {
-            @Override
-            public void onClickPositiveBtn() {
-                isOnlyQCMaterial = true;
-                chooseMaterial();
-            }
 
-            @Override
-            public void onClickNegativeBtn() {
-                chooseJob();
-            }
-        }, getString(R.string.run_test_for), getString(R.string.material), getString(R.string.job));
+        JobOrMaterialFragment jobOrMaterialFragment = JobOrMaterialFragment.newInstance();
+        getSupportFragmentManager().beginTransaction().add(R.id.AQC_container, jobOrMaterialFragment).addToBackStack(JobOrMaterialFragment.class.getSimpleName()).commit();
 
-        dialog.showAlert2BtnDialog(true).show();
+
+
+//        Alert2BtnDialog dialog = new Alert2BtnDialog(this, new Alert2BtnDialog.Alert2BtnDialogListener() {
+//            @Override
+//            public void onClickPositiveBtn() {
+//                isOnlyQCMaterial = true;
+//                chooseMaterial();
+//            }
+//
+//            @Override
+//            public void onClickNegativeBtn() {
+//                chooseJob();
+//            }
+//        }, getString(R.string.run_test_for), getString(R.string.material), getString(R.string.job));
+//
+//        dialog.showAlert2BtnDialog(true).show();
     }
 
     private void chooseJob() {
@@ -187,8 +194,9 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
                 if (getSupportFragmentManager().getFragments().size() > 1){
                     getSupportFragmentManager().popBackStack();
                 }else {
-                    super.onBackPressed();
-                    openJobOrMaterialDialog();
+                    finish();
+//                    super.onBackPressed();
+//                    openJobOrMaterialDialog();
                 }
             }else {
                 setResult(RESULT_CANCELED, getIntent());
@@ -275,5 +283,15 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
         finish();
         System.exit(2);
+    }
+
+    @Override
+    public void onJobOrMaterialSelected(boolean isJob) {
+        if (isJob){
+            chooseJob();
+        }else {
+            isOnlyQCMaterial = true;
+            chooseMaterial();
+        }
     }
 }
