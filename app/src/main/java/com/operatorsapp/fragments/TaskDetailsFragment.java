@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -110,6 +111,7 @@ public class TaskDetailsFragment extends Fragment {
     private EditText mNotesAddNewEt;
     private ArrayList<TaskStep> mTaskStepList;
     private EditText mTaskStepAddNewEt;
+    private ImageView mTaskStepAddNewIv;
 
     public static TaskDetailsFragment newInstance(TaskProgress taskProgress) {
         TaskDetailsFragment taskDetailsFragment = new TaskDetailsFragment();
@@ -189,6 +191,7 @@ public class TaskDetailsFragment extends Fragment {
         mSeverityRv = view.findViewById(R.id.FTD_severity_rv);
         mTaskStepRv = view.findViewById(R.id.FTD_sub_task_rv);
         mTaskStepAddNewEt = view.findViewById(R.id.FTD_sub_task_add_new_et);
+        mTaskStepAddNewIv = view.findViewById(R.id.FTD_sub_task_add_new_iv);
         mNotesRv = view.findViewById(R.id.FTD_task_notes_rv);
         mNotesAddNewEt = view.findViewById(R.id.FTD_task_note_add_new_et);
         mAttachedFilesRv = view.findViewById(R.id.FTD_attached_files_rv);
@@ -249,6 +252,8 @@ public class TaskDetailsFragment extends Fragment {
                 initStatusSpinner(status, task.getTaskStatus(), 0);
                 initSubjectSpinner(editTaskObject.getSubjects(), task.getSubjectId(), getResources().getColor(R.color.grey1));
                 mSubjectSpinner.setEnabled(false);
+                mTaskStepAddNewEt.setVisibility(View.GONE);
+                mTaskStepAddNewIv.setVisibility(View.GONE);
             } else {
                 initSeverity(editTaskObject.getPriority(), task.getTaskPriorityID(), true);
                 initStatusSpinner(editTaskObject.getStatus(), task.getTaskStatus(), 0);
@@ -611,7 +616,7 @@ public class TaskDetailsFragment extends Fragment {
     }
 
     private void initListener(View view) {
-        view.findViewById(R.id.FTD_sub_task_add_new_iv).setOnClickListener(new View.OnClickListener() {
+        mTaskStepAddNewIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addTaskStep();
@@ -708,13 +713,9 @@ public class TaskDetailsFragment extends Fragment {
     }
 
     private double getTotalTime() {
-        double totalTime;
-        try {
-            totalTime = (Integer.parseInt(mTimeHr.getText().toString()) * 60)  + (Integer.parseInt(mTimeMin.getText().toString()));
-        } catch (NumberFormatException e) {
-            totalTime = 0;
-        }
-        return totalTime;
+        String durationHours = !mTimeHr.getText().toString().equals("") ? mTimeHr.getText().toString() : "0";
+        String durationMinutes = !mTimeMin.getText().toString().equals("") ? mTimeMin.getText().toString() : "0";
+        return  (Integer.parseInt(durationHours) * 60) + Integer.parseInt(durationMinutes);
     }
 
     private void createTask(Task task) {

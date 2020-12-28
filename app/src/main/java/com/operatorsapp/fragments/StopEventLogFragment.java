@@ -226,7 +226,7 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
             }
 
             for (Event event : mStopLogsItems) {
-                if (rootIdList.contains(event.getRootEventID()) && (event.getRootEventID() != 0 || event.getEventGroupID() == 6)){
+                if (rootIdList.contains(event.getEventID()) || (rootIdList.contains(event.getRootEventID()) && (event.getRootEventID() != 0 || event.getEventGroupID() == 6))){
                     stopLogTempList.add(event);
                 }
             }

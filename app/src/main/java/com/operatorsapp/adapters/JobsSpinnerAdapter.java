@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.model.JobActionsSpinnerItem;
 
@@ -16,14 +17,16 @@ import java.util.List;
 
 public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
 
+    private MachineStatus mCurrentMachineStatus;
     private Activity mContext;
     private List<JobActionsSpinnerItem> mSpinnerItems;
     private int mCurrentProductionId;
 
-    public JobsSpinnerAdapter(Activity context, int resource, List<JobActionsSpinnerItem> operators) {
+    public JobsSpinnerAdapter(Activity context, int resource, List<JobActionsSpinnerItem> operators, MachineStatus currentMachineStatus) {
         super(context, resource, operators);
         mSpinnerItems = operators;
         mContext = context;
+        mCurrentMachineStatus = currentMachineStatus;
         mCurrentProductionId = mSpinnerItems.get(0).getUniqueID();
     }
 
@@ -48,6 +51,7 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_jobs_item_dropdown, parent, false);
         }
+        checkMachineStatusConfig();
         TextView name = row.findViewById(R.id.SJID_texte);
         name.setText(mSpinnerItems.get(position).getName());
         setIcon(mSpinnerItems.get(position).getUniqueID(), (ImageView) row.findViewById(R.id.SJID_image));
@@ -92,5 +96,17 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
 
     public void updateSelectedId(int id) {
         mCurrentProductionId = id;
+    }
+
+    public void checkMachineStatusConfig() {
+        if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData() != null
+                && mCurrentMachineStatus.getAllMachinesData().get(0).getConfigName() != null
+                && mCurrentMachineStatus.getAllMachinesData().get(0).getConfigName().length() > 0){
+            mSpinnerItems.get(2).setEnabled(false);
+        }
+    }
+
+    public void updateMachineStatus(MachineStatus machineStatus) {
+        mCurrentMachineStatus = machineStatus;
     }
 }
