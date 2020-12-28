@@ -1,13 +1,9 @@
 package com.operatorsapp.adapters;
 
 import android.content.Context;
-
-import androidx.annotation.ColorInt;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +11,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.operators.reportfieldsformachineinfra.StopReasons;
-import com.operators.reportfieldsformachineinfra.SubReasons;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
@@ -26,7 +25,6 @@ import com.operatorsapp.utils.ReasonImage;
 import com.operatorsapp.utils.ReasonImageLenox;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by alex on 26/12/2018.
@@ -67,24 +65,24 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
 //            }
         }
         int color = (mStopItemsList.get(position).getGroupColor());
-        if (color == 0){
+        if (color == 0) {
             color = ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
         }
         holder.mTitleLil.setBackgroundColor(color);
 //        holder.mTitleLil.setBackgroundColor(ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId()));
 //        holder.mTitleLil.setBackgroundColor(ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getEventGroupColorID()));
 
-        if (imgId == 0){
+        if (imgId == 0) {
             holder.mReasonImage.setVisibility(View.INVISIBLE);
-        }else {
+        } else {
             holder.mReasonImage.setVisibility(View.VISIBLE);
             holder.mReasonImage.setBackground(mContext.getResources().getDrawable(imgId));
         }
-        holder.mHorizontalRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL,false));
+        holder.mHorizontalRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         holder.mHorizontalRv.setAdapter(new VerticalAdapter(position, mStopItemsList.get(position).getSubReasons(), imgId));
 //        int color = new Random().nextInt(4);
 //        Color.parseColor(mContext.getResources().getStringArray(R.array.color_array)[color]);
-       // holder.mTitleLil.setBackgroundColor(Color.parseColor(mContext.getResources().getStringArray(R.array.color_array)[color]));
+        // holder.mTitleLil.setBackgroundColor(Color.parseColor(mContext.getResources().getStringArray(R.array.color_array)[color]));
     }
 
     @Override
@@ -107,7 +105,6 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
             mTitleLil = view.findViewById(R.id.report_horizontal_lil);
         }
     }
-
 
 
     /****  Vertical Adapter  ****/
@@ -135,16 +132,26 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
         @Override
         public void onBindViewHolder(@NonNull VerticalAdapter.VerticalViewHolder holder, final int position) {
 
-            holder.itemView.setBackgroundColor(adjustAlpha(mStopItemsList.get(mGroupReasonPosition).getGroupColor(),
-                    (mVerticalList.size() - position) * 100 / mVerticalList.size()));
+            String color = mVerticalList.get(position).getmColorID();
+            if (color == null || color.isEmpty()) {
+                color = String.format("#%06x", mContext.getResources().getColor(R.color.C2) & 0xffffff);
+            }
+            Configuration config = mContext.getResources().getConfiguration();
+            GradientDrawable.Orientation orientation = GradientDrawable.Orientation.RIGHT_LEFT;
+            if (config.getLayoutDirection() != View.LAYOUT_DIRECTION_RTL) {
+                orientation = GradientDrawable.Orientation.LEFT_RIGHT;
+            }
+            GradientDrawable gd = new GradientDrawable(
+                    orientation, new int[] {Color.parseColor(color),Color.parseColor("#ffffff")});
+            holder.itemView.setBackground(gd);
             String title = OperatorApplication.isEnglishLang() ? mVerticalList.get(position).getEName() : mVerticalList.get(position).getLName();
             holder.mVerticalTitle.setText(title);
 
             int icon = mVerticalList.get(position).getGroupIcon(mContext);
-            if (icon == 0){
+            if (icon == 0) {
 //                icon = mImgId;
                 holder.mVerticalImage.setVisibility(View.INVISIBLE);
-            }else {
+            } else {
                 holder.mVerticalImage.setVisibility(View.VISIBLE);
                 holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(icon));
             }
@@ -177,6 +184,7 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
 
 
     }
+
     @ColorInt
     public static int adjustAlpha(@ColorInt int color, float factor) {
         int alpha = Math.round(Color.alpha(color) * factor);

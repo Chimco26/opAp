@@ -3,15 +3,16 @@ package com.operatorsapp.fragments;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.common.ErrorResponse;
 import com.example.common.StandardResponse;
@@ -19,8 +20,6 @@ import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
-import com.operators.reportfieldsformachineinfra.SubReasons;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
@@ -60,7 +59,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     private static final float MINIMUM_VERSION_TO_NEW_API = 1.7f;
     private static final String EXTRA_VIEW_LOG_REPORT_IS_SUCCESS = "EXTRA_VIEW_LOG_REPORT_IS_SUCCESS";
 
-//    private ReportFieldsForMachine mReportFieldsForMachine;
+    //    private ReportFieldsForMachine mReportFieldsForMachine;
     private Integer mJoshId = 0;
 
     private StopReasonsGroup mSelectedSubreason;
@@ -200,6 +199,20 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
                 close();
             }
         });
+
+        View backBtn = view.findViewById(R.id.FSSRN_back_btn);
+        if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            backBtn.setRotation(180);
+        }
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (getActivity() != null) {
+                    getActivity().onBackPressed();
+                }
+            }
+        });
     }
 
     private void initSubReasons() {
@@ -246,7 +259,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
             if (isFromViewLogRoot) {
                 mListener.onReport(mSelectedPosition, mSelectedSubreason);
-            }else {
+            } else {
                 sendReport();
             }
 //            SendBroadcast.refreshPolling(getContext());
