@@ -137,12 +137,14 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
                 color = String.format("#%06x", mContext.getResources().getColor(R.color.C2) & 0xffffff);
             }
             Configuration config = mContext.getResources().getConfiguration();
+
             GradientDrawable.Orientation orientation = GradientDrawable.Orientation.RIGHT_LEFT;
             if (config.getLayoutDirection() != View.LAYOUT_DIRECTION_RTL) {
                 orientation = GradientDrawable.Orientation.LEFT_RIGHT;
             }
             GradientDrawable gd = new GradientDrawable(
-                    orientation, new int[] {Color.parseColor(color),Color.parseColor("#ffffff")});
+                    orientation, new int[] {adjustAlpha(Color.parseColor(color), 0.65f),Color.parseColor("#ffffff")
+                    ,Color.parseColor("#ffffff"),Color.parseColor("#ffffff")});
             holder.itemView.setBackground(gd);
             String title = OperatorApplication.isEnglishLang() ? mVerticalList.get(position).getEName() : mVerticalList.get(position).getLName();
             holder.mVerticalTitle.setText(title);
