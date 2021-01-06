@@ -112,6 +112,7 @@ public class TaskDetailsFragment extends Fragment {
     private ArrayList<TaskStep> mTaskStepList;
     private EditText mTaskStepAddNewEt;
     private ImageView mTaskStepAddNewIv;
+    private boolean isTaskCreator;
 
     public static TaskDetailsFragment newInstance(TaskProgress taskProgress) {
         TaskDetailsFragment taskDetailsFragment = new TaskDetailsFragment();
@@ -141,6 +142,7 @@ public class TaskDetailsFragment extends Fragment {
         if (operatorId == 0) {
             operatorId = PersistenceManager.getInstance().getUserId();
         }
+        isTaskCreator = true;
         if (mTask == null) {
             mTask = new TaskProgress();
             mTask.setHistoryCreateDate(TimeUtils.getDate(new Date().getTime(), SQL_T_FORMAT_NO_SECOND));
@@ -152,6 +154,7 @@ public class TaskDetailsFragment extends Fragment {
             mTask.setCreateUserName(operatorName);
         } else {
             initialStatus = mTask.getTaskStatus();
+            isTaskCreator = mTask.getTaskCreateUser() == operatorId;
         }
         super.onCreate(savedInstanceState);
     }
@@ -240,7 +243,7 @@ public class TaskDetailsFragment extends Fragment {
             initTotalTime(task);
             initAssignSpinner(task.getAssigneeDisplayName(), getResources().getColor(R.color.grey1));
             mAssignSpinner.setEnabled(false);
-            if (task.getTaskCreateUser() != operatorId) {
+            if (isTaskCreator) {
                 disableEditText(mDescriptionEt);
                 disableEditText(mTimeMin);
                 disableEditText(mTimeHr);
@@ -310,6 +313,11 @@ public class TaskDetailsFragment extends Fragment {
         mStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (mStartDate.getText().toString().length() > 0){
+                    mStartDate.setText("");
+                    mTask.setTaskStartTimeTarget("");
+                    return;
+                }
                 final Calendar calendar = Calendar.getInstance();
                 calendar.setTime(new Date(start[0]));
                 DatePickerDialog datePickerDialog = new DatePickerDialog(
@@ -334,20 +342,14 @@ public class TaskDetailsFragment extends Fragment {
                                             SQL_T_FORMAT_NO_SECOND), SQL_NO_T_FORMAT_NO_SECOND));
                                 }
                             }
-                        }
-
-                        ;
+                        };
                         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.TimePickerTheme, myTimeListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
-                        timePickerDialog.setTitle(String.format("%s :",
-
-                                getString(R.string.choose_hour)));
+                        timePickerDialog.setTitle(String.format("%s :", getString(R.string.choose_hour)));
                         timePickerDialog.show();
 
                     }
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-                if (!mTask.getTaskEndTimeTarget().
-
-                        isEmpty()) {
+                if (!mTask.getTaskEndTimeTarget().isEmpty()) {
                     datePickerDialog.getDatePicker().setMaxDate(end[0]);
                 }
                 datePickerDialog.getDatePicker().
@@ -361,6 +363,11 @@ public class TaskDetailsFragment extends Fragment {
         mEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (mEndDate.getText().toString().length() > 0){
+                    mEndDate.setText("");
+                    mTask.setTaskEndTimeTarget("");
+                    return;
+                }
                 final Calendar calendar = Calendar.getInstance();
                 calendar.setTime(new Date(end[0]));
                 DatePickerDialog datePickerDialog = new DatePickerDialog(
@@ -520,12 +527,12 @@ public class TaskDetailsFragment extends Fragment {
 
     private void setNotesRecycler() {
         mNotesRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mNotesRv.setAdapter(new TaskNotesAdapter(mTaskNoteList != null ? mTaskNoteList : new ArrayList<TaskNote>()));
+        mNotesRv.setAdapter(new TaskNotesAdapter(isTaskCreator, mTaskNoteList != null ? mTaskNoteList : new ArrayList<TaskNote>()));
     }
 
     private void setTaskStepsRecycler() {
         mTaskStepRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mTaskStepRv.setAdapter(new TaskStepsAdapter(mTaskStepList != null ? mTaskStepList : new ArrayList<TaskStep>()));
+        mTaskStepRv.setAdapter(new TaskStepsAdapter(isTaskCreator, mTaskStepList != null ? mTaskStepList : new ArrayList<TaskStep>()));
     }
 
     private void initAttachFiles(TaskFilesResponse taskFiles) {
@@ -807,28 +814,26 @@ public class TaskDetailsFragment extends Fragment {
         }
 
         for (TaskNote taskNote : mTaskNoteList) {
-            if (taskNote.getmNoteId() == 0) {
-                final int[] requestCounter = {0};
-                CreateTaskNotesRequest request = new CreateTaskNotesRequest(PersistenceManager.getInstance().getSessionId(), taskId, taskNote.getmNoteId(), mTask.getHistoryID(), taskNote.getmNoteText());
-                NetworkManager.getInstance().postNotesForNewTask(request, new Callback<StandardResponse>() {
-                    @Override
-                    public void onResponse(Call<StandardResponse> call, Response<StandardResponse> response) {
-                        requestCounter[0]++;
-                        if (requestCounter[0] == mTaskNoteList.size()){
-                            ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
-                            mListener.onUpdate();
-                        }
+            final int[] requestCounter = {0};
+            CreateTaskNotesRequest request = new CreateTaskNotesRequest(PersistenceManager.getInstance().getSessionId(), taskId, taskNote.getmNoteId(), mTask.getHistoryID(), taskNote.getmNoteText());
+            NetworkManager.getInstance().postNotesForNewTask(request, new Callback<StandardResponse>() {
+                @Override
+                public void onResponse(Call<StandardResponse> call, Response<StandardResponse> response) {
+                    requestCounter[0]++;
+                    if (requestCounter[0] == mTaskNoteList.size()){
+                        ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(), getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
+                        mListener.onUpdate();
                     }
+                }
 
-                    @Override
-                    public void onFailure(Call<StandardResponse> call, Throwable t) {
-                        requestCounter[0]++;
-                        if (requestCounter[0] == mTaskNoteList.size()){
-                            mListener.onUpdate();
-                        }
+                @Override
+                public void onFailure(Call<StandardResponse> call, Throwable t) {
+                    requestCounter[0]++;
+                    if (requestCounter[0] == mTaskNoteList.size()){
+                        mListener.onUpdate();
                     }
-                });
-            }
+                }
+            });
         }
     }
 
