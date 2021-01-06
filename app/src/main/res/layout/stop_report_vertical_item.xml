@@ -26,6 +26,7 @@
             android:gravity="center_vertical"
             android:textColor="@color/black"
             android:textSize="20sp"
+            android:minHeight="45dp"
             style="@style/ProximaNovaSemiBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
