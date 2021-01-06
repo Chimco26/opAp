@@ -53,4 +53,8 @@ public class TaskNote {
     public String getmCreateDate() {
         return mCreateDate;
     }
+
+    public void setNoteText(String mNoteText) {
+        this.mNoteText = mNoteText;
+    }
 }

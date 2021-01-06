@@ -63,7 +63,7 @@ public class QCTestOrderFragment extends Fragment implements
     private Spinner mTestSpinner;
     private View mSamplesLy;
     private boolean isOnlyQCMaterial;
-    private boolean isFragmentRecreated = false;
+    private boolean isWentToNextScreen = false;
 
     public static QCTestOrderFragment newInstance(int idForTests, boolean isMaterial) {
 
@@ -115,13 +115,6 @@ public class QCTestOrderFragment extends Fragment implements
         initVars(view);
         mTestOrderRequest = new TestOrderRequest(idForTest != 0 ? idForTest : PersistenceManager.getInstance().getJobId());
         getTestOrder(mTestOrderRequest);
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null)
-            isFragmentRecreated = true;
     }
 
     @Override
@@ -181,8 +174,8 @@ public class QCTestOrderFragment extends Fragment implements
                 if (mTestOrder == null) {
                     testOrderResponse.getResponseDictionaryDT().getSubTypes().add(0, new SubType());
                     initTestSpinner(testOrderResponse);
-                }else if (isFragmentRecreated){
-                    isFragmentRecreated = false;
+                }else if (isWentToNextScreen){
+                    isWentToNextScreen = false;
                     initTestSpinner(testOrderResponse);
                 }
                 mTestOrder = testOrderResponse;
@@ -406,6 +399,7 @@ public class QCTestOrderFragment extends Fragment implements
                 mProgressBar.setVisibility(View.GONE);
                 if (standardResponse.getLeaderRecordID() != null && standardResponse.getLeaderRecordID() > 0) {
                     mListener.onSent(standardResponse.getLeaderRecordID());
+                    isWentToNextScreen = true;
                 } else {
                     ShowCrouton.showSimpleCrouton((QCActivity) getActivity(), standardResponse);
                 }

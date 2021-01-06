@@ -340,8 +340,8 @@
     <string name="min">דק</string>
     <string name="hr2">שע\'</string>
     <string name="dont_activate">לא להפעיל</string>
-    <string name="no_setup">לא סט-אפ</string>
-    <string name="go_to_setup">לך לסט-אפ</string>
+    <string name="no_setup">ללא סט-אפ</string>
+    <string name="go_to_setup">עם סט-אפ</string>
     <string name="rejects_quantity">כמות פסולים</string>
     <string name="there_are_no_stop_event">אין ארועי עצירה לדיווח</string>
     <string name="theoretical_units">יחידות תיאורטיות</string>

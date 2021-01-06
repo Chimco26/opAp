@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.operatorsapp.activities.MainActivity;
 import com.operatorsapp.application.OperatorApplication;
@@ -22,7 +23,9 @@ public class MyExceptionHandler implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread t, Throwable e) {
-        Log.d(LOG_TAG, "MyExceptionHandler " + e.toString());
+        Log.d(LOG_TAG, "MyExceptionHandler- " + t.getStackTrace()[0].getClassName() + ": " + t.getStackTrace()[0].getLineNumber());
+//        String msg = t.getStackTrace()[0].getClassName() + ": " + t.getStackTrace()[0].getLineNumber();
+//        Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(OperatorApplication.getAppContext(), MainActivity.class);
         intent.putExtra("crash", true);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP

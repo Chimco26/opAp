@@ -597,4 +597,5 @@
     <string name="run_test_for">Run a test for:</string>
     <string name="material">Material</string>
     <string name="quality_control">Quality Control</string>
+    <string name="edit_sub_task">Edit sub task</string>
 </resources>

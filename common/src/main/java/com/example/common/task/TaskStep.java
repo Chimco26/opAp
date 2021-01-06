@@ -56,4 +56,8 @@ public class TaskStep {
     public void setOpen(boolean open) {
         IsOpen = open;
     }
+
+    public void setText(String mText) {
+        this.mText = mText;
+    }
 }

@@ -251,6 +251,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private static final int REQUEST_WRITE_PERMISSION = 786;
     private static final int QC_ACTIVITY_RESULT_CODE = 2506;
     private static final int TECH_CALL_ACTIVITY_RESULT_CODE = 2507;
+    private static final int TASK_ACTIVITY_RESULT_CODE = 2508;
     private boolean ignoreFromOnPause = false;
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private CroutonCreator mCroutonCreator;
@@ -2210,6 +2211,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onOpenTaskActivity() {
+        pollingBackup(false);
+        mAllDashboardDataCore.stopPolling();
+        mAllDashboardDataCore.unregisterListener();
+        mAllDashboardDataCore.stopTimer();
+        mReportFieldsForMachineCore.stopPolling();
+        mReportFieldsForMachineCore.unregisterListener();
+        NetworkManager.getInstance().clearPollingRequest();
+
         Intent intent = new Intent(DashboardActivity.this, TaskActivity.class);
         ignoreFromOnPause = true;
 
@@ -2217,7 +2226,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             mActionBarAndEventsFragment.setFromAnotherActivity(true);
         }
-        startActivity(intent);
+        startActivityForResult(intent, TASK_ACTIVITY_RESULT_CODE);
     }
 
     @Override
@@ -2900,14 +2909,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         }
 
-        if (resultCode == RESULT_OK && requestCode == QC_ACTIVITY_RESULT_CODE) {
+        if (requestCode == QC_ACTIVITY_RESULT_CODE || requestCode == TASK_ACTIVITY_RESULT_CODE) {
 
-            ShowCrouton.showSimpleCrouton(this, getString(R.string.send_test_success), CroutonCreator.CroutonType.SUCCESS);
+            if (resultCode == RESULT_OK && requestCode == QC_ACTIVITY_RESULT_CODE) {
+                ShowCrouton.showSimpleCrouton(this, getString(R.string.send_test_success), CroutonCreator.CroutonType.SUCCESS);
+            }
             pollingBackup(true);
             dashboardDataStartPolling();
             mReportFieldsForMachineCore.startPolling();
             mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
-
         }
 
         if (resultCode == RESULT_OK && requestCode == ActivateJobActivity.EXTRA_ACTIVATE_JOB_CODE) {

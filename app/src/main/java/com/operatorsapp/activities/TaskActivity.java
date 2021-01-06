@@ -13,6 +13,7 @@ import com.operatorsapp.fragments.TaskBoardFragment;
 import com.operatorsapp.fragments.TaskDetailsFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
+import com.operatorsapp.utils.MyExceptionHandler;
 
 import java.util.List;
 
@@ -29,6 +30,8 @@ public class TaskActivity extends AppCompatActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
+
         setContentView(R.layout.task_activity);
         mCroutonCreator = new CroutonCreator();
         showTaskBoardFragment();
