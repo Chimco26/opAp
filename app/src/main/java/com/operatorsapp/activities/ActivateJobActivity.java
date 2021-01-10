@@ -3,6 +3,7 @@ package com.operatorsapp.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 
@@ -382,7 +383,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
         simpleRequests.postActivateJob(persistanceManager.getSiteUrl(), new PostActivateJobCallback() {
 
             @Override
-            public void onPostActivateJobSuccess(StandardResponse response) {
+            public void onPostActivateJobSuccess(final StandardResponse response) {
                 if (!isActive) {
                     return;
                 }
@@ -400,7 +401,13 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
                 } else {
 
-                    finishActivity((StandardResponse) response, activateJobRequest.getJobID());
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            finishActivity((StandardResponse) response, activateJobRequest.getJobID());
+                        }
+                    }, 5000);
                 }
             }
 
