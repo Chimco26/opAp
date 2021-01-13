@@ -15,6 +15,7 @@ import android.util.TypedValue;
 import android.view.View;
 
 import com.operatorsapp.R;
+import com.operatorsapp.utils.SizeUtils;
 
 import java.text.DecimalFormat;
 
@@ -38,7 +39,6 @@ public class RangeView2 extends View {
     float mHeight;
     private Bitmap avgImage;
     private Bitmap mStandardImage;
-    private int mWidth = 1;
     private boolean mShowStandardIc;
     private boolean mShowAvgdIc;
     private boolean mIsDefaultMode;
@@ -66,11 +66,6 @@ public class RangeView2 extends View {
 
     public void setCurrentValue(float mCurrentValue) {
         this.mCurrentValue = mCurrentValue;
-    }
-
-    public void setWidth(int width) {
-        mWidth = width;
-        postInvalidate();
     }
 
     public RangeView2(Context context) {
@@ -106,8 +101,8 @@ public class RangeView2 extends View {
 
         a.recycle();
 
-        mHeight = dipToPixels(context, 15);
-        border = dipToPixels(context, 12);
+        mHeight = dpToPixels(context, 15);
+        border = dpToPixels(context, 12);
 
         avgImage = Bitmap.createScaledBitmap(avgImage, (int) (mHeight), (int) (mHeight), true);
         mStandardImage = Bitmap.createScaledBitmap(mStandardImage, (int) (mHeight * 1.2), (int) (mHeight * 1.2), true);
@@ -123,22 +118,22 @@ public class RangeView2 extends View {
         mBorderPaint.setAntiAlias(true);
         mBorderPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mBorderPaint.setColor(Color.BLACK);
-        mBorderPaint.setStrokeWidth(dipToPixels(context, 2));
+        mBorderPaint.setStrokeWidth(dpToPixels(context, 2));
 
         mCurrentPaint.setAntiAlias(true);
         mCurrentPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mCurrentPaint.setStrokeWidth(dipToPixels(context, 6));
+        mCurrentPaint.setStrokeWidth(dpToPixels(context, 6));
 
         mTextPaint.setStyle(Paint.Style.FILL);
         mTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        mTextPaint.setTextSize(dipToPixels(context, 13));
+        mTextPaint.setTextSize(dpToPixels(context, 13));
 
         mBorderTextPaint.setStyle(Paint.Style.FILL);
         mBorderTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        mBorderTextPaint.setTextSize(dipToPixels(context, 13));
+        mBorderTextPaint.setTextSize(dpToPixels(context, 13));
         mBorderTextPaint.setColor(Color.BLACK);
 
-        textPadding = dipToPixels(context, 6);
+        textPadding = dpToPixels(context, 10);
 
     }
 //    @Override
@@ -162,7 +157,7 @@ public class RangeView2 extends View {
         mTextPaint.setColor(valueColor);
         mGreenPaint.setColor(valueColor);
 
-        float percent = mWidth / 100;
+        float percent = getWidth() / 100f;
 
         canvas.drawRect(0, getHeight() / 2f - mHeight / 2f, percent * 100, getHeight() / 2f + mHeight / 2f, mGrayPaint);
         String currentValueTxt = new DecimalFormat("##.#").format(mCurrentValue);
@@ -207,9 +202,9 @@ public class RangeView2 extends View {
         canvas.drawText(highLimitTxt, percent * 80 - mTextPaint.measureText(highLimitTxt) / 2, getHeight() / 2 + border + textPadding * 2, mBorderTextPaint);
     }
 
-    public static float dipToPixels(Context context, float dipValue) {
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, metrics);
+    public static float dpToPixels(Context context, float dpValue) {
+
+        return SizeUtils.convertDpToPixel(dpValue, context);
     }
 
     public void setDefaultMode(boolean isDefaultMode) {
