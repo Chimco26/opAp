@@ -261,7 +261,6 @@ public class QCMultiTypeAdapter extends RecyclerView.Adapter {
         }
         mRangeView.setHighLimit(item.getHValue());
         mRangeView.setLowLimit(item.getLValue());
-        mRangeView.setWidth((int) (mRangeView.getWidth()));
     }
 
     public void setTextWatcher(final int position, EditText mTextEt, final RecyclerView.ViewHolder viewHolder, final TestFieldsDatum item) {

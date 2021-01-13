@@ -259,7 +259,6 @@ public class TaskDetailsFragment extends Fragment {
                 mTaskStepAddNewIv.setVisibility(View.GONE);
             } else {
                 initSeverity(editTaskObject.getPriority(), task.getTaskPriorityID(), true);
-                initStatusSpinner(editTaskObject.getStatus(), task.getTaskStatus(), 0);
                 initSubjectSpinner(editTaskObject.getSubjects(), task.getSubjectId(), 0);
                 initStartAndEndTimeViews();
             }

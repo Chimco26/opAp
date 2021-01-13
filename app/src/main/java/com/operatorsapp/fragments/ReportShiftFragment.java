@@ -105,6 +105,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     private RecyclerView mGraphRv;
     private ArrayList<Graph> mGraphs;
     private ArrayList<SelectableString> mSelectableStrings;
+    private TextView mTitle;
 
     public static ReportShiftFragment newInstance(boolean isTimeLineOpen) {
         ReportShiftFragment reportShiftFragment = new ReportShiftFragment();
@@ -149,7 +150,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         super.onViewCreated(view, savedInstanceState);
         mProgressBar = view.findViewById(R.id.FTF_progress);
         ((TextView) view.findViewById(R.id.FRS_title_tv)).setText(getResources().getString(R.string.shift_report));
-        ((TextView) view.findViewById(R.id.FRS_machine_name_tv)).setText(PersistenceManager.getInstance().getMachineName());
+        mTitle = view.findViewById(R.id.FRS_machine_name_tv);
         initServiceCallsVars(view);
         initCycleTimeVars(view);
         initTopFiveStopsVars(view);
@@ -502,6 +503,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     private void getData() {
 
         PersistenceManager pm = PersistenceManager.getInstance();
+        mTitle.setText(pm.getMachineName());
         String shiftEnd = TimeUtils.getDate(TimeUtils.getLongFromDateString(pm.getShiftEnd(), TimeUtils.SQL_NO_T_FORMAT) + 5 * ONE_MINUTE_IN_SECONDS * 1000, TimeUtils.SQL_NO_T_FORMAT);
         String[] machineId = {String.valueOf(pm.getMachineId())};
         final GetTopRejectsAndEventsRequest request = new GetTopRejectsAndEventsRequest(machineId, pm.getSessionId(), pm.getShiftStart(), TimeUtils.getDateFromFormat(new Date(), TimeUtils.SQL_NO_T_FORMAT));
