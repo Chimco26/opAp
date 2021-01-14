@@ -522,4 +522,16 @@
     <string name="root_cause">סיבת שורש</string>
     <string name="no_connection_msg">חסרה גישה לשרת. בדוק את חיבוריות האינטרנט.</string>
     <string name="no_report_permission_on_setup">לא קיימות הרשאות לדיווח אירוע סטאפ, פנה למנהל המערכת</string>
+    <string name="send">שלח</string>
+    <string name="select_technician">בחר טכנאי</string>
+    <string name="select_material">בחר חומר</string>
+    <string name="material">חומר</string>
+    <string name="quality_control">בקרת איכות</string>
+    <string name="run_test_for">הרץ בדיקה על:</string>
+    <string name="select_job">בחר פקע</string>
+    <string name="open_gallery">פתח גלריה</string>
+    <string name="sub_task">תת משימה</string>
+    <string name="add_sub_task">הוסף תת משימה</string>
+    <string name="step_task_not_finished">השלם בבקשה את כל תתי המשימות</string>
+    <string name="sort_by">מיין</string>
 </resources>

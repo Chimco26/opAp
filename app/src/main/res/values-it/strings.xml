@@ -455,4 +455,16 @@
     <string name="only_to_this_event">No, solo questo evento</string>
     <string name="report_stop_reason_to_all_connected_events">Segnala il motivo dell\'interruzione a tutti gli eventi correlati</string>
     <string name="no_report_permission_on_setup">Non sei autorizzato a segnalare eventi nella CONFIGURAZIONE. Per godere di ulteriori autorizzazioni, devi contattare l\'amministratore del sistema</string>
+    <string name="send">Invia</string>
+    <string name="select_technician">Seleziona tecnico</string>
+    <string name="select_material">Seleziona materiale</string>
+    <string name="material">Materiale</string>
+    <string name="quality_control">Controllo qualità</string>
+    <string name="run_test_for">Esegui un test per:</string>
+    <string name="select_job">Seleziona lavoro</string>
+    <string name="open_gallery">Apri galleria</string>
+    <string name="sub_task">sotto-attività</string>
+    <string name="add_sub_task">Aggiungi sotto-attività</string>
+    <string name="step_task_not_finished">Finisci tutti i passaggi dell\'attività</string>
+    <string name="sort_by">Sort by</string>
 </resources>

@@ -498,4 +498,16 @@
     <string name="no_connection_msg">No se puede alcanzar el servidor. Compruebe la conexión a Internet.</string>
     <string name="only_to_this_event">No, solo a este evento</string>
     <string name="report_stop_reason_to_all_connected_events">Informar razón de parada a todos los eventos conectados</string>
+    <string name="send">Enviar</string>
+    <string name="select_technician">Seleccionar técnico</string>
+    <string name="select_material">Seleccione el material</string>
+    <string name="material">Material</string>
+    <string name="quality_control">Control de calidad</string>
+    <string name="run_test_for">Realizar una prueba para:</string>
+    <string name="select_job">Seleccione el trabajo</string>
+    <string name="open_gallery">Abrir galería</string>
+    <string name="sub_task">subtarea</string>
+    <string name="add_sub_task">Añadir subtarea</string>
+    <string name="step_task_not_finished">Termine todos los pasos de la tarea</string>
+    <string name="sort_by">Ordenar por</string>
 </resources>

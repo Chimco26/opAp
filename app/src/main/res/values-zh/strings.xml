@@ -492,4 +492,16 @@
     <string name="only_to_this_event">不，仅对此事件</string>
     <string name="report_stop_reason_to_all_connected_events">向所有关联事件报告停机原因</string>
     <string name="no_report_permission_on_setup">您无权报告安装事件，请联系系统管理员以获取更多权限</string>
+    <string name="send">发送</string>
+    <string name="select_technician">选择技术人员</string>
+    <string name="select_material">选择物料</string>
+    <string name="material">物料</string>
+    <string name="quality_control">质量控制</string>
+    <string name="run_test_for">为此运行测试：</string>
+    <string name="select_job">选择作业</string>
+    <string name="open_gallery">打开图库</string>
+    <string name="sub_task">子任务</string>
+    <string name="add_sub_task">添加子任务</string>
+    <string name="step_task_not_finished">请完成所有任务步骤</string>
+    <string name="sort_by">排序方式</string>
 </resources>

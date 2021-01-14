@@ -64,6 +64,7 @@ public class MaterialForTest {
         return context.getResources().getStringArray(R.array.material_headers_for_qc_array);
     }
 
+    // TODO: 12/01/2021 translate:
     public List<Property> getProperties(Context context) {
         ArrayList<Property> propertyList = new ArrayList<>();
         String[] headersStringArray = getHeaders(context);

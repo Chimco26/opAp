@@ -507,4 +507,16 @@
     <string name="only_to_this_event">Nee, alleen voor deze gebeurtenis</string>
     <string name="report_stop_reason_to_all_connected_events">Rapporteer stopreden aan alle verbonden gebeurtenissen</string>
     <string name="no_report_permission_on_setup">U mag geen gebeurtenissen melden over SETUP, neem contact op met de systeembeheerder voor meer rechten</string>
+    <string name="send">Versturen</string>
+    <string name="select_technician">Selecteer technicus</string>
+    <string name="select_material">Selecteer materiaal</string>
+    <string name="material">Materiaal</string>
+    <string name="quality_control">Kwaliteitscontrole</string>
+    <string name="run_test_for">Voer een test uit voor:</string>
+    <string name="select_job">Selecteer taak</string>
+    <string name="open_gallery">Open Galerij</string>
+    <string name="sub_task">deeltaak</string>
+    <string name="add_sub_task">Deeltaak toevoegen</string>
+    <string name="step_task_not_finished">Voltooi alle taakstappen</string>
+    <string name="sort_by">Sorteren op</string>
 </resources>

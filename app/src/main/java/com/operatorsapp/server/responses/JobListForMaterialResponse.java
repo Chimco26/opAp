@@ -15,9 +15,17 @@ public class JobListForMaterialResponse extends StandardResponse {
         return material != null ? material.materialList : new ArrayList<MaterialForTest>();
     }
 
+    public ArrayList<TranslateForTest> getTranslationsForTestList() {
+        return material != null ? material.translateList : new ArrayList<TranslateForTest>();
+    }
+
+
     public class MaterialListForTest {
 
         @SerializedName("Materials")
         ArrayList<MaterialForTest> materialList;
+
+        @SerializedName("Translate")
+        ArrayList<TranslateForTest> translateList;
     }
 }
