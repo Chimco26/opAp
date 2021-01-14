@@ -1,14 +1,14 @@
 package com.operatorsapp.view.widgetViewHolders;
 
 import android.content.Context;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.operators.machinedatainfra.models.Widget;
 import com.operatorsapp.R;
@@ -87,43 +87,32 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
 
     private void setCycleTime(final Widget widget) {
 
+        try {
+            mCycleRange.setCurrentValue(Float.valueOf(widget.getCurrentValue()));
+        } catch (NumberFormatException e) {
+            mCycleRange.setCurrentValue(0);
+        }
+        mCycleRange.setHighLimit(widget.getHighLimit());
+        mCycleRange.setLowLimit(widget.getLowLimit());
+        mCycleRange.setmStandardValue(widget.getStandardValue());
 
-        mParentLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-
-                mParentLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                try {
-                    mCycleRange.setCurrentValue(Float.valueOf(widget.getCurrentValue()));
-                } catch (NumberFormatException e) {
-                    mCycleRange.setCurrentValue(0);
+        mCycleTimeLy.setVisibility(View.VISIBLE);
+        mCycleRange.setAvgValue(Float.parseFloat(widget.getCycleTimeAvg()));
+        mStandardTv.setText(String.format("%s%s", mContext.getString(R.string.standard), widget.getStandardValue()));
+        mAverageTv.setVisibility(View.GONE);
+        mAverageImg.setVisibility(View.GONE);
+        if (widget.getCycleTimeAvg() != null) {
+            try {
+                if (Float.parseFloat(widget.getCycleTimeAvg()) > 0) {
+                    mAverageTv.setVisibility(View.VISIBLE);
+                    mAverageImg.setVisibility(View.VISIBLE);
                 }
-                mCycleRange.setHighLimit(widget.getHighLimit());
-                mCycleRange.setLowLimit(widget.getLowLimit());
-                mCycleRange.setmStandardValue(widget.getStandardValue());
-                mCycleRange.setWidth((int) (mParentLayout.getWidth()));
+            } catch (Exception ignored) {
 
-                mCycleTimeLy.setVisibility(View.VISIBLE);
-                mCycleRange.setAvgValue(Float.parseFloat(widget.getCycleTimeAvg()));
-                mStandardTv.setText(String.format("%s%s", mContext.getString(R.string.standard), widget.getStandardValue()));
-                mAverageTv.setVisibility(View.GONE);
-                mAverageImg.setVisibility(View.GONE);
-                if (widget.getCycleTimeAvg() != null) {
-                    try {
-                        if (Float.parseFloat(widget.getCycleTimeAvg()) > 0) {
-                            mAverageTv.setVisibility(View.VISIBLE);
-                            mAverageImg.setVisibility(View.VISIBLE);
-                        }
-                    } catch (Exception ignored) {
-
-                    }
-                }
-                mAverageTv.setText(String.format("%s%s", mContext.getString(R.string.average), widget.getCycleTimeAvg()));
-                mCycleRange.postInvalidate();
             }
-        });
-
+        }
+        mAverageTv.setText(String.format("%s%s", mContext.getString(R.string.average), widget.getCycleTimeAvg()));
+        mCycleRange.postInvalidate();
     }
 
 }

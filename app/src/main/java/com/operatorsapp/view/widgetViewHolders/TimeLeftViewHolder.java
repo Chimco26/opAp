@@ -33,7 +33,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
     private TextView mSubTitle;
     private View m1Ly;
     private TextView m1TimeTv;
-    private TextView m1Btn;
+    private LinearLayout m1Btn;
     private View m3Ly;
     private View m2Btn;
     private View m2CountDownLy;
