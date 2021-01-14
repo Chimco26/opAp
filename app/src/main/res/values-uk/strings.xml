@@ -496,4 +496,16 @@
     <string name="only_to_this_event">Ні, тільки до цієї події</string>
     <string name="report_stop_reason_to_all_connected_events">Повідомте про причину зупинки для всіх пов’язаних подій</string>
     <string name="no_report_permission_on_setup">У вас немає дозволу повідомляти про події в НАЛАШТУВАННЯХ, будь ласка, зверніться до системного адміністратора, щоб отримати додаткові дозволи</string>
+    <string name="send">Надіслати</string>
+    <string name="select_technician">Вибрати техніка</string>
+    <string name="select_material">Вибрати матеріал</string>
+    <string name="material">Матеріал</string>
+    <string name="quality_control">Контроль якості</string>
+    <string name="run_test_for">Запустити тест для:</string>
+    <string name="select_job">Вибрати роботу</string>
+    <string name="open_gallery">Відкрити галерею</string>
+    <string name="sub_task">підзавдання</string>
+    <string name="add_sub_task">Додати підзавдання</string>
+    <string name="step_task_not_finished">Будь ласка, виконайте всі кроки завдання</string>
+    <string name="sort_by">Сортувати за</string>
 </resources>

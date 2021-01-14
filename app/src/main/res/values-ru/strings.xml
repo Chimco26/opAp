@@ -496,4 +496,16 @@
     <string name="only_to_this_event">Нет, только к этому событию</string>
     <string name="report_stop_reason_to_all_connected_events">Сообщить причину остановки всем связанным событиям</string>
     <string name="no_report_permission_on_setup">Вы не можете сообщать о событиях настройки, пожалуйста свяжитесь с системным администратором для получения дополнительных разрешений</string>
+    <string name="send">Отправить</string>
+    <string name="select_technician">Выбрать техника</string>
+    <string name="select_material">Выбрать материал</string>
+    <string name="material">Материал</string>
+    <string name="quality_control">Контроль качества</string>
+    <string name="run_test_for">Провести проверку:</string>
+    <string name="select_job">Выбрать задание</string>
+    <string name="open_gallery">Открыть галерею</string>
+    <string name="sub_task">подзадача</string>
+    <string name="add_sub_task">Добавить подзадачу</string>
+    <string name="step_task_not_finished">Завершите все шаги задачи</string>
+    <string name="sort_by">Сортировать по</string>
 </resources>

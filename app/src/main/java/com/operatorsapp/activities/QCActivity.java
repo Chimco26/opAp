@@ -104,7 +104,7 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
             public void onResponse(Call<JobListForTestResponse> call, Response<JobListForTestResponse> response) {
 
                 if (response.body() != null && response.body().isNoError()){
-                    JobListFragment jobListFragment = JobListFragment.newInstance(response.body().getJobForTestList());
+                    JobListFragment jobListFragment = JobListFragment.newInstance(response.body());
                     getSupportFragmentManager().beginTransaction().add(R.id.AQC_container, jobListFragment).addToBackStack(JobListFragment.class.getSimpleName()).commit();
                 }
                 mProgressBar.setVisibility(View.GONE);
@@ -124,7 +124,7 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
             public void onResponse(Call<JobListForMaterialResponse> call, Response<JobListForMaterialResponse> response) {
 
                 if (response.body() != null && response.body().isNoError()){
-                    JobListFragment jobListFragment = JobListFragment.newInstance(response.body().getMaterialForTestList(), 0);
+                    JobListFragment jobListFragment = JobListFragment.newInstance(response.body(), 0);
                     getSupportFragmentManager().beginTransaction().add(R.id.AQC_container, jobListFragment).addToBackStack(JobListFragment.class.getSimpleName()).commit();
                 }
                 mProgressBar.setVisibility(View.GONE);

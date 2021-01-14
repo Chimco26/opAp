@@ -501,4 +501,16 @@
     <string name="only_to_this_event">Nein, nur zu diesem Ereignis</string>
     <string name="report_stop_reason_to_all_connected_events">Stoppgrund allen verbundenen Ereignissen melden</string>
     <string name="no_report_permission_on_setup">Sie dürfen keine Ereignisse in SETUP melden. Weitere Berechtigungen erhalten Sie vom Systemadministrator</string>
+    <string name="send">Senden</string>
+    <string name="select_technician">Techniker wählen</string>
+    <string name="select_material">Material wählen</string>
+    <string name="material">Material</string>
+    <string name="quality_control">Qualitätskontrolle</string>
+    <string name="run_test_for">Führen Sie einen Test durch für:</string>
+    <string name="select_job">Job wählen</string>
+    <string name="open_gallery">Galerie öffnen</string>
+    <string name="sub_task">Unteraufgabe</string>
+    <string name="add_sub_task">Unteraufgabe hinzufügen</string>
+    <string name="step_task_not_finished">Bitte beenden Sie alle Aufgabenschritte</string>
+    <string name="sort_by">Sortieren nach</string>
 </resources>

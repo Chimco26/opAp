@@ -88,7 +88,7 @@
     <string name="report_stop_start">"البدايه"</string>
     <string name="report_stop_resume">"النهايه"</string>
     <string name="report_cycle_nunits">تغيير &placeholder1; فيn\ الدورة</string>
-    <string name="report_cycle_units">تغيير &placeholder1; فيn\\ الدورة</string>
+    <string name="report_cycle_units">تغيير &placeholder1; في الدورة</string>
     <string name="report_inventory_nitem_production">تسجيل مخزون\nالمنتج</string>
     <string name="report_inventory_item_production">تسجيل محزون المنتج</string>
     <string name="package_type">نوع الرزمه</string>
@@ -501,4 +501,14 @@
     <string name="only_to_this_event">لا، فقط بالنسبة لهذا الحدث</string>
     <string name="report_stop_reason_to_all_connected_events">أبلغ عن سبب التوقف لجميع الأحداث ذات الصلة</string>
     <string name="no_report_permission_on_setup">لا يُسمح لك بالإبلاغ عن الأحداث في قسم \"الإعداد\"، يرجى الاتصال بمسؤول النظام للحصول على مزيد من الأذونات</string>
+    <string name="send">إرسال</string>
+    <string name="select_technician">اختيار الفني</string>
+    <string name="select_material">اختيار المادة</string>
+    <string name="material">المادة</string>
+    <string name="quality_control">التحكم في الجودة</string>
+    <string name="run_test_for">إجراء اختبار لـ:</string>
+    <string name="select_job">اختيار الوظيفة</string>
+    <string name="open_gallery">فتح المعرض</string>
+    <string name="sub_task">مهمة فرعية</string>
+    <string name="add_sub_task">إضافة مهمة فرعية</string>
 </resources>

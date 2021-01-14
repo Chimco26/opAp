@@ -15,9 +15,18 @@ public class JobListForTestResponse extends StandardResponse {
         return jobs != null ? jobs.mJobForTestList : new ArrayList<JobForTest>();
     }
 
+    public ArrayList<TranslateForTest> getTranslationsForTestList() {
+        return jobs != null ? jobs.translateList : new ArrayList<TranslateForTest>();
+    }
+
+
+
     public class TestJobs {
 
         @SerializedName("Jobs")
         ArrayList<JobForTest> mJobForTestList;
+
+        @SerializedName("Translate")
+        ArrayList<TranslateForTest> translateList;
     }
 }

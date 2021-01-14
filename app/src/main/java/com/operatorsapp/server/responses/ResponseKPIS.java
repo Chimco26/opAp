@@ -19,7 +19,7 @@ public class ResponseKPIS extends StandardResponse {
     public String getKPIByName(String name){
         if (mTranslationList!= null && !mTranslationList.isEmpty()) {
             for (HashMap item : mTranslationList) {
-                if (item != null && item.get("Name") != null && item.get("Name").equals(name)) {
+                if (item != null && item.get("Name") != null && item.get("Name").toString().toLowerCase().equals(name.toLowerCase())) {
                     String txt = String.valueOf(item.get(ChangeLang.languagesCode3Letters[ChangeLang.getPositionByLanguageCode()]));
                     txt = !txt.isEmpty() ? txt :  String.valueOf(item.get(ChangeLang.languagesCode3Letters[0]));
                     return txt;
