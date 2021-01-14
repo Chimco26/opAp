@@ -42,6 +42,7 @@ import com.operatorsapp.adapters.QCDetailsMultiTypeAdapter;
 import com.operatorsapp.adapters.QCMultiTypeAdapter;
 import com.operatorsapp.adapters.QCParametersHorizontalAdapter;
 import com.operatorsapp.adapters.QCSamplesMultiTypeAdapter;
+import com.operatorsapp.adapters.QcPicturesAdapter;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.QCRequests;
@@ -84,6 +85,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
     private View mPlusSamplesBtn;
     private RecyclerView mDetailsRv;
     private boolean isEditMode = true;
+    private RecyclerView mPicturesRecycler;
+    private LinearLayout mPicturesLy;
 
     public static QCDetailsFragment newInstance(int testId, boolean editMode) {
 
@@ -134,6 +137,8 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
         mNoDataTv = view.findViewById(R.id.FQCD_no_data_tv);
         mProgressBar = view.findViewById(R.id.FQCD_progress);
         View saveBtn = view.findViewById(R.id.FQCD_save_tv);
+        mPicturesRecycler = view.findViewById(R.id.FQCD_pictures_rv);
+        mPicturesLy = view.findViewById(R.id.FQCD_pictures_ly);
         if (!isEditMode){
             saveBtn.setVisibility(View.INVISIBLE);
         }
@@ -409,6 +414,7 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                     initDetailsData();
                     initView();
                     initIncrementSamples(isEditMode && testDetailsResponse.getAllowEditSamples());
+                    initFilesRecycler();
 //                    initIncrementSamples(testDetailsResponse.getTestSampleFieldsData().get(0).getAllowEditSamples());
                 }
             }
@@ -419,6 +425,15 @@ public class QCDetailsFragment extends Fragment implements CroutonRootProvider,
                 mNoDataTv.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    private void initFilesRecycler() {
+        if (mTestOrderDetails.getFiles() != null && mTestOrderDetails.getFiles().size() > 0) {
+            mPicturesLy.setVisibility(View.VISIBLE);
+            mPicturesRecycler.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+            mPicturesRecycler.setAdapter(new QcPicturesAdapter(mTestOrderDetails.getFiles()));
+            mPicturesRecycler.requestLayout();
+        }
     }
 
     private void initDetailsData() {

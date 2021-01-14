@@ -500,6 +500,16 @@
     <string name="only_to_this_event">Non, seulement sur cet événement</string>
     <string name="report_stop_reason_to_all_connected_events">Signaler le motif d\'arrêt sur tous les événements connectés</string>
     <string name="no_report_permission_on_setup">Vous n\'êtes pas autorisé à signaler des événements sur le programme CONFIGURATION. Veuillez contacter l\'administrateur système pour obtenir les autorisations nécessaires</string>
-    <string name="select_technician">" Choisir un technicien"</string>
+    <string name="select_technician">Sélectionner un technicien</string>
     <string name="send">Envoyer</string>
+    <string name="select_material">Sélectionner un matériau</string>
+    <string name="material">Matériau</string>
+    <string name="quality_control">Contrôle qualité</string>
+    <string name="run_test_for">Exécuter un test pour :</string>
+    <string name="select_job">Sélectionner une tâche</string>
+    <string name="open_gallery">Ouvrir la galerie</string>
+    <string name="sub_task">sous-tâche</string>
+    <string name="add_sub_task">Ajouter une sous-tâche</string>
+    <string name="step_task_not_finished">Veuillez terminer toutes les étapes de la tâche</string>
+    <string name="sort_by">Trier par</string>
 </resources>

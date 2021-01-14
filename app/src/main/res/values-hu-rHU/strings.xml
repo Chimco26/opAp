@@ -488,4 +488,16 @@
     <string name="only_to_this_event">Nem, csak ennél az eseménynél</string>
     <string name="report_stop_reason_to_all_connected_events">Leállás okának jelentése minden kapcsolódó eseményhez</string>
     <string name="no_report_permission_on_setup">Ön nem jelenthet BEÁLLÍTÁSI eseményeket; kérjük, hogy további engedélyért forduljon a rendszergazdához</string>
+    <string name="send">Küldés</string>
+    <string name="select_technician">Technikus kiválasztása</string>
+    <string name="select_material">Anyag kiválasztása</string>
+    <string name="material">Anyag</string>
+    <string name="quality_control">Minőségirányítás</string>
+    <string name="run_test_for">Teszt futtatása ehhez:</string>
+    <string name="select_job">Feladat kiválasztása</string>
+    <string name="open_gallery">Galéria megnyitása</string>
+    <string name="sub_task">részfeladat</string>
+    <string name="add_sub_task">Részfeladat hozzáadása</string>
+    <string name="step_task_not_finished">Kérjük, fejezze be a teendő összes lépését</string>
+    <string name="sort_by">Sorrend</string>
 </resources>

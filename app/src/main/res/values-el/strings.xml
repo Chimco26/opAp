@@ -500,4 +500,16 @@
     <string name="only_to_this_event">Όχι, μόνο σε αυτό το γεγονός</string>
     <string name="report_stop_reason_to_all_connected_events">Αναφορά αιτίας παύσης λειτουργίας σε όλα τα συνδεδεμένα γεγονότα</string>
     <string name="source">Πηγή</string>
+    <string name="send">Αποστολή</string>
+    <string name="select_technician">Αποστολή Τεχνικού</string>
+    <string name="select_material">Επιλέξτε Υλικό</string>
+    <string name="material">Υλικό</string>
+    <string name="quality_control">Ποιοτικός Έλεγχος</string>
+    <string name="run_test_for">Εκτέλεση δοκιμής για:</string>
+    <string name="select_job">Επιλέξτε Εργασία</string>
+    <string name="open_gallery">Άνοιγμα Άλμπουμ</string>
+    <string name="sub_task">υποεργασία</string>
+    <string name="add_sub_task">Προσθήκη Υποεργασίας</string>
+    <string name="step_task_not_finished">Παρακαλούμε ολοκληρώστε όλα τα βήματα της εργασίας</string>
+    <string name="sort_by">Ταξινόμηση κατά</string>
 </resources>

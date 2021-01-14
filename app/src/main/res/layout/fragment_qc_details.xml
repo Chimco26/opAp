@@ -304,6 +304,60 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
+
+                <LinearLayout
+                    android:id="@+id/FQCD_pictures_ly"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/pictures"
+                        android:textColor="@color/machine_blue"
+                        android:textSize="23sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/FQCD_pictures_rv"
+                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/divider_gray" />
+
+                </LinearLayout>
+
+
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>

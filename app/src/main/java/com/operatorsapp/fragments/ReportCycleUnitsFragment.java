@@ -269,7 +269,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
                 LayoutInflater inflater = LayoutInflater.from(getActivity());
                 // rootView null
                 @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.report_cycle_unit_action_bar, null);
-                String txt = getResources().getString(R.string.report_cycle_nunits);
+                String txt = getResources().getString(R.string.report_cycle_units);
                 txt = txt.replace(getResources().getString(R.string.placeholder1), PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("GoodUnits"));
                 ((TextView)view.findViewById(R.id.report_cycle_unit_actionbar_units_tv)).setText(txt);
                 LinearLayout buttonClose = view.findViewById(R.id.close_image);

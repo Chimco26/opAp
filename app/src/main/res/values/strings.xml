@@ -94,7 +94,7 @@
     <string name="report_stop_start">"Start "</string>
     <string name="report_stop_resume">"End"</string>
     <string name="report_cycle_nunits">Change &placeholder1; in \nCycle</string><!--take text from KPIresponse with key "units" and replace the placeholder-->
-    <string name="report_cycle_units">Change &placeholder1; in \nCycle</string><!--take text from KPIresponse with key "units" and replace the placeholder-->
+    <string name="report_cycle_units">Change &placeholder1; in Cycle</string><!--take text from KPIresponse with key "units" and replace the placeholder-->
     <string name="report_inventory_nitem_production">Report Production \n</string>
     <string name="report_inventory_item_production">Report Production</string>
     <string name="package_type">Package Type</string>
@@ -598,4 +598,6 @@
     <string name="material">Material</string>
     <string name="quality_control">Quality Control</string>
     <string name="edit_sub_task">Edit sub task</string>
+    <string name="back">Back</string>
+    <string name="pictures">Pictures</string>
 </resources>

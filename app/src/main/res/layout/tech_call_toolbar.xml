@@ -3,6 +3,7 @@
 <androidx.appcompat.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/toolbar"
+    android:layoutDirection="ltr"
     android:background="@color/dark_indigo"
     android:layout_width="match_parent"
     android:layout_height="55dp">
@@ -26,7 +27,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:layout_marginStart="15dp"
-            android:text="@string/dashboard"
+            android:text="@string/back"
             android:textSize="35sp"
             android:textColor="@color/white"/>
 

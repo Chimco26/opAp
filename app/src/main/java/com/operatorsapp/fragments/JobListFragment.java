@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,14 +26,16 @@ import com.operatorsapp.adapters.PendingJobsAdapter;
 import com.operatorsapp.adapters.PendingJobsListAdapter;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.responses.JobForTest;
+import com.operatorsapp.server.responses.JobListForMaterialResponse;
+import com.operatorsapp.server.responses.JobListForTestResponse;
 import com.operatorsapp.server.responses.MaterialForTest;
+import com.operatorsapp.server.responses.TranslateForTest;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class JobListFragment extends Fragment implements
@@ -61,6 +62,7 @@ public class JobListFragment extends Fragment implements
     private boolean isQcFromMaterial = false;
     private ArrayList<JobForTest> mJobForTestListOrigin;
     private ArrayList<MaterialForTest> mMaterialsForTestListOrigin;
+    private ArrayList<TranslateForTest> mHeaderTranslationList;
 
     public static JobListFragment newInstance(PendingJobStandardResponse mPendingJobsResponse, ArrayList<PendingJob> mPendingJobs, ArrayList<Header> headers) {
 
@@ -73,25 +75,29 @@ public class JobListFragment extends Fragment implements
         return jobListFragment;
     }
 
-    public static JobListFragment newInstance(ArrayList<JobForTest> jobForTestList) {
+    public static JobListFragment newInstance(JobListForTestResponse jobForTestList) {
         JobListFragment jobListFragment = new JobListFragment();
         jobListFragment.setDataForQcTest(jobForTestList);
         return jobListFragment;
     }
 
-    public static JobListFragment newInstance(ArrayList<MaterialForTest> materialForTestList, int junkParam) {
+    public static JobListFragment newInstance(JobListForMaterialResponse materialResponse, int junkParam) {
         JobListFragment jobListFragment = new JobListFragment();
-        jobListFragment.setMaterialsForQcTest(materialForTestList);
+        jobListFragment.setMaterialsForQcTest(materialResponse);
         return jobListFragment;
     }
 
-    private void setMaterialsForQcTest(ArrayList<MaterialForTest> materialForTestList) {
+    private void setMaterialsForQcTest(JobListForMaterialResponse materialForTestList) {
         mMaterialsForTestListOrigin = new ArrayList<>();
-        mMaterialsForTestListOrigin.addAll(materialForTestList);
+        mMaterialsForTestListOrigin.addAll(materialForTestList.getMaterialForTestList());
         isQcFromMaterial = true;
+        mHeaderTranslationList = materialForTestList.getTranslationsForTestList();
     }
 
-    private void setDataForQcTest(ArrayList<JobForTest> jobForTestList) {
+    private void setDataForQcTest(JobListForTestResponse jobResponse) {
+        ArrayList<JobForTest> jobForTestList = jobResponse.getJobForTestList();
+        mHeaderTranslationList = jobResponse.getTranslationsForTestList();
+
         mJobForTestListOrigin = new ArrayList<>();
         // TODO: 30/11/2020 DEV is A Mess, to many results (20,000)
         if (PersistenceManager.getInstance().getSiteName().equals("DEV")) {
@@ -100,6 +106,13 @@ public class JobListFragment extends Fragment implements
 //                if (jobForTestList.get(i).getId() == 20157 || mJobForTestListOrigin.size() < 50) {
 //                }
                 mJobForTestListOrigin.add(jobForTestList.get(i));
+            }
+
+            for (JobForTest job: jobForTestList) {
+                if (job.getId() == 20390) {
+                    mJobForTestListOrigin.add(job);
+                    break;
+                }
             }
         }else {
             mJobForTestListOrigin.addAll(jobForTestList);

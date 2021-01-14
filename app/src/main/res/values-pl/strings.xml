@@ -470,4 +470,16 @@
     <string name="only_to_this_event">Nie, tylko w zakresie tego zdarzenia</string>
     <string name="report_stop_reason_to_all_connected_events">Zgłoś przyczynę przestoju (wszystkie połączone zdarzenia)</string>
     <string name="no_report_permission_on_setup">Nie możesz zgłaszać zdarzeń w czasie KONFIGURACJI, skontaktuj się z administratorem systemu w celu uzyskania dodatkowych uprawnień</string>
+    <string name="send">Wyślij</string>
+    <string name="select_technician">Wyślij technika</string>
+    <string name="select_material">Wybierz materiał</string>
+    <string name="material">Materiał</string>
+    <string name="quality_control">Kontrola jakości</string>
+    <string name="run_test_for">Przeprowadź test dla:</string>
+    <string name="select_job">Wybierz zadanie</string>
+    <string name="open_gallery">Otwórz galerię</string>
+    <string name="sub_task">podzadanie</string>
+    <string name="add_sub_task">Dodaj podzadanie</string>
+    <string name="step_task_not_finished">Wykonaj wszystkie kroki zadania</string>
+    <string name="sort_by">Sortuj wg</string>
 </resources>
