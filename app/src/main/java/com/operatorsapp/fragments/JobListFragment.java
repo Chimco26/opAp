@@ -102,9 +102,6 @@ public class JobListFragment extends Fragment implements
         // TODO: 30/11/2020 DEV is A Mess, to many results (20,000)
         if (PersistenceManager.getInstance().getSiteName().equals("DEV")) {
             for (int i = 0; i < 100; i++) {
-
-//                if (jobForTestList.get(i).getId() == 20157 || mJobForTestListOrigin.size() < 50) {
-//                }
                 mJobForTestListOrigin.add(jobForTestList.get(i));
             }
 
@@ -157,16 +154,25 @@ public class JobListFragment extends Fragment implements
 
     private void setHeadersForQc() {
         ArrayList<Header> headers = new ArrayList<>();
-        if (isQcFromJob) {
-            orderedHeadersKey = getResources().getStringArray(R.array.pending_job_headers_for_qc_array);
-        }else{
-            orderedHeadersKey = getResources().getStringArray(R.array.material_headers_for_qc_array);
-        }
-        for (int i = 0; i< orderedHeadersKey.length; i++) {
-            Header header = new Header(orderedHeadersKey[i], i);
-            header.setName(orderedHeadersKey[i]);
+        orderedHeadersKey = new String[mHeaderTranslationList.size()];
+//        if (isQcFromJob) {
+//            orderedHeadersKey = getResources().getStringArray(R.array.pending_job_headers_for_qc_array);
+//        }else{
+//            orderedHeadersKey = getResources().getStringArray(R.array.material_headers_for_qc_array);
+//        }
+//        for (int i = 0; i< orderedHeadersKey.length; i++) {
+//            Header header = new Header(orderedHeadersKey[i], i);
+//            header.setName(orderedHeadersKey[i]);
+//            header.setShowOnHeader(true);
+//            headers.add(header);
+//        }
+
+        for (int i = 0; i< mHeaderTranslationList.size(); i++) {
+            Header header = new Header(mHeaderTranslationList.get(i).getTranslation(), i);
+            header.setName(mHeaderTranslationList.get(i).getColumnName());
             header.setShowOnHeader(true);
             headers.add(header);
+            orderedHeadersKey[i] = mHeaderTranslationList.get(i).getColumnName();
         }
 
         mPendingJobs = new ArrayList<>();
@@ -175,14 +181,14 @@ public class JobListFragment extends Fragment implements
             for (JobForTest job : mJobForTestListOrigin) {
                 PendingJob pj = new PendingJob();
                 pj.setID(job.getId());
-                pj.setProperties(job.getProperties(getActivity()));
+                pj.setProperties(job.getProperties(orderedHeadersKey));
                 mPendingJobs.add(pj);
             }
         }else {
             for (MaterialForTest test : mMaterialsForTestListOrigin) {
                 PendingJob pj = new PendingJob();
                 pj.setID(test.getId());
-                pj.setProperties(test.getProperties(getActivity()));
+                pj.setProperties(test.getProperties(orderedHeadersKey));
                 mPendingJobs.add(pj);
             }
         }
@@ -344,7 +350,6 @@ public class JobListFragment extends Fragment implements
         mSearchViewEt = view.findViewById(R.id.AJA_search_et);
         mPendingJobsRv = view.findViewById(R.id.AJA_product_rv);
         mClearFiltersTv = view.findViewById(R.id.AJA_clear_filters_tv);
-
     }
 
     private void initRecyclerViews() {
@@ -352,6 +357,11 @@ public class JobListFragment extends Fragment implements
         if (mPendingJobs != null && mPendingJobs.size() > 0) {
             mPendingJobs.get(0).setSelected(true);
             RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+//            String[] headersName = new String[mHeaderTranslationList.size()];
+//            for (int i = 0; i < mHeaderTranslationList.size(); i++) {
+//                headersName[i] = mHeaderTranslationList.get(i).getColumnName();
+//            }
+//            mPendingJobsAdapter = new PendingJobsListAdapter(mPendingJobs, headersName, this, getActivity());
             mPendingJobsAdapter = new PendingJobsListAdapter(mPendingJobs, orderedHeadersKey, this, getActivity());
             mPendingJobsRv.setLayoutManager(layoutManager2);
             mPendingJobsRv.setAdapter(mPendingJobsAdapter);

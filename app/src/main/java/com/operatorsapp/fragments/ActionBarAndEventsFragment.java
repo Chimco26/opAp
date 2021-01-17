@@ -1357,9 +1357,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
             });
 
-            getNotificationsFromServer(false);
-            setTechnicianCallStatus();
-
             tutorialIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1368,28 +1365,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     } else {
                         openOtherApps();
                     }
-//                    startToolbarTutorial();
                 }
             });
-
-//            notificationIv.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    openNotificationsList();
-//                }
-//            });
 
             technicianRl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startTechCallActivity();
-//                    openDeleteTechCallDialog(PersistenceManager.getInstance().getCalledTechnician());
-
-//                    long technicianCallTime = PersistenceManager.getInstance().getTechnicianCallTime();
-//                    long now = new Date().getTime();
-//                    if (!(technicianCallTime > 0 && technicianCallTime > (now - TECHNICIAN_CALL_WAITING_RESPONSE))) {
-//                        openTechniciansList();
-//                    }
                 }
             });
 
@@ -3876,6 +3858,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void getNotificationsFromServer(final boolean openNotifications) {
 
+        if(PersistenceManager.getInstance().getMachineId() == -1){
+            return;
+        }
         NetworkManager.getInstance().getNotificationHistory(new Callback<NotificationHistoryResponse>() {
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
