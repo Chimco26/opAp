@@ -2606,6 +2606,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                         if (event.getRootEventID() == 0 && (lastEventRegistered == null || event.getEventID() > lastEventRegistered.getEventID())){
                             lastEventReceived = event;
+                            break;
                         }
                     }
 
