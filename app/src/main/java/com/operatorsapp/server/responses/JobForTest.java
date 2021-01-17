@@ -85,19 +85,44 @@ public class JobForTest {
         return context.getResources().getStringArray(R.array.pending_job_headers_for_qc_array);
     }
 
-    public List<Property> getProperties(Context context) {
+    public List<Property> getProperties(String[] headersStringArray) {
         ArrayList<Property> propertyList = new ArrayList<>();
-        String[] headersStringArray = getHeaders(context);
-        propertyList.add(0, new Property(headersStringArray[0], getId()+""));
-        propertyList.add(1, new Property(headersStringArray[1], getCatalogID()));
-        propertyList.add(2, new Property(headersStringArray[2], getStatus()+""));
-        propertyList.add(3, new Property(headersStringArray[3], getMachineName()));
-        propertyList.add(4, new Property(headersStringArray[4], getProductName()));
-        propertyList.add(5, new Property(headersStringArray[5], getUnitsTarget()+""));
-        propertyList.add(6, new Property(headersStringArray[6], getUnitsProduced()+""));
-        propertyList.add(7, new Property(headersStringArray[7], getErpJobID()));
-        propertyList.add(8, new Property(headersStringArray[8], getNotes()));
-        propertyList.add(9, new Property(headersStringArray[9], getErpJobIndexKey()));
+        for (int i = 0; i < headersStringArray.length; i++) {
+            String fieldName = "";
+            switch (headersStringArray[i]){
+                case "ID":
+                    fieldName = getId()+"";
+                    break;
+                case "CatalogID":
+                    fieldName = getCatalogID();
+                    break;
+                case "Status":
+                    fieldName = getStatus()+"";
+                    break;
+                case "MachineName":
+                    fieldName = getMachineName();
+                    break;
+                case "ProductName":
+                    fieldName = getProductName();
+                    break;
+                case "UnitsTarget":
+                    fieldName = getUnitsTarget()+"";
+                    break;
+                case "UnitsProduced":
+                    fieldName = getUnitsProduced()+"";
+                    break;
+                case "ERPJobID":
+                    fieldName = getErpJobID();
+                    break;
+                case "Notes":
+                    fieldName = getNotes();
+                    break;
+                case "ERPJobIndexKey":
+                    fieldName = getErpJobIndexKey();
+                    break;
+            }
+            propertyList.add(i, new Property(headersStringArray[i], fieldName));
+        }
 
         return propertyList;
     }

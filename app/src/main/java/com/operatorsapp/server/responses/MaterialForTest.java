@@ -65,17 +65,36 @@ public class MaterialForTest {
     }
 
     // TODO: 12/01/2021 translate:
-    public List<Property> getProperties(Context context) {
+    public List<Property> getProperties(String[] headersStringArray) {
         ArrayList<Property> propertyList = new ArrayList<>();
-        String[] headersStringArray = getHeaders(context);
-        propertyList.add(0, new Property(headersStringArray[0], getId()+""));
-        propertyList.add(1, new Property(headersStringArray[1], getMaterialName()));
-        propertyList.add(2, new Property(headersStringArray[2], getDescription()));
-        propertyList.add(3, new Property(headersStringArray[3], getMaterialGroup()));
-        propertyList.add(4, new Property(headersStringArray[4], getCatalogID()));
-        propertyList.add(5, new Property(headersStringArray[5], getErpId()));
-        propertyList.add(6, new Property(headersStringArray[6], getErpAmount()+""));
 
+        for (int i = 0; i < headersStringArray.length; i++) {
+            String fieldName = "";
+            switch (headersStringArray[i]){
+                case "ID":
+                    fieldName = getId()+"";
+                    break;
+                case "CatalogID":
+                    fieldName = getCatalogID();
+                    break;
+                case "MaterialName":
+                    fieldName = getMaterialName();
+                    break;
+                case "Description":
+                    fieldName = getDescription();
+                    break;
+                case "ERPID":
+                    fieldName = getErpId();
+                    break;
+                case "MaterialGroup":
+                    fieldName = getMaterialGroup();
+                    break;
+                case "ErpAmount":
+                    fieldName = getErpAmount()+"";
+                    break;
+            }
+            propertyList.add(i, new Property(headersStringArray[i], fieldName));
+        }
         return propertyList;
     }
 }
