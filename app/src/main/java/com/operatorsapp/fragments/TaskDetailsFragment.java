@@ -243,7 +243,7 @@ public class TaskDetailsFragment extends Fragment {
             initTotalTime(task);
             initAssignSpinner(task.getAssigneeDisplayName(), getResources().getColor(R.color.grey1));
             mAssignSpinner.setEnabled(false);
-            if (isTaskCreator) {
+            if (!isTaskCreator) {
                 disableEditText(mDescriptionEt);
                 disableEditText(mTimeMin);
                 disableEditText(mTimeHr);
