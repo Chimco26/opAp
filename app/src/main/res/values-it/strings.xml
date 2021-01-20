@@ -19,11 +19,11 @@
     <string name="activate">Attivato</string>
     <string name="activate_job">Attivare Lavoro</string>
     <string name="activate_last_job">Attiva ultimo lavoro</string>
-    <string name="activate_new_job">Inizia Nuovo Lavoro</string>
+    <string name="activate_new_job">ATTIVARE</string>
     <string name="add">Aggiungi</string>
     <string name="add_another">Aggiungi Macchina</string>
     <string name="add_note">Aggiungi Nota</string>
-    <string name="add_rejects">Aggiungi Scarti</string>
+    <string name="add_rejects">Dichiara sottoprodotto</string>
     <string name="advanced_settings">Settaggi Avanzati</string>
     <string name="alarms">Allarmi</string>
     <string name="amount">Quantità</string>
