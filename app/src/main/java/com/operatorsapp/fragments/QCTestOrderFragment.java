@@ -208,14 +208,22 @@ public class QCTestOrderFragment extends Fragment implements
     private void getMaterialTestOrder(TestOrderRequest testOrderRequest) {
 
         mProgressBar.setVisibility(View.VISIBLE);
-        mQcRequests.getQCTestOrderMaterial(new TestOrderMaterialRequest((int) testOrderRequest.getJobID(), 0, -1), new QCRequests.QCTestOrderCallback() {
+        int qualityGroupId = 0;
+        int subType = -1;
+        if (mQualitySpinner.getAdapter() != null && mTestSpinner.getAdapter() != null
+                && mTestSpinner.getSelectedItemPosition() >=0 && mQualitySpinner.getSelectedItemPosition() >= 0)
+        {
+            qualityGroupId = ((DictionarySpinnerAdapter) mQualitySpinner.getAdapter()).getItem(mQualitySpinner.getSelectedItemPosition()).getId();
+            subType = ((SubTypeAdapter) mTestSpinner.getAdapter()).getItem(mTestSpinner.getSelectedItemPosition()).getId();
+        }
+        mQcRequests.getQCTestOrderMaterial(new TestOrderMaterialRequest((int) testOrderRequest.getJobID(), qualityGroupId, subType), new QCRequests.QCTestOrderCallback() {
             @Override
             public void onSuccess(TestOrderResponse testOrderResponse) {
                 mProgressBar.setVisibility(View.GONE);
                 if (mTestOrder == null) {
                     testOrderResponse.getResponseDictionaryDT().getSubTypes().add(0, new SubType());
-                    initTestSpinner(testOrderResponse);
                 }
+                initTestSpinner(testOrderResponse);
                 mTestOrder = testOrderResponse;
                 if (mTestOrderRequest.getSubType() == -1) {
                     mTestOrderRequest.setSubType(mTestOrder.getResponseDictionaryDT().getSubTypes().get(0).getId());
@@ -237,7 +245,6 @@ public class QCTestOrderFragment extends Fragment implements
                 mProgressBar.setVisibility(View.GONE);
                 if (mTestOrder != null) {
                     ShowCrouton.showSimpleCrouton((QCActivity) getActivity(), standardResponse);
-                } else {
                 }
             }
         });
