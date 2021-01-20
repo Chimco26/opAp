@@ -38,7 +38,6 @@
     <string name="no_data">沒有資料</string>
     <string name="error_rest">REST服務出錯</string>
     <string name="jobs_actions">作業操作</string>
-    <string name="job_id">作業編號</string>
     <string name="product_name">產品名稱</string>
     <string name="erp">ERP</string>
     <string name="planned_start">計畫開始</string>
@@ -504,4 +503,5 @@
     <string name="add_sub_task">添加子任务</string>
     <string name="step_task_not_finished">请完成所有任务步骤</string>
     <string name="sort_by">排序方式</string>
+    <string name="job_id">作業編號</string>
 </resources>
