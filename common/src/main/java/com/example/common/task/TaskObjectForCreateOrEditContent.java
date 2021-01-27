@@ -3,6 +3,7 @@ package com.example.common.task;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class TaskObjectForCreateOrEditContent {
@@ -20,7 +21,16 @@ public class TaskObjectForCreateOrEditContent {
     @Expose
     private List<TaskInfoObject> status;
 
-    public List<TaskInfoObject> getSubjects() {
+    public List<TaskInfoObject> getSubjects(int currentSubject) {
+        if (subjects != null && !subjects.isEmpty()) {
+            Iterator<TaskInfoObject> iterator = subjects.iterator();
+            while (iterator.hasNext()){
+                TaskInfoObject item = iterator.next();
+                if (!item.isActive() && item.getID() != currentSubject){
+                    iterator.remove();
+                }
+            }
+        }
         return subjects;
     }
 
