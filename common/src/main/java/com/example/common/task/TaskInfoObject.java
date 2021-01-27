@@ -14,6 +14,9 @@ public class TaskInfoObject {
     @SerializedName("DisplayName")
     @Expose
     private String displayName;
+    /*  only in use for "Subject"  */
+    @SerializedName("IsActive")
+    private boolean isActive = true;
 
     public TaskInfoObject(String displayName) {
         this.displayName = displayName;
@@ -54,5 +57,9 @@ public class TaskInfoObject {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public boolean isActive() {
+        return isActive;
     }
 }

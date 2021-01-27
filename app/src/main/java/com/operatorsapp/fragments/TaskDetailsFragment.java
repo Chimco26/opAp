@@ -212,7 +212,7 @@ public class TaskDetailsFragment extends Fragment {
             initStatusSpinner(editTaskObject.getStatus(), TODO.getValue(), getResources().getColor(R.color.grey1));
             mStatusSpinner.setEnabled(false);
             initSeverity(editTaskObject.getPriority(), TaskProgress.TaskPriority.MEDIUM.getValue(), true);
-            initSubjectSpinner(editTaskObject.getSubjects(), editTaskObject.getSubjects().get(0).getID(), 0);
+            initSubjectSpinner(editTaskObject.getSubjects(0), editTaskObject.getSubjects(0).get(0).getID(), 0);
             initAssignSpinner("", getResources().getColor(R.color.grey1));
             mAssignSpinner.setEnabled(false);
             initStartAndEndTimeViews();
@@ -253,13 +253,13 @@ public class TaskDetailsFragment extends Fragment {
                     status = removeIdFromInfoObjectList(editTaskObject.getStatus(), TaskProgress.TaskStatus.CANCELLED.getValue());
                 }
                 initStatusSpinner(status, task.getTaskStatus(), 0);
-                initSubjectSpinner(editTaskObject.getSubjects(), task.getSubjectId(), getResources().getColor(R.color.grey1));
+                initSubjectSpinner(editTaskObject.getSubjects(mTask.getSubjectId()), task.getSubjectId(), getResources().getColor(R.color.grey1));
                 mSubjectSpinner.setEnabled(false);
                 mTaskStepAddNewEt.setVisibility(View.GONE);
                 mTaskStepAddNewIv.setVisibility(View.GONE);
             } else {
                 initSeverity(editTaskObject.getPriority(), task.getTaskPriorityID(), true);
-                initSubjectSpinner(editTaskObject.getSubjects(), task.getSubjectId(), 0);
+                initSubjectSpinner(editTaskObject.getSubjects(mTask.getSubjectId()), task.getSubjectId(), 0);
                 initStartAndEndTimeViews();
             }
         }
