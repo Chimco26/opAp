@@ -37,6 +37,7 @@
         android:layout_weight="5.5"
         android:background="@color/white"
         android:gravity="center"
+        android:inputType="text"
         android:maxLines="1"
         android:textSize="20sp" />
 
