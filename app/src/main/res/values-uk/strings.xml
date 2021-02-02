@@ -508,4 +508,7 @@
     <string name="add_sub_task">Додати підзавдання</string>
     <string name="step_task_not_finished">Будь ласка, виконайте всі кроки завдання</string>
     <string name="sort_by">Сортувати за</string>
+    <string name="edit_sub_task">Редагувати підзавдання</string>
+    <string name="back">Назад</string>
+    <string name="clear_filters">Очистити всі фільтри</string>
 </resources>

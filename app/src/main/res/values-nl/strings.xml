@@ -519,4 +519,7 @@
     <string name="add_sub_task">Deeltaak toevoegen</string>
     <string name="step_task_not_finished">Voltooi alle taakstappen</string>
     <string name="sort_by">Sorteren op</string>
+    <string name="edit_sub_task">Subtaak bewerken</string>
+    <string name="back">Terug</string>
+    <string name="clear_filters">Alle filters wissen</string>
 </resources>

@@ -500,4 +500,7 @@
     <string name="add_sub_task">Részfeladat hozzáadása</string>
     <string name="step_task_not_finished">Kérjük, fejezze be a teendő összes lépését</string>
     <string name="sort_by">Sorrend</string>
+    <string name="edit_sub_task">Al-feladat szerkesztése</string>
+    <string name="back">Vissza</string>
+    <string name="clear_filters">Összes szűrő törlése</string>
 </resources>

@@ -467,4 +467,7 @@
     <string name="add_sub_task">Aggiungi sotto-attività</string>
     <string name="step_task_not_finished">Finisci tutti i passaggi dell\'attività</string>
     <string name="sort_by">Sort by</string>
+    <string name="edit_sub_task">Modifica sotto-attività</string>
+    <string name="back">Indietro</string>
+    <string name="clear_filters">Rimuovi tutti i filtri</string>
 </resources>

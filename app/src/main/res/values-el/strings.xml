@@ -56,7 +56,7 @@
     <string name="activate_new_job">θέτω σε λειτουργία</string>
     <string name="could_not_retrieve_job_list">Αδυναμία ανάκτησης λίστας εργασιών</string>
     <string name="product">Προϊόν</string>
-    <string name="id"></string>
+    <string name="id">ID -</string>
     <string name="job">Εργασία</string>
     <string name="josh">Τζος</string>
     <string name="shift">Βάρδια</string>
@@ -198,7 +198,7 @@
     <string name="channel_1_99">κανάλι 1-99</string>
     <string name="channel_100">κανάλι 100</string>
     <string name="close">Κλείσιμο</string>
-    <string name="default_unanswered_technician_call_no_name"></string>
+    <string name="default_unanswered_technician_call_no_name">Aναμονή για να απαντήσει o τεχνικός</string>
     <string name="edit_note">Διαμορφώστε τη Σημείωση</string>
     <string name="end_setup_success">Λήξη Setup με επιτυχία</string>
     <string name="enter_note_here">Εισάγετε τη Σημείωση σας Εδώ</string>
@@ -512,4 +512,7 @@
     <string name="add_sub_task">Προσθήκη Υποεργασίας</string>
     <string name="step_task_not_finished">Παρακαλούμε ολοκληρώστε όλα τα βήματα της εργασίας</string>
     <string name="sort_by">Ταξινόμηση κατά</string>
+    <string name="edit_sub_task">Επεξεργασία υποεργασιών</string>
+    <string name="back">Επιστροφή</string>
+    <string name="clear_filters">Διαγραφή όλων των φίλτρων</string>
 </resources>

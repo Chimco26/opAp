@@ -510,4 +510,7 @@
     <string name="add_sub_task">Añadir subtarea</string>
     <string name="step_task_not_finished">Termine todos los pasos de la tarea</string>
     <string name="sort_by">Ordenar por</string>
+    <string name="edit_sub_task">Editar subtarea</string>
+    <string name="back">Atrás</string>
+    <string name="clear_filters">Borrar todos los filtros</string>
 </resources>

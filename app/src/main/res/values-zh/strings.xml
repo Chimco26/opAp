@@ -504,4 +504,7 @@
     <string name="step_task_not_finished">请完成所有任务步骤</string>
     <string name="sort_by">排序方式</string>
     <string name="job_id">作業編號</string>
+    <string name="edit_sub_task">编辑子任务</string>
+    <string name="back">返回</string>
+    <string name="clear_filters">清除所有过滤条件</string>
 </resources>
