@@ -512,4 +512,7 @@
     <string name="add_sub_task">Ajouter une sous-tâche</string>
     <string name="step_task_not_finished">Veuillez terminer toutes les étapes de la tâche</string>
     <string name="sort_by">Trier par</string>
+    <string name="edit_sub_task">Editer la sous-tâche</string>
+    <string name="back">Retour</string>
+    <string name="clear_filters">Nettoyer tous les filtres</string>
 </resources>

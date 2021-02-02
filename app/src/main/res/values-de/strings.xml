@@ -513,4 +513,7 @@
     <string name="add_sub_task">Unteraufgabe hinzufügen</string>
     <string name="step_task_not_finished">Bitte beenden Sie alle Aufgabenschritte</string>
     <string name="sort_by">Sortieren nach</string>
+    <string name="edit_sub_task">Unteraufgabe bearbeiten</string>
+    <string name="back">Zurück</string>
+    <string name="clear_filters">Alle Filter löschen</string>
 </resources>

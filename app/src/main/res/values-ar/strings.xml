@@ -511,4 +511,9 @@
     <string name="open_gallery">فتح المعرض</string>
     <string name="sub_task">مهمة فرعية</string>
     <string name="add_sub_task">إضافة مهمة فرعية</string>
+    <string name="sort_by">ترتيب حسب</string>
+    <string name="step_task_not_finished">يُرجى إنهاء جميع خطوات المهمة</string>
+    <string name="edit_sub_task">تعديل المهام الفرعية</string>
+    <string name="back">العودة</string>
+    <string name="clear_filters">إزالة جميع المرشحات</string>
 </resources>
