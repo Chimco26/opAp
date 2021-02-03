@@ -18,11 +18,14 @@ import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
+import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.view.widgetViewHolders.CounterViewHolder;
 import com.operatorsapp.view.widgetViewHolders.FreeTextViewHolder;
 import com.operatorsapp.view.widgetViewHolders.GenericTimeViewHolder;
+import com.operatorsapp.view.widgetViewHolders.NewWidget2ViewHolder;
+import com.operatorsapp.view.widgetViewHolders.NewWidgetViewHolder;
 import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
 import com.operatorsapp.view.widgetViewHolders.ProjectionViewHolderNew;
 import com.operatorsapp.view.widgetViewHolders.RangeViewHolder;
@@ -52,6 +55,8 @@ public class WidgetAdapter extends Adapter {
     private static final int REPORT_PERCENT = 7;
     private static final int GENERIC_TIME = 8;
     private static final int FREE_TEXT = 9;
+    private static final int NEW1 = 10;
+    private static final int NEW2 = 11;
     private GoToScreenListener mGoToScreenListener;
     private int mRangeCapsuleWidth = 0;
     private int mProjectionCapsuleWidth = 0;
@@ -64,15 +69,19 @@ public class WidgetAdapter extends Adapter {
     private int mSelectedCauseId;
     private boolean mEndSetupDisable;
     private SparseArray<WidgetInfo> mPermissionResponse;
+    private Integer mJoshId;
+    private ShowDashboardCroutonListener mShowDashboardCroutonListener;
+
 
     public WidgetAdapter(Activity context, List<Widget> widgets, GoToScreenListener goToScreenListener,
-                         boolean closedState, int height, int width,
+                         Integer joshId, boolean closedState, int height, int width,
                          DashboardCentralContainerListener dashboardCentralContainerListener,
                          ReportFieldsForMachine reportFieldsForMachine, MachineStatus machineStatus,
-                         OnKeyboardManagerListener onKeyboardManagerListener, SparseArray<WidgetInfo> permissionResponse) {
+                         ShowDashboardCroutonListener showDashboardCroutonListener, OnKeyboardManagerListener onKeyboardManagerListener, SparseArray<WidgetInfo> permissionResponse) {
         mWidgets = widgets;
         mContext = context;
         mGoToScreenListener = goToScreenListener;
+        mJoshId = joshId;
         mClosedState = closedState;
         mHeight = height;
         mWidth = width;
@@ -81,6 +90,7 @@ public class WidgetAdapter extends Adapter {
         mMachineStatus = machineStatus;
         mOnKeyboardManagerListener = onKeyboardManagerListener;
         mPermissionResponse = permissionResponse;
+        mShowDashboardCroutonListener = showDashboardCroutonListener;
     }
 
     public void changeState(boolean closedState) {
@@ -155,6 +165,7 @@ public class WidgetAdapter extends Adapter {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case NUMERIC: {
+
                 return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
                         mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth,
                         WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(),
@@ -191,6 +202,13 @@ public class WidgetAdapter extends Adapter {
             }
             case FREE_TEXT: {
                 return new FreeTextViewHolder(inflater.inflate(R.layout.holder_free_text, parent, false), mHeight, mWidth);
+            }
+            case NEW1: {
+                return new NewWidgetViewHolder(inflater.inflate(R.layout.new_widget_cardview, parent, false));
+            }
+            case NEW2: {
+                return new NewWidget2ViewHolder(inflater.inflate(R.layout.new_widget2_cardview, parent, false),
+                        mReportFieldsForMachine,mOnKeyboardManagerListener,mShowDashboardCroutonListener,mJoshId,mContext);
             }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
@@ -300,6 +318,7 @@ public class WidgetAdapter extends Adapter {
         switch (mWidgets.get(position).getFieldType()) {
             case 0:
                 type = NUMERIC;
+//                type = NEW2;
                 break;
             case 1:
                 type = RANGE;

@@ -55,9 +55,9 @@ import static com.operatorsapp.application.OperatorApplication.isEnglishLang;
 public class ReportProductionFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider, KeyboardUtils.KeyboardListener {
 
     public static final String LOG_TAG = ReportProductionFragment.class.getSimpleName();
-    private static final String CURRENT_PRODUCT_ID = "current_product_id";
-    private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
-    private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
+    public static final String CURRENT_PRODUCT_ID = "current_product_id";
+    public static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
+    public static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
     private static final int REFRESH_DELAY_MILLIS = 3000;
     private int mCurrentProductId;
     private ImageView mPlusButton;
@@ -411,7 +411,7 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
                 mJobsSpinner.setVisibility(View.VISIBLE);
                 final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
                 activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
+//                mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
                 mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
                 mJobsSpinner.setSelection(mSelectedPosition);
                 mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
