@@ -32,6 +32,7 @@ import com.operatorsapp.view.widgetViewHolders.RangeViewHolder;
 import com.operatorsapp.view.widgetViewHolders.ReportStopViewHolder;
 import com.operatorsapp.view.widgetViewHolders.TimeLeftViewHolder;
 import com.operatorsapp.view.widgetViewHolders.TimeViewHolder;
+import com.operatorsapp.view.widgetViewHolders.TopStopEventsViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,7 @@ public class WidgetAdapter extends Adapter {
     private static final int FREE_TEXT = 9;
     private static final int ORDER_TEST = 10;
     private static final int REPORT_PRODUCTION = 11;
+    private static final int TOP_5_STOP_EVENTS = 12;
     private GoToScreenListener mGoToScreenListener;
     private int mRangeCapsuleWidth = 0;
     private int mProjectionCapsuleWidth = 0;
@@ -210,6 +212,9 @@ public class WidgetAdapter extends Adapter {
                 return new ReportProductionViewHolder(inflater.inflate(R.layout.report_production_widget_cardview, parent, false),
                         mReportFieldsForMachine, mOnKeyboardManagerListener, mShowDashboardCroutonListener, mJoshId, mContext);
             }
+            case TOP_5_STOP_EVENTS: {
+                return new TopStopEventsViewHolder(inflater.inflate(R.layout.top_stop_events_cardview, parent, false));
+            }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
                 mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth,
@@ -279,6 +284,10 @@ public class WidgetAdapter extends Adapter {
                     final ReportProductionViewHolder reportProductionViewHolder = (ReportProductionViewHolder) holder;
 //                   Nathat missing
                 }
+                case TOP_5_STOP_EVENTS: {
+                    final TopStopEventsViewHolder topStopEventsViewHolder = (TopStopEventsViewHolder) holder;
+//                   Nathat missing
+                }
             }
             //        final View itemview= holder.itemView;
             //        Log.clearPollingRequest("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
@@ -325,9 +334,10 @@ public class WidgetAdapter extends Adapter {
         int type;
         switch (mWidgets.get(position).getFieldType()) {
             case 0:
-//                type = NUMERIC;
+                type = NUMERIC;
 //                type = REPORT_PRODUCTION;
-                type = ORDER_TEST;
+//                type = ORDER_TEST;
+//                type = TOP_5_STOP_EVENTS;
                 break;
             case 1:
                 type = RANGE;
@@ -362,6 +372,10 @@ public class WidgetAdapter extends Adapter {
             case 11:
                 type = REPORT_PRODUCTION;
                 break;
+            case 12:
+                type = TOP_5_STOP_EVENTS;
+                break;
+
             default:
                 type = NUMERIC;
                 break;
