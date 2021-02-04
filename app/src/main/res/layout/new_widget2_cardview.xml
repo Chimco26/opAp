@@ -234,7 +234,8 @@
                     android:maxLines="1"
                     app:autoSizeTextType="uniform"
                     app:autoSizeMaxTextSize="22sp"
-                    android:padding="5dp"/>
+                    android:padding="5dp"
+                    android:enabled="false"/>
             </LinearLayout>
 
         </LinearLayout>

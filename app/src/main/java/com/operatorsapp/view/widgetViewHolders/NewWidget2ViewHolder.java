@@ -124,6 +124,8 @@ public class NewWidget2ViewHolder extends RecyclerView.ViewHolder implements OnC
     private void cancelScreenReportProduction() {
         screen1.setVisibility(View.VISIBLE);
         screen2.setVisibility(View.GONE);
+        buttonReportBUT.setBackground(mContext.getResources().getDrawable(R.drawable.button_bg_disabled));
+        buttonReportBUT.setEnabled(false);
     }
 
     private void initScreenReportProduction() {
@@ -133,7 +135,9 @@ public class NewWidget2ViewHolder extends RecyclerView.ViewHolder implements OnC
     }
 
     private void initNumberUnits() {
-        mUnitsCounter = Integer.parseInt(mEditUnitsET.getText().toString());
+        if (!mEditUnitsET.getText().toString().isEmpty()) {
+            mUnitsCounter = Integer.parseInt(mEditUnitsET.getText().toString());
+        }
     }
 
     private void sendReport() {
@@ -229,8 +233,10 @@ public class NewWidget2ViewHolder extends RecyclerView.ViewHolder implements OnC
     public void enableNextBtn(String text, View nextBtn, EditText editText) {
         if (!text.isEmpty()) {
             nextBtn.setBackground(editText.getContext().getResources().getDrawable(R.drawable.buttons_selector));
+            nextBtn.setEnabled(true);
         } else {
             nextBtn.setBackground(editText.getContext().getResources().getDrawable(R.drawable.button_bg_disabled));
+            nextBtn.setEnabled(false);
         }
     }
 
