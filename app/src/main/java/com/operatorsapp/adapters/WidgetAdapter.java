@@ -24,8 +24,8 @@ import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.view.widgetViewHolders.CounterViewHolder;
 import com.operatorsapp.view.widgetViewHolders.FreeTextViewHolder;
 import com.operatorsapp.view.widgetViewHolders.GenericTimeViewHolder;
-import com.operatorsapp.view.widgetViewHolders.NewWidget2ViewHolder;
-import com.operatorsapp.view.widgetViewHolders.NewWidgetViewHolder;
+import com.operatorsapp.view.widgetViewHolders.ReportProductionViewHolder;
+import com.operatorsapp.view.widgetViewHolders.OrderTestViewHolder;
 import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
 import com.operatorsapp.view.widgetViewHolders.ProjectionViewHolderNew;
 import com.operatorsapp.view.widgetViewHolders.RangeViewHolder;
@@ -55,8 +55,8 @@ public class WidgetAdapter extends Adapter {
     private static final int REPORT_PERCENT = 7;
     private static final int GENERIC_TIME = 8;
     private static final int FREE_TEXT = 9;
-    private static final int NEW1 = 10;
-    private static final int NEW2 = 11;
+    private static final int ORDER_TEST = 10;
+    private static final int REPORT_PRODUCTION = 11;
     private GoToScreenListener mGoToScreenListener;
     private int mRangeCapsuleWidth = 0;
     private int mProjectionCapsuleWidth = 0;
@@ -203,12 +203,12 @@ public class WidgetAdapter extends Adapter {
             case FREE_TEXT: {
                 return new FreeTextViewHolder(inflater.inflate(R.layout.holder_free_text, parent, false), mHeight, mWidth);
             }
-            case NEW1: {
-                return new NewWidgetViewHolder(inflater.inflate(R.layout.new_widget_cardview, parent, false));
+            case ORDER_TEST: {
+                return new OrderTestViewHolder(inflater.inflate(R.layout.order_test_widget_cardview, parent, false));
             }
-            case NEW2: {
-                return new NewWidget2ViewHolder(inflater.inflate(R.layout.new_widget2_cardview, parent, false),
-                        mReportFieldsForMachine,mOnKeyboardManagerListener,mShowDashboardCroutonListener,mJoshId,mContext);
+            case REPORT_PRODUCTION: {
+                return new ReportProductionViewHolder(inflater.inflate(R.layout.report_production_widget_cardview, parent, false),
+                        mReportFieldsForMachine, mOnKeyboardManagerListener, mShowDashboardCroutonListener, mJoshId, mContext);
             }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
@@ -271,6 +271,14 @@ public class WidgetAdapter extends Adapter {
                 case FREE_TEXT:
                     final FreeTextViewHolder freeTextViewHolder = (FreeTextViewHolder) holder;
                     freeTextViewHolder.setData(widget);
+                case ORDER_TEST: {
+                    final OrderTestViewHolder orderTestViewHolder = (OrderTestViewHolder) holder;
+//                   Nathat missing
+                }
+                case REPORT_PRODUCTION: {
+                    final ReportProductionViewHolder reportProductionViewHolder = (ReportProductionViewHolder) holder;
+//                   Nathat missing
+                }
             }
             //        final View itemview= holder.itemView;
             //        Log.clearPollingRequest("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
@@ -317,8 +325,9 @@ public class WidgetAdapter extends Adapter {
         int type;
         switch (mWidgets.get(position).getFieldType()) {
             case 0:
-                type = NUMERIC;
-//                type = NEW2;
+//                type = NUMERIC;
+//                type = REPORT_PRODUCTION;
+                type = ORDER_TEST;
                 break;
             case 1:
                 type = RANGE;
@@ -346,6 +355,12 @@ public class WidgetAdapter extends Adapter {
                 break;
             case 9:
                 type = FREE_TEXT;
+                break;
+            case 10:
+                type = ORDER_TEST;
+                break;
+            case 11:
+                type = REPORT_PRODUCTION;
                 break;
             default:
                 type = NUMERIC;

@@ -11,9 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.common.ErrorResponse;
 import com.example.common.StandardResponse;
 import com.example.oppapplog.OppAppLogger;
@@ -33,19 +35,18 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.SingleLineKeyboard;
-import com.example.oppapplog.OppAppLogger;
 
 import static com.operatorsapp.application.OperatorApplication.isEnglishLang;
 
-public class NewWidget2ViewHolder extends RecyclerView.ViewHolder implements OnClickListener{
+public class ReportProductionViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
-    public static final String LOG_TAG = NewWidget2ViewHolder.class.getSimpleName();
-    private View screen1;
-    private View screen2;
-    private TextView buttonReportProductionTV;
-    private Spinner rejectReasonSpinner;
+    public static final String LOG_TAG = ReportProductionViewHolder.class.getSimpleName();
+    private View step1LL;
+    private View step2LL;
+    private TextView mButtonReportProductionTV;
+    private Spinner mRejectReasonSpinner;
     private EditText mEditUnitsET;
-    private Button buttonReportBUT;
+    private Button mButtonReportBUT;
     private TextView mButtonCancelBUT;
 
     private Activity mContext;
@@ -60,9 +61,8 @@ public class NewWidget2ViewHolder extends RecyclerView.ViewHolder implements OnC
     private int mUnitsCounter;
 
 
-
-    public NewWidget2ViewHolder(@NonNull View itemView, ReportFieldsForMachine mReportFieldsForMachine, OnKeyboardManagerListener mOnKeyboardManagerListener,
-                                ShowDashboardCroutonListener mShowDashboardCroutonListener, Integer mJoshId, Activity context) {
+    public ReportProductionViewHolder(@NonNull View itemView, ReportFieldsForMachine mReportFieldsForMachine, OnKeyboardManagerListener mOnKeyboardManagerListener,
+                                      ShowDashboardCroutonListener mShowDashboardCroutonListener, Integer mJoshId, Activity context) {
         super(itemView);
         this.mContext = context;
         this.mReportFieldsForMachine = mReportFieldsForMachine;
@@ -70,13 +70,13 @@ public class NewWidget2ViewHolder extends RecyclerView.ViewHolder implements OnC
         this.mJoshId = mJoshId;
         this.mShowDashboardCroutonListener = mShowDashboardCroutonListener;
 
-        screen1 = itemView.findViewById(R.id.NWC2_screen1);
-        screen2 = itemView.findViewById(R.id.NWC2_screen2);
-        buttonReportProductionTV = itemView.findViewById(R.id.TLWC_report_production_btn);
-        rejectReasonSpinner = itemView.findViewById(R.id.package_type_spinner);
-        mEditUnitsET = itemView.findViewById(R.id.NWC2_units_ET);
-        buttonReportBUT = itemView.findViewById(R.id.NWC2_button_report);
-        mButtonCancelBUT = itemView.findViewById(R.id.NWC2_button_cancel);
+        step1LL = itemView.findViewById(R.id.RPWC_step1_LL);
+        step2LL = itemView.findViewById(R.id.RPWC_step2_LL);
+        mButtonReportProductionTV = itemView.findViewById(R.id.RPWC_button_report_production_TV);
+        mRejectReasonSpinner = itemView.findViewById(R.id.RPWC_package_type_spinner_SP);
+        mEditUnitsET = itemView.findViewById(R.id.RPWC_units_ET);
+        mButtonReportBUT = itemView.findViewById(R.id.RPWC_button_report_BUT);
+        mButtonCancelBUT = itemView.findViewById(R.id.RPWC_button_cancel_TV);
 
         initListeners();
         initSpinner();
@@ -85,9 +85,9 @@ public class NewWidget2ViewHolder extends RecyclerView.ViewHolder implements OnC
 
 
     private void initListeners() {
-        buttonReportProductionTV.setOnClickListener(this);
+        mButtonReportProductionTV.setOnClickListener(this);
         mButtonCancelBUT.setOnClickListener(this);
-        buttonReportBUT.setOnClickListener(this);
+        mButtonReportBUT.setOnClickListener(this);
 
         mEditUnitsET.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -96,7 +96,7 @@ public class NewWidget2ViewHolder extends RecyclerView.ViewHolder implements OnC
                 mEditUnitsET.setInputType(InputType.TYPE_NULL); // disable soft input
                 mEditUnitsET.onTouchEvent(event); // call native handler
                 mEditUnitsET.setInputType(inType); // restore input type
-                setKeyBoard(mEditUnitsET, null, buttonReportBUT);
+                setKeyBoard(mEditUnitsET, null, mButtonReportBUT);
                 return false; // consume touch event
             }
         });
@@ -105,15 +105,15 @@ public class NewWidget2ViewHolder extends RecyclerView.ViewHolder implements OnC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.TLWC_report_production_btn: {
+            case R.id.RPWC_button_report_production_TV: {
                 initScreenReportProduction();
                 break;
             }
-            case R.id.NWC2_button_cancel: {
+            case R.id.RPWC_button_cancel_TV: {
                 cancelScreenReportProduction();
                 break;
             }
-            case R.id.NWC2_button_report: {
+            case R.id.RPWC_button_report_BUT: {
                 initNumberUnits();
                 sendReport();
                 break;
@@ -122,15 +122,15 @@ public class NewWidget2ViewHolder extends RecyclerView.ViewHolder implements OnC
     }
 
     private void cancelScreenReportProduction() {
-        screen1.setVisibility(View.VISIBLE);
-        screen2.setVisibility(View.GONE);
-        buttonReportBUT.setBackground(mContext.getResources().getDrawable(R.drawable.button_bg_disabled));
-        buttonReportBUT.setEnabled(false);
+        step1LL.setVisibility(View.VISIBLE);
+        step2LL.setVisibility(View.GONE);
+        mButtonReportBUT.setBackground(mContext.getResources().getDrawable(R.drawable.button_bg_disabled));
+        mButtonReportBUT.setEnabled(false);
     }
 
     private void initScreenReportProduction() {
-        screen1.setVisibility(View.GONE);
-        screen2.setVisibility(View.VISIBLE);
+        step1LL.setVisibility(View.GONE);
+        step2LL.setVisibility(View.VISIBLE);
         mEditUnitsET.getText().clear();
     }
 
@@ -153,7 +153,7 @@ public class NewWidget2ViewHolder extends RecyclerView.ViewHolder implements OnC
 //        SendBroadcast.refreshPolling(getContext());
     }
 
-     private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
+    private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override//TODO crouton error
         public void sendReportSuccess(StandardResponse o) {
 
@@ -176,15 +176,16 @@ public class NewWidget2ViewHolder extends RecyclerView.ViewHolder implements OnC
 
 
         }
-         @Override
+
+        @Override
         public void sendReportFailure(StandardResponse reason) {
             dismissProgressDialog();
             new GoogleAnalyticsHelper().trackEvent(mContext, GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, false, "Report Production- " + reason.getError().getErrorDesc());
             OppAppLogger.i(LOG_TAG, "sendReportFailure() reason: " + reason.getError().getErrorDesc());
-             mShowDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getError().getErrorDesc(), true);
+            mShowDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getError().getErrorDesc(), true);
             SendBroadcast.refreshPolling(mContext);
 
-             cancelScreenReportProduction();
+            cancelScreenReportProduction();
         }
     };
 
@@ -217,7 +218,6 @@ public class NewWidget2ViewHolder extends RecyclerView.ViewHolder implements OnC
     }
 
 
-
     private void setKeyBoard(final EditText editText, String[] complementChars, final View nextBtn) {
         if (mOnKeyboardManagerListener != null) {
             mOnKeyboardManagerListener.onOpenKeyboard(new SingleLineKeyboard.OnKeyboardClickListener() {
@@ -244,10 +244,10 @@ public class NewWidget2ViewHolder extends RecyclerView.ViewHolder implements OnC
         if (mContext != null) {
             final RejectProductionSpinnerAdapter reasonSpinnerArrayAdapter = new RejectProductionSpinnerAdapter(mContext, R.layout.base_spinner_item, mReportFieldsForMachine.getPackageTypes());
             reasonSpinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
-            rejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
-            rejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(mContext, R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+            mRejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
+            mRejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(mContext, R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
-            rejectReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            mRejectReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     reasonSpinnerArrayAdapter.setTitle(position);

@@ -11,14 +11,14 @@ import com.operatorsapp.model.event.QCTestEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
-public class NewWidgetViewHolder extends RecyclerView.ViewHolder {
+public class OrderTestViewHolder extends RecyclerView.ViewHolder {
     private TextView buttonOrderTestTV;
 
 
-    public NewWidgetViewHolder(@NonNull View itemView) {
+    public OrderTestViewHolder(@NonNull View itemView) {
         super(itemView);
 
-        buttonOrderTestTV = itemView.findViewById(R.id.TLWC_countdown_btn);
+        buttonOrderTestTV = itemView.findViewById(R.id.OTWC_countdown_btn);
         buttonOrderTestTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

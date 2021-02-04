@@ -22,7 +22,7 @@
         android:weightSum="10">
 
         <TextView
-            android:id="@+id/TLWC_title"
+            android:id="@+id/RPWC_title"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="6"
@@ -36,7 +36,7 @@
             app:autoSizeTextType="uniform" />
 
         <TextView
-            android:id="@+id/TLWC_subtitle"
+            android:id="@+id/RPWC_subtitle"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="4"
@@ -61,7 +61,7 @@
         android:layout_weight="190">
 
         <LinearLayout
-            android:id="@+id/NWC2_screen1"
+            android:id="@+id/RPWC_step1_LL"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -88,7 +88,7 @@
                     android:layout_weight="7" />
 
                 <TextView
-                    android:id="@+id/TLWC_report_production_btn"
+                    android:id="@+id/RPWC_button_report_production_TV"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="3"
@@ -104,7 +104,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/NWC2_screen2"
+            android:id="@+id/RPWC_step2_LL"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -140,7 +140,7 @@
                     android:background="@drawable/edit_text_background_selector">
 
                     <Spinner
-                        android:id="@+id/package_type_spinner"
+                        android:id="@+id/RPWC_package_type_spinner_SP"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
                 </RelativeLayout>
@@ -157,7 +157,7 @@
                 android:layout_marginTop="15dp">
 
                 <TextView
-                    android:id="@+id/FRP_units_tv"
+                    android:id="@+id/RPWC_units_TV"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
@@ -179,7 +179,7 @@
                    >
 
                     <EditText
-                        android:id="@+id/NWC2_units_ET"
+                        android:id="@+id/RPWC_units_ET"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerHorizontal="true"
@@ -201,7 +201,7 @@
                 android:weightSum="2.2">
 
                 <TextView
-                    android:id="@+id/NWC2_button_cancel"
+                    android:id="@+id/RPWC_button_cancel_TV"
                     style="@style/FontStyle_Button"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -222,7 +222,7 @@
                     android:layout_weight="0.2" />
 
                 <Button
-                    android:id="@+id/NWC2_button_report"
+                    android:id="@+id/RPWC_button_report_BUT"
                     style="@style/FontStyle_Button"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
