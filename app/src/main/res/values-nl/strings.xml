@@ -108,9 +108,9 @@
     <string name="end_">Eind: </string>
     <string name="start_">Starten: </string>
     <string name="chart_min_">Minimaal: </string>
-    <string name="chart_standard_">Standaard: </string>
+    <string name="chart_standard_">Standaard:</string>
     <string name="chart_max_">Maximaal: </string>
-    <string name="standard">Standaard&#160;</string>
+    <string name="standard">Standaard</string>
     <string name="shift_log_min">Minimaal</string>
     <string name="shift_log_max">Maximaal</string>
     <string name="shift_log_standard">Standaard</string>

@@ -109,10 +109,10 @@
     <string name="end_">النهايه: </string>
     <string name="start_">بدء: </string>
     <string name="chart_min_">الحد الادنى: </string>
-    <string name="chart_standard_">رئيسي:&#160;</string>
+    <string name="chart_standard_">رئيسي:</string>
     <string name="chart_max_">الحد الاقصى: </string>
     <string name="switch_user">تغير المستخدم</string>
-    <string name="standard">اساسي&#160;</string>
+    <string name="standard">اساسي</string>
     <string name="total_required">مجموع&#160;</string>
     <string name="shift_log_min">الحد الادنى&#160;</string>
     <string name="shift_log_max">الحد الاقصى&#160;</string>
