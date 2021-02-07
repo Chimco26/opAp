@@ -103,10 +103,10 @@
     <string name="end_">Закінчення: </string>
     <string name="start_">Старт: </string>
     <string name="chart_min_">Мин.: </string>
-    <string name="chart_standard_">Стандарт: </string>
+    <string name="chart_standard_">Стандарт:</string>
     <string name="chart_max_">Макс.: </string>
     <string name="switch_user">Змінити користувача</string>
-    <string name="standard">Стандарт </string>
+    <string name="standard">Стандарт</string>
     <string name="total_required">Потребується загалом</string>
     <string name="shift_log_min">Мін.</string>
     <string name="shift_log_max">Макс.</string>
