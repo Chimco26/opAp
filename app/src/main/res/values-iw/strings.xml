@@ -112,9 +112,9 @@
     <string name="end_">סיום: </string>
     <string name="start_">התחלה: </string>
     <string name="chart_min_">מינימום: </string>
-    <string name="chart_standard_">תקן:</string>
+    <string name="chart_standard_">סטנדרט:</string>
     <string name="chart_max_">מקסימום: </string>
-    <string name="standard">תקן </string>
+    <string name="standard">תקן</string>
     <string name="shift_log_min">מינימום</string>
     <string name="shift_log_max">מקסימום</string>
     <string name="shift_log_standard">תקן</string>

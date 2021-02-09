@@ -108,10 +108,10 @@
     <string name="end_">Fin: </string>
     <string name="start_">Inicio: </string>
     <string name="chart_min_">Min: </string>
-    <string name="chart_standard_">Estandar:&#160;</string>
+    <string name="chart_standard_">Estandar:</string>
     <string name="chart_max_">Max: </string>
     <string name="switch_user">Cambiar Usuario</string>
-    <string name="standard">Estandar&#160;</string>
+    <string name="standard">Estandar</string>
     <string name="total_required">Total requerido&#160;</string>
     <string name="shift_log_min">Min&#160;</string>
     <string name="shift_log_max">Max&#160;</string>

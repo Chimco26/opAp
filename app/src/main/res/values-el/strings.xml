@@ -345,7 +345,7 @@
     <string name="good_units">καλές μονάδες</string>
     <string name="working_time">Χρόνος εργασίας</string>
     <string name="event_details">Λεπτομέρειες συμβάντος</string>
-    <string name="messages"></string>
+    <string name="messages">μηνύματα</string>
     <string name="message">Μήνυμα</string>
     <string name="production_report">Αναφορά παραγωγής</string>
     <string name="select_all">Επιλογή όλων</string>
