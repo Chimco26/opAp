@@ -116,11 +116,11 @@
     <string name="end_">vége: </string>
     <string name="start_">Rajt: </string>
     <string name="chart_min_">Min: </string>
-    <string name="chart_standard_">Alapértelmezett:&#160;</string>
+    <string name="chart_standard_">Alapértelmezett:</string>
     <string name="chart_max_">Max: </string>
     <string name="space" translatable="false">&#160;</string>
     <string name="switch_user">Felhasználót váltani</string>
-    <string name="standard">Alapértelmezett&#160;</string>
+    <string name="standard">Alapértelmezett</string>
     <string name="total_required">Összes szükséges&#160;</string>
     <string name="shift_log_min">Min&#160;</string>
     <string name="shift_log_max">Max&#160;</string>
