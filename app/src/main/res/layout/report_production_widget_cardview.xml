@@ -29,7 +29,7 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:text="Current quantity"
+            android:text="Report production"
             android:textColor="@android:color/black"
             android:textSize="23sp"
             app:autoSizeMaxTextSize="23sp"
@@ -129,7 +129,7 @@
                     android:textSize="16sp"
                     android:maxLines="1"
                     app:autoSizeTextType="uniform"
-                    app:autoSizeMaxTextSize="22sp"/>
+                    app:autoSizeMaxTextSize="16sp"/>
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -161,13 +161,13 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
-                    android:gravity="center"
+                    android:gravity="center_vertical"
                     android:text="@string/units"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:maxLines="1"
                     app:autoSizeTextType="uniform"
-                    app:autoSizeMaxTextSize="22sp"/>
+                    app:autoSizeMaxTextSize="16sp" />/>
 
 
                 <RelativeLayout
@@ -184,6 +184,7 @@
                         android:layout_height="match_parent"
                         android:layout_centerHorizontal="true"
                         android:gravity="center"
+                        android:textSize="16sp"
                         android:maxLines="1"
                         android:background="@drawable/edit_text_background_selector"/>
                 </RelativeLayout>

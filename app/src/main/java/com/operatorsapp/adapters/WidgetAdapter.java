@@ -33,6 +33,7 @@ import com.operatorsapp.view.widgetViewHolders.ReportStopViewHolder;
 import com.operatorsapp.view.widgetViewHolders.TimeLeftViewHolder;
 import com.operatorsapp.view.widgetViewHolders.TimeViewHolder;
 import com.operatorsapp.view.widgetViewHolders.TopStopEventsViewHolder;
+import com.operatorsapp.view.widgetViewHolders.helper.MachineWorkBitViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +59,8 @@ public class WidgetAdapter extends Adapter {
     private static final int FREE_TEXT = 9;
     private static final int ORDER_TEST = 10;
     private static final int REPORT_PRODUCTION = 11;
-    private static final int TOP_5_STOP_EVENTS = 12;
+    private static final int MACHINE_WORK_BIT = 12;
+    private static final int TOP_5_STOP_EVENTS = 13;
     private GoToScreenListener mGoToScreenListener;
     private int mRangeCapsuleWidth = 0;
     private int mProjectionCapsuleWidth = 0;
@@ -206,14 +208,17 @@ public class WidgetAdapter extends Adapter {
                 return new FreeTextViewHolder(inflater.inflate(R.layout.holder_free_text, parent, false), mHeight, mWidth);
             }
             case ORDER_TEST: {
-                return new OrderTestViewHolder(inflater.inflate(R.layout.order_test_widget_cardview, parent, false));
+                return new OrderTestViewHolder(inflater.inflate(R.layout.order_test_widget_cardview, parent, false), mHeight, mWidth);
             }
             case REPORT_PRODUCTION: {
-                return new ReportProductionViewHolder(inflater.inflate(R.layout.report_production_widget_cardview, parent, false),
+                return new ReportProductionViewHolder(inflater.inflate(R.layout.report_production_widget_cardview, parent, false), mHeight, mWidth,
                         mReportFieldsForMachine, mOnKeyboardManagerListener, mShowDashboardCroutonListener, mJoshId, mContext);
             }
+            case MACHINE_WORK_BIT: {
+                return new MachineWorkBitViewHolder(inflater.inflate(R.layout.machine_work_bit_cardview, parent, false), mHeight, mWidth);
+            }
             case TOP_5_STOP_EVENTS: {
-                return new TopStopEventsViewHolder(inflater.inflate(R.layout.top_stop_events_cardview, parent, false));
+                return new TopStopEventsViewHolder(inflater.inflate(R.layout.top_stop_events_cardview, parent, false), mHeight, mWidth);
             }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
@@ -278,11 +283,15 @@ public class WidgetAdapter extends Adapter {
                     freeTextViewHolder.setData(widget);
                 case ORDER_TEST: {
                     final OrderTestViewHolder orderTestViewHolder = (OrderTestViewHolder) holder;
-//                   Nathat missing
+                    orderTestViewHolder.setData(widget);
                 }
                 case REPORT_PRODUCTION: {
                     final ReportProductionViewHolder reportProductionViewHolder = (ReportProductionViewHolder) holder;
-//                   Nathat missing
+                    reportProductionViewHolder.setData(widget);
+                }
+                case MACHINE_WORK_BIT: {
+                   final MachineWorkBitViewHolder machineWorkBitViewHolder = (MachineWorkBitViewHolder) holder;
+                   machineWorkBitViewHolder.setData(widget);
                 }
                 case TOP_5_STOP_EVENTS: {
                     final TopStopEventsViewHolder topStopEventsViewHolder = (TopStopEventsViewHolder) holder;
@@ -373,6 +382,9 @@ public class WidgetAdapter extends Adapter {
                 type = REPORT_PRODUCTION;
                 break;
             case 12:
+                type = MACHINE_WORK_BIT;
+                break;
+            case 13:
                 type = TOP_5_STOP_EVENTS;
                 break;
 

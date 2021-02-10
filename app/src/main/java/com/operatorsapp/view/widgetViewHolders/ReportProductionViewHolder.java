@@ -6,9 +6,11 @@ import android.text.InputType;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -21,6 +23,7 @@ import com.example.common.StandardResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.operators.machinedatainfra.models.Widget;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
@@ -28,6 +31,7 @@ import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.RejectProductionSpinnerAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
@@ -41,6 +45,9 @@ import static com.operatorsapp.application.OperatorApplication.isEnglishLang;
 public class ReportProductionViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
     public static final String LOG_TAG = ReportProductionViewHolder.class.getSimpleName();
+    private final TextView mTitle;
+    private final int mHeight;
+    private final int mWidth;
     private View step1LL;
     private View step2LL;
     private TextView mButtonReportProductionTV;
@@ -61,15 +68,19 @@ public class ReportProductionViewHolder extends RecyclerView.ViewHolder implemen
     private int mUnitsCounter;
 
 
-    public ReportProductionViewHolder(@NonNull View itemView, ReportFieldsForMachine mReportFieldsForMachine, OnKeyboardManagerListener mOnKeyboardManagerListener,
+    public ReportProductionViewHolder(@NonNull View itemView, int height, int width, ReportFieldsForMachine mReportFieldsForMachine, OnKeyboardManagerListener mOnKeyboardManagerListener,
                                       ShowDashboardCroutonListener mShowDashboardCroutonListener, Integer mJoshId, Activity context) {
         super(itemView);
+        mHeight = height;
+        mWidth = width;
+
         this.mContext = context;
         this.mReportFieldsForMachine = mReportFieldsForMachine;
         this.mOnKeyboardManagerListener = mOnKeyboardManagerListener;
         this.mJoshId = mJoshId;
         this.mShowDashboardCroutonListener = mShowDashboardCroutonListener;
 
+        mTitle = itemView.findViewById(R.id.RPWC_title);
         step1LL = itemView.findViewById(R.id.RPWC_step1_LL);
         step2LL = itemView.findViewById(R.id.RPWC_step2_LL);
         mButtonReportProductionTV = itemView.findViewById(R.id.RPWC_button_report_production_TV);
@@ -77,6 +88,8 @@ public class ReportProductionViewHolder extends RecyclerView.ViewHolder implemen
         mEditUnitsET = itemView.findViewById(R.id.RPWC_units_ET);
         mButtonReportBUT = itemView.findViewById(R.id.RPWC_button_report_BUT);
         mButtonCancelBUT = itemView.findViewById(R.id.RPWC_button_cancel_TV);
+        LinearLayout parentLayout = itemView.findViewById(R.id.widget_parent_layout);
+        setSizes(parentLayout);
 
         initListeners();
         initSpinner();
@@ -100,6 +113,11 @@ public class ReportProductionViewHolder extends RecyclerView.ViewHolder implemen
                 return false; // consume touch event
             }
         });
+    }
+
+    public void setData(Widget widget){
+        String nameByLang2 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
+        mTitle.setText(nameByLang2);
     }
 
     @Override
@@ -261,5 +279,14 @@ public class ReportProductionViewHolder extends RecyclerView.ViewHolder implemen
                 }
             });
         }
+    }
+
+    private void setSizes(final LinearLayout parent) {
+        ViewGroup.LayoutParams layoutParams;
+        layoutParams = parent.getLayoutParams();
+        layoutParams.height = (int) (mHeight * 0.5);
+        layoutParams.width = (int) (mWidth * 0.325);
+        parent.requestLayout();
+
     }
 }

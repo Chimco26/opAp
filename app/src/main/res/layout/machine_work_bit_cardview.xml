@@ -22,21 +22,21 @@
         android:weightSum="10">
 
         <TextView
-            android:id="@+id/OTWC_title"
+            android:id="@+id/MWBC_title"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="6"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:text="Order test"
+            android:text="Machine work bit"
             android:textColor="@android:color/black"
             android:textSize="23sp"
             app:autoSizeMaxTextSize="23sp"
             app:autoSizeTextType="uniform" />
 
         <TextView
-            android:id="@+id/OTWC_subtitle"
+            android:id="@+id/HFT_subtitle"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="4"
@@ -60,46 +60,14 @@
         android:layout_height="0dp"
         android:layout_weight="190">
 
-        <LinearLayout
-            android:id="@+id/OTWC_countdown_ly"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="visible"
-            android:weightSum="10">
+        <Switch
+            android:id="@+id/MWBC_switch_SW"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="2"
+            android:scaleY="2"
+            android:layout_centerInParent="true"/>
 
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4.5"
-                android:gravity="center_vertical"
-                android:layout_gravity="center_horizontal"
-                android:orientation="vertical"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                android:weightSum="10">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="7" />
-
-                <TextView
-                    android:id="@+id/OTWC_countdown_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="3"
-                    android:background="@color/blue1"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:text="@string/order_test"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    app:autoSizeMaxTextSize="20sp"
-                    app:autoSizeTextType="uniform" />
-            </LinearLayout>
-        </LinearLayout>
     </RelativeLayout>
+
 </LinearLayout>
