@@ -215,7 +215,7 @@ public class WidgetAdapter extends Adapter {
                         mReportFieldsForMachine, mOnKeyboardManagerListener, mShowDashboardCroutonListener, mJoshId, mContext);
             }
             case MACHINE_WORK_BIT: {
-                return new MachineWorkBitViewHolder(inflater.inflate(R.layout.machine_work_bit_cardview, parent, false), mHeight, mWidth);
+                return new MachineWorkBitViewHolder(inflater.inflate(R.layout.machine_work_bit_cardview, parent, false), mHeight, mWidth,mContext,mShowDashboardCroutonListener);
             }
             case TOP_5_STOP_EVENTS: {
                 return new TopStopEventsViewHolder(inflater.inflate(R.layout.top_stop_events_cardview, parent, false), mHeight, mWidth);
