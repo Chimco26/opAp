@@ -160,7 +160,7 @@ public class RangeView2 extends View {
         float percent = getWidth() / 100f;
 
         canvas.drawRect(0, getHeight() / 2f - mHeight / 2f, percent * 100, getHeight() / 2f + mHeight / 2f, mGrayPaint);
-        String currentValueTxt = new DecimalFormat("##.#").format(mCurrentValue);
+        String currentValueTxt = new DecimalFormat("##.##").format(mCurrentValue);
         if (mCurrentValue >= mLowLimit && mCurrentValue <= mHighLimit) {
             canvas.drawLine(percent * 20, getHeight() / 2f, percent * 80, getHeight() / 2f, mGreenPaint);
             canvas.drawLine(((mCurrentValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20, getHeight() / 2 - border, percent * 20 + ((mCurrentValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent, getHeight() / 2 + mHeight / 2, mCurrentPaint);
@@ -196,8 +196,8 @@ public class RangeView2 extends View {
 
         canvas.drawLine(percent * 20, getHeight() / 2f - mHeight / 2f, percent * 20, getHeight() / 2f + mHeight / 2f, mBorderPaint);
         canvas.drawLine(percent * 80, getHeight() / 2f - mHeight / 2f, percent * 80, getHeight() / 2f + mHeight / 2f, mBorderPaint);
-        String lowLimitTxt = new DecimalFormat("##.#").format(mLowLimit);
-        String highLimitTxt = new DecimalFormat("##.#").format(mHighLimit);
+        String lowLimitTxt = new DecimalFormat("##.##").format(mLowLimit);
+        String highLimitTxt = new DecimalFormat("##.##").format(mHighLimit);
         canvas.drawText(lowLimitTxt, percent * 20 - mTextPaint.measureText(lowLimitTxt) / 2, getHeight() / 2 + border + textPadding * 2, mBorderTextPaint);
         canvas.drawText(highLimitTxt, percent * 80 - mTextPaint.measureText(highLimitTxt) / 2, getHeight() / 2 + border + textPadding * 2, mBorderTextPaint);
     }
