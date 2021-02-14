@@ -54,5 +54,8 @@ public interface EmeraldGetSimple {
 
     @POST("/LeaderMESApi/GetTaskFiles")
     Call<TaskFilesResponse> getTaskFiles(@Body GetTaskFilesRequest request);
+
+    @POST("/LeaderMESApi/UpdateMachineStopBit")
+    Call<StandardResponse> updateMachineStopBit(@Body MachineIdRequest request);
 }
 

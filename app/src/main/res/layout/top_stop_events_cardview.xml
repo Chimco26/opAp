@@ -29,7 +29,7 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:text="Order test"
+            android:text="@string/top_five_stop_events"
             android:textColor="@android:color/black"
             android:textSize="23sp"
             app:autoSizeMaxTextSize="23sp"
@@ -55,51 +55,19 @@
         android:layout_height="1dp"
         android:background="@color/divider_gray" />
 
-    <RelativeLayout
+    <include
+        android:id="@+id/fragment_dashboard_top_five_1"
+        layout="@layout/top_five"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="190">
+        android:layout_weight="50"/>
 
-        <LinearLayout
-            android:id="@+id/OTWC_countdown_ly"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="visible"
-            android:weightSum="10">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/top_five_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="140"
+        android:scrollbars="none" />
 
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4.5"
-                android:gravity="center_vertical"
-                android:layout_gravity="center_horizontal"
-                android:orientation="vertical"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                android:weightSum="10">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="7" />
-
-                <TextView
-                    android:id="@+id/OTWC_countdown_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="3"
-                    android:background="@color/blue1"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:text="@string/order_test"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    app:autoSizeMaxTextSize="20sp"
-                    app:autoSizeTextType="uniform" />
-            </LinearLayout>
-        </LinearLayout>
-    </RelativeLayout>
 </LinearLayout>
