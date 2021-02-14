@@ -27,6 +27,7 @@ import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
+import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.WidgetAdapter;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
@@ -53,6 +54,7 @@ import static org.acra.ACRA.LOG_TAG;
 public class WidgetFragment extends Fragment implements
         DashboardUICallbackListener, OnKeyboardManagerListener {
 
+    public static final String KEY_JOSH_ID = "JOSHID";
     private static final int CHART_POINTS_LIST_LIMIT_SIZE = 1500;
     private boolean mIsOpen;
     private int mWidgetsLayoutWidth;
@@ -73,11 +75,14 @@ public class WidgetFragment extends Fragment implements
     private SingleLineKeyboard mKeyBoard;
     private int mSpanCount;
     private SparseArray<WidgetInfo> mPermissionResponse;
+    private Integer mJoshId = null;
+    private ShowDashboardCroutonListener mShowDashboardCroutonListener;
 
-    public static WidgetFragment newInstance(ReportFieldsForMachine reportFieldsForMachine) {
+    public static WidgetFragment newInstance(ReportFieldsForMachine reportFieldsForMachine, int joshId) {
         WidgetFragment widgetFragment = new WidgetFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(ReportFieldsForMachine.TAG, reportFieldsForMachine);
+        bundle.putInt(KEY_JOSH_ID,joshId);
         return widgetFragment;
     }
 
@@ -86,6 +91,7 @@ public class WidgetFragment extends Fragment implements
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mReportFieldForMachine = getArguments().getParcelable(ReportFieldsForMachine.TAG);
+            mJoshId = getArguments().getInt(KEY_JOSH_ID);
         }
     }
 
@@ -133,9 +139,9 @@ public class WidgetFragment extends Fragment implements
                     mGridSpacingItemDecoration.setSpacingTop(0);
                     mGridSpacingItemDecoration.setSpacingBottom(8);
                     mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
-                    mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener,
+                    mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener,mJoshId,
                             true, mRecyclersHeight, mWidgetsLayoutWidth,
-                            mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus, new OnKeyboardManagerListener() {
+                            mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus,mShowDashboardCroutonListener, new OnKeyboardManagerListener() {
                         @Override
                         public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
                             if (mKeyBoardLayout != null) {
@@ -189,6 +195,7 @@ public class WidgetFragment extends Fragment implements
             mOnActivityCallbackRegistered.onFragmentAttached(this);
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mDashboardCentralContainerListener = (DashboardCentralContainerListener) getActivity();
+            mShowDashboardCroutonListener = (ShowDashboardCroutonListener) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
@@ -204,6 +211,7 @@ public class WidgetFragment extends Fragment implements
         mOnGoToScreenListener = null;
         mReportFieldsFragmentCallbackListener = null;
         mDashboardCentralContainerListener = null;
+        mShowDashboardCroutonListener = null;
         OppAppLogger.d(LOG_TAG, "onDetach(), end ");
     }
 
@@ -247,8 +255,8 @@ public class WidgetFragment extends Fragment implements
                 mWidgetAdapter.setNewData(widgetList, mPermissionResponse);
             } else {
                 mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener,
-                        !mIsOpen, mRecyclersHeight, mWidgetsLayoutWidth,
-                        mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus, this, mPermissionResponse);
+                        mJoshId, !mIsOpen, mRecyclersHeight, mWidgetsLayoutWidth,
+                        mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus, mShowDashboardCroutonListener, this, mPermissionResponse);
                 mWidgetRecycler.setAdapter(mWidgetAdapter);
             }
         } else {

@@ -18,17 +18,22 @@ import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
+import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.interfaces.OnKeyboardManagerListener;
 import com.operatorsapp.view.widgetViewHolders.CounterViewHolder;
 import com.operatorsapp.view.widgetViewHolders.FreeTextViewHolder;
 import com.operatorsapp.view.widgetViewHolders.GenericTimeViewHolder;
+import com.operatorsapp.view.widgetViewHolders.ReportProductionViewHolder;
+import com.operatorsapp.view.widgetViewHolders.OrderTestViewHolder;
 import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
 import com.operatorsapp.view.widgetViewHolders.ProjectionViewHolderNew;
 import com.operatorsapp.view.widgetViewHolders.RangeViewHolder;
 import com.operatorsapp.view.widgetViewHolders.ReportStopViewHolder;
 import com.operatorsapp.view.widgetViewHolders.TimeLeftViewHolder;
 import com.operatorsapp.view.widgetViewHolders.TimeViewHolder;
+import com.operatorsapp.view.widgetViewHolders.TopStopEventsViewHolder;
+import com.operatorsapp.view.widgetViewHolders.helper.MachineWorkBitViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +57,10 @@ public class WidgetAdapter extends Adapter {
     private static final int REPORT_PERCENT = 7;
     private static final int GENERIC_TIME = 8;
     private static final int FREE_TEXT = 9;
+    private static final int ORDER_TEST = 10;
+    private static final int REPORT_PRODUCTION = 11;
+    private static final int MACHINE_WORK_BIT = 12;
+    private static final int TOP_5_STOP_EVENTS = 13;
     private GoToScreenListener mGoToScreenListener;
     private int mRangeCapsuleWidth = 0;
     private int mProjectionCapsuleWidth = 0;
@@ -64,15 +73,19 @@ public class WidgetAdapter extends Adapter {
     private int mSelectedCauseId;
     private boolean mEndSetupDisable;
     private SparseArray<WidgetInfo> mPermissionResponse;
+    private Integer mJoshId;
+    private ShowDashboardCroutonListener mShowDashboardCroutonListener;
+
 
     public WidgetAdapter(Activity context, List<Widget> widgets, GoToScreenListener goToScreenListener,
-                         boolean closedState, int height, int width,
+                         Integer joshId, boolean closedState, int height, int width,
                          DashboardCentralContainerListener dashboardCentralContainerListener,
                          ReportFieldsForMachine reportFieldsForMachine, MachineStatus machineStatus,
-                         OnKeyboardManagerListener onKeyboardManagerListener, SparseArray<WidgetInfo> permissionResponse) {
+                         ShowDashboardCroutonListener showDashboardCroutonListener, OnKeyboardManagerListener onKeyboardManagerListener, SparseArray<WidgetInfo> permissionResponse) {
         mWidgets = widgets;
         mContext = context;
         mGoToScreenListener = goToScreenListener;
+        mJoshId = joshId;
         mClosedState = closedState;
         mHeight = height;
         mWidth = width;
@@ -81,6 +94,7 @@ public class WidgetAdapter extends Adapter {
         mMachineStatus = machineStatus;
         mOnKeyboardManagerListener = onKeyboardManagerListener;
         mPermissionResponse = permissionResponse;
+        mShowDashboardCroutonListener = showDashboardCroutonListener;
     }
 
     public void changeState(boolean closedState) {
@@ -155,6 +169,7 @@ public class WidgetAdapter extends Adapter {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case NUMERIC: {
+
                 return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
                         mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth,
                         WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(),
@@ -191,6 +206,19 @@ public class WidgetAdapter extends Adapter {
             }
             case FREE_TEXT: {
                 return new FreeTextViewHolder(inflater.inflate(R.layout.holder_free_text, parent, false), mHeight, mWidth);
+            }
+            case ORDER_TEST: {
+                return new OrderTestViewHolder(inflater.inflate(R.layout.order_test_widget_cardview, parent, false), mHeight, mWidth);
+            }
+            case REPORT_PRODUCTION: {
+                return new ReportProductionViewHolder(inflater.inflate(R.layout.report_production_widget_cardview, parent, false), mHeight, mWidth,
+                        mReportFieldsForMachine, mOnKeyboardManagerListener, mShowDashboardCroutonListener, mJoshId, mContext);
+            }
+            case MACHINE_WORK_BIT: {
+                return new MachineWorkBitViewHolder(inflater.inflate(R.layout.machine_work_bit_cardview, parent, false), mHeight, mWidth,mContext,mShowDashboardCroutonListener);
+            }
+            case TOP_5_STOP_EVENTS: {
+                return new TopStopEventsViewHolder(inflater.inflate(R.layout.top_stop_events_cardview, parent, false), mHeight, mWidth);
             }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
@@ -253,6 +281,22 @@ public class WidgetAdapter extends Adapter {
                 case FREE_TEXT:
                     final FreeTextViewHolder freeTextViewHolder = (FreeTextViewHolder) holder;
                     freeTextViewHolder.setData(widget);
+                case ORDER_TEST: {
+                    final OrderTestViewHolder orderTestViewHolder = (OrderTestViewHolder) holder;
+                    orderTestViewHolder.setData(widget);
+                }
+                case REPORT_PRODUCTION: {
+                    final ReportProductionViewHolder reportProductionViewHolder = (ReportProductionViewHolder) holder;
+                    reportProductionViewHolder.setData(widget);
+                }
+                case MACHINE_WORK_BIT: {
+                   final MachineWorkBitViewHolder machineWorkBitViewHolder = (MachineWorkBitViewHolder) holder;
+                   machineWorkBitViewHolder.setData(widget);
+                }
+                case TOP_5_STOP_EVENTS: {
+                    final TopStopEventsViewHolder topStopEventsViewHolder = (TopStopEventsViewHolder) holder;
+//                   Nathat missing
+                }
             }
             //        final View itemview= holder.itemView;
             //        Log.clearPollingRequest("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
@@ -300,6 +344,9 @@ public class WidgetAdapter extends Adapter {
         switch (mWidgets.get(position).getFieldType()) {
             case 0:
                 type = NUMERIC;
+//                type = REPORT_PRODUCTION;
+//                type = ORDER_TEST;
+//                type = TOP_5_STOP_EVENTS;
                 break;
             case 1:
                 type = RANGE;
@@ -328,6 +375,19 @@ public class WidgetAdapter extends Adapter {
             case 9:
                 type = FREE_TEXT;
                 break;
+            case 10:
+                type = ORDER_TEST;
+                break;
+            case 11:
+                type = REPORT_PRODUCTION;
+                break;
+            case 12:
+                type = MACHINE_WORK_BIT;
+                break;
+            case 13:
+                type = TOP_5_STOP_EVENTS;
+                break;
+
             default:
                 type = NUMERIC;
                 break;
