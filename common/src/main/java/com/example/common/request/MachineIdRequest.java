@@ -15,6 +15,7 @@ public class MachineIdRequest {
     public MachineIdRequest(String machineId, String sessionId) {
         this.machineId = machineId;
         this.sessionId = sessionId;
+
     }
 
     public String getMachineId() {
