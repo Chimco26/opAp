@@ -71,6 +71,7 @@ public class WidgetFragment extends Fragment implements
     private ReportFieldsForMachine mReportFieldForMachine;
     private MachineStatus mMachineStatus;
 
+
     private LinearLayout mKeyBoardLayout;
     private SingleLineKeyboard mKeyBoard;
     private int mSpanCount;
