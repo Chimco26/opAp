@@ -33,6 +33,19 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/FJOM_tests_report_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="22sp"
+            android:textColor="@color/white"
+            android:background="@color/blue1"
+            android:text="@string/tests_report"
+            android:layout_alignParentEnd="true"
+            android:padding="10dp"
+            android:gravity="center"/>
+
+        <TextView
             android:id="@+id/FJOM_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

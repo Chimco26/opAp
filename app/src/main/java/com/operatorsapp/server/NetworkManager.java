@@ -83,7 +83,6 @@ import com.operatorsapp.server.interfaces.OpAppServiceRequests;
 import com.operatorsapp.server.requests.CreateTaskNotesRequest;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
 import com.operatorsapp.server.requests.GetTaskNoteRequest;
-import com.operatorsapp.server.requests.JobTestRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
@@ -97,7 +96,6 @@ import com.operatorsapp.server.requests.TopNotificationRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.JobListForMaterialResponse;
 import com.operatorsapp.server.responses.JobListForTestResponse;
-import com.operatorsapp.server.responses.JobTestResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.ResponseKPIS;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
@@ -105,6 +103,7 @@ import com.operatorsapp.server.responses.StopReasonsResponse;
 import com.operatorsapp.server.responses.TaskNotesResponse;
 import com.example.common.task.TaskStepResponse;
 import com.operatorsapp.server.responses.TechCall24HResponse;
+import com.operatorsapp.server.responses.TestReportsResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
 import com.operatorsapp.utils.SendReportUtil;
 
@@ -1191,4 +1190,9 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         call.enqueue(callback);
     }
 
+    public void getTestReports(BaseRequest request, final Callback<TestReportsResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<TestReportsResponse> call = mRetrofit.create(OpAppServiceRequests.class).getTestReports(request);
+        call.enqueue(callback);
+    }
 }
