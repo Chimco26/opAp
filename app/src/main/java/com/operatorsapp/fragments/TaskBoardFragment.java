@@ -329,12 +329,6 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
                     updateTaskStatus(mColumnsObjectList.get(toColumn).getAdapter().getListFiltered().get(toRow), fromColumn, fromRow, toColumn, toRow);
                     mDraggingTask = null;
                 }
-                if (fromColumn == toColumn || mColumnsObjectList.size() <= toColumn
-                        || mColumnsObjectList.get(toColumn).getAdapter().getListFiltered().size() <= toRow) {
-                    mBoardView.moveItem(toColumn, toRow, fromColumn, fromRow, false);
-                } else {
-                    updateTaskStatus(mColumnsObjectList.get(toColumn).getAdapter().getListFiltered().get(toRow), fromColumn, fromRow, toColumn, toRow);
-                }
             }
 
             @Override

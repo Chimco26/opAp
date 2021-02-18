@@ -600,4 +600,6 @@
     <string name="edit_sub_task">Edit sub task</string>
     <string name="back">Back</string>
     <string name="pictures">Pictures</string>
+    <string name="type_amount_for_item">Please type the amount in this item</string>
+    <string name="tests_report">Tests Report</string>
 </resources>

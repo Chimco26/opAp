@@ -59,16 +59,29 @@ public class JobOrMaterialFragment extends Fragment implements View.OnClickListe
     private void initViews(View view) {
         view.findViewById(R.id.FJOM_job_btn).setOnClickListener(this);
         view.findViewById(R.id.FJOM_material_btn).setOnClickListener(this);
+        view.findViewById(R.id.FJOM_tests_report_btn).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         if (mListener != null){
-            mListener.onJobOrMaterialSelected(v.getId() == R.id.FJOM_job_btn);
+            switch (v.getId()){
+                case R.id.FJOM_job_btn:
+                    mListener.onJobOrMaterialSelected(true);
+                    break;
+                case R.id.FJOM_material_btn:
+                    mListener.onJobOrMaterialSelected(false);
+                    break;
+                case R.id.FJOM_tests_report_btn:
+                    mListener.onTestsReport();
+                    break;
+            }
         }
     }
 
     public interface JobOrMaterialFragmentListener {
         void onJobOrMaterialSelected(boolean isJob);
+
+        void onTestsReport();
     }
 }
