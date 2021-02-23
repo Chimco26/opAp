@@ -168,6 +168,8 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             }
         };
         // getPollingFrequency for all
+
+
         OppAppLogger.d(LOG_TAG, "startPolling(), Frequency: " + mMachineStatusPersistenceManagerInterface.getPollingFrequency());
         mJob.startJob(START_DELAY, mMachineStatusPersistenceManagerInterface.getPollingFrequency(), TimeUnit.SECONDS);
 
