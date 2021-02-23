@@ -285,6 +285,11 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         System.exit(2);
     }
 
+    private void openTestReportFragment() {
+        TestReportFragment testListFragment = TestReportFragment.newInstance();
+        getSupportFragmentManager().beginTransaction().add(R.id.AQC_container, testListFragment).addToBackStack(TestReportFragment.class.getSimpleName()).commit();
+    }
+
     @Override
     public void onJobOrMaterialSelected(boolean isJob) {
         if (isJob){
@@ -293,5 +298,10 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
             isOnlyQCMaterial = true;
             chooseMaterial();
         }
+    }
+
+    @Override
+    public void onTestsReport() {
+        openTestReportFragment();
     }
 }

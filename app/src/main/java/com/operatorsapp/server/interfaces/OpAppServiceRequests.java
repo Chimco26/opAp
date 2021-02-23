@@ -18,7 +18,6 @@ import com.example.common.request.MachineIdRequest;
 import com.operatorsapp.server.requests.CreateTaskNotesRequest;
 import com.operatorsapp.server.requests.GetTaskNoteRequest;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
-import com.operatorsapp.server.requests.JobTestRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
@@ -32,7 +31,6 @@ import com.operatorsapp.server.requests.TopNotificationRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.JobListForMaterialResponse;
 import com.operatorsapp.server.responses.JobListForTestResponse;
-import com.operatorsapp.server.responses.JobTestResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.ResponseKPIS;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
@@ -40,6 +38,7 @@ import com.operatorsapp.server.responses.StopReasonsResponse;
 import com.operatorsapp.server.responses.TaskNotesResponse;
 import com.example.common.task.TaskStepResponse;
 import com.operatorsapp.server.responses.TechCall24HResponse;
+import com.operatorsapp.server.responses.TestReportsResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
 
 import retrofit2.Call;
@@ -134,4 +133,7 @@ public interface OpAppServiceRequests {
 
     @POST("/LeaderMESApi/GetMaterialTestOrder")
     Call<TestOrderResponse> getMaterialTestOrder(@Body TestOrderMaterialRequest request);
+
+    @POST("/LeaderMESApi/GetTestsReportMobile")
+    Call<TestReportsResponse> getTestReports(@Body BaseRequest request);
 }

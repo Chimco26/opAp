@@ -122,6 +122,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String TECHNICIANS_LIST = "TECHNICIANS_LIST";
     private static final String PENDING_JOB_SAVED_FILTERS = "PENDING_JOB_SAVED_FILTERS";
     private static final String KPI_LIST = "KPI_LIST";
+    private static final String PREF_REQUIRE_WORKER_SIGN_IN = "PREF_REQUIRE_WORKER_SIGN_IN";
 
 
     private static PersistenceManager msInstance;
@@ -1026,5 +1027,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
             kpi = new ResponseKPIS();
         }
         return kpi;
+    }
+
+    public void setRequireWorkerSignIn(boolean requireWorkerSignIn) {
+        SecurePreferences.getInstance().setBoolean(PREF_REQUIRE_WORKER_SIGN_IN, requireWorkerSignIn);
+    }
+
+    public boolean isRequireWorkerSignIn() {
+        return SecurePreferences.getInstance().getBoolean(PREF_REQUIRE_WORKER_SIGN_IN, false);
     }
 }

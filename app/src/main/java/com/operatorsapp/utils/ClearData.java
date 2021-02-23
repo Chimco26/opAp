@@ -55,6 +55,7 @@ public class ClearData {
         PersistenceManager.getInstance().setTechnicianCallTime(0);
         PersistenceManager.getInstance().setRecentTechCallId(0);
         PersistenceManager.getInstance().setNeedUpdateToken(true);
+        PersistenceManager.getInstance().setRequireWorkerSignIn(false);
 
     }
 
