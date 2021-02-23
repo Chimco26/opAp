@@ -1,12 +1,21 @@
 package com.operatorsapp.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +23,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
 import com.example.common.StandardResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.infra.Machine;
@@ -56,6 +63,8 @@ public class LoginFragment extends Fragment {
     private TextView mLoginBtnBackground;
     private ImageView mShowHidePass;
     private boolean mPasswordIsVisible = false;
+    private IntentFilter mIntentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+    private BroadcastReceiver broadcastReceiver;
 
     public static LoginFragment newInstance() {
 
@@ -70,6 +79,7 @@ public class LoginFragment extends Fragment {
         // Analytics
         new GoogleAnalyticsHelper().trackScreen(getActivity(), "Login screen");
 
+
     }
 
     @Override
@@ -78,6 +88,7 @@ public class LoginFragment extends Fragment {
         try {
             mNavigationCallback = (GoToScreenListener) context;
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
+
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
@@ -136,13 +147,43 @@ public class LoginFragment extends Fragment {
 
         ravtechTest(rootView);
 
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (isNetworkAvailable(getActivity())) {
+                    Log.d("Network Available ", "Network Available");
+                    doSilentLogin();
+                }
+            }
+        };
+
         return rootView;
+    }
+
+    private Boolean isNetworkAvailable(Context application) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Network nw = connectivityManager.getActiveNetwork();
+            if (nw == null) return false;
+            NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
+            return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH));
+        } else {
+            NetworkInfo nwInfo = connectivityManager.getActiveNetworkInfo();
+            return nwInfo != null && nwInfo.isConnected();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         setActionBar();
+        getActivity().registerReceiver(broadcastReceiver, mIntentFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(broadcastReceiver);
     }
 
     private void ravtechTest(View rootView) {
@@ -240,6 +281,7 @@ public class LoginFragment extends Fragment {
         mCroutonCallback = null;
         mNavigationCallback = null;
     }
+
 
     private boolean isAllFieldsAreValid() {
         String factoryUrl = mSiteUrl.getText().toString();

@@ -1,6 +1,7 @@
 package com.operators.logincore;
 
 import android.util.Base64;
+import android.util.Log;
 
 import com.example.common.StandardResponse;
 import com.example.common.callback.ErrorObjectInterface;
@@ -13,6 +14,7 @@ import com.operators.infra.Machine;
 import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
 import com.operators.logincore.interfaces.LoginUICallback;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 
 public class LoginCore {
