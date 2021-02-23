@@ -102,6 +102,7 @@
                 android:src="@drawable/settings_new_small" />
 
             <RelativeLayout
+                android:id="@+id/ATATV_task_rl"
                 android:layout_width="45dp"
                 android:layout_height="39dp"
                 android:layout_marginEnd="31dp">
@@ -177,6 +178,7 @@
         android:background="@color/dark_indigo" />
 
     <LinearLayout
+        android:id="@+id/ATATV_toolbar_row_2"
         android:layout_width="match_parent"
         android:layout_height="67dp"
         android:gravity="center_vertical"
