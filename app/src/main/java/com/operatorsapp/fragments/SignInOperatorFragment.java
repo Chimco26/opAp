@@ -235,6 +235,10 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                     mWorkersProgressBar.setVisibility(View.GONE);
                     ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, getString(R.string.save) + " " +
                             getString(R.string.operator) + " " + getString(R.string.success), CroutonCreator.CroutonType.SUCCESS);
+                    if (getMainWorker() != null) {
+                        PersistenceManager.getInstance().setOperatorId(getMainWorker().getWorkerID());
+                        PersistenceManager.getInstance().setOperatorName(getMainWorker().getWorkerName());
+                    }
                     listener.onSaveWorkers();
                 }
             }

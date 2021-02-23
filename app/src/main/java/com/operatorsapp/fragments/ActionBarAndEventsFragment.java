@@ -299,7 +299,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private boolean mBlockStatusChange = false;
     private boolean mBlockOperatorChange = false;
     private boolean isAsyncTaskFinished = true;
-//    private Handler mEventHandler;
+    private RelativeLayout taskRl;
+    private RelativeLayout productionStatusRl;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -1086,6 +1087,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             } else {
                 // TODO: 25/07/2018 sign in success
                 ShowCrouton.jobsLoadingSuccessCrouton(mCroutonCallback, getString(R.string.signed_in_successfully));
+
+                taskRl.setVisibility(View.VISIBLE);
+                technicianRl.setVisibility(View.VISIBLE);
+                mJobsSpinner.setVisibility(View.VISIBLE);
+                productionStatusRl.setVisibility(View.VISIBLE);
+                displayOperatorView(View.VISIBLE);
             }
             SendBroadcast.refreshPolling(getActivity());
             setupOperatorSpinner();
@@ -1239,7 +1246,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (mActiveJobsListForMachine.getActiveJobs() != null && mActiveJobsListForMachine.getActiveJobs().size() > 1) {
 
             mProductNameTextView.setVisibility(View.GONE);
-            mProductSpinner.setVisibility(View.VISIBLE);
             mMultipleProductImg.setVisibility(View.VISIBLE);
             mProductSpinner.setVisibility(View.VISIBLE);
 
@@ -1511,6 +1517,22 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
         if (PersistenceManager.getInstance().getMachineId() == -1) {
             mListener.onActionBarAndEventsFragmentCreated();
+        }
+        taskRl = mToolBarView.findViewById(R.id.ATATV_task_rl);
+        productionStatusRl = mToolBarView.findViewById(R.id.toolbar_production_status_rl);
+        String operator = PersistenceManager.getInstance().getOperatorId();
+        if (PersistenceManager.getInstance().isRequireWorkerSignIn() && (operator == null || operator.isEmpty() || operator.equals(" "))) {
+            taskRl.setVisibility(View.INVISIBLE);
+            productionStatusRl.setVisibility(View.INVISIBLE);
+            technicianRl.setVisibility(View.INVISIBLE);
+            mJobsSpinner.setVisibility(View.INVISIBLE);
+            displayOperatorView(View.INVISIBLE);
+        }else {
+            taskRl.setVisibility(View.VISIBLE);
+            productionStatusRl.setVisibility(View.VISIBLE);
+            technicianRl.setVisibility(View.VISIBLE);
+            mJobsSpinner.setVisibility(View.VISIBLE);
+            displayOperatorView(View.VISIBLE);
         }
     }
 
@@ -2129,8 +2151,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
 
         int selected = 0;
-        mToolBarView.findViewById(R.id.toolbar_production_spinner).setVisibility(View.VISIBLE);
+        productionStatusRl = mToolBarView.findViewById(R.id.toolbar_production_status_rl);
         final EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_spinner);
+        productionStatusSpinner.setVisibility(View.VISIBLE);
         mToolBarView.findViewById(R.id.ATATV_spinner_disable_view).setVisibility(View.GONE);
         final LinearLayout productionStatusSpinnerLil = mToolBarView.findViewById(R.id.toolbar_production_spinner_lil);
         productionStatusSpinnerLil.setOnClickListener(new View.OnClickListener() {
@@ -2689,6 +2712,30 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             enableActionSpinner();
         }
         mJobsSpinnerAdapter.updateMachineStatus(machineStatus);
+
+        checkWorkerSignIn();
+    }
+
+    private void checkWorkerSignIn() {
+        String operator = PersistenceManager.getInstance().getOperatorId();
+        if (PersistenceManager.getInstance().isRequireWorkerSignIn() && (operator == null || operator.isEmpty() || operator.equals(" "))) {
+            if (isVisible()) {
+                taskRl.setVisibility(View.INVISIBLE);
+                productionStatusRl.setVisibility(View.INVISIBLE);
+                technicianRl.setVisibility(View.INVISIBLE);
+                mJobsSpinner.setVisibility(View.INVISIBLE);
+                displayOperatorView(View.INVISIBLE);
+            }
+            mListener.onLockScreenForceLoginOperator();
+        }else {
+            if (isVisible()) {
+                taskRl.setVisibility(View.VISIBLE);
+                productionStatusRl.setVisibility(View.VISIBLE);
+                technicianRl.setVisibility(View.VISIBLE);
+                mJobsSpinner.setVisibility(View.VISIBLE);
+                displayOperatorView(View.VISIBLE);
+            }
+        }
     }
 
     public void enableActionSpinner() {
@@ -3968,6 +4015,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onOpenTaskActivity();
 
         void onActionBarAndEventsFragmentCreated();
+
+        void onLockScreenForceLoginOperator();
     }
 
 }

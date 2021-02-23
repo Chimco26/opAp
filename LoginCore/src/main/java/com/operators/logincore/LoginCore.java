@@ -36,7 +36,9 @@ public class LoginCore {
         mGetMachinesNetworkBridgeInterface = getMachinesNetworkBridgeInterface;
     }
 
+
     public void login(final String siteUrl, final String username, final String password, final LoginUICallback<Machine> loginUICallback) {
+
         if (password == null){
             loginUICallback.onLoginFailed(new StandardResponse(ErrorObjectInterface.ErrorCode.SessionInvalid, "Empty Password"));
             return;
@@ -69,7 +71,7 @@ public class LoginCore {
                 OppAppLogger.d(LOG_TAG, "login, onLoginFailed");
                 loginUICallback.onLoginFailed(reason);
             }
-        }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());
+        }, 1000, mLoginPersistenceManagerInterface.getRequestTimeout());
     }
 
     public void silentLoginFromDashBoard(final String siteUrl, final String username, final String password, final LoginUICallback<Machine> loginUICallback) {

@@ -362,6 +362,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
 
                 OppAppLogger.d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString() + " jobId " + mJobId);
                 if (canSendReport()) {
+                    mNextButton.setEnabled(false);
                     sendReport();
                 }
 

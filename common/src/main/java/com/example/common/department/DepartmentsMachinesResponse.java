@@ -1,5 +1,6 @@
 package com.example.common.department;
 
+import com.example.common.permissions.UserGroupPermission;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -30,6 +31,16 @@ public class DepartmentsMachinesResponse {
     @SerializedName("departments")
     @Expose
     private List<Object> departments = null;
+    @SerializedName("UserGroupPermission")
+    @Expose
+    private UserGroupPermission userGroupPermission;
+
+    public UserGroupPermission getUserGroupPermission() {
+        if (userGroupPermission == null){
+            userGroupPermission = new UserGroupPermission();
+        }
+        return userGroupPermission;
+    }
 
     public Boolean getFunctionSucceed() {
         return functionSucceed;
