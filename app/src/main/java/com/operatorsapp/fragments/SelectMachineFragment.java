@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -57,6 +58,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     private TextView noDataTv;
     private SelectMachineFragmentListener mListener;
     private ProgressBar mProgress;
+    private Button mQcTestBtn;
 
 
     public static SelectMachineFragment newInstance() {
@@ -92,7 +94,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         final View rootView = inflater.inflate(R.layout.fragment_select_machine, container, false);
         setActionBar();
 
-        rootView.findViewById(R.id.FSM_qc_test_btn).setOnClickListener(this);
+        mQcTestBtn = rootView.findViewById(R.id.FSM_qc_test_btn);
+        mQcTestBtn.setOnClickListener(this);
 //        rootView.findViewById(R.id.FSM_change_factory_btn).setOnClickListener(this);
         departementRecyclerView = rootView.findViewById(R.id.FSM_department_rv);
         mSearchField = rootView.findViewById(R.id.machine_id_name);
@@ -138,6 +141,12 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             mGoButton.setVisibility(View.GONE);
             noDataTv.setVisibility(View.VISIBLE);
         }
+
+//        if (mDepartmentMachine != null ){
+//            mQcTestBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isQualityTest() ? View.VISIBLE : View.INVISIBLE);
+//            mQcTestBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isChangeProductionStatus() ? View.VISIBLE : View.INVISIBLE);
+//            mQcTestBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isOperatorLogin() ? View.VISIBLE : View.INVISIBLE);
+//        }
     }
 
     private void initDepartmentRv() {
