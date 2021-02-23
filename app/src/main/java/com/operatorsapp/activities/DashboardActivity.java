@@ -671,8 +671,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void initWidgetFragment() {
 
-        mWidgetFragment = WidgetFragment.newInstance(mReportFieldsForMachine);
+        mWidgetFragment = WidgetFragment.newInstance(mReportFieldsForMachine,findJoshId(mActiveJobsListForMachine, mSpinnerProductPosition));
 
+//        mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSpinnerProductPosition
+    }
+
+    private int findJoshId(ActiveJobsListForMachine mActiveJobsListForMachine, int mSpinnerProductPosition) {
+        if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null
+                && mActiveJobsListForMachine.getActiveJobs().size() > 0 && mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition) != null) {
+            return mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition).getJoshID();
+        }
+        return 0;
     }
 
     private void initDashboardFragment() {

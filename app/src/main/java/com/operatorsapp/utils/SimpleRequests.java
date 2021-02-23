@@ -1096,6 +1096,52 @@ public class SimpleRequests {
         });
     }
 
+    public static void updateMachineStopBit(int machineId, String siteUrl, final SimpleCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<StandardResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                requestTimeout, TimeUnit.SECONDS).updateMachineStopBit(new MachineIdRequest(String.valueOf(machineId),PersistenceManager.getInstance().getSessionId()));
+
+        call.enqueue(new Callback<StandardResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+
+                if (response.body() != null && (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty())) {
+                    if (callback != null) {
+
+                        callback.onRequestSuccess(response.body());
+                    } else {
+
+                        OppAppLogger.w(LOG_TAG, "updateMachineStopBit(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "updateMachineStopBit Error");
+                        callback.onRequestFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.w(LOG_TAG, "updateMachineStopBit(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
     public static void getTaskFiles(int taskId, String siteUrl, final GetTaskFilesCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
 
         final int[] retryCount = {0};

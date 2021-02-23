@@ -64,7 +64,7 @@ public interface OpAppServiceRequests {
     @POST("/LeaderMESApi/NotificationResponse")
     Call<StandardResponse> postNotificationResponse(@Body RespondToNotificationRequest respondToNotificationRequest);
 
-    @POST("/LeaderMESApi/ControllerFieldUpdateTotalCycles")
+    @POST("/LeaderMESApi/IncreaseMachineTotaCycles")
     Call<StandardResponse> postIncrementCounterRequest(@Body PostIncrementCounterRequest postIncrementCounterRequest);
 
     @POST("/LeaderMESApi/GetStopAndCriticalEvents")
