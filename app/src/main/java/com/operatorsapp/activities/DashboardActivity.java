@@ -1150,6 +1150,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         PersistenceManager.getInstance().setUnitsInCycleType(machineStatus.getAllMachinesData().get(0).getUnitsInCycleType());
                         PersistenceManager.getInstance().setMachineLineId(machineStatus.getAllMachinesData().get(0).getLineID());
                         PersistenceManager.getInstance().setReportRejectDefaultUnits(machineStatus.getAllMachinesData().get(0).getReportRejectDefaultUnits());
+                        PersistenceManager.getInstance().setRequireWorkerSignIn(machineStatus.getAllMachinesData().get(0).isRequireWorkerSignIn());
 
                         String opName = machineStatus.getAllMachinesData().get(0).getOperatorName();
                         String opId = machineStatus.getAllMachinesData().get(0).getOperatorId();
@@ -2239,6 +2240,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
             getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, mSelectMachineFragment).commit();
             showReportBtn(false);
+        }
+    }
+
+    @Override
+    public void onLockScreenForceLoginOperator() {
+
+        if (!(getVisibleFragment() instanceof SignInOperatorFragment)) {
+            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, new SignInOperatorFragment()).addToBackStack("SignInOperatorFragment").commit();
         }
     }
 
@@ -3536,6 +3545,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         ProgressDialogManager.show(this);
         dashboardDataStartPolling();
         shiftForMachineTimer();
+
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            if (fragment instanceof SignInOperatorFragment) {
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+        }
     }
 
     @Override

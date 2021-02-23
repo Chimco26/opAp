@@ -124,6 +124,12 @@ public class AllMachinesData {
     private boolean isAllowReportingOnSetupEvents;
     @SerializedName("AllowReportingSetupAfterSetupEnd")
     private boolean mAllowReportingSetupAfterSetupEnd;
+    @SerializedName("RequireWorkerSignIn")
+    private boolean mRequireWorkerSignIn;
+
+    public boolean isRequireWorkerSignIn() {
+        return mRequireWorkerSignIn;
+    }
 
     public boolean isAllowReportingOnSetupEvents() {
         return isAllowReportingOnSetupEvents;
