@@ -485,7 +485,7 @@
     <string name="enter_pass_unlock_statusbar">Enter Your User Password To Unlock The Status Bar</string>
     <string name="unlock">Unlock</string>
     <string name="password_incorrect">This password is incorrect. try again</string>
-    <string name="order_test">Order QC Test</string>
+    <string name="order_qc_test">Order QC Test</string>
     <string name="installed_apps">Applications Shortcuts</string>
     <string name="quality_group">Quality Group</string>
     <string name="product_group">Product Group</string>

@@ -415,7 +415,7 @@
     <string name="enter_pass_unlock_statusbar">εισήγαγε τον κωδικό χρήστη σου για να ξεκλειδώσεις την μπάρα κατάστασης</string>
     <string name="unlock">ξεκλείδωσε</string>
     <string name="password_incorrect">Αυτός ο κωδικός είναι λανθασμένος. Προσπαθήστε ξανά</string>
-    <string name="order_test">Παραγγείλτε τεστ</string>
+    <string name="order_qc_test">Παραγγείλτε τεστ</string>
     <string name="installed_apps">Συντομεύσεις εφαρμογών</string>
     <string name="test">Τεστ</string>
     <string name="test_fields">Πεδία τεστ</string>
