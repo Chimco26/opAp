@@ -1,6 +1,7 @@
 package com.operators.logincore;
 
 import android.util.Base64;
+import android.util.Log;
 
 import com.example.common.StandardResponse;
 import com.example.common.callback.ErrorObjectInterface;
@@ -13,6 +14,7 @@ import com.operators.infra.Machine;
 import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
 import com.operators.logincore.interfaces.LoginUICallback;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 
 public class LoginCore {
@@ -36,7 +38,9 @@ public class LoginCore {
         mGetMachinesNetworkBridgeInterface = getMachinesNetworkBridgeInterface;
     }
 
+
     public void login(final String siteUrl, final String username, final String password, final LoginUICallback<Machine> loginUICallback) {
+
         if (password == null){
             loginUICallback.onLoginFailed(new StandardResponse(ErrorObjectInterface.ErrorCode.SessionInvalid, "Empty Password"));
             return;
@@ -69,7 +73,7 @@ public class LoginCore {
                 OppAppLogger.d(LOG_TAG, "login, onLoginFailed");
                 loginUICallback.onLoginFailed(reason);
             }
-        }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());
+        }, 1000, mLoginPersistenceManagerInterface.getRequestTimeout());
     }
 
     public void silentLoginFromDashBoard(final String siteUrl, final String username, final String password, final LoginUICallback<Machine> loginUICallback) {

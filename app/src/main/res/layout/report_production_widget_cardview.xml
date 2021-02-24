@@ -4,241 +4,300 @@
     android:id="@+id/widget_parent_layout"
     android:layout_width="@dimen/widget_width"
     android:layout_height="@dimen/widget_height"
-    android:layout_centerInParent="true"
+    android:gravity="center"
     android:background="@drawable/combined_shape"
-    android:orientation="vertical"
-    android:paddingStart="15dp"
-    android:paddingTop="5dp"
-    android:paddingEnd="15dp"
-    android:paddingBottom="15dp"
-    android:weightSum="260">
+    android:weightSum="10"
+    android:orientation="vertical">
+
 
     <LinearLayout
-        android:id="@+id/top_rl"
+        android:id="@+id/OTWC_countdown_ly"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="70"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:weightSum="10">
 
-        <TextView
-            android:id="@+id/RPWC_title"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="6"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:text="Report production"
-            android:textColor="@android:color/black"
-            android:textSize="23sp"
-            app:autoSizeMaxTextSize="23sp"
-            app:autoSizeTextType="uniform" />
-
-        <TextView
-            android:id="@+id/RPWC_subtitle"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:textSize="18sp"
-            app:autoSizeMaxTextSize="18sp"
-            app:autoSizeTextType="uniform" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/divider_gray" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="190">
 
         <LinearLayout
-            android:id="@+id/RPWC_step1_LL"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="visible"
-            android:weightSum="10">
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4.5"
-                android:gravity="center_vertical"
-                android:layout_gravity="center_horizontal"
-                android:orientation="vertical"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                android:weightSum="10"
-                android:visibility="visible">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="7" />
-
-                <TextView
-                    android:id="@+id/RPWC_button_report_production_TV"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="3"
-                    android:background="@color/blue1"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:text="@string/report_inventory_nitem_production"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    app:autoSizeMaxTextSize="20sp"
-                    app:autoSizeTextType="uniform" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/RPWC_step2_LL"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_weight="4.8"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_horizontal"
             android:orientation="vertical"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
-            android:weightSum="10"
-            android:visibility="gone">
+            android:weightSum="10">
 
-            <LinearLayout
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="5" />
+
+            <TextView
+                android:id="@+id/RPWC_button_report_production_TV"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="3"
-                android:orientation="horizontal">
+                android:background="@color/blue1"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/report"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:padding="5dp"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeTextType="uniform" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/package_type"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:maxLines="1"
-                    app:autoSizeTextType="uniform"
-                    app:autoSizeMaxTextSize="16sp"/>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1.5"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:background="@drawable/edit_text_background_selector">
-
-                    <Spinner
-                        android:id="@+id/RPWC_package_type_spinner_SP"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-                </RelativeLayout>
-
-
-
-            </LinearLayout>
-
-            <LinearLayout
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="4"
-                android:orientation="horizontal"
-                android:layout_marginTop="15dp">
-
-                <TextView
-                    android:id="@+id/RPWC_units_TV"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/units"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:maxLines="1"
-                    app:autoSizeTextType="uniform"
-                    app:autoSizeMaxTextSize="16sp" />/>
-
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1.5"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                   >
-
-                    <EditText
-                        android:id="@+id/RPWC_units_ET"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerHorizontal="true"
-                        android:gravity="center"
-                        android:textSize="16sp"
-                        android:maxLines="1"
-                        android:background="@drawable/edit_text_background_selector"/>
-                </RelativeLayout>
-
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="3"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                android:weightSum="2.2">
-
-                <TextView
-                    android:id="@+id/RPWC_button_cancel_TV"
-                    style="@style/FontStyle_Button"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/cancel"
-                    android:textAllCaps="true"
-                    android:textColor="@drawable/button_cancel_text_selector"
-                    android:textSize="18sp"
-                    android:maxLines="1"
-                    app:autoSizeTextType="uniform"
-                    app:autoSizeMaxTextSize="22sp"
-                    android:padding="5dp"/>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="0.2" />
-
-                <Button
-                    android:id="@+id/RPWC_button_report_BUT"
-                    style="@style/FontStyle_Button"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_bg_disabled"
-                    android:text="@string/report"
-                    android:textColor="@drawable/button_text_color_selector"
-                    android:textSize="18sp"
-                    android:maxLines="1"
-                    app:autoSizeTextType="uniform"
-                    app:autoSizeMaxTextSize="22sp"
-                    android:padding="5dp"
-                    android:enabled="false"/>
-            </LinearLayout>
-
+                android:layout_weight="5" />
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>
+
+
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:id="@+id/widget_parent_layout"-->
+<!--    android:layout_width="@dimen/widget_width"-->
+<!--    android:layout_height="@dimen/widget_height"-->
+<!--    android:layout_centerInParent="true"-->
+<!--    android:background="@drawable/combined_shape"-->
+<!--    android:orientation="vertical"-->
+<!--    android:paddingStart="15dp"-->
+<!--    android:paddingTop="5dp"-->
+<!--    android:paddingEnd="15dp"-->
+<!--    android:paddingBottom="15dp"-->
+<!--    android:weightSum="260">-->
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/top_rl"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="70"-->
+<!--        android:orientation="vertical"-->
+<!--        android:weightSum="10">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/RPWC_title"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_weight="6"-->
+<!--            android:ellipsize="end"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:maxLines="1"-->
+<!--            android:text="Report production"-->
+<!--            android:textColor="@android:color/black"-->
+<!--            android:textSize="23sp"-->
+<!--            app:autoSizeMaxTextSize="23sp"-->
+<!--            app:autoSizeTextType="uniform" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/RPWC_subtitle"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_weight="4"-->
+<!--            android:ellipsize="end"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:maxLines="1"-->
+<!--            android:textSize="18sp"-->
+<!--            app:autoSizeMaxTextSize="18sp"-->
+<!--            app:autoSizeTextType="uniform" />-->
+
+<!--    </LinearLayout>-->
+
+<!--    <View-->
+<!--        android:id="@+id/divider"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:background="@color/divider_gray" />-->
+
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="190">-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/RPWC_step1_LL"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:visibility="visible"-->
+<!--            android:weightSum="10">-->
+
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="4.5"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:layout_gravity="center_horizontal"-->
+<!--                android:orientation="vertical"-->
+<!--                android:paddingTop="15dp"-->
+<!--                android:paddingBottom="15dp"-->
+<!--                android:weightSum="10"-->
+<!--                android:visibility="visible">-->
+
+<!--                <View-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:layout_weight="7" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/RPWC_button_report_production_TV"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:layout_weight="3"-->
+<!--                    android:background="@color/blue1"-->
+<!--                    android:gravity="center"-->
+<!--                    android:maxLines="1"-->
+<!--                    android:text="@string/report_inventory_nitem_production"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="20sp"-->
+<!--                    app:autoSizeMaxTextSize="20sp"-->
+<!--                    app:autoSizeTextType="uniform" />-->
+<!--            </LinearLayout>-->
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/RPWC_step2_LL"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical"-->
+<!--            android:paddingTop="15dp"-->
+<!--            android:paddingBottom="15dp"-->
+<!--            android:weightSum="10"-->
+<!--            android:visibility="gone">-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_weight="3"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    android:text="@string/package_type"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:maxLines="1"-->
+<!--                    app:autoSizeTextType="uniform"-->
+<!--                    app:autoSizeMaxTextSize="16sp"/>-->
+
+<!--                <RelativeLayout-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_weight="1.5"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_marginStart="15dp"-->
+<!--                    android:layout_marginEnd="15dp"-->
+<!--                    android:background="@drawable/edit_text_background_selector">-->
+
+<!--                    <Spinner-->
+<!--                        android:id="@+id/RPWC_package_type_spinner_SP"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"/>-->
+<!--                </RelativeLayout>-->
+
+
+
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_weight="4"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:layout_marginTop="15dp">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/RPWC_units_TV"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    android:text="@string/units"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:maxLines="1"-->
+<!--                    app:autoSizeTextType="uniform"-->
+<!--                    app:autoSizeMaxTextSize="16sp" />/>-->
+
+
+<!--                <RelativeLayout-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_weight="1.5"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_marginStart="15dp"-->
+<!--                    android:layout_marginEnd="15dp"-->
+<!--                   >-->
+
+<!--                    <EditText-->
+<!--                        android:id="@+id/RPWC_units_ET"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_centerHorizontal="true"-->
+<!--                        android:gravity="center"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:maxLines="1"-->
+<!--                        android:background="@drawable/edit_text_background_selector"/>-->
+<!--                </RelativeLayout>-->
+
+
+
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_weight="3"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:weightSum="2.2">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/RPWC_button_cancel_TV"-->
+<!--                    style="@style/FontStyle_Button"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:gravity="center"-->
+<!--                    android:text="@string/cancel"-->
+<!--                    android:textAllCaps="true"-->
+<!--                    android:textColor="@drawable/button_cancel_text_selector"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:maxLines="1"-->
+<!--                    app:autoSizeTextType="uniform"-->
+<!--                    app:autoSizeMaxTextSize="22sp"-->
+<!--                    android:padding="5dp"/>-->
+
+<!--                <View-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="1dp"-->
+<!--                    android:layout_weight="0.2" />-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/RPWC_button_report_BUT"-->
+<!--                    style="@style/FontStyle_Button"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:background="@drawable/button_bg_disabled"-->
+<!--                    android:text="@string/report"-->
+<!--                    android:textColor="@drawable/button_text_color_selector"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:maxLines="1"-->
+<!--                    app:autoSizeTextType="uniform"-->
+<!--                    app:autoSizeMaxTextSize="22sp"-->
+<!--                    android:padding="5dp"-->
+<!--                    android:enabled="false"/>-->
+<!--            </LinearLayout>-->
+
+<!--        </LinearLayout>-->
+<!--    </RelativeLayout>-->
+<!--</LinearLayout>-->

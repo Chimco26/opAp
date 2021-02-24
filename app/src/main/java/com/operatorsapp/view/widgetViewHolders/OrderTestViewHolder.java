@@ -17,7 +17,7 @@ import org.greenrobot.eventbus.EventBus;
 
 public class OrderTestViewHolder extends RecyclerView.ViewHolder {
     private TextView buttonOrderTestTV;
-    private final TextView mTitle;
+//    private final TextView mTitle;
     private final int mHeight;
     private final int mWidth;
 
@@ -27,7 +27,7 @@ public class OrderTestViewHolder extends RecyclerView.ViewHolder {
 
         mHeight = height;
         mWidth = width;
-        mTitle = itemView.findViewById(R.id.OTWC_title);
+//        mTitle = itemView.findViewById(R.id.OTWC_title);
         LinearLayout parentLayout = itemView.findViewById(R.id.widget_parent_layout);
         setSizes(parentLayout);
 
@@ -41,8 +41,8 @@ public class OrderTestViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setData(Widget widget){
-        String nameByLang2 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
-        mTitle.setText(nameByLang2);
+//        String nameByLang2 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
+//        mTitle.setText(nameByLang2);
     }
 
     private void setSizes(final LinearLayout parent) {
