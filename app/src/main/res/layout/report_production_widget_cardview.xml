@@ -42,7 +42,7 @@
                 android:background="@color/blue1"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="@string/report_production"
+                android:text="@string/report_inventory_item_production"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:padding="5dp"

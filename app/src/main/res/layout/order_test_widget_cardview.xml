@@ -35,14 +35,14 @@
                     android:layout_weight="5" />
 
                 <TextView
-                    android:id="@+id/OTWC_countdown_btn"
+                    android:id="@+id/OTWC_btn"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="3"
                     android:background="@color/blue1"
                     android:gravity="center"
                     android:maxLines="1"
-                    android:text="@string/order_qc_test"
+                    android:text="@string/order_test"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     app:autoSizeMaxTextSize="20sp"

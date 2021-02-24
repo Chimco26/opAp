@@ -134,8 +134,6 @@
     <string name="alarm">"Alarm"</string>
     <string name="loading_data">Loading data...</string>
     <string name="no_data_chart">You need to provide data\nfor the chart</string>
-    <string name="report_production">report production </string>
-    <string name="order_qc_test">Order QC Test</string>
 
     <array name="languages_spinner_array">
         <item>English</item>
@@ -175,7 +173,7 @@
         <item>Add Rejects</item>
         <item>Change Units In Cycle</item>
         <item>Report Production</item>
-        <item>Order Test</item>
+        <item>Order QC Test</item>
     </array>
 
     <array name="pending_job_headers_for_qc_array">
@@ -487,7 +485,7 @@
     <string name="enter_pass_unlock_statusbar">Enter Your User Password To Unlock The Status Bar</string>
     <string name="unlock">Unlock</string>
     <string name="password_incorrect">This password is incorrect. try again</string>
-    <string name="order_test">Order Test</string>
+    <string name="order_test">Order QC Test</string>
     <string name="installed_apps">Applications Shortcuts</string>
     <string name="quality_group">Quality Group</string>
     <string name="product_group">Product Group</string>
