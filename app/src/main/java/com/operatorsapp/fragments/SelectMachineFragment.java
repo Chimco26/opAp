@@ -100,6 +100,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         mSignInBtn = rootView.findViewById(R.id.FSM_operator_login_btn);
         mQcTestBtn = rootView.findViewById(R.id.FSM_qc_test_btn);
         mQcTestBtn.setOnClickListener(this);
+        mSignInBtn.setOnClickListener(this);
+        mChangeStatusBtn.setOnClickListener(this);
 //        rootView.findViewById(R.id.FSM_change_factory_btn).setOnClickListener(this);
         departementRecyclerView = rootView.findViewById(R.id.FSM_department_rv);
         mSearchField = rootView.findViewById(R.id.machine_id_name);
@@ -257,6 +259,12 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             case R.id.FSM_qc_test_btn:
                 mListener.onQCTestSelected();
                 break;
+            case R.id.FSM_operator_login_btn:
+                setLoginMode();
+                break;
+            case R.id.FSM_change_production_status_btn:
+                setStatusMode();
+                break;
             case R.id.FSM_change_factory_btn:
 
 //                if (mNavigationCallback != null){
@@ -268,6 +276,14 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 //                }
                 break;
         }
+
+    }
+
+    private void setLoginMode() {
+
+    }
+
+    private void setStatusMode() {
 
     }
 
