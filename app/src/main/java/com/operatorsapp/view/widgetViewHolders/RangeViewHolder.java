@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.operators.machinedatainfra.models.Widget;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.view.RangeView2;
 
 public class RangeViewHolder extends RecyclerView.ViewHolder {
@@ -62,6 +63,9 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
 
         setSizes(mParentLayout);
         String nameByLang3 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
+        if (nameByLang3.equals("[CycleTimeEfficiency]")){
+            nameByLang3 = PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("CycleTimeEfficiency");
+        }
         mTitle.setText(nameByLang3);
         mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));
         mValue.setText(widget.getCurrentValue());
