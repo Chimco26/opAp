@@ -42,7 +42,7 @@
                     android:background="@color/blue1"
                     android:gravity="center"
                     android:maxLines="1"
-                    android:text="@string/order_test"
+                    android:text="@string/order_qc_test"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     app:autoSizeMaxTextSize="20sp"

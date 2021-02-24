@@ -134,7 +134,8 @@
     <string name="alarm">"Alarm"</string>
     <string name="loading_data">Loading data...</string>
     <string name="no_data_chart">You need to provide data\nfor the chart</string>
-    <string name="common_signin_button_text">SIGN IN</string>
+    <string name="report_production">report production </string>
+    <string name="order_qc_test">Order QC Test</string>
 
     <array name="languages_spinner_array">
         <item>English</item>
