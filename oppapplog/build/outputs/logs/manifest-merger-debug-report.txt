@@ -1,6 +1,5 @@
 -- Merging decision tree log ---
 manifest
-<<<<<<< HEAD
 ADDED from /Users/nathanbotbol/projects/android/matics/oppapplog/src/main/AndroidManifest.xml:1:1-2:39
 INJECTED from /Users/nathanbotbol/projects/android/matics/oppapplog/src/main/AndroidManifest.xml:1:1-2:39
 INJECTED from /Users/nathanbotbol/projects/android/matics/oppapplog/src/main/AndroidManifest.xml:1:1-2:39
@@ -36,40 +35,3 @@ INJECTED from /Users/nathanbotbol/projects/android/matics/oppapplog/src/main/And
 		INJECTED from /Users/nathanbotbol/projects/android/matics/oppapplog/src/main/AndroidManifest.xml
 		ADDED from /Users/nathanbotbol/projects/android/matics/oppapplog/src/main/AndroidManifest.xml
 		INJECTED from /Users/nathanbotbol/projects/android/matics/oppapplog/src/main/AndroidManifest.xml
-=======
-ADDED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml:1:1-2:39
-INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml:1:1-2:39
-INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml:1:1-2:39
-INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml:1:1-2:39
-INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml:1:1-2:39
-INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml:1:1-2:39
-INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml:1:1-2:39
-	package
-		ADDED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml:2:5-36
-		INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml
-		INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml
-	android:versionName
-		INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml
-		ADDED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml:1:1-2:39
-		INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml
-	android:versionCode
-		INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml
-		ADDED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml:1:1-2:39
-		INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml
-	xmlns:android
-		ADDED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml:1:11-69
-uses-sdk
-INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml
-INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml
-INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml
-INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml
-	android:targetSdkVersion
-		INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml
-		ADDED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml
-		INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml
-	android:minSdkVersion
-		INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml
-		ADDED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml
-		INJECTED from C:\OpApp\oppapplog\src\main\AndroidManifest.xml
->>>>>>> 4067af2388f2de59809fe671a27538816b802452
