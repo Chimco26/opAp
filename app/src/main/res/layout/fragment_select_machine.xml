@@ -28,7 +28,41 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="22sp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:visibility="visible"
+            app:autoSizeMaxTextSize="22sp"
+            app:autoSizeTextType="uniform" />
+
+        <Button
+            android:id="@+id/FSM_change_production_status_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/blue1"
+            android:padding="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:text="@string/production_status"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:visibility="gone"
+            app:autoSizeMaxTextSize="22sp"
+            app:autoSizeTextType="uniform" />
+
+        <Button
+            android:id="@+id/FSM_operator_login_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/blue1"
+            android:padding="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:text="@string/operator_sign_in"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:visibility="gone"
             app:autoSizeMaxTextSize="22sp"
             app:autoSizeTextType="uniform" />
 
@@ -36,6 +70,8 @@
             android:layout_width="0dp"
             android:layout_height="1px"
             android:layout_weight="1"/>
+
+
 
         <Button
             android:id="@+id/FSM_change_factory_btn"
