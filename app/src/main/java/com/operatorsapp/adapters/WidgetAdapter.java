@@ -211,8 +211,9 @@ public class WidgetAdapter extends Adapter {
                 return new OrderTestViewHolder(inflater.inflate(R.layout.order_test_widget_cardview, parent, false), mHeight, mWidth);
             }
             case REPORT_PRODUCTION: {
-                return new ReportProductionViewHolder(inflater.inflate(R.layout.report_production_widget_cardview, parent, false), mHeight, mWidth,
-                        mReportFieldsForMachine, mOnKeyboardManagerListener, mShowDashboardCroutonListener, mJoshId, mContext);
+                return new ReportProductionViewHolder(inflater.inflate(R.layout.report_production_widget_cardview, parent, false), mHeight, mWidth);
+//                return new ReportProductionViewHolder(inflater.inflate(R.layout.report_production_widget_cardview, parent, false), mHeight, mWidth,
+//                        mReportFieldsForMachine, mOnKeyboardManagerListener, mShowDashboardCroutonListener, mJoshId, mContext);
             }
             case MACHINE_WORK_BIT: {
                 return new MachineWorkBitViewHolder(inflater.inflate(R.layout.machine_work_bit_cardview, parent, false), mHeight, mWidth,mContext,mShowDashboardCroutonListener);

@@ -145,6 +145,7 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.model.SendRejectObject;
 import com.operatorsapp.model.event.QCTestEvent;
+import com.operatorsapp.model.event.ReportProductionEvent;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
 import com.operatorsapp.server.pulling.AllDashboardDataCore;
@@ -927,6 +928,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Subscribe
     public void onOpenQcById(QCTestEvent event){
         onOpenQCActivity(event.getiD(), false);
+    }
+
+    @Subscribe
+    public void openReportProduction(ReportProductionEvent event){
+        if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+            goToFragment(ReportProductionFragment.newInstance(0, mActiveJobsListForMachine, mSpinnerProductPosition), true, true);
+        } else {
+            goToFragment(ReportProductionFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSpinnerProductPosition), true, true);
+        }
     }
 
     private void registerReceiver() {

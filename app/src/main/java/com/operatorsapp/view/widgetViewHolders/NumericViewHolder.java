@@ -237,6 +237,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 if (!mEditCycleEt.getText().toString().isEmpty()) {
+                    mEditCycleReportBtn.setEnabled(false);
                     widget.setEditStep(0);
                     mDashboardCentralContainerListener.onReportCycleUnit(String.valueOf(Double.parseDouble(mEditCycleEt.getText().toString())));
                     mEditCycleEt.clearFocus();
