@@ -155,7 +155,7 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
             mPlusButton.setEnabled(true);
         }
         TextView productIdTextView = view.findViewById(R.id.report_cycle_id_text_view);
-        ((TextView)view.findViewById(R.id.FRP_units_tv)).setText(PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units"));
+//        ((TextView)view.findViewById(R.id.FRP_units_tv)).setText(PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units"));
 
         productIdTextView.setText(String.valueOf(mCurrentProductId));
 

@@ -201,7 +201,7 @@
                             android:layout_height="0dp"
                             android:layout_weight="1.5"
                             android:gravity="center_vertical"
-                            android:text="@string/type_amount_for_item"
+                            android:text="@string/units"
                             android:textColor="@color/black"
                             android:textSize="22sp"
                             android:maxLines="1"
