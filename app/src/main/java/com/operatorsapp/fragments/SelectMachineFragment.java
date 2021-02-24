@@ -59,6 +59,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     private SelectMachineFragmentListener mListener;
     private ProgressBar mProgress;
     private Button mQcTestBtn;
+    private Button mSignInBtn;
+    private Button mChangeStatusBtn;
 
 
     public static SelectMachineFragment newInstance() {
@@ -94,6 +96,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         final View rootView = inflater.inflate(R.layout.fragment_select_machine, container, false);
         setActionBar();
 
+        mChangeStatusBtn = rootView.findViewById(R.id.FSM_change_production_status_btn);
+        mSignInBtn = rootView.findViewById(R.id.FSM_operator_login_btn);
         mQcTestBtn = rootView.findViewById(R.id.FSM_qc_test_btn);
         mQcTestBtn.setOnClickListener(this);
 //        rootView.findViewById(R.id.FSM_change_factory_btn).setOnClickListener(this);
