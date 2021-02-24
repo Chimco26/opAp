@@ -410,7 +410,7 @@
     <string name="enter_pass_unlock_statusbar">Введіть свій пароль для розблокування строки статусу</string>
     <string name="unlock">Розблокувати</string>
     <string name="password_incorrect">Пароль невірний. Повторіть спробу</string>
-    <string name="order_test">Замовити тест</string>
+    <string name="order_qc_test">Замовити тест</string>
     <string name="installed_apps">Ярлики програм</string>
     <string name="test">Тест</string>
     <string name="test_fields">Поля тесту</string>

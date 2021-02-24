@@ -422,7 +422,7 @@
     <string name="enter_pass_unlock_statusbar">Voer uw gebruikerswachtwoord in om de statusbalk te ontgrendelen</string>
     <string name="unlock">Ontgrendelen</string>
     <string name="password_incorrect">Dit wachtwoord is onjuist. Probeer het opnieuw</string>
-    <string name="order_test">Besteltest</string>
+    <string name="order_qc_test">Besteltest</string>
     <string name="installed_apps">Applicaties snelkoppelingen</string>
     <string name="test">Test</string>
     <string name="test_fields">Testvelden</string>

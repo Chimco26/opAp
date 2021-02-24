@@ -357,12 +357,14 @@ public class LoginFragment extends Fragment {
 
     // Silent - setUsername & password from preferences, It is only when preferences.isSelectedMachine().
     private void doSilentLogin() {
+        Log.d("Network Available ", "do Silent Login");
         if (mNavigationCallback != null) {
             mNavigationCallback.isTryToLogin(true);
             ProgressDialogManager.show(getActivity());//todo kuti
             LoginCore.getInstance().login(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getUserName(), PersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
                 @Override
                 public void onLoginSucceeded(ArrayList<Machine> machines, String siteName) {
+                    Log.d("Network Available ", "on Login Succeeded");
                     OppAppLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
                     PersistenceManager.getInstance().setSiteName(siteName);
                     getVersion(machines, false);
@@ -370,6 +372,7 @@ public class LoginFragment extends Fragment {
 
                 @Override
                 public void onLoginFailed(final StandardResponse reason) {
+                    Log.d("Network Available ", "on Login Failed");
                     dismissProgressDialog();
                     if (mCroutonCallback != null) {
                         mCroutonCallback.onHideConnectivityCroutonRequest();
