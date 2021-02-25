@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.operators.machinedatainfra.models.Widget;
 import com.operatorsapp.R;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.model.event.QCTestEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,7 +30,7 @@ public class OrderTestViewHolder extends RecyclerView.ViewHolder {
         LinearLayout parentLayout = itemView.findViewById(R.id.widget_parent_layout);
         setSizes(parentLayout);
 
-        buttonOrderTestTV = itemView.findViewById(R.id.OTWC_countdown_btn);
+        buttonOrderTestTV = itemView.findViewById(R.id.OTWC_btn);
         buttonOrderTestTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

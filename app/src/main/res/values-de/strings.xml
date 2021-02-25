@@ -415,7 +415,7 @@
     <string name="enter_pass_unlock_statusbar">Geben Sie Ihr Benutzerpasswort ein, um die Statusleiste zu entsperren</string>
     <string name="unlock">Freischalten</string>
     <string name="password_incorrect">Dieses Passwort ist falsch. Versuchen Sie es nochmal</string>
-    <string name="order_test">Test bestellen</string>
+    <string name="order_qc_test">Test bestellen</string>
     <string name="installed_apps">Anwendungsverknüpfungen</string>
     <string name="test">Test</string>
     <string name="test_fields">Testfelder</string>

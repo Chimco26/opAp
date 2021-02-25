@@ -379,7 +379,7 @@
     <string name="enter_pass_unlock_statusbar">Wprowadź hasło użytkownika, aby odblokować pasek statusu</string>
     <string name="unlock">Odblokuj</string>
     <string name="password_incorrect">Hasło jest nieprawidłowe. Spróbuj ponownie</string>
-    <string name="order_test">Test zamówienia</string>
+    <string name="order_qc_test">Test zamówienia</string>
     <string name="installed_apps">Skróty aplikacji</string>
     <string name="quality_group">Grupa jakości</string>
     <string name="product_group">Grupa produktu</string>

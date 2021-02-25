@@ -73,7 +73,7 @@ public class LoginCore {
                 OppAppLogger.d(LOG_TAG, "login, onLoginFailed");
                 loginUICallback.onLoginFailed(reason);
             }
-        }, 1000, mLoginPersistenceManagerInterface.getRequestTimeout());
+        }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());
     }
 
     public void silentLoginFromDashBoard(final String siteUrl, final String username, final String password, final LoginUICallback<Machine> loginUICallback) {

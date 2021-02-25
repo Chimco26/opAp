@@ -18,7 +18,6 @@ import android.widget.ProgressBar;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
-import com.operatorsapp.dialogs.Alert2BtnDialog;
 import com.operatorsapp.fragments.JobListFragment;
 import com.operatorsapp.fragments.QCDetailsFragment;
 import com.operatorsapp.fragments.QCTestOrderFragment;
@@ -140,7 +139,7 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
     private void configureToolbar(){
         // Get the toolbar view inside the activity layout
         Toolbar toolbar = findViewById(R.id.AQC_toolbar);
-        toolbar.setTitle(R.string.order_test);
+        toolbar.setTitle(R.string.order_qc_test);
         toolbar.setNavigationIcon(R.drawable.arrow_back);
         setSupportActionBar(toolbar);
         if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
