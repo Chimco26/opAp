@@ -134,6 +134,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
     private void initView() {
         if (mDepartmentMachine != null && mDepartmentMachine.getDepartmentMachine() != null && mDepartmentMachine.getDepartmentMachine().size() > 0) {
+            mChangeStatusBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isChangeProductionStatus() ? View.VISIBLE : View.INVISIBLE);
+            mSignInBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isOperatorLogin() ? View.VISIBLE : View.INVISIBLE);
             initDepartmentRv();
             mSearchField.addTextChangedListener(mTextWatcher);
             mGoButton.setOnClickListener(new View.OnClickListener() {
@@ -280,11 +282,11 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     }
 
     private void setLoginMode() {
-
+        mDepartmentAdapter.setMultiSelection(true);
     }
 
     private void setStatusMode() {
-
+        mDepartmentAdapter.setMultiSelection(true);
     }
 
     @Override
