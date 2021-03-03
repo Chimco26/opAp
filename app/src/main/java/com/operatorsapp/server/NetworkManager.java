@@ -88,11 +88,13 @@ import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
+import com.operatorsapp.server.requests.ProductionModeForMachineRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.requests.SendNotificationRequest;
 import com.operatorsapp.server.requests.TechCall24HRequest;
 import com.operatorsapp.server.requests.TestOrderMaterialRequest;
 import com.operatorsapp.server.requests.TopNotificationRequest;
+import com.operatorsapp.server.requests.UpdateWorkerRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.JobListForMaterialResponse;
 import com.operatorsapp.server.responses.JobListForTestResponse;
@@ -1195,4 +1197,17 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         Call<TestReportsResponse> call = mRetrofit.create(OpAppServiceRequests.class).getTestReports(request);
         call.enqueue(callback);
     }
+
+    public void UpdateWorkerToJosh(UpdateWorkerRequest request, final Callback<StandardResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<StandardResponse> call = mRetrofit.create(OpAppServiceRequests.class).postUpdateWorkerToJosh(request);
+        call.enqueue(callback);
+    }
+
+    public void postProductionModeForMachine(ProductionModeForMachineRequest request, Callback<StandardResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<StandardResponse> call = mRetrofit.create(OpAppServiceRequests.class).postProductionModeForMachine(request);
+        call.enqueue(callback);
+    }
+
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="380dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:padding="30dp"
+    android:background="@drawable/rounded_dark_gray">
+
+    <TextView
+        android:id="@+id/dialog_rounded_title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:text="@string/confirm_machine_selection"
+        android:textSize="32sp"/>
+
+    <TextView
+        android:id="@+id/dialog_rounded_btn_yes_tv"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="5dp"
+        android:textAlignment="center"
+        android:layout_below="@+id/dialog_rounded_title_tv"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/rounded_blue"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:text="@string/yes"/>
+
+
+    <TextView
+        android:id="@+id/dialog_rounded_btn_cancel_tv"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="5dp"
+        android:textAlignment="center"
+        android:layout_below="@+id/dialog_rounded_title_tv"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/rounded_blue"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:text="@string/cancel"/>
+
+</RelativeLayout>

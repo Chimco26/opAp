@@ -17,6 +17,7 @@ import com.operatorsapp.R;
 import java.util.List;
 
 public class SimpleSpinnerAdapter extends ArrayAdapter<SelectableString> {
+    private boolean isPosition = false;
     private Context mContext;
     private List<SelectableString> mSpinnerItems;
     private TextView mRowName;
@@ -26,6 +27,13 @@ public class SimpleSpinnerAdapter extends ArrayAdapter<SelectableString> {
         super(context, resource, list);
         mSpinnerItems = list;
         mContext = context;
+    }
+
+    public SimpleSpinnerAdapter(Context context, int resource, List<SelectableString> list, boolean isPosition) {
+        super(context, resource, list);
+        mSpinnerItems = list;
+        mContext = context;
+        this.isPosition = isPosition;
     }
 
     @NonNull
@@ -38,9 +46,9 @@ public class SimpleSpinnerAdapter extends ArrayAdapter<SelectableString> {
             mView = row;
             mRowName = row.findViewById(R.id.spinner_item_name);
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-            if(mSpinnerItems != null && mSpinnerItems.get(0) != null)
+            if(mSpinnerItems != null && mSpinnerItems.get(isPosition ? position : 0) != null)
             {
-                mRowName.setText(mSpinnerItems.get(0).getString());
+                mRowName.setText(mSpinnerItems.get(isPosition ? position : 0).getString());
             }
             else
             {
