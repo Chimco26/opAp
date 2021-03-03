@@ -3,6 +3,7 @@ package com.operatorsapp.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,34 +12,53 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.common.QCModels.TestDetailsForm;
+import com.example.common.QCModels.ValueList;
+import com.example.common.SelectableString;
 import com.example.common.StandardResponse;
 import com.example.common.callback.GetDepartmentCallback;
 import com.example.common.department.DepartmentMachineValue;
 import com.example.common.department.DepartmentsMachinesResponse;
+import com.example.common.department.ProductionStatus;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.AutoCompleteAdapter;
 import com.operatorsapp.adapters.DepartmentAdapter;
+import com.operatorsapp.adapters.SimpleSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.requests.ProductionModeForMachineRequest;
+import com.operatorsapp.server.requests.UpdateWorkerRequest;
 import com.operatorsapp.utils.ClearData;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.SimpleRequests;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.operatorsapp.managers.PersistenceManager.setMachineData;
 
@@ -61,6 +81,13 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     private Button mQcTestBtn;
     private Button mSignInBtn;
     private Button mChangeStatusBtn;
+    private RelativeLayout mLoginLayout;
+    private EditText mLoginIdEt;
+    private RelativeLayout mMainLayoutTitle;
+    private LinearLayout mBtnLayout;
+    private Button mApplyMultiSelectBtn;
+    private Spinner mStatusSpinner;
+    private RelativeLayout mStatusLayout;
 
 
     public static SelectMachineFragment newInstance() {
@@ -99,13 +126,25 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         mChangeStatusBtn = rootView.findViewById(R.id.FSM_change_production_status_btn);
         mSignInBtn = rootView.findViewById(R.id.FSM_operator_login_btn);
         mQcTestBtn = rootView.findViewById(R.id.FSM_qc_test_btn);
-        mQcTestBtn.setOnClickListener(this);
 //        rootView.findViewById(R.id.FSM_change_factory_btn).setOnClickListener(this);
         departementRecyclerView = rootView.findViewById(R.id.FSM_department_rv);
         mSearchField = rootView.findViewById(R.id.machine_id_name);
         mGoButton = rootView.findViewById(R.id.goBtn);
         noDataTv = rootView.findViewById(R.id.FSM_no_data_tv);
         mProgress = rootView.findViewById(R.id.FSM_progress);
+        mApplyMultiSelectBtn = rootView.findViewById(R.id.FSM_multi_select_apply_btn);
+        mBtnLayout = rootView.findViewById(R.id.FSM_top_buttons_layout_lil);
+        mLoginLayout = rootView.findViewById(R.id.FSM_operator_login_rl);
+        mLoginIdEt = rootView.findViewById(R.id.FSM_operator_login_input_et);
+        mMainLayoutTitle = rootView.findViewById(R.id.main);
+        mStatusSpinner = rootView.findViewById(R.id.FSM_production_status_spn);
+        mStatusLayout = rootView.findViewById(R.id.FSM_production_status_rl);
+
+        mApplyMultiSelectBtn.setOnClickListener(this);
+        mQcTestBtn.setOnClickListener(this);
+        mSignInBtn.setOnClickListener(this);
+        mChangeStatusBtn.setOnClickListener(this);
+
         getDepartmentsMachines();
         return rootView;
     }
@@ -132,6 +171,10 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
     private void initView() {
         if (mDepartmentMachine != null && mDepartmentMachine.getDepartmentMachine() != null && mDepartmentMachine.getDepartmentMachine().size() > 0) {
+            mChangeStatusBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isChangeProductionStatus() ? View.VISIBLE : View.VISIBLE);
+            mSignInBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isOperatorLogin() ? View.VISIBLE : View.VISIBLE);
+            mQcTestBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isQualityTest() ? View.VISIBLE : View.VISIBLE);
+
             initDepartmentRv();
             mSearchField.addTextChangedListener(mTextWatcher);
             mGoButton.setOnClickListener(new View.OnClickListener() {
@@ -146,11 +189,6 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             noDataTv.setVisibility(View.VISIBLE);
         }
 
-//        if (mDepartmentMachine != null ){
-//            mQcTestBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isQualityTest() ? View.VISIBLE : View.INVISIBLE);
-//            mQcTestBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isChangeProductionStatus() ? View.VISIBLE : View.INVISIBLE);
-//            mQcTestBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isOperatorLogin() ? View.VISIBLE : View.INVISIBLE);
-//        }
     }
 
     private void initDepartmentRv() {
@@ -163,6 +201,13 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             departementRecyclerView.setLayoutManager(layoutManager);
 
             departementRecyclerView.setAdapter(mDepartmentAdapter);
+
+            mDepartmentAdapter.setMultiSelection(false);
+            mApplyMultiSelectBtn.setVisibility(View.GONE);
+            mLoginLayout.setVisibility(View.GONE);
+            mStatusLayout.setVisibility(View.GONE);
+            mMainLayoutTitle.setVisibility(View.VISIBLE);
+            mBtnLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -257,6 +302,15 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             case R.id.FSM_qc_test_btn:
                 mListener.onQCTestSelected();
                 break;
+            case R.id.FSM_operator_login_btn:
+                setLoginMode();
+                break;
+            case R.id.FSM_change_production_status_btn:
+                setStatusMode();
+                break;
+            case R.id.FSM_multi_select_apply_btn:
+                openConfirmationDialog();
+                break;
             case R.id.FSM_change_factory_btn:
 
 //                if (mNavigationCallback != null){
@@ -269,6 +323,124 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 break;
         }
 
+    }
+
+    private ArrayList<String> getSelectedMachines() {
+        return mDepartmentAdapter.getSelectedMachineList();
+    }
+
+    private void openConfirmationDialog() {
+        final boolean isLogIn = mLoginLayout.getVisibility() == View.VISIBLE;
+        if (isLogIn && getSelectedMachines().size() == 0 && mLoginIdEt.getText().toString().isEmpty()){
+            Toast.makeText(getActivity(), getString(R.string.select_machines_and_worker_id), Toast.LENGTH_SHORT).show();
+            return;
+        }else if (!isLogIn && getSelectedMachines().size() == 0){
+            Toast.makeText(getActivity(), getString(R.string.select_machines), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View view = getLayoutInflater().inflate(R.layout.rounded_dialog_2_btns, null);
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+
+        view.findViewById(R.id.dialog_rounded_btn_yes_tv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {/// Button Yes
+                if (isLogIn) {
+                    signInSelectedMachines(dialog);
+                }else {
+                    setProductionModeForMachine(dialog);
+                }
+            }
+        });
+        view.findViewById(R.id.dialog_rounded_btn_cancel_tv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {/// Button Cancel
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        dialog.show();
+    }
+
+    private void signInSelectedMachines(final AlertDialog dialog) {
+        UpdateWorkerRequest request = new UpdateWorkerRequest(PersistenceManager.getInstance().getSessionId(), mLoginIdEt.getText().toString(), getSelectedMachines());
+        NetworkManager.getInstance().UpdateWorkerToJosh(request, new Callback<StandardResponse>() {
+            @Override
+            public void onResponse(Call<StandardResponse> call, Response<StandardResponse> response) {
+                initView();
+                if (dialog != null)
+                    dialog.dismiss();
+                Toast.makeText(getActivity(), getString(R.string.signed_in_successfully), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<StandardResponse> call, Throwable t) {
+                Toast.makeText(getActivity(), getString(R.string.failed), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setProductionModeForMachine(final AlertDialog dialog) {
+        int productionModeId = Integer.parseInt(((SimpleSpinnerAdapter)mStatusSpinner.getAdapter()).getItem(mStatusSpinner.getSelectedItemPosition()).getId());
+        ProductionModeForMachineRequest request = new ProductionModeForMachineRequest(PersistenceManager.getInstance().getSessionId(), productionModeId, getSelectedMachines());
+        NetworkManager.getInstance().postProductionModeForMachine(request, new Callback<StandardResponse>() {
+            @Override
+            public void onResponse(Call<StandardResponse> call, Response<StandardResponse> response) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                initView();
+                Toast.makeText(getActivity(), getString(R.string.success), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<StandardResponse> call, Throwable t) {
+                Toast.makeText(getActivity(), getString(R.string.failed), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setLoginMode() {
+        mDepartmentAdapter.setMultiSelection(true);
+        mApplyMultiSelectBtn.setVisibility(View.VISIBLE);
+        mLoginLayout.setVisibility(View.VISIBLE);
+        mMainLayoutTitle.setVisibility(View.GONE);
+        mBtnLayout.setVisibility(View.GONE);
+        mStatusLayout.setVisibility(View.GONE);
+    }
+
+    private void setStatusMode() {
+        mDepartmentAdapter.setMultiSelection(true);
+        mApplyMultiSelectBtn.setVisibility(View.VISIBLE);
+        mStatusLayout.setVisibility(View.VISIBLE);
+        mLoginLayout.setVisibility(View.GONE);
+        mMainLayoutTitle.setVisibility(View.GONE);
+        mBtnLayout.setVisibility(View.GONE);
+        initSpinner();
+    }
+
+    private void initSpinner() {
+
+        final ArrayList<SelectableString> statusList = new ArrayList<>();
+        for (ProductionStatus status : mDepartmentMachine.getProductionStatuses()) {
+            statusList.add(new SelectableString(status.getStatusName(), false, String.valueOf(status.getId())));
+        }
+
+        final SimpleSpinnerAdapter dataAdapter = new SimpleSpinnerAdapter(getActivity(), R.layout.base_spinner_item, statusList, true);
+        dataAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mStatusSpinner.setAdapter(dataAdapter);
+        mStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                dataAdapter.setTitle(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {            }
+        });
     }
 
     @Override

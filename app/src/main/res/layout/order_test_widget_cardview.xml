@@ -35,7 +35,7 @@
                     android:layout_weight="5" />
 
                 <TextView
-                    android:id="@+id/OTWC_countdown_btn"
+                    android:id="@+id/OTWC_btn"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="3"

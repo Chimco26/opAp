@@ -23,11 +23,13 @@ import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
+import com.operatorsapp.server.requests.ProductionModeForMachineRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.requests.SendNotificationRequest;
 import com.operatorsapp.server.requests.TechCall24HRequest;
 import com.operatorsapp.server.requests.TestOrderMaterialRequest;
 import com.operatorsapp.server.requests.TopNotificationRequest;
+import com.operatorsapp.server.requests.UpdateWorkerRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.JobListForMaterialResponse;
 import com.operatorsapp.server.responses.JobListForTestResponse;
@@ -136,4 +138,10 @@ public interface OpAppServiceRequests {
 
     @POST("/LeaderMESApi/GetTestsReportMobile")
     Call<TestReportsResponse> getTestReports(@Body BaseRequest request);
+
+    @POST("/LeaderMESApi/UpdateWorkerToJosh")
+    Call<StandardResponse> postUpdateWorkerToJosh(@Body UpdateWorkerRequest request);
+
+    @POST("/LeaderMESApi/SetProductionModeForMachine")
+    Call<StandardResponse> postProductionModeForMachine(@Body ProductionModeForMachineRequest request);
 }

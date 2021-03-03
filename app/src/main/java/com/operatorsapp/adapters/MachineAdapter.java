@@ -2,6 +2,8 @@ package com.operatorsapp.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +17,20 @@ import java.util.List;
 
 class MachineAdapter  extends RecyclerView.Adapter<MachineAdapter.ViewHolder> {
 
+    private ArrayList<String> mSelectedMachineList;
+    private boolean isMultiSelect;
     private List<DepartmentMachineValue> mMachines;
     private List<DepartmentMachineValue> mMachinesFil;
     private MachineAdapterListener mListener;
 
-    public MachineAdapter(List<DepartmentMachineValue> departmentResponse, MachineAdapterListener machineAdapterListener) {
+    public MachineAdapter(List<DepartmentMachineValue> departmentResponse, ArrayList<String> selectedMachineList, boolean isMultiSelect, MachineAdapterListener machineAdapterListener) {
 
         mMachines = departmentResponse;
         mMachinesFil = new ArrayList<>();
         mMachinesFil.addAll(departmentResponse);
         mListener = machineAdapterListener;
+        mSelectedMachineList = selectedMachineList;
+        this.isMultiSelect = isMultiSelect;
     }
 
     @NonNull
@@ -37,15 +43,31 @@ class MachineAdapter  extends RecyclerView.Adapter<MachineAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull final MachineAdapter.ViewHolder viewHolder, final int position) {
-
-        viewHolder.mTitle.setText(mMachinesFil.get(position).getMachineName());
+        DepartmentMachineValue machine = mMachinesFil.get(position);
+        viewHolder.mTitle.setText(machine.getMachineName());
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onMachineSelected(mMachinesFil.get(position));
+                DepartmentMachineValue machineValue = mMachinesFil.get(position);
+                if (isMultiSelect){
+                    if (mSelectedMachineList.contains(machineValue.getId() + "")){
+                        mSelectedMachineList.remove(machineValue.getId() + "");
+                        viewHolder.mTitle.setTextColor(view.getContext().getResources().getColor(R.color.black));
+                    }else {
+                        mSelectedMachineList.add(machineValue.getId() + "");
+                        viewHolder.mTitle.setTextColor(view.getContext().getResources().getColor(R.color.blue1));
+                    }
+
+                }
+                mListener.onMachineSelected(machineValue);
             }
         });
+        if (isMultiSelect && mSelectedMachineList.contains(machine.getId() + "")){
+            viewHolder.mTitle.setTextColor(Color.BLUE);
+        }else {
+            viewHolder.mTitle.setTextColor(Color.BLACK);
+        }
     }
 
     @Override

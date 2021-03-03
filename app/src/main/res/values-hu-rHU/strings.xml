@@ -401,7 +401,7 @@
     <string name="enter_pass_unlock_statusbar">Adja meg felhasználói jelszavát az állapotsor feloldásához</string>
     <string name="unlock">Feloldás</string>
     <string name="password_incorrect">Ez a jelszó helytelen. Próbálkozzon ismét</string>
-    <string name="order_test">Teszt rendelése</string>
+    <string name="order_qc_test">Teszt rendelése</string>
     <string name="installed_apps">Alkalmazások billentyűkombinációi</string>
     <string name="test">Teszt</string>
     <string name="test_fields">Teszt mezők</string>

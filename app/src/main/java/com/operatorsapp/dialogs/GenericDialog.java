@@ -127,10 +127,5 @@ public class GenericDialog implements View.OnClickListener {
         void onActionNo();
         void onActionAnother();
 
-//        void onDismissClick(DialogInterface dialog, int requestCode);
-//
-//        void onDismissAllClick(DialogInterface dialog, int eventGroupId, int requestCode);
-//
-//        void onReportClick(Event event);
     }
 }

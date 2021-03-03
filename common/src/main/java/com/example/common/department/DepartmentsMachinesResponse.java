@@ -4,6 +4,7 @@ import com.example.common.permissions.UserGroupPermission;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DepartmentsMachinesResponse {
@@ -34,6 +35,13 @@ public class DepartmentsMachinesResponse {
     @SerializedName("UserGroupPermission")
     @Expose
     private UserGroupPermission userGroupPermission;
+    @SerializedName("ProductionStatus")
+    @Expose
+    private ArrayList<ProductionStatus> productionStatuses;
+
+    public ArrayList<ProductionStatus> getProductionStatuses() {
+        return productionStatuses != null ? productionStatuses : new ArrayList<ProductionStatus>();
+    }
 
     public UserGroupPermission getUserGroupPermission() {
         if (userGroupPermission == null){

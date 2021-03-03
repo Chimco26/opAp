@@ -15,6 +15,7 @@ import com.example.common.department.DepartmentMachineValue;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 
+import java.util.AbstractQueue;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,8 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
     private DepartmentFilter mFilter = new DepartmentFilter();
     private String mSearchFilter;
     private DepartmentAdapterListener mListener;
+    private boolean isMultiSelect = false;
+    private ArrayList<String> selectedMachineList = new ArrayList<>();
 
     public DepartmentAdapter(List<DepartmentMachine> departmentResponse, DepartmentAdapterListener departmentAdapterListener) {
 
@@ -56,7 +59,7 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
 
     private void initRv(int position, ViewHolder viewHolder) {
 
-        MachineAdapter machineAdapter = new MachineAdapter(mDepartmentFil.get(position).getDepartmentMachineValue(), this);
+        MachineAdapter machineAdapter = new MachineAdapter(mDepartmentFil.get(position).getDepartmentMachineValue(), selectedMachineList, isMultiSelect, this);
 
         RecyclerView recyclerView = viewHolder.mRv;
 
@@ -87,7 +90,19 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
 
     @Override
     public void onMachineSelected(DepartmentMachineValue departmentMachineValue) {
-        mListener.onMachineSelected(departmentMachineValue);
+        if (isMultiSelect){
+        }else {
+            mListener.onMachineSelected(departmentMachineValue);
+        }
+    }
+
+    public void setMultiSelection(boolean isMultiSelect) {
+        this.isMultiSelect = isMultiSelect;
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<String> getSelectedMachineList() {
+        return selectedMachineList;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
