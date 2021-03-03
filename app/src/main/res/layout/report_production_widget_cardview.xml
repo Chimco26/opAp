@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="3"
-                android:background="@color/blue1"
+                android:background="@drawable/button_blue_with_round_corners"
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="@string/report_production"
