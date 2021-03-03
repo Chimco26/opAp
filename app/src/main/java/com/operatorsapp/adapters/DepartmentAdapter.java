@@ -91,11 +91,6 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
     @Override
     public void onMachineSelected(DepartmentMachineValue departmentMachineValue) {
         if (isMultiSelect){
-            if (selectedMachineList.contains(departmentMachineValue.getId() + "")){
-                selectedMachineList.remove(departmentMachineValue.getId() + "");
-            }else {
-                selectedMachineList.add(departmentMachineValue.getId() + "");
-            }
         }else {
             mListener.onMachineSelected(departmentMachineValue);
         }
@@ -104,6 +99,10 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
     public void setMultiSelection(boolean isMultiSelect) {
         this.isMultiSelect = isMultiSelect;
         notifyDataSetChanged();
+    }
+
+    public ArrayList<String> getSelectedMachineList() {
+        return selectedMachineList;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
