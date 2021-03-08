@@ -5,42 +5,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
-    android:weightSum="10">
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/FSM_top_buttons_layout_lil"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="60dp"
         android:layout_gravity="end"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginStart="30dp"
-        android:layout_weight="1.25">
+        android:layout_marginStart="30dp">
 
         <Button
             android:id="@+id/FSM_qc_test_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="match_parent"
-            android:background="@color/blue1"
+            android:background="@drawable/rounded_blue"
             android:padding="10dp"
+            android:drawableStart="@drawable/outline_check_circle_white"
             android:text="@string/quality_test"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="22sp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:autoSizeMaxTextSize="22sp"
             app:autoSizeTextType="uniform" />
 
         <Button
             android:id="@+id/FSM_change_production_status_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="match_parent"
-            android:background="@color/blue1"
+            android:background="@drawable/rounded_blue"
             android:padding="10dp"
+            android:drawableStart="@drawable/production"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:text="@string/production_status"
@@ -53,9 +53,10 @@
 
         <Button
             android:id="@+id/FSM_operator_login_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="match_parent"
-            android:background="@color/blue1"
+            android:background="@drawable/rounded_blue"
+            android:drawableStart="@drawable/operator"
             android:padding="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
@@ -78,7 +79,7 @@
             android:id="@+id/FSM_change_factory_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@color/blue1"
+            android:background="@drawable/rounded_blue"
             android:padding="10dp"
             android:text="@string/change_factory"
             android:textAllCaps="false"
@@ -119,8 +120,8 @@
             android:layout_centerInParent="true"
             android:layout_alignParentTop="true"
             android:background="@drawable/rounded_gray"
-            android:paddingTop="30dp"
-            android:paddingBottom="30dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:paddingStart="10dp"
             android:paddingEnd="30dp"
             android:orientation="vertical">
@@ -129,7 +130,7 @@
                 android:id="@+id/FSM_operator_login_input_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:layout_alignParentTop="true"
                 style="@style/ProximaNovaSemiBold"
                 android:textColor="@color/black"
@@ -138,13 +139,11 @@
 
             <EditText
                 android:id="@+id/FSM_operator_login_input_et"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:inputType="number"
-                android:layout_below="@+id/FSM_operator_login_input_tv"
-                android:layout_alignStart="@+id/FSM_operator_login_input_tv"
-                android:layout_alignEnd="@+id/FSM_operator_login_input_tv"
+                android:layout_toEndOf="@+id/FSM_operator_login_input_tv"
                 android:background="@drawable/rounded_white"
                 style="@style/ProximaNovaSemiBold" />
 
@@ -194,8 +193,8 @@
             android:layout_centerInParent="true"
             android:layout_alignParentTop="true"
             android:background="@drawable/rounded_gray"
-            android:paddingTop="30dp"
-            android:paddingBottom="30dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:paddingStart="10dp"
             android:paddingEnd="30dp"/>
 
@@ -214,16 +213,13 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.25" />
+        android:layout_height="20dp"/>
 
     <RelativeLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_weight="1.5">
+        android:layout_height="wrap_content"
+        android:padding="30dp">
 
         <TextView
             android:id="@+id/select_machine_title"
@@ -284,13 +280,12 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.25" />
+        android:layout_height="20dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6.75">
+        android:layout_weight="1">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/FSM_department_rv"
