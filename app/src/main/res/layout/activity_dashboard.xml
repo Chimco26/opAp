@@ -47,8 +47,8 @@
 
             <ImageView
                 android:id="@+id/AD_report_btn"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignBottom="@+id/fragments_container_central"
                 android:padding="10dp"
