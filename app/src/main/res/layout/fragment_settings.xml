@@ -355,21 +355,64 @@
                     android:layout_marginBottom="15dp"
                     android:background="@color/divider_gray" />
 
-                <TextView
-                    android:id="@+id/refresh_button"
-                    style="@style/FontStyle_Button"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="15"
-                    android:background="@drawable/button_bg_disabled_copy_2"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:text="@string/refresh_reporting_data"
-                    android:textColor="@drawable/button_refresh_reporting_data_text_selector"
-                    android:textSize="22sp"
-                    app:autoSizeTextType="uniform"/>
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/refresh_button"
+                        style="@style/FontStyle_Button"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_bg_disabled_copy_2"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:text="@string/refresh_reporting_data"
+                        android:textColor="@drawable/button_refresh_reporting_data_text_selector"
+                        android:textSize="20sp"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1px"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/update_app_button"
+                        style="@style/FontStyle_Button"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_bg_disabled_copy_2"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:text="@string/check_for_updates"
+                        android:textColor="@drawable/button_refresh_reporting_data_text_selector"
+                        android:textSize="20sp"/>
+
+                </LinearLayout>
+
+<!--                <TextView-->
+<!--                    android:id="@+id/refresh_button"-->
+<!--                    style="@style/FontStyle_Button"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:layout_weight="15"-->
+<!--                    android:background="@drawable/button_bg_disabled_copy_2"-->
+<!--                    android:gravity="center"-->
+<!--                    android:maxLines="1"-->
+<!--                    android:paddingStart="20dp"-->
+<!--                    android:paddingEnd="20dp"-->
+<!--                    android:text="@string/refresh_reporting_data"-->
+<!--                    android:textColor="@drawable/button_refresh_reporting_data_text_selector"-->
+<!--                    android:textSize="22sp"-->
+<!--                    app:autoSizeTextType="uniform"/>-->
 
                 <TextView
                     android:id="@+id/refresh_status_text_view"

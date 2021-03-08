@@ -607,4 +607,5 @@
     <string name="select_machines_and_worker_id">Please select machines and enter worker ID</string>
     <string name="select_machines">Please select machines</string>
     <string name="change_production_status_to">Change Production Status to:</string>
+    <string name="check_for_updates">Check App Update</string>
 </resources>

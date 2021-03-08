@@ -43,8 +43,10 @@ import com.operatorsapp.adapters.AutoCompleteAdapter;
 import com.operatorsapp.adapters.DepartmentAdapter;
 import com.operatorsapp.adapters.SimpleSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
+import com.operatorsapp.dialogs.ProgressDialogFragment;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.ProductionModeForMachineRequest;
 import com.operatorsapp.server.requests.UpdateWorkerRequest;
@@ -169,11 +171,11 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
     }
 
-    private void initView() {
+    public void initView() {
         if (mDepartmentMachine != null && mDepartmentMachine.getDepartmentMachine() != null && mDepartmentMachine.getDepartmentMachine().size() > 0) {
-            mChangeStatusBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isChangeProductionStatus() ? View.VISIBLE : View.VISIBLE);
-            mSignInBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isOperatorLogin() ? View.VISIBLE : View.VISIBLE);
-            mQcTestBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isQualityTest() ? View.VISIBLE : View.VISIBLE);
+            mChangeStatusBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isChangeProductionStatus() ? View.VISIBLE : View.GONE);
+            mSignInBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isOperatorLogin() ? View.VISIBLE : View.GONE);
+            mQcTestBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isQualityTest() ? View.VISIBLE : View.GONE);
 
             initDepartmentRv();
             mSearchField.addTextChangedListener(mTextWatcher);
@@ -232,9 +234,10 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 backButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (mListener != null) {
-                            mListener.onCloseSelectMachine();
-                        }
+                        getActivity().onBackPressed();
+//                        if (mListener != null) {
+//                            mListener.onCloseSelectMachine();
+//                        }
                     }
                 });
                 ((TextView) view.findViewById(R.id.title)).setText(getString(R.string.link_machine));
@@ -340,11 +343,15 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        View view = getLayoutInflater().inflate(R.layout.rounded_dialog_2_btns, null);
+        View view = getLayoutInflater().inflate(R.layout.title_text_btn_dialog, null);
         builder.setView(view);
         final AlertDialog dialog = builder.create();
 
-        view.findViewById(R.id.dialog_rounded_btn_yes_tv).setOnClickListener(new View.OnClickListener() {
+        final ProgressBar progressBar = view.findViewById(R.id.DALJ_progress_pb);
+        view.findViewById(R.id.DALJ_title_ic).setVisibility(View.GONE);
+        view.findViewById(R.id.DALJ_title_tv).setVisibility(View.GONE);
+        ((TextView)view.findViewById(R.id.DALJ_sub_title_tv)).setText(getResources().getString(R.string.confirm_machine_selection));
+        view.findViewById(R.id.DALJ_positive_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {/// Button Yes
                 if (isLogIn) {
@@ -352,9 +359,10 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 }else {
                     setProductionModeForMachine(dialog);
                 }
+                progressBar.setVisibility(View.VISIBLE);
             }
         });
-        view.findViewById(R.id.dialog_rounded_btn_cancel_tv).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.DALJ_negative_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {/// Button Cancel
                 dialog.dismiss();
@@ -369,15 +377,23 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         NetworkManager.getInstance().UpdateWorkerToJosh(request, new Callback<StandardResponse>() {
             @Override
             public void onResponse(Call<StandardResponse> call, Response<StandardResponse> response) {
-                initView();
-                if (dialog != null)
-                    dialog.dismiss();
-                Toast.makeText(getActivity(), getString(R.string.signed_in_successfully), Toast.LENGTH_SHORT).show();
+                if (response.body() != null && response.body().isNoError()) {
+                    initView();
+                    if (dialog != null)
+                        dialog.dismiss();
+                    Toast.makeText(getActivity(), getString(R.string.signed_in_successfully), Toast.LENGTH_SHORT).show();
+                }else {
+                    if (response.body() != null) {
+                        onFailure(call, new Throwable(response.body().getError().getErrorDesc()));
+                    }else {
+                        onFailure(call, new Throwable(""));
+                    }
+                }
             }
 
             @Override
             public void onFailure(Call<StandardResponse> call, Throwable t) {
-                Toast.makeText(getActivity(), getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -391,13 +407,21 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 if (dialog != null) {
                     dialog.dismiss();
                 }
-                initView();
-                Toast.makeText(getActivity(), getString(R.string.success), Toast.LENGTH_SHORT).show();
+                if (response.body() != null && response.body().isNoError()) {
+                    initView();
+                    Toast.makeText(getActivity(), getString(R.string.success), Toast.LENGTH_SHORT).show();
+                }else {
+                    if (response.body() != null) {
+                        onFailure(call, new Throwable(response.body().getError().getErrorDesc()));
+                    }else {
+                        onFailure(call, new Throwable(""));
+                    }
+                }
             }
 
             @Override
             public void onFailure(Call<StandardResponse> call, Throwable t) {
-                Toast.makeText(getActivity(), getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -455,6 +479,10 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         if (mListener != null) {
             mListener.onMachineSelected();
         }
+    }
+
+    public boolean isMultiSelectMode() {
+        return mApplyMultiSelectBtn.getVisibility() == View.VISIBLE;
     }
 
     public interface SelectMachineFragmentListener {

@@ -42,6 +42,8 @@ import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.utils.NetworkAvailable;
 import com.operatorsapp.utils.SaveAlarmsHelper;
 
+import org.w3c.dom.Text;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,6 +63,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     private GoToScreenListener mGoToScreenListener;
     private SettingsInterface mSettingsInterface;
     private TextView mButtonChangeMachine;
+    private TextView mUpdateBtn;
 
     public static SettingsFragment newInstance() {
 
@@ -167,6 +170,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
         mCancelButton = view.findViewById(R.id.button_cancel);
 //        mButtonChange = view.findViewById(R.id.button_change);
         mButtonChangeMachine = view.findViewById(R.id.button_change_machine);
+        mUpdateBtn = view.findViewById(R.id.update_app_button);
     }
 
     @Override
@@ -178,6 +182,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
         mRefreshButton.setOnClickListener(null);
 //        mButtonChange.setOnClickListener(null);
         mButtonChangeMachine.setOnClickListener(null);
+        mUpdateBtn.setOnClickListener(null);
     }
 
     @Override
@@ -189,6 +194,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
         mRefreshButton.setOnClickListener(this);
 //        mButtonChange.setOnClickListener(this);
         mButtonChangeMachine.setOnClickListener(this);
+        mUpdateBtn.setOnClickListener(this);
     }
 
     public void setActionBar() {
@@ -254,6 +260,10 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                 }
                 break;
             }
+            case R.id.update_app_button:
+                mSettingsInterface.onCheckForAppUpdates();
+                getActivity().onBackPressed();
+                break;
 //            case R.id.button_change: {
 //                boolean isShowTutorial = PersistenceManager.getInstance().isDisplayToolbarTutorial();
 //                mSettingsInterface.onClearAppDataRequest();

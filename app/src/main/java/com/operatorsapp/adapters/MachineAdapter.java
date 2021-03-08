@@ -54,9 +54,11 @@ class MachineAdapter  extends RecyclerView.Adapter<MachineAdapter.ViewHolder> {
                     if (mSelectedMachineList.contains(machineValue.getId() + "")){
                         mSelectedMachineList.remove(machineValue.getId() + "");
                         viewHolder.mTitle.setTextColor(view.getContext().getResources().getColor(R.color.black));
+                        viewHolder.itemView.setBackgroundColor(view.getContext().getResources().getColor(R.color.white_five));
                     }else {
                         mSelectedMachineList.add(machineValue.getId() + "");
                         viewHolder.mTitle.setTextColor(view.getContext().getResources().getColor(R.color.blue1));
+                        viewHolder.itemView.setBackgroundColor(view.getContext().getResources().getColor(R.color.grey_lite));
                     }
 
                 }
