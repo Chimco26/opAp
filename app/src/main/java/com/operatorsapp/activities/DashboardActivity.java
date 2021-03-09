@@ -1907,6 +1907,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, mSelectMachineFragment).commit();
         showReportBtn(false);
     }
+    @Override
+    public void onCheckForAppUpdates() {
+        setupVersionCheck();
+    }
 
     @Override
     public void onOpenQCActivity(int id, boolean editMode) {
@@ -2664,6 +2668,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Fragment visible = getVisibleFragment();
 
         if (mSelectMachineFragment != null) {
+            if (mSelectMachineFragment.isMultiSelectMode()){
+                mSelectMachineFragment.initView();
+                return;
+            }
             if (PersistenceManager.getInstance().getMachineId() == -1) {
                 return;
             }

@@ -51,7 +51,7 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_jobs_item_dropdown, parent, false);
         }
-        checkMachineStatusConfig();
+//        checkMachineStatusConfig();
         TextView name = row.findViewById(R.id.SJID_texte);
         name.setText(mSpinnerItems.get(position).getName());
         setIcon(mSpinnerItems.get(position).getUniqueID(), (ImageView) row.findViewById(R.id.SJID_image));

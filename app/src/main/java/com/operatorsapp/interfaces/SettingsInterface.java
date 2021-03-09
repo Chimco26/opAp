@@ -9,5 +9,6 @@ public interface SettingsInterface {
     void onRefreshApplicationRequest();
     void onRefreshPollingRequest();
     void onIgnoreFromOnPause(boolean ignore);
+    void onCheckForAppUpdates();
 
 }
