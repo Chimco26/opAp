@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="3"
-                android:background="@color/green_dark_2"
+                android:background="@drawable/button_green_with_round_corners"
                 android:gravity="center"
                 android:padding="7dp"
                 android:orientation="horizontal">
