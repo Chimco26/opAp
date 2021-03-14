@@ -1,22 +1,42 @@
 package com.operatorsapp.server.responses;
 
+import com.example.common.StandardResponse;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class TestReportsResponse {
+public class TestReportsResponse extends StandardResponse {
 
-    @SerializedName("Columns")
-    ArrayList<TestReportColumn> mColumns;
+    @SerializedName("ResponseDictionary")
+    TestReports mTestReports;
 
-    @SerializedName("Rows")
-    ArrayList<TestReportRow> mRows;
-
-    public ArrayList<TestReportColumn> getmolumns() {
-        return mColumns;
+    public ArrayList<TestReportColumn> getColumns() {
+        return mTestReports.mColumns == null ? new ArrayList<TestReportColumn>() : mTestReports.mColumns;
     }
 
     public ArrayList<TestReportRow> getRows() {
-        return mRows;
+        return mTestReports.mRows == null ? new ArrayList<TestReportRow>() : mTestReports.mRows;
+    }
+
+    public void setColumns(ArrayList<TestReportColumn> mColumns) {
+        mTestReports.mColumns = mColumns;
+    }
+
+    public void setRows(ArrayList<TestReportRow> mRows) {
+        mTestReports.mRows = mRows;
+    }
+
+    public void addRow(TestReportRow row){
+        if (mTestReports.mRows == null)
+            mTestReports.mRows = new ArrayList<>();
+        mTestReports.mRows.add(row);
+    }
+
+    private class TestReports {
+        @SerializedName("Columns")
+        ArrayList<TestReportColumn> mColumns;
+
+        @SerializedName("Rows")
+        ArrayList<TestReportRow> mRows;
     }
 }

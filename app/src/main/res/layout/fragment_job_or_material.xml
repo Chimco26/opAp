@@ -42,7 +42,6 @@
             android:background="@color/blue1"
             android:text="@string/tests_report"
             android:layout_alignParentEnd="true"
-            android:visibility="gone"
             android:padding="10dp"
             android:gravity="center"/>
 
