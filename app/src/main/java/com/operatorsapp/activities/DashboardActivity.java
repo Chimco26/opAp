@@ -2270,7 +2270,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onLockScreenForceLoginOperator() {
 
         if (!(getVisibleFragment() instanceof SignInOperatorFragment)) {
-            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, new SignInOperatorFragment()).addToBackStack("SignInOperatorFragment").commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, new SignInOperatorFragment()).addToBackStack("SignInOperatorFragment").commitAllowingStateLoss();
         }
     }
 
