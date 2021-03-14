@@ -132,7 +132,8 @@ public class MachineWorkBitViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void initPowerBtn(boolean isOn) {
-        mPowerBtn.setBackgroundColor(mContext.getResources().getColor(isOn ? R.color.red_light :  R.color.green_dark_2));
+//        mPowerBtn.setBackgroundColor(mContext.getResources().getColor(isOn ? R.color.red_light :  R.color.green_dark_2));
+        mPowerBtn.setBackground(mContext.getResources().getDrawable(isOn ? R.drawable.button_red_with_round_corners :  R.drawable.button_green_with_round_corners));
         mPowerText.setText(mContext.getResources().getText(isOn ?  R.string.stop : R.string.start));
         mPowerImg.setImageDrawable(mContext.getResources().getDrawable(isOn ? R.drawable.ic_outline_stop_24 : R.drawable.ic_baseline_power_settings_new_24 ));
     }
