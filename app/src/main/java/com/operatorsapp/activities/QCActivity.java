@@ -40,6 +40,7 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         QCTestOrderFragment.QCTestOrderFragmentListener,
         QCDetailsFragment.QCDetailsFragmentListener,
         JobOrMaterialFragment.JobOrMaterialFragmentListener,
+        TestReportFragment.TestReportFragmentListener,
         Thread.UncaughtExceptionHandler{
 
     public static final String QC_IS_FROM_SELECT_MACHINE_SCREEN = "QC_IS_FROM_SELECT_MACHINE_SCREEN";
@@ -287,6 +288,11 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
     private void openTestReportFragment() {
         TestReportFragment testListFragment = TestReportFragment.newInstance();
         getSupportFragmentManager().beginTransaction().add(R.id.AQC_container, testListFragment).addToBackStack(TestReportFragment.class.getSimpleName()).commit();
+    }
+
+    @Override
+    public void onReportSelected(int id) {
+        showQCDetailsFragment(id, false);
     }
 
     @Override

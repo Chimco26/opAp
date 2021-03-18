@@ -6,17 +6,8 @@
     android:orientation="vertical"
     android:layout_gravity="center"
     android:gravity="center"
+    android:background="@color/grey_transparent"
     android:padding="5dp">
-
-    <LinearLayout
-        android:id="@+id/test_report_item_filter_lil"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:visibility="gone"
-        android:padding="5dp"/>
 
     <LinearLayout
         android:id="@+id/test_report_item_lil"
@@ -26,5 +17,16 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:padding="5dp"/>
+
+    <LinearLayout
+        android:id="@+id/test_report_item_filter_lil"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="gone"
+        android:paddingEnd="5dp"
+        android:paddingStart="5dp"/>
 
 </LinearLayout>

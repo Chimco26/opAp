@@ -41,7 +41,7 @@ public class TestReportRow {
     String mIssuerUserName;
 
     @SerializedName("QAWorkerID")
-    int mQAWorkerID;
+    String mQAWorkerName;
 
     @SerializedName("Samples")
     String mSamples;
@@ -56,10 +56,10 @@ public class TestReportRow {
     String mMoldGroupID;
 
     @SerializedName("FailedFields")
-    int mFailedFields;
+    String mFailedFields;
 
     @SerializedName("FailedSampleFields")
-    int mFailedSampleFields;
+    String mFailedSampleFields;
 
     @SerializedName("TestTime")
     String mTestTime;
@@ -118,8 +118,8 @@ public class TestReportRow {
         return mIssuerUserName;
     }
 
-    public int getQAWorkerID() {
-        return mQAWorkerID;
+    public String getQAWorkerID() {
+        return mQAWorkerName;
     }
 
     public String getSamples() {
@@ -138,11 +138,11 @@ public class TestReportRow {
         return mMoldGroupID;
     }
 
-    public int getFailedFields() {
+    public String getFailedFields() {
         return mFailedFields;
     }
 
-    public int getFailedSampleFields() {
+    public String getFailedSampleFields() {
         return mFailedSampleFields;
     }
 

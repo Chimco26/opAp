@@ -1111,7 +1111,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onPause() {
         super.onPause();
-
         if (mDatabaseHelper != null)
             mDatabaseHelper.closeDB();
     }
@@ -1121,7 +1120,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void onResume() {
         OppAppLogger.d(LOG_TAG, "onResume(), Start ");
         super.onResume();
-
         if (mFromAnotherActivity) {
 
             mFromAnotherActivity = false;
