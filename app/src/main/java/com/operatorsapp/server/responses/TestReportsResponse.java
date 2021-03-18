@@ -1,5 +1,6 @@
 package com.operatorsapp.server.responses;
 
+import com.example.common.ErrorResponse;
 import com.example.common.StandardResponse;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,6 +10,11 @@ public class TestReportsResponse extends StandardResponse {
 
     @SerializedName("ResponseDictionary")
     TestReports mTestReports;
+
+    public TestReportsResponse() {
+        super(true, 0, null);
+        mTestReports = new TestReports();
+    }
 
     public ArrayList<TestReportColumn> getColumns() {
         return mTestReports.mColumns == null ? new ArrayList<TestReportColumn>() : mTestReports.mColumns;

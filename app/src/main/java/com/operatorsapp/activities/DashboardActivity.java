@@ -2269,7 +2269,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onLockScreenForceLoginOperator() {
 
-        if (!(getVisibleFragment() instanceof SignInOperatorFragment)) {
+        if (!(getVisibleFragment() instanceof SignInOperatorFragment || getVisibleFragment() instanceof SelectMachineFragment)) {
             getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, new SignInOperatorFragment()).addToBackStack("SignInOperatorFragment").commitAllowingStateLoss();
         }
     }

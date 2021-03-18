@@ -901,6 +901,9 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     public EmeraldGetPendingJobList emeraldGetPendingJobList(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
 
+        if(mRetrofit == null){
+            return null;
+        }
         try {
             return mRetrofit.create(EmeraldGetPendingJobList.class);
 

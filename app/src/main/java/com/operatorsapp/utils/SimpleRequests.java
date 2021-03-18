@@ -569,6 +569,10 @@ public class SimpleRequests {
 
         Call<PendingJobStandardResponse> call = getPendingJobListNetworkManager.emeraldGetPendingJobList(siteUrl, requestTimeout, TimeUnit.SECONDS).getPendingJobListRequest(getPendingJobListRequest);
 
+        if (call == null){
+            callback.onGetPendingJobListFailed(null);
+            return;
+        }
         call.enqueue(new Callback<PendingJobStandardResponse>() {
             @Override
             public void onResponse(@NonNull Call<PendingJobStandardResponse> call, @NonNull Response<PendingJobStandardResponse> response) {
