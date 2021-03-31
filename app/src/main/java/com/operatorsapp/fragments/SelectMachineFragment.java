@@ -333,10 +333,6 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         return mDepartmentAdapter.getSelectedMachineList();
     }
 
-    private ArrayList<String> getSelectedMachinesLineId() {
-        return mDepartmentAdapter.getSelectedMachineLineIdList();
-    }
-
     private void openConfirmationDialog() {
         final boolean isLogIn = mLoginLayout.getVisibility() == View.VISIBLE;
         if (isLogIn && getSelectedMachines().size() == 0 && mLoginIdEt.getText().toString().isEmpty()){
