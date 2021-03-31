@@ -35,6 +35,7 @@ import com.example.common.QCModels.ValueList;
 import com.example.common.SelectableString;
 import com.example.common.StandardResponse;
 import com.example.common.callback.GetDepartmentCallback;
+import com.example.common.department.DepartmentMachine;
 import com.example.common.department.DepartmentMachineValue;
 import com.example.common.department.DepartmentsMachinesResponse;
 import com.example.common.department.ProductionStatus;
@@ -332,6 +333,10 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         return mDepartmentAdapter.getSelectedMachineList();
     }
 
+    private ArrayList<String> getSelectedMachinesLineId() {
+        return mDepartmentAdapter.getSelectedMachineLineIdList();
+    }
+
     private void openConfirmationDialog() {
         final boolean isLogIn = mLoginLayout.getVisibility() == View.VISIBLE;
         if (isLogIn && getSelectedMachines().size() == 0 && mLoginIdEt.getText().toString().isEmpty()){
@@ -373,8 +378,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     }
 
     private void signInSelectedMachines(final AlertDialog dialog) {
-        UpdateWorkerRequest request = new UpdateWorkerRequest(PersistenceManager.getInstance().getSessionId(), mLoginIdEt.getText().toString(), getSelectedMachines());
-        NetworkManager.getInstance().UpdateWorkerToJosh(request, new Callback<StandardResponse>() {
+
+        NetworkManager.getInstance().UpdateWorkerToJosh(getUpdateWorkerRequest(), new Callback<StandardResponse>() {
             @Override
             public void onResponse(Call<StandardResponse> call, Response<StandardResponse> response) {
                 if (response.body() != null && response.body().isNoError()) {
@@ -398,10 +403,65 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         });
     }
 
-    private void setProductionModeForMachine(final AlertDialog dialog) {
+    private UpdateWorkerRequest getUpdateWorkerRequest() {
+        ArrayList<String> selectedMachines = new ArrayList<>();
+        ArrayList<String> selectedLines = new ArrayList<>();
+        for (DepartmentMachine department : mDepartmentMachine.getDepartmentMachine()) {
+            for (DepartmentMachineValue machine : department.getDepartmentMachineValue()) {
+                for (String machineId : getSelectedMachines()) {
+                    if (machineId.equals(machine.getId())){
+                        if (machine.getLineId() > 0) {
+                            boolean addLine = true;
+                            for (String lineId : selectedLines) {
+                                if (lineId.equals(machine.getLineId())) {
+                                    addLine = false;
+                                    break;
+                                }
+                            }
+                            if (addLine)
+                                selectedLines.add(String.valueOf(machine.getLineId()));
+                        }else {
+                            selectedMachines.add(machineId);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        return new UpdateWorkerRequest(PersistenceManager.getInstance().getSessionId(), mLoginIdEt.getText().toString(), selectedMachines, selectedLines);
+    }
+
+    private ProductionModeForMachineRequest getProductionModeForMachineRequest() {
+        ArrayList<String> selectedMachines = new ArrayList<>();
+        ArrayList<String> selectedLines = new ArrayList<>();
+        for (DepartmentMachine department : mDepartmentMachine.getDepartmentMachine()) {
+            for (DepartmentMachineValue machine : department.getDepartmentMachineValue()) {
+                for (String machineId : getSelectedMachines()) {
+                    if (machineId.equals(machine.getId())){
+                        if (machine.getLineId() > 0) {
+                            boolean addLine = true;
+                            for (String lineId : selectedLines) {
+                                if (lineId.equals(machine.getLineId())) {
+                                    addLine = false;
+                                    break;
+                                }
+                            }
+                            if (addLine)
+                                selectedLines.add(String.valueOf(machine.getLineId()));
+                        }else {
+                            selectedMachines.add(machineId);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
         int productionModeId = Integer.parseInt(((SimpleSpinnerAdapter)mStatusSpinner.getAdapter()).getItem(mStatusSpinner.getSelectedItemPosition()).getId());
-        ProductionModeForMachineRequest request = new ProductionModeForMachineRequest(PersistenceManager.getInstance().getSessionId(), productionModeId, getSelectedMachines());
-        NetworkManager.getInstance().postProductionModeForMachine(request, new Callback<StandardResponse>() {
+        return new ProductionModeForMachineRequest(PersistenceManager.getInstance().getSessionId(), productionModeId, selectedMachines, selectedLines);
+    }
+
+    private void setProductionModeForMachine(final AlertDialog dialog) {
+        NetworkManager.getInstance().postProductionModeForMachine(getProductionModeForMachineRequest(), new Callback<StandardResponse>() {
             @Override
             public void onResponse(Call<StandardResponse> call, Response<StandardResponse> response) {
                 if (dialog != null) {

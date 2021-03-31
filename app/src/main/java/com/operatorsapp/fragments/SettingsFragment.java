@@ -261,7 +261,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                 break;
             }
             case R.id.update_app_button:
-                mSettingsInterface.onCheckForAppUpdates();
+                mSettingsInterface.onCheckForAppUpdates(true);
                 getActivity().onBackPressed();
                 break;
 //            case R.id.button_change: {

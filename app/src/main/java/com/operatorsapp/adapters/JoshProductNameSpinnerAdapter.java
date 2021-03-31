@@ -38,7 +38,10 @@ public class JoshProductNameSpinnerAdapter extends ArrayAdapter<ActiveJob>
             row = inflater.inflate(R.layout.item_product_spinner, parent, false);
             mView = row;
             mRowName = row.findViewById(R.id.IPSL_name);
-            mRowName.setText(mSpinnerItems.get(position).getProductName());
+            String name = mSpinnerItems.get(position).getProductName();
+            String jobID = String.valueOf(mSpinnerItems.get(position).getJobID());
+            mRowName.setText(jobID + " " + name);
+//            mRowName.setText(mSpinnerItems.get(position).getProductName());
         }
         return row;
     }
@@ -53,7 +56,10 @@ public class JoshProductNameSpinnerAdapter extends ArrayAdapter<ActiveJob>
             row = inflater.inflate(R.layout.item_product_spinner_list, parent, false);
         }
         TextView name = row.findViewById(R.id.IPSL_name);
-        name.setText(mSpinnerItems.get(position).getProductName());
+        String productName = mSpinnerItems.get(position).getProductName();
+        String jobID = String.valueOf(mSpinnerItems.get(position).getJobID());
+        name.setText(jobID + " " + productName);
+//        name.setText(mSpinnerItems.get(position).getProductName());
 
         return row;
     }

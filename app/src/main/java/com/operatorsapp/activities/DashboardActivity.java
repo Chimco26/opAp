@@ -450,7 +450,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
         OppAppLogger.d(TAG, "onCreate(), end ");
 
-        setupVersionCheck();
+        setupVersionCheck(false);
 
         setReportBtnListener();
 
@@ -1908,8 +1908,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         showReportBtn(false);
     }
     @Override
-    public void onCheckForAppUpdates() {
-        setupVersionCheck();
+    public void onCheckForAppUpdates(boolean isImmediate) {
+        setupVersionCheck(isImmediate);
     }
 
     @Override
@@ -3424,7 +3424,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         });
     }
 
-    private void setupVersionCheck() {
+    private void setupVersionCheck(boolean isImmediate) {
+        int delay = isImmediate ? 0 : CHECK_APP_VERSION_INTERVAL;
         if (mVersionCheckHandler != null) {
             mVersionCheckHandler.removeCallbacksAndMessages(null);
         }
@@ -3461,7 +3462,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
         };
 
-        mVersionCheckHandler.postDelayed(mCheckAppVersionRunnable, CHECK_APP_VERSION_INTERVAL);
+        mVersionCheckHandler.postDelayed(mCheckAppVersionRunnable, delay);
     }
 
     private void getFile(String url) {

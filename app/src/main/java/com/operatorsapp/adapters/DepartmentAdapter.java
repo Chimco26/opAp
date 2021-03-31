@@ -15,7 +15,6 @@ import com.example.common.department.DepartmentMachineValue;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 
-import java.util.AbstractQueue;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +29,7 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
     private DepartmentAdapterListener mListener;
     private boolean isMultiSelect = false;
     private ArrayList<String> selectedMachineList = new ArrayList<>();
+    private ArrayList<String> machineLineIdList = new ArrayList<>();
 
     public DepartmentAdapter(List<DepartmentMachine> departmentResponse, DepartmentAdapterListener departmentAdapterListener) {
 
