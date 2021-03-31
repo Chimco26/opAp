@@ -15,6 +15,10 @@ public class ProductionModeForMachineRequest {
     @SerializedName("Machines")
     int[] machines;
 
+    @SerializedName("Lines")
+    int[] lines;
+
+
 
     public ProductionModeForMachineRequest(String sessionID, int ProductionModeID, int[] machines) {
         this.sessionID = sessionID;
@@ -31,12 +35,16 @@ public class ProductionModeForMachineRequest {
         }
     }
 
-    public ProductionModeForMachineRequest(String sessionID, int ProductionModeID, ArrayList<String> machines) {
+    public ProductionModeForMachineRequest(String sessionID, int ProductionModeID, ArrayList<String> machines, ArrayList<String> selectedMachinesLineId) {
         this.sessionID = sessionID;
         this.ProductionModeID = ProductionModeID;
         this.machines = new int[machines.size()];
         for (int i = 0; i < machines.size(); i++) {
             this.machines[i] = Integer.parseInt(machines.get(i));
+        }
+        this.lines = new int[selectedMachinesLineId.size()];
+        for (int i = 0; i < selectedMachinesLineId.size(); i++) {
+            this.lines[i] = Integer.parseInt(selectedMachinesLineId.get(i));
         }
     }
 }
