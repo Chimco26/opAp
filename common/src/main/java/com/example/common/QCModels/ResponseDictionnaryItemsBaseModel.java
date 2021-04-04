@@ -8,6 +8,9 @@ public class ResponseDictionnaryItemsBaseModel {
     @SerializedName("id")
     @Expose
     private Integer id = 0;
+    @SerializedName("jobid")
+    @Expose
+    private Integer jobId = 0;
     @SerializedName("name")
     @Expose
     private String name = DEFAULT;
@@ -27,6 +30,10 @@ public class ResponseDictionnaryItemsBaseModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getJobId() {
+        return jobId;
     }
 }
 

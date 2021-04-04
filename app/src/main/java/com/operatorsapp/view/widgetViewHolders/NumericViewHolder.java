@@ -112,9 +112,8 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
             }
         });
         mUnitRadioBtn = itemView.findViewById(R.id.NWC_edit_unit_btn);
-        mUnitRadioBtn.setChecked(PersistenceManager.getInstance().getReportRejectDefaultUnits() == 1);
         mWeightRadioBtn = itemView.findViewById(R.id.NWC_edit_weight_btn);
-        mWeightRadioBtn.setChecked(PersistenceManager.getInstance().getReportRejectDefaultUnits() != 1);
+        initUnitAndWeight();
         mStep1CancelBtn = itemView.findViewById(R.id.NWC_edit_cancel_btn);
         ResponseKPIS trans = PersistenceManager.getInstance().getTranslationForKPIS();
         if (trans != null) {
@@ -146,6 +145,26 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         });
         mEditCycleCancelBtn = itemView.findViewById(R.id.NWC_edit_quantity_cancel_btn);
 
+    }
+
+    private void initUnitAndWeight() {
+        switch (PersistenceManager.getInstance().getReportRejectDefaultUnits()) {
+            case 1:
+                mUnitRadioBtn.setVisibility(View.VISIBLE);
+                mUnitRadioBtn.setChecked(true);
+                mWeightRadioBtn.setVisibility(View.GONE);
+                break;
+            case 2:
+                mWeightRadioBtn.setVisibility(View.VISIBLE);
+                mWeightRadioBtn.setChecked(true);
+                mUnitRadioBtn.setVisibility(View.GONE);
+                break;
+            case 3:
+                mWeightRadioBtn.setVisibility(View.VISIBLE);
+                mUnitRadioBtn.setVisibility(View.VISIBLE);
+                mUnitRadioBtn.setChecked(true);
+                break;
+        }
     }
 
     public void setNumericItem(Widget widget, boolean showChangeUnitInCycleBtn, boolean showAddRejectsBtn) {
@@ -397,7 +416,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         if (widget.getCurrentValue().contains(".")) {
             try {
                 mValue.setText(new DecimalFormat("#.##").format(Double.parseDouble(widget.getCurrentValue())));
-            }catch (Exception e){
+            } catch (Exception e) {
                 mValue.setText(widget.getCurrentValue());
             }
         } else {

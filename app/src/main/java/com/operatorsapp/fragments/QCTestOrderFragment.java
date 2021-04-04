@@ -268,6 +268,7 @@ public class QCTestOrderFragment extends Fragment implements
                         case TYPE_JOSH:
                             if (mTestOrderRequest.getJoshID() != mTestOrder.getResponseDictionaryDT().getJoshIDs().get(position).getId()) {
                                 mTestOrderRequest.setJoshID(mTestOrder.getResponseDictionaryDT().getJoshIDs().get(position).getId());
+                                mTestOrderRequest.setJobID(mTestOrder.getResponseDictionaryDT().getJoshIDs().get(position).getJobId());
                                 if (!isFirst[0])
                                     getTestOrder(mTestOrderRequest);
                             }

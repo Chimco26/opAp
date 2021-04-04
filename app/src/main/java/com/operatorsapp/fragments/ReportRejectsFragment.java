@@ -78,6 +78,8 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     private ReportCore mReportCore;
     private int mSelectedPosition;
     private String mRejectMesuaring;
+    private View mUnitsLy;
+    private View mWeight_ly;
 
     public static ReportRejectsFragment newInstance(int currentProductId, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition, String rejectMesuring) {
         ReportRejectsFragment reportRejectsFragment = new ReportRejectsFragment();
@@ -153,13 +155,13 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         mActiveJobsProgressBar = view.findViewById(R.id.active_jobs_progressBar);
         mCancelButton = view.findViewById(R.id.button_cancel);
         mNextButton = view.findViewById(R.id.button_approve);
+        mUnitsLy = view.findViewById(R.id.FRR_unit_ly);
+        mWeight_ly = view.findViewById(R.id.FRR_weight_ly);
         mUnitsEditText = view.findViewById(R.id.units_edit_text);
         mWeightEditText = view.findViewById(R.id.weight_edit_text);
-        if (PersistenceManager.getInstance().getReportRejectDefaultUnits() == 1){
-            mUnitsEditText.requestFocus();
-        }else {
-            mWeightEditText.requestFocus();
-        }
+
+        initUnitAndWeight();
+
         mJobsSpinner = view.findViewById(R.id.report_job_spinner);
         TextView productIdTextView = view.findViewById(R.id.report_cycle_id_text_view);
         setWeightTitleView(view);
@@ -488,6 +490,27 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
             }
         }
     }
+
+    private void initUnitAndWeight() {
+        switch (PersistenceManager.getInstance().getReportRejectDefaultUnits()) {
+            case 1:
+                mUnitsLy.setVisibility(View.VISIBLE);
+                mUnitsEditText.requestFocus();
+                mWeight_ly.setVisibility(View.GONE);
+                break;
+            case 2:
+                mWeight_ly.setVisibility(View.VISIBLE);
+                mWeightEditText.requestFocus();
+                mUnitsLy.setVisibility(View.GONE);
+                break;
+            case 3:
+                mUnitsLy.setVisibility(View.VISIBLE);
+                mWeight_ly.setVisibility(View.VISIBLE);
+                mUnitsEditText.requestFocus();
+                break;
+        }
+    }
+
 
     private void dismissProgressDialog() {
         if (getActivity() != null) {
