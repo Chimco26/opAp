@@ -75,7 +75,7 @@
                 android:layout_marginEnd="21dp"
                 android:layout_toStartOf="@+id/toolbar_tutorial_iv"
                 android:drawSelectorOnTop="true"
-                app:theme="@style/ProximaNovaSemiBold"
+                android:theme="@style/ProximaNovaSemiBold"
                 tools:ignore="MissingPrefix" />
 
 
@@ -389,7 +389,7 @@
             android:background="@drawable/spinner_bckgrnd"
             android:dropDownVerticalOffset="31dp"
             android:popupBackground="@android:color/transparent"
-            app:theme="@style/ProximaNovaSemiBold" />
+            android:theme="@style/ProximaNovaSemiBold" />
 
         <View
             android:id="@+id/toolbar_after_job_spinner_separator"
@@ -437,7 +437,7 @@
                 android:drawSelectorOnTop="true"
                 android:dropDownVerticalOffset="51dp"
                 android:popupBackground="@android:color/transparent"
-                app:theme="@style/ProximaNovaSemiBold"
+                android:theme="@style/ProximaNovaSemiBold"
                 tools:ignore="MissingPrefix" />
         </FrameLayout>
     </LinearLayout>

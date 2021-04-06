@@ -7,7 +7,7 @@
     android:layout_height="@dimen/small_toolbar_height"
     android:background="?attr/colorPrimary"
     android:minHeight="?attr/actionBarSize"
-    app:theme="@style/ToolbarTheme">
+    android:theme="@style/ToolbarTheme">
 
 
 

@@ -1,19 +1,21 @@
 package com.operatorsapp.adapters;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.BaseSplits;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSplits;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -63,11 +65,14 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
 
         viewHolder.mTitle.setText(String.format(Locale.getDefault(),
                 "%s - %d", viewHolder.itemView.getContext().getResources()
-                .getString(R.string.source), mChannelSplits.get(position).getSplitNumber()));
+                        .getString(R.string.source), mChannelSplits.get(position).getSplitNumber()));
 
         if (mChannelSplits.get(position).getBaseSplits() != null && mChannelSplits.get(position).getBaseSplits().size() > 0) {
 
-            viewHolder.mSubTitle.setText(String.format("%s", mChannelSplits.get(viewHolder.getAdapterPosition()).getBaseSplits().get(0).getMaterialLName()));
+            viewHolder.mSubTitle.setText(String.format("%s",
+                    OperatorApplication.isEnglishLang() ?
+                            mChannelSplits.get(viewHolder.getAdapterPosition()).getBaseSplits().get(0).getMaterialEName()
+                            : mChannelSplits.get(viewHolder.getAdapterPosition()).getBaseSplits().get(0).getMaterialLName()));
             if (mType == TYPE_CHANNEL_100) {
                 ((TextView) viewHolder.itemView.findViewById(R.id.IP_sub_title_id)).setText(mChannelSplits.get(position).getBaseSplits().get(0).getCatalogID());
             }

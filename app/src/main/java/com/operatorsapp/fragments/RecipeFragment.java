@@ -272,7 +272,10 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
             mLayoutChannel100NoDataTv.setVisibility(View.GONE);
             mLayoutChannel100RvLy.setVisibility(View.VISIBLE);
 
-            mLayoutChannel100Title.setText(mRecipeResponse.getRecipe().getChannels().get(mRecipeResponse.getRecipe().getChannels().size() - 1).getChannelEname());
+            mLayoutChannel100Title.setText(
+                    OperatorApplication.isEnglishLang() ?
+                            mRecipeResponse.getRecipe().getChannels().get(mRecipeResponse.getRecipe().getChannels().size() - 1).getChannelEname()
+                            : mRecipeResponse.getRecipe().getChannels().get(mRecipeResponse.getRecipe().getChannels().size() - 1).getChannelLname());
 
             No0ChannelAdapter mNo0ChannelAdapter = new No0ChannelAdapter(getActivity(), new No0ChannelAdapter.Channel100AdapterListener() {
                 @Override
@@ -325,7 +328,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
             if (mRecipeResponse.getProductData() != null && mRecipeResponse.getProductData().getFileUrl() != null &&
                     mRecipeResponse.getProductData().getFileUrl().size() > 0) {
                 ImageLoader.getInstance().displayImage(mRecipeResponse.getProductData().getFileUrl().get(0), mLayoutChannel0Image);
-            }else if (mRecipeResponse.getProductFiles() != null && mRecipeResponse.getProductFiles().size() > 0){
+            } else if (mRecipeResponse.getProductFiles() != null && mRecipeResponse.getProductFiles().size() > 0) {
                 ImageLoader.getInstance().displayImage(mRecipeResponse.getProductFiles().get(0), mLayoutChannel0Image);
             }
 
@@ -690,7 +693,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
 
                 for (Channel recipe : recipeResponse_1_99) {
 
-                    ViewTagsHelper.addTitle(getActivity(), recipe.getChannelEname(), mlayoutChannel1_99);
+                    ViewTagsHelper.addTitle(getActivity(), OperatorApplication.isEnglishLang() ? recipe.getChannelEname() : recipe.getChannelLname(), mlayoutChannel1_99);
 
                     ViewTagsHelper.addRv(getActivity(), recipe.getChannelSplits(), mlayoutChannel1_99, new No0ChannelAdapter.Channel100AdapterListener() {
                         @Override
