@@ -516,4 +516,27 @@
     <string name="edit_sub_task">Unteraufgabe bearbeiten</string>
     <string name="back">Zurück</string>
     <string name="clear_filters">Alle Filter löschen</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="display_recipe">Rezept anzeigen</string>
+    <string name="error_cant_show_recipe">Fehler beim Anzeigen des Rezepts</string>
+    <string name="select_machines_for_display">Maschinen für die Anzeige auswählen</string>
+    <string name="pictures">Bilder</string>
+    <array name="shiftlog_spinner_items">
+
+        <item>Alle Ereignisse</item>
+        <item>Alarme</item>
+        <item>Alle Stopps</item>
+        <item>Nicht kategorisierte Stopps</item>
+
+    </array>
+
+    <string name="type_amount_for_item">Bitte geben Sie den Betrag in dieses Element ein</string>
+    <string name="tests_report">Testbericht</string>
+    <string name="operator_login">Bediener-Login</string>
+    <string name="select_multiple_machine">Wählen Sie Maschinen aus, um diese Aktion anzuwenden:</string>
+    <string name="select_machines_and_worker_id">Bitte wählen Sie Maschinen aus und geben Sie die Arbeiter-ID ein</string>
+    <string name="select_machines">Bitte wählen Sie Maschinen aus</string>
+    <string name="change_production_status_to">Produktionsstatus ändern zu:</string>
+    <string name="check_for_updates">App-Update prüfen</string>
+    <string name="select_test">Test wählen</string>
 </resources>

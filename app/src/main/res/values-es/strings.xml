@@ -513,4 +513,29 @@
     <string name="edit_sub_task">Editar subtarea</string>
     <string name="back">Atrás</string>
     <string name="clear_filters">Borrar todos los filtros</string>
+    <string name="dashboard">Panel de control</string>
+    <string name="display_recipe">Mostrar receta</string>
+    <string name="error_cant_show_recipe">Error. No se puede mostrar la receta</string>
+    <string name="select_machines_for_display">Seleccione las máquinas a mostrar</string>
+    <string name="pictures">Imágenes</string>
+    <array name="shiftlog_spinner_items">
+
+        <item>Todos los eventos</item>
+        <item>Alarmas</item>
+        <item>Todas las paradas</item>
+        <item>Paradas no categorizadas</item>
+
+    </array>
+
+    <string name="type_amount_for_item">Por favor, escriba la cantidad en este punto</string>
+
+    <string name="tests_report">Informe de pruebas</string>
+    <string name="operator_login">Inicio de sesión del operador:</string>
+    <string name="select_multiple_machine">Seleccione las máquinas para aplicar esta acción:</string>
+    <string name="select_machines_and_worker_id">Por favor, seleccione las máquinas e introduzca el ID del trabajador</string>
+    <string name="select_machines">Por favor, seleccione las máquinas</string>
+    <string name="change_production_status_to">Cambiar el estado de producción a:</string>
+    <string name="check_for_updates">Comprobar actualización de la aplicación</string>
+    <string name="select_test">Seleccionar prueba</string>
+    <string name="no_report_permission_on_setup">No se le permite informar eventos en la CONFIGURACIÓN. Contacte con el administrador del sistema para obtener más permisos</string>
 </resources>

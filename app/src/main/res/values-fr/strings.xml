@@ -515,4 +515,27 @@
     <string name="edit_sub_task">Editer la sous-tâche</string>
     <string name="back">Retour</string>
     <string name="clear_filters">Nettoyer tous les filtres</string>
+    <string name="dashboard">Tableau de bord</string>
+    <string name="display_recipe">Afficher la recette</string>
+    <string name="error_cant_show_recipe">Erreur : impossible d\'afficher la recette</string>
+    <string name="select_machines_for_display">Sélectionner les machines pour l\'affichage</string>
+    <string name="pictures">Images</string>
+    <array name="shiftlog_spinner_items">
+
+        <item>Tous les événements</item>
+        <item>Alarmes</item>
+        <item>Tous les arrêts</item>
+        <item>Arrêts non classifiés</item>
+
+    </array>
+
+    <string name="type_amount_for_item">Veuillez saisir le montant de cette production</string>
+    <string name="tests_report">Rapport des tests</string>
+    <string name="operator_login">Identification de l\'opérateur :</string>
+    <string name="select_multiple_machine">Sélectionnes les machines pour appliquer cette action :</string>
+    <string name="select_machines_and_worker_id">Veuillez sélectionner les machines et saisir l\'ID de l\'opérateur</string>
+    <string name="select_machines">Veuillez sélectionner les machines</string>
+    <string name="change_production_status_to">Changer le statut de production pour :</string>
+    <string name="check_for_updates">Vérifier les mises à jour de l\'application</string>
+    <string name="select_test">Sélectionner un test</string>
 </resources>

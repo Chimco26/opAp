@@ -470,4 +470,26 @@
     <string name="edit_sub_task">Modifica sotto-attività</string>
     <string name="back">Indietro</string>
     <string name="clear_filters">Rimuovi tutti i filtri</string>
+    <string name="dashboard">Pannello di controllo</string>
+    <string name="display_recipe">Mostra istruzioni</string>
+    <string name="error_cant_show_recipe">Errore, non posso visualizzare le istruzioni</string>
+    <string name="select_machines_for_display">Seleziona la macchina da visualizzare</string>
+    <string name="pictures">Figure</string>
+    <array name="shiftlog_spinner_items">
+
+        <item>Tutti gli eventi</item>
+        <item>Allarmi</item>
+        <item>Tutti i fermi</item>
+        <item>Fermi non categorizzati</item>
+
+    </array>
+    <string name="type_amount_for_item">Digita l\'ammontare in questa voce</string>
+    <string name="tests_report">Risultati del test</string>
+    <string name="operator_login">Accesso operatore:</string>
+    <string name="select_multiple_machine">Seleziona le macchine per applicare questa azione:</string>
+    <string name="select_machines_and_worker_id">Seleziona le macchine e inserisci l\'ID lavoratore</string>
+    <string name="select_machines">Seleziona le macchine</string>
+    <string name="change_production_status_to">Cambia lo stato della produzione in:</string>
+    <string name="check_for_updates">Verifica l\'aggiornamento dell\'app</string>
+    <string name="select_test">Seleziona test</string>
 </resources>

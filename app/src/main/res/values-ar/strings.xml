@@ -516,4 +516,27 @@
     <string name="edit_sub_task">تعديل المهام الفرعية</string>
     <string name="back">العودة</string>
     <string name="clear_filters">إزالة جميع المرشحات</string>
+    <string name="dashboard">لوحة المعلومات</string>
+    <string name="display_recipe">طريقة العرض</string>
+    <string name="error_cant_show_recipe">خطأ يمنع عرض الطريقة</string>
+    <string name="select_machines_for_display">حدد الآلات للعرض</string>
+    <string name="pictures">الصور</string>
+    <array name="shiftlog_spinner_items">
+
+        <item>جميع الأحداث</item>
+        <item>التنبيهات</item>
+        <item>جميع التوقفات</item>
+        <item>توقفات غير مُحددة التصنيف</item>
+
+    </array>
+
+    <string name="type_amount_for_item">يُرجى كتابة المقدار في هذا العنصر</string>
+    <string name="tests_report">تقرير الاختبارات</string>
+    <string name="operator_login">تسجيل دخول المشغل:</string>
+    <string name="select_multiple_machine">حدد الماكينات لتطبيق هذا الإجراء:</string>
+    <string name="select_machines_and_worker_id">يُرج اختيار الماكينات وإدخال معرف العامل</string>
+    <string name="select_machines">يُرجى تحديد الماكينات</string>
+    <string name="change_production_status_to">تغيير حالة الإنتاج إلى:</string>
+    <string name="check_for_updates">التحقق من تحديث التطبيق</string>
+    <string name="select_test">تحديد الاختبار</string>
 </resources>

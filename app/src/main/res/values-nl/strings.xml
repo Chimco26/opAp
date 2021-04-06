@@ -522,4 +522,27 @@
     <string name="edit_sub_task">Subtaak bewerken</string>
     <string name="back">Terug</string>
     <string name="clear_filters">Alle filters wissen</string>
+    <string name="dashboard">Bedieningspaneel</string>
+    <string name="display_recipe">Recept weergeven</string>
+    <string name="error_cant_show_recipe">Fout, kan recept niet tonen</string>
+    <string name="select_machines_for_display">Selecteer machines om weer te geven</string>
+    <string name="pictures">Afbeeldingen</string>
+    <array name="shiftlog_spinner_items">
+
+        <item>Alle gebeurtenissen</item>
+        <item>Alarmmeldingen</item>
+        <item>Alle stops</item>
+        <item>Ongecategoriseerde stops</item>
+
+    </array>
+
+    <string name="type_amount_for_item"></string>
+    <string name="tests_report"></string>
+    <string name="operator_login"></string>
+    <string name="select_multiple_machine"></string>
+    <string name="select_machines_and_worker_id"></string>
+    <string name="select_machines"></string>
+    <string name="change_production_status_to"></string>
+    <string name="check_for_updates"></string>
+    <string name="select_test"></string>
 </resources>
