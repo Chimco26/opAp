@@ -511,4 +511,27 @@
     <string name="edit_sub_task">Изменить подзадачу</string>
     <string name="back">Назад</string>
     <string name="clear_filters">Очистить все фильтры</string>
+    <string name="dashboard">Панель управления</string>
+    <string name="display_recipe">Показать набор параметров</string>
+    <string name="error_cant_show_recipe">Ошибка, невозможно показать набор параметров</string>
+    <string name="select_machines_for_display">Выберите машины для отображения</string>
+    <string name="pictures">Изображения</string>
+    <array name="shiftlog_spinner_items">
+
+        <item>Все события</item>
+        <item>Тревожные сигналы</item>
+        <item>Все остановки</item>
+        <item>Некатегоризованные остановки</item>
+
+    </array>
+
+    <string name="type_amount_for_item">Введите сумму в этой позиции</string>
+    <string name="tests_report">Отчет о тестах</string>
+    <string name="operator_login">Вход оператора:</string>
+    <string name="select_multiple_machine">Выберите машины, чтобы применить это действие:</string>
+    <string name="select_machines_and_worker_id">Выберите машины и введите ид. работника</string>
+    <string name="select_machines">Выберите машины</string>
+    <string name="change_production_status_to">Изменить статус производства на:</string>
+    <string name="check_for_updates">Проверить обновление приложения</string>
+    <string name="select_test">Выбрать тест</string>
 </resources>

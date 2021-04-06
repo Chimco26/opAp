@@ -511,4 +511,27 @@
     <string name="edit_sub_task">Редагувати підзавдання</string>
     <string name="back">Назад</string>
     <string name="clear_filters">Очистити всі фільтри</string>
+    <string name="dashboard">Панель інструментів</string>
+    <string name="display_recipe">Показати рецепт</string>
+    <string name="error_cant_show_recipe">Помилка не може показати рецепт</string>
+    <string name="select_machines_for_display">Виберіть машини для відображення</string>
+    <string name="pictures">Зображення</string>
+    <array name="shiftlog_spinner_items">
+
+        <item>Всі події</item>
+        <item>Сповіщення</item>
+        <item>Всі зупинки</item>
+        <item>Зупинки без категорії</item>
+
+    </array>
+
+    <string name="type_amount_for_item">Вкажіть кількість для цієї одиниці</string>
+    <string name="tests_report">Звіт про тести</string>
+    <string name="operator_login">Вхід оператора:</string>
+    <string name="select_multiple_machine">Виберіть пристрої для вживання цієї дії:</string>
+    <string name="select_machines_and_worker_id">Виберіть пристрої та введіть ідентифікатор робітника</string>
+    <string name="select_machines">Виберіть пристрої</string>
+    <string name="change_production_status_to">Змінити статус виробництва на:</string>
+    <string name="check_for_updates">Перевірити оновлення додатка</string>
+    <string name="select_test">Вибрати тест</string>
 </resources>

@@ -482,4 +482,30 @@
     <string name="add_sub_task">Dodaj podzadanie</string>
     <string name="step_task_not_finished">Wykonaj wszystkie kroki zadania</string>
     <string name="sort_by">Sortuj wg</string>
+    <string name="dashboard">Pulpit</string>
+    <string name="display_recipe">Wyświetl recepturę</string>
+    <string name="error_cant_show_recipe">Błąd - nie można wyświetlić receptury</string>
+    <string name="select_machines_for_display">Wybierz urządzenia do wyświetlenia</string>
+    <string name="pictures">Obrazy</string>
+    <array name="shiftlog_spinner_items">
+
+        <item>Wszystkie zdarzenia</item>
+        <item>Ostrzeżenia</item>
+        <item>Wszystkie zatrzymania</item>
+        <item>Zatrzymania nieujęte w kategorie</item>
+
+    </array>
+
+    <string name="type_amount_for_item">Proszę wpisać ilość do tego przedmiotu</string>
+    <string name="tests_report">Raporty z testów</string>
+    <string name="operator_login">Logowanie operatora:</string>
+    <string name="select_multiple_machine">Wybierz maszyny aby zastosować działanie:</string>
+    <string name="select_machines_and_worker_id">Proszę wybrać maszyny i wpisać ID pracownika</string>
+    <string name="select_machines">Proszę wybrać maszyny</string>
+    <string name="change_production_status_to">Zmień status produkcji na:</string>
+    <string name="check_for_updates">Sprawdź aktualizację aplikacji</string>
+    <string name="select_test">Wybierz test</string>
+    <string name="clear_filters">Wyczyść filtry</string>
+    <string name="edit_sub_task">Edytuj podzadanie</string>
+    <string name="back">Powrót</string>
 </resources>

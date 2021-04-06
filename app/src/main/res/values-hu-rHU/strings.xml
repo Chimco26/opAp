@@ -503,4 +503,27 @@
     <string name="edit_sub_task">Al-feladat szerkesztése</string>
     <string name="back">Vissza</string>
     <string name="clear_filters">Összes szűrő törlése</string>
+    <string name="dashboard">Vezérlőpult</string>
+    <string name="display_recipe">Recept megjelenítése</string>
+    <string name="error_cant_show_recipe">Hiba - recept nem jeleníthető meg</string>
+    <string name="select_machines_for_display">Gépek kijelölése megjelenítésre</string>
+    <string name="pictures">Képek</string>
+    <array name="shiftlog_spinner_items">
+
+        <item>Összes esemény</item>
+        <item>Riasztások</item>
+        <item>Összes leállás</item>
+        <item>Kategória nélküli leállások</item>
+
+    </array>
+    <string name="type_amount_for_item">Gépelje be a mennyiséget ebben az elemben</string>
+    <string name="tests_report">Tesztjelentés</string>
+    <string name="operator_login">Kezelői bejelentkezés:</string>
+    <string name="select_multiple_machine">Gépek kiválasztása ehhez a művelethez:</string>
+    <string name="select_machines_and_worker_id">Válasszon gépeket, és adja meg a dolgozó azonosítóját</string>
+    <string name="select_machines">Válasszon gépeket</string>
+    <string name="change_production_status_to">Gyártási állapot módosítása erre:</string>
+    <string name="check_for_updates">Alkalmazás frissítések ellenőrzése</string>
+    <string name="select_test">Teszt kiválasztása</string>
+
 </resources>

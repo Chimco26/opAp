@@ -537,4 +537,18 @@
     <string name="edit_sub_task">עריכת תת-משימה</string>
     <string name="back">חזרה</string>
     <string name="clear_filters">נקה פילטרים</string>
+    <string name="dashboard"></string>
+    <string name="display_recipe"></string>
+    <string name="error_cant_show_recipe"></string>
+    <string name="select_machines_for_display"></string>
+    <string name="pictures">תמונות</string>
+    <string name="type_amount_for_item">בבקשה הזן את הכמות לפריט זה</string>
+    <string name="tests_report">דו"ח בדיקות</string>
+    <string name="operator_login">כניסת מפעיל</string>
+    <string name="select_multiple_machine">בחר מכונות שעליהן תופעל הפעולה שנבחרה:</string>
+    <string name="select_machines_and_worker_id">בחר מכונות והזן מספר עובד</string>
+    <string name="select_machines">בבקשה בחר מכונות</string>
+    <string name="change_production_status_to">שנה סטטוס ייצור ל:</string>
+    <string name="check_for_updates">בדיקת עדכונים</string>
+    <string name="select_test">בחר בדיקה</string>
 </resources>

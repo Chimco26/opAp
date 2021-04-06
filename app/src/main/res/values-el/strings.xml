@@ -369,7 +369,7 @@
     <string name="go_to_setup">Πηγαίνετε στις ρυθμίσεις</string>
     <string name="setup_mode">Setup-Modus</string>
     <string name="rejects_quantity">Ποσότητα απορριφθέντων</string>
-    <string name="there_are_no_stop_event"></string>
+    <string name="there_are_no_stop_event">Δεν υπάρχουν ακόμη στάσεις για αναφορά</string>
     <string name="theoretical_units">Θεωρητικές ενότητες</string>
     <string name="average">Μέσος όρος</string>
     <string name="add_rejects">Προσθέστε απορρίψεις</string>
@@ -443,7 +443,7 @@
     <string name="update">αναβάθμιση</string>
     <string name="update_this_event_to_all_linked">Ενημερώστε το λόγο τερματισμού σε όλα τα συνδεδεμένα συμβάντα</string>
     <string name="update_this_production_status_also_to">Ενημερώστε την κατάσταση παραγωγής επίσης στο</string>
-    <string name="you_need_to_complete_all_mandatory_fields"></string>
+    <string name="you_need_to_complete_all_mandatory_fields">Πρέπει να συμπληρώσετε όλα τα υποχρεωτικά πεδία</string>
     <string name="send_test_success">Στείλτε το τεστ επιτυχίας</string>
     <string name="powered_by_leadermes">Powered by Matics</string>
     <string name="you_need_to_select_the_test">Χρειάζετε να διαλέξετε το τεστ που θέλετε να \'τρέξετε\'</string>
@@ -452,7 +452,7 @@
     <string name="you_cant_add_more_workers_than">δε μπορείς να προσθέσεις περισσότερους χειριστές από</string>
     <string name="save_and_close">Αποθήκευση και κλείσιμο</string>
     <string name="default_unanswered_technocian_call">Aναμονή για να απαντήσει o τεχνικός</string>
-    <string name="install_activity_not_found"></string>
+    <string name="install_activity_not_found">Δεν ήταν δυνατή η εύρεση της εφαρμογής εγκατάστασης, δοκιμάστε να εγκαταστήσετε ξανά το «Google Play Store»</string>
     <string name="add_new_task">Προσθέστε νέο έργο</string>
     <string name="todo">Να γίνουν</string>
     <string name="in_progress">Σε εξέλιξη</string>
@@ -490,8 +490,8 @@
     <string name="task_id">Ταυτότητα έργου</string>
     <string name="test_details">Λεπτομέρειες τεστ</string>
     <string name="execution_time_frame">Χρονικό πλαίσιο εκτέλεσης</string>
-    <string name="activate_custom_y_axis_values"></string>
-    <string name="max_value_must_be_greater_than_min"></string>
+    <string name="activate_custom_y_axis_values">Ενεργοποίηση προσαρμοσμένων τιμών Άξονα Υ</string>
+    <string name="max_value_must_be_greater_than_min">Η μέγιστη τιμή πρέπει να είναι μεγαλύτερη από την ελάχιστη τιμή</string>
     <string name="start_service">έναρξη υπηρεσίας</string>
     <string name="finish_service">λήξη υπηρεσίας</string>
     <string name="deselect_all">Αποεπιλογή όλων</string>
@@ -515,4 +515,28 @@
     <string name="edit_sub_task">Επεξεργασία υποεργασιών</string>
     <string name="back">Επιστροφή</string>
     <string name="clear_filters">Διαγραφή όλων των φίλτρων</string>
+    <string name="dashboard">Πίνακας Ελέγχου</string>
+    <string name="display_recipe">Εμφάνιση συνταγής</string>
+    <string name="error_cant_show_recipe">Το σφάλμα δεν μπορεί να δείξει τη συνταγή</string>
+    <string name="select_machines_for_display">Επιλέξτε Μηχανές για Προβολή</string>
+    <string name="pictures">Εικόνες</string>
+    <array name="shiftlog_spinner_items">
+
+        <item>Όλες οι Εκδηλώσεις</item>
+        <item>Συναγερμοί</item>
+        <item>Όλες οι Στάσεις</item>
+        <item>Μη Κατηγοριοποιημένες Στάσεις</item>
+
+    </array>
+
+    <string name="type_amount_for_item">Πληκτρολογήστε το ποσό σε αυτό το είδος</string>
+    <string name="tests_report">Αναφορά Δοκιμών</string>
+    <string name="operator_login">Σύνδεση Χειριστή:</string>
+    <string name="select_multiple_machine">Επιλέξτε μηχανήματα για να εφαρμόσετε αυτήν την ενέργεια:</string>
+    <string name="select_machines_and_worker_id">Επιλέξτε μηχανήματα και εισαγάγετε το αναγνωριστικό εργαζομένου</string>
+    <string name="select_machines">Επιλέξτε μηχανήματα</string>
+    <string name="change_production_status_to">Αλλαγή Κατάστασης Παραγωγής σε:</string>
+    <string name="check_for_updates">Έλεγχος Ενημερώσεων της Εφαρμογής</string>
+    <string name="select_test">Επιλέξτε Δοκιμή</string>
+    <string name="no_report_permission_on_setup">Δεν έχετε εξουσιοδότηση για αναφορά συμβάντων κατά την ΕΓΚΑΤΑΣΤΑΣΗ. Παρακαλούμε επικοινωνήστε με τον διαχειριστή του συστήματος για περισσότερες άδειες.</string>
 </resources>

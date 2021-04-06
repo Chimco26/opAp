@@ -507,4 +507,27 @@
     <string name="edit_sub_task">编辑子任务</string>
     <string name="back">返回</string>
     <string name="clear_filters">清除所有过滤条件</string>
+    <string name="dashboard">仪表板</string>
+    <string name="display_recipe">显示配方</string>
+    <string name="error_cant_show_recipe">错误，无法显示配方</string>
+    <string name="select_machines_for_display">选择要显示的机器</string>
+    <string name="pictures">图片</string>
+    <array name="shiftlog_spinner_items">
+
+        <item>所有事件</item>
+        <item>警报</item>
+        <item>所有停机</item>
+        <item>未分类的停机</item>
+
+    </array>
+
+    <string name="type_amount_for_item">请录入此物件的总量</string>
+    <string name="tests_report">测试报告</string>
+    <string name="operator_login">操作员登入：</string>
+    <string name="select_multiple_machine">选择要应用此操作的机器：</string>
+    <string name="select_machines_and_worker_id">请选择机器并输入工作人员编号</string>
+    <string name="select_machines">请选择机器</string>
+    <string name="change_production_status_to">将生产状态更改为：</string>
+    <string name="check_for_updates">检查应用更新</string>
+    <string name="select_test">选择测试</string>
 </resources>
