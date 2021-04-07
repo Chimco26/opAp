@@ -16,7 +16,7 @@ public class SendReportCycleUnitsRequest {
     private String mOperatorId;
     @SerializedName("UnitsPerCycle")
     private double mUnitsPerCycle;
-    @SerializedName("JobId")
+    @SerializedName("JobID")
     private Integer mJobId;
 
     public SendReportCycleUnitsRequest(String sessionId, String machineId, String operatorId, double unitsPerCycle, @Nullable Integer jobId) {

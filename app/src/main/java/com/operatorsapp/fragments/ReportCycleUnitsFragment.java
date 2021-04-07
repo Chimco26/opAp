@@ -138,7 +138,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
             if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null
                     && mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition) != null) {
-                mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+                mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJobID();
                 mUnitsCounter = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getCavitiesActual();
             }
 
@@ -466,7 +466,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         activeJobsSpinnerAdapter.setTitle(position);
-                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
+                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
                         mMaxUnits = mActiveJobsListForMachine.getActiveJobs().get(position).getCavitiesStandard();
                     }
 
