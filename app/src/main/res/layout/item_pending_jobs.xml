@@ -10,6 +10,7 @@
         android:layout_height="148dp"
         android:orientation="horizontal">
 
+<!--        no rounded-->
         <View
             android:id="@+id/PI_selected_bar"
             android:layout_width="7dp"

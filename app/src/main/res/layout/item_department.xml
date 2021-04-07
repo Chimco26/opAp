@@ -12,6 +12,7 @@
         android:orientation="vertical"
         app:corner_radius="5dp">
 
+<!--        no rounded-->
         <TextView
             android:id="@+id/ID_title"
             android:layout_width="match_parent"
