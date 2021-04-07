@@ -30,8 +30,6 @@ import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.common.QCModels.TestDetailsForm;
-import com.example.common.QCModels.ValueList;
 import com.example.common.SelectableString;
 import com.example.common.StandardResponse;
 import com.example.common.callback.GetDepartmentCallback;
@@ -44,10 +42,7 @@ import com.operatorsapp.adapters.AutoCompleteAdapter;
 import com.operatorsapp.adapters.DepartmentAdapter;
 import com.operatorsapp.adapters.SimpleSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
-import com.operatorsapp.dialogs.ProgressDialogFragment;
-import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.ProductionModeForMachineRequest;
 import com.operatorsapp.server.requests.UpdateWorkerRequest;
@@ -57,7 +52,6 @@ import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.SimpleRequests;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,7 +62,7 @@ import static com.operatorsapp.managers.PersistenceManager.setMachineData;
 public class SelectMachineFragment extends BackStackAwareFragment implements AdapterView.OnItemClickListener, View.OnClickListener, DepartmentAdapter.DepartmentAdapterListener {
     public static final String LOG_TAG = SelectMachineFragment.class.getSimpleName();
     private static final String MACHINES_LIST = "machines_list";
-//    private GoToScreenListener mNavigationCallback;
+    //    private GoToScreenListener mNavigationCallback;
     private AppCompatAutoCompleteTextView mSearchField;
     private ImageView mGoButton;
     private DepartmentsMachinesResponse mDepartmentMachine;
@@ -335,10 +329,10 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
     private void openConfirmationDialog() {
         final boolean isLogIn = mLoginLayout.getVisibility() == View.VISIBLE;
-        if (isLogIn && getSelectedMachines().size() == 0 && mLoginIdEt.getText().toString().isEmpty()){
+        if (isLogIn && getSelectedMachines().size() == 0 && mLoginIdEt.getText().toString().isEmpty()) {
             Toast.makeText(getActivity(), getString(R.string.select_machines_and_worker_id), Toast.LENGTH_SHORT).show();
             return;
-        }else if (!isLogIn && getSelectedMachines().size() == 0){
+        } else if (!isLogIn && getSelectedMachines().size() == 0) {
             Toast.makeText(getActivity(), getString(R.string.select_machines), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -351,13 +345,13 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         final ProgressBar progressBar = view.findViewById(R.id.DALJ_progress_pb);
         view.findViewById(R.id.DALJ_title_ic).setVisibility(View.GONE);
         view.findViewById(R.id.DALJ_title_tv).setVisibility(View.GONE);
-        ((TextView)view.findViewById(R.id.DALJ_sub_title_tv)).setText(getResources().getString(R.string.confirm_machine_selection));
+        ((TextView) view.findViewById(R.id.DALJ_sub_title_tv)).setText(getResources().getString(R.string.confirm_machine_selection));
         view.findViewById(R.id.DALJ_positive_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {/// Button Yes
                 if (isLogIn) {
                     signInSelectedMachines(dialog);
-                }else {
+                } else {
                     setProductionModeForMachine(dialog);
                 }
                 progressBar.setVisibility(View.VISIBLE);
@@ -383,10 +377,10 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                     if (dialog != null)
                         dialog.dismiss();
                     Toast.makeText(getActivity(), getString(R.string.signed_in_successfully), Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     if (response.body() != null) {
                         onFailure(call, new Throwable(response.body().getError().getErrorDesc()));
-                    }else {
+                    } else {
                         onFailure(call, new Throwable(""));
                     }
                 }
@@ -405,7 +399,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         for (DepartmentMachine department : mDepartmentMachine.getDepartmentMachine()) {
             for (DepartmentMachineValue machine : department.getDepartmentMachineValue()) {
                 for (String machineId : getSelectedMachines()) {
-                    if (machineId.equals(machine.getId())){
+                    if (machineId.equals(machine.getId())) {
                         if (machine.getLineId() > 0) {
                             boolean addLine = true;
                             for (String lineId : selectedLines) {
@@ -416,7 +410,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                             }
                             if (addLine)
                                 selectedLines.add(String.valueOf(machine.getLineId()));
-                        }else {
+                        } else {
                             selectedMachines.add(machineId);
                         }
                         break;
@@ -433,18 +427,19 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         for (DepartmentMachine department : mDepartmentMachine.getDepartmentMachine()) {
             for (DepartmentMachineValue machine : department.getDepartmentMachineValue()) {
                 for (String machineId : getSelectedMachines()) {
-                    if (machineId.equals(machine.getId())){
+                    if (machineId.equals(String.valueOf(machine.getId()))) {
                         if (machine.getLineId() > 0) {
                             boolean addLine = true;
                             for (String lineId : selectedLines) {
-                                if (lineId.equals(machine.getLineId())) {
+                                if (lineId.equals(String.valueOf(machine.getLineId()))) {
                                     addLine = false;
                                     break;
                                 }
                             }
-                            if (addLine)
+                            if (addLine) {
                                 selectedLines.add(String.valueOf(machine.getLineId()));
-                        }else {
+                            }
+                        } else {
                             selectedMachines.add(machineId);
                         }
                         break;
@@ -452,7 +447,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 }
             }
         }
-        int productionModeId = Integer.parseInt(((SimpleSpinnerAdapter)mStatusSpinner.getAdapter()).getItem(mStatusSpinner.getSelectedItemPosition()).getId());
+        int productionModeId = Integer.parseInt(((SimpleSpinnerAdapter) mStatusSpinner.getAdapter()).getItem(mStatusSpinner.getSelectedItemPosition()).getId());
         return new ProductionModeForMachineRequest(PersistenceManager.getInstance().getSessionId(), productionModeId, selectedMachines, selectedLines);
     }
 
@@ -466,10 +461,10 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 if (response.body() != null && response.body().isNoError()) {
                     initView();
                     Toast.makeText(getActivity(), getString(R.string.success), Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     if (response.body() != null) {
                         onFailure(call, new Throwable(response.body().getError().getErrorDesc()));
-                    }else {
+                    } else {
                         onFailure(call, new Throwable(""));
                     }
                 }
@@ -519,7 +514,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {            }
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
         });
     }
 
@@ -543,8 +539,11 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
     public interface SelectMachineFragmentListener {
         void onChangeFactory();
+
         void onCloseSelectMachine();
+
         void onMachineSelected();
+
         void onQCTestSelected();
     }
 }

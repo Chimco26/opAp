@@ -51,12 +51,12 @@ class MachineAdapter  extends RecyclerView.Adapter<MachineAdapter.ViewHolder> {
             public void onClick(View view) {
                 DepartmentMachineValue machineValue = mMachinesFil.get(position);
                 if (isMultiSelect){
-                    if (mSelectedMachineList.contains(machineValue.getId() + "")){
-                        mSelectedMachineList.remove(machineValue.getId() + "");
+                    if (mSelectedMachineList.contains(String.valueOf(machineValue.getId()))){
+                        mSelectedMachineList.remove(String.valueOf(machineValue.getId()));
                         viewHolder.mTitle.setTextColor(view.getContext().getResources().getColor(R.color.black));
                         viewHolder.itemView.setBackgroundColor(view.getContext().getResources().getColor(R.color.white_five));
                     }else {
-                        mSelectedMachineList.add(machineValue.getId() + "");
+                        mSelectedMachineList.add(String.valueOf(machineValue.getId()));
                         viewHolder.mTitle.setTextColor(view.getContext().getResources().getColor(R.color.blue1));
                         viewHolder.itemView.setBackgroundColor(view.getContext().getResources().getColor(R.color.grey_lite));
                     }
@@ -65,7 +65,7 @@ class MachineAdapter  extends RecyclerView.Adapter<MachineAdapter.ViewHolder> {
                 mListener.onMachineSelected(machineValue);
             }
         });
-        if (isMultiSelect && mSelectedMachineList.contains(machine.getId() + "")){
+        if (isMultiSelect && mSelectedMachineList.contains(String.valueOf(machine.getId()))){
             viewHolder.mTitle.setTextColor(Color.BLUE);
         }else {
             viewHolder.mTitle.setTextColor(Color.BLACK);

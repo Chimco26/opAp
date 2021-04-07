@@ -113,7 +113,9 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         });
         mUnitRadioBtn = itemView.findViewById(R.id.NWC_edit_unit_btn);
         mWeightRadioBtn = itemView.findViewById(R.id.NWC_edit_weight_btn);
-        initUnitAndWeight();
+        View unitTv = itemView.findViewById(R.id.NWC_units_tv);
+        View weightTv = itemView.findViewById(R.id.NWC_weight_tv);
+        initUnitAndWeight(unitTv, weightTv);
         mStep1CancelBtn = itemView.findViewById(R.id.NWC_edit_cancel_btn);
         ResponseKPIS trans = PersistenceManager.getInstance().getTranslationForKPIS();
         if (trans != null) {
@@ -147,21 +149,27 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    private void initUnitAndWeight() {
+    private void initUnitAndWeight(View unitTv, View weightTv) {
         switch (PersistenceManager.getInstance().getReportRejectDefaultUnits()) {
             case 1:
                 mUnitRadioBtn.setVisibility(View.VISIBLE);
+                unitTv.setVisibility(View.VISIBLE);
                 mUnitRadioBtn.setChecked(true);
                 mWeightRadioBtn.setVisibility(View.GONE);
+                weightTv.setVisibility(View.GONE);
                 break;
             case 2:
                 mWeightRadioBtn.setVisibility(View.VISIBLE);
+                weightTv.setVisibility(View.VISIBLE);
                 mWeightRadioBtn.setChecked(true);
                 mUnitRadioBtn.setVisibility(View.GONE);
+                unitTv.setVisibility(View.GONE);
                 break;
             case 3:
                 mWeightRadioBtn.setVisibility(View.VISIBLE);
+                weightTv.setVisibility(View.VISIBLE);
                 mUnitRadioBtn.setVisibility(View.VISIBLE);
+                unitTv.setVisibility(View.VISIBLE);
                 mUnitRadioBtn.setChecked(true);
                 break;
         }
@@ -240,6 +248,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mEditStep1Ly.setVisibility(View.GONE);
         mEditStep2Ly.setVisibility(View.GONE);
         mEditCycleLy.setVisibility(View.VISIBLE);
+        mEditCycleReportBtn.setEnabled(true);
 //        mEditCycleEt.requestFocus();
 //        KeyboardUtils.showKeyboard(mContext);
 
