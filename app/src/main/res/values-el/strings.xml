@@ -539,4 +539,6 @@
     <string name="check_for_updates">Έλεγχος Ενημερώσεων της Εφαρμογής</string>
     <string name="select_test">Επιλέξτε Δοκιμή</string>
     <string name="no_report_permission_on_setup">Δεν έχετε εξουσιοδότηση για αναφορά συμβάντων κατά την ΕΓΚΑΤΑΣΤΑΣΗ. Παρακαλούμε επικοινωνήστε με τον διαχειριστή του συστήματος για περισσότερες άδειες.</string>
+    <string name="confirm_machine_selection">Είστε βέβαιοι ότι θέλετε να εφαρμόσετε αυτήν την ενέργεια σε όλα τα μηχανήματα;</string>
+    <string name="you_ve_reached_the_shift_production_target">Φτάσατε στον στόχο παραγωγής της βάρδιας!</string>
 </resources>

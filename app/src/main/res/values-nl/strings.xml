@@ -536,13 +536,15 @@
 
     </array>
 
-    <string name="type_amount_for_item"></string>
-    <string name="tests_report"></string>
-    <string name="operator_login"></string>
-    <string name="select_multiple_machine"></string>
-    <string name="select_machines_and_worker_id"></string>
-    <string name="select_machines"></string>
-    <string name="change_production_status_to"></string>
-    <string name="check_for_updates"></string>
-    <string name="select_test"></string>
+    <string name="type_amount_for_item">Typ het aantal in dit vak</string>
+    <string name="tests_report">Testrapporten</string>
+    <string name="operator_login">Operator log in:</string>
+    <string name="select_multiple_machine">Selecteer machines om deze actie toe te passen:</string>
+    <string name="select_machines_and_worker_id">Selecteer machines en voer werknemers-ID in</string>
+    <string name="select_machines">Selecteer machines</string>
+    <string name="change_production_status_to">Wijzig productiestatus in:</string>
+    <string name="check_for_updates">Controleer app-update</string>
+    <string name="select_test">Selecteer test</string>
+    <string name="confirm_machine_selection">Weet u zeker dat u deze actie op alle machines wilt toepassen?</string>
+    <string name="you_ve_reached_the_shift_production_target">U hebt het doel van de ploegendienst bereikt!</string>
 </resources>

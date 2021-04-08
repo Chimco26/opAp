@@ -525,5 +525,7 @@
     <string name="change_production_status_to">Gyártási állapot módosítása erre:</string>
     <string name="check_for_updates">Alkalmazás frissítések ellenőrzése</string>
     <string name="select_test">Teszt kiválasztása</string>
+    <string name="confirm_machine_selection">אתה בטוח שאתה רוצה לבצע את פעולה זו לכל המכונות שנבחרו?</string>
+    <string name="you_ve_reached_the_shift_production_target">Ön elérte a műszak gyártási célkitűzését!</string>
 
 </resources>

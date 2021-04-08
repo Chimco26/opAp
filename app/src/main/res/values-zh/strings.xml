@@ -530,4 +530,6 @@
     <string name="change_production_status_to">将生产状态更改为：</string>
     <string name="check_for_updates">检查应用更新</string>
     <string name="select_test">选择测试</string>
+    <string name="confirm_machine_selection">您确定要对所有机器应用此操作吗？</string>
+    <string name="you_ve_reached_the_shift_production_target">您已达到轮班生产目标！</string>
 </resources>
