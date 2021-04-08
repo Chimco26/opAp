@@ -539,4 +539,6 @@
     <string name="change_production_status_to">تغيير حالة الإنتاج إلى:</string>
     <string name="check_for_updates">التحقق من تحديث التطبيق</string>
     <string name="select_test">تحديد الاختبار</string>
+    <string name="confirm_machine_selection">هل ترغب بالتأكيد في تطبيق هذا الإجراء على جميع الماكينات؟</string>
+    <string name="you_ve_reached_the_shift_production_target">لقد حققت هدف الإنتاج لنوبة العمل!</string>
 </resources>

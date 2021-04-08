@@ -538,4 +538,6 @@
     <string name="change_production_status_to">Changer le statut de production pour :</string>
     <string name="check_for_updates">Vérifier les mises à jour de l\'application</string>
     <string name="select_test">Sélectionner un test</string>
+    <string name="confirm_machine_selection">Voulez-vous vraiment appliquer cette action à toutes les machines ?</string>
+    <string name="you_ve_reached_the_shift_production_target">Vous avez atteint l\'objectif de production du quart !</string>
 </resources>

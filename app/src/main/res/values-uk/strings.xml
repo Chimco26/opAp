@@ -534,4 +534,6 @@
     <string name="change_production_status_to">Змінити статус виробництва на:</string>
     <string name="check_for_updates">Перевірити оновлення додатка</string>
     <string name="select_test">Вибрати тест</string>
+    <string name="confirm_machine_selection">Ви дійсно хочете застосувати цю дію до всіх пристроїв?</string>
+    <string name="you_ve_reached_the_shift_production_target">Ви досягли цілі виробництва за зміну!</string>
 </resources>

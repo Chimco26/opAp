@@ -508,4 +508,6 @@
     <string name="clear_filters">Wyczyść filtry</string>
     <string name="edit_sub_task">Edytuj podzadanie</string>
     <string name="back">Powrót</string>
+    <string name="confirm_machine_selection">Czy na pewno chcesz zastosować to działanie do wszystkich maszyn?</string>
+    <string name="you_ve_reached_the_shift_production_target">Osiągnąłeś cel produkcyjny zmiany!</string>
 </resources>

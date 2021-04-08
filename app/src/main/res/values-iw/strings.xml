@@ -161,7 +161,7 @@
 
         <item>כל האירועים</item>
         <item>התראות</item>
-        <item>עצירות</item>
+        <item>כל העצירות</item>
         <item>עצירות לא מסווגות</item>
 
     </array>
@@ -286,7 +286,7 @@
     <string name="dont_forget_to_activate_job">אל תשכח להפעיל פקודות עבודה</string>
     <string name="change_factory">שנה מפעל</string>
     <string name="you_ve_reached_the_production_target">הגעת ליעד היצור של פקודת העבודה!</string>
-    <string name="you_ve_reached_the_shift_production_target">הגעת ליעד הייצור של המשמרת הנוכחית!</string>
+    <string name="you_ve_reached_the_shift_production_target">הגעת ליעד הייצור של המשמרת!</string>
     <string name="end_setup">סיום סט-אפ</string>
     <string name="you_are_in_setup_mode">אתה במצב סט-אפ</string>
     <string name="reported_stop_event">עצירות מדווחות</string>
@@ -537,10 +537,10 @@
     <string name="edit_sub_task">עריכת תת-משימה</string>
     <string name="back">חזרה</string>
     <string name="clear_filters">נקה פילטרים</string>
-    <string name="dashboard"></string>
-    <string name="display_recipe"></string>
-    <string name="error_cant_show_recipe"></string>
-    <string name="select_machines_for_display"></string>
+    <string name="dashboard">לוח בקרה</string>
+    <string name="display_recipe">הצג מתכון</string>
+    <string name="error_cant_show_recipe">שגיאה - לא ניתן להציג מתכון</string>
+    <string name="select_machines_for_display">שגיאה - לא ניתן להציג מתכון</string>
     <string name="pictures">תמונות</string>
     <string name="type_amount_for_item">בבקשה הזן את הכמות לפריט זה</string>
     <string name="tests_report">דו"ח בדיקות</string>
@@ -551,4 +551,6 @@
     <string name="change_production_status_to">שנה סטטוס ייצור ל:</string>
     <string name="check_for_updates">בדיקת עדכונים</string>
     <string name="select_test">בחר בדיקה</string>
+    <string name="confirm_machine_selection">אתה בטוח שאתה רוצה לבצע את פעולה זו לכל המכונות שנבחרו?</string>
+
 </resources>

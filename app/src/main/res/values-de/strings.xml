@@ -539,4 +539,6 @@
     <string name="change_production_status_to">Produktionsstatus ändern zu:</string>
     <string name="check_for_updates">App-Update prüfen</string>
     <string name="select_test">Test wählen</string>
+    <string name="confirm_machine_selection">Möchten Sie diese Aktion wirklich auf alle Maschinen anwenden?</string>
+    <string name="you_ve_reached_the_shift_production_target">Sie haben das Schichtproduktionsziel erreicht!</string>
 </resources>
