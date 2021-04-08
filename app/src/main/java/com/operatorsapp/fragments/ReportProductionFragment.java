@@ -411,7 +411,7 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
                 mJobsSpinner.setVisibility(View.VISIBLE);
                 final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
                 activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
+                mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
                 mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
                 mJobsSpinner.setSelection(mSelectedPosition);
                 mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
