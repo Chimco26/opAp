@@ -132,7 +132,7 @@ public class ReportNumericAdapter extends PagerAdapter {
     private void initTitle(@NonNull TextView textView, TextView boxTitle, int position, Context context) {
         if (isReject) {
             String txt = context.getResources().getString(R.string.setup_good_units_dialog_text);
-            txt = txt.replace(context.getResources().getString(R.string.placeholder1), PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units"));
+            txt = txt.replace(context.getResources().getString(R.string.placeholder1), PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("GoodUnits"));
 
             textView.setText(Html.fromHtml(String.format(Locale.getDefault(), "%s <b>%s</b> %s %s <b>%s</b>.<br /> %s",
                     context.getString(R.string.on_the_setup_you_produced),
