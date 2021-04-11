@@ -399,11 +399,11 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         for (DepartmentMachine department : mDepartmentMachine.getDepartmentMachine()) {
             for (DepartmentMachineValue machine : department.getDepartmentMachineValue()) {
                 for (String machineId : getSelectedMachines()) {
-                    if (machineId.equals(machine.getId())) {
+                    if (machineId.equals(String.valueOf(machine.getId()))) {
                         if (machine.getLineId() > 0) {
                             boolean addLine = true;
                             for (String lineId : selectedLines) {
-                                if (lineId.equals(machine.getLineId())) {
+                                if (lineId.equals(String.valueOf(machine.getLineId()))) {
                                     addLine = false;
                                     break;
                                 }

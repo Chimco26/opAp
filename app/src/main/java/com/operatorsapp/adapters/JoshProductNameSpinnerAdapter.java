@@ -39,7 +39,7 @@ public class JoshProductNameSpinnerAdapter extends ArrayAdapter<ActiveJob>
             mView = row;
             mRowName = row.findViewById(R.id.IPSL_name);
             String name = mSpinnerItems.get(position).getProductName();
-            String jobID = String.valueOf(mSpinnerItems.get(position).getJobID());
+            String jobID = String.valueOf(mSpinnerItems.get(position).geteRPJobID());
             mRowName.setText(name);
 //            mRowName.setText(mSpinnerItems.get(position).getProductName());
         }
@@ -57,8 +57,9 @@ public class JoshProductNameSpinnerAdapter extends ArrayAdapter<ActiveJob>
         }
         TextView name = row.findViewById(R.id.IPSL_name);
         String productName = mSpinnerItems.get(position).getProductName();
-        String jobID = String.valueOf(mSpinnerItems.get(position).getJobID());
-        name.setText(jobID + " " + productName);
+        String jobID = String.valueOf(mSpinnerItems.get(position).geteRPJobID());
+        String catalogId = String.valueOf(mSpinnerItems.get(position).getProductCatalogId());
+        name.setText(String.format("%s- %s- %s", jobID, catalogId, productName));
 //        name.setText(mSpinnerItems.get(position).getProductName());
 
         return row;

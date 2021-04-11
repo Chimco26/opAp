@@ -18,6 +18,8 @@ public class ActiveJob implements Parcelable {
     private Integer department;
     @SerializedName("JobID")
     private Integer jobID;
+    @SerializedName("ERPJobID")
+    private String eRPJobID;
     @SerializedName("MachineID")
     private Integer machineID;
     @SerializedName("ShiftID")
@@ -176,6 +178,10 @@ public class ActiveJob implements Parcelable {
         return joshName;
     }
 
+    public String geteRPJobID() {
+        return eRPJobID;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -187,6 +193,7 @@ public class ActiveJob implements Parcelable {
         dest.writeValue(this.cavitiesStandard);
         dest.writeValue(this.department);
         dest.writeValue(this.jobID);
+        dest.writeString(this.eRPJobID);
         dest.writeValue(this.machineID);
         dest.writeValue(this.shiftID);
         dest.writeValue(this.joshID);
@@ -206,6 +213,7 @@ public class ActiveJob implements Parcelable {
         this.cavitiesStandard = (Float) in.readValue(Integer.class.getClassLoader());
         this.department = (Integer) in.readValue(Integer.class.getClassLoader());
         this.jobID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.eRPJobID = in.readString();
         this.machineID = (Integer) in.readValue(Integer.class.getClassLoader());
         this.shiftID = (Integer) in.readValue(Integer.class.getClassLoader());
         this.joshID = (Integer) in.readValue(Integer.class.getClassLoader());
