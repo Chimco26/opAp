@@ -136,12 +136,12 @@ public class QCTestOrderFragment extends Fragment implements
                     } catch (Exception ignored) {
                     }
                     String operatorId = "";
-                    if (PersistenceManager.getInstance().getOperatorId() != null){
+                    if (PersistenceManager.getInstance().getOperatorId() != null) {
                         operatorId = PersistenceManager.getInstance().getOperatorId();
                     }
                     if (mTestOrder != null) {
-                        sendTestOrder(new TestOrderSendRequest(mTestOrderRequest.getJobID(), mTestOrder.getJoshID(),
-                                mTestOrder.getProductID(), mTestOrderRequest.getSubType(), samples, operatorId));
+                        sendTestOrder(new TestOrderSendRequest(mTestOrderRequest.getJobID(), mTestOrderRequest.getJoshID(),
+                                mTestOrderRequest.getProductID(), mTestOrderRequest.getSubType(), samples, operatorId));
                     }
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.you_need_to_select_the_test_field), Toast.LENGTH_SHORT).show();
@@ -154,15 +154,15 @@ public class QCTestOrderFragment extends Fragment implements
         mProductsSpinner = view.findViewById(R.id.FQCTO_spin_products);
         mTestSpinner = view.findViewById(R.id.FQCTO_spin_test);
 
-        if (isOnlyQCMaterial){
+        if (isOnlyQCMaterial) {
             view.findViewById(R.id.FQCTO_josh_lil).setVisibility(View.GONE);
             view.findViewById(R.id.FQCTO_product_lil).setVisibility(View.GONE);
-            ((TextView)view.findViewById(R.id.FQCTO_spin_product_tv)).setText(getString(R.string.materials));
+            ((TextView) view.findViewById(R.id.FQCTO_spin_product_tv)).setText(getString(R.string.materials));
         }
     }
 
     private void getTestOrder(final TestOrderRequest testOrderRequest) {
-        if (isOnlyQCMaterial){
+        if (isOnlyQCMaterial) {
             getMaterialTestOrder(testOrderRequest);
             return;
         }
@@ -174,7 +174,7 @@ public class QCTestOrderFragment extends Fragment implements
                 if (mTestOrder == null) {
                     testOrderResponse.getResponseDictionaryDT().getSubTypes().add(0, new SubType());
                     initTestSpinner(testOrderResponse);
-                }else if (isWentToNextScreen){
+                } else if (isWentToNextScreen) {
                     isWentToNextScreen = false;
                     initTestSpinner(testOrderResponse);
                 }
@@ -185,7 +185,7 @@ public class QCTestOrderFragment extends Fragment implements
                 mTestOrderRequest.setJoshID(mTestOrder.getJoshID());
                 mTestOrderRequest.setProductGroupID(mTestOrder.getProductGroupID());
                 mTestOrderRequest.setQualityGroupID(mTestOrder.getQualityGroupID());
-                mTestOrderRequest.setProductID(mTestOrder.getProductID());
+                mTestOrderRequest.setProductID(getDefaultProductId(mTestOrder));
                 mTestOrder.getResponseDictionaryDT().getQualityGroups().add(0, new ResponseDictionnaryItemsBaseModel());
                 mTestOrder.getResponseDictionaryDT().getProductGroups().add(0, new ResponseDictionnaryItemsBaseModel());
                 initSpinner(mJoshSpinner, mTestOrder.getResponseDictionaryDT().getJoshIDs(), TYPE_JOSH);
@@ -205,14 +205,30 @@ public class QCTestOrderFragment extends Fragment implements
         });
     }
 
+    private long getDefaultProductId(TestOrderResponse mTestOrder) {
+        if (mTestOrder != null) {
+            if (mTestOrder.getProductID() != null && mTestOrder.getProductID() != 0) {
+                return mTestOrder.getProductID();
+            } else if (mTestOrder.getResponseDictionaryDT() != null
+                    && mTestOrder.getResponseDictionaryDT().getProducts() != null
+                    && mTestOrder.getResponseDictionaryDT().getProducts().size() > 0
+                    && mTestOrder.getResponseDictionaryDT().getProducts().get(0).getId() != null) {
+                return mTestOrder.getResponseDictionaryDT().getProducts().get(0).getId();
+            } else {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
+    }
+
     private void getMaterialTestOrder(TestOrderRequest testOrderRequest) {
 
         mProgressBar.setVisibility(View.VISIBLE);
         int qualityGroupId = 0;
         int subType = -1;
         if (mQualitySpinner.getAdapter() != null && mTestSpinner.getAdapter() != null
-                && mTestSpinner.getSelectedItemPosition() >=0 && mQualitySpinner.getSelectedItemPosition() >= 0)
-        {
+                && mTestSpinner.getSelectedItemPosition() >= 0 && mQualitySpinner.getSelectedItemPosition() >= 0) {
             qualityGroupId = ((DictionarySpinnerAdapter) mQualitySpinner.getAdapter()).getItem(mQualitySpinner.getSelectedItemPosition()).getId();
             subType = ((SubTypeAdapter) mTestSpinner.getAdapter()).getItem(mTestSpinner.getSelectedItemPosition()).getId();
         }
@@ -358,18 +374,18 @@ public class QCTestOrderFragment extends Fragment implements
                     mTestOrderRequest.setSubType(subType.getId());
                     if (subType.getHasSamples()) {
                         mSamplesLy.setVisibility(View.VISIBLE);
-                        if (subType.getDefaultSamplesCount() != null){
-                            if (subType.getDefaultSamplesCount() == 0){
+                        if (subType.getDefaultSamplesCount() != null) {
+                            if (subType.getDefaultSamplesCount() == 0) {
                                 mSamplesEt.setHint(String.valueOf(subType.getDefaultSamplesCount()));
-                            }else {
+                            } else {
                                 mSamplesEt.setText(String.valueOf(subType.getDefaultSamplesCount()));
                             }
-                        }else {
+                        } else {
                             mSamplesEt.setText(null);
                         }
-                        if (subType.getAllowEdit()){
+                        if (subType.getAllowEdit()) {
                             mSamplesEt.setEnabled(true);
-                        }else {
+                        } else {
                             mSamplesEt.setEnabled(false);
                         }
                     } else {
@@ -393,7 +409,7 @@ public class QCTestOrderFragment extends Fragment implements
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         }
 
-        if (isOnlyQCMaterial){
+        if (isOnlyQCMaterial) {
             testOrderSendRequest.setMaterialID(String.valueOf(mTestOrderRequest.getJobID()));
             testOrderSendRequest.setJobID(0);
         }
