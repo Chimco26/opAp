@@ -1355,7 +1355,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     ProgressDialogManager.dismiss();
                 }
 
-                if (!ChangeLang.isLanguageSetOk(DashboardActivity.this)) {
+                if (!ChangeLang.isLanguageSetOk(DashboardActivity.this)) {//todo nathan check this function
                     refreshApp();
                 }
             }
