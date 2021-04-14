@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -101,18 +103,22 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
             }
 
             @Override
-            public TextView getCustomTextView() {
-                return TestReportFragment.this.getCustomTextView();
+            public TextView getCustomTextView(int size) {
+                return TestReportFragment.this.getCustomTextView(size);
             }
         }));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_test_report, container, false);
+        return inflater.inflate(R.layout.fragment_test_report, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         initViews(view);
         getTestReports();
-        return view;
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private void initViews(View view) {
@@ -206,12 +212,12 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
 
         for (TestReportColumn column : mTestReport.getColumns()){
 
-            TextView tv = getCustomTextView();
+            TextView tv = getCustomTextView(mTestReport.getColumns().size());
             tv.setTextSize(COMPLEX_UNIT_SP,18);
             tv.setText(column.getDisplayHName());
             mHeaderRowLil.addView(tv);
 
-            EditText et = getCustomEditText();
+            EditText et = getCustomEditText(getCellWidth(mTestReport.getColumns().size()));
             et.setTextSize(COMPLEX_UNIT_SP,18);
             et.setText(mFilterMap.get(column.getFieldName()));
             mHeaderRowFilterLil.addView(et);
@@ -219,9 +225,9 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    private TextView getCustomTextView() {
+    private TextView getCustomTextView(int size) {
         TextView tv = new TextView(getContext());
-        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(200, 50);
+        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(getCellWidth(size), 50);
         params.setMargins(5,2,5,2);
         tv.setLayoutParams(params);
         tv.setTextSize(COMPLEX_UNIT_SP,14);
@@ -232,13 +238,20 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
         return tv;
     }
 
-    private EditText getCustomEditText() {
+    private int getCellWidth(int size) {
+        if (size > 0 && getView() != null){
+            return (getView().getWidth() - 100) / size;
+        }
+        return 200;
+    }
+
+    private EditText getCustomEditText(int cellWidth) {
         EditText et = new EditText(getContext());
-        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(200, 40);
+        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(cellWidth, 40);
         params.setMargins(5,2,5,2);
         et.setLayoutParams(params);
         et.setTextSize(COMPLEX_UNIT_SP,14);
-        et.setTextColor(Color.DKGRAY);
+        et.setTextColor(Color.BLACK);
         et.setBackground(getResources().getDrawable(R.drawable.rounded_white));
         et.setEllipsize(TextUtils.TruncateAt.END);
         et.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -254,7 +267,6 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mHandlerFilter.removeCallbacksAndMessages(null);
             }
 
             @Override

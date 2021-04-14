@@ -1,16 +1,9 @@
 package com.operatorsapp.adapters;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Handler;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,10 +18,6 @@ import com.operatorsapp.server.responses.TestReportsResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-
-import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
 public class TestReportAdapter extends RecyclerView.Adapter<TestReportAdapter.ViewHolder> {
 
@@ -65,7 +54,7 @@ public class TestReportAdapter extends RecyclerView.Adapter<TestReportAdapter.Vi
         try {
             JSONObject json = new JSONObject(mGson.toJson(row));
             for (TestReportColumn column : mTestReport.getColumns()) {
-                TextView tv = mListener.getCustomTextView();
+                TextView tv = mListener.getCustomTextView(mTestReport.getColumns().size());
                 String str = "";
                 if (json.has(column.getFieldName()))
                     str = String.valueOf(json.get(column.getFieldName()));
@@ -111,6 +100,6 @@ public class TestReportAdapter extends RecyclerView.Adapter<TestReportAdapter.Vi
 
     public interface TestReportAdapterListener {
         void onReportClicked(TestReportRow row);
-        TextView getCustomTextView();
+        TextView getCustomTextView(int size);
     }
 }

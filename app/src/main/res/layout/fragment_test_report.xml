@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
+    android:background="@color/white_five"
     android:padding="10dp"
     tools:context=".activities.TestReportFragment">
 
@@ -94,7 +94,7 @@
     <HorizontalScrollView
         android:layout_below="@+id/FTR_top_bar_lil"
         android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
