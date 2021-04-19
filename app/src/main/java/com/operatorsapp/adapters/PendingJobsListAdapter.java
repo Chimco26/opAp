@@ -1,8 +1,21 @@
 package com.operatorsapp.adapters;
 
 import android.content.Context;
+
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.core.text.BidiFormatter;
+import androidx.core.text.TextDirectionHeuristicsCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.Color;
+import android.graphics.ColorSpace;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextDirectionHeuristics;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,13 +106,44 @@ public class PendingJobsListAdapter extends RecyclerView.Adapter<PendingJobsList
             if (mOrderedHederasKey[i].equals(ID_NAME) || mOrderedHederasKey[i].equals(ERP_JOB_ID_NAME) || mOrderedHederasKey[i].equals(CATALOG_ID)) {
                 textView.setText(propertiesHashMap.get(mOrderedHederasKey[i]));
             }else {
-                textView.setText(getText(propertiesHashMap.get(mOrderedHederasKey[i])));
+
+                String s = propertiesHashMap.get(mOrderedHederasKey[i]);
+
+                textView.setText(s);
             }
         }else {
             ImageLoader.getInstance().displayImage("", imageView);
             textView.setText("");
             parent.setVisibility(View.GONE);
         }
+    }
+
+
+    private String toLineAtIndex(String text, int maxChartByLine, char spaceChar){
+        int lastSpace = 0;
+        for (int i = 0; i < text.length(); i++){
+            if (text.charAt(i) == spaceChar){
+                lastSpace = i;
+            }
+            if (i%maxChartByLine == 0){
+                text.toCharArray()[lastSpace] = "$".toCharArray()[0];
+            }
+        }
+        return text.replaceAll("$", System.getProperty("line.separator"));
+    }
+
+    public static Spannable colorized(final String text, final String word, final int argb) {
+        final Spannable spannable = new SpannableString(text);
+        int substringStart=0;
+        int start;
+        while((start=text.indexOf(word,substringStart))>=0){
+            spannable.setSpan(
+                    new ForegroundColorSpan(argb),start,start+word.length(),
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            );
+            substringStart = start+word.length();
+        }
+        return spannable;
     }
 
     private String getText(String s){
