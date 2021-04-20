@@ -21,7 +21,8 @@
         android:textSize="25sp"
         android:textStyle="bold"
         app:autoSizeMaxTextSize="25sp"
-        app:autoSizeTextType="uniform"/>
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="2sp"/>
 
     <View
         android:layout_width="match_parent"

@@ -46,7 +46,8 @@
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     app:autoSizeMaxTextSize="20sp"
-                    app:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="2sp"/>
 
                 <View
                     android:layout_width="match_parent"

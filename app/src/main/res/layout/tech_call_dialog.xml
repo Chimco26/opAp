@@ -52,6 +52,7 @@
             android:layout_height="0dp"
             android:layout_weight="10"
             app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="2sp"
             app:autoSizeMaxTextSize="35sp"/>
 
         <TextView
@@ -69,6 +70,7 @@
             android:maxLines="2"
             android:layout_weight="10"
             app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="2sp"
             app:autoSizeMaxTextSize="20sp"/>
 
 

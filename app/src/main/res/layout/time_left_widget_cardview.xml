@@ -33,7 +33,8 @@
             android:textColor="@android:color/black"
             android:textSize="23sp"
             app:autoSizeMaxTextSize="23sp"
-            app:autoSizeTextType="uniform" />
+            app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="2sp"/>
 
         <TextView
             android:id="@+id/TLWC_subtitle"
@@ -45,7 +46,8 @@
             android:maxLines="1"
             android:textSize="18sp"
             app:autoSizeMaxTextSize="18sp"
-            app:autoSizeTextType="uniform" />
+            app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="2sp"/>
 
     </LinearLayout>
 
@@ -81,7 +83,8 @@
                 android:textSize="33sp"
                 android:textStyle="bold"
                 app:autoSizeMaxTextSize="33sp"
-                app:autoSizeTextType="uniform" />
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="2sp"/>
 
             <TextView
                 android:id="@+id/TLWC_estimated_tv"
@@ -95,7 +98,8 @@
                 android:textSize="18sp"
                 android:visibility="gone"
                 app:autoSizeMaxTextSize="18sp"
-                app:autoSizeTextType="uniform" />
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="2sp"/>
 
             <LinearLayout
                 android:id="@+id/TLWC_see_jobs_btn"
@@ -123,7 +127,8 @@
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     app:autoSizeMaxTextSize="20sp"
-                    app:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="2sp"/>
 
                 <View
                     android:layout_width="0dp"
@@ -172,7 +177,8 @@
                     android:textColor="@color/blue1"
                     android:textSize="18sp"
                     app:autoSizeMaxTextSize="20sp"
-                    app:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="2sp"/>
             </LinearLayout>
 
             <View
@@ -206,7 +212,8 @@
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     app:autoSizeMaxTextSize="20sp"
-                    app:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="2sp"/>
 
                 <View
                     android:layout_width="0dp"
@@ -256,7 +263,8 @@
                     android:textColor="@color/blue1"
                     android:textSize="18sp"
                     app:autoSizeMaxTextSize="18sp"
-                    app:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="2sp"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -275,7 +283,8 @@
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     app:autoSizeMaxTextSize="20sp"
-                    app:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="2sp"/>
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

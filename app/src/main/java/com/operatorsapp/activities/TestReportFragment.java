@@ -254,6 +254,8 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
         tv.setLayoutParams(params);
         tv.setTextSize(COMPLEX_UNIT_SP, 14);
         tv.setTextColor(Color.BLACK);
+        tv.setMaxLines(2);
+
         tv.setEllipsize(TextUtils.TruncateAt.END);
         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         tv.setGravity(Gravity.CENTER);

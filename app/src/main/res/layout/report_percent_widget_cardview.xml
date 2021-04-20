@@ -37,7 +37,8 @@
                 android:textColor="@android:color/black"
                 android:textSize="23sp"
                 app:autoSizeMaxTextSize="23sp"
-                app:autoSizeTextType="uniform" />
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="2sp"/>
 
             <TextView
                 android:id="@+id/RPWC_subtitle"
@@ -50,7 +51,8 @@
                 android:text="Total required 2k"
                 android:textSize="18sp"
                 app:autoSizeMaxTextSize="18sp"
-                app:autoSizeTextType="uniform" />
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="2sp"/>
 
         </LinearLayout>
 
@@ -112,7 +114,8 @@
                         android:textColor="@color/red_line"
                         android:textSize="14sp"
                         app:autoSizeMaxTextSize="14sp"
-                        app:autoSizeTextType="uniform" />
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="2sp"/>
 
                     <TextView
                         android:id="@+id/RPWC_filter_short_min_tv"
@@ -125,7 +128,8 @@
                         android:textColor="@color/red_line"
                         android:textSize="14sp"
                         app:autoSizeMaxTextSize="14sp"
-                        app:autoSizeTextType="uniform" />
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="2sp"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -150,7 +154,8 @@
                         android:textColor="#850f16"
                         android:textSize="14sp"
                         app:autoSizeMaxTextSize="14sp"
-                        app:autoSizeTextType="uniform" />
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="2sp"/>
 
                     <TextView
                         android:id="@+id/RPWC_reported_min_tv"
@@ -163,7 +168,8 @@
                         android:textColor="#850f16"
                         android:textSize="14sp"
                         app:autoSizeMaxTextSize="14sp"
-                        app:autoSizeTextType="uniform" />
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="2sp"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -188,7 +194,8 @@
                         android:textColor="#850f16"
                         android:textSize="14sp"
                         app:autoSizeMaxTextSize="14sp"
-                        app:autoSizeTextType="uniform" />
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="2sp"/>
 
                     <TextView
                         android:id="@+id/RPWC_not_reported_min_tv"
@@ -201,7 +208,8 @@
                         android:textColor="#850f16"
                         android:textSize="14sp"
                         app:autoSizeMaxTextSize="14sp"
-                        app:autoSizeTextType="uniform" />
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="2sp"/>
                 </RelativeLayout>
             </LinearLayout>
 
@@ -238,7 +246,8 @@
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:autoSizeMaxTextSize="16sp"
-                        app:autoSizeTextType="uniform" />
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="2sp"/>
                 </LinearLayout>
 
                 <com.operatorsapp.view.SquareImageView
@@ -265,7 +274,8 @@
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:autoSizeMaxTextSize="16sp"
-                        app:autoSizeTextType="uniform" />
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="2sp"/>
                 </LinearLayout>
 
                 <com.operatorsapp.view.SquareImageView
@@ -292,7 +302,8 @@
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:autoSizeMaxTextSize="16sp"
-                        app:autoSizeTextType="uniform" />
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="2sp"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -330,7 +341,8 @@
                     android:textColor="@color/blue1"
                     android:textSize="25sp"
                     app:autoSizeMaxTextSize="25sp"
-                    app:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="2sp"/>
 
                 <View
                     android:layout_width="0dp"
@@ -352,7 +364,8 @@
                     android:textStyle="bold"
                     android:visibility="visible"
                     app:autoSizeMaxTextSize="20sp"
-                    app:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="2sp"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

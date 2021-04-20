@@ -40,7 +40,8 @@
                         android:text="@string/josh"
                         android:textColor="@color/black"
                         app:autoSizeMaxTextSize="25sp"
-                        app:autoSizeTextType="uniform" />
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="2sp"/>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -64,7 +65,8 @@
                     android:text="@string/quality_group"
                     android:textColor="@color/black"
                     app:autoSizeMaxTextSize="25sp"
-                    app:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="2sp"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -88,7 +90,8 @@
                     android:text="@string/product_group"
                     android:textColor="@color/black"
                     app:autoSizeMaxTextSize="25sp"
-                    app:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="2sp"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -117,7 +120,8 @@
                         android:text="@string/product"
                         android:textColor="@color/black"
                         app:autoSizeMaxTextSize="25sp"
-                        app:autoSizeTextType="uniform" />
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="2sp"/>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -142,7 +146,8 @@
                     android:text="@string/test"
                     android:textColor="@color/blue1"
                     app:autoSizeMaxTextSize="25sp"
-                    app:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="2sp"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -171,7 +176,8 @@
                         android:text="@string/samples"
                         android:textColor="@color/black"
                         app:autoSizeMaxTextSize="25sp"
-                        app:autoSizeTextType="uniform" />
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="2sp"/>
 
                     <EditText
                         android:id="@+id/FQCTO_samples_et"
@@ -183,6 +189,7 @@
                         android:hint="0"
                         app:autoSizeMaxTextSize="35sp"
                         app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="2sp"
                         />
                 </LinearLayout>
 
@@ -209,7 +216,8 @@
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     app:autoSizeMaxTextSize="35sp"
-                    app:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="2sp"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

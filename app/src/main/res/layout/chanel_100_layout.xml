@@ -63,7 +63,8 @@
             android:textColor="@color/divider_gray"
             android:textSize="50sp"
             android:visibility="gone"
-            app:autoSizeTextType="uniform" />
+            app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="2sp"/>
     </LinearLayout>
 
 

@@ -19,6 +19,7 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         android:maxLines="1"
-        app:autoSizeTextType="uniform"/>
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="2sp"/>
 
 </LinearLayout>
