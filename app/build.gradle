@@ -10,7 +10,7 @@ android {
         applicationId "com.operatorsapp"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 51
+        versionCode 52
         versionName "2.5.1"
         multiDexEnabled true
     }
