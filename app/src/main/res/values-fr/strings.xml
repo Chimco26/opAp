@@ -331,7 +331,7 @@
     <string name="target_reached">Objectif atteint!</string>
     <string name="setup_rejects_dialog_text">Voulez-vous signaler certains d\'entre eux comme rejets ?</string>
     <string name="setup_good_units_dialog_text">Voulez-vous en signaler certaines comme &placeholder1; ?</string>
-    <string name="on_the_setup_you_produced">Sur la configuration que vous avez produite</string>
+    <string name="on_the_setup_you_produced">Pendant la configuration, vous avez produit</string>
     <string name="from_the">du</string>
     <string name="activate_last_job">Activer le dernier OF</string>
     <string name="do_you_want_to_activate_the_last_job_you_work_on_job">Voulez-vous activer le dernier OF sur lequel vous travaillez ?</string>

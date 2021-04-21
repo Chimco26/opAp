@@ -1,7 +1,6 @@
 package com.operators.logincore;
 
 import android.util.Base64;
-import android.util.Log;
 
 import com.example.common.StandardResponse;
 import com.example.common.callback.ErrorObjectInterface;
@@ -14,7 +13,6 @@ import com.operators.infra.Machine;
 import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
 import com.operators.logincore.interfaces.LoginUICallback;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
 
 public class LoginCore {
@@ -41,13 +39,13 @@ public class LoginCore {
 
     public void login(final String siteUrl, final String username, final String password, final LoginUICallback<Machine> loginUICallback) {
 
-        if (password == null){
+        if (password == null) {
             loginUICallback.onLoginFailed(new StandardResponse(ErrorObjectInterface.ErrorCode.SessionInvalid, "Empty Password"));
             return;
         }
 
         final String EncryptedPassword = Base64.encodeToString(password.getBytes(), Base64.NO_WRAP);
-            mLoginNetworkBridgeInterface.login(siteUrl, username, EncryptedPassword, mLoginPersistenceManagerInterface.getCurrentLang(),  new LoginCoreCallback() {
+        mLoginNetworkBridgeInterface.login(siteUrl, username, EncryptedPassword, mLoginPersistenceManagerInterface.getCurrentLang(), new LoginCoreCallback() {
             @Override
             public void onLoginSucceeded(final String sessionId, final String siteName, final int userId) {
                 OppAppLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(), " + sessionId);
