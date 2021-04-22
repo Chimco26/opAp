@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
@@ -50,6 +51,7 @@ public class TestReportAdapter extends RecyclerView.Adapter<TestReportAdapter.Vi
     private void setRow(ViewHolder holder, int position) {
         holder.itemRowFilter.setVisibility(View.GONE);
         holder.itemRow.removeAllViews();
+        holder.itemLy.setBackgroundColor(ContextCompat.getColor(holder.itemLy.getContext(), R.color.grey_transparent));
         TestReportRow row = mTestReport.getRows().get(position); /// -1 because position 0 is headers
         try {
             JSONObject json = new JSONObject(mGson.toJson(row));
@@ -83,11 +85,13 @@ public class TestReportAdapter extends RecyclerView.Adapter<TestReportAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final LinearLayout itemRow;
         public final LinearLayout itemRowFilter;
+        private final View itemLy;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             itemRow = itemView.findViewById(R.id.test_report_item_lil);
             itemRowFilter = itemView.findViewById(R.id.test_report_item_filter_lil);
+            itemLy = itemView.findViewById(R.id.TRI_item_ly);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

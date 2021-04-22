@@ -1,31 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_gravity="center"
     android:gravity="center"
-    android:padding="5dp">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/test_report_item_lil"
+        android:id="@+id/TRI_item_ly"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:padding="5dp"/>
+        android:layout_height="115dp"
+        android:orientation="vertical"
+        android:padding="5dp">
 
-    <LinearLayout
-        android:id="@+id/test_report_item_filter_lil"
+        <LinearLayout
+            android:id="@+id/test_report_item_lil"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp" />
+
+        <LinearLayout
+            android:id="@+id/test_report_item_filter_lil"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:visibility="visible"
-        android:paddingEnd="5dp"
-        android:paddingStart="5dp"/>
+        android:layout_height="20dp" />
 
 </LinearLayout>

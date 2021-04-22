@@ -240,7 +240,6 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
             mHeaderRowLil.addView(tv);
 
             EditText et = getCustomEditText(getCellWidth(mTestReport.getColumns().size()));
-            et.setTextSize(COMPLEX_UNIT_SP, 18);
             et.setText(mFilterMap.get(column.getFieldName()));
             mHeaderRowFilterLil.addView(et);
             et.addTextChangedListener(setTextWatcher(column.getFieldName()));
@@ -276,6 +275,7 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
         params.setMargins((int) (2 * density), 0, (int) (2 * density), 0);
         et.setLayoutParams(params);
         et.setTextSize(COMPLEX_UNIT_SP, 16);
+        et.setMaxLines(1);
         et.setTextColor(Color.BLACK);
         et.setBackground(getResources().getDrawable(R.drawable.box_grey_stroke));
         et.setGravity(Gravity.CENTER);

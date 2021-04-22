@@ -3,6 +3,8 @@ package com.operatorsapp.application;
 import android.content.Context;
 import android.content.Intent;
 import androidx.multidex.MultiDexApplication;
+
+import android.content.res.Configuration;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -97,7 +99,6 @@ public class OperatorApplication extends MultiDexApplication {
         initImageLoading();
 
     }
-
 
     synchronized public FirebaseAnalytics getDefaultTracker() {
         // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
