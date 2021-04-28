@@ -23,6 +23,8 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.utils.Consts;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -39,7 +41,8 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
 
     public StopEventLogAdapter(ArrayList<Event> machineLineItems, StopEventLogAdapterListener listener) {
         items = machineLineItems;
-        itemsFiltered.addAll(machineLineItems);
+        ArrayList<Event> events = filterEvents(items);
+        itemsFiltered = reorderEvents((List<Event>) events);
         mListener = listener;
         mContext = null;
     }
@@ -96,7 +99,7 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
         viewHolder.multiSelectionCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                items.get(viewHolder.getAdapterPosition()).setSelected(isChecked);
+                itemsFiltered.get(viewHolder.getAdapterPosition()).setSelected(isChecked);
                 mListener.onUpdateLogSelection(getSelectedItems());
                 mFilter.filter("");
             }
@@ -274,7 +277,7 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
         private final LinearLayout techCallStatusLil;
         private final ImageView techCallStatusIv;
         private final TextView techCallStatusTv;
-        private final CheckBox multiSelectionCheckBox;
+        private CheckBox multiSelectionCheckBox;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -304,14 +307,9 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
 
             FilterResults results = new FilterResults();
 
-            ArrayList<Event> events = new ArrayList<>();
-            events.addAll(items);
-            for (Event event : items) {
-                if (!event.isShowSub() && event.getRootEventID() != 0) {
-                    events.remove(event);
-                }
+            ArrayList<Event> events = filterEvents(items);
 
-            }
+            events = reorderEvents((List<Event>) events);
 
             results.values = events;
 
@@ -326,11 +324,24 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
 
-            itemsFiltered = reorderEvents((List<Event>) results.values);
+            itemsFiltered = ((ArrayList<Event>) results.values);
 
             notifyDataSetChanged();
         }
 
+    }
+
+    @NotNull
+    private ArrayList<Event> filterEvents(ArrayList<Event> items) {
+        ArrayList<Event> events = new ArrayList<>();
+        events.addAll(items);
+        for (Event event : items) {
+            if (!event.isShowSub() && event.getRootEventID() != 0) {
+                events.remove(event);
+            }
+
+        }
+        return events;
     }
 
     private ArrayList<Event> reorderEvents(List<Event> events) {
