@@ -1,12 +1,11 @@
 package com.operatorsapp.adapters;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.FrameLayout;
@@ -14,11 +13,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.common.StopLogs.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.utils.Consts;
 
@@ -54,6 +55,7 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
     @Override
     public void onBindViewHolder(@NonNull final StopEventLogAdapter.ViewHolder viewHolder, final int position) {
 
+        final boolean isSelectedMode = isAtLeastOneSelected(items);
 
         final Event event = itemsFiltered.get(position);
 
@@ -61,38 +63,93 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
 
         setTexts(event, viewHolder);
 
+        if (isSelectedMode) {
+            viewHolder.multiSelectionCheckBox.setVisibility(View.VISIBLE);
+            viewHolder.multiSelectionCheckBox.setChecked(event.isSelected());
+        }else {
+            viewHolder.multiSelectionCheckBox.setVisibility(View.INVISIBLE);
+        }
+
         viewHolder.stopIc.setImageDrawable(viewHolder.itemView.getContext().
                 getResources().getDrawable(getImageForStopReason(event.getEventGroupID())));
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onLogSelected(event);
+                if (isSelectedMode) {
+                    viewHolder.multiSelectionCheckBox.setChecked(!event.isSelected());
+                } else {
+                    mListener.onLogSelected(itemsFiltered.get(viewHolder.getAdapterPosition()));
+                }
+            }
+        });
+
+        viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                resetSelection();
+                viewHolder.multiSelectionCheckBox.setChecked(true);
+                return true;
+            }
+        });
+
+        viewHolder.multiSelectionCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                items.get(viewHolder.getAdapterPosition()).setSelected(isChecked);
+                mListener.onUpdateLogSelection(getSelectedItems());
+                mFilter.filter("");
             }
         });
 
         viewHolder.expandBackgrnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                event.setExpand(!event.isExpand());
-                updateEvents(event);
+                Event event1 = itemsFiltered.get(viewHolder.getAdapterPosition());
+                event1.setExpand(!event1.isExpand());
+                updateEvents(event1);
                 getFilter().filter("");
             }
         });
 
         Notification notification = checkTechCallForEvent(event);
-        if (notification != null){
+        if (notification != null) {
             setTechCallStatusForEvent(viewHolder, notification);
             viewHolder.techCall.setVisibility(View.GONE);
-        }else {
+        } else {
             viewHolder.techCallStatusLil.setVisibility(View.GONE);
             viewHolder.techCall.setVisibility(View.VISIBLE);
             viewHolder.techCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onTechCallSelected(event);
+                    mListener.onTechCallSelected(itemsFiltered.get(viewHolder.getAdapterPosition()));
                 }
             });
+        }
+    }
+
+    private ArrayList<Event> getSelectedItems() {
+        ArrayList<Event> list = new ArrayList<>();
+        for (Event item: items){
+            if (item.isSelected()){
+                list.add(item);
+            }
+        }
+        return list;
+    }
+
+    private boolean isAtLeastOneSelected(ArrayList<Event> items) {
+        for (Event item: items){
+            if (item.isSelected()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void resetSelection() {
+        for (Event item : items) {
+            item.setSelected(false);
         }
     }
 
@@ -100,7 +157,7 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
 
         int icon = R.drawable.technician_blue_svg;
         String txt = mContext.getResources().getString(R.string.waiting_for_replay);
-        switch (notification.getmResponseType()){
+        switch (notification.getmResponseType()) {
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_UNSET:
                 icon = R.drawable.call_recieved;
@@ -140,8 +197,8 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
     }
 
     private Notification checkTechCallForEvent(Event event) {
-        for (Notification notification: PersistenceManager.getInstance().getNotificationHistory()) {
-            if (notification.getmEventID() == event.getEventID()){
+        for (Notification notification : PersistenceManager.getInstance().getNotificationHistory()) {
+            if (notification.getmEventID() == event.getEventID()) {
                 return notification;
             }
         }
@@ -178,11 +235,11 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
             } else {
                 viewHolderItems.expand.setRotationX(0);
             }
-        } else if (event.getRootEventID() != 0){
+        } else if (event.getRootEventID() != 0) {
             viewHolderItems.expand.setVisibility(View.INVISIBLE);
             viewHolderItems.expandBackgrnd.setVisibility(View.INVISIBLE);
             viewHolderItems.subMarginView.setVisibility(View.INVISIBLE);
-        }else {
+        } else {
             viewHolderItems.expand.setVisibility(View.INVISIBLE);
             viewHolderItems.expandBackgrnd.setVisibility(View.VISIBLE);
             viewHolderItems.subMarginView.setVisibility(View.VISIBLE);
@@ -217,6 +274,7 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
         private final LinearLayout techCallStatusLil;
         private final ImageView techCallStatusIv;
         private final TextView techCallStatusTv;
+        private final CheckBox multiSelectionCheckBox;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -224,6 +282,7 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
             expand = itemView.findViewById(R.id.ISEL_expand_img);
             expandBackgrnd = itemView.findViewById(R.id.ISEL_expand_img_rl);
             subMarginView = itemView.findViewById(R.id.ISEL_sub_item_margin);
+            multiSelectionCheckBox = itemView.findViewById(R.id.ISEL_sub_item_check_box);
             stopIc = itemView.findViewById(R.id.ISEL_ic);
             title = itemView.findViewById(R.id.ISEL_item_title);
             start = itemView.findViewById(R.id.ISEL_start);
@@ -302,6 +361,9 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
     public interface StopEventLogAdapterListener {
 
         void onLogSelected(Event item);
+
+        void onUpdateLogSelection(ArrayList<Event> item);
+
         void onTechCallSelected(Event item);
     }
 }

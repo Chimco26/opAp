@@ -22,12 +22,25 @@
             android:src="@drawable/expand_down" />
     </RelativeLayout>
 
-    <View
-        android:id="@+id/ISEL_sub_item_margin"
+    <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight=".6"
-        android:background="@color/grey_transparent" />
+        android:layout_weight=".6">
+
+        <View
+            android:id="@+id/ISEL_sub_item_margin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/grey_transparent"/>
+        <CheckBox
+            android:id="@+id/ISEL_sub_item_check_box"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="invisible"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
 
     <View
         android:layout_width="0dp"
@@ -76,8 +89,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:gravity="center_horizontal"
+                android:orientation="vertical"
                 android:weightSum="4">
 
                 <ImageView
@@ -162,8 +175,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1.45"
             android:gravity="center_vertical"
-            android:visibility="visible"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/ISEL_tech_call_status_iv"
@@ -177,9 +190,9 @@
                 android:id="@+id/ISEL_tech_call_subtext_tv"
                 style="@style/ProximaNovaSemiBold"
                 android:layout_width="match_parent"
-                android:maxLines="2"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:maxLines="2"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
@@ -189,10 +202,10 @@
             android:id="@+id/ISEL_tech_call_fl"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="1dp"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1.45"
             android:background="@color/grey1"
-            android:layout_weight="1.45">
+            android:padding="1dp">
 
             <TextView
                 android:id="@+id/ISEL_tech_call_tv"
@@ -201,9 +214,9 @@
                 android:background="@color/white"
                 android:gravity="center"
                 android:maxLines="2"
+                android:text="@string/open_new_call"
                 android:textColor="@color/black"
                 android:textSize="20sp"
-                android:text="@string/open_new_call"
                 app:autoSizeMaxTextSize="20sp"
                 app:autoSizeTextType="uniform" />
         </FrameLayout>
