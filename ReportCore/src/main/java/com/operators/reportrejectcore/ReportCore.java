@@ -88,56 +88,56 @@ public class ReportCore {
     }
 
     public void sendStopReport(int stopReasonId, int stopSubReasonId, long eventId, int joshId) {
-//        if (mReportPersistenceManagerInterface != null) {
-//            mReportRejectNetworkBridgeInterface.sendReportStop(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
-//                    String.valueOf(mReportPersistenceManagerInterface.getMachineId())
-//                    , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, eventId, joshId, new SendReportStopCallback() {
-//                        @Override
-//                        public void onSendStopReportSuccess(StandardResponse o) {
-//                            if (mReportCallbackListener != null) {
-//                                mReportCallbackListener.sendReportSuccess(o);
-//                            } else {
-//                                OppAppLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onSendStopReportFailed(StandardResponse reason) {
-//                            if (mReportCallbackListener != null) {
-//                                mReportCallbackListener.sendReportFailure(reason);
-//                            } else {
-//                                OppAppLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
-//                            }
-//                        }
-//                    }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());
-//        }
+        if (mReportPersistenceManagerInterface != null) {
+            mReportRejectNetworkBridgeInterface.sendReportStop(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
+                    String.valueOf(mReportPersistenceManagerInterface.getMachineId())
+                    , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, eventId, joshId, new SendReportStopCallback() {
+                        @Override
+                        public void onSendStopReportSuccess(StandardResponse o) {
+                            if (mReportCallbackListener != null) {
+                                mReportCallbackListener.sendReportSuccess(o);
+                            } else {
+                                OppAppLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                            }
+                        }
+
+                        @Override
+                        public void onSendStopReportFailed(StandardResponse reason) {
+                            if (mReportCallbackListener != null) {
+                                mReportCallbackListener.sendReportFailure(reason);
+                            } else {
+                                OppAppLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                            }
+                        }
+                    }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());
+        }
 
     }
 
     public void sendMultipleStopReport(int stopReasonId, int stopSubReasonId, long[] eventId, int joshId, boolean byRootEvent) {
-//        if (mReportPersistenceManagerInterface != null) {
-//            mReportRejectNetworkBridgeInterface.sendMultipleReportStop(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
-//                    String.valueOf(mReportPersistenceManagerInterface.getMachineId())
-//                    , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, eventId, joshId, new SendReportStopCallback() {
-//                        @Override
-//                        public void onSendStopReportSuccess(StandardResponse o) {
-//                            if (mReportCallbackListener != null) {
-//                                mReportCallbackListener.sendReportSuccess(o);
-//                            } else {
-//                                OppAppLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onSendStopReportFailed(StandardResponse reason) {
-//                            if (mReportCallbackListener != null) {
-//                                mReportCallbackListener.sendReportFailure(reason);
-//                            } else {
-//                                OppAppLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
-//                            }
-//                        }
-//                    }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout(), byRootEvent);
-//        }
+        if (mReportPersistenceManagerInterface != null) {
+            mReportRejectNetworkBridgeInterface.sendMultipleReportStop(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
+                    String.valueOf(mReportPersistenceManagerInterface.getMachineId())
+                    , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, eventId, joshId, new SendReportStopCallback() {
+                        @Override
+                        public void onSendStopReportSuccess(StandardResponse o) {
+                            if (mReportCallbackListener != null) {
+                                mReportCallbackListener.sendReportSuccess(o);
+                            } else {
+                                OppAppLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                            }
+                        }
+
+                        @Override
+                        public void onSendStopReportFailed(StandardResponse reason) {
+                            if (mReportCallbackListener != null) {
+                                mReportCallbackListener.sendReportFailure(reason);
+                            } else {
+                                OppAppLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                            }
+                        }
+                    }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout(), byRootEvent);
+        }
     }
 
     public void sendCycleUnitsReport(double unitsPerCycle, Integer jobId) {
