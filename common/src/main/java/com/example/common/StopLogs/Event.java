@@ -87,6 +87,7 @@ public class Event implements Parcelable {
     private boolean expand;
     private boolean showSub;
     private boolean haveChild;
+    private boolean selected;
 
     public boolean isHaveChild() {
         return haveChild;
@@ -348,6 +349,7 @@ public class Event implements Parcelable {
         dest.writeByte(this.expand ? (byte) 1 : (byte) 0);
         dest.writeByte(this.showSub ? (byte) 1 : (byte) 0);
         dest.writeByte(this.haveChild ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.selected ? (byte) 1 : (byte) 0);
     }
 
     public Event() {
@@ -382,6 +384,7 @@ public class Event implements Parcelable {
         this.expand = in.readByte() != 0;
         this.showSub = in.readByte() != 0;
         this.haveChild = in.readByte() != 0;
+        this.selected = in.readByte() != 0;
     }
 
     public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
@@ -395,4 +398,12 @@ public class Event implements Parcelable {
             return new Event[size];
         }
     };
+
+    public void setSelected(boolean isSelected) {
+        this.selected = isSelected;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
 }

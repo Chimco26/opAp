@@ -21,7 +21,8 @@
             android:textColor="@color/black"
             android:textSize="20sp"
             app:autoSizeMaxTextSize="20sp"
-            app:autoSizeTextType="uniform" />
+            app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="2sp"/>
 
         <RelativeLayout
             android:id="@+id/IS_display_or_edit_ly"
@@ -47,7 +48,8 @@
                     android:textColor="@color/blue1"
                     android:textSize="20sp"
                     app:autoSizeMaxTextSize="20sp"
-                    app:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="2sp"/>
 
                 <TextView
                     android:id="@+id/IS_range_tv"
@@ -59,7 +61,8 @@
                     android:textColor="@color/default_gray"
                     android:textSize="16sp"
                     app:autoSizeMaxTextSize="20sp"
-                    app:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="2sp"/>
 
             </LinearLayout>
 
@@ -83,6 +86,7 @@
                     android:background="@drawable/box_grey_stroke"
                     app:autoSizeMaxTextSize="20sp"
                     app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="2sp"
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:textColorHint="@color/grey1"/>
@@ -100,6 +104,7 @@
                     android:padding="2dp"
                     android:maxLines="1"
                     app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="2sp"
                     android:gravity="center"
                     android:textColor="@color/blue1"
                     android:textStyle="bold"/>

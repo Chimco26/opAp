@@ -117,7 +117,8 @@
                 android:textColor="@color/selector_white_black"
                 android:textStyle="bold"
                 app:autoSizeMaxTextSize="20sp"
-                app:autoSizeTextType="uniform" />
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="2sp"/>
 
             <RadioButton
                 android:id="@+id/DER_parameter_radio_failed"
@@ -132,7 +133,8 @@
                 android:textColor="@color/selector_white_black"
                 android:textStyle="bold"
                 app:autoSizeMaxTextSize="20sp"
-                app:autoSizeTextType="uniform" />
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="2sp"/>
 
         </RadioGroup>
 

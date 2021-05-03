@@ -43,7 +43,7 @@
             android:text="@string/tests_report"
             android:layout_alignParentEnd="true"
             android:padding="10dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:gravity="center"/>
 
         <TextView

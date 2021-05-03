@@ -1,7 +1,6 @@
 package com.operatorsapp.fragments;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,6 +57,8 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
     private EventTechCallDialog mTechCalldialog;
     private TextView mUnreportedTv;
     private boolean isUnreportedOnly = false;
+    private ArrayList<Event> mSelectedItems;
+    private View mReportMultipleBtn;
 
     public static StopEventLogFragment newInstance() {
         StopEventLogFragment stopEventLogFragment = new StopEventLogFragment();
@@ -188,6 +189,7 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
         mProgressBar = view.findViewById(R.id.FSEL_progressBar);
         mNoDataTv = view.findViewById(R.id.FSEL_no_data_tv);
         mUnreportedTv = view.findViewById(R.id.FSEL_unreported_tv);
+        mReportMultipleBtn = view.findViewById(R.id.FSEL_report_mutiple_btn);
         mRv = view.findViewById(R.id.FSEL_rv);
         mRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mStopLogsItems = new ArrayList<>();
@@ -210,6 +212,17 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
                     mUnreportedTv.setBackgroundColor(getResources().getColor(R.color.white_five));
                 }
                 initAdapter();
+            }
+        });
+        mReportMultipleBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Event item = mSelectedItems.get(0);
+                ArrayList<Float> list = new ArrayList<>();
+                for (Event event: mSelectedItems) {
+                    list.add(event.getEventID() * 1f);
+                }
+                mListener.onReportEvents(item.getMachineId(), mStopLogsItems, list, item.getRootEventID() == 0, getRootMachineName(item));
             }
         });
     }
@@ -245,6 +258,16 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
             mListener.onReportEvents(item.getMachineId(), rootMap.get(item.getRootEventID()), list, item.getRootEventID() == 0, getRootMachineName(item));
         } else {
             mListener.onReportEvents(item.getMachineId(), mStopLogsItems, list, item.getRootEventID() == 0, getRootMachineName(item));
+        }
+    }
+
+    @Override
+    public void onUpdateLogSelection(ArrayList<Event> selectedItems) {
+        mSelectedItems = selectedItems;
+        if (mSelectedItems.size() > 0){
+            mReportMultipleBtn.setVisibility(View.VISIBLE);
+        }else {
+            mReportMultipleBtn.setVisibility(View.GONE);
         }
     }
 

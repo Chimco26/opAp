@@ -3,11 +3,6 @@ package com.operatorsapp.activities;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -21,6 +16,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.common.request.BaseRequest;
 import com.google.gson.Gson;
@@ -87,9 +88,9 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
 
 
     private void showTestReport() {
-        if (mFilterMap == null || mFilterMap.isEmpty()){
+        if (mFilterMap == null || mFilterMap.isEmpty()) {
             mFilterMap = new HashMap<>();
-            for (TestReportColumn column: mTestReport.getColumns()) {
+            for (TestReportColumn column : mTestReport.getColumns()) {
                 mFilterMap.put(column.getFieldName(), "");
             }
         }
@@ -101,18 +102,22 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
             }
 
             @Override
-            public TextView getCustomTextView() {
-                return TestReportFragment.this.getCustomTextView();
+            public TextView getCustomTextView(int size) {
+                return TestReportFragment.this.getCustomTextView(size);
             }
         }));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_test_report, container, false);
+        return inflater.inflate(R.layout.fragment_test_report, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         initViews(view);
         getTestReports();
-        return view;
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private void initViews(View view) {
@@ -126,16 +131,33 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
 
         mClearFilter.setOnClickListener(this);
         mSearchIconIv.setOnClickListener(this);
+
+        mSearchEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                filterData();
+            }
+        });
     }
 
     private void filterData() {
         mGson = new Gson();
-        if (mFilterMap.isEmpty()){
-            for (TestReportColumn column: mTestReport.getColumns()) {
+        if (mFilterMap.isEmpty()) {
+            for (TestReportColumn column : mTestReport.getColumns()) {
                 mFilterMap.put(column.getFieldName(), "");
             }
             mTestReportFiltered = mTestReport;
-        }else {
+        } else {
             mTestReportFiltered = new TestReportsResponse();
             mTestReportFiltered.setColumns(mTestReport.getColumns());
             for (TestReportRow row : mTestReport.getRows()) {
@@ -144,17 +166,18 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
                     boolean isAdd = true;
                     boolean isSearchAdd = false;
                     for (String filter : mFilterMap.keySet()) {
-                        if (!json.has(filter) || !json.get(filter).toString().contains(mFilterMap.get(filter))){
+                        if (json.has(filter) && mFilterMap.get(filter).length() > 0 && !json.get(filter).toString().contains(mFilterMap.get(filter))) {
                             isAdd = false;
                             break;
-                        }else if(json.has(filter) && json.get(filter).toString().contains(mSearchEt.getText().toString())){
+                        } else if (mSearchEt.getText().toString().length() == 0 || (json.has(filter) && json.get(filter).toString().contains(mSearchEt.getText().toString()))) {
                             isSearchAdd = true;
                         }
                     }
-                    if (isAdd && isSearchAdd){
+                    if (isAdd && isSearchAdd) {
                         mTestReportFiltered.addRow(row);
                     }
-                } catch (JSONException e) { }
+                } catch (JSONException e) {
+                }
             }
         }
 
@@ -164,7 +187,7 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.FTR_search_iv:
                 filterData();
                 break;
@@ -178,22 +201,27 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
         for (String key : mFilterMap.keySet()) {
             mFilterMap.put(key, "");
         }
+        for(int i = 0; i < mHeaderRowFilterLil.getChildCount(); i++){
+            if (mHeaderRowFilterLil.getChildAt(i) instanceof EditText){
+                ((EditText) mHeaderRowFilterLil.getChildAt(i)).setText("");
+            }
+        }
         mSearchEt.setText("");
         mClearFilter.setBackgroundColor(getResources().getColor(R.color.white_five));
 
-        showTestReport();
+        filterData();
     }
 
     private void checkFilter() {
-        if (mSearchEt.getText().toString().isEmpty()){
-            for (String filter: mFilterMap.keySet()) {
-                if (mFilterMap.containsKey(filter) && !mFilterMap.get(filter).isEmpty()){
+        if (mSearchEt.getText().toString().isEmpty()) {
+            for (String filter : mFilterMap.keySet()) {
+                if (mFilterMap.containsKey(filter) && !mFilterMap.get(filter).isEmpty()) {
                     mClearFilter.setBackgroundColor(getResources().getColor(R.color.blue1));
                     return;
                 }
             }
             mClearFilter.setBackgroundColor(getResources().getColor(R.color.white_five));
-        }else {
+        } else {
             mClearFilter.setBackgroundColor(getResources().getColor(R.color.blue1));
         }
     }
@@ -204,44 +232,52 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
         mHeaderRowLil.removeAllViews();
         mHeaderRowLil.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        for (TestReportColumn column : mTestReport.getColumns()){
+        for (TestReportColumn column : mTestReport.getColumns()) {
 
-            TextView tv = getCustomTextView();
-            tv.setTextSize(COMPLEX_UNIT_SP,18);
+            TextView tv = getCustomTextView(mTestReport.getColumns().size());
+            tv.setTextSize(COMPLEX_UNIT_SP, 18);
             tv.setText(column.getDisplayHName());
             mHeaderRowLil.addView(tv);
 
-            EditText et = getCustomEditText();
-            et.setTextSize(COMPLEX_UNIT_SP,18);
+            EditText et = getCustomEditText(getCellWidth(mTestReport.getColumns().size()));
             et.setText(mFilterMap.get(column.getFieldName()));
             mHeaderRowFilterLil.addView(et);
             et.addTextChangedListener(setTextWatcher(column.getFieldName()));
         }
     }
 
-    private TextView getCustomTextView() {
+    private TextView getCustomTextView(int size) {
         TextView tv = new TextView(getContext());
-        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(200, 50);
-        params.setMargins(5,2,5,2);
+        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(getCellWidth(size), 50);
+        params.setMargins(5, 2, 5, 2);
         tv.setLayoutParams(params);
-        tv.setTextSize(COMPLEX_UNIT_SP,14);
+        tv.setTextSize(COMPLEX_UNIT_SP, 14);
         tv.setTextColor(Color.BLACK);
+        tv.setMaxLines(2);
+
         tv.setEllipsize(TextUtils.TruncateAt.END);
         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         tv.setGravity(Gravity.CENTER);
         return tv;
     }
 
-    private EditText getCustomEditText() {
+    private int getCellWidth(int size) {
+        if (size > 0 && getView() != null) {
+            return (getView().getWidth() - 200) / size;
+        }
+        return 200;
+    }
+
+    private EditText getCustomEditText(int cellWidth) {
         EditText et = new EditText(getContext());
-        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(200, 40);
-        params.setMargins(5,2,5,2);
+        float density = getResources().getDisplayMetrics().density;
+        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(cellWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins((int) (2 * density), 0, (int) (2 * density), 0);
         et.setLayoutParams(params);
-        et.setTextSize(COMPLEX_UNIT_SP,14);
-        et.setTextColor(Color.DKGRAY);
-        et.setBackground(getResources().getDrawable(R.drawable.rounded_white));
-        et.setEllipsize(TextUtils.TruncateAt.END);
-        et.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        et.setTextSize(COMPLEX_UNIT_SP, 16);
+        et.setMaxLines(1);
+        et.setTextColor(Color.BLACK);
+        et.setBackground(getResources().getDrawable(R.drawable.box_grey_stroke));
         et.setGravity(Gravity.CENTER);
         return et;
     }
@@ -254,7 +290,6 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mHandlerFilter.removeCallbacksAndMessages(null);
             }
 
             @Override

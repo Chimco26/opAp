@@ -18,7 +18,8 @@
             android:id="@+id/FJL_1_rl"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="10">
+            android:layout_weight="10"
+            android:textDirection="anyRtl">
 
             <ImageView
                 android:id="@+id/FJL_img_1"
@@ -28,6 +29,7 @@
 
 
             <TextView
+                android:textDirection="anyRtl"
                 android:id="@+id/FJL_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

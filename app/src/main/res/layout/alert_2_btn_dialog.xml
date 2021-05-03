@@ -45,6 +45,7 @@
             android:textColor="@color/black"
             android:textSize="20sp"
             app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="2sp"
             app:autoSizeMaxTextSize="25dp"
             android:maxLines="2"
             android:gravity="center"/>
@@ -70,7 +71,8 @@
                 android:paddingEnd="10dp"
                 android:gravity="center"
                 app:autoSizeMaxTextSize="22sp"
-                app:autoSizeTextType="uniform"/>
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="2sp"/>
 
             <TextView
                 android:id="@+id/DALJ_positive_btn"
@@ -87,7 +89,8 @@
                 android:paddingEnd="10dp"
                 android:gravity="center"
                 app:autoSizeMaxTextSize="22sp"
-                app:autoSizeTextType="uniform"/>
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="2sp"/>
 
         </RelativeLayout>
 

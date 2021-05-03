@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     android:ellipsize="marquee"
     app:autoSizeTextType="uniform"
+    app:autoSizeMinTextSize="2sp"
     app:autoSizeMaxTextSize="25sp" />
 
 

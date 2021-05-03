@@ -67,7 +67,8 @@
                 android:text="@string/add_new_task"
                 android:textColor="@color/white"
                 app:autoSizeMaxTextSize="25sp"
-                app:autoSizeTextType="uniform" />
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="2sp"/>
 
         </LinearLayout>
 

@@ -444,11 +444,11 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                         .addHeader(TIME_ZONE, TimeZone.getDefault().getID())
                         .build();
             }
-            Log.d(LOG_TAG, "intercept: " + " : "
-                    + Base64.encodeToString(String.format("%s;%s", persistenceManager.getUserName(), persistenceManager.getPassword()).getBytes(), Base64.NO_WRAP)
-                    + String.format("%s;%s", persistenceManager.getUserName(), persistenceManager.getPassword())
-                    + persistenceManager.getCurrentLang()
-                    + LoginRequest.PLATFORM);
+//            Log.d(LOG_TAG, "intercept: " + " : "
+//                    + Base64.encodeToString(String.format("%s;%s", persistenceManager.getUserName(), persistenceManager.getPassword()).getBytes(), Base64.NO_WRAP)
+//                    + String.format("%s;%s", persistenceManager.getUserName(), persistenceManager.getPassword())
+//                    + persistenceManager.getCurrentLang()
+//                    + LoginRequest.PLATFORM);
             return chain.proceed(requestToReturn);
         }
     }

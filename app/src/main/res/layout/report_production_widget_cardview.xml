@@ -47,7 +47,8 @@
                 android:textSize="20sp"
                 android:padding="5dp"
                 app:autoSizeMaxTextSize="20sp"
-                app:autoSizeTextType="uniform" />
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="2sp"/>
 
             <View
                 android:layout_width="match_parent"

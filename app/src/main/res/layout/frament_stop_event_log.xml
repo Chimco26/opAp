@@ -91,10 +91,29 @@
         android:textStyle="bold"
         android:visibility="gone"
         app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="2sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="@+id/FSEL_rv" />
+
+    <TextView
+        android:id="@+id/FSEL_report_mutiple_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="32sp"
+        android:textColor="@color/white"
+        android:background="@drawable/button_blue_with_round_corners"
+        android:text="@string/report"
+        android:layout_margin="15dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:gravity="center"
+        android:visibility="gone"
+        app:autoSizeMaxTextSize="22sp"
+        app:autoSizeTextType="uniform"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
