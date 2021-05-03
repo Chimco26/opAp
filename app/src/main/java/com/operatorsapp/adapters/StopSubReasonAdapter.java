@@ -30,14 +30,12 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
     private static final String LOG_TAG = StopSubReasonAdapter.class.getSimpleName();
     private final StopReasonsGroup mStopReason;
     private ArrayList<StopReasonsGroup> mSubReasonsList;
-    private Context mContext;
     private int mSelectedPosition = -1;
     private OnSelectedSubReasonListener mOnSelectedSubReasonListener;
 
-    public StopSubReasonAdapter(OnSelectedSubReasonListener onSelectedSubReasonListener, Context context, StopReasonsGroup stopReason) {
+    public StopSubReasonAdapter(OnSelectedSubReasonListener onSelectedSubReasonListener, StopReasonsGroup stopReason) {
         mSubReasonsList = stopReason.getSubReasons();
         mStopReason = stopReason;
-        mContext = context;
         mOnSelectedSubReasonListener = onSelectedSubReasonListener;
     }
 
@@ -46,7 +44,7 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
     public StopSubReasonAdapter.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
 
         View view;
-        if (com.operatorsapp.BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
+        if (com.operatorsapp.BuildConfig.FLAVOR.equals(parent.getContext().getString(R.string.lenox_flavor_name))) {
 
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.sub_stop_reason_grid_item_lenox, parent, false);
@@ -61,33 +59,34 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
+        Context context = holder.itemView.getContext();
         String nameByLang = OperatorApplication.isEnglishLang() ? mSubReasonsList.get(position).getEName() : mSubReasonsList.get(position).getLName();
         holder.mStopTitle.setText(nameByLang);
 
-        if (BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
+        if (BuildConfig.FLAVOR.equals(context.getString(R.string.lenox_flavor_name))) {
 
             holder.mStopTitle.setTextColor(Color.WHITE);
-            holder.mReasonImage.setImageDrawable(mContext.getDrawable(ReasonImageLenox.getSubReasonIc(mStopReason.getId())));
-            holder.itemView.setBackground(mContext.getDrawable(ReasonImageLenox.getSubReasonBackgroundColor(mStopReason.getId())));
+            holder.mReasonImage.setImageDrawable(context.getDrawable(ReasonImageLenox.getSubReasonIc(mStopReason.getId())));
+            holder.itemView.setBackground(context.getDrawable(ReasonImageLenox.getSubReasonBackgroundColor(mStopReason.getId())));
 
         } else {
-            holder.mStopTitle.setTextColor(mContext.getResources().getColor(R.color.color_jobs_row));
+            holder.mStopTitle.setTextColor(context.getResources().getColor(R.color.color_jobs_row));
             String color = mSubReasonsList.get(position).getmColorID();
             if (color == null || color.isEmpty()) {
-                color = String.format("#%06x", mContext.getColor(R.color.C2) & 0xffffff);
+                color = String.format("#%06x", context.getColor(R.color.C2) & 0xffffff);
             }
             if (mSelectedPosition == position) {
 //                holder.mImageTitle.setTextColor(Color.WHITE);
-                GradientDrawable selector = (GradientDrawable) mContext.getDrawable(R.drawable.circle_withe_stroke);
+                GradientDrawable selector = (GradientDrawable) context.getDrawable(R.drawable.circle_withe_stroke);
                 selector.setColor(Color.parseColor(color));
 
                 holder.mReasonImage.setBackground(selector);
             } else {
-                Drawable selector = mContext.getDrawable(R.drawable.simple_circle);
+                Drawable selector = context.getDrawable(R.drawable.simple_circle);
                 selector.setTint(Color.parseColor(color));
 
                 holder.mReasonImage.setBackground(selector);
-//                holder.mImageTitle.setTextColor(ContextCompat.getColorStateList(mContext, R.color.button_stop_text_selector));
+//                holder.mImageTitle.setTextColor(ContextCompat.getColorStateList(context, R.color.button_stop_text_selector));
             }
 //            if (nameByLang != null) {
 //                char firstLetter = nameByLang.charAt(0);

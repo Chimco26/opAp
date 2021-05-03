@@ -35,7 +35,6 @@ import retrofit2.Response;
 public class NotificationsDialog extends Dialog implements View.OnClickListener, NotificationHistoryAdapter.OnNotificationResponseSelected {
 
     private static final int DEFAULT_NUM_TEMPLATE = 10;
-    private final Context mContext;
     private NotificationsDialogListener mListener;
     private EditText newNotBodyEt;
     private SwipeRefreshLayout swipeRefresh;
@@ -46,7 +45,6 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
 
     public NotificationsDialog(Context context, NotificationsDialogListener listener) {
         super(context);
-        mContext = context;
         mListener = listener;
     }
 
@@ -80,7 +78,7 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new NotificationHistoryAdapter(getContext(), getNotificationList(), this));
+        recyclerView.setAdapter(new NotificationHistoryAdapter(getNotificationList(), this));
 
         getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -107,7 +105,7 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
     }
 
     private void getTopNotifications() {
-        ProgressDialogManager.show((AppCompatActivity) mContext);
+        ProgressDialogManager.show((AppCompatActivity) getContext());
         NetworkManager.getInstance().getTopNotification(new TopNotificationRequest(PersistenceManager.getInstance().getSessionId(), DEFAULT_NUM_TEMPLATE), new Callback<NotificationHistoryResponse>() {
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {

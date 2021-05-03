@@ -30,17 +30,15 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
     private TextView mTitle;
     private TextView mSubtitle;
     private TextView mValue;
-    private Context mContext;
     private boolean mClosedState;
     private int mRangeCapsuleWidth;
     private int mHeight;
     private int mWidth;
 
 
-    public RangeViewHolder(View itemView, Context context, boolean closedState, int height, int width) {
+    public RangeViewHolder(View itemView, boolean closedState, int height, int width) {
         super(itemView);
 
-        mContext = context;
         mClosedState = closedState;
         mHeight = height;
         mWidth = width;
@@ -59,7 +57,7 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void setRangeItem(final Widget widget) {
+    public void setRangeItem(Context context, final Widget widget) {
 
         setSizes(mParentLayout);
         String nameByLang3 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
@@ -67,15 +65,15 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
             nameByLang3 = PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("CycleTimeEfficiency");
         }
         mTitle.setText(nameByLang3);
-        mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));
+        mSubtitle.setText(new StringBuilder(context.getString(R.string.standard)).append(widget.getStandardValue()));
         mValue.setText(widget.getCurrentValue());
         if (widget.isOutOfRange()) {
-            mValue.setTextColor(ContextCompat.getColor(mContext, R.color.red_line));
+            mValue.setTextColor(ContextCompat.getColor(context, R.color.red_line));
         } else {
-            mValue.setTextColor(ContextCompat.getColor(mContext, R.color.C16));
+            mValue.setTextColor(ContextCompat.getColor(context, R.color.C16));
         }
 
-        setCycleTime(widget);
+        setCycleTime(context, widget);
     }
 
     private void setSizes(final LinearLayout parent) {
@@ -89,7 +87,7 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
     }
 
 
-    private void setCycleTime(final Widget widget) {
+    private void setCycleTime(Context context, final Widget widget) {
 
         try {
             mCycleRange.setCurrentValue(Float.valueOf(widget.getCurrentValue()));
@@ -102,7 +100,7 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
 
         mCycleTimeLy.setVisibility(View.VISIBLE);
         mCycleRange.setAvgValue(Float.parseFloat(widget.getCycleTimeAvg()));
-        mStandardTv.setText(String.format("%s%s", mContext.getString(R.string.standard), widget.getStandardValue()));
+        mStandardTv.setText(String.format("%s%s", context.getString(R.string.standard), widget.getStandardValue()));
         mAverageTv.setVisibility(View.GONE);
         mAverageImg.setVisibility(View.GONE);
         if (widget.getCycleTimeAvg() != null) {
@@ -115,7 +113,7 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
 
             }
         }
-        mAverageTv.setText(String.format("%s%s", mContext.getString(R.string.average), widget.getCycleTimeAvg()));
+        mAverageTv.setText(String.format("%s%s", context.getString(R.string.average), widget.getCycleTimeAvg()));
         mCycleRange.postInvalidate();
     }
 

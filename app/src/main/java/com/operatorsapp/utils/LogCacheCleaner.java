@@ -8,15 +8,12 @@ import java.io.IOException;
 
 public class LogCacheCleaner {
 
-    private Context mContext;
 
-    public LogCacheCleaner(Context context) {
-
-        mContext = context;
+    public LogCacheCleaner() {
     }
 
-    public void removeExistingFiles() {
-        File root = this.getRootCacheDirectory();
+    public void removeExistingFiles(Context context) {
+        File root = this.getRootCacheDirectory(context);
         File logsDir = new File(root, "Logs");
         if (logsDir.exists()) {
             String[] children = logsDir.list();
@@ -30,7 +27,7 @@ public class LogCacheCleaner {
 
     }
 
-    private File getRootCacheDirectory() {
+    private File getRootCacheDirectory(Context context) {
         File appCacheDir = null;
 
         String externalStorageState;
@@ -40,16 +37,16 @@ public class LogCacheCleaner {
             externalStorageState = "";
         }
 
-        if ("mounted".equals(externalStorageState) && this.hasExternalStoragePermission(this.mContext)) {
-            appCacheDir = this.getExternalCacheDir(this.mContext);
+        if ("mounted".equals(externalStorageState) && this.hasExternalStoragePermission(context)) {
+            appCacheDir = this.getExternalCacheDir(context);
         }
 
         if (appCacheDir == null) {
-            appCacheDir = this.mContext.getCacheDir();
+            appCacheDir = context.getCacheDir();
         }
 
         if (appCacheDir == null) {
-            String cacheDirPath = "/data/data/" + this.mContext.getPackageName() + "/cache/";
+            String cacheDirPath = "/data/data/" + context.getPackageName() + "/cache/";
             appCacheDir = new File(cacheDirPath);
         }
 

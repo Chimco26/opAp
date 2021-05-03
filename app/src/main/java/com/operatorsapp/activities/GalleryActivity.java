@@ -204,7 +204,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         mGalleryModels.get(0).setSelected(true);
 
-        mAdapter = new GalleryAdapter(mGalleryModels, this, this, R.layout.item_gallery);
+        mAdapter = new GalleryAdapter(mGalleryModels, this, R.layout.item_gallery);
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);

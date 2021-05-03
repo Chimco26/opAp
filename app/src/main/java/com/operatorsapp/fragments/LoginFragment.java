@@ -79,7 +79,6 @@ public class LoginFragment extends Fragment {
         // Analytics
         new GoogleAnalyticsHelper().trackScreen(getActivity(), "Login screen");
 
-
     }
 
     @Override

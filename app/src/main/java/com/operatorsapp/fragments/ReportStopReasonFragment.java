@@ -375,7 +375,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         //Analytics
         new GoogleAnalyticsHelper().trackScreen(getActivity(), "Report Stop Reason- circle level 1");
 
-        StopReasonsAdapter mStopReasonsAdapter = new StopReasonsAdapter(getContext(), mStopReasonsList, this);
+        StopReasonsAdapter mStopReasonsAdapter = new StopReasonsAdapter(mStopReasonsList, this);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setAdapter(mStopReasonsAdapter);
     }
@@ -384,7 +384,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         //Analytics
         new GoogleAnalyticsHelper().trackScreen(getActivity(), "Report Stop Reason- table");
 
-        NewStopReasonsAdapter newStopReasonsAdapter = new NewStopReasonsAdapter(getActivity(), mStopReasonsList, this);
+        NewStopReasonsAdapter newStopReasonsAdapter = new NewStopReasonsAdapter(mStopReasonsList, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mRecyclerView.setAdapter(newStopReasonsAdapter);
     }

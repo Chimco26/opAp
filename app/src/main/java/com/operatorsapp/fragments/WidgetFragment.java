@@ -140,18 +140,18 @@ public class WidgetFragment extends Fragment implements
                     mGridSpacingItemDecoration.setSpacingTop(0);
                     mGridSpacingItemDecoration.setSpacingBottom(8);
                     mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
-                    mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener,mJoshId,
+                    mWidgetAdapter = new WidgetAdapter(mWidgets, mOnGoToScreenListener,mJoshId,
                             true, mRecyclersHeight, mWidgetsLayoutWidth,
                             mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus,mShowDashboardCroutonListener, new OnKeyboardManagerListener() {
                         @Override
-                        public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
+                        public void onOpenKeyboard(Context context, SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
                             if (mKeyBoardLayout != null) {
                                 mKeyBoardLayout.setVisibility(View.VISIBLE);
                                 if (mKeyBoard == null)
                                     mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
 
                                 mKeyBoard.setChars(complementChars);
-                                mKeyBoard.openKeyBoard(text);
+                                mKeyBoard.openKeyBoard(context, text);
                                 mKeyBoard.setListener(listener);
                                 if (mDashboardCentralContainerListener != null) {
                                     mDashboardCentralContainerListener.onKeyboardEvent(true);
@@ -255,7 +255,7 @@ public class WidgetFragment extends Fragment implements
             if (mWidgetAdapter != null) {
                 mWidgetAdapter.setNewData(widgetList, mPermissionResponse);
             } else {
-                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener,
+                mWidgetAdapter = new WidgetAdapter(widgetList, mOnGoToScreenListener,
                         mJoshId, !mIsOpen, mRecyclersHeight, mWidgetsLayoutWidth,
                         mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus, mShowDashboardCroutonListener, this, mPermissionResponse);
                 mWidgetRecycler.setAdapter(mWidgetAdapter);
@@ -424,14 +424,14 @@ public class WidgetFragment extends Fragment implements
 
 
     @Override
-    public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
+    public void onOpenKeyboard(Context context, SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
         if (mKeyBoardLayout != null) {
             mKeyBoardLayout.setVisibility(View.VISIBLE);
             if (mKeyBoard == null)
                 mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
 
             mKeyBoard.setChars(complementChars);
-            mKeyBoard.openKeyBoard(text);
+            mKeyBoard.openKeyBoard(context, text);
             mKeyBoard.setListener(listener);
             if (mDashboardCentralContainerListener != null) {
                 mDashboardCentralContainerListener.onKeyboardEvent(true);

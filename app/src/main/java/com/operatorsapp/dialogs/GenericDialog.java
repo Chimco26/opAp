@@ -2,6 +2,7 @@ package com.operatorsapp.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import androidx.appcompat.app.AlertDialog;
@@ -24,7 +25,6 @@ public class GenericDialog implements View.OnClickListener {
 
     private static final String DIALOG_BODY = "body";
     private static final String DIALOG_TITLE = "title";
-    private Activity mContext;
     private final String mActionYesStr;
     private final boolean mIsError;
     private String mBodyStr;
@@ -41,20 +41,19 @@ public class GenericDialog implements View.OnClickListener {
     private AlertDialog mAlertDialog;
 
     public GenericDialog(Activity context, String body, String title, String actionYes, boolean isError) {
-        mContext = context;
         mBodyStr = body;
         mTitleStr = title;
         mActionYesStr = actionYes;
         mIsError = isError;
-        mContext.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        context.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
     }
 
-    public AlertDialog showNoProductionAlarm() {
+    public AlertDialog showNoProductionAlarm(Context context) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        LayoutInflater inflater = mContext.getLayoutInflater();
+        LayoutInflater inflater = LayoutInflater.from(context);
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.basic_message_dialog, null);
         builder.setView(view);
         mCloseIv = view.findViewById(R.id.basic_dialog_close_iv);
@@ -85,7 +84,7 @@ public class GenericDialog implements View.OnClickListener {
         mAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                mContext.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+                mAlertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
             }
         });
         mAlertDialog.show();

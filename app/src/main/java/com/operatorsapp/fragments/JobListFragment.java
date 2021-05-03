@@ -362,7 +362,7 @@ public class JobListFragment extends Fragment implements
 //                headersName[i] = mHeaderTranslationList.get(i).getColumnName();
 //            }
 //            mPendingJobsAdapter = new PendingJobsListAdapter(mPendingJobs, headersName, this, getActivity());
-            mPendingJobsAdapter = new PendingJobsListAdapter(mPendingJobs, orderedHeadersKey, this, getActivity());
+            mPendingJobsAdapter = new PendingJobsListAdapter(mPendingJobs, orderedHeadersKey, this);
             mPendingJobsRv.setLayoutManager(layoutManager2);
             mPendingJobsRv.setAdapter(mPendingJobsAdapter);
         }

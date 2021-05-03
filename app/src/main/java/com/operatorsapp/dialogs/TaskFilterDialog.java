@@ -21,7 +21,6 @@ import com.operatorsapp.managers.PersistenceManager;
 import java.util.ArrayList;
 
 public class TaskFilterDialog {
-    private Context mContext;
     private AlertDialog mAlarmAlertDialog;
     private CompoundButton.OnCheckedChangeListener selectAllListener;
     final ArrayList<SelectableString> priorities = PersistenceManager.getInstance().getTaskFilterPriorityToShow();
@@ -29,18 +28,17 @@ public class TaskFilterDialog {
 
 
     public TaskFilterDialog(Context context) {
-        mContext = context;
-        periods.add(0, new SelectableString(mContext.getString(R.string.select_all),
-                SelectableString.isAllSelected(periods, true), SelectableString.SELECT_ALL_ID, mContext.getResources().getColor(R.color.blue1)));
-        priorities.add(0, new SelectableString(mContext.getString(R.string.select_all),
-                SelectableString.isAllSelected(priorities, true), SelectableString.SELECT_ALL_ID, mContext.getResources().getColor(R.color.blue1)));
+        periods.add(0, new SelectableString(context.getString(R.string.select_all),
+                SelectableString.isAllSelected(periods, true), SelectableString.SELECT_ALL_ID, context.getResources().getColor(R.color.blue1)));
+        priorities.add(0, new SelectableString(context.getString(R.string.select_all),
+                SelectableString.isAllSelected(priorities, true), SelectableString.SELECT_ALL_ID, context.getResources().getColor(R.color.blue1)));
     }
 
-    public AlertDialog showTaskFilterDialog() {
+    public AlertDialog showTaskFilterDialog(Context context) {
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        @SuppressLint("InflateParams") View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_task_filter, null);
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.dialog_task_filter, null);
         builder.setView(view);
 
         final Button applyBtn = view.findViewById(R.id.DTF_apply_btn);
@@ -59,10 +57,10 @@ public class TaskFilterDialog {
         }, true, true);
         priorityRv.setAdapter(prioritiesAdapter);
         priorityRv.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager llm = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         priorityRv.setLayoutManager(llm);
 
-        periodRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        periodRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         periodRv.setHasFixedSize(true);
         final CheckBoxFilterAdapter periodsAdapter = new CheckBoxFilterAdapter(periods, new CheckBoxFilterAdapter.CheckBoxFilterAdapterListener() {
             @Override

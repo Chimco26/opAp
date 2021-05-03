@@ -224,7 +224,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         ((TextView) mTopFiveStopsView.findViewById(R.id.TF_tv)).setText(getString(R.string.top_five_stop_events));
         mTopStops_rv = mTopFiveStopsView.findViewById(R.id.top_five_recyclerView);
         mTopStops_rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mStopsAdapter = new TopFiveAdapter(getActivity(), new ArrayList<TopFiveItem>(), TopFiveAdapter.TYPE_STOP);
+        mStopsAdapter = new TopFiveAdapter(new ArrayList<TopFiveItem>(), TopFiveAdapter.TYPE_STOP);
         mTopStops_rv.setAdapter(mStopsAdapter);
     }
 
@@ -233,7 +233,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         ((TextView) mTopFiveRejectsView.findViewById(R.id.TF_tv)).setText(getString(R.string.top_five_reject_reasons));
         mTopRejects_rv = mTopFiveRejectsView.findViewById(R.id.top_five_recyclerView);
         mTopRejects_rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRejectsAdapter = new TopFiveAdapter(getActivity(), new ArrayList<TopFiveItem>(), TopFiveAdapter.TYPE_REJECT);
+        mRejectsAdapter = new TopFiveAdapter(new ArrayList<TopFiveItem>(), TopFiveAdapter.TYPE_REJECT);
         mTopRejects_rv.setAdapter(mRejectsAdapter);
     }
 

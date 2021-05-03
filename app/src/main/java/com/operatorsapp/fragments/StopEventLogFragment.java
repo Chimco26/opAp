@@ -348,7 +348,7 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TECH_CALL, false, "reason: " + m);
 
                 final GenericDialog dialog = new GenericDialog(getActivity(), t.getMessage(), getString(R.string.call_technician_title), getString(R.string.ok), true);
-                final AlertDialog alertDialog = dialog.showNoProductionAlarm();
+                final AlertDialog alertDialog = dialog.showNoProductionAlarm(getContext());
                 dialog.setListener(new GenericDialog.OnGenericDialogListener() {
                     @Override
                     public void onActionYes() {

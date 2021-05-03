@@ -24,13 +24,11 @@ public class PendingJobPropsAdapter extends RecyclerView.Adapter<PendingJobProps
 
     private final List<Property> mProps;
     private final HashMap<String, Header> mHashMapHeaders;
-    private final Context mContext;
 
-    public PendingJobPropsAdapter(Context context, List<Property> properties, HashMap<String, Header> hashMapHeaders) {
+    public PendingJobPropsAdapter(List<Property> properties, HashMap<String, Header> hashMapHeaders) {
 
         mProps = properties;
         mHashMapHeaders = hashMapHeaders;
-        mContext = context;
     }
 
     @NonNull
@@ -50,7 +48,7 @@ public class PendingJobPropsAdapter extends RecyclerView.Adapter<PendingJobProps
         if (mProps.get(position) != null && mHashMapHeaders.get(mProps.get(position).getKey()) != null) {
             viewHolder.mTitleTv.setText(getResizedString(mHashMapHeaders.get(mProps.get(position).getKey()).getDisplayName(), 20));
         }
-        if (mContext.getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+        if (viewHolder.itemView.getContext().getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
             viewHolder.mValueTv.setText(getResizedString(updateDateForRtl(mProps.get(position), actualFormat, dateFormat), 22));
         } else {
             viewHolder.mValueTv.setText(getResizedString(mProps.get(position).getValue(), 22));

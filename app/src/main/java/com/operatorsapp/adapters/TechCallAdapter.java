@@ -30,15 +30,13 @@ import java.util.Comparator;
 public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final ArrayList<TechCallInfo> mTechList;
-    private final Context mContext;
     private final TechCallItemListener mListener;
     private final boolean isManageServiceCall;
 //    private final String mMachineName;
     private final MachineLineResponse mMachineLine;
     private final boolean isViewOnly;
 
-    public TechCallAdapter(Context context, ArrayList<TechCallInfo> mTechList, boolean isManageServiceCall, boolean isViewOnly, MachineLineResponse machineLine, TechCallItemListener listener) {
-        mContext = context;
+    public TechCallAdapter(ArrayList<TechCallInfo> mTechList, boolean isManageServiceCall, boolean isViewOnly, MachineLineResponse machineLine, TechCallItemListener listener) {
         this.mTechList = mTechList;
 //        mMachineName = machineName;
         this.isManageServiceCall = isManageServiceCall;
@@ -58,12 +56,13 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final TechViewHolder techViewHolder = (TechViewHolder) holder;
+        Context context = holder.itemView.getContext();
 
         boolean isNewestCall = !isNewerCallExists(mTechList.get(position));
         if ((isManageServiceCall || !isViewOnly) && isNewestCall){
             techViewHolder.mManageCallFl.setVisibility(View.VISIBLE);
-            techViewHolder.mManageCallIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.wrench));
-            techViewHolder.mManageCallTv.setText(mContext.getResources().getString(R.string.start_service));
+            techViewHolder.mManageCallIv.setImageDrawable(context.getResources().getDrawable(R.drawable.wrench));
+            techViewHolder.mManageCallTv.setText(context.getResources().getString(R.string.start_service));
         }else {
             techViewHolder.mManageCallFl.setVisibility(View.INVISIBLE);
         }
@@ -92,36 +91,36 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         techViewHolder.mTimeTv.setText(TimeUtils.getDate(mTechList.get(position).getmCallTime(), TimeUtils.COMMON_DATE_FORMAT));
 
         int icon = R.drawable.technician_blue_svg;
-        String txt = mContext.getResources().getString(R.string.waiting_for_replay);
+        String txt = context.getResources().getString(R.string.waiting_for_replay);
         switch (mTechList.get(position).getmResponseType()){
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_UNSET:
                 icon = R.drawable.call_recieved;
-                txt = mContext.getResources().getString(R.string.waiting_for_replay);
+                txt = context.getResources().getString(R.string.waiting_for_replay);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
                 icon = R.drawable.call_sent_blue;
-                txt = mContext.getResources().getString(R.string.call_approved);
+                txt = context.getResources().getString(R.string.call_approved);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
                 icon = R.drawable.call_declined;
-                txt = mContext.getResources().getString(R.string.call_declined);
+                txt = context.getResources().getString(R.string.call_declined);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
                 icon = R.drawable.cancel_blue;
-                txt = mContext.getResources().getString(R.string.service_call_was_canceled);
+                txt = context.getResources().getString(R.string.service_call_was_canceled);
                 techViewHolder.mManageCallFl.setVisibility(View.INVISIBLE);
                 techViewHolder.mRemoveIv.setVisibility(View.INVISIBLE);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
                 icon = R.drawable.at_work_blue;
-                txt = mContext.getResources().getString(R.string.at_work);
-                techViewHolder.mManageCallIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.check_all));
-                techViewHolder.mManageCallTv.setText(mContext.getResources().getString(R.string.finish_service));
+                txt = context.getResources().getString(R.string.at_work);
+                techViewHolder.mManageCallIv.setImageDrawable(context.getResources().getDrawable(R.drawable.check_all));
+                techViewHolder.mManageCallTv.setText(context.getResources().getString(R.string.finish_service));
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
                 icon = R.drawable.service_done;
-                txt = mContext.getResources().getString(R.string.service_completed);
+                txt = context.getResources().getString(R.string.service_completed);
                 techViewHolder.mManageCallFl.setVisibility(View.INVISIBLE);
                 techViewHolder.mRemoveIv.setVisibility(View.INVISIBLE);
                 break;

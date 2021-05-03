@@ -368,7 +368,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                     date != null ? date.getTime() : 0, call.getmNotificationID(), call.getmTargetUserId(), call.getmEventID()));
         }
 
-        mRecycler.setAdapter(new TechCallAdapter(getContext(), techCallList, isManageServiceCall, true, mMachineLine, new TechCallAdapter.TechCallItemListener() {
+        mRecycler.setAdapter(new TechCallAdapter(techCallList, isManageServiceCall, true, mMachineLine, new TechCallAdapter.TechCallItemListener() {
             @Override
             public void onRemoveCallPressed(TechCallInfo techCallInfo) {
                 removeCall(techCallInfo);
@@ -416,7 +416,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
         mLast24Underline.setVisibility(View.INVISIBLE);
 
         sortCalls(mSortSpnr.getSelectedItemPosition());
-        mRecycler.setAdapter(new TechCallAdapter(getContext(), mTechCallList, isManageServiceCall, false, mMachineLine, new TechCallAdapter.TechCallItemListener() {
+        mRecycler.setAdapter(new TechCallAdapter(mTechCallList, isManageServiceCall, false, mMachineLine, new TechCallAdapter.TechCallItemListener() {
             @Override
             public void onRemoveCallPressed(TechCallInfo techCallInfo) {
                 removeCall(techCallInfo);
@@ -633,7 +633,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TECH_CALL, false, "reason: " + m);
 
                 final GenericDialog dialog = new GenericDialog(getActivity(), t.getMessage(), getString(R.string.call_technician_title), getString(R.string.ok), true);
-                final AlertDialog alertDialog = dialog.showNoProductionAlarm();
+                final AlertDialog alertDialog = dialog.showNoProductionAlarm(getContext());
                 dialog.setListener(new GenericDialog.OnGenericDialogListener() {
                     @Override
                     public void onActionYes() {

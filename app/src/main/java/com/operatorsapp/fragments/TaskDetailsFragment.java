@@ -564,7 +564,7 @@ public class TaskDetailsFragment extends Fragment {
             public void onPdfClick(GalleryModel galleryModel) {
                 startGalleryActivity(files, "Task files");
             }
-        }, getContext(), R.layout.item_task_gallery);
+        }, R.layout.item_task_gallery);
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);

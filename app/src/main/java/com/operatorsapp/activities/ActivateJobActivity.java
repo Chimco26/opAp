@@ -144,7 +144,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
     }
 
     private void showLastJobDialog(String title, String subTitle, String msg, String positiveBtn, String negativeBtn, final boolean firstSteps) {
-        BasicTitleTextBtnDialog basicTitleTextBtnDialog = new BasicTitleTextBtnDialog(this,
+        BasicTitleTextBtnDialog basicTitleTextBtnDialog = new BasicTitleTextBtnDialog(
                 new BasicTitleTextBtnDialog.BasicTitleTextBtnDialogListener() {
                     @Override
                     public void onClickPositiveBtn() {
@@ -183,7 +183,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
                 }, title, subTitle, msg, positiveBtn, negativeBtn
         );
 
-        basicTitleTextBtnDialog.showBasicTitleTextBtnDialog().show();
+        basicTitleTextBtnDialog.showBasicTitleTextBtnDialog(this).show();
     }
 
     private void getPendingJobList() {
@@ -237,7 +237,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
                 } else {
                     ProgressDialogManager.dismiss();
                     final GenericDialog dialog = new GenericDialog(ActivateJobActivity.this, getString(R.string.empty_job_list_msg), getString(R.string.attention), getString(R.string.ok), true);
-                    final AlertDialog alertDialog = dialog.showNoProductionAlarm();
+                    final AlertDialog alertDialog = dialog.showNoProductionAlarm(ActivateJobActivity.this);
                     dialog.setListener(new GenericDialog.OnGenericDialogListener() {
                         @Override
                         public void onActionYes() {

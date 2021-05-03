@@ -217,7 +217,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
     private void initSubReasons() {
         if (mStopReason != null) {
-            mStopReasonsAdapter = new StopSubReasonAdapter(this, getContext(), mStopReason);
+            mStopReasonsAdapter = new StopSubReasonAdapter(this, mStopReason);
             mRecyclerView.setAdapter(mStopReasonsAdapter);
         }
     }

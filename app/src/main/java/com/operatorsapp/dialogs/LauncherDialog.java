@@ -22,12 +22,10 @@ import java.util.List;
 
 public class LauncherDialog extends Dialog {
 
-    private final Context mContext;
     private RecyclerView mRecycler;
 
     public LauncherDialog(Context context) {
         super(context);
-        mContext = context;
     }
 
 
@@ -51,7 +49,7 @@ public class LauncherDialog extends Dialog {
 
     private void initRecycler() {
 
-        PackageManager pm = mContext.getPackageManager();
+        PackageManager pm = getContext().getPackageManager();
 
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -76,7 +74,7 @@ public class LauncherDialog extends Dialog {
         }
 
         mRecycler = findViewById(R.id.launcher_dialog_rv);
-        mRecycler.setLayoutManager(new GridLayoutManager(mContext, 3));
-        mRecycler.setAdapter(new LauncherAdapter(mContext, selectedApps));
+        mRecycler.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        mRecycler.setAdapter(new LauncherAdapter(selectedApps));
     }
 }

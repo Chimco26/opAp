@@ -63,7 +63,7 @@ public class ReportProductionViewHolder extends RecyclerView.ViewHolder {
 //    private Button mButtonReportBUT;
 //    private TextView mButtonCancelBUT;
 
-//    private Activity mContext;
+//    private Activity context;
 //    private ShowDashboardCroutonListener mShowDashboardCroutonListener;
 //    private OnKeyboardManagerListener mOnKeyboardManagerListener;
 //
@@ -112,7 +112,7 @@ public class ReportProductionViewHolder extends RecyclerView.ViewHolder {
 //        mHeight = height;
 //        mWidth = width;
 //
-//        this.mContext = context;
+//        this.context = context;
 //        this.mReportFieldsForMachine = mReportFieldsForMachine;
 //        this.mOnKeyboardManagerListener = mOnKeyboardManagerListener;
 //        this.mJoshId = mJoshId;
@@ -180,7 +180,7 @@ public class ReportProductionViewHolder extends RecyclerView.ViewHolder {
 //    private void cancelScreenReportProduction() {
 //        step1LL.setVisibility(View.VISIBLE);
 //        step2LL.setVisibility(View.GONE);
-//        mButtonReportBUT.setBackground(mContext.getResources().getDrawable(R.drawable.button_bg_disabled));
+//        mButtonReportBUT.setBackground(context.getResources().getDrawable(R.drawable.button_bg_disabled));
 //        mButtonReportBUT.setEnabled(false);
 //    }
 //
@@ -197,7 +197,7 @@ public class ReportProductionViewHolder extends RecyclerView.ViewHolder {
 //    }
 //
 //    private void sendReport() {
-//        ProgressDialogManager.show(mContext);
+//        ProgressDialogManager.show(context);
 //        ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
 //        reportNetworkBridge.injectInventory(NetworkManager.getInstance());
 //        ReportCore mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
@@ -217,16 +217,16 @@ public class ReportProductionViewHolder extends RecyclerView.ViewHolder {
 //            dismissProgressDialog();
 //
 //            if (response.getFunctionSucceed()) {
-//                new GoogleAnalyticsHelper().trackEvent(mContext, GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, true, "Report Production- units: " + mUnitsCounter + ", type: " + mSelectedPackageTypeName);
+//                new GoogleAnalyticsHelper().trackEvent(context, GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, true, "Report Production- units: " + mUnitsCounter + ", type: " + mSelectedPackageTypeName);
 ////                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
 //                mShowDashboardCroutonListener.onShowCrouton(o.getError().getErrorDesc(), false);
 //
 //            } else {
-//                new GoogleAnalyticsHelper().trackEvent(mContext, GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, false, "Report Production- units: " + mUnitsCounter + ", type: " + mSelectedPackageTypeName);
+//                new GoogleAnalyticsHelper().trackEvent(context, GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, false, "Report Production- units: " + mUnitsCounter + ", type: " + mSelectedPackageTypeName);
 ////                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
 //                mShowDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + o.getError().getErrorDesc(), true);
 //            }
-//            SendBroadcast.refreshPolling(mContext);
+//            SendBroadcast.refreshPolling(context);
 //
 //            cancelScreenReportProduction();
 //
@@ -236,18 +236,18 @@ public class ReportProductionViewHolder extends RecyclerView.ViewHolder {
 //        @Override
 //        public void sendReportFailure(StandardResponse reason) {
 //            dismissProgressDialog();
-//            new GoogleAnalyticsHelper().trackEvent(mContext, GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, false, "Report Production- " + reason.getError().getErrorDesc());
+//            new GoogleAnalyticsHelper().trackEvent(context, GoogleAnalyticsHelper.EventCategory.PRODUCTION_REPORT, false, "Report Production- " + reason.getError().getErrorDesc());
 //            OppAppLogger.i(LOG_TAG, "sendReportFailure() reason: " + reason.getError().getErrorDesc());
 //            mShowDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getError().getErrorDesc(), true);
-//            SendBroadcast.refreshPolling(mContext);
+//            SendBroadcast.refreshPolling(context);
 //
 //            cancelScreenReportProduction();
 //        }
 //    };
 //
 //    private void dismissProgressDialog() {
-//        if (mContext != null) {
-//            mContext.runOnUiThread(new Runnable() {
+//        if (context != null) {
+//            context.runOnUiThread(new Runnable() {
 //                @Override
 //                public void run() {
 //                    ProgressDialogManager.dismiss();
@@ -297,11 +297,11 @@ public class ReportProductionViewHolder extends RecyclerView.ViewHolder {
 //    }
 //
 //    private void initSpinner() {
-//        if (mContext != null) {
-//            final RejectProductionSpinnerAdapter reasonSpinnerArrayAdapter = new RejectProductionSpinnerAdapter(mContext, R.layout.base_spinner_item, mReportFieldsForMachine.getPackageTypes());
+//        if (context != null) {
+//            final RejectProductionSpinnerAdapter reasonSpinnerArrayAdapter = new RejectProductionSpinnerAdapter(context, R.layout.base_spinner_item, mReportFieldsForMachine.getPackageTypes());
 //            reasonSpinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
 //            mRejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
-//            mRejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(mContext, R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+//            mRejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(context, R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 //
 //            mRejectReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //                @Override

@@ -65,6 +65,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
 import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
 import com.operators.activejobslistformachineinfra.ActiveJob;
@@ -477,6 +478,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mReportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                ProcessPhoenix.triggerRebirth(DashboardActivity.this);
+
                 new GoogleAnalyticsHelper().trackEvent(DashboardActivity.this, GoogleAnalyticsHelper.EventCategory.SHIFT_REPORT, true, "Shift Report pressed");
                 initReportShiftFragment();
             }
@@ -1558,7 +1561,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void showSetUpEndDialog() {
         if (mActiveJobsListForMachine != null) {
             mSetupEndDialog = new SetupEndDialog(this, mReportFieldsForMachine, mActiveJobsListForMachine);
-            mSetupEndDialog.showNoProductionAlarm(new SetupEndDialog.SetupEndDialogListener() {
+            mSetupEndDialog.showNoProductionAlarm(this, new SetupEndDialog.SetupEndDialogListener() {
                 @Override
                 public void sendReport(int selectedReasonId, int selectedTechnicianId, ArrayList<RejectForMultipleRequest> rejectForMultipleRequests) {
                     mRejectForMultipleRequests = rejectForMultipleRequests;
@@ -2454,7 +2457,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (machineLineItems != null && machineLineItems.size() > 0) {
 
             TitleAndSubWithSelectableListDialog titleAndSubWithSelectableListDialog = new TitleAndSubWithSelectableListDialog(
-                    this, new TitleAndSubWithSelectableListDialog.TitleAndSubWithSelectableListDialogListener() {
+                    new TitleAndSubWithSelectableListDialog.TitleAndSubWithSelectableListDialogListener() {
                 @Override
                 public void onClickPositiveBtn(ArrayList<MachinesLineDetail> machinesLineDetails) {
                     ProgressDialogManager.show(DashboardActivity.this);
@@ -2473,7 +2476,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     String.format("%s:", getString(R.string.update_this_production_status_also_to)),
                     getString(R.string.apply), (ArrayList<MachinesLineDetail>) machineLineItems
             );
-            android.app.AlertDialog dialog = titleAndSubWithSelectableListDialog.showTitleAndSubWithSelectableListDialog();
+            android.app.AlertDialog dialog = titleAndSubWithSelectableListDialog.showTitleAndSubWithSelectableListDialog(getApplicationContext());
             dialog.show();
             dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
@@ -3752,7 +3755,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         try {
             if (autoActivateNextJob && nextJobID > 0) {
                 mShowDialogJobId = currentJobID;
-                mNextJobTimerDialog = new NextJobTimerDialog(this,
+                mNextJobTimerDialog = new NextJobTimerDialog(
                         new NextJobTimerDialog.NextJobTimerDialogListener() {
                             @Override
                             public void onClickPositiveBtn() {
@@ -3771,7 +3774,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         erpJobId, getString(R.string.start_job_now), getString(R.string.cancel_job), counter, autoActivateNextJobTimer
                 );
 
-                mNextJobTimerDialog.showNextJobTimerDialog().show();
+                mNextJobTimerDialog.showNextJobTimerDialog(getApplicationContext()).show();
             }
         } catch (Exception e) {
 

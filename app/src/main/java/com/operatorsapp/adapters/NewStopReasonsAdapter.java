@@ -33,12 +33,10 @@ import java.util.ArrayList;
 public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAdapter.ViewHolder> {
 
     private ArrayList<StopReasonsGroup> mStopItemsList;
-    private Context mContext;
     private OnStopReasonSelectedCallbackListener mOnStopReasonSelectedCallbackListener;
 
-    public NewStopReasonsAdapter(Context context, ArrayList<StopReasonsGroup> stopItemsList, OnStopReasonSelectedCallbackListener onStopReasonSelectedCallbackListener) {
+    public NewStopReasonsAdapter(ArrayList<StopReasonsGroup> stopItemsList, OnStopReasonSelectedCallbackListener onStopReasonSelectedCallbackListener) {
         mStopItemsList = stopItemsList;
-        mContext = context;
         mOnStopReasonSelectedCallbackListener = onStopReasonSelectedCallbackListener;
     }
 
@@ -56,10 +54,10 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
         String nameByLang = OperatorApplication.isEnglishLang() ? mStopItemsList.get(position).getEName() : mStopItemsList.get(position).getLName();
         holder.mStopTitle.setText(nameByLang);
         int imgId;
-        if (BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
+        if (BuildConfig.FLAVOR.equals(holder.itemView.getContext().getString(R.string.lenox_flavor_name))) {
             imgId = ReasonImageLenox.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
         } else {
-            imgId = mStopItemsList.get(position).getGroupIcon(mContext);
+            imgId = mStopItemsList.get(position).getGroupIcon(holder.itemView.getContext());
 //            if (imgId == 0){
 //                imgId = ReasonImage.getImageForNewStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
 //            }
@@ -76,13 +74,13 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
             holder.mReasonImage.setVisibility(View.INVISIBLE);
         } else {
             holder.mReasonImage.setVisibility(View.VISIBLE);
-            holder.mReasonImage.setBackground(mContext.getResources().getDrawable(imgId));
+            holder.mReasonImage.setBackground(holder.itemView.getContext().getResources().getDrawable(imgId));
         }
-        holder.mHorizontalRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        holder.mHorizontalRv.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext(), LinearLayoutManager.VERTICAL, false));
         holder.mHorizontalRv.setAdapter(new VerticalAdapter(position, mStopItemsList.get(position).getSubReasons(), imgId));
 //        int color = new Random().nextInt(4);
-//        Color.parseColor(mContext.getResources().getStringArray(R.array.color_array)[color]);
-        // holder.mTitleLil.setBackgroundColor(Color.parseColor(mContext.getResources().getStringArray(R.array.color_array)[color]));
+//        Color.parseColor(context.getResources().getStringArray(R.array.color_array)[color]);
+        // holder.mTitleLil.setBackgroundColor(Color.parseColor(context.getResources().getStringArray(R.array.color_array)[color]));
     }
 
     @Override
@@ -134,9 +132,9 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
 
             String color = mVerticalList.get(position).getmColorID();
             if (color == null || color.isEmpty()) {
-                color = String.format("#%06x", mContext.getResources().getColor(R.color.C2) & 0xffffff);
+                color = String.format("#%06x", holder.itemView.getContext().getResources().getColor(R.color.C2) & 0xffffff);
             }
-            Configuration config = mContext.getResources().getConfiguration();
+            Configuration config = holder.itemView.getContext().getResources().getConfiguration();
 
             GradientDrawable.Orientation orientation = GradientDrawable.Orientation.RIGHT_LEFT;
             if (config.getLayoutDirection() != View.LAYOUT_DIRECTION_RTL) {
@@ -149,15 +147,15 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
             String title = OperatorApplication.isEnglishLang() ? mVerticalList.get(position).getEName() : mVerticalList.get(position).getLName();
             holder.mVerticalTitle.setText(title);
 
-            int icon = mVerticalList.get(position).getGroupIcon(mContext);
+            int icon = mVerticalList.get(position).getGroupIcon(holder.itemView.getContext());
             if (icon == 0) {
 //                icon = mImgId;
                 holder.mVerticalImage.setVisibility(View.INVISIBLE);
             } else {
                 holder.mVerticalImage.setVisibility(View.VISIBLE);
-                holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(icon));
+                holder.mVerticalImage.setBackground(holder.itemView.getContext().getResources().getDrawable(icon));
             }
-//            holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(mVerticalList.get(position).getEventIcon(mContext)));
+//            holder.mVerticalImage.setBackground(context.getResources().getDrawable(mVerticalList.get(position).getEventIcon(context)));
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

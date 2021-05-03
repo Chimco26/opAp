@@ -16,13 +16,10 @@ import java.util.List;
 
 public class JobMaterialsSplitAdapter extends RecyclerView.Adapter<JobMaterialsSplitAdapter.ViewHolder> {
 
-    private final Context mContext;
     private final List<Material> mMaterials;
 
 
-    public JobMaterialsSplitAdapter(List<Material> list, Context context) {
-
-        mContext = context;
+    public JobMaterialsSplitAdapter(List<Material> list) {
 
         mMaterials = list;
     }
@@ -46,9 +43,9 @@ public class JobMaterialsSplitAdapter extends RecyclerView.Adapter<JobMaterialsS
         String str = mMaterials.get(position).getAmount() + " ";
         if (mMaterials.get(position).getAmountUnits().contains("1")){
             str += PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("units");
-//            str += mContext.getString(R.string.units);
+//            str += context.getString(R.string.units);
         }else {
-            str += mContext.getString(R.string.kg);
+            str += viewHolder.itemView.getContext().getString(R.string.kg);
         }
         viewHolder.mAmountTv.setText(str);
     }

@@ -157,7 +157,7 @@ public class StopEventLogActivity extends AppCompatActivity
         }
 
         if (mSubEvents != null && mSubEvents.size() > 0) {
-            Alert2BtnDialog alert2BtnDialog = new Alert2BtnDialog(this, new Alert2BtnDialog.Alert2BtnDialogListener() {
+            Alert2BtnDialog alert2BtnDialog = new Alert2BtnDialog(new Alert2BtnDialog.Alert2BtnDialogListener() {
                 @Override
                 public void onClickPositiveBtn() {
 //                    sendReport(position, mSelectedSubreason);
@@ -176,7 +176,7 @@ public class StopEventLogActivity extends AppCompatActivity
                 }
             }, title, getString(R.string.yes), getString(R.string.only_to_this_event));
 
-            alert2BtnDialog.showAlert2BtnDialog(false).show();
+            alert2BtnDialog.showAlert2BtnDialog(this, false).show();
         }else {
             sendReport(position, mSelectedSubreason, false);
         }

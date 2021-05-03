@@ -395,7 +395,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         RecyclerView lenoxMachineLy = view.findViewById(R.id.FAAE_lenox_machines_rv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         lenoxMachineLy.setLayoutManager(linearLayoutManager);
-        lenoxMachineLy.setAdapter(new LenoxMachineAdapter(getContext(), mMachines, this));
+        lenoxMachineLy.setAdapter(new LenoxMachineAdapter(mMachines, this));
     }
 
     public ViewGroup.LayoutParams initView(@NonNull View view) {
@@ -1679,7 +1679,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                        .build());
 
                 final GenericDialog dialog = new GenericDialog(getActivity(), t.getMessage(), getString(R.string.call_technician_title), getString(R.string.ok), true);
-                final AlertDialog alertDialog = dialog.showNoProductionAlarm();
+                final AlertDialog alertDialog = dialog.showNoProductionAlarm(getContext());
                 dialog.setListener(new GenericDialog.OnGenericDialogListener() {
                     @Override
                     public void onActionYes() {
@@ -1962,7 +1962,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                                .build());
 
                         final GenericDialog dialog = new GenericDialog(getActivity(), t.getMessage(), getString(R.string.call_technician_title), getString(R.string.ok), true);
-                        final AlertDialog alertDialog = dialog.showNoProductionAlarm();
+                        final AlertDialog alertDialog = dialog.showNoProductionAlarm(getContext());
                         dialog.setListener(new GenericDialog.OnGenericDialogListener() {
                             @Override
                             public void onActionYes() {
@@ -2594,7 +2594,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TECH_CALL, false, "reason: " + m);
 
                 final GenericDialog dialog = new GenericDialog(getActivity(), t.getMessage(), getString(R.string.call_technician_title), getString(R.string.ok), true);
-                final AlertDialog alertDialog = dialog.showNoProductionAlarm();
+                final AlertDialog alertDialog = dialog.showNoProductionAlarm(getContext());
                 dialog.setListener(new GenericDialog.OnGenericDialogListener() {
                     @Override
                     public void onActionYes() {
@@ -2670,7 +2670,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (mShiftLogAdapter != null){
             mShiftLogAdapter.closeCursor();
         }
-        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), cursor,
+        mShiftLogAdapter = new ShiftLogSqlAdapter(cursor,
                 !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight,
                 mIsSelectionMode, mSelectedEvents, mCurrentMachineStatus != null && mCurrentMachineStatus.isAllowReportingOnSetupEvents());
 
@@ -3239,7 +3239,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void initEventRecycler(View view) {
         mEventsRecycler = view.findViewById(R.id.FAAE_events_recycler);
         mEventsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen);
+        mEventsAdapter = new EventsAdapter(this, mIsSelectionMode, mIsOpen);
         mEventsRecycler.setAdapter(mEventsAdapter);
 
         final boolean[] isZooming = {false};

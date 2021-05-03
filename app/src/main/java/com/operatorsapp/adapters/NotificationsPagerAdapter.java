@@ -26,12 +26,10 @@ public class NotificationsPagerAdapter extends PagerAdapter {
     private static final int ITEM_LEFT = 0;
 
     private static int NUM_ITEMS = 1;
-    private final Context mContext;
     private final ArrayList<Notification> mNotificationList;
     private final NotificationHistoryAdapter.OnNotificationResponseSelected mListener;
 
-    public NotificationsPagerAdapter(Context context, ArrayList<Notification> notificationHistory, NotificationHistoryAdapter.OnNotificationResponseSelected listener) {
-        mContext = context;
+    public NotificationsPagerAdapter(ArrayList<Notification> notificationHistory, NotificationHistoryAdapter.OnNotificationResponseSelected listener) {
         mNotificationList = notificationHistory;
         mListener = listener;
     }
@@ -39,11 +37,11 @@ public class NotificationsPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
 
-        final NotificationHistoryAdapter notificationHistoryAdapter = new NotificationHistoryAdapter(mContext, getNotificationList(position), mListener);
+        final NotificationHistoryAdapter notificationHistoryAdapter = new NotificationHistoryAdapter(getNotificationList(position), mListener);
 
-        RecyclerView rvDialog = new RecyclerView(mContext);
-        rvDialog.setBackgroundColor(mContext.getResources().getColor(R.color.white_five));
-        rvDialog.setLayoutManager(new LinearLayoutManager(mContext));
+        RecyclerView rvDialog = new RecyclerView(container.getContext());
+        rvDialog.setBackgroundColor(container.getContext().getResources().getColor(R.color.white_five));
+        rvDialog.setLayoutManager(new LinearLayoutManager(container.getContext()));
         rvDialog.setAdapter(notificationHistoryAdapter);
         container.addView(rvDialog);
 

@@ -19,19 +19,15 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
     private final ArrayList<GalleryModel> mGalleryModels;
 
-    private final Context mContext;
-
     private GalleryAdapterListener mListener;
     private int mItemLayoutId;
 
 
-    public GalleryAdapter(ArrayList<GalleryModel> fileUrls, GalleryAdapterListener listener, Context context, int itemLayoutId) {
+    public GalleryAdapter(ArrayList<GalleryModel> fileUrls, GalleryAdapterListener listener, int itemLayoutId) {
 
         mGalleryModels = fileUrls;
 
         mListener = listener;
-
-        mContext = context;
 
         mItemLayoutId = itemLayoutId;
     }
@@ -54,7 +50,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                 public void run() {
                     ViewGroup.MarginLayoutParams mItemViewParams4;
                     mItemViewParams4 = (ViewGroup.MarginLayoutParams) viewHolder.mImgLy.getLayoutParams();
-                    mItemViewParams4.width = mContext.getResources().getDisplayMetrics().widthPixels / 6;
+                    mItemViewParams4.width = viewHolder.itemView.getResources().getDisplayMetrics().widthPixels / 6;
                     viewHolder.mImgLy.requestLayout();
                 }
             });
@@ -62,11 +58,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
         if (mGalleryModels.get(position).isSelected()) {
 
-            viewHolder.mImgLy.setBackground(mContext.getResources().getDrawable(R.drawable.background_item_gallery_selected));
+            viewHolder.mImgLy.setBackground(viewHolder.itemView.getResources().getDrawable(R.drawable.background_item_gallery_selected));
 
         } else {
 
-            viewHolder.mImgLy.setBackground(mContext.getResources().getDrawable(R.drawable.background_item_gallery));
+            viewHolder.mImgLy.setBackground(viewHolder.itemView.getResources().getDrawable(R.drawable.background_item_gallery));
         }
 
         if (mGalleryModels.get(position).getUrl().endsWith("pdf")) {
@@ -85,7 +81,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
                 if (mItemLayoutId == R.layout.item_gallery) {
 
-                    viewHolder.mImgLy.setBackground(mContext.getResources().getDrawable(R.drawable.background_item_gallery_selected));
+                    viewHolder.mImgLy.setBackground(viewHolder.itemView.getResources().getDrawable(R.drawable.background_item_gallery_selected));
                     resetSelectedItems();
                     mGalleryModels.get(position).setSelected(true);
                 }

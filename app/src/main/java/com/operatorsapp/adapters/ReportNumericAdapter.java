@@ -78,7 +78,7 @@ public class ReportNumericAdapter extends PagerAdapter {
 
     private void setKeyBoard(final EditText editText, String[] complementChars) {
         if (mKeyboardListener != null) {
-            mKeyboardListener.onOpenKeyboard(new SingleLineKeyboard.OnKeyboardClickListener() {
+            mKeyboardListener.onOpenKeyboard(editText.getContext(), new SingleLineKeyboard.OnKeyboardClickListener() {
                 @Override
                 public void onKeyboardClick(String text) {
                     editText.setText(text);

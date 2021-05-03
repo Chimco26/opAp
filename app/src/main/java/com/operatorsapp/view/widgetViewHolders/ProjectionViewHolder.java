@@ -40,16 +40,14 @@ public class ProjectionViewHolder extends RecyclerView.ViewHolder {
     private LinearLayout mBluePlus;
     private TextView mMin;
     private TextView mMax;
-    private Context mContext;
     private int mHeight;
     private int mWidth;
     private int mProjectionCapsuleWidth;
 
-    public ProjectionViewHolder(View itemView, Context context, int height, int width) {
+    public ProjectionViewHolder(View itemView, int height, int width) {
         super(itemView);
 
         mProjectionDrawableHelper = new ProjectionDrawablesHelper();
-        mContext = context;
         mHeight = height;
         mWidth = width;
 
@@ -74,7 +72,7 @@ public class ProjectionViewHolder extends RecyclerView.ViewHolder {
         mMax = itemView.findViewById(R.id.projection_widget_max);
     }
 
-    public void setProjectionItem(final Widget widget) {
+    public void setProjectionItem(final Context context, final Widget widget) {
 //        mDivider.post(new Runnable() {
 //            @Override
 //            public void run() {
@@ -89,22 +87,22 @@ public class ProjectionViewHolder extends RecyclerView.ViewHolder {
         mRangeView.setBackground(mProjectionDrawableHelper.createRangeShape(widget.getCurrentColor()));
         mProjectionView.setBackground(mProjectionDrawableHelper.createProjectionShape(widget.getCurrentColor()));
         mProjectionViewProjection.setBackground(mProjectionDrawableHelper.createProjectionShape(widget.getProjectionColor()));
-        mProjectionViewEnd.setBackground(mProjectionDrawableHelper.createEndProjectionShape(widget.getProjectionColor(), mContext));
-        mProjectionViewStart.setBackground(mProjectionDrawableHelper.createStartProjectionShape(widget.getCurrentColor(), mContext));
+        mProjectionViewEnd.setBackground(mProjectionDrawableHelper.createEndProjectionShape(widget.getProjectionColor(), context));
+        mProjectionViewStart.setBackground(mProjectionDrawableHelper.createStartProjectionShape(widget.getCurrentColor(), context));
 //                    mRangeView.setCurrentLine(false);
-//                    mRangeView.setLineColor(mContext, "#000000");
+//                    mRangeView.setLineColor(context, "#000000");
         float currentFloat = WidgetAdapterUtils.tryParse(widget.getCurrentValue(), WidgetAdapterUtils.StringParse.FLOAT);
         mCurrentValueInChart.setText(valueInK(currentFloat));
         if (currentFloat >= widget.getTarget()) {
             mBluePlus.setVisibility(View.VISIBLE);
-            mProjectionViewEnd.setBackground(mProjectionDrawableHelper.createEndProjectionShape(widget.getCurrentColor(), mContext));
-            mProjectionViewStart.setBackground(mProjectionDrawableHelper.createStartProjectionShape(widget.getCurrentColor(), mContext));
+            mProjectionViewEnd.setBackground(mProjectionDrawableHelper.createEndProjectionShape(widget.getCurrentColor(), context));
+            mProjectionViewStart.setBackground(mProjectionDrawableHelper.createStartProjectionShape(widget.getCurrentColor(), context));
 //                    mCurrentValueInChart.setText("");
             mRangeView.setVisibility(View.GONE);
         } else if (widget.getProjection() >= widget.getTarget()) {
             mBluePlus.setVisibility(View.GONE);
-            mProjectionViewEnd.setBackground(mProjectionDrawableHelper.createEndProjectionShape(widget.getProjectionColor(), mContext));
-            mProjectionViewStart.setBackground(mProjectionDrawableHelper.createStartProjectionShape(widget.getCurrentColor(), mContext));
+            mProjectionViewEnd.setBackground(mProjectionDrawableHelper.createEndProjectionShape(widget.getProjectionColor(), context));
+            mProjectionViewStart.setBackground(mProjectionDrawableHelper.createStartProjectionShape(widget.getCurrentColor(), context));
             if (isNotNearestTexts(widget)) {
                 mGrayValueInEndChart.setText(valueInK(widget.getProjection()));
             } else {
@@ -112,8 +110,8 @@ public class ProjectionViewHolder extends RecyclerView.ViewHolder {
             }
         } else {
             mBluePlus.setVisibility(View.GONE);
-            mProjectionViewEnd.setBackground(mProjectionDrawableHelper.createEndProjectionShape(widget.getProjectionColor(), mContext));
-            mProjectionViewStart.setBackground(mProjectionDrawableHelper.createStartProjectionShape(widget.getCurrentColor(), mContext));
+            mProjectionViewEnd.setBackground(mProjectionDrawableHelper.createEndProjectionShape(widget.getProjectionColor(), context));
+            mProjectionViewStart.setBackground(mProjectionDrawableHelper.createStartProjectionShape(widget.getCurrentColor(), context));
             mProjectionViewEnd.setVisibility(View.GONE);
             if (isNotNearestTexts(widget)) {
                 mGrayValueInChart.setText(valueInK(widget.getProjection()));
@@ -122,11 +120,11 @@ public class ProjectionViewHolder extends RecyclerView.ViewHolder {
             }
         }
         if (currentFloat <= widget.getLowLimit() && currentFloat != widget.getTarget()) {
-            mProjectionViewEnd.setBackground(mProjectionDrawableHelper.createEndProjectionShape(widget.getProjectionColor(), mContext));
+            mProjectionViewEnd.setBackground(mProjectionDrawableHelper.createEndProjectionShape(widget.getProjectionColor(), context));
             mRangeView.setVisibility(View.GONE);
             mProjectionView.setVisibility(View.GONE);
             mProjectionViewProjection.setVisibility(View.VISIBLE);
-            mProjectionViewStart.setBackground(mProjectionDrawableHelper.createStartProjectionShape(widget.getProjectionColor(), mContext));
+            mProjectionViewStart.setBackground(mProjectionDrawableHelper.createStartProjectionShape(widget.getProjectionColor(), context));
             mGrayValueInEndChart.setText("");
             mGrayValueInChart.setText("");
             mCurrentValueInChart.setText("");
@@ -138,7 +136,7 @@ public class ProjectionViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void run() {
                 mProjectionCapsuleWidth = mRangeViewRv.getWidth();
-                setProjectionData(widget, finalCurrentFloat);
+                setProjectionData(context, widget, finalCurrentFloat);
             }
         });
 //                    } else {
@@ -154,10 +152,10 @@ public class ProjectionViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void setProjectionData(Widget widget, float finalCurrentFloat) {
+    private void setProjectionData(Context context, Widget widget, float finalCurrentFloat) {
         String nameByLang4 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         mTitle.setText(nameByLang4);
-        mSubtitle.setText(new StringBuilder(mContext.getString(R.string.total_required)).append(valueInK(widget.getTarget())));
+        mSubtitle.setText(new StringBuilder(context.getString(R.string.total_required)).append(valueInK(widget.getTarget())));
         mValue.setText(valueInK(finalCurrentFloat));
         if (widget.getTarget() >= widget.getLowLimit()) {
             float scaleValue = (widget.getTarget() - widget.getLowLimit());

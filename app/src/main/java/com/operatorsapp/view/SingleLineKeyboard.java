@@ -14,7 +14,6 @@ import android.widget.TextView;
 public class SingleLineKeyboard implements View.OnClickListener {
 
     private LinearLayout mLinearLayout;
-    private Context mContext;
     private String[] mChars;
     private String mText = "";
     public static boolean isKeyBoardOpen = false;
@@ -25,7 +24,6 @@ public class SingleLineKeyboard implements View.OnClickListener {
 
     public SingleLineKeyboard(LinearLayout linearLayout, Context context) {
         mLinearLayout = linearLayout;
-        mContext = context;
     }
 
     public OnKeyboardClickListener getmListener() {
@@ -36,14 +34,14 @@ public class SingleLineKeyboard implements View.OnClickListener {
         this.mListener = mListener;
     }
 
-    public void openKeyBoard(String text) {
+    public void openKeyBoard(Context context, String text) {
 
         mText = text;
 
         closeKeyBoard();
 
         if (!isKeyBoardOpen)
-            initViews();
+            initViews(context);
 
         isKeyBoardOpen = true;
     }
@@ -61,26 +59,26 @@ public class SingleLineKeyboard implements View.OnClickListener {
     }
 
 
-    private void initViews() {
+    private void initViews(Context context) {
 
         for (int i = 0; i < 10; i++) {
-            crateNewTextView("" + i, i, mLinearLayout);
+            crateNewTextView(context, "" + i, i, mLinearLayout);
         }
 
         if (mChars != null)
             for (String chars : mChars) {
 
-                crateNewTextView(chars, 0, mLinearLayout);
+                crateNewTextView(context, chars, 0, mLinearLayout);
 
             }
 
-        crateNewTextView("⌫", DELETE, mLinearLayout);
+        crateNewTextView(context, "⌫", DELETE, mLinearLayout);
 
     }
 
-    private void crateNewTextView(String text, int id, LinearLayout parent) {
+    private void crateNewTextView(Context context, String text, int id, LinearLayout parent) {
 
-        Button button = new Button(mContext);
+        Button button = new Button(context);
         button.setText(text);
         button.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f));
         button.setGravity(Gravity.CENTER);

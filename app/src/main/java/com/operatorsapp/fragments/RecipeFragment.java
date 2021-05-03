@@ -277,7 +277,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
                             mRecipeResponse.getRecipe().getChannels().get(mRecipeResponse.getRecipe().getChannels().size() - 1).getChannelEname()
                             : mRecipeResponse.getRecipe().getChannels().get(mRecipeResponse.getRecipe().getChannels().size() - 1).getChannelLname());
 
-            No0ChannelAdapter mNo0ChannelAdapter = new No0ChannelAdapter(getActivity(), new No0ChannelAdapter.Channel100AdapterListener() {
+            No0ChannelAdapter mNo0ChannelAdapter = new No0ChannelAdapter(new No0ChannelAdapter.Channel100AdapterListener() {
                 @Override
                 public void onImageProductClick(String fileUrl, String s) {
                     ArrayList<String> arrayList = new ArrayList<>();

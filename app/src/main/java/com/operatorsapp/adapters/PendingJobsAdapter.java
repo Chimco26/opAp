@@ -19,19 +19,16 @@ import java.util.HashMap;
 
 public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.ViewHolder> {
 
-    private final Context mContext;
     private final ArrayList<PendingJob> mPandingjobs;
     private final HashMap<String, Header> mHashMapHeaders;
 
     private PendingJobsAdapterListener mListener;
 
 
-    public PendingJobsAdapter(ArrayList<PendingJob> list, HashMap<String, Header> hashMapHeaders, PendingJobsAdapterListener listener, Context context) {
+    public PendingJobsAdapter(ArrayList<PendingJob> list, HashMap<String, Header> hashMapHeaders, PendingJobsAdapterListener listener) {
 
         mListener = listener;
-
-        mContext = context;
-
+        
         mPandingjobs = list;
 
         mHashMapHeaders = hashMapHeaders;
@@ -54,12 +51,12 @@ public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.
         if (mPandingjobs.get(viewHolder.getAdapterPosition()).isSelected()) {
 
             viewHolder.mSelectedBarView.setVisibility(View.VISIBLE);
-            viewHolder.mLayout.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+            viewHolder.mLayout.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.white));
 
         } else {
 
             viewHolder.mSelectedBarView.setVisibility(View.INVISIBLE);
-            viewHolder.mLayout.setBackgroundColor(mContext.getResources().getColor(R.color.transparentColor));
+            viewHolder.mLayout.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.transparentColor));
         }
 
         if (properties.size() > 0) {
@@ -122,12 +119,12 @@ public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.
         if (selected) {
 
             viewHolder.mSelectedBarView.setVisibility(View.VISIBLE);
-            viewHolder.mLayout.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+            viewHolder.mLayout.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.white));
 
         } else {
 
             viewHolder.mSelectedBarView.setVisibility(View.INVISIBLE);
-            viewHolder.mLayout.setBackgroundColor(mContext.getResources().getColor(R.color.transparentColor));
+            viewHolder.mLayout.setBackgroundColor(viewHolder.itemView.getResources().getColor(R.color.transparentColor));
         }
     }
 

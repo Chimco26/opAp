@@ -45,7 +45,6 @@ public class WidgetAdapter extends Adapter {
     private static final long TEN_HOURS = 60000L * 60 * 10;
     private final DashboardCentralContainerListener mDashboardCentralContainerListener;
     private final OnKeyboardManagerListener mOnKeyboardManagerListener;
-    private Activity mContext;
     private List<Widget> mWidgets;
     private final int NUMERIC = 0;
     private final int RANGE = 1;
@@ -77,13 +76,12 @@ public class WidgetAdapter extends Adapter {
     private ShowDashboardCroutonListener mShowDashboardCroutonListener;
 
 
-    public WidgetAdapter(Activity context, List<Widget> widgets, GoToScreenListener goToScreenListener,
+    public WidgetAdapter(List<Widget> widgets, GoToScreenListener goToScreenListener,
                          Integer joshId, boolean closedState, int height, int width,
                          DashboardCentralContainerListener dashboardCentralContainerListener,
                          ReportFieldsForMachine reportFieldsForMachine, MachineStatus machineStatus,
                          ShowDashboardCroutonListener showDashboardCroutonListener, OnKeyboardManagerListener onKeyboardManagerListener, SparseArray<WidgetInfo> permissionResponse) {
         mWidgets = widgets;
-        mContext = context;
         mGoToScreenListener = goToScreenListener;
         mJoshId = joshId;
         mClosedState = closedState;
@@ -171,22 +169,21 @@ public class WidgetAdapter extends Adapter {
             case NUMERIC: {
 
                 return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
-                        mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth,
+                        mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth,
                         WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(),
                         WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean());
             }
             case RANGE: {
-                return new RangeViewHolder(inflater.inflate(R.layout.range_widget_cardview, parent, false),
-                        mContext, mClosedState, mHeight, mWidth);
+                return new RangeViewHolder(inflater.inflate(R.layout.range_widget_cardview, parent, false), mClosedState, mHeight, mWidth);
             }
             case PROJECTION: {
                 return new ProjectionViewHolderNew(inflater.inflate(R.layout.projection_widget_cardview_new, parent, false), mHeight, mWidth);
             }
             case TIME: {
-                return new TimeViewHolder(inflater.inflate(R.layout.time_widget_cardview, parent, false), mContext, mGoToScreenListener, mHeight, mWidth);
+                return new TimeViewHolder(inflater.inflate(R.layout.time_widget_cardview, parent, false), mGoToScreenListener, mHeight, mWidth);
             }
             case COUNTER: {
-                return new CounterViewHolder(inflater.inflate(R.layout.counter_widget_cardview, parent, false), mContext, mDashboardCentralContainerListener, mHeight, mWidth);
+                return new CounterViewHolder(inflater.inflate(R.layout.counter_widget_cardview, parent, false), mDashboardCentralContainerListener, mHeight, mWidth);
             }
             case IMAGE: {
                 return new ImageViewHolder(inflater.inflate(R.layout.image_widget_cardview, parent, false));
@@ -213,17 +210,17 @@ public class WidgetAdapter extends Adapter {
             case REPORT_PRODUCTION: {
                 return new ReportProductionViewHolder(inflater.inflate(R.layout.report_production_widget_cardview, parent, false), mHeight, mWidth);
 //                return new ReportProductionViewHolder(inflater.inflate(R.layout.report_production_widget_cardview, parent, false), mHeight, mWidth,
-//                        mReportFieldsForMachine, mOnKeyboardManagerListener, mShowDashboardCroutonListener, mJoshId, mContext);
+//                        mReportFieldsForMachine, mOnKeyboardManagerListener, mShowDashboardCroutonListener, mJoshId);
             }
             case MACHINE_WORK_BIT: {
-                return new MachineWorkBitViewHolder(inflater.inflate(R.layout.machine_work_bit_cardview, parent, false), mHeight, mWidth,mContext,mShowDashboardCroutonListener);
+                return new MachineWorkBitViewHolder(inflater.inflate(R.layout.machine_work_bit_cardview, parent, false), mHeight, mWidth,mShowDashboardCroutonListener);
             }
             case TOP_5_STOP_EVENTS: {
                 return new TopStopEventsViewHolder(inflater.inflate(R.layout.top_stop_events_cardview, parent, false), mHeight, mWidth);
             }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
-                mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth,
+                mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth,
                 WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(),
                 WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean());
     }
@@ -257,11 +254,11 @@ public class WidgetAdapter extends Adapter {
                     break;
                 case TIME:
                     final TimeViewHolder timeViewHolder = (TimeViewHolder) holder;
-                    timeViewHolder.setTimeItem(widget);
+                    timeViewHolder.setTimeItem(holder.itemView.getContext(), widget);
                     break;
                 case RANGE:
                     final RangeViewHolder rangeViewHolder = (RangeViewHolder) holder;
-                    rangeViewHolder.setRangeItem(widget);
+                    rangeViewHolder.setRangeItem(rangeViewHolder.itemView.getContext(), widget);
                     break;
                 case PROJECTION:
                     final ProjectionViewHolderNew projectionViewHolder = (ProjectionViewHolderNew) holder;

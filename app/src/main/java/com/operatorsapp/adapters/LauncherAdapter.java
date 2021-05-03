@@ -16,11 +16,9 @@ import com.operatorsapp.R;
 import java.util.List;
 
 public class LauncherAdapter extends RecyclerView.Adapter<LauncherAdapter.ViewHolder> {
-    private final Context mContext;
     private final List<ResolveInfo> mSelectedApps;
 
-    public LauncherAdapter(Context mContext, List<ResolveInfo> selectedApps) {
-        this.mContext = mContext;
+    public LauncherAdapter(List<ResolveInfo> selectedApps) {
         this.mSelectedApps = selectedApps;
     }
 
@@ -34,12 +32,12 @@ public class LauncherAdapter extends RecyclerView.Adapter<LauncherAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
         viewHolder.name.setText(getAppName(mSelectedApps.get(position).activityInfo.packageName));
-        viewHolder.app.setImageDrawable(mSelectedApps.get(position).activityInfo.loadIcon( mContext.getPackageManager()));
+        viewHolder.app.setImageDrawable(mSelectedApps.get(position).activityInfo.loadIcon(viewHolder.itemView.getContext().getPackageManager()));
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent launchIntent = mContext.getPackageManager().getLaunchIntentForPackage(mSelectedApps.get(position).activityInfo.packageName);
-                mContext.startActivity(launchIntent);
+                Intent launchIntent = view.getContext().getPackageManager().getLaunchIntentForPackage(mSelectedApps.get(position).activityInfo.packageName);
+                view.getContext().startActivity(launchIntent);
             }
         });
     }

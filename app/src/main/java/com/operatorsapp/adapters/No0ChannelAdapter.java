@@ -24,15 +24,12 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
 
     public static final int TYPE_CHANNEL_100 = 100;
     public static final int TYPE_CHANNEL_1_99 = 99;
-    private final Context mContext;
     private final Channel100AdapterListener mListener;
     private final ArrayList<ChannelSplits> mChannelSplits;
     private final int mType;
     private View mMainView;
 
-    public No0ChannelAdapter(Context context, Channel100AdapterListener listener, ArrayList<ChannelSplits> channelSplits, int type) {
-
-        mContext = context;
+    public No0ChannelAdapter(Channel100AdapterListener listener, ArrayList<ChannelSplits> channelSplits, int type) {
         mListener = listener;
         mChannelSplits = channelSplits;
         mType = type;
@@ -123,7 +120,7 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
             });
 
             LinearLayoutManager layoutManager
-                    = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
+                    = new LinearLayoutManager(viewHolder.itemView.getContext(), LinearLayoutManager.VERTICAL, false);
 
             viewHolder.mSplitRv.setLayoutManager(layoutManager);
 

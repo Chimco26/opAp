@@ -50,15 +50,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     private boolean mIsSelectionMode;
     private final OnStopClickListener mOnStopClickListener;
 
-    private Context mContext;
     private ArrayList<Float> mSelectedEvents;
     private boolean mIsServiceCallsChecked = true, mIsmMessagesChecked = true,
             mIsRejectsChecked = true, mIsProductionReportChecked = true, mIsQualityTestsChecked = true;
     private ArrayList<Event> mEventsFiltered = new ArrayList<>();
     private float mFactor = 1;
 
-    public EventsAdapter(Context context, OnStopClickListener onStopClickListener, boolean selectMode, boolean closedState) {
-        mContext = context;
+    public EventsAdapter(OnStopClickListener onStopClickListener, boolean selectMode, boolean closedState) {
         mOnStopClickListener = onStopClickListener;
         mIsSelectionMode = selectMode;
         mIsOpenState = closedState;
@@ -96,7 +94,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.event_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_item, parent, false);
 
         return new ViewHolder(view);
     }
@@ -195,7 +193,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             ViewGroup.LayoutParams params = itemView.getLayoutParams();
             params.height = getViewHeight(event);
             mView.setLayoutParams(params);
-            updateNotification(event, params.height);
+            updateNotification(holder.itemView.getContext(), event, params.height);
 
             mLine.setBackgroundColor(Color.parseColor(event.getColor()));
             GradientDrawable circleBackground = (GradientDrawable) mCircle.getBackground();
@@ -284,12 +282,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             holder.mScissors.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    validateDialog(event.getEventID());
+                    validateDialog(v.getContext(), event.getEventID());
                 }
             });
         }
 
-        private void updateNotification(Event event, int height) {
+        private void updateNotification(Context context, Event event, int height) {
             if (mTechContainer.getChildCount() > 0) {
                 mTechContainer.removeAllViews();
             }
@@ -298,17 +296,17 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
                     String text = mTechContainer.getContext().getString(R.string.message);
                     if (notification.getNotificationType() == 1 && mIsmMessagesChecked) {
-                        setNotification(event, 1, notification.getResponseDate().substring(11, 16), getTextByState(text, 6), 0, notification.getResponseDate());
+                        setNotification(context, event, 1, notification.getResponseDate().substring(11, 16), getTextByState(text, 6), 0, notification.getResponseDate());
                     } else if (notification.getNotificationType() == 2 && mIsServiceCallsChecked) {
-                        text = String.format("%s - %s", getCallTextById(notification.getResponseTypeID()), notification.getTargetUserName());
-                        setNotification(event, 2, notification.getResponseDate().substring(11, 16), getTextByState(text, 6), notification.getResponseTypeID(), notification.getResponseDate());
+                        text = String.format("%s - %s", getCallTextById(context, notification.getResponseTypeID()), notification.getTargetUserName());
+                        setNotification(context, event, 2, notification.getResponseDate().substring(11, 16), getTextByState(text, 6), notification.getResponseTypeID(), notification.getResponseDate());
                     }
                 }
             }
 
             if (mIsProductionReportChecked && event.getInventories() != null && event.getInventories().size() > 0) {
                 for (Inventory inventory : event.getInventories()) {
-                    setNotification(event, 3, inventory.getTime().substring(11, 16), getTextByState(inventory.getAmount() + " " + inventory.getLName(), 6), 0, inventory.getTime());
+                    setNotification(context, event, 3, inventory.getTime().substring(11, 16), getTextByState(inventory.getAmount() + " " + inventory.getLName(), 6), 0, inventory.getTime());
                 }
             }
 
@@ -317,17 +315,17 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 for (Reject reject : event.getRejects()) {
 
                     String name = OperatorApplication.isEnglishLang() ? reject.getEName() : reject.getLName();
-                    setNotification(event, 4, reject.getTime().substring(11, 16), getTextByState(reject.getAmount() + " " + name, 6), 0, reject.getTime());
+                    setNotification(context, event, 4, reject.getTime().substring(11, 16), getTextByState(reject.getAmount() + " " + name, 6), 0, reject.getTime());
                 }
             }
             
             if (mIsQualityTestsChecked && event.getQualityTests() != null && event.getQualityTests().size() > 0) {
                 for (final QualityTest qualityTest : event.getQualityTests()) {
 
-                    String isPassed = qualityTest.getPassed() ? mContext.getString(R.string.passed) : mContext.getString(R.string.failed);
+                    String isPassed = qualityTest.getPassed() ? context.getString(R.string.passed) : context.getString(R.string.failed);
                     int typeByPassed = qualityTest.getPassed() ? 7 : 8;
                     String name = OperatorApplication.isEnglishLang() ? qualityTest.getEName() : qualityTest.getLName();
-                    View view = setNotification(event, typeByPassed, qualityTest.getReportTime().substring(11, 16),
+                    View view = setNotification(context, event, typeByPassed, qualityTest.getReportTime().substring(11, 16),
                             getTextByState(String.format(Locale.getDefault(), "%s: %s %s", isPassed, qualityTest.getAmount(), name), 6)
                             , 0, qualityTest.getReportTime());
                     view.setOnClickListener(new View.OnClickListener() {
@@ -341,15 +339,15 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             if (event.getJobDataItems() != null && event.getJobDataItems().size() > 0) {
                 for (JobDataItem jobDataItem : event.getJobDataItems()) {
-                    setNotification(event, 6, jobDataItem.getStartTime().substring(11, 16),
+                    setNotification(context, event, 6, jobDataItem.getStartTime().substring(11, 16),
                             getTextByState((OperatorApplication.isEnglishLang() ? jobDataItem.getEName() : jobDataItem.getLName()), 10), 0, jobDataItem.getStartTime());
                 }
             }
 
         }
 
-        private View setNotification(Event event, int type, String time, String details, int icon, String completeTime) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.service_call_item, mTechContainer, false);
+        private View setNotification(Context context, Event event, int type, String time, String details, int icon, String completeTime) {
+            View view = LayoutInflater.from(context).inflate(R.layout.service_call_item, mTechContainer, false);
             TextView timeTV = view.findViewById(R.id.SCI_time);
             TextView detailsTV = view.findViewById(R.id.SCI_details);
             ImageView iconIV = view.findViewById(R.id.SCI_service_call_icon);
@@ -399,22 +397,22 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             switch (type) {
                 case 1:
-                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_black));
+                    iconIV.setImageDrawable(context.getResources().getDrawable(R.drawable.message_black));
                     break;
 
                 case 2:
-                    setNotificationIcon(iconIV, icon);
+                    setNotificationIcon(context, iconIV, icon);
                     break;
 
                 case 3:
-                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.production_black));
+                    iconIV.setImageDrawable(context.getResources().getDrawable(R.drawable.production_black));
                     break;
 
                 case 4:
-                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.rejects_black));
+                    iconIV.setImageDrawable(context.getResources().getDrawable(R.drawable.rejects_black));
                     break;
                 case 5:
-                    detailsTV.setBackgroundColor(mContext.getResources().getColor(R.color.alert));
+                    detailsTV.setBackgroundColor(context.getResources().getColor(R.color.alert));
                     break;
                 case 6:
                     view.findViewById(R.id.SCI_circle).setVisibility(View.GONE);
@@ -435,22 +433,22 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
                     break;
                 case 7:
-                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.order_test));
-                    detailsTV.setBackgroundColor(mContext.getResources().getColor(R.color.new_green));
+                    iconIV.setImageDrawable(context.getResources().getDrawable(R.drawable.order_test));
+                    detailsTV.setBackgroundColor(context.getResources().getColor(R.color.new_green));
                     break;
                 case 8:
-                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.order_test));
-                    detailsTV.setBackgroundColor(mContext.getResources().getColor(R.color.red_line));
+                    iconIV.setImageDrawable(context.getResources().getDrawable(R.drawable.order_test));
+                    detailsTV.setBackgroundColor(context.getResources().getColor(R.color.red_line));
                     break;
             }
             mTechContainer.addView(view);
             return view;
         }
 
-        private void validateDialog(final float eventID) {
+        private void validateDialog(Context context, final float eventID) {
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_notes, null);
             builder.setView(dialogView);
 
@@ -490,44 +488,44 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
     }
 
-    private String getCallTextById(Integer textByKeysValues) {
+    private String getCallTextById(Context context, Integer textByKeysValues) {
         switch (textByKeysValues) {
             case 1:
-                return mContext.getString(R.string.call_approved);
+                return context.getString(R.string.call_approved);
             case 2:
-                return mContext.getString(R.string.call_decline);
+                return context.getString(R.string.call_decline);
             case 4:
-                return mContext.getString(R.string.started_service);
+                return context.getString(R.string.started_service);
             case 5:
-                return mContext.getString(R.string.service_completed);
+                return context.getString(R.string.service_completed);
             case 6:
-                return mContext.getString(R.string.call_cancelled);
+                return context.getString(R.string.call_cancelled);
             case 0:
-                return mContext.getString(R.string.waiting_for_replay);
+                return context.getString(R.string.waiting_for_replay);
             default:
-                return mContext.getString(R.string.waiting_for_replay);
+                return context.getString(R.string.waiting_for_replay);
         }
     }
 
-    private void setNotificationIcon(ImageView iconIV, int icon) {
+    private void setNotificationIcon(Context context, ImageView iconIV, int icon) {
         switch (icon) {
             case 0:
-                iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.called_black));
+                iconIV.setImageDrawable(context.getResources().getDrawable(R.drawable.called_black));
                 break;
             case 1:
-                iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_recieved_black));
+                iconIV.setImageDrawable(context.getResources().getDrawable(R.drawable.message_recieved_black));
                 break;
             case 2:
-                iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_declined_black));
+                iconIV.setImageDrawable(context.getResources().getDrawable(R.drawable.message_declined_black));
                 break;
             case 3:
-                iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cancel_black));
+                iconIV.setImageDrawable(context.getResources().getDrawable(R.drawable.cancel_black));
                 break;
             case 4:
-                iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.at_work_black));
+                iconIV.setImageDrawable(context.getResources().getDrawable(R.drawable.at_work_black));
                 break;
             case 5:
-                iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.work_completed_black));
+                iconIV.setImageDrawable(context.getResources().getDrawable(R.drawable.work_completed_black));
                 break;
 
             default:

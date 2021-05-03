@@ -29,11 +29,9 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private double mTotalSum;
     private ArrayList<TopFiveItem> mTopList;
-    private final Context mContext;
     private ViewGroup mParent;
 
-    public TopFiveAdapter(Context context, ArrayList<TopFiveItem> topFiveList, int type) {
-        mContext = context;
+    public TopFiveAdapter(ArrayList<TopFiveItem> topFiveList, int type) {
         mListType = type;
         setmTopList(topFiveList);
     }
@@ -88,7 +86,7 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     stopEventViewHolder.topView.setBackgroundColor(Color.parseColor(mTopList.get(position).getmColor()));
                     stopEventViewHolder.topTv.setTextColor(Color.parseColor(mTopList.get(position).getmColor()));
                 } catch (IllegalArgumentException e) {
-                    stopEventViewHolder.topView.setBackgroundColor(mContext.getResources().getColor(R.color.dialog_text_gray));
+                    stopEventViewHolder.topView.setBackgroundColor(stopEventViewHolder.itemView.getResources().getColor(R.color.dialog_text_gray));
                 }
 
                 break;

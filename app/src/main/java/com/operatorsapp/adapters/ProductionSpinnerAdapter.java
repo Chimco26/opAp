@@ -1,6 +1,7 @@
 package com.operatorsapp.adapters;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -18,14 +19,12 @@ import java.util.List;
 
 public class ProductionSpinnerAdapter extends ArrayAdapter<PackageTypes> {
 
-    private Activity mContext;
     private List<PackageTypes> mSpinnerItems;
     private int mCurrentProductionId;
 
-    public ProductionSpinnerAdapter(Activity context, int resource, List<PackageTypes> operators, int currentProduction) {
+    public ProductionSpinnerAdapter(Context context, int resource, List<PackageTypes> operators, int currentProduction) {
         super(context, resource, operators);
         mSpinnerItems = operators;
-        mContext = context;
         mCurrentProductionId = currentProduction;
     }
 
@@ -34,7 +33,7 @@ public class ProductionSpinnerAdapter extends ArrayAdapter<PackageTypes> {
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         if (row == null) {
-            LayoutInflater inflater = mContext.getLayoutInflater();
+            LayoutInflater inflater = LayoutInflater.from(getContext());
             row = inflater.inflate(R.layout.spinner_production_item, parent, false);
             ImageView spinnerImage = row.findViewById(R.id.SPI_image);
             if (mSpinnerItems.get(mCurrentProductionId).getEName() == null || mSpinnerItems.get(mCurrentProductionId).getEName().equals("")) {
@@ -50,7 +49,7 @@ public class ProductionSpinnerAdapter extends ArrayAdapter<PackageTypes> {
     public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         if (row == null) {
-            LayoutInflater inflater = mContext.getLayoutInflater();
+            LayoutInflater inflater = LayoutInflater.from(getContext());
             row = inflater.inflate(R.layout.spinner_production_item_dropdown, parent, false);
         }
         if (mSpinnerItems.get(position) != null) {
@@ -60,14 +59,14 @@ public class ProductionSpinnerAdapter extends ArrayAdapter<PackageTypes> {
             GradientDrawable textBackground = (GradientDrawable) (row.findViewById(R.id.SPID_image)).getBackground();
 
             if (mSpinnerItems.get(mCurrentProductionId).getId() == mSpinnerItems.get(position).getId()) {
-                name.setTextColor(mContext.getResources().getColor(R.color.blue1));
+                name.setTextColor(getContext().getResources().getColor(R.color.blue1));
                 setIcon(mSpinnerItems.get(position).getId(), true, (ImageView) row.findViewById(R.id.SPID_image));
-                textBackground.setColor(mContext.getResources().getColor(R.color.blue1));
+                textBackground.setColor(getContext().getResources().getColor(R.color.blue1));
 //                ((row.findViewById(R.id.SPID_image))).setBackground(getContext().getResources().getDrawable(R.drawable.circle_blue));
             } else {
-                name.setTextColor(mContext.getResources().getColor(R.color.white));
+                name.setTextColor(getContext().getResources().getColor(R.color.white));
                 setIcon(mSpinnerItems.get(position).getId(), false, (ImageView) row.findViewById(R.id.SPID_image));
-                textBackground.setColor(mContext.getResources().getColor(R.color.white));
+                textBackground.setColor(getContext().getResources().getColor(R.color.white));
             }
         }
         return row;

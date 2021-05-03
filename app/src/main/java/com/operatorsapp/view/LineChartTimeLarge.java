@@ -29,7 +29,6 @@ public class LineChartTimeLarge extends FrameLayout {
     public static final String SAMSUNG = "samsung";
 
     private LineChart mChart;
-    private Context mContext;
     protected Typeface mTfRegular;
     protected Typeface mTfLight;
     private String[] mXValues;
@@ -37,24 +36,20 @@ public class LineChartTimeLarge extends FrameLayout {
 
     public LineChartTimeLarge(Context context) {
         super(context);
-        mContext = context;
         init(context);
     }
 
     public LineChartTimeLarge(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
         init(context);
     }
 
     public LineChartTimeLarge(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mContext = context;
         init(context);
     }
 
     public void init(Context context) {
-        mContext = context;
 
         View view = LayoutInflater.from(context).inflate(R.layout.activity_linechart_time, this, false);
 
@@ -190,29 +185,29 @@ public class LineChartTimeLarge extends FrameLayout {
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setEnabled(false);
 
-        addVerticalLimitLimitLine(midnightLimit);
+        addVerticalLimitLimitLine(context, midnightLimit);
     }
 
-    private void addVerticalLimitLimitLine(float midnightLimit) {
+    private void addVerticalLimitLimitLine(Context context, float midnightLimit) {
         XAxis bottomAxis = mChart.getXAxis();
-        LimitLine limitLine3 = new LimitLine(midnightLimit, mContext.getResources().getString(R.string.midnight));
-        limitLine3.setLineColor(ContextCompat.getColor(mContext, R.color.red_line));
+        LimitLine limitLine3 = new LimitLine(midnightLimit, context.getResources().getString(R.string.midnight));
+        limitLine3.setLineColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine3.setTextSize(16);
-        limitLine3.setTextColor(ContextCompat.getColor(mContext, R.color.red_line));
+        limitLine3.setTextColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine3.setLineWidth(1f);
         limitLine3.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
         bottomAxis.addLimitLine(limitLine3);
     }
 
 
-    public void setData(final ArrayList<ArrayList<Entry>> values, String[] xValues, final float lowLimit, final float highLimit) {
+    public void setData(Context context, final ArrayList<ArrayList<Entry>> values, String[] xValues, final float lowLimit, final float highLimit) {
         mXValues = xValues;
         // create a dataset and give it a type
         ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
         for (ArrayList<Entry> entries : values) {
             LineDataSet set1 = new LineDataSet(entries, "DataSet 1");
             set1.setAxisDependency(YAxis.AxisDependency.LEFT);
-            set1.setColor(ContextCompat.getColor(mContext, R.color.C16));
+            set1.setColor(ContextCompat.getColor(context, R.color.C16));
             set1.setValueTextColor(ColorTemplate.getHoloBlue());
             set1.setLineWidth(5f);
 //        set1.setDrawCircles(false);
@@ -224,8 +219,8 @@ public class LineChartTimeLarge extends FrameLayout {
 
 
             set1.setCircleRadius(5);
-            set1.setCircleColor(ContextCompat.getColor(mContext, R.color.C16));
-            set1.setCircleHoleColor(ContextCompat.getColor(mContext, R.color.C16));
+            set1.setCircleColor(ContextCompat.getColor(context, R.color.C16));
+            set1.setCircleHoleColor(ContextCompat.getColor(context, R.color.C16));
             set1.setDrawCircleHole(true);
             set1.setDrawCircles(true);
 
