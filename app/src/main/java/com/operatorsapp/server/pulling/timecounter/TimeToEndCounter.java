@@ -6,6 +6,8 @@ import android.os.CountDownTimer;
 import com.example.oppapplog.OppAppLogger;
 import com.operatorsapp.server.pulling.interfaces.OnTimeToEndChangedListener;
 
+import java.lang.ref.WeakReference;
+
 
 public class TimeToEndCounter
 {
@@ -13,11 +15,11 @@ public class TimeToEndCounter
     private static final int COUNT_DOWN_INTERVAL = 1000;
     private static final String ZERO_TIME = "00:00:00";
     public static final int FINISHED = 0;
-    private OnTimeToEndChangedListener mOnTimeToEndChangedListener;
+    private WeakReference<OnTimeToEndChangedListener> mOnTimeToEndChangedListener;
     private CountDownTimer mCountDownTimer;
 
     public TimeToEndCounter(OnTimeToEndChangedListener onTimeToEndChangedListener) {
-        mOnTimeToEndChangedListener = onTimeToEndChangedListener;
+        mOnTimeToEndChangedListener = new WeakReference<>(onTimeToEndChangedListener);
     }
 
     public void calculateTimeToEnd(final int timeInMilliseconds) {
@@ -27,11 +29,15 @@ public class TimeToEndCounter
 
         mCountDownTimer = new CountDownTimer(timeInMilliseconds, COUNT_DOWN_INTERVAL) {
             public void onTick(long millisUntilFinished) {
-                mOnTimeToEndChangedListener.onTimeToEndChanged(millisUntilFinished);
+                if (mOnTimeToEndChangedListener.get() != null) {
+                    mOnTimeToEndChangedListener.get().onTimeToEndChanged(millisUntilFinished);
+                }
             }
 
             public void onFinish() {
-                mOnTimeToEndChangedListener.onTimeToEndChanged(FINISHED);
+                if (mOnTimeToEndChangedListener.get() != null) {
+                    mOnTimeToEndChangedListener.get().onTimeToEndChanged(FINISHED);
+                }
                 OppAppLogger.i(LOG_TAG, "onFinish()");
             }
 
@@ -52,7 +58,9 @@ public class TimeToEndCounter
 
             @Override
             public void onFinish() {
-                mOnTimeToEndChangedListener.onTimeToEndChanged(FINISHED);
+                if (mOnTimeToEndChangedListener.get() != null) {
+                    mOnTimeToEndChangedListener.get().onTimeToEndChanged(FINISHED);
+                }
                 OppAppLogger.i(LOG_TAG, "onFinish()");
             }
 

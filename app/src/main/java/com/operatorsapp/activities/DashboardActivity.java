@@ -224,7 +224,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback,
         OperatorCoreToDashboardActivityCallback,
         ReportFieldsFragmentCallbackListener, SettingsInterface,
-        OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener,
+        CroutonRootProvider, ApproveFirstItemFragmentCallbackListener,
         RefreshPollingBroadcast.RefreshPollingListener, CroutonCreator.CroutonListener,
         ActionBarAndEventsFragment.ActionBarAndEventsFragmentListener,
         ReportStopReasonFragment.ReportStopReasonFragmentListener,
@@ -1429,22 +1429,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void startShiftTimer(long timeInSeconds) {
         if (mTimeToEndCounter == null) {
-            mTimeToEndCounter = new TimeToEndCounter(this);
+            mTimeToEndCounter = new TimeToEndCounter(new OnTimeToEndChangedListener() {
+                @Override
+                public void onTimeToEndChanged(long millisUntilFinished) {
+                    shiftForMachineTimer();
+                }
+            });
         }
         mTimeToEndCounter.calculateShiftToEnd(timeInSeconds);
 
-    }
-
-    @Override
-    public void onTimeToEndChanged(long millisUntilFinished) {
-
-//        if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
-//
-//            for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
-//                dashboardUICallbackListener.onShiftForMachineEnded();
-//            }
-//        }
-        shiftForMachineTimer();
     }
 
 

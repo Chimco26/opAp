@@ -65,7 +65,7 @@ import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 
-public class AllDashboardDataCore implements OnTimeToEndChangedListener {
+public class AllDashboardDataCore{
     private static final String LOG_TAG = AllDashboardDataCore.class.getSimpleName();
 
     private static final int START_DELAY = 0;
@@ -515,18 +515,18 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
     private void startTimer(int timeInSeconds) {
         if (mTimeToEndCounter == null) {
-            mTimeToEndCounter = new TimeToEndCounter(this);
+            mTimeToEndCounter = new TimeToEndCounter(new OnTimeToEndChangedListener() {
+                @Override
+                public void onTimeToEndChanged(long millisUntilFinished) {
+                    if (mMachineStatusUICallback != null) {
+                        mMachineStatusUICallback.onTimerChanged(millisUntilFinished);
+                    } else {
+                        OppAppLogger.w(LOG_TAG, "onTimeToEndChanged() mMachineStatusUICallback is null");
+                    }
+                }
+            });
         }
         mTimeToEndCounter.calculateTimeToEnd(timeInSeconds);
-    }
-
-    @Override
-    public void onTimeToEndChanged(long millisUntilFinished) {
-        if (mMachineStatusUICallback != null) {
-            mMachineStatusUICallback.onTimerChanged(millisUntilFinished);
-        } else {
-            OppAppLogger.w(LOG_TAG, "onTimeToEndChanged() mMachineStatusUICallback is null");
-        }
     }
 
     public static String getDate(long milliSeconds, String dateFormat) {

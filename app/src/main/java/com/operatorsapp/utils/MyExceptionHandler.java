@@ -13,12 +13,14 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.managers.PersistenceManager;
 
+import java.lang.ref.WeakReference;
+
 public class MyExceptionHandler implements Thread.UncaughtExceptionHandler {
     private static final String LOG_TAG = MyExceptionHandler.class.getSimpleName();
-    private final Activity activity;
+    private final WeakReference<Activity> activity;
 
     public MyExceptionHandler(Activity activity) {
-        this.activity = activity;
+        this.activity = new WeakReference<>(activity);
     }
 
     @Override
@@ -34,7 +36,9 @@ public class MyExceptionHandler implements Thread.UncaughtExceptionHandler {
         PendingIntent pendingIntent = PendingIntent.getActivity(OperatorApplication.getAppContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
         AlarmManager mgr = (AlarmManager) OperatorApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
-        activity.finish();
+        if (activity.get() != null && !activity.get().isFinishing() && !activity.get().isDestroyed()) {
+            activity.get().finish();
+        }
         System.exit(2);
     }
 }
