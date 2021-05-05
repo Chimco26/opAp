@@ -276,7 +276,9 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mButtonChangeMachine.setOnClickListener(SettingsFragment.this);
+                        if (getActivity() != null && !getActivity().isDestroyed()) {
+                            mButtonChangeMachine.setOnClickListener(SettingsFragment.this);
+                        }
                     }
                 }, 2000);
                 mSettingsInterface.onChangeMachineRequest();

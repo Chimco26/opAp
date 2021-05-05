@@ -127,7 +127,6 @@ import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.requests.SendNotificationRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
-import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.ClearData;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
@@ -698,8 +697,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mBottomRl.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (mListener != null) {
-                        mListener.onResizeBottomMargin(mBottomRl.getHeight());
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        if (mListener != null) {
+                            mListener.onResizeBottomMargin(mBottomRl.getHeight());
+                        }
                     }
                 }
             });
@@ -1525,7 +1526,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             technicianRl.setVisibility(View.INVISIBLE);
             mJobsSpinner.setVisibility(View.INVISIBLE);
             displayOperatorView(View.INVISIBLE);
-        }else {
+        } else {
             taskRl.setVisibility(View.VISIBLE);
             productionStatusRl.setVisibility(View.VISIBLE);
             technicianRl.setVisibility(View.VISIBLE);
@@ -1536,7 +1537,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void startTechCallActivity() {
 
-        if (getActivity() != null && ((DashboardActivity) getActivity()).getReportForMachine() != null ) {
+        if (getActivity() != null && ((DashboardActivity) getActivity()).getReportForMachine() != null) {
             Intent intent = new Intent(getActivity(), TechCallActivity.class);
             intent.putExtra(TechCallActivity.EXTRA_REPORT_FIELD_FOR_MACHINE, ((DashboardActivity) getActivity()).getReportForMachine());
             intent.putExtra(TechCallActivity.EXTRA_MANAGE_SERVICE_CALL_FOR_TECHNICIAN, mCurrentMachineStatus != null && mCurrentMachineStatus.getmAllMachinesData().get(0).isManageServiceCallForTechnician());
@@ -2045,7 +2046,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 } else {
                     if (response.body() != null) {
                         onFailure(call, new Throwable(response.body().getError().getErrorDesc()));
-                    }else {
+                    } else {
                         ShowCrouton.showSimpleCrouton(mCroutonCallback, getString(R.string.credentials_error), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                     }
                 }
@@ -2061,7 +2062,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         });
     }
 
-    private void sendNotificationResponse(final int notificationId, final int responseType, final boolean isRefresh) {
+    private void sendNotificationResponse(final int notificationId, final int responseType,
+                                          final boolean isRefresh) {
 
         final PersistenceManager pm = PersistenceManager.getInstance();
         final Notification[] notification = new Notification[1];
@@ -2288,7 +2290,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mBlockOperatorChange = false;
+                if (getActivity() != null && !getActivity().isDestroyed()) {
+                    mBlockOperatorChange = false;
+                }
             }
         }, BLOCK_OPERATOR_SPINNER_TIME);
     }
@@ -2299,7 +2303,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mBlockStatusChange = false;
+                if (getActivity() != null && !getActivity().isDestroyed()) {
+                    mBlockStatusChange = false;
+                }
             }
         }, BLOCK_PRODUCTION_SPINNER_TIME);
     }
@@ -2461,7 +2467,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onSelectMode(Event event) {
 
-        startSelectMode(event,null);
+        startSelectMode(event, null);
     }
 
     public void startSelectMode(Event event, MyTaskListener myTaskListener) {
@@ -2487,7 +2493,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         boolean isAllowReportingOnSetupEvents = false;
         boolean isSetupEnd = false;
         boolean isAllowReportingSetupAfterSetupEnd = false;
-        if (mCurrentMachineStatus != null){
+        if (mCurrentMachineStatus != null) {
             isAllowReportingOnSetupEvents = mCurrentMachineStatus.isAllowReportingOnSetupEvents();
             isSetupEnd = mCurrentMachineStatus.getAllMachinesData().get(0).isSetupEnd();
             isAllowReportingSetupAfterSetupEnd = mCurrentMachineStatus.isAllowReportingSetupAfterSetupEnd();
@@ -2495,7 +2501,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (mListener != null && events != null && events.size() > 0) {
 //            if (!(isSetupEnd || isAllowReportingOnSetupEvents)){
-            if (event.getEventGroupID() == 10 && !isAllowReportingOnSetupEvents){
+            if (event.getEventGroupID() == 10 && !isAllowReportingOnSetupEvents) {
                 ShowCrouton.showSimpleCrouton(mCroutonCallback, getString(R.string.no_report_permission_on_setup), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                 return;
             }
@@ -2516,14 +2522,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //            if (mEventHandler != null){
 //                mEventHandler.removeCallbacksAndMessages(null);
 //            }
-        setShiftLogAdapter(cursor);
+            setShiftLogAdapter(cursor);
 
-        initEvents(events);
+            initEvents(events);
 
-        onStopEventSelected(event.getEventID(), true);
+            onStopEventSelected(event.getEventID(), true);
 
-         mShowAlarmCheckBoxLy.setVisibility(View.GONE);
-         mMinDurationLil.setVisibility(View.GONE);
+            mShowAlarmCheckBoxLy.setVisibility(View.GONE);
+            mMinDurationLil.setVisibility(View.GONE);
         } else {
             myTaskListener.onUpdateEventsRecyclerViews(cursor, events);
             myTaskListener.onStartSelectMode(event);
@@ -2541,7 +2547,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         dialog.show();
     }
 
-    private void sendTechCall(final Technician technician, com.example.common.StopLogs.Event event, final String additionalText) {
+    private void sendTechCall(final Technician technician, com.
+            example.common.StopLogs.Event event, final String additionalText) {
 
         PersistenceManager pm = PersistenceManager.getInstance();
         ProgressDialogManager.show(getActivity());
@@ -2600,19 +2607,23 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     public void onActionYes() {
                         alertDialog.cancel();
                     }
+
                     @Override
-                    public void onActionNo() { }
+                    public void onActionNo() {
+                    }
+
                     @Override
-                    public void onActionAnother() {}
+                    public void onActionAnother() {
+                    }
                 });
             }
         });
     }
 
 
-    private void getLineEvents(){
+    private void getLineEvents() {
         PersistenceManager pm = PersistenceManager.getInstance();
-        if (pm.getMachineLineId() < 1){
+        if (pm.getMachineLineId() < 1) {
             return;
         }
         getLineShiftLog(pm.getSiteUrl(), new GetStopLogCallback() {
@@ -2625,7 +2636,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     for (com.example.common.StopLogs.Event event : response.getEvents()) {
 
-                        if (event.getRootEventID() == 0 && (lastEventRegistered == null || event.getEventID() > lastEventRegistered.getEventID())){
+                        if (event.getRootEventID() == 0 && (lastEventRegistered == null || event.getEventID() > lastEventRegistered.getEventID())) {
                             lastEventReceived = event;
                             break;
                         }
@@ -2637,7 +2648,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         boolean isAllowReportingOnSetupEvents = false;
                         boolean isSetupEnd = false;
                         boolean isAllowReportingSetupAfterSetupEnd = false;
-                        if (mCurrentMachineStatus != null){
+                        if (mCurrentMachineStatus != null) {
                             isAllowReportingOnSetupEvents = mCurrentMachineStatus.isAllowReportingOnSetupEvents();
                             isSetupEnd = mCurrentMachineStatus.getAllMachinesData().get(0).isSetupEnd();
                             isAllowReportingSetupAfterSetupEnd = mCurrentMachineStatus.isAllowReportingSetupAfterSetupEnd();
@@ -2667,7 +2678,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void setShiftLogAdapter(Cursor cursor) {
-        if (mShiftLogAdapter != null){
+        if (mShiftLogAdapter != null) {
             mShiftLogAdapter.closeCursor();
         }
         mShiftLogAdapter = new ShiftLogSqlAdapter(cursor,
@@ -2725,7 +2736,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 displayOperatorView(View.INVISIBLE);
             }
             mListener.onLockScreenForceLoginOperator();
-        }else {
+        } else {
             if (isVisible()) {
                 taskRl.setVisibility(View.VISIBLE);
                 productionStatusRl.setVisibility(View.VISIBLE);
@@ -2780,7 +2791,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //    }
 
     @Override
-    public void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MachineJoshDataResponse machineJoshDataResponse) {
+    public void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse
+            actualBarExtraResponse, MachineJoshDataResponse machineJoshDataResponse) {
 
         if (events == null) {
             events = new ArrayList<>();
@@ -2816,14 +2828,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                if (getActivity() != null && !getActivity().isDestroyed()) {
 // in all polling befor the request i update the getshiftlogstartingfrom to current time (for the request i used the previous value of getshiftlogstartingfrom , make the update after that)
-                                // if the conditions bellow is completed the endtime of last event is seted to shiftlogstartingfrom in place of time of last polling request
-                                if (mIsTimeLine) {
-                                    if (finalLatestEvent1 != null && finalLatestEvent1.getEventEndTime() != null
-                                            && finalLatestEvent1.getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
-                                            mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
+                                    // if the conditions bellow is completed the endtime of last event is seted to shiftlogstartingfrom in place of time of last polling request
+                                    if (mIsTimeLine) {
+                                        if (finalLatestEvent1 != null && finalLatestEvent1.getEventEndTime() != null
+                                                && finalLatestEvent1.getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
+                                                mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
-                                        PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent1.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
+                                            PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent1.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
+                                        }
                                     }
                                 }
                             }
@@ -2837,9 +2851,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                setShiftLogAdapter(oldCursor);
-                                if (newEvents != null) {
-                                    initEvents(newEvents);
+                                if (getActivity() != null && !getActivity().isDestroyed()) {
+                                    setShiftLogAdapter(oldCursor);
+                                    if (newEvents != null) {
+                                        initEvents(newEvents);
+                                    }
                                 }
                             }
                         });
@@ -2852,10 +2868,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                onStopEventSelected(event.getEventID(), true);
+                                if (getActivity() != null && !getActivity().isDestroyed()) {
+                                    onStopEventSelected(event.getEventID(), true);
 
-                                mShowAlarmCheckBoxLy.setVisibility(View.GONE);
-                                mMinDurationLil.setVisibility(View.GONE);
+                                    mShowAlarmCheckBoxLy.setVisibility(View.GONE);
+                                    mMinDurationLil.setVisibility(View.GONE);
+                                }
                             }
                         });
                     }
@@ -2867,10 +2885,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (show) {
-                                    mNoNotificationsText.setVisibility(View.VISIBLE);
-                                } else {
-                                    mNoNotificationsText.setVisibility(View.GONE);
+                                if (getActivity() != null && !getActivity().isDestroyed()) {
+                                    if (show) {
+                                        mNoNotificationsText.setVisibility(View.VISIBLE);
+                                    } else {
+                                        mNoNotificationsText.setVisibility(View.GONE);
+                                    }
                                 }
                             }
                         });
@@ -2883,7 +2903,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                openDialog(event);
+                                if (getActivity() != null && !getActivity().isDestroyed()) {
+                                    openDialog(event);
+                                }
                             }
                         });
                     }
@@ -2895,8 +2917,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (mListener != null) {
-                                    mListener.onClearAllSelectedEvents();
+                                if (getActivity() != null && !getActivity().isDestroyed()) {
+                                    if (mListener != null) {
+                                        mListener.onClearAllSelectedEvents();
+                                    }
                                 }
                             }
                         });
@@ -3086,7 +3110,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onClearAllSelectedEvents();
     }
 
-    public void updateEvents(MyTask myTask, ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MyTaskListener myTaskListener) {
+    public void updateEvents(MyTask myTask, ArrayList<Event> events, ActualBarExtraResponse
+            actualBarExtraResponse, MyTaskListener myTaskListener) {
 
         if (getActivity() == null || !isAdded() || myTask == null || myTask.isCancelled()) {
             return;
@@ -3288,7 +3313,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
-    public void clearEventsRecycler(){
+    public void clearEventsRecycler() {
         mIsSelectionMode = false;
         mNoData = true;
         mSelectedEvents = new ArrayList<>();
@@ -3430,7 +3455,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
+                    }
                 }
             });
         }
@@ -3858,7 +3885,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
-    private void sendTokenWithSessionIdToServer(final String languageCode, final String languagesName) {
+    private void sendTokenWithSessionIdToServer(final String languageCode,
+                                                final String languagesName) {
         ProgressDialogManager.show(getActivity());
         final PersistenceManager pm = PersistenceManager.getInstance();
         final String id = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -3903,7 +3931,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void getNotificationsFromServer(final boolean openNotifications) {
 
-        if(PersistenceManager.getInstance().getMachineId() == -1){
+        if (PersistenceManager.getInstance().getMachineId() == -1) {
             return;
         }
         NetworkManager.getInstance().getNotificationHistory(new Callback<NotificationHistoryResponse>() {

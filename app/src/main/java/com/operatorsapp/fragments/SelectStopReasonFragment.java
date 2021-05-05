@@ -431,7 +431,9 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ProgressDialogManager.dismiss();
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        ProgressDialogManager.dismiss();
+                    }
                 }
             });
         }

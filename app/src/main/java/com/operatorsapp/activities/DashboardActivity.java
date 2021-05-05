@@ -294,8 +294,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Runnable pollingBackupRunnable = new Runnable() {
         @Override
         public void run() {
-            getActiveJobs();
-            pollingBackup(true);
+            if (DashboardActivity.this != null && !DashboardActivity.this.isDestroyed()) {
+                getActiveJobs();
+                pollingBackup(true);
+            }
         }
     };
     private ReportCore mReportCore;
@@ -336,8 +338,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 @Override
                 public void run() {
                     // cancel collapse loop after 1 minute
-                    collapseNotificationHandler.removeCallbacks(null);
-                    mIsCollapse = false;
+                    if (DashboardActivity.this != null && !DashboardActivity.this.isDestroyed()) {
+                        collapseNotificationHandler.removeCallbacks(null);
+                        mIsCollapse = false;
+                    }
                 }
             }, 1000 * 60);
         }
@@ -362,45 +366,46 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 @Override
                 public void run() {
+                    if (DashboardActivity.this != null && !DashboardActivity.this.isDestroyed()) {
+                        // Use reflection to trigger a method from 'StatusBarManager'
+                        @SuppressLint("WrongConstant") Object statusBarService = getSystemService("statusbar");
+                        Class<?> statusBarManager = null;
 
-                    // Use reflection to trigger a method from 'StatusBarManager'
-                    @SuppressLint("WrongConstant") Object statusBarService = getSystemService("statusbar");
-                    Class<?> statusBarManager = null;
-
-                    try {
-                        statusBarManager = Class.forName("android.app.StatusBarManager");
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-
-                    Method collapseStatusBar = null;
-                    try {
-                        // Prior to API 17, the method to call is 'collapse()'
-                        // API 17 onwards, the method to call is `collapsePanels()`
-                        if (Build.VERSION.SDK_INT > 16) {
-                            collapseStatusBar = statusBarManager.getMethod(isCollapse ? "collapsePanels" : "expandNotificationsPanel");
-                        } else {
-                            collapseStatusBar = statusBarManager.getMethod(isCollapse ? "collapse" : "expand");
+                        try {
+                            statusBarManager = Class.forName("android.app.StatusBarManager");
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
                         }
-                    } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
-                    }
 
-                    collapseStatusBar.setAccessible(true);
+                        Method collapseStatusBar = null;
+                        try {
+                            // Prior to API 17, the method to call is 'collapse()'
+                            // API 17 onwards, the method to call is `collapsePanels()`
+                            if (Build.VERSION.SDK_INT > 16) {
+                                collapseStatusBar = statusBarManager.getMethod(isCollapse ? "collapsePanels" : "expandNotificationsPanel");
+                            } else {
+                                collapseStatusBar = statusBarManager.getMethod(isCollapse ? "collapse" : "expand");
+                            }
+                        } catch (NoSuchMethodException e) {
+                            e.printStackTrace();
+                        }
 
-                    try {
-                        collapseStatusBar.invoke(statusBarService);
-                    } catch (IllegalArgumentException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                    // Currently, the delay is 10 ms. You can change this
-                    // value to suit your needs.
-                    if (mIsCollapse && PersistenceManager.getInstance().isStatusBarLocked()) {
-                        collapseNotificationHandler.postDelayed(this, 10L);
+                        collapseStatusBar.setAccessible(true);
+
+                        try {
+                            collapseStatusBar.invoke(statusBarService);
+                        } catch (IllegalArgumentException e) {
+                            e.printStackTrace();
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+                        // Currently, the delay is 10 ms. You can change this
+                        // value to suit your needs.
+                        if (mIsCollapse && PersistenceManager.getInstance().isStatusBarLocked()) {
+                            collapseNotificationHandler.postDelayed(this, 10L);
+                        }
                     }
                 }
             }, 10L);
@@ -463,15 +468,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mReportBtn.post(new Runnable() {
             @Override
             public void run() {
-                ViewGroup.LayoutParams params = mReportBtn.getLayoutParams();
-                params.height = (int) (getResources().getDisplayMetrics().heightPixels * 0.15);
-                params.width = params.height;
-                mReportBtn.setLayoutParams(params);
-                if (PersistenceManager.getInstance().getReportShiftBtnPositionX() > 0) {
-                    mReportBtn.setX(PersistenceManager.getInstance().getReportShiftBtnPositionX());
-                }
-                if (PersistenceManager.getInstance().getReportShiftBtnPositionY() > 0) {
-                    mReportBtn.setY(PersistenceManager.getInstance().getReportShiftBtnPositionY());
+                if (DashboardActivity.this != null && !DashboardActivity.this.isDestroyed()) {
+                    ViewGroup.LayoutParams params = mReportBtn.getLayoutParams();
+                    params.height = (int) (getResources().getDisplayMetrics().heightPixels * 0.15);
+                    params.width = params.height;
+                    mReportBtn.setLayoutParams(params);
+                    if (PersistenceManager.getInstance().getReportShiftBtnPositionX() > 0) {
+                        mReportBtn.setX(PersistenceManager.getInstance().getReportShiftBtnPositionX());
+                    }
+                    if (PersistenceManager.getInstance().getReportShiftBtnPositionY() > 0) {
+                        mReportBtn.setY(PersistenceManager.getInstance().getReportShiftBtnPositionY());
+                    }
                 }
             }
         });
@@ -1406,7 +1413,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            startShiftTimer(durationOfShift);
+                            if (DashboardActivity.this != null && !DashboardActivity.this.isDestroyed()) {
+                                startShiftTimer(durationOfShift);
+                            }
                         }
                     }, PersistenceManager.getInstance().getPollingFrequency() * 1000);
                 }
@@ -2306,13 +2315,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void run() {
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        if (timeCounter[0] == 60) {
-                            onClearAllSelectedEvents();
-                            mReportModeTimer.cancel();
-                            return;
-                        }
+                        if (DashboardActivity.this != null && !DashboardActivity.this.isDestroyed()) {
+                            if (timeCounter[0] == 60) {
+                                onClearAllSelectedEvents();
+                                mReportModeTimer.cancel();
+                                return;
+                            }
 
-                        timeCounter[0]++;
+                            timeCounter[0]++;
+                        }
                     }
                 });
             }
@@ -3430,31 +3441,33 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mCheckAppVersionRunnable = new Runnable() {
             @Override
             public void run() {
-                getKPIS();
-                NetworkManager.getInstance().GetApplicationVersion(new Callback<AppVersionResponse>() {
-                    @Override
-                    public void onResponse(Call<AppVersionResponse> call, retrofit2.Response<AppVersionResponse> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().getError().getErrorDesc() == null) {
+                if (DashboardActivity.this != null && !DashboardActivity.this.isDestroyed()) {
+                    getKPIS();
+                    NetworkManager.getInstance().GetApplicationVersion(new Callback<AppVersionResponse>() {
+                        @Override
+                        public void onResponse(Call<AppVersionResponse> call, retrofit2.Response<AppVersionResponse> response) {
+                            if (response.isSuccessful() && response.body() != null && response.body().getError().getErrorDesc() == null) {
 
-                            for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
+                                for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
 
 //                                String siteName = item.getmSite() != null ? item.getmSite().toLowerCase() : "";
-                                String siteName = item.getmSite();
+                                    String siteName = item.getmSite();
 
-                                if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE
-                                        && (siteName.isEmpty() || siteName.equals("all") || siteName.equals(PersistenceManager.getInstance().getSiteName().toLowerCase()))) {
-                                    getFile(item.getmUrl());
+                                    if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE
+                                            && (siteName.isEmpty() || siteName.equals("all") || siteName.equals(PersistenceManager.getInstance().getSiteName().toLowerCase()))) {
+                                        getFile(item.getmUrl());
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<AppVersionResponse> call, Throwable t) {
+                        @Override
+                        public void onFailure(Call<AppVersionResponse> call, Throwable t) {
 
-                    }
-                });
-                mVersionCheckHandler.postDelayed(mCheckAppVersionRunnable, CHECK_APP_VERSION_INTERVAL);
+                        }
+                    });
+                    mVersionCheckHandler.postDelayed(mCheckAppVersionRunnable, CHECK_APP_VERSION_INTERVAL);
+                }
             }
         };
 

@@ -399,9 +399,10 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
             getActivity().runOnUiThread(new Runnable()
             {
                 @Override
-                public void run()
-                {
-                    ProgressDialogManager.dismiss();
+                public void run() {
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        ProgressDialogManager.dismiss();
+                    }
                 }
             });
         }

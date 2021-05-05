@@ -435,20 +435,22 @@ public class TaskDetailsFragment extends Fragment {
         mSubjectSpinner.post(new Runnable() {
             @Override
             public void run() {
-                mSubjectSpinner.setSelection(getInfoObjectSelectedPosition(subjects, subjectId));
-                mSubjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        dataAdapter.setTitle(adapterView.getSelectedItemPosition());
-                        mTask.setSubjectTrans(subjects.get(adapterView.getSelectedItemPosition()).getName());
-                        mTask.setSubjectId(subjects.get(adapterView.getSelectedItemPosition()).getID());
-                    }
+                if (getActivity() != null && !getActivity().isDestroyed()) {
+                    mSubjectSpinner.setSelection(getInfoObjectSelectedPosition(subjects, subjectId));
+                    mSubjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            dataAdapter.setTitle(adapterView.getSelectedItemPosition());
+                            mTask.setSubjectTrans(subjects.get(adapterView.getSelectedItemPosition()).getName());
+                            mTask.setSubjectId(subjects.get(adapterView.getSelectedItemPosition()).getID());
+                        }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
 
-                    }
-                });
+                        }
+                    });
+                }
             }
         });
 
@@ -465,28 +467,30 @@ public class TaskDetailsFragment extends Fragment {
         mStatusSpinner.post(new Runnable() {
             @Override
             public void run() {
-                mStatusSpinner.setSelection(getInfoObjectSelectedPosition(finalStatus, taskStatus));
-                mStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        int selectedId = finalStatus.get(adapterView.getSelectedItemPosition()).getID();
-                        if (selectedId == TaskProgress.TaskStatus.DONE.getValue()){
-                            for (TaskStep step : ((TaskStepsAdapter)mTaskStepRv.getAdapter()).getTaskSteps()) {
-                                if (step.IsOpen){
-                                    ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(), getString(R.string.step_task_not_finished), CroutonCreator.CroutonType.ALERT_DIALOG);
-                                    return;
+                if (getActivity() != null && !getActivity().isDestroyed()) {
+                    mStatusSpinner.setSelection(getInfoObjectSelectedPosition(finalStatus, taskStatus));
+                    mStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            int selectedId = finalStatus.get(adapterView.getSelectedItemPosition()).getID();
+                            if (selectedId == TaskProgress.TaskStatus.DONE.getValue()) {
+                                for (TaskStep step : ((TaskStepsAdapter) mTaskStepRv.getAdapter()).getTaskSteps()) {
+                                    if (step.IsOpen) {
+                                        ShowCrouton.showSimpleCrouton((TaskActivity) getActivity(), getString(R.string.step_task_not_finished), CroutonCreator.CroutonType.ALERT_DIALOG);
+                                        return;
+                                    }
                                 }
                             }
+                            dataAdapter.setTitle(adapterView.getSelectedItemPosition());
+                            mTask.setTaskStatus(selectedId);
                         }
-                        dataAdapter.setTitle(adapterView.getSelectedItemPosition());
-                        mTask.setTaskStatus(selectedId);
-                    }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
 
-                    }
-                });
+                        }
+                    });
+                }
             }
         });
     }

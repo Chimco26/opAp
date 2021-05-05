@@ -438,7 +438,9 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ProgressDialogManager.dismiss();
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        ProgressDialogManager.dismiss();
+                    }
                 }
             });
         }

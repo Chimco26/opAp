@@ -1,13 +1,15 @@
 package com.operatorsapp.view.widgetViewHolders;
 
-import androidx.core.widget.TextViewCompat;
-import androidx.recyclerview.widget.RecyclerView;
+import android.app.Activity;
 import android.text.Html;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.core.widget.TextViewCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
@@ -88,7 +90,8 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         long time = 0;
         try {
             time = Long.parseLong(widget.getCurrentValue());
-        }catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
         int endLimit = END_LIMIT;
 //        time = 45;// test states
         if (mMachineStatus != null &&
@@ -101,9 +104,9 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
             m1Ly.setVisibility(View.GONE);
             m2CountDownLy.setVisibility(View.GONE);
             m3Ly.setVisibility(View.VISIBLE);
-            if (mShowEndSetupBtn){
+            if (mShowEndSetupBtn) {
                 m2Btn.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 m2Btn.setVisibility(View.INVISIBLE);
             }
 //            mSubTitle.setText("");
@@ -113,7 +116,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
                 m1Ly.setVisibility(View.VISIBLE);
                 if (mShowActivateJobBtn) {
                     m1Btn.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     m1Btn.setVisibility(View.GONE);
                 }
                 m2CountDownLy.setVisibility(View.GONE);
@@ -142,9 +145,12 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         mTitle.post(new Runnable() {
             @Override
             public void run() {
-                TextViewCompat
-                        .setAutoSizeTextTypeUniformWithConfiguration(mTitle,
-                                10, 23, 1, TypedValue.COMPLEX_UNIT_SP);
+                if (mTitle.getContext() != null && mTitle.getContext() instanceof Activity && !((Activity) mTitle.getContext()).isDestroyed()) {
+
+                    TextViewCompat
+                            .setAutoSizeTextTypeUniformWithConfiguration(mTitle,
+                                    10, 23, 1, TypedValue.COMPLEX_UNIT_SP);
+                }
             }
         });
     }
@@ -155,7 +161,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
             m3Btn.setText(m3Btn.getContext().getString(R.string.activate));
             if (mShowActivateJobBtn) {
                 m3Btn.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 m3Btn.setVisibility(View.INVISIBLE);
             }
             m3Text.setTextColor(m3Text.getContext().getResources().getColor(R.color.red_line));
@@ -166,7 +172,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
             m3Btn.setText(m3Btn.getContext().getString(R.string.see_job));
             if (mShowActivateJobBtn) {
                 m3Btn.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 m3Btn.setVisibility(View.INVISIBLE);
             }
             m3Text.setTextColor(m3Text.getContext().getResources().getColor(R.color.blue1));
@@ -174,17 +180,23 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         m3Text.post(new Runnable() {
             @Override
             public void run() {
-                TextViewCompat
-                        .setAutoSizeTextTypeUniformWithConfiguration(m3Text,
-                                10, 18, 1, TypedValue.COMPLEX_UNIT_SP);
+                if (m3Text.getContext() != null && m3Text.getContext() instanceof Activity && !((Activity) m3Text.getContext()).isDestroyed()) {
+
+                    TextViewCompat
+                            .setAutoSizeTextTypeUniformWithConfiguration(m3Text,
+                                    10, 18, 1, TypedValue.COMPLEX_UNIT_SP);
+                }
             }
         });
         m3Btn.post(new Runnable() {
             @Override
             public void run() {
-                TextViewCompat
-                        .setAutoSizeTextTypeUniformWithConfiguration(m3Btn,
-                                10, 20, 1, TypedValue.COMPLEX_UNIT_SP);
+                if (m3Btn.getContext() != null && m3Btn.getContext() instanceof Activity && !((Activity) m3Btn.getContext()).isDestroyed()) {
+
+                    TextViewCompat
+                            .setAutoSizeTextTypeUniformWithConfiguration(m3Btn,
+                                    10, 20, 1, TypedValue.COMPLEX_UNIT_SP);
+                }
             }
         });
     }

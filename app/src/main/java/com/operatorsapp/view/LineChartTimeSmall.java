@@ -1,5 +1,6 @@
 package com.operatorsapp.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -225,51 +226,56 @@ public class LineChartTimeSmall extends FrameLayout {
         mChart.post(new Runnable() {
             @Override
             public void run() {
-                float max = highLimit;
-                float min = lowLimit;
-                for (ArrayList<Entry> entries : values) {
-                    for (Entry entry : entries) {
+                if (mChart.getContext() != null && mChart.getContext() instanceof Activity && !((Activity) mChart.getContext()).isDestroyed()) {
+                    float max = highLimit;
+                    float min = lowLimit;
+                    for (ArrayList<Entry> entries : values) {
+                        for (Entry entry : entries) {
 
-                        float entryY = entry.getY();
-                        if (entryY > max) {
-                            max = entryY;
+                            float entryY = entry.getY();
+                            if (entryY > max) {
+                                max = entryY;
+                            }
+                            if (entryY < min) {
+                                min = entryY;
+                            }
+                            lastValue[0] = entry;
                         }
-                        if (entryY < min) {
-                            min = entryY;
-                        }
-                        lastValue[0] = entry;
                     }
+
+                    float addition = ((max - min) + 1) / 5; // add percentage of full range on each side for better visibility,, adding some for min = max case;
+
+                    max += addition;
+
+                    YAxis leftAxis = mChart.getAxisLeft();
+                    leftAxis.resetAxisMaximum();//leftAxis.resetAxisMaxValue();
+                    leftAxis.resetAxisMinimum();//leftAxis.resetAxisMinValue();
+                    leftAxis.setAxisMinimum(min);
+                    leftAxis.setAxisMaximum(max);
+                    mChart.zoomOut(); // needed due to chart lib not refreshing.
+                    mChart.moveViewToX(lastValue[0].getX());
+
+                    float offsetLeft = mChart.getAxisLeft().getRequiredWidthSpace(mChart.getRendererLeftYAxis()
+                            .getPaintAxisLabels());
+
+                    mChart.resetViewPortOffsets();
+                    mChart.setViewPortOffsets(offsetLeft, 8f, 0f, 25f);
+                    mChart.invalidate();
+                    mChart.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mChart.getContext() != null && mChart.getContext() instanceof Activity && !((Activity) mChart.getContext()).isDestroyed()) {
+
+                                float offsetLeft = mChart.getAxisLeft().getRequiredWidthSpace(mChart.getRendererLeftYAxis()
+                                        .getPaintAxisLabels());
+
+                                mChart.resetViewPortOffsets();
+                                mChart.setViewPortOffsets(offsetLeft, 8f, 0f, 25f);
+                                mChart.invalidate();
+                            }
+                        }
+                    });
                 }
-
-                float addition = ((max - min) + 1) / 5; // add percentage of full range on each side for better visibility,, adding some for min = max case;
-
-                max += addition;
-
-                YAxis leftAxis = mChart.getAxisLeft();
-                leftAxis.resetAxisMaximum();//leftAxis.resetAxisMaxValue();
-                leftAxis.resetAxisMinimum();//leftAxis.resetAxisMinValue();
-                leftAxis.setAxisMinimum(min);
-                leftAxis.setAxisMaximum(max);
-                mChart.zoomOut(); // needed due to chart lib not refreshing.
-                mChart.moveViewToX(lastValue[0].getX());
-
-                float offsetLeft = mChart.getAxisLeft().getRequiredWidthSpace(mChart.getRendererLeftYAxis()
-                        .getPaintAxisLabels());
-
-                mChart.resetViewPortOffsets();
-                mChart.setViewPortOffsets(offsetLeft, 8f, 0f, 25f);
-                mChart.invalidate();
-                mChart.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        float offsetLeft = mChart.getAxisLeft().getRequiredWidthSpace(mChart.getRendererLeftYAxis()
-                                .getPaintAxisLabels());
-
-                        mChart.resetViewPortOffsets();
-                        mChart.setViewPortOffsets(offsetLeft, 8f, 0f, 25f);
-                        mChart.invalidate();
-                    }
-                });
             }
         });
     }

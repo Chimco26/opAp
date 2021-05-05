@@ -387,7 +387,9 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    SendBroadcast.refreshPolling(getContext());
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        SendBroadcast.refreshPolling(getContext());
+                    }
                 }
             }, REFRESH_DELAY_MILLIS);
 
@@ -442,7 +444,9 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ProgressDialogManager.dismiss();
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        ProgressDialogManager.dismiss();
+                    }
                 }
             });
         }

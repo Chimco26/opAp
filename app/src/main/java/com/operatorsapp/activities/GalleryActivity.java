@@ -603,8 +603,10 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if (GalleryActivity.this != null && !GalleryActivity.this.isDestroyed()) {
 
-                showLoadingError();
+                    showLoadingError();
+                }
             }
         });
 
@@ -616,8 +618,9 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
-                showLoadingError();
+                if (GalleryActivity.this != null && !GalleryActivity.this.isDestroyed()) {
+                    showLoadingError();
+                }
             }
         });
     }

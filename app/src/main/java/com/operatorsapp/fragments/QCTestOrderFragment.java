@@ -323,7 +323,9 @@ public class QCTestOrderFragment extends Fragment implements
             spinner.post(new Runnable() {
                 @Override
                 public void run() {
-                    spinner.setSelection(getPositionForSelectedItem(models, type), false);
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        spinner.setSelection(getPositionForSelectedItem(models, type), false);
+                    }
                 }
             });
 

@@ -405,7 +405,9 @@ public class ActivateJobActivity extends AppCompatActivity implements
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            finishActivity((StandardResponse) response, activateJobRequest.getJobID());
+                            if (ActivateJobActivity.this != null && !ActivateJobActivity.this.isDestroyed()) {
+                                finishActivity((StandardResponse) response, activateJobRequest.getJobID());
+                            }
                         }
                     }, 5000);
                 }

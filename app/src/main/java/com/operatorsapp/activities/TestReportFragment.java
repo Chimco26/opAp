@@ -298,7 +298,9 @@ public class TestReportFragment extends Fragment implements View.OnClickListener
                 mHandlerFilter.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        filterData();
+                        if (TestReportFragment.this != null && !TestReportFragment.this.isDetached()) {
+                            filterData();
+                        }
                     }
                 }, 1000);
             }

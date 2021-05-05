@@ -1,6 +1,7 @@
 package com.operatorsapp.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -122,7 +123,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         private View mParameterCard;
         private View mStoppedCard;
 
-        ShiftLogViewHolder(View itemView) {
+        ShiftLogViewHolder(final View itemView) {
             super(itemView);
             mParameterCard = itemView.findViewById(R.id.parameter_cardview);
             mStoppedCard = itemView.findViewById(R.id.stopped_cardview);
@@ -133,8 +134,12 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             mStoppedTitleLayout.post(new Runnable() {
                 @Override
                 public void run() {
-                    mStoppedTitleLayout.getLayoutParams().width = mCloseWidth - 50;
-                    mStoppedTitleLayout.requestLayout();
+                    if (itemView.getContext() != null
+                            && itemView.getContext() instanceof Activity
+                            && !((Activity) itemView.getContext()).isDestroyed()) {
+                        mStoppedTitleLayout.getLayoutParams().width = mCloseWidth - 50;
+                        mStoppedTitleLayout.requestLayout();
+                    }
                 }
             });
             mStoppedTitle = itemView.findViewById(R.id.event_stopped_shift_log_item_title);
@@ -155,8 +160,12 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             mParameterTitleLayout.post(new Runnable() {
                 @Override
                 public void run() {
-                    mParameterTitleLayout.getLayoutParams().width = mCloseWidth - 50;
-                    mParameterTitleLayout.requestLayout();
+                    if (itemView.getContext() != null
+                            && itemView.getContext() instanceof Activity
+                            && !((Activity) itemView.getContext()).isDestroyed()) {
+                        mParameterTitleLayout.getLayoutParams().width = mCloseWidth - 50;
+                        mParameterTitleLayout.requestLayout();
+                    }
                 }
             });
             mParameterTitle = itemView.findViewById(R.id.event_parameter_shift_log_item_title);

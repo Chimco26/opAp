@@ -1,5 +1,6 @@
 package com.operatorsapp.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import androidx.annotation.NonNull;
@@ -98,23 +99,26 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mParent.post(new Runnable() {
             @Override
             public void run() {
-                int parentWidth = mParent.getWidth() - 100;
-                double amount = Math.abs(Double.parseDouble(mTopList.get(position).getmAmount()));
-                int width;
-                if (amount < 1 || mTotalSum == 0) {
-                    width = 10;
-                } else {
-                    width = (int) ((parentWidth) * (Math.abs(amount) / mTotalSum));
-                    if (width > (parentWidth * 80 / 100)) {
-                        width = (parentWidth * 80 / 100);
+                if (mParent.getContext() != null
+                        && mParent.getContext() instanceof Activity
+                        && !((Activity) mParent.getContext()).isDestroyed()) {
+                    int parentWidth = mParent.getWidth() - 100;
+                    double amount = Math.abs(Double.parseDouble(mTopList.get(position).getmAmount()));
+                    int width;
+                    if (amount < 1 || mTotalSum == 0) {
+                        width = 10;
+                    } else {
+                        width = (int) ((parentWidth) * (Math.abs(amount) / mTotalSum));
+                        if (width > (parentWidth * 80 / 100)) {
+                            width = (parentWidth * 80 / 100);
+                        }
                     }
+                    ViewGroup.MarginLayoutParams mItemViewParams4;
+                    mItemViewParams4 = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+                    mItemViewParams4.width = (int) width;
+                    view.requestLayout();
                 }
-                ViewGroup.MarginLayoutParams mItemViewParams4;
-                mItemViewParams4 = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-                mItemViewParams4.width = (int) width;
-                view.requestLayout();
             }
-
         });
     }
 

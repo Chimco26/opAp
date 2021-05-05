@@ -774,10 +774,11 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
 
                 @Override
                 public void run() {
-
-                    mProductPdfNoImageTv.setText(getString(R.string.loading_error));
-                    mProductPdfNoImageLy.setVisibility(View.VISIBLE);
-                    mProductPdfView.setVisibility(View.INVISIBLE);
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        mProductPdfNoImageTv.setText(getString(R.string.loading_error));
+                        mProductPdfNoImageLy.setVisibility(View.VISIBLE);
+                        mProductPdfView.setVisibility(View.INVISIBLE);
+                    }
                 }
             });
         }

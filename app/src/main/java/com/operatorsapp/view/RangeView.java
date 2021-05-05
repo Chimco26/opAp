@@ -1,6 +1,7 @@
 package com.operatorsapp.view;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -53,7 +54,10 @@ public class RangeView extends View {
         post(new Runnable() {
             @Override
             public void run() {
-                invalidate();
+                if (getContext() != null && getContext() instanceof Activity && !((Activity) getContext()).isDestroyed()) {
+
+                    invalidate();
+                }
             }
         });
     }

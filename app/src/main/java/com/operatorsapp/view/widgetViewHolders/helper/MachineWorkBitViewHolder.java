@@ -94,12 +94,14 @@ public class MachineWorkBitViewHolder extends RecyclerView.ViewHolder {
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
     }
 
-    private void dismissProgressDialog(Activity context) {
+    private void dismissProgressDialog(final Activity context) {
         if (context != null) {
             context.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ProgressDialogManager.dismiss();
+                    if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
+                        ProgressDialogManager.dismiss();
+                    }
                 }
             });
         }

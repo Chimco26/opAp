@@ -1,5 +1,6 @@
 package com.operatorsapp.view.widgetViewHolders;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import androidx.recyclerview.widget.RecyclerView;
@@ -135,8 +136,11 @@ public class ProjectionViewHolder extends RecyclerView.ViewHolder {
         mCapsule.post(new Runnable() {
             @Override
             public void run() {
-                mProjectionCapsuleWidth = mRangeViewRv.getWidth();
-                setProjectionData(context, widget, finalCurrentFloat);
+                if (mCapsule.getContext() != null && mCapsule.getContext() instanceof Activity && !((Activity) mCapsule.getContext()).isDestroyed()) {
+
+                    mProjectionCapsuleWidth = mRangeViewRv.getWidth();
+                    setProjectionData(context, widget, finalCurrentFloat);
+                }
             }
         });
 //                    } else {
@@ -192,20 +196,26 @@ public class ProjectionViewHolder extends RecyclerView.ViewHolder {
             mProjectionView.post(new Runnable() {
                 @Override
                 public void run() {
-                    ViewGroup.MarginLayoutParams mItemViewParams4;
-                    mItemViewParams4 = (ViewGroup.MarginLayoutParams) mProjectionView.getLayoutParams();
-                    mItemViewParams4.width = (int) finalCurrentWidth;
-                    mProjectionView.requestLayout();
+                    if (mProjectionView.getContext() != null && mProjectionView.getContext() instanceof Activity && !((Activity) mProjectionView.getContext()).isDestroyed()) {
+
+                        ViewGroup.MarginLayoutParams mItemViewParams4;
+                        mItemViewParams4 = (ViewGroup.MarginLayoutParams) mProjectionView.getLayoutParams();
+                        mItemViewParams4.width = (int) finalCurrentWidth;
+                        mProjectionView.requestLayout();
+                    }
                 }
             });
             final float finalProjectionWidth = projectionWidth;
             mProjectionViewProjection.post(new Runnable() {
                 @Override
                 public void run() {
-                    ViewGroup.MarginLayoutParams mItemViewParams4;
-                    mItemViewParams4 = (ViewGroup.MarginLayoutParams) mProjectionViewProjection.getLayoutParams();
-                    mItemViewParams4.width = (int) finalProjectionWidth;
-                    mProjectionViewProjection.requestLayout();
+                    if (mProjectionView.getContext() != null && mProjectionView.getContext() instanceof Activity && !((Activity) mProjectionView.getContext()).isDestroyed()) {
+
+                        ViewGroup.MarginLayoutParams mItemViewParams4;
+                        mItemViewParams4 = (ViewGroup.MarginLayoutParams) mProjectionViewProjection.getLayoutParams();
+                        mItemViewParams4.width = (int) finalProjectionWidth;
+                        mProjectionViewProjection.requestLayout();
+                    }
                 }
             });
         }

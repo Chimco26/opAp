@@ -1,6 +1,8 @@
 package com.operatorsapp.view.widgetViewHolders;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -71,40 +73,43 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
         mTargetRl.post(new Runnable() {
             @Override
             public void run() {
-                float finalCurrentWidth = 0;
-                float finalProjectionWidth = 0;
-                if (widget.getTarget() != 0) {
-                    finalCurrentWidth = mTargetRl.getWidth() * (mCurrentValue / widget.getTarget());
-                    finalProjectionWidth = mTargetRl.getWidth() * (widget.getProjection() / widget.getTarget());
-                }
-                initValuesTv(widget);
-//                initWidgetHeight();
-                updateColors(widget);
+                if (mTargetRl.getContext() != null && mTargetRl.getContext() instanceof Activity && !((Activity) mTargetRl.getContext()).isDestroyed()) {
 
-                if (mCurrentValue < widget.getTarget()) {
-                    mProducedCompleteView.setVisibility(View.GONE);
-                    mProducedCompleteTv.setVisibility(View.GONE);
-                    mTargetReachedTv.setVisibility(View.INVISIBLE);
-                    showProducedValue();
-                    showTheoricalValue(widget);
-                    updateViewsWidth(finalCurrentWidth, finalProjectionWidth);
-                } else {
-                    updateViewsWidth(mTargetRl.getWidth(), 0);
-                    mProducedView.setBackgroundColor(mProducedTv.getContext().getResources().getColor(R.color.new_green));
-                    mProducedCompleteView.setVisibility(View.VISIBLE);
-                    mProducedCompleteTv.setVisibility(View.VISIBLE);
-                    mTargetReachedTv.setVisibility(View.VISIBLE);
-                    mProducedTv.setVisibility(View.GONE);
-                    mTheoricalTv.setVisibility(View.GONE);
-                    mTheoricalView.setVisibility(View.GONE);
-                    if (widget.getFieldName().equals("UnitsProducedOKjob")){
-                        mTargetReachedTv.setText(mTargetReachedTv.getContext().getResources().getString(R.string.you_ve_reached_the_production_target));
-                    }else {
-                        mTargetReachedTv.setText(mTargetReachedTv.getContext().getResources().getString(R.string.you_ve_reached_the_shift_production_target));
+                    float finalCurrentWidth = 0;
+                    float finalProjectionWidth = 0;
+                    if (widget.getTarget() != 0) {
+                        finalCurrentWidth = mTargetRl.getWidth() * (mCurrentValue / widget.getTarget());
+                        finalProjectionWidth = mTargetRl.getWidth() * (widget.getProjection() / widget.getTarget());
                     }
-                }
-                if (mCurrentValue == 0 && widget.getProjection() == 0) {
-                    setEmptyMode();
+                    initValuesTv(widget);
+//                initWidgetHeight();
+                    updateColors(widget);
+
+                    if (mCurrentValue < widget.getTarget()) {
+                        mProducedCompleteView.setVisibility(View.GONE);
+                        mProducedCompleteTv.setVisibility(View.GONE);
+                        mTargetReachedTv.setVisibility(View.INVISIBLE);
+                        showProducedValue();
+                        showTheoricalValue(widget);
+                        updateViewsWidth(finalCurrentWidth, finalProjectionWidth);
+                    } else {
+                        updateViewsWidth(mTargetRl.getWidth(), 0);
+                        mProducedView.setBackgroundColor(mProducedTv.getContext().getResources().getColor(R.color.new_green));
+                        mProducedCompleteView.setVisibility(View.VISIBLE);
+                        mProducedCompleteTv.setVisibility(View.VISIBLE);
+                        mTargetReachedTv.setVisibility(View.VISIBLE);
+                        mProducedTv.setVisibility(View.GONE);
+                        mTheoricalTv.setVisibility(View.GONE);
+                        mTheoricalView.setVisibility(View.GONE);
+                        if (widget.getFieldName().equals("UnitsProducedOKjob")) {
+                            mTargetReachedTv.setText(mTargetReachedTv.getContext().getResources().getString(R.string.you_ve_reached_the_production_target));
+                        } else {
+                            mTargetReachedTv.setText(mTargetReachedTv.getContext().getResources().getString(R.string.you_ve_reached_the_shift_production_target));
+                        }
+                    }
+                    if (mCurrentValue == 0 && widget.getProjection() == 0) {
+                        setEmptyMode();
+                    }
                 }
             }
         });
@@ -154,19 +159,25 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
         mProducedView.post(new Runnable() {
             @Override
             public void run() {
-                ViewGroup.MarginLayoutParams mItemViewParams4;
-                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mProducedView.getLayoutParams();
-                mItemViewParams4.width = (int) finalCurrentWidth;
-                mProducedView.requestLayout();
+                if (mProducedView.getContext() != null && mProducedView.getContext() instanceof Activity && !((Activity) mProducedView.getContext()).isDestroyed()) {
+
+                    ViewGroup.MarginLayoutParams mItemViewParams4;
+                    mItemViewParams4 = (ViewGroup.MarginLayoutParams) mProducedView.getLayoutParams();
+                    mItemViewParams4.width = (int) finalCurrentWidth;
+                    mProducedView.requestLayout();
+                }
             }
         });
         mTheoricalView.post(new Runnable() {
             @Override
             public void run() {
-                ViewGroup.MarginLayoutParams mItemViewParams4;
-                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mTheoricalView.getLayoutParams();
-                mItemViewParams4.width = (int) finalProjectionWidth;
-                mTheoricalView.requestLayout();
+                if (mTheoricalView.getContext() != null && mTheoricalView.getContext() instanceof Activity && !((Activity) mTheoricalView.getContext()).isDestroyed()) {
+
+                    ViewGroup.MarginLayoutParams mItemViewParams4;
+                    mItemViewParams4 = (ViewGroup.MarginLayoutParams) mTheoricalView.getLayoutParams();
+                    mItemViewParams4.width = (int) finalProjectionWidth;
+                    mTheoricalView.requestLayout();
+                }
             }
         });
     }
@@ -201,10 +212,13 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
         mDivider.post(new Runnable() {
             @Override
             public void run() {
-                ViewGroup.MarginLayoutParams mItemViewParams4;
-                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
-                mDivider.requestLayout();
+                if (mDivider.getContext() != null && mDivider.getContext() instanceof Activity && !((Activity) mDivider.getContext()).isDestroyed()) {
+
+                    ViewGroup.MarginLayoutParams mItemViewParams4;
+                    mItemViewParams4 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
+                    mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
+                    mDivider.requestLayout();
+                }
             }
         });
     }

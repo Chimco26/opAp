@@ -1,6 +1,6 @@
 package com.operatorsapp.adapters;
 
-import android.content.Context;
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,10 +48,14 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             viewHolder.mImgLy.post(new Runnable() {
                 @Override
                 public void run() {
-                    ViewGroup.MarginLayoutParams mItemViewParams4;
-                    mItemViewParams4 = (ViewGroup.MarginLayoutParams) viewHolder.mImgLy.getLayoutParams();
-                    mItemViewParams4.width = viewHolder.itemView.getResources().getDisplayMetrics().widthPixels / 6;
-                    viewHolder.mImgLy.requestLayout();
+                    if (viewHolder.itemView.getContext() != null
+                            && viewHolder.itemView.getContext() instanceof Activity
+                            && !((Activity) viewHolder.itemView.getContext()).isDestroyed()) {
+                        ViewGroup.MarginLayoutParams mItemViewParams4;
+                        mItemViewParams4 = (ViewGroup.MarginLayoutParams) viewHolder.mImgLy.getLayoutParams();
+                        mItemViewParams4.width = viewHolder.itemView.getResources().getDisplayMetrics().widthPixels / 6;
+                        viewHolder.mImgLy.requestLayout();
+                    }
                 }
             });
         }
@@ -69,7 +73,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
             viewHolder.mImg.setImageResource(R.drawable.ic_pdf);
 
-        }else {
+        } else {
 
             ImageLoader.getInstance().displayImage(mGalleryModels.get(position).getUrl(), viewHolder.mImg);
 

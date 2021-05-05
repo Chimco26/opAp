@@ -1,5 +1,6 @@
 package com.operatorsapp.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -241,36 +242,37 @@ public class LineChartTimeLarge extends FrameLayout {
         mChart.post(new Runnable() {
             @Override
             public void run() {
-
-                float max = highLimit;
-                float min = lowLimit;
-                for (ArrayList<Entry> entries : values) {
-                    for (Entry entry : entries) {
-                        float entryY = entry.getY();
-                        if (entryY > max) {
-                            max = entryY;
+                if (mChart.getContext() != null && mChart.getContext() instanceof Activity && !((Activity) mChart.getContext()).isDestroyed()) {
+                    float max = highLimit;
+                    float min = lowLimit;
+                    for (ArrayList<Entry> entries : values) {
+                        for (Entry entry : entries) {
+                            float entryY = entry.getY();
+                            if (entryY > max) {
+                                max = entryY;
+                            }
+                            if (entryY < min) {
+                                min = entryY;
+                            }
+                            lastValue[0] = entry;
                         }
-                        if (entryY < min) {
-                            min = entryY;
-                        }
-                        lastValue[0] = entry;
                     }
+
+                    float addition = ((max - min) / 5) + 1; // add percentage of full range on each side for better visibility,, adding some for min = max case;
+
+                    max += addition;
+
+                    YAxis leftAxis = mChart.getAxisLeft();
+                    leftAxis.resetAxisMaximum();//leftAxis.resetAxisMaxValue();
+                    leftAxis.resetAxisMinimum();//leftAxis.resetAxisMinValue();
+                    leftAxis.setAxisMinimum(min);
+                    leftAxis.setAxisMaximum(max);
+                    leftAxis.calculate(min, max);
+
+                    mChart.zoomOut(); // needed for refresh
+                    mChart.moveViewToX(lastValue[0].getX());
+                    mChart.invalidate();
                 }
-
-                float addition = ((max - min) / 5) + 1; // add percentage of full range on each side for better visibility,, adding some for min = max case;
-
-                max += addition;
-
-                YAxis leftAxis = mChart.getAxisLeft();
-                leftAxis.resetAxisMaximum();//leftAxis.resetAxisMaxValue();
-                leftAxis.resetAxisMinimum();//leftAxis.resetAxisMinValue();
-                leftAxis.setAxisMinimum(min);
-                leftAxis.setAxisMaximum(max);
-                leftAxis.calculate(min, max);
-
-                mChart.zoomOut(); // needed for refresh
-                mChart.moveViewToX(lastValue[0].getX());
-                mChart.invalidate();
             }
         });
     }
