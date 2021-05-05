@@ -2,14 +2,15 @@ package com.operatorsapp.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.common.Event;
 import com.example.common.StandardResponse;
@@ -28,6 +29,7 @@ import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.managers.PersistenceManager;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import static com.operatorsapp.fragments.ActionBarAndEventsFragment.MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB;
@@ -38,8 +40,8 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
     private ViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
     private OnViewPagerListener mListener;
-    private ArrayList<Fragment> mFragmentList = new ArrayList<>();
-//    private SwipeRefreshLayout mSwipeRefresh;
+    private WeakReference<ArrayList<Fragment>> mFragmentList;
+    //    private SwipeRefreshLayout mSwipeRefresh;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
     private View mCycleWarningView;
     private GoToScreenListener mOnGoToScreenListener;
@@ -57,6 +59,7 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        mFragmentList = new WeakReference<>(new ArrayList<Fragment>());
         super.onCreate(savedInstanceState);
     }
 
@@ -95,11 +98,11 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.frament_view_pager, container, false);
 
-        if (getActivity() != null) {
+        if (getActivity() != null && mFragmentList.get() != null) {
 
             initCycleAlarmView(view);
             mPager = view.findViewById(R.id.FVP_view_pager);
-            mPagerAdapter = new ScreenSlidePagerAdapter(getActivity().getSupportFragmentManager(), mFragmentList);
+            mPagerAdapter = new ScreenSlidePagerAdapter(getActivity().getSupportFragmentManager(), mFragmentList.get());
             mPager.setAdapter(mPagerAdapter);
 
             mListener.onViewPagerCreated();
@@ -111,8 +114,10 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
                 @Override
                 public void onPageSelected(int position) {
-                    if (mFragmentList.get(position) instanceof RecipeFragment){
-                        mListener.onRecipeFragmentShown();
+                    if (mFragmentList != null && mFragmentList.get() != null) {
+                        if (mFragmentList.get().get(position) instanceof RecipeFragment) {
+                            mListener.onRecipeFragmentShown();
+                        }
                     }
                 }
 
@@ -126,13 +131,18 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
         return view;
     }
 
-    public boolean isRecipeShown(){
+    public boolean isRecipeShown() {
         try {
-            return mFragmentList.get(mPager.getCurrentItem()) instanceof RecipeFragment;
-        }catch (Exception e){
+            if (mFragmentList != null && mFragmentList.get() != null) {
+                return mFragmentList.get().get(mPager.getCurrentItem()) instanceof RecipeFragment;
+            }else {
+                return false;
+            }
+        } catch (Exception e) {
             return false;
         }
     }
+
     private void initCycleAlarmView(View view) {
         mCycleWarningView = view.findViewById(R.id.FAAE_cycle_alarm_view);
         view.findViewById(R.id.FAAE_cycle_alarm_view).findViewById(R.id.NPAD_btn).setOnClickListener(new View.OnClickListener() {
@@ -193,9 +203,9 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
     public void addFragment(Fragment fragment) {
 
-        if (mPagerAdapter != null) {
+        if (mPagerAdapter != null && mFragmentList != null && mFragmentList.get() != null) {
 
-            mFragmentList.add(fragment);
+            mFragmentList.get().add(fragment);
 
             mPagerAdapter.notifyDataSetChanged();
 
@@ -216,9 +226,9 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 //
 //    }
 
-    private void updateDirection(){
+    private void updateDirection() {
 
-        if (getActivity() != null && getActivity().getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL){
+        if (getActivity() != null && getActivity().getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
 
             mPager.setCurrentItem(mPagerAdapter.getCount() - 1);
         }

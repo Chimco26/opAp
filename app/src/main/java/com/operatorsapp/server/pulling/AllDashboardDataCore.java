@@ -48,6 +48,7 @@ import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -70,7 +71,7 @@ public class AllDashboardDataCore{
 
     private static final int START_DELAY = 0;
     private static boolean isOnlineChecking = false;
-    private final AllDashboardDataCoreListener mListener;
+    private final WeakReference<AllDashboardDataCoreListener> mListener;
     private EmeraldJobBase mJob;
 
     private GetMachineStatusNetworkBridgeInterface mGetMachineStatusNetworkBridgeInterface;
@@ -112,7 +113,7 @@ public class AllDashboardDataCore{
         mShiftLogPersistenceManagerInterface = shiftLogPersistenceManagerInterface;
         mShiftLogNetworkBridgeInterface = shiftLogNetworkBridgeInterface;
 
-        mListener = listener;
+        mListener = new WeakReference<>(listener);
 
     }
 
@@ -163,7 +164,9 @@ public class AllDashboardDataCore{
             @Override
             protected void executeJob(final JobBase.OnJobFinishedListener onJobFinishedListener) {
 
-                mListener.onExecuteJob(onJobFinishedListener);
+                if(mListener != null && mListener.get() != null) {
+                    mListener.get().onExecuteJob(onJobFinishedListener);
+                }
                 //sendRequestForPolling(onJobFinishedListener, jobId);
             }
         };
@@ -214,7 +217,9 @@ public class AllDashboardDataCore{
         catch (IOException e)          { e.printStackTrace(); }
         catch (InterruptedException e) { e.printStackTrace(); }
 
-        if (!isOnline) mListener.onNoInternetConnection();
+        if (!isOnline && mListener != null && mListener.get() != null){
+            mListener.get().onNoInternetConnection();
+        }
 
 //        HandlerThread handlerThread = new HandlerThread("HandlerThread");
 //        handlerThread.start();
