@@ -267,7 +267,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private RefreshPollingBroadcast mRefreshBroadcast = null;
     private ArrayList<DashboardUICallbackListener> mDashboardUICallbackListenerList = new ArrayList<>();
     private WidgetFragment mWidgetFragment;
-    private ActionBarAndEventsFragment mActionBarAndEventsFragment;
+    private WeakReference<ActionBarAndEventsFragment> mActionBarAndEventsFragment;
     //    private View mContainer2;
     private ArrayList<Float> mSelectedEvents;
     private WeakReference<ReportStopReasonFragment> mReportStopReasonFragment;
@@ -438,7 +438,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         initDataListeners();
 
-        mActionBarAndEventsFragment = ActionBarAndEventsFragment.newInstance();
+        mActionBarAndEventsFragment = new WeakReference<>(ActionBarAndEventsFragment.newInstance());
 
 //        mContainer2 = findViewById(R.id.fragments_container_widget);
 
@@ -448,7 +448,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         try {
 
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mActionBarAndEventsFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mActionBarAndEventsFragment.get()).commit();
 
             getSupportFragmentManager().addOnBackStackChangedListener(getListener());
         } catch (IllegalStateException ignored) {
@@ -712,8 +712,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             initLenoxDashboardFragment();
 
-            if (mActionBarAndEventsFragment != null) {
-                mActionBarAndEventsFragment.setMachines(mMachines);
+            if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
+                mActionBarAndEventsFragment.get().setMachines(mMachines);
             }
         }
 
@@ -771,12 +771,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             } catch (IllegalStateException ignored) {
             }
         }
-        if (mActionBarAndEventsFragment != null) {
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
 
             try {
 
                 FragmentManager fm = getSupportFragmentManager();
-                fm.beginTransaction().remove(mActionBarAndEventsFragment).commit();
+                fm.beginTransaction().remove(mActionBarAndEventsFragment.get()).commit();
             } catch (IllegalStateException ignored) {
             }
         }
@@ -796,9 +796,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 Fragment fragment = getVisibleFragment();
 
-                if (mActionBarAndEventsFragment != null) {
+                if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
 
-                    mActionBarAndEventsFragment.setVisiblefragment(fragment);
+                    mActionBarAndEventsFragment.get().setVisiblefragment(fragment);
                 }
 
                 if (fragment != null) {
@@ -827,8 +827,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 fragment instanceof ReportStopReasonFragment ||
                 fragment instanceof SelectStopReasonFragment ||
                 fragment instanceof ReportShiftFragment) {
-            if (mActionBarAndEventsFragment != null) {
-                mActionBarAndEventsFragment.setActionBar();
+            if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
+                mActionBarAndEventsFragment.get().setActionBar();
             }
             first = !first;
         }
@@ -907,9 +907,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         if (!ignoreFromOnPause) {
 
-            if (mActionBarAndEventsFragment != null) {
+            if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
 
-                mActionBarAndEventsFragment.setVisiblefragment(getVisibleFragment());
+                mActionBarAndEventsFragment.get().setVisiblefragment(getVisibleFragment());
             }
 
             registerReceiver();
@@ -1324,22 +1324,22 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 findViewById(R.id.FAAE_white_filter).setVisibility(View.GONE);
             }
         }
-        if (mActionBarAndEventsFragment != null) {
-            mActionBarAndEventsFragment.setWhiteFilter(show);
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
+            mActionBarAndEventsFragment.get().setWhiteFilter(show);
         }
     }
 
     private void setFilterWarningText(boolean show) {
         Fragment fragment = getVisibleFragment();
-        if (mActionBarAndEventsFragment != null) {
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
             if (fragment instanceof ActionBarAndEventsFragment ||
                     fragment instanceof RecipeFragment ||
                     fragment instanceof WidgetFragment ||
                     fragment instanceof ReportStopReasonFragment ||
                     fragment instanceof SelectStopReasonFragment) {
-                mActionBarAndEventsFragment.setCycleWarningViewShow(show);
+                mActionBarAndEventsFragment.get().setCycleWarningViewShow(show);
             } else {
-                mActionBarAndEventsFragment.setCycleWarningViewShow(false);
+                mActionBarAndEventsFragment.get().setCycleWarningViewShow(false);
             }
         }
     }
@@ -1575,13 +1575,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 @Override
                 public void onDismissSetupEndDialog() {
                     mSetupEndDialog = null;
-                    if (mActionBarAndEventsFragment != null) {
-                        mActionBarAndEventsFragment.SetupEndDialogShow(false);
+                    if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
+                        mActionBarAndEventsFragment.get().SetupEndDialogShow(false);
                     }
                 }
             });
-            if (mActionBarAndEventsFragment != null) {
-                mActionBarAndEventsFragment.SetupEndDialogShow(true);
+            if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
+                mActionBarAndEventsFragment.get().SetupEndDialogShow(true);
             }
         }
     }
@@ -1908,8 +1908,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Log.i(TAG, "onChangeMachineRequest() command received from settings screen");
 
         mSelectMachineFragment = new WeakReference<>(SelectMachineFragment.newInstance());
-        if (mActionBarAndEventsFragment != null) {
-            mActionBarAndEventsFragment.setVisiblefragment(mSelectMachineFragment.get());
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
+            mActionBarAndEventsFragment.get().setVisiblefragment(mSelectMachineFragment.get());
         }
         getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, mSelectMachineFragment.get()).commit();
         showReportBtn(false);
@@ -1927,9 +1927,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         intent.putExtra(QC_EDIT_MODE, editMode);
         ignoreFromOnPause = true;
 
-        if (mActionBarAndEventsFragment != null) {
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
 
-            mActionBarAndEventsFragment.setFromAnotherActivity(true);
+            mActionBarAndEventsFragment.get().setFromAnotherActivity(true);
         }
         startActivityForResult(intent, QC_ACTIVITY_RESULT_CODE);
     }
@@ -1953,9 +1953,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         startActivity(intent);
         ignoreFromOnPause = true;
 
-        if (mActionBarAndEventsFragment != null) {
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
 
-            mActionBarAndEventsFragment.setFromAnotherActivity(true);
+            mActionBarAndEventsFragment.get().setFromAnotherActivity(true);
         }
     }
 
@@ -2098,14 +2098,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
 //        }
         Fragment visible = getVisibleFragment();
-        if (mActionBarAndEventsFragment != null &&
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null &&
                 visible != null && (visible instanceof ActionBarAndEventsFragment
                 || visible instanceof WidgetFragment
                 || visible instanceof RecipeFragment
                 || visible instanceof SelectStopReasonFragment
                 || visible instanceof ReportStopReasonFragment)) {
 
-            return mActionBarAndEventsFragment.getCroutonRoot();
+            return mActionBarAndEventsFragment.get().getCroutonRoot();
 
         }
         return R.id.parent_layouts;
@@ -2190,7 +2190,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onCroutonDismiss() {
 
 //        mActionBarAndEventsFragment.openNextDialog();
-        mActionBarAndEventsFragment.setAlertChecked();
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
+
+            mActionBarAndEventsFragment.get().setAlertChecked();
+        }
     }
 
     @Override
@@ -2254,9 +2257,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Intent intent = new Intent(DashboardActivity.this, TaskActivity.class);
         ignoreFromOnPause = true;
 
-        if (mActionBarAndEventsFragment != null) {
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
 
-            mActionBarAndEventsFragment.setFromAnotherActivity(true);
+            mActionBarAndEventsFragment.get().setFromAnotherActivity(true);
         }
         startActivityForResult(intent, TASK_ACTIVITY_RESULT_CODE);
     }
@@ -2266,8 +2269,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         if (PersistenceManager.getInstance().getMachineId() == -1 && !(getVisibleFragment() instanceof SelectMachineFragment)) {
             mSelectMachineFragment = new WeakReference<>(SelectMachineFragment.newInstance());
-            if (mActionBarAndEventsFragment != null) {
-                mActionBarAndEventsFragment.setVisiblefragment(mSelectMachineFragment.get());
+            if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
+                mActionBarAndEventsFragment.get().setVisiblefragment(mSelectMachineFragment.get());
             }
             getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, mSelectMachineFragment.get()).commit();
             showReportBtn(false);
@@ -2366,9 +2369,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             mReportStopReasonFragment.get().setSelectedEvents(mSelectedEvents);
         }
-        if (mActionBarAndEventsFragment != null) {
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
 
-            mActionBarAndEventsFragment.setSelectedEvents(mSelectedEvents);
+            mActionBarAndEventsFragment.get().setSelectedEvents(mSelectedEvents);
         }
         if (mSelectedEvents.size() == 0) {
             if (mSelectStopReasonFragment != null) {
@@ -2389,9 +2392,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mSelectedEvents = null;
 
-        if (mActionBarAndEventsFragment != null) {
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
 
-            mActionBarAndEventsFragment.disableSelectMode();
+            mActionBarAndEventsFragment.get().disableSelectMode();
         }
 
         if (mReportStopReasonFragment != null) {
@@ -2428,9 +2431,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         ignoreFromOnPause = true;
 
-        if (mActionBarAndEventsFragment != null) {
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
 
-            mActionBarAndEventsFragment.setFromAnotherActivity(true);
+            mActionBarAndEventsFragment.get().setFromAnotherActivity(true);
         }
     }
 
@@ -2488,8 +2491,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialogInterface) {
-                    if (mActionBarAndEventsFragment != null) {
-                        mActionBarAndEventsFragment.setProductionStatusVisible();
+            if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
+                        mActionBarAndEventsFragment.get().setProductionStatusVisible();
                     }
                 }
             });
@@ -2498,8 +2501,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             postProductionMode(productionModeId, PersistenceManager.getInstance().getMachineId());
         }
 
-        if (mActionBarAndEventsFragment != null) {
-            mActionBarAndEventsFragment.blockStatusSpinner();
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
+            mActionBarAndEventsFragment.get().blockStatusSpinner();
         }
     }
 
@@ -2747,9 +2750,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 mReportStopReasonFragment = null;
 
-                if (mActionBarAndEventsFragment != null) {
+            if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
 
-                    mActionBarAndEventsFragment.disableSelectMode();
+                    mActionBarAndEventsFragment.get().disableSelectMode();
                 }
                 if (mSelectedEvents != null) {
                     mSelectedEvents = null;
@@ -2936,9 +2939,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             ignoreFromOnPause = true;
 
-            if (mActionBarAndEventsFragment != null) {
+            if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
 
-                mActionBarAndEventsFragment.setFromAnotherActivity(true);
+                mActionBarAndEventsFragment.get().setFromAnotherActivity(true);
             }
 
         }
@@ -3089,8 +3092,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onReportStopEvent() {
-        if (mActionBarAndEventsFragment != null) {
-            mActionBarAndEventsFragment.startSelectMode(null, null);
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
+            mActionBarAndEventsFragment.get().startSelectMode(null, null);
         }
     }
 
@@ -3531,8 +3534,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         onBackPressed();
         ProgressDialogManager.show(this);
         dashboardDataStartPolling();
-        if (mActionBarAndEventsFragment.isVisible()) {
-            mActionBarAndEventsFragment.blockOperatorsSpinner();
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
+
+            if (mActionBarAndEventsFragment.get().isVisible()) {
+                mActionBarAndEventsFragment.get().blockOperatorsSpinner();
+            }
         }
     }
 
@@ -3558,9 +3564,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         intent.putExtra(QCActivity.QC_IS_FROM_SELECT_MACHINE_SCREEN, true);
         ignoreFromOnPause = true;
 
-        if (mActionBarAndEventsFragment != null) {
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
 
-            mActionBarAndEventsFragment.setFromAnotherActivity(true);
+            mActionBarAndEventsFragment.get().setFromAnotherActivity(true);
         }
         startActivityForResult(intent, QC_ACTIVITY_RESULT_CODE);
     }
@@ -3579,15 +3585,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
         }
         showReportBtn(true);
-        mActionBarAndEventsFragment.setActionBar();
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
+
+            mActionBarAndEventsFragment.get().setActionBar();
+        }
     }
 
     @Override
     public void onMachineSelected() {
         cleanEvents();
         onCloseSelectMachine();
-        if (mActionBarAndEventsFragment != null) {
-            mActionBarAndEventsFragment.clearEventsRecycler();
+        if (mActionBarAndEventsFragment != null && mActionBarAndEventsFragment.get() != null) {
+            mActionBarAndEventsFragment.get().clearEventsRecycler();
         }
         ProgressDialogManager.show(this);
         dashboardDataStartPolling();

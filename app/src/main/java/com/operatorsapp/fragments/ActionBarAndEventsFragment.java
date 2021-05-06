@@ -147,6 +147,7 @@ import com.ravtech.david.sqlcore.DatabaseHelper;
 
 import org.litepal.crud.DataSupport;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -232,7 +233,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private TextView mSelectedNumberTv;
     private View mSelectedNumberLy;
     private Event mLastEvent;
-    private Fragment mVisiblefragment;
+    private WeakReference<Fragment> mVisiblefragment;
     private boolean mFromAnotherActivity;
     private TextView mMinDurationText;
     private LinearLayout mMinDurationLil;
@@ -1311,13 +1312,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
         if (actionBar != null) {
 
-            if (mVisiblefragment != null && !(mVisiblefragment instanceof ActionBarAndEventsFragment
-                    || mVisiblefragment instanceof WidgetFragment
-                    || mVisiblefragment instanceof RecipeFragment
-                    || mVisiblefragment instanceof SelectStopReasonFragment
-                    || mVisiblefragment instanceof ReportStopReasonFragment
-                    || mVisiblefragment instanceof SelectMachineFragment
-                    || mVisiblefragment instanceof ReportShiftFragment)) {
+            if (mVisiblefragment != null && mVisiblefragment.get() != null && !(mVisiblefragment.get() instanceof ActionBarAndEventsFragment
+                    || mVisiblefragment.get() instanceof WidgetFragment
+                    || mVisiblefragment.get() instanceof RecipeFragment
+                    || mVisiblefragment.get() instanceof SelectStopReasonFragment
+                    || mVisiblefragment.get() instanceof ReportStopReasonFragment
+                    || mVisiblefragment.get() instanceof SelectMachineFragment
+                    || mVisiblefragment.get() instanceof ReportShiftFragment)) {
                 return;
             }
 
@@ -3777,13 +3778,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     public void setVisiblefragment(Fragment visibleFragment) {
 
-        mVisiblefragment = visibleFragment;
+        mVisiblefragment = new WeakReference<>(visibleFragment);
 
         if (mToolBarView != null) {
 
-            if (mVisiblefragment instanceof ActionBarAndEventsFragment ||
-                    mVisiblefragment instanceof RecipeFragment ||
-                    mVisiblefragment instanceof WidgetFragment) {
+            if (mVisiblefragment.get() instanceof ActionBarAndEventsFragment ||
+                    mVisiblefragment.get() instanceof RecipeFragment ||
+                    mVisiblefragment.get() instanceof WidgetFragment) {
 
                 mToolBarView.findViewById(R.id.toolbar_job_spinner).setVisibility(View.VISIBLE);
 
