@@ -358,7 +358,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                 Dispatcher dispatcher = new okhttp3.Dispatcher();
                 dispatcher.setMaxRequests(1);
                 HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-                loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
                 if (okHttpClient == null) {
                     if (timeout >= 0 && timeUnit != null) {
                         okHttpClient = new OkHttpClient.Builder()

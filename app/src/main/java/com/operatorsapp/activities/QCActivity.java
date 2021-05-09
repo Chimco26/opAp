@@ -137,6 +137,12 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mCroutonCreator = null;
+    }
+
     private void configureToolbar(){
         // Get the toolbar view inside the activity layout
         Toolbar toolbar = findViewById(R.id.AQC_toolbar);

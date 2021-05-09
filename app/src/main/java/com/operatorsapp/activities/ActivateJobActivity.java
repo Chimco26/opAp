@@ -563,6 +563,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
         isActive = false;
+        mCroutonCreator = null;
     }
 
     @Override

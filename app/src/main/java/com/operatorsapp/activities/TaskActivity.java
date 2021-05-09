@@ -86,6 +86,12 @@ public class TaskActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mCroutonCreator = null;
+    }
+
+    @Override
     public void onShowCroutonRequest(SpannableStringBuilder croutonMessage,
                                      int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
 

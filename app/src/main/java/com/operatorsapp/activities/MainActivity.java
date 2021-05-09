@@ -264,6 +264,12 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mCroutonCreator = null;
+    }
+
+    @Override
     public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
         if (mCroutonCreator != null) {
             mCroutonCreator.showCrouton(this, croutonMessage, croutonDurationInMilliseconds, viewGroup, croutonType);

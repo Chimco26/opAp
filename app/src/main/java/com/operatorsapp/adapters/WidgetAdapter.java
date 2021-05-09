@@ -10,8 +10,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.common.permissions.WidgetInfo;
+import com.github.mikephil.charting.jobs.MoveViewJob;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
@@ -223,6 +225,11 @@ public class WidgetAdapter extends Adapter {
                 mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth,
                 WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(),
                 WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean());
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        MoveViewJob.getInstance(null, 0, 0, null, null);
     }
 
     @SuppressLint("SimpleDateFormat")

@@ -21,6 +21,7 @@ import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.example.common.permissions.WidgetInfo;
 import com.example.oppapplog.OppAppLogger;
+import com.github.mikephil.charting.jobs.MoveViewJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
@@ -214,6 +215,8 @@ public class WidgetFragment extends Fragment implements
         mDashboardCentralContainerListener = null;
         mShowDashboardCroutonListener = null;
         OppAppLogger.d(LOG_TAG, "onDetach(), end ");
+        MoveViewJob.getInstance(null, 0, 0, null, null);
+
     }
 
     @Override
