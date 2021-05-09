@@ -970,6 +970,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         pollingBackup(false);
         mVersionCheckHandler.removeCallbacksAndMessages(null);
+        collapseNotificationHandler.removeCallbacks(null);
 
         mIsCollapse = false;
         if (!mIsUpgrading && PersistenceManager.getInstance().isStatusBarLocked()) {

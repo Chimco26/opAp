@@ -48,6 +48,7 @@ import com.operatorsapp.utils.broadcast.BroadcastAlarmManager;
 
 import org.acra.ACRA;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     private static final int STORAGE_REQUEST_CODE = 1;
     public static final String MACHINE_LIST = "MACHINE_LIST";
     private CroutonCreator mCroutonCreator;
-    private Fragment mCurrentFragment;
+    private WeakReference<Fragment> mCurrentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,9 +125,9 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        if (mCurrentFragment != null) {
+        if (mCurrentFragment != null && mCurrentFragment.get() != null) {
             FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().remove(mCurrentFragment).commit();
+            fm.beginTransaction().remove(mCurrentFragment.get()).commit();
         }
         super.onSaveInstanceState(outState, outPersistentState);
     }
@@ -143,11 +144,11 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         }
         try {
             OppAppLogger.d(TAG, "goToFragment(), " + fragment.getClass().getSimpleName());
-            mCurrentFragment = fragment;
+            mCurrentFragment = new WeakReference<>(fragment);
             if (addToBackStack) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).addToBackStack("").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment.get()).addToBackStack("").commit();
             } else {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment.get()).commit();
             }
         } catch (Exception e) {
 
