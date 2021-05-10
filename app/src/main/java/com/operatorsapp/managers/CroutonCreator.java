@@ -104,6 +104,12 @@ public class CroutonCreator {
         }
     }
 
+    public void cancel() {
+        if (mCurrentCrouton != null && mCurrentCrouton.mCrouton != null && mCurrentCrouton.mCrouton.get() != null) {
+            mCurrentCrouton.mCrouton.get().cancel();
+        }
+    }
+
     private boolean checkIfConnectivityCroutonIsDisplayed() {
         if (!mCurrentCrouton.isEmpty() && mCurrentCrouton.getCroutonType().equals(CroutonType.CONNECTIVITY)) {
             OppAppLogger.v(LOG_TAG, "showErrorCrouton(), connectivity crouton is displayed");
@@ -235,7 +241,7 @@ public class CroutonCreator {
         Crouton getCrouton() {
             if (mCrouton != null) {
                 return mCrouton.get();
-            }else {
+            } else {
                 return null;
             }
         }

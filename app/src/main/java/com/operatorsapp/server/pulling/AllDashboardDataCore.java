@@ -148,6 +148,9 @@ public class AllDashboardDataCore{
         if (mStopEventsLineCallback != null) {
             mStopEventsLineCallback = null;
         }
+        if (mMachinePermissionsCallback != null) {
+            mMachinePermissionsCallback = null;
+        }
     }
 
     public void stopTimer() {

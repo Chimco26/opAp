@@ -146,6 +146,11 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
     }
 
+    public void clearTouchListener() {
+        mEditNumberEt.setOnTouchListener(null);
+        mEditCycleEt.setOnTouchListener(null);
+    }
+
     private void initUnitAndWeight(View unitTv, View weightTv) {
         switch (PersistenceManager.getInstance().getReportRejectDefaultUnits()) {
             case 1:

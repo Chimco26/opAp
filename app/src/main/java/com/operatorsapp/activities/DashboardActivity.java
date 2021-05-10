@@ -143,6 +143,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.model.SendRejectObject;
+import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.model.event.QCTestEvent;
 import com.operatorsapp.model.event.ReportProductionEvent;
 import com.operatorsapp.server.NetworkManager;
@@ -160,6 +161,8 @@ import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
+import com.operatorsapp.server.responses.Notification;
+import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.ResponseKPIS;
 import com.operatorsapp.server.responses.StopReasonsGroup;
 import com.operatorsapp.utils.ChangeLang;
@@ -339,12 +342,78 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 public void run() {
                     // cancel collapse loop after 1 minute
                     if (DashboardActivity.this != null && !DashboardActivity.this.isDestroyed()) {
-                        collapseNotificationHandler.removeCallbacks(null);
+                        collapseNotificationHandler.removeCallbacksAndMessages(null);
                         mIsCollapse = false;
                     }
                 }
             }, 1000 * 60);
         }
+
+    }
+
+    private void getNotifications() {
+
+//        ProgressDialogManager.show(this);
+        NetworkManager.getInstance().getNotificationHistory(new Callback<NotificationHistoryResponse>() {
+            @Override
+            public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
+
+                if (response.body() != null && response.body().getError().getErrorDesc() == null) {
+
+                    ArrayList<TechCallInfo> techList = new ArrayList<>();
+
+                    if (response.body().getmNotificationsList() != null) {
+                        for (Notification not : response.body().getmNotificationsList()) {
+                            not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
+                            not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
+
+                            if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN && not.isOpenCall()) {
+                                boolean isNew = true;
+                                for (TechCallInfo techCall : techList) {
+                                    if (techCall.getmMachineId() == 0) {
+                                        techCall.setmMachineId(not.getMachineID());
+                                    }
+                                    if (not.getmNotificationID() == techCall.getmNotificationId()) {
+                                        isNew = false;
+                                        break;
+                                    }
+                                }
+                                if (isNew) {
+                                    techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmTitle(), not.getmAdditionalText(),
+                                            TimeUtils.getDateForNotification(not.getmSentTime()).getTime(), not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID()));
+                                }
+                            }
+                        }
+                        PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
+                    } else {
+                        PersistenceManager.getInstance().setNotificationHistory(new ArrayList<Notification>());
+                    }
+
+                    PersistenceManager.getInstance().setCalledTechnicianList(techList);
+                    if (techList.size() > 0) {
+                        PersistenceManager.getInstance().setRecentTechCallId(techList.get(0).getmNotificationId());
+                    } else {
+                        PersistenceManager.getInstance().setRecentTechCallId(0);
+                    }
+//                    ProgressDialogManager.dismiss();
+//                    finish();
+                } else {
+//                    ProgressDialogManager.dismiss();
+                    PersistenceManager.getInstance().setNotificationHistory(null);
+//                    finish();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
+
+//                ProgressDialogManager.dismiss();
+                PersistenceManager.getInstance().setNotificationHistory(null);
+//                finish();
+
+            }
+        });
 
     }
 
@@ -426,6 +495,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //        // Analytics
 //        OperatorApplication application = (OperatorApplication) ƒgetApplication();
 //        mTracker = application.getDefaultTracker();
+
+        getNotifications();
 
         mMachines = getIntent().getExtras().<Machine>getParcelableArrayList(MainActivity.MACHINE_LIST);
 
@@ -969,15 +1040,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         MoveViewJob.getInstance(null, 0, 0, null, null);
 
         if (mReportModeTimer != null) {
+            mReportModeTimer.purge();
             mReportModeTimer.cancel();
             mReportModeTimer = null;
         }
-        mCroutonCreator = null;
+        if (mCroutonCreator != null) {
+            mCroutonCreator.cancel();
+            mCroutonCreator = null;
+        }
         removeBroadcasts();
 
-        pollingBackup(false);
+        clearPolling();
+
         mVersionCheckHandler.removeCallbacksAndMessages(null);
-        collapseNotificationHandler.removeCallbacks(null);
+        collapseNotificationHandler.removeCallbacksAndMessages(null);
         collapseNotificationHandler = null;
 
         mIsCollapse = false;
@@ -2268,13 +2344,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onOpenTaskActivity() {
-        pollingBackup(false);
-        mAllDashboardDataCore.stopPolling();
-        mAllDashboardDataCore.unregisterListener();
-        mAllDashboardDataCore.stopTimer();
-        mReportFieldsForMachineCore.stopPolling();
-        mReportFieldsForMachineCore.unregisterListener();
-        NetworkManager.getInstance().clearPollingRequest();
+        clearPolling();
 
         Intent intent = new Intent(DashboardActivity.this, TaskActivity.class);
         ignoreFromOnPause = true;
@@ -2284,6 +2354,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mActionBarAndEventsFragment.get().setFromAnotherActivity(true);
         }
         startActivityForResult(intent, TASK_ACTIVITY_RESULT_CODE);
+    }
+
+    private void clearPolling() {
+        pollingBackup(false);
+        if (mAllDashboardDataCore != null) {
+            mAllDashboardDataCore.stopPolling();
+            mAllDashboardDataCore.unregisterListener();
+            mAllDashboardDataCore.stopTimer();
+        }
+        if (mReportFieldsForMachineCore != null) {
+            mReportFieldsForMachineCore.stopPolling();
+            mReportFieldsForMachineCore.unregisterListener();
+        }
+        NetworkManager.getInstance().clearPollingRequest();
     }
 
     @Override
@@ -2341,19 +2425,21 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mReportModeTimer = new Timer();
         mReportModeTimer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        if (DashboardActivity.this != null && !DashboardActivity.this.isDestroyed()) {
-                            if (timeCounter[0] == 60) {
-                                onClearAllSelectedEvents();
-                                mReportModeTimer.cancel();
-                                return;
-                            }
+                if (DashboardActivity.this != null && !DashboardActivity.this.isDestroyed()) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            if (DashboardActivity.this != null && !DashboardActivity.this.isDestroyed()) {
+                                if (timeCounter[0] == 60) {
+                                    onClearAllSelectedEvents();
+                                    mReportModeTimer.cancel();
+                                    return;
+                                }
 
-                            timeCounter[0]++;
+                                timeCounter[0]++;
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         }, 0, 1000);
     }

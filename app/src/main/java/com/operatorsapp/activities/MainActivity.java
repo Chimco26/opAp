@@ -35,7 +35,6 @@ import com.operatorsapp.fragments.LoginFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.responses.Notification;
@@ -55,9 +54,10 @@ import java.util.Calendar;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-//import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.app.AlarmManager.INTERVAL_DAY;
+
+//import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements GoToScreenListener, OnCroutonRequestListener, Thread.UncaughtExceptionHandler {
 
@@ -175,73 +175,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         startActivity(intent);
 
         //now we have machineID and can get notifications history
-        getNotifications();
-    }
-
-    private void getNotifications() {
-
-//        ProgressDialogManager.show(this);
-        NetworkManager.getInstance().getNotificationHistory(new Callback<NotificationHistoryResponse>() {
-            @Override
-            public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
-
-                if (response.body() != null && response.body().getError().getErrorDesc() == null) {
-
-                    ArrayList<TechCallInfo> techList = new ArrayList<>();
-
-                    if (response.body().getmNotificationsList() != null) {
-                        for (Notification not : response.body().getmNotificationsList()) {
-                            not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
-                            not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
-
-                            if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN && not.isOpenCall()) {
-                                boolean isNew = true;
-                                for (TechCallInfo techCall : techList) {
-                                    if (techCall.getmMachineId() == 0) {
-                                        techCall.setmMachineId(not.getMachineID());
-                                    }
-                                    if (not.getmNotificationID() == techCall.getmNotificationId()) {
-                                        isNew = false;
-                                        break;
-                                    }
-                                }
-                                if (isNew) {
-                                    techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmTitle(), not.getmAdditionalText(),
-                                            TimeUtils.getDateForNotification(not.getmSentTime()).getTime(), not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID()));
-                                }
-                            }
-                        }
-                        PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
-                    }else {
-                        PersistenceManager.getInstance().setNotificationHistory(new ArrayList<Notification>());
-                    }
-
-                    PersistenceManager.getInstance().setCalledTechnicianList(techList);
-                    if (techList.size() > 0) {
-                        PersistenceManager.getInstance().setRecentTechCallId(techList.get(0).getmNotificationId());
-                    } else {
-                        PersistenceManager.getInstance().setRecentTechCallId(0);
-                    }
-//                    ProgressDialogManager.dismiss();
-                    finish();
-                } else {
-//                    ProgressDialogManager.dismiss();
-                    PersistenceManager.getInstance().setNotificationHistory(null);
-                    finish();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
-
-//                ProgressDialogManager.dismiss();
-                PersistenceManager.getInstance().setNotificationHistory(null);
-                finish();
-
-            }
-        });
-
+//        getNotifications();
     }
 
     private void updateAndroidSecurityProvider(Activity callingActivity) {
@@ -266,7 +200,10 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mCroutonCreator = null;
+        if (mCroutonCreator != null) {
+            mCroutonCreator.cancel();
+            mCroutonCreator = null;
+        }
     }
 
     @Override

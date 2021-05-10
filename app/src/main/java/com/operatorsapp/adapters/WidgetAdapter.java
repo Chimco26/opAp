@@ -229,7 +229,17 @@ public class WidgetAdapter extends Adapter {
 
     @Override
     public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        detach(recyclerView);
+    }
+
+    public void detach(@NonNull RecyclerView recyclerView) {
         MoveViewJob.getInstance(null, 0, 0, null, null);
+        int childCOunt = recyclerView.getChildCount();
+        for (int i = 0; i < childCOunt; i++){
+            if (recyclerView.getChildViewHolder(recyclerView.getChildAt(i)) instanceof NumericViewHolder){
+                ((NumericViewHolder)recyclerView.getChildViewHolder(recyclerView.getChildAt(i))).clearTouchListener();
+            }
+        }
     }
 
     @SuppressLint("SimpleDateFormat")

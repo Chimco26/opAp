@@ -88,7 +88,10 @@ public class TaskActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mCroutonCreator = null;
+        if (mCroutonCreator != null) {
+            mCroutonCreator.cancel();
+            mCroutonCreator = null;
+        }
     }
 
     @Override

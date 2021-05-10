@@ -708,6 +708,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
+
+
     private void initBottomNotificationLayout(View view) {
 
         if (view != null) {

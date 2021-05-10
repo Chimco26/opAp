@@ -140,7 +140,10 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mCroutonCreator = null;
+        if (mCroutonCreator != null) {
+            mCroutonCreator.cancel();
+            mCroutonCreator = null;
+        }
     }
 
     private void configureToolbar(){

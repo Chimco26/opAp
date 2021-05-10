@@ -64,6 +64,7 @@ public class KeyboardUtils {
 
             @Override
             public void onGlobalLayout() {
+                decorView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                 // Retrieve visible rectangle inside window.
                 decorView.getWindowVisibleDisplayFrame(windowVisibleDisplayFrame);
@@ -104,6 +105,7 @@ public class KeyboardUtils {
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 int heightDiff = view.getRootView().getHeight() - view.getHeight();
 
 

@@ -40,6 +40,7 @@ import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.SingleLineKeyboard;
+import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -217,6 +218,14 @@ public class WidgetFragment extends Fragment implements
         OppAppLogger.d(LOG_TAG, "onDetach(), end ");
         MoveViewJob.getInstance(null, 0, 0, null, null);
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (mWidgetAdapter != null && mWidgetRecycler != null){
+            mWidgetAdapter.detach(mWidgetRecycler);
+        }
+        super.onDestroyView();
     }
 
     @Override

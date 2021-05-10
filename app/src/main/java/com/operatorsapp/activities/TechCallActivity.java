@@ -254,7 +254,10 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
 
     @Override
     protected void onDestroy() {
-        mCroutonCreator = null;
+        if (mCroutonCreator != null) {
+            mCroutonCreator.cancel();
+            mCroutonCreator = null;
+        }
 
         Intent intent = getIntent();
         intent.putExtra(EXTRA_IS_MACHINE_CHANGED, isMachineChanged);
