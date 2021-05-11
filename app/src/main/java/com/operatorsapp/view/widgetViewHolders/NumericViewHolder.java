@@ -149,6 +149,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
     public void clearTouchListener() {
         mEditNumberEt.setOnTouchListener(null);
         mEditCycleEt.setOnTouchListener(null);
+        closeKeyboard(0);
     }
 
     private void initUnitAndWeight(View unitTv, View weightTv) {

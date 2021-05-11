@@ -283,7 +283,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mFilterLy;
     private View mFilterBtn;
     private View mFiltersView;
-    private AsyncTask<Void, Void, String> mAsyncTask;
+    private static WeakReference<AsyncTask<Void, Void, String>> mAsyncTask;
     private ImageView mLegendBtn;
     private LegendDialog mLegendDialog;
     private Event mOpenEvent;
@@ -2519,8 +2519,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mFirstSeletedEvent = event;
 
         if (myTaskListener == null) {
-            if (mAsyncTask != null) {
-                mAsyncTask.cancel(true);
+            if (mAsyncTask != null && mAsyncTask.get() != null) {
+                mAsyncTask.get().cancel(true);
             }
 //            if (mEventHandler != null){
 //                mEventHandler.removeCallbacksAndMessages(null);
@@ -2821,13 +2821,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
         if (isAdded() && isAsyncTaskFinished) {
             final Event finalLatestEvent1 = finalLatestEvent;
-            if (mAsyncTask != null) {
-                mAsyncTask.cancel(true);
+            if (mAsyncTask != null && mAsyncTask.get() != null) {
+                mAsyncTask.get().cancel(true);
             }
-            mAsyncTask = new MyTask(events, actualBarExtraResponse, new MyTaskListener() {
+            MyTaskListener myTaskListener = new MyTaskListener() {
                 @Override
                 public void onComplete() {
-                    if (isAdded() && getActivity() != null && mAsyncTask != null && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && getActivity() != null && mAsyncTask != null && mAsyncTask.get() != null && !mAsyncTask.get().isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -2850,7 +2850,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onUpdateEventsRecyclerViews(final Cursor oldCursor, final ArrayList<Event> newEvents) {
-                    if (isAdded() && mAsyncTask != null && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && mAsyncTask != null && mAsyncTask.get() != null && !mAsyncTask.get().isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -2867,7 +2867,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onStartSelectMode(final Event event) {
-                    if (isAdded() && mAsyncTask != null && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && mAsyncTask != null && mAsyncTask.get() != null && !mAsyncTask.get().isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -2884,7 +2884,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onShowNotificationText(final boolean show) {
-                    if (isAdded() && mAsyncTask != null && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && mAsyncTask != null && mAsyncTask.get() != null && !mAsyncTask.get().isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -2902,7 +2902,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onOpenDialog(final Event event) {
-                    if (isAdded() && mAsyncTask != null && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && mAsyncTask != null && mAsyncTask.get() != null && !mAsyncTask.get().isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -2916,7 +2916,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onClearAllSelectedEvents() {
-                    if (isAdded() && mAsyncTask != null && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && mAsyncTask != null && mAsyncTask.get() != null && !mAsyncTask.get().isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -2929,7 +2929,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         });
                     }
                 }
-            }).execute();
+            };
+            mAsyncTask = new WeakReference<>(new MyTask(events, actualBarExtraResponse, myTaskListener).execute());
 //            if (mEventHandler != null){
 //                mEventHandler.removeCallbacksAndMessages(null);
 //            }
@@ -3093,8 +3094,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //        if (mEventHandler != null){
 //            mEventHandler.removeCallbacksAndMessages(null);
 //        }
-        if (mAsyncTask != null) {
-            mAsyncTask.cancel(true);
+        if (mAsyncTask != null && mAsyncTask.get() != null) {
+            mAsyncTask.get().cancel(true);
         }
     }
 
@@ -3574,8 +3575,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         super.onDestroy();
 
         removeBroadcasts();
-        if (mAsyncTask != null) {
-            mAsyncTask.cancel(true);
+        if (mAsyncTask != null && mAsyncTask.get() != null) {
+            mAsyncTask.get().cancel(true);
         }
 //        if (mEventHandler != null){
 //            mEventHandler.removeCallbacksAndMessages(null);

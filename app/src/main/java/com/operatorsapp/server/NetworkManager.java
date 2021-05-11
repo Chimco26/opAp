@@ -110,6 +110,7 @@ import com.operatorsapp.server.responses.TopRejectResponse;
 import com.operatorsapp.utils.SendReportUtil;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -155,7 +156,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         GetReportMultipleRequestNetworkManager,
         GetSimpleNetworkManager {
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
-    private static NetworkManager msInstance;
+    private static WeakReference<NetworkManager> msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
     private Retrofit mRetrofit;
     private OkHttpClient okHttpClient;
@@ -163,18 +164,19 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     HeaderInterceptor headerInterceptor = new HeaderInterceptor();
 
     public static NetworkManager initInstance() {
-        if (msInstance == null) {
-            msInstance = new NetworkManager();
+        if (msInstance == null || msInstance.get() == null) {
+            msInstance = new WeakReference<>(new NetworkManager());
         }
 
-        return msInstance;
+        return msInstance.get();
     }
 
     public static NetworkManager getInstance() {
-        if (msInstance == null) {
+        if (msInstance == null || msInstance.get() == null) {
             OppAppLogger.e(LOG_TAG, "getInstance(), fail, NetworkManager is not init");
+            return null;
         }
-        return msInstance;
+        return msInstance.get();
     }
 
     public NetworkManager() {

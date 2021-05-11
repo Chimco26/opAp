@@ -160,6 +160,15 @@ public class LoginFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onDestroyView() {
+        mSiteUrl.addTextChangedListener(null);
+        mUserName.addTextChangedListener(null);
+        mPassword.addTextChangedListener(null);
+        mPassword.setOnEditorActionListener(null);
+        super.onDestroyView();
+    }
+
     private Boolean isNetworkAvailable(Context application) {
         ConnectivityManager connectivityManager = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
