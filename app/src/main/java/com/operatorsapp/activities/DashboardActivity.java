@@ -1051,6 +1051,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         removeBroadcasts();
 
         clearPolling();
+        clearInterfaces();
 
         mVersionCheckHandler.removeCallbacksAndMessages(null);
         collapseNotificationHandler.removeCallbacksAndMessages(null);
@@ -2091,6 +2092,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         PersistenceManager.getInstance().setCurrentLanguageName(tmpLanguageName);
 
         OppAppLogger.i(TAG, "PersistenceManager cleared");
+        clearInterfaces();
+    }
+
+    private void clearInterfaces() {
         //Cores clear
         if (mReportFieldsForMachineCore != null) {
             mReportFieldsForMachineCore.stopPolling();
