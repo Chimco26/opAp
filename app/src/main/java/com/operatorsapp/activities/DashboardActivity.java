@@ -269,7 +269,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private WeakReference<OnReportFieldsUpdatedCallbackListener> mOnReportFieldsUpdatedCallbackListener;
     private AllDashboardDataCore mAllDashboardDataCore;
     private RefreshPollingBroadcast mRefreshBroadcast = null;
-    private ArrayList<DashboardUICallbackListener> mDashboardUICallbackListenerList = new ArrayList<>();
+    private WeakReference<ArrayList<DashboardUICallbackListener>> mDashboardUICallbackListenerList = new WeakReference<>(new ArrayList<DashboardUICallbackListener>());
     private WeakReference<WidgetFragment> mWidgetFragment;
     private WeakReference<ActionBarAndEventsFragment> mActionBarAndEventsFragment;
     //    private View mContainer2;
@@ -1129,7 +1129,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onMachinePermissionCallbackSucceeded(PermissionResponse permissionResponse) {
-                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.get() != null && mDashboardUICallbackListenerList.get().size() > 0) {
 
                     permissionForMachineHashMap = new SparseArray<>();
                     for (WidgetInfo widgetInfo : permissionResponse.getWidgetInfo()) {
@@ -1137,7 +1137,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         permissionForMachineHashMap.put(widgetInfo.getId(), widgetInfo);
                     }
 
-                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList.get()) {
 
                         dashboardUICallbackListener.onPermissionForMachinePolling(permissionForMachineHashMap);
                     }
@@ -1213,9 +1213,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     mSelectProductJobId = null;
                 }
 
-                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.get() != null && mDashboardUICallbackListenerList.get().size() > 0) {
 
-                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList.get()) {
 
                         dashboardUICallbackListener.onActiveJobsListForMachineUICallbackListener(activeJobsListForMachine);
                     }
@@ -1266,7 +1266,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     isNewShift = (mCurrentMachineStatus.getAllMachinesData().get(0).getShiftEndingIn() - machineStatus.getAllMachinesData().get(0).getShiftEndingIn()) < 0;
                 }
                 mCurrentMachineStatus = machineStatus;
-                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.get() != null && mDashboardUICallbackListenerList.get().size() > 0) {
 
                     if (machineStatus != null && machineStatus.getAllMachinesData() != null &&
                             machineStatus.getAllMachinesData().size() > 0) {
@@ -1304,7 +1304,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         pollingBackup(true);
                     }
 
-                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList.get()) {
 
                         dashboardUICallbackListener.onDeviceStatusChanged(machineStatus);
 
@@ -1334,9 +1334,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onTimerChanged(long millisUntilFinished) {
-                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.get() != null && mDashboardUICallbackListenerList.get().size() > 0) {
 
-                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList.get()) {
 
                         Locale locale = getApplicationContext().getResources().getConfiguration().locale;
 
@@ -1354,9 +1354,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 if (ProgressDialogManager.isShowing()) {
                     ProgressDialogManager.dismiss();
                 }
-                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.get() != null && mDashboardUICallbackListenerList.get().size() > 0) {
 
-                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList.get()) {
 
                         OppAppLogger.i(TAG, "onStatusReceiveFailed() reason: " + reason.getError().getErrorDesc());
                         dashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.Status);
@@ -1452,9 +1452,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //                if (mSelectJobId != null) {
 //                    PersistenceManager.getInstance().setJobId(mSelectJobId);
 //                }
-                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.get() != null && mDashboardUICallbackListenerList.get().size() > 0) {
 
-                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList.get()) {
                         dashboardUICallbackListener.onMachineDataReceived(widgetList);
                     }
                 } else {
@@ -1474,9 +1474,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onDataReceiveFailed(StandardResponse reason) {
                 OppAppLogger.i(TAG, "onDataReceivedSuccessfully() reason: " + reason.getError().getErrorDesc());
 
-                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.get() != null && mDashboardUICallbackListenerList.get().size() > 0) {
 
-                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList.get()) {
                         dashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.MachineData);
                     }
                 }
@@ -1557,7 +1557,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onGetShiftLogSucceeded(ArrayList<Event> events) {
 
-                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.get() != null && mDashboardUICallbackListenerList.get().size() > 0) {
 
                     int minDuration = PersistenceManager.getInstance().getMinEventDuration();
                     if (mSelectedEvents != null && mSelectedEvents.size() > 0) {
@@ -1575,7 +1575,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //TODO kuti
 //                    events = updateList(events);
 
-                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList.get()) {
                         dashboardUICallbackListener.onShiftLogDataReceived(events, mActualBarExtraResponse, mMachineJoshDataResponse);
                     }
                     if (ProgressDialogManager.isShowing()) {
@@ -1596,9 +1596,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                     OppAppLogger.i(TAG, "shiftLogStartPolling() reason: " + reason.getError().getErrorDesc());
 
-                    if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+                    if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.get() != null && mDashboardUICallbackListenerList.get().size() > 0) {
 
-                        for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+                        for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList.get()) {
                             dashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.ShiftLog);
                         }
                     }
@@ -1723,13 +1723,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //    }
 
     public void onFragmentAttached(DashboardUICallbackListener dashboardUICallbackListener) {
-        mDashboardUICallbackListenerList.add(dashboardUICallbackListener);
+        if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.get() != null) {
+
+            mDashboardUICallbackListenerList.get().add(dashboardUICallbackListener);
+        }
     }
 
     @Override
     public void onFragmentDetached(DashboardUICallbackListener dashboardUICallbackListener) {
-        mDashboardUICallbackListenerList.remove(dashboardUICallbackListener);
+        if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.get() != null) {
 
+            mDashboardUICallbackListenerList.get().remove(dashboardUICallbackListener);
+        }
     }
 
     @Override
@@ -2120,8 +2125,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mDashboardActivityToSelectedJobFragmentCallback = null;
             OppAppLogger.i(TAG, "mDashboardActivityToSelectedJobFragmentCallback cleared");
         }
-        if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
-            mDashboardUICallbackListenerList.clear();
+        if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.get() != null && mDashboardUICallbackListenerList.get().size() > 0) {
+            mDashboardUICallbackListenerList.get().clear();
             OppAppLogger.i(TAG, "mDashboardUICallbackListenerList cleared");
         }
         if (mReportFieldsForMachineUICallback != null) {
@@ -2230,9 +2235,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onApproveFirstItemComplete() {
 
-        if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+        if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.get() != null && mDashboardUICallbackListenerList.get().size() > 0) {
 
-            for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+            for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList.get()) {
 
                 dashboardUICallbackListener.onApproveFirstItemEnabledChanged(false); // disable the button at least until next polling cycle
             }
