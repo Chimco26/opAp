@@ -2,7 +2,7 @@ package com.operatorsapp.interfaces;
 
 public interface OnActivityCallbackRegistered
 {
-    void onFragmentAttached(DashboardUICallbackListener dashboardUICallbackListener);
+    void onFragmentAttached(String tag, DashboardUICallbackListener dashboardUICallbackListener);
 
-    void onFragmentDetached(DashboardUICallbackListener dashboardUICallbackListener);
+    void onFragmentDetached(String tag, DashboardUICallbackListener dashboardUICallbackListener);
 }

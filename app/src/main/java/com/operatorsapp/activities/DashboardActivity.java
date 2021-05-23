@@ -1053,9 +1053,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         clearPolling();
         clearInterfaces();
 
-        mVersionCheckHandler.removeCallbacksAndMessages(null);
-        collapseNotificationHandler.removeCallbacksAndMessages(null);
-        collapseNotificationHandler = null;
+        if (mVersionCheckHandler != null) {
+            mVersionCheckHandler.removeCallbacksAndMessages(null);
+        }
+        if (collapseNotificationHandler != null) {
+            collapseNotificationHandler.removeCallbacksAndMessages(null);
+            collapseNotificationHandler = null;
+        }
 
         mIsCollapse = false;
 
@@ -1723,7 +1727,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 //    }
 
-    public void onFragmentAttached(DashboardUICallbackListener dashboardUICallbackListener) {
+    public void onFragmentAttached(String tag, DashboardUICallbackListener dashboardUICallbackListener) {
         if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.get() != null) {
 
             mDashboardUICallbackListenerList.get().add(dashboardUICallbackListener);
@@ -1731,7 +1735,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onFragmentDetached(DashboardUICallbackListener dashboardUICallbackListener) {
+    public void onFragmentDetached(String tag, DashboardUICallbackListener dashboardUICallbackListener) {
         if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.get() != null) {
 
             mDashboardUICallbackListenerList.get().remove(dashboardUICallbackListener);

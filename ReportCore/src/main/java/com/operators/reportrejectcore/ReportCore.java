@@ -166,11 +166,11 @@ public class ReportCore {
         }
     }
 
-    public void sendInventoryReport(int packageTypeId, int units, Integer joshId) {
+    public void sendInventoryReport(int packageTypeId, int units, Integer joshId, int numberOfBatch) {
         if (mReportPersistenceManagerInterface != null) {
             mReportRejectNetworkBridgeInterface.sendReportInventory(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
-                    , mReportPersistenceManagerInterface.getOperatorId(), packageTypeId, units, joshId, new SendReportCallback() {
+                    , mReportPersistenceManagerInterface.getOperatorId(), packageTypeId, units, joshId, 1, new SendReportCallback() {
                         @Override
                         public void onSendReportSuccess(StandardResponse o) {
                             if (mReportCallbackListener != null) {

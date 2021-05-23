@@ -16,7 +16,7 @@ public interface ReportRejectNetworkBridgeInterface {
     void sendReportCycleUnits(String siteUrl, String sessionId, String machineId, String operatorId, double unitsPerCycle, Integer jobId,
                               SendReportCallback callback, int totalRetries, int specificRequestTimeout);
 
-    void sendReportInventory(String siteUrl, String sessionId, String machineId, String operatorId, int packageTypeId, int units, Integer jobId,
+    void sendReportInventory(String siteUrl, String sessionId, String machineId, String operatorId, int packageTypeId, int units, Integer jobId, Integer numOfBatch,
                              SendReportCallback callback, int totalRetries, int specificRequestTimeout);
 
 

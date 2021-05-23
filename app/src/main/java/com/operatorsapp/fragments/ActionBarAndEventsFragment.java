@@ -1216,7 +1216,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
-            mOnActivityCallbackRegistered.onFragmentAttached(this);
+            mOnActivityCallbackRegistered.onFragmentAttached(ActionBarAndEventsFragment.class.getSimpleName(), (DashboardUICallbackListener)this);
             mListener = (ActionBarAndEventsFragmentListener) context;
             OperatorCoreToDashboardActivityCallback operatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
             if (operatorCoreToDashboardActivityCallback != null) {
@@ -1235,7 +1235,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         super.onDetach();
         mCroutonCallback = null;
         mOnGoToScreenListener = null;
-        mOnActivityCallbackRegistered.onFragmentDetached(this);
+        mOnActivityCallbackRegistered.onFragmentDetached(ActionBarAndEventsFragment.class.getSimpleName(),(DashboardUICallbackListener)this);
         mOnActivityCallbackRegistered = null;
         mOperatorCore.unregisterListener();
         mOperatorCore = null;

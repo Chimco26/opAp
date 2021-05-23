@@ -281,8 +281,8 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
     }
 
     @Override
-    public void sendReportInventory(String siteUrl, String sessionId, String machineId, String operatorId, int packageTypeId, int units, Integer jobId, final SendReportCallback callback, final int totalRetries, int specificRequestTimeout) {
-        SendReportInventoryRequest sendReportInventoryRequest = new SendReportInventoryRequest(sessionId, machineId, operatorId, packageTypeId, units, jobId);
+    public void sendReportInventory(String siteUrl, String sessionId, String machineId, String operatorId, int packageTypeId, int units, Integer jobId, Integer numOfBatch, final SendReportCallback callback, final int totalRetries, int specificRequestTimeout) {
+        SendReportInventoryRequest sendReportInventoryRequest = new SendReportInventoryRequest(sessionId, machineId, operatorId, packageTypeId, units, jobId, numOfBatch);
         final int[] retryCount = {0};
         Call<StandardResponse> call = mReportInventoryNetworkManagerInterface.reportInventoryRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendReportInventory(sendReportInventoryRequest);
         call.enqueue(new Callback<StandardResponse>() {

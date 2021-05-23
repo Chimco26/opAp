@@ -1,5 +1,6 @@
 package com.operators.reportrejectnetworkbridge.interfaces;
 
+import com.example.common.PackageTypesResponse;
 import com.example.common.StandardResponse;
 import com.example.common.StopLogs.StopLogsResponse;
 import com.example.common.department.DepartmentsMachinesResponse;
@@ -8,6 +9,7 @@ import com.example.common.department.MachineLineResponse;
 import com.example.common.machineData.ShiftOperatorResponse;
 import com.example.common.operator.SaveShiftWorkersRequest;
 import com.example.common.request.BaseRequest;
+import com.example.common.request.GetPackageTypesRequest;
 import com.example.common.request.MachineIdRequest;
 import com.example.common.task.CreateTaskHistoryRequest;
 import com.example.common.task.CreateTaskRequest;
@@ -54,6 +56,9 @@ public interface EmeraldGetSimple {
 
     @POST("/LeaderMESApi/GetTaskFiles")
     Call<TaskFilesResponse> getTaskFiles(@Body GetTaskFilesRequest request);
+
+    @POST("/LeaderMESApi/GetPackageTypes")
+    Call<PackageTypesResponse> getPackageTypes(@Body GetPackageTypesRequest request);
 
     @POST("/LeaderMESApi/UpdateMachineStopBit")
     Call<StandardResponse> updateMachineStopBit(@Body MachineIdRequest request);

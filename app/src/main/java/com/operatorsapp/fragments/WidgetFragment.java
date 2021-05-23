@@ -195,7 +195,7 @@ public class WidgetFragment extends Fragment implements
         try {
             mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
-            mOnActivityCallbackRegistered.onFragmentAttached(this);
+            mOnActivityCallbackRegistered.onFragmentAttached(WidgetFragment.class.getSimpleName(),(DashboardUICallbackListener)this);
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mDashboardCentralContainerListener = (DashboardCentralContainerListener) getActivity();
             mShowDashboardCroutonListener = (ShowDashboardCroutonListener) getActivity();
@@ -209,7 +209,7 @@ public class WidgetFragment extends Fragment implements
     public void onDetach() {
         OppAppLogger.d(LOG_TAG, "onDetach(), start ");
         super.onDetach();
-        mOnActivityCallbackRegistered.onFragmentDetached(this);
+        mOnActivityCallbackRegistered.onFragmentDetached(WidgetFragment.class.getSimpleName(),(DashboardUICallbackListener) this);
         mOnActivityCallbackRegistered = null;
         mOnGoToScreenListener = null;
         mReportFieldsFragmentCallbackListener = null;

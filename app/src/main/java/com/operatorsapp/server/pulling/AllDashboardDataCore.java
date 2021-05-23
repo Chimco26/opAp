@@ -253,8 +253,8 @@ public class AllDashboardDataCore{
     }
 
     private void getStopEventsLine() {
-        if (mStopEventsLineCallback != null){
-            PersistenceManager pm = PersistenceManager.getInstance();
+        PersistenceManager pm = PersistenceManager.getInstance();
+        if (mStopEventsLineCallback != null && pm.getMachineLineId() > 0){
             SimpleRequests.getLineShiftLog(pm.getSiteUrl(), mStopEventsLineCallback, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
         }
     }

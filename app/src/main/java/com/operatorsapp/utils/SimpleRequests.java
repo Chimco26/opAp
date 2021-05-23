@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.example.common.ErrorResponse;
 import com.example.common.MultipleRejectRequestModel;
+import com.example.common.PackageTypesResponse;
 import com.example.common.StandardResponse;
 import com.example.common.StopLogs.StopLogsResponse;
 import com.example.common.callback.CreateTaskCallback;
@@ -19,6 +20,7 @@ import com.example.common.department.MachineLineResponse;
 import com.example.common.machineData.ShiftOperatorResponse;
 import com.example.common.operator.SaveShiftWorkersRequest;
 import com.example.common.request.BaseRequest;
+import com.example.common.request.GetPackageTypesRequest;
 import com.example.common.request.MachineIdRequest;
 import com.example.common.request.RecipeUpdateRequest;
 import com.example.common.task.CreateTaskHistoryRequest;
@@ -1186,6 +1188,53 @@ public class SimpleRequests {
                     }
                 } else {
                     OppAppLogger.w(LOG_TAG, "updateTaskStatus(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    public static void getPackageTypes(long jobId, String siteUrl, final SimpleCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<PackageTypesResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                requestTimeout, TimeUnit.SECONDS).getPackageTypes(new GetPackageTypesRequest(PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), jobId));
+
+        call.enqueue(new Callback<PackageTypesResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<PackageTypesResponse> call, @NonNull Response<PackageTypesResponse> response) {
+
+                if (response.body() != null && response.body().getResponseDictionaryDT() != null && response.body().getResponseDictionaryDT().getPackageTypes() != null
+                        && (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty())) {
+                    if (callback != null) {
+
+                        callback.onRequestSuccess(response.body());
+                    } else {
+
+                        OppAppLogger.w(LOG_TAG, "getPackageTypes(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<PackageTypesResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getPackageTypes Error");
+                        callback.onRequestFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.w(LOG_TAG, "getPackageTypes(), onFailure() callback is null");
 
                 }
             }

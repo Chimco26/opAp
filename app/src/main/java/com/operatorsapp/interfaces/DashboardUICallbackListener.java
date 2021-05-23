@@ -36,4 +36,22 @@ public interface DashboardUICallbackListener {
     void onApproveFirstItemEnabledChanged(boolean enabled);
 
     void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine mActiveJobsListForMachine);
+
+    public class DashboardUICallbackListenerTaged{
+        private DashboardUICallbackListener listener;
+        private String tag;
+
+        public DashboardUICallbackListenerTaged(DashboardUICallbackListener listener, String tag) {
+            this.listener = listener;
+            this.tag = tag;
+        }
+
+        public DashboardUICallbackListener getListener() {
+            return listener;
+        }
+
+        public String getTag() {
+            return tag;
+        }
+    }
 }

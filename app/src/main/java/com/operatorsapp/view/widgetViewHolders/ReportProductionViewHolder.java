@@ -1,52 +1,18 @@
 package com.operatorsapp.view.widgetViewHolders;
 
-import android.app.Activity;
-import android.graphics.PorterDuff;
-import android.text.InputType;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.common.ErrorResponse;
-import com.example.common.StandardResponse;
-import com.example.oppapplog.OppAppLogger;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.operators.machinedatainfra.models.Widget;
-import com.operators.machinestatusinfra.models.MachineStatus;
-import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
-import com.operators.reportrejectcore.ReportCallbackListener;
-import com.operators.reportrejectcore.ReportCore;
-import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.interfaces.GoToScreenListener;
-import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
-import com.operatorsapp.adapters.RejectProductionSpinnerAdapter;
-import com.operatorsapp.application.OperatorApplication;
-import com.operatorsapp.interfaces.OnKeyboardManagerListener;
-import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.managers.ProgressDialogManager;
-import com.operatorsapp.model.event.QCTestEvent;
 import com.operatorsapp.model.event.ReportProductionEvent;
-import com.operatorsapp.server.NetworkManager;
-import com.operatorsapp.utils.GoogleAnalyticsHelper;
-import com.operatorsapp.utils.broadcast.SendBroadcast;
-import com.operatorsapp.view.SingleLineKeyboard;
 
 import org.greenrobot.eventbus.EventBus;
-
-import static com.operatorsapp.application.OperatorApplication.isEnglishLang;
 
 public class ReportProductionViewHolder extends RecyclerView.ViewHolder {
 

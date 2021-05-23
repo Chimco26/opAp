@@ -3,28 +3,31 @@ package com.operatorsapp.adapters;
 import android.app.Activity;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.common.PackageTypesResponse;
 import com.operators.reportfieldsformachineinfra.PackageTypes;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 
 import java.util.List;
 
-public class RejectProductionSpinnerAdapter extends ArrayAdapter<PackageTypes> {
-    private List<PackageTypes> mSpinnerItems;
+public class PackageTypeSpinnerAdapter extends ArrayAdapter<PackageTypesResponse.PackageType> {
+    private List<PackageTypesResponse.PackageType> mSpinnerItems;
     private TextView mRowName;
     private View mView;
 
-    public RejectProductionSpinnerAdapter(Context context, int resource, List<PackageTypes> packageTypesList) {
-        super(context, resource, packageTypesList);
-        mSpinnerItems = packageTypesList;
+    public PackageTypeSpinnerAdapter(Context context,  int base_spinner_item, List<PackageTypesResponse.PackageType> packageTypes) {
+        super(context, base_spinner_item, packageTypes);
+        mSpinnerItems = packageTypes;
     }
 
     @NonNull
@@ -36,7 +39,7 @@ public class RejectProductionSpinnerAdapter extends ArrayAdapter<PackageTypes> {
             row = inflater.inflate(R.layout.base_spinner_item, parent, false);
             mView = row;
             mRowName = row.findViewById(R.id.spinner_item_name);
-            mRowName.setTextColor(ContextCompat.getColor(getContext(), R.color.status_bar));
+            mRowName.setTextColor(Color.parseColor(mSpinnerItems.get(0).getColor()));
             String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(0).getEName() : mSpinnerItems.get(0).getLName();
             mRowName.setText(nameByLang);
             mRowName.setTextSize(22);
@@ -55,7 +58,7 @@ public class RejectProductionSpinnerAdapter extends ArrayAdapter<PackageTypes> {
         if (item != null) {
             TextView name = row.findViewById(R.id.spinner_item_name);
             name.setText(item);
-            name.setTextColor(ContextCompat.getColor(getContext(), R.color.status_bar));
+            name.setTextColor(Color.parseColor(mSpinnerItems.get(position).getColor()));
             name.setTextSize(22);
         }
         return row;
@@ -64,7 +67,7 @@ public class RejectProductionSpinnerAdapter extends ArrayAdapter<PackageTypes> {
     public void setTitle(int position) {
 
         mRowName = mView.findViewById(R.id.spinner_item_name);
-        mRowName.setTextColor(ContextCompat.getColor(getContext(), R.color.status_bar));
+        mRowName.setTextColor(Color.parseColor(mSpinnerItems.get(position).getColor()));
         String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getLName();
         mRowName.setText(nameByLang);
         mRowName.setTextSize(24);
