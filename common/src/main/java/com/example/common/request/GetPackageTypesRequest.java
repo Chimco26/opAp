@@ -10,12 +10,12 @@ public class GetPackageTypesRequest {
     @SerializedName("MachineID")
     private long machineID;
 
-    @SerializedName("JoshID")
-    private long joshID;
+    @SerializedName("JobID")
+    private long jobId;
 
-    public GetPackageTypesRequest(String sessionID, long machineID, long joshID) {
+    public GetPackageTypesRequest(String sessionID, long machineID, long jobId) {
         this.sessionID = sessionID;
         this.machineID = machineID;
-        this.joshID = joshID;
+        this.jobId = jobId;
     }
 }

@@ -39,8 +39,13 @@ public class PackageTypeSpinnerAdapter extends ArrayAdapter<PackageTypesResponse
             row = inflater.inflate(R.layout.base_spinner_item, parent, false);
             mView = row;
             mRowName = row.findViewById(R.id.spinner_item_name);
-            mRowName.setTextColor(Color.parseColor(mSpinnerItems.get(0).getColor()));
-            String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(0).getEName() : mSpinnerItems.get(0).getLName();
+            String color = mSpinnerItems.get(position).getColor();
+            if (color == null) {
+                mRowName.setTextColor(ContextCompat.getColor(getContext(), R.color.status_bar));
+            }else {
+                mRowName.setTextColor(Color.parseColor(color));
+            }
+            String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getLName();
             mRowName.setText(nameByLang);
             mRowName.setTextSize(22);
         }
@@ -58,7 +63,12 @@ public class PackageTypeSpinnerAdapter extends ArrayAdapter<PackageTypesResponse
         if (item != null) {
             TextView name = row.findViewById(R.id.spinner_item_name);
             name.setText(item);
-            name.setTextColor(Color.parseColor(mSpinnerItems.get(position).getColor()));
+            String color = mSpinnerItems.get(position).getColor();
+            if (color == null) {
+                mRowName.setTextColor(ContextCompat.getColor(getContext(), R.color.status_bar));
+            }else {
+                mRowName.setTextColor(Color.parseColor(color));
+            }
             name.setTextSize(22);
         }
         return row;
@@ -67,7 +77,12 @@ public class PackageTypeSpinnerAdapter extends ArrayAdapter<PackageTypesResponse
     public void setTitle(int position) {
 
         mRowName = mView.findViewById(R.id.spinner_item_name);
-        mRowName.setTextColor(Color.parseColor(mSpinnerItems.get(position).getColor()));
+        String color = mSpinnerItems.get(position).getColor();
+        if (color == null) {
+            mRowName.setTextColor(ContextCompat.getColor(getContext(), R.color.status_bar));
+        }else {
+            mRowName.setTextColor(Color.parseColor(color));
+        }
         String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getLName();
         mRowName.setText(nameByLang);
         mRowName.setTextSize(24);

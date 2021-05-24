@@ -127,13 +127,13 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     public void onAttach(Context context) {
         super.onAttach(context);
         mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
-        mOnActivityCallbackRegistered.onFragmentAttached(ReportShiftFragment.class.getSimpleName(),(DashboardUICallbackListener)this);
+        mOnActivityCallbackRegistered.onFragmentAttached(ReportShiftFragment.class.getSimpleName(),this);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mOnActivityCallbackRegistered.onFragmentDetached(ReportShiftFragment.class.getSimpleName(),(DashboardUICallbackListener)this);
+        mOnActivityCallbackRegistered.onFragmentDetached(ReportShiftFragment.class.getSimpleName(),this);
         mOnActivityCallbackRegistered = null;
     }
 

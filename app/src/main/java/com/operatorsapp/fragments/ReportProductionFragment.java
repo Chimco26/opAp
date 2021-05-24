@@ -4,11 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,6 +18,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.common.ErrorResponse;
 import com.example.common.PackageTypesResponse;
@@ -216,7 +217,7 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
                 , persistenceManager.getSiteUrl(), new SimpleCallback() {
                     @Override
                     public void onRequestSuccess(StandardResponse response) {
-                        initPackageTypeSpinner((PackageTypesResponse) ((PackageTypesResponse)response).getResponseDictionaryDT().getPackageTypes());
+                        initPackageTypeSpinner(((PackageTypesResponse) response));
                     }
 
                     @Override
@@ -237,10 +238,12 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     mPackageSelectedPosition = position;
-                    mUnitsCounterTextView.setText(packageTypes.getResponseDictionaryDT().getPackageTypes().get(position).getEffectiveAmount());
-                    reasonSpinnerArrayAdapter.setTitle(position);
+//                    mPackageTypeSpinner.setSelection(position);
                     mSelectedPackageTypeName = isEnglishLang() ? packageTypes.getResponseDictionaryDT().getPackageTypes().get(position).getEName() : packageTypes.getResponseDictionaryDT().getPackageTypes().get(position).getLName();
                     mSelectedPackageTypeId = packageTypes.getResponseDictionaryDT().getPackageTypes().get(position).getId();
+                    mUnitsCounter = packageTypes.getResponseDictionaryDT().getPackageTypes().get(position).getEffectiveAmount();
+                    mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
+
                 }
 
                 @Override
@@ -347,7 +350,7 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
         OppAppLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " type value: " + mSelectedPackageTypeId + " type name: " + mSelectedPackageTypeName + " JobId: " + mJoshId);
 
         int numOfBatch = 1;
-        if (!mNumOfBatch.getText().toString().equals("")){
+        if (!mNumOfBatch.getText().toString().equals("")) {
             numOfBatch = Integer.parseInt(mNumOfBatch.getText().toString());
         }
         mReportCore.sendInventoryReport(mSelectedPackageTypeId, mUnitsCounter, mJoshId, numOfBatch);
@@ -454,11 +457,10 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
                 mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        mSelectedPosition = position;
                         activeJobsSpinnerAdapter.setTitle(position);
                         mJoshId = mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
                         getPackagesTypes();
-                        mUnitsCounter = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getProductEffectiveAmount().intValue();
-
                     }
 
                     @Override

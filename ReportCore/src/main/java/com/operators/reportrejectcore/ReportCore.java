@@ -170,7 +170,7 @@ public class ReportCore {
         if (mReportPersistenceManagerInterface != null) {
             mReportRejectNetworkBridgeInterface.sendReportInventory(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
-                    , mReportPersistenceManagerInterface.getOperatorId(), packageTypeId, units, joshId, 1, new SendReportCallback() {
+                    , mReportPersistenceManagerInterface.getOperatorId(), packageTypeId, units, joshId, numberOfBatch, new SendReportCallback() {
                         @Override
                         public void onSendReportSuccess(StandardResponse o) {
                             if (mReportCallbackListener != null) {
