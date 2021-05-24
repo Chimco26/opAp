@@ -45,6 +45,7 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
     private View mCycleWarningView;
     private GoToScreenListener mOnGoToScreenListener;
+    private WeakReference<DashboardUICallbackListener> mUiCallbackListener;
 //    private ImageView mNoteIv;
 //    private TextView mNoteTv;
 //    private LinearLayout mNoteLy;
@@ -74,7 +75,8 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
         try {
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
-            mOnActivityCallbackRegistered.onFragmentAttached(ViewPagerFragment.class.getSimpleName(),this);
+            mUiCallbackListener = new WeakReference<DashboardUICallbackListener>((DashboardUICallbackListener)this);
+            mOnActivityCallbackRegistered.onFragmentAttached(mUiCallbackListener);
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
@@ -86,7 +88,8 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
     @Override
     public void onDetach() {
         super.onDetach();
-        mOnActivityCallbackRegistered.onFragmentDetached(ViewPagerFragment.class.getSimpleName(),this);
+        mOnActivityCallbackRegistered.onFragmentDetached(mUiCallbackListener);
+        mUiCallbackListener = null;
         mOnActivityCallbackRegistered = null;
         mOnGoToScreenListener = null;
 

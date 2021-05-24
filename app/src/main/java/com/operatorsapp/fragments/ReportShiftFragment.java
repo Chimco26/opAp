@@ -60,6 +60,7 @@ import com.operatorsapp.server.responses.TopRejectResponse;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.TimeUtils;
 
+import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -106,6 +107,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     private ArrayList<Graph> mGraphs;
     private ArrayList<SelectableString> mSelectableStrings;
     private TextView mTitle;
+    private WeakReference<DashboardUICallbackListener> mUiCallbackListener;
 
     public static ReportShiftFragment newInstance(boolean isTimeLineOpen) {
         ReportShiftFragment reportShiftFragment = new ReportShiftFragment();
@@ -127,13 +129,15 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     public void onAttach(Context context) {
         super.onAttach(context);
         mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
-        mOnActivityCallbackRegistered.onFragmentAttached(ReportShiftFragment.class.getSimpleName(),this);
+        mUiCallbackListener = new WeakReference<DashboardUICallbackListener>((DashboardUICallbackListener)this);
+        mOnActivityCallbackRegistered.onFragmentAttached(mUiCallbackListener);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mOnActivityCallbackRegistered.onFragmentDetached(ReportShiftFragment.class.getSimpleName(),this);
+        mOnActivityCallbackRegistered.onFragmentDetached(mUiCallbackListener);
+        mUiCallbackListener = null;
         mOnActivityCallbackRegistered = null;
     }
 

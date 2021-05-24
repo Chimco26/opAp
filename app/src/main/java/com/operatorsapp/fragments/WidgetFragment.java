@@ -42,6 +42,7 @@ import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.SingleLineKeyboard;
 import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,6 +81,7 @@ public class WidgetFragment extends Fragment implements
     private SparseArray<WidgetInfo> mPermissionResponse;
     private Integer mJoshId = null;
     private ShowDashboardCroutonListener mShowDashboardCroutonListener;
+    private WeakReference<DashboardUICallbackListener> mUiCallbackListener;
 
     public static WidgetFragment newInstance(ReportFieldsForMachine reportFieldsForMachine, int joshId) {
         WidgetFragment widgetFragment = new WidgetFragment();
@@ -195,7 +197,8 @@ public class WidgetFragment extends Fragment implements
         try {
             mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
-            mOnActivityCallbackRegistered.onFragmentAttached(WidgetFragment.class.getSimpleName(),this);
+            mUiCallbackListener = new WeakReference<DashboardUICallbackListener>((DashboardUICallbackListener)this);
+            mOnActivityCallbackRegistered.onFragmentAttached(mUiCallbackListener);
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mDashboardCentralContainerListener = (DashboardCentralContainerListener) getActivity();
             mShowDashboardCroutonListener = (ShowDashboardCroutonListener) getActivity();
@@ -209,7 +212,8 @@ public class WidgetFragment extends Fragment implements
     public void onDetach() {
         OppAppLogger.d(LOG_TAG, "onDetach(), start ");
         super.onDetach();
-        mOnActivityCallbackRegistered.onFragmentDetached(WidgetFragment.class.getSimpleName(),this);
+        mOnActivityCallbackRegistered.onFragmentDetached(mUiCallbackListener);
+        mUiCallbackListener = null;
         mOnActivityCallbackRegistered = null;
         mOnGoToScreenListener = null;
         mReportFieldsFragmentCallbackListener = null;
