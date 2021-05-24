@@ -3,12 +3,15 @@ package com.operatorsapp.application;
 import android.content.Context;
 import android.content.Intent;
 import androidx.multidex.MultiDexApplication;
+import androidx.work.Configuration;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
-import android.content.res.Configuration;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -19,6 +22,7 @@ import com.operators.loginnetworkbridge.LoginNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.worker.RecreateWorker;
 
 import org.acra.ACRA;
 import org.acra.ReportField;
@@ -28,6 +32,8 @@ import org.acra.sender.HttpSender;
 import org.litepal.LitePal;
 
 //import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+
+import java.util.concurrent.TimeUnit;
 
 import static com.operatorsapp.utils.SendReportUtil.IS_APP_CRASH;
 import static com.operatorsapp.utils.SendReportUtil.MACHINE_ID;
@@ -53,7 +59,7 @@ import static com.operatorsapp.utils.SendReportUtil.SESSION_ID;
         reportType = HttpSender.Type.JSON
 
 )
-public class OperatorApplication extends MultiDexApplication {
+public class OperatorApplication extends MultiDexApplication implements androidx.work.Configuration.Provider {
 
     private static final String LOG_TAG = OperatorApplication.class.getSimpleName();
 
@@ -66,6 +72,20 @@ public class OperatorApplication extends MultiDexApplication {
         super.onCreate();
 
 //        Fabric.with(this, new Crashlytics());
+
+        // provide custom configuration
+        Configuration myConfig = new Configuration.Builder()
+                .setMinimumLoggingLevel(android.util.Log.INFO)
+                .build();
+
+//initialize WorkManager
+        WorkManager.initialize(this, myConfig);
+
+        OneTimeWorkRequest mywork=
+                new OneTimeWorkRequest.Builder(RecreateWorker.class)
+                        .setInitialDelay(12, TimeUnit.HOURS)// Use this when you want to add initial delay or schedule initial work to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
+                        .build();
+        WorkManager.getInstance(this).beginUniqueWork(RecreateWorker.class.getSimpleName(), ExistingWorkPolicy.KEEP, mywork).enqueue();
 
         LitePal.initialize(this);
 
@@ -123,6 +143,12 @@ public class OperatorApplication extends MultiDexApplication {
 
     }
 
+    @Override
+    public androidx.work.Configuration getWorkManagerConfiguration() {
+        return new Configuration.Builder()
+                .setMinimumLoggingLevel(android.util.Log.INFO)
+                .build();
+    }
 
     private void exceptionHandler() {
 

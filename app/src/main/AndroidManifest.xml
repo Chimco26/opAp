@@ -97,6 +97,11 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            tools:node="remove" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="14901f99212291ad01bd6ae5fb3af77ed3114173" />
