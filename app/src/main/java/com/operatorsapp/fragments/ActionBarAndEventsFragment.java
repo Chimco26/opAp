@@ -269,9 +269,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private boolean mSetupEndDialogShow;
     private boolean mCycleWarningViewShow;
     private EmeraldSpinner mJobsSpinner;
-    private LinearLayout mScrollView;
-    private TimeLineView mTimeView;
-    private ArrayList<String> mTimes;
     public static final int PIXEL_FOR_MINUTE = 10;
     private PinchRecyclerView mEventsRecycler;
     private EventsAdapter mEventsAdapter;
@@ -489,7 +486,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mTimerTextView = view.findViewById(R.id.text_view_timer);
         mSelectedNumberTv = view.findViewById(R.id.FAAE_selected_nmbr);
         mSelectedNumberLy = view.findViewById(R.id.FAAE_event_selected_ly);
-        mTimeView = view.findViewById(R.id.FAAE_time_container);
         initLenoxMachineRv(view);
         mNoNotificationsText = view.findViewById(R.id.fragment_dashboard_no_notif);
         mLoadingDataText = view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
@@ -753,8 +749,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             public void onClick(View view) {
                 if (mLegendDialog == null)
                     mLegendDialog = LegendDialog.newInstants();
-                if (getFragmentManager() != null)
-                    mLegendDialog.show(getFragmentManager(), null);
+                if (getChildFragmentManager() != null)
+                    mLegendDialog.show(getChildFragmentManager(), null);
             }
         });
     }
