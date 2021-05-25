@@ -158,8 +158,8 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static WeakReference<NetworkManager> msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
-    private Retrofit mRetrofit;
-    private OkHttpClient okHttpClient;
+    private static Retrofit mRetrofit;
+    private static OkHttpClient okHttpClient;
 
     HeaderInterceptor headerInterceptor = new HeaderInterceptor();
 
@@ -353,7 +353,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     }
 
     private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit) {
-        ConnectionPool pool = new ConnectionPool(5, 10000, TimeUnit.MILLISECONDS);
+        ConnectionPool pool = new ConnectionPool(5, timeout, timeUnit);
 
         try {
             if (mRetrofit == null || !mRetrofit.baseUrl().toString().equals(siteUrl)) {
@@ -371,6 +371,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                                 .addInterceptor(headerInterceptor)
                                 .addInterceptor(loggingInterceptor)
                                 .dispatcher(dispatcher)
+                                .retryOnConnectionFailure(false)
                                 .build();
                     } else {
                         okHttpClient = new OkHttpClient.Builder()
@@ -378,6 +379,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                                 .dispatcher(dispatcher)
                                 .addInterceptor(headerInterceptor)
                                 .addInterceptor(loggingInterceptor)
+                                .retryOnConnectionFailure(false)
                                 .build();
                     }
                 } else if (timeUnit != null) {
@@ -392,6 +394,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                                 .addInterceptor(headerInterceptor)
                                 .addInterceptor(loggingInterceptor)
                                 .readTimeout(timeout, timeUnit)
+                                .retryOnConnectionFailure(false)
                                 .build();
                     }
                 }
