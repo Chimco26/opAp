@@ -1,7 +1,6 @@
 package com.operatorsapp.adapters;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,14 +22,15 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.interfaces.OnKeyboardManagerListener;
+import com.operatorsapp.view.widgetViewHolders.ActivateJobViewHolder;
 import com.operatorsapp.view.widgetViewHolders.CounterViewHolder;
 import com.operatorsapp.view.widgetViewHolders.FreeTextViewHolder;
 import com.operatorsapp.view.widgetViewHolders.GenericTimeViewHolder;
-import com.operatorsapp.view.widgetViewHolders.ReportProductionViewHolder;
-import com.operatorsapp.view.widgetViewHolders.OrderTestViewHolder;
 import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
+import com.operatorsapp.view.widgetViewHolders.OrderTestViewHolder;
 import com.operatorsapp.view.widgetViewHolders.ProjectionViewHolderNew;
 import com.operatorsapp.view.widgetViewHolders.RangeViewHolder;
+import com.operatorsapp.view.widgetViewHolders.ReportProductionViewHolder;
 import com.operatorsapp.view.widgetViewHolders.ReportStopViewHolder;
 import com.operatorsapp.view.widgetViewHolders.TimeLeftViewHolder;
 import com.operatorsapp.view.widgetViewHolders.TimeViewHolder;
@@ -42,6 +42,7 @@ import java.util.List;
 
 import static androidx.recyclerview.widget.RecyclerView.Adapter;
 import static androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import static com.operators.machinedatainfra.models.Widget.FIELD_TYPE_ACTIVATE_JOB;
 
 public class WidgetAdapter extends Adapter {
     private static final long TEN_HOURS = 60000L * 60 * 10;
@@ -209,13 +210,16 @@ public class WidgetAdapter extends Adapter {
             case ORDER_TEST: {
                 return new OrderTestViewHolder(inflater.inflate(R.layout.order_test_widget_cardview, parent, false), mHeight, mWidth);
             }
+            case FIELD_TYPE_ACTIVATE_JOB: {
+                return new ActivateJobViewHolder(inflater.inflate(R.layout.activate_job_widget_cardview, parent, false), mHeight, mWidth);
+            }
             case REPORT_PRODUCTION: {
                 return new ReportProductionViewHolder(inflater.inflate(R.layout.report_production_widget_cardview, parent, false), mHeight, mWidth);
 //                return new ReportProductionViewHolder(inflater.inflate(R.layout.report_production_widget_cardview, parent, false), mHeight, mWidth,
 //                        mReportFieldsForMachine, mOnKeyboardManagerListener, mShowDashboardCroutonListener, mJoshId);
             }
             case MACHINE_WORK_BIT: {
-                return new MachineWorkBitViewHolder(inflater.inflate(R.layout.machine_work_bit_cardview, parent, false), mHeight, mWidth,mShowDashboardCroutonListener);
+                return new MachineWorkBitViewHolder(inflater.inflate(R.layout.machine_work_bit_cardview, parent, false), mHeight, mWidth, mShowDashboardCroutonListener);
             }
             case TOP_5_STOP_EVENTS: {
                 return new TopStopEventsViewHolder(inflater.inflate(R.layout.top_stop_events_cardview, parent, false), mHeight, mWidth);
@@ -235,9 +239,9 @@ public class WidgetAdapter extends Adapter {
     public void detach(@NonNull RecyclerView recyclerView) {
         MoveViewJob.getInstance(null, 0, 0, null, null);
         int childCOunt = recyclerView.getChildCount();
-        for (int i = 0; i < childCOunt; i++){
-            if (recyclerView.getChildViewHolder(recyclerView.getChildAt(i)) instanceof NumericViewHolder){
-                ((NumericViewHolder)recyclerView.getChildViewHolder(recyclerView.getChildAt(i))).clearTouchListener();
+        for (int i = 0; i < childCOunt; i++) {
+            if (recyclerView.getChildViewHolder(recyclerView.getChildAt(i)) instanceof NumericViewHolder) {
+                ((NumericViewHolder) recyclerView.getChildViewHolder(recyclerView.getChildAt(i))).clearTouchListener();
             }
         }
     }
@@ -305,11 +309,16 @@ public class WidgetAdapter extends Adapter {
                     reportProductionViewHolder.setData(widget);
                 }
                 case MACHINE_WORK_BIT: {
-                   final MachineWorkBitViewHolder machineWorkBitViewHolder = (MachineWorkBitViewHolder) holder;
-                   machineWorkBitViewHolder.setData(widget);
+                    final MachineWorkBitViewHolder machineWorkBitViewHolder = (MachineWorkBitViewHolder) holder;
+                    machineWorkBitViewHolder.setData(widget);
                 }
                 case TOP_5_STOP_EVENTS: {
                     final TopStopEventsViewHolder topStopEventsViewHolder = (TopStopEventsViewHolder) holder;
+//                   Nathat missing
+                }
+                case FIELD_TYPE_ACTIVATE_JOB: {
+                    final ActivateJobViewHolder activateJobViewHolder = (ActivateJobViewHolder) holder;
+                    activateJobViewHolder.setData(widget);
 //                   Nathat missing
                 }
             }
@@ -401,6 +410,9 @@ public class WidgetAdapter extends Adapter {
                 break;
             case 13:
                 type = TOP_5_STOP_EVENTS;
+                break;
+            case FIELD_TYPE_ACTIVATE_JOB:
+                type = FIELD_TYPE_ACTIVATE_JOB;
                 break;
 
             default:

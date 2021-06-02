@@ -144,6 +144,7 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.model.SendRejectObject;
 import com.operatorsapp.model.TechCallInfo;
+import com.operatorsapp.model.event.ActivateJobEvent;
 import com.operatorsapp.model.event.QCTestEvent;
 import com.operatorsapp.model.event.ReportProductionEvent;
 import com.operatorsapp.server.NetworkManager;
@@ -1021,6 +1022,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     }
 
+    @Subscribe
+    public void onActivateJob(ActivateJobEvent event){
+        PersistenceManager persistenceManager = PersistenceManager.getInstance();
+        postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
+                String.valueOf(persistenceManager.getMachineId()),
+                event.getErpJobId(),
+                persistenceManager.getOperatorId(),
+                false));
+    }
+
     private void registerReceiver() {
 
         if (mRefreshBroadcast == null) {
@@ -1288,6 +1299,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         PersistenceManager.getInstance().setMachineLineId(machineStatus.getAllMachinesData().get(0).getLineID());
                         PersistenceManager.getInstance().setReportRejectDefaultUnits(machineStatus.getAllMachinesData().get(0).getReportRejectDefaultUnits());
                         PersistenceManager.getInstance().setRequireWorkerSignIn(machineStatus.getAllMachinesData().get(0).isRequireWorkerSignIn());
+                        PersistenceManager.getInstance().setActivateJobWidgetOnOpApp(machineStatus.getAllMachinesData().get(0).isActivateJobWidgetOnOpApp());
 
                         String opName = machineStatus.getAllMachinesData().get(0).getOperatorName();
                         String opId = machineStatus.getAllMachinesData().get(0).getOperatorId();

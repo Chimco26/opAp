@@ -24,7 +24,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".activities.MainActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:configChanges="keyboard|keyboardHidden|orientation|navigation"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
@@ -36,37 +36,37 @@
         </activity>
         <activity
             android:name=".activities.DashboardActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:configChanges="keyboard|keyboardHidden|orientation|navigation"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.TechCallActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:configChanges="keyboard|keyboardHidden|orientation|navigation"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".activities.GalleryActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:configChanges="keyboard|keyboardHidden|orientation|navigation"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".activities.TaskActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:configChanges="keyboard|keyboardHidden|orientation|navigation"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.ActivateJobActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:configChanges="keyboard|keyboardHidden|orientation|navigation"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activities.StopEventLogActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:configChanges="keyboard|keyboardHidden|orientation|navigation"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activities.QCActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:configChanges="keyboard|keyboardHidden|orientation|navigation"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateAlwaysHidden" />
 

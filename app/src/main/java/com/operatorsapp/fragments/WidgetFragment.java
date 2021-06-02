@@ -48,6 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.operators.machinedatainfra.models.Widget.FIELD_TYPE_ACTIVATE_JOB;
 import static org.acra.ACRA.LOG_TAG;
 
 /**
@@ -263,6 +264,11 @@ public class WidgetFragment extends Fragment implements
 
         mWidgets = widgetList;
         if (widgetList != null && widgetList.size() > 0) {
+            if (PersistenceManager.getInstance().isActivateJobWidgetOnOpApp()){
+                Widget activateJobWidget = new Widget();
+                activateJobWidget.setmFieldType(FIELD_TYPE_ACTIVATE_JOB);
+                widgetList.add(0, activateJobWidget);
+            }
             saveAndRestoreChartData(widgetList);
             PersistenceManager.getInstance().setMachineDataStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
 //            mNoDataView.setVisibility(View.GONE);

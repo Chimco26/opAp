@@ -123,6 +123,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PENDING_JOB_SAVED_FILTERS = "PENDING_JOB_SAVED_FILTERS";
     private static final String KPI_LIST = "KPI_LIST";
     private static final String PREF_REQUIRE_WORKER_SIGN_IN = "PREF_REQUIRE_WORKER_SIGN_IN";
+    private static final String PREF_REQUIRE_ACTIVATE_JOB_WIDGET = "PREF_REQUIRE_ACTIVATE_JOB_WIDGET";
 
 
     private static PersistenceManager msInstance;
@@ -1035,5 +1036,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public boolean isRequireWorkerSignIn() {
         return SecurePreferences.getInstance().getBoolean(PREF_REQUIRE_WORKER_SIGN_IN, false);
+    }
+
+    public void setActivateJobWidgetOnOpApp(boolean activateJobWidgetOnOpApp) {
+        SecurePreferences.getInstance().setBoolean(PREF_REQUIRE_ACTIVATE_JOB_WIDGET, activateJobWidgetOnOpApp);
+    }
+
+    public boolean isActivateJobWidgetOnOpApp(){
+        return SecurePreferences.getInstance().getBoolean(PREF_REQUIRE_ACTIVATE_JOB_WIDGET, false);
     }
 }
