@@ -258,9 +258,16 @@ public class LineChartTimeLarge extends FrameLayout {
                         }
                     }
 
-                    float addition = ((max - min) / 5) + 1; // add percentage of full range on each side for better visibility,, adding some for min = max case;
+                    if (min == 0) {
+                        min = -0.1f;
+                    }
+                    if (max == 0) {
+                        max = 0.1f;
+                    }
 
-                    max += addition;
+                    min = min - (max - min) / 10f;
+
+                    max = max + (max - min) / 10f;
 
                     YAxis leftAxis = mChart.getAxisLeft();
                     leftAxis.resetAxisMaximum();//leftAxis.resetAxisMaxValue();

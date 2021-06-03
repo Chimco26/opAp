@@ -112,7 +112,8 @@ public class LineChartTimeSmall extends FrameLayout {
                     }
                 } else {
                     return "";
-                }            }
+                }
+            }
 
 //            @Override
 //            public int getDecimalDigits() {
@@ -221,7 +222,7 @@ public class LineChartTimeSmall extends FrameLayout {
 
 //        setLimitLines(lowLimit,highLimit,standardValue);
         final Entry[] lastValue = new Entry[1];
-        lastValue[0] = new Entry(0,0);
+        lastValue[0] = new Entry(0, 0);
 
         mChart.post(new Runnable() {
             @Override
@@ -229,6 +230,7 @@ public class LineChartTimeSmall extends FrameLayout {
                 if (mChart.getContext() != null && mChart.getContext() instanceof Activity && !((Activity) mChart.getContext()).isDestroyed()) {
                     float max = highLimit;
                     float min = lowLimit;
+
                     for (ArrayList<Entry> entries : values) {
                         for (Entry entry : entries) {
 
@@ -243,9 +245,15 @@ public class LineChartTimeSmall extends FrameLayout {
                         }
                     }
 
-                    float addition = ((max - min) + 1) / 5; // add percentage of full range on each side for better visibility,, adding some for min = max case;
+                    if (min == 0) {
+                        min = -0.1f;
+                    }
+                    if (max == 0) {
+                        max = 0.1f;
+                    }
+                    min = min - (max - min) / 10f;
 
-                    max += addition;
+                    max = max + (max - min) / 10f;
 
                     YAxis leftAxis = mChart.getAxisLeft();
                     leftAxis.resetAxisMaximum();//leftAxis.resetAxisMaxValue();
