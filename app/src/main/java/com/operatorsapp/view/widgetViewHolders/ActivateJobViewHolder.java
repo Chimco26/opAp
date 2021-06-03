@@ -33,11 +33,31 @@ public class ActivateJobViewHolder extends RecyclerView.ViewHolder {
     }
     public void setData(Widget widget){
         editText.requestFocus();
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().contains("\n")){
+                    s = s.toString().replace("\n", "");
+                    EventBus.getDefault().post(new ActivateJobEvent(s.toString()));
+                    editText.setText("");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if(i == EditorInfo.IME_ACTION_DONE){
                     EventBus.getDefault().post(new ActivateJobEvent(editText.getText().toString()));
+                    editText.setText("");
                 }
                 return false;
             }
