@@ -79,11 +79,11 @@
                 android:layout_marginStart="14dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1.8"
+                android:autoSizeMaxTextSize="18sp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                android:autoSizeMaxTextSize="18sp"
                 app:autoSizeTextType="uniform" />
 
             <TextView
@@ -121,8 +121,8 @@
             android:id="@+id/event_stopped_shift_log_divider"
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@color/divider_gray"
             android:visibility="gone" />
 
@@ -131,7 +131,7 @@
             android:id="@+id/event_stopped_shift_log_item_subtitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="10dp"
             android:gravity="center"
             android:orientation="vertical"
             android:weightSum="6">
@@ -141,8 +141,7 @@
                 android:layout_height="0dp"
                 android:layout_gravity="start"
                 android:layout_marginStart="10dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="5"
+                android:layout_weight="4.8"
                 android:orientation="horizontal"
                 android:weightSum="12">
 
@@ -260,7 +259,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center"
-                android:layout_weight="1"
+                android:layout_weight="1.2"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -288,21 +287,22 @@
                 <FrameLayout
                     android:id="@+id/event_stopped_shift_log_item_tech_call_fl"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/grey1"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
+                    android:background="@color/grey1"
                     android:padding="1dp">
 
                     <TextView
                         android:id="@+id/event_stopped_shift_log_item_tech_call_tv"
                         style="@style/ProximaNovaSemiBold"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:background="@color/white"
                         android:maxLines="1"
                         android:text="@string/new_call"
-                        android:textStyle="bold"
                         android:textAlignment="center"
-                        android:background="@color/white"
+                        android:textStyle="bold"
                         app:autoSizeTextType="uniform" />
                 </FrameLayout>
 

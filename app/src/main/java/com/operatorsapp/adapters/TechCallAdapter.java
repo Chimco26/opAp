@@ -20,8 +20,6 @@ import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Created by alex on 07/01/2019.
@@ -32,7 +30,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final ArrayList<TechCallInfo> mTechList;
     private final TechCallItemListener mListener;
     private final boolean isManageServiceCall;
-//    private final String mMachineName;
+    //    private final String mMachineName;
     private final MachineLineResponse mMachineLine;
     private final boolean isViewOnly;
 
@@ -59,15 +57,15 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Context context = holder.itemView.getContext();
 
         boolean isNewestCall = !isNewerCallExists(mTechList.get(position));
-        if ((isManageServiceCall || !isViewOnly) && isNewestCall){
+        if ((isManageServiceCall || !isViewOnly) && isNewestCall) {
             techViewHolder.mManageCallFl.setVisibility(View.VISIBLE);
             techViewHolder.mManageCallIv.setImageDrawable(context.getResources().getDrawable(R.drawable.wrench));
             techViewHolder.mManageCallTv.setText(context.getResources().getString(R.string.start_service));
-        }else {
+        } else {
             techViewHolder.mManageCallFl.setVisibility(View.INVISIBLE);
         }
 
-        if (!isViewOnly && isNewestCall){
+        if (!isViewOnly && isNewestCall) {
             techViewHolder.mRemoveIv.setVisibility(View.VISIBLE);
             techViewHolder.mRemoveIv.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -75,7 +73,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     mListener.onRemoveCallPressed(mTechList.get(position));
                 }
             });
-        }else {
+        } else {
             techViewHolder.mRemoveIv.setVisibility(View.INVISIBLE);
         }
 
@@ -92,7 +90,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         int icon = R.drawable.technician_blue_svg;
         String txt = context.getResources().getString(R.string.waiting_for_replay);
-        switch (mTechList.get(position).getmResponseType()){
+        switch (mTechList.get(position).getmResponseType()) {
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_UNSET:
                 icon = R.drawable.call_recieved;
@@ -129,7 +127,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         techViewHolder.mSubTextTv.setText(txt);
         if (mMachineLine != null && mMachineLine.getLineID() > 0) {
             for (MachinesLineDetail machine : mMachineLine.getMachinesData()) {
-                if (machine.getMachineID() == mTechList.get(position).getmMachineId()){
+                if (machine.getMachineID() == mTechList.get(position).getmMachineId()) {
                     techViewHolder.mMachineNameTv.setText(machine.getMachineName());
                     break;
                 }
@@ -140,7 +138,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private boolean isNewerCallExists(TechCallInfo techCallInfo) {
         for (TechCallInfo call : mTechList) {
             if (call.getmNotificationId() == techCallInfo.getmNotificationId() && call.getmResponseType() > techCallInfo.getmResponseType())
-               return true;
+                return true;
         }
         return false;
     }
@@ -151,6 +149,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public class TechViewHolder extends RecyclerView.ViewHolder {
+        private TextView mEventInfoTv;
         private LinearLayout mMoreInfoLil;
         private TextView mMachineNameTv;
         private TextView mSubTextTv;
@@ -179,22 +178,50 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mStatusIv = itemView.findViewById(R.id.tech_call_item_status_iv);
             mSubTextTv = itemView.findViewById(R.id.tech_call_item_subtext_tv);
             mMachineNameTv = itemView.findViewById(R.id.tech_call_item_machine_name_tv);
-            if (mMachineLine != null && mMachineLine.getLineID() > 0){
+            mEventInfoTv = itemView.findViewById(R.id.tech_call_event_tv);
+            if (mMachineLine != null && mMachineLine.getLineID() > 0) {
                 mMachineNameTv.setVisibility(View.VISIBLE);
             }
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mMoreInfoLil.setVisibility(isMoreInfoOpen ? View.GONE : View.VISIBLE);
-                    isMoreInfoOpen = !isMoreInfoOpen;
-                    mArrowIv.setRotation(isMoreInfoOpen ? 180 : 0);
+                    String description = mTechList.get(getAdapterPosition()).getmAdditionalText();
+
+                    String eventText = String.valueOf(mTechList.get(getAdapterPosition()).getEventId());
+                    String eventName = mTechList.get(getAdapterPosition()).getmEventName();
+                    if (eventName != null && !eventName.isEmpty()) {
+                        eventText += String.format(" - %s", mTechList.get(getAdapterPosition()).getmEventName());
+                    }
+
+                    boolean showDescription = description != null && !description.isEmpty();
+                    boolean showEventInfo = mTechList.get(getAdapterPosition()).getEventId() != 0;
+
+                    if (!showDescription && !showEventInfo) {
+                        mMoreInfoLil.setVisibility(View.GONE);
+                        mEventInfoTv.setVisibility(View.GONE);
+                    } else {
+                        if (isMoreInfoOpen) {
+                            mMoreInfoLil.setVisibility(View.GONE);
+                            mEventInfoTv.setVisibility(View.GONE);
+                        } else {
+                            if (showDescription) {
+                                mMoreInfoLil.setVisibility(View.VISIBLE);
+                            }
+                            if (showEventInfo) {
+                                mEventInfoTv.setVisibility(View.VISIBLE);
+                                mEventInfoTv.setText(eventText);
+                            }
+                        }
+                        isMoreInfoOpen = !isMoreInfoOpen;
+                        mArrowIv.setRotation(isMoreInfoOpen ? 180 : 0);
+                    }
                 }
             });
         }
     }
 
-    public interface TechCallItemListener{
+    public interface TechCallItemListener {
         void onRemoveCallPressed(TechCallInfo techCallInfo);
 
         void onManageCall(TechCallInfo techCallInfo);

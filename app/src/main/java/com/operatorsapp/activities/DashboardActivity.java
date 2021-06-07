@@ -381,7 +381,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                                 }
                                 if (isNew) {
                                     techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmTitle(), not.getmAdditionalText(),
-                                            TimeUtils.getDateForNotification(not.getmSentTime()).getTime(), not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID()));
+                                            TimeUtils.getDateForNotification(not.getmSentTime()).getTime(), not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID(), not.getmEventName()));
                                 }
                             }
                         }

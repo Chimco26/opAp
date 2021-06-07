@@ -37,9 +37,7 @@ import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
-import com.operatorsapp.server.requests.TechCall24HRequest;
 import com.operatorsapp.server.responses.Notification;
-import com.operatorsapp.server.responses.TechCall24HResponse;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
@@ -365,7 +363,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
         for (Notification call : mLast24hCallList) {
             date = TimeUtils.getDateForNotification(call.getmSentTime());
             techCallList.add(new TechCallInfo(call.getMachineID(), call.getmResponseType(), call.getmTargetName(), call.getmTitle(), call.getmAdditionalText(),
-                    date != null ? date.getTime() : 0, call.getmNotificationID(), call.getmTargetUserId(), call.getmEventID()));
+                    date != null ? date.getTime() : 0, call.getmNotificationID(), call.getmTargetUserId(), call.getmEventID(), call.getmEventName()));
         }
 
         mRecycler.setAdapter(new TechCallAdapter(techCallList, isManageServiceCall, true, mMachineLine, new TechCallAdapter.TechCallItemListener() {
@@ -603,7 +601,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                     PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
                     TechCallInfo techCall = new TechCallInfo(machineId[0], 0, techName, getString(R.string.called_technician) + "\n" + techName,
-                            mDescriptionEt.getText().toString(), Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID(), 0);
+                            mDescriptionEt.getText().toString(), Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID(), 0, null);
                     PersistenceManager.getInstance().setCalledTechnician(techCall);
                     PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                     mListener.onGetNotificationsFromServer();

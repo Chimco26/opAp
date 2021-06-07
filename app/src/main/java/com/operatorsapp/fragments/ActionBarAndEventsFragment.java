@@ -142,7 +142,6 @@ import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.EmeraldSpinner;
 import com.operatorsapp.view.LinearLayoutManagerNoPredictiveAnimation;
 import com.operatorsapp.view.PinchRecyclerView;
-import com.operatorsapp.view.TimeLineView;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 
 import org.litepal.crud.DataSupport;
@@ -1633,7 +1632,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
                     TechCallInfo techCall = new TechCallInfo(PersistenceManager.getInstance().getMachineId(), 0, techName, getString(R.string.called_technician) + "\n" + techName,
-                            "", Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID(), 0);
+                            "", Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID(), 0, null);
                     PersistenceManager.getInstance().setCalledTechnician(techCall);
                     PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                     setTechnicianCallStatus();
@@ -1919,7 +1918,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
                             TechCallInfo techCall = new TechCallInfo(PersistenceManager.getInstance().getMachineId(), 0, techName, getString(R.string.called_technician) + "\n" + techName,
-                                    "", Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technicianId, 0);
+                                    "", Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technicianId, 0, null);
                             PersistenceManager.getInstance().setCalledTechnician(techCall);
                             PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                             setTechnicianCallStatus();
@@ -3952,7 +3951,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
                             techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmResponseType() + "",
                                     not.getmAdditionalText(), TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
-                                    not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID()));
+                                    not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID(), not.getmEventName()));
                         }
                     }
 

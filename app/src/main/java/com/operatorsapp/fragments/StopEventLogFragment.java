@@ -319,7 +319,7 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
                     PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
                     TechCallInfo techCall = new TechCallInfo(machineId, 0, techName, getString(R.string.called_technician) + "\n" + techName,
-                            additionalText, Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID(), 0);
+                            additionalText, Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID(), 0, null);
                     PersistenceManager.getInstance().setCalledTechnician(techCall);
                     PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                     ProgressDialogManager.dismiss();
