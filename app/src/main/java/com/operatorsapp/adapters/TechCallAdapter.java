@@ -4,9 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -149,6 +151,8 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public class TechViewHolder extends RecyclerView.ViewHolder {
+        private final RelativeLayout mTechnicianRL;
+        private final LinearLayout mtopLl;
         private TextView mEventInfoTv;
         private LinearLayout mMoreInfoLil;
         private TextView mMachineNameTv;
@@ -179,9 +183,31 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mSubTextTv = itemView.findViewById(R.id.tech_call_item_subtext_tv);
             mMachineNameTv = itemView.findViewById(R.id.tech_call_item_machine_name_tv);
             mEventInfoTv = itemView.findViewById(R.id.tech_call_event_tv);
+            mTechnicianRL = itemView.findViewById(R.id.tech_call_item_text_rl);
+            mtopLl = itemView.findViewById(R.id.TCR_top_ll);
             if (mMachineLine != null && mMachineLine.getLineID() > 0) {
                 mMachineNameTv.setVisibility(View.VISIBLE);
             }
+
+            mTechnicianRL.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    mTechnicianRL.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    int margin = 0;
+                    if (mTechnicianRL.getContext().getResources().getConfiguration().getLayoutDirection()
+                            == View.LAYOUT_DIRECTION_RTL) {
+                        margin = (int) (mTechnicianRL.getX() - mTechnicianRL.getWidth());
+                    } else {
+                        margin = (int) mTechnicianRL.getX();
+                    }
+                    LinearLayout.LayoutParams eventInfoParams = (LinearLayout.LayoutParams) mEventInfoTv.getLayoutParams();
+                    eventInfoParams.setMarginStart(margin);
+                    mEventInfoTv.setLayoutParams(eventInfoParams);
+                    LinearLayout.LayoutParams moreInfoParams = (LinearLayout.LayoutParams) mMoreInfoLil.getLayoutParams();
+                    moreInfoParams.setMarginStart(margin);
+                    mMoreInfoLil.setLayoutParams(moreInfoParams);
+                }
+            });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -207,10 +233,14 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         } else {
                             if (showDescription) {
                                 mMoreInfoLil.setVisibility(View.VISIBLE);
+                            }else {
+                                mMoreInfoLil.setVisibility(View.GONE);
                             }
                             if (showEventInfo) {
                                 mEventInfoTv.setVisibility(View.VISIBLE);
                                 mEventInfoTv.setText(eventText);
+                            }else {
+                                mEventInfoTv.setVisibility(View.GONE);
                             }
                         }
                         isMoreInfoOpen = !isMoreInfoOpen;
