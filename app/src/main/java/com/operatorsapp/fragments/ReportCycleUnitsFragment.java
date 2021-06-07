@@ -104,6 +104,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     @Override
     public void onDetach() {
         mOnCroutonRequestListener = null;
+        mDashboardCroutonListener = null;
         super.onDetach();
     }
 

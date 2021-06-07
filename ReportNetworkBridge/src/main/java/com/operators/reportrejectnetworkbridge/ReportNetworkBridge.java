@@ -281,6 +281,45 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
     }
 
     @Override
+    public void sendReportFixUnits(String siteUrl, String sessionId, String machineId, String operatorId, double amount, Integer joshId, final SendReportCallback callback, final int totalRetries, int specificRequestTimeout) {
+        SendReportCycleUnitsRequest sendReportCycleUnitsRequest = new SendReportCycleUnitsRequest(sessionId, machineId, operatorId, amount, joshId);
+        final int[] retryCount = {0};
+        Call<StandardResponse> call = mReportCycleUnitsNetworkManagerInterface.reportCycleUnitsRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendReportCycleUnits(sendReportCycleUnitsRequest);
+        call.enqueue(new Callback<StandardResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+                if (response.isSuccessful()) {
+                    if (callback != null) {
+                        callback.onSendReportSuccess(response.body());
+                    } else {
+                        OppAppLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
+                    }
+                } else {
+                    onFailure(call, new Exception("response not successful"));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Send_Report_Failed Error");
+                        callback.onSendReportFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    @Override
     public void sendReportInventory(String siteUrl, String sessionId, String machineId, String operatorId, int packageTypeId, int units, Integer jobId, Integer numOfBatch, final SendReportCallback callback, final int totalRetries, int specificRequestTimeout) {
         SendReportInventoryRequest sendReportInventoryRequest = new SendReportInventoryRequest(sessionId, machineId, operatorId, packageTypeId, units, jobId, numOfBatch);
         final int[] retryCount = {0};

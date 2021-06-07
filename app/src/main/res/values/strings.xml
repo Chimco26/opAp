@@ -611,4 +611,5 @@
     <string name="select_test">Select Test</string>
     <string name="common_signin_button_text">Sign in</string>
     <string name="number_of_batches">Number of Batches</string>
+    <string name="units_to_add_remove">&placeholder1; to Add/Remove</string>
 </resources>
