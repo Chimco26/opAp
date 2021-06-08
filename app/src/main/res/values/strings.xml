@@ -172,6 +172,7 @@
         <item>Activate Job</item>
         <item>Add Rejects</item>
         <item>Change Units In Cycle</item>
+        <item>Fix Units Produced</item>
         <item>Report Production</item>
         <item>Order QC Test</item>
     </array>

@@ -23,6 +23,7 @@ public class ActivateJobViewHolder extends RecyclerView.ViewHolder {
     private final int mHeight;
     private final int mWidth;
     private final EditText editText;
+    private TextWatcher textWatcher;
 
     public ActivateJobViewHolder(@NonNull View itemView, int height, int width) {
         super(itemView);
@@ -30,10 +31,7 @@ public class ActivateJobViewHolder extends RecyclerView.ViewHolder {
         mWidth = width;
         editText = itemView.findViewById(R.id.HFT_edit_text);
         setSizes((LinearLayout) itemView.findViewById(R.id.widget_parent_layout));
-    }
-    public void setData(Widget widget){
-        editText.requestFocus();
-        editText.addTextChangedListener(new TextWatcher() {
+        textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -41,27 +39,37 @@ public class ActivateJobViewHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().contains("\n")){
-                    s = s.toString().replace("\n", "");
-                    EventBus.getDefault().post(new ActivateJobEvent(s.toString()));
-                    editText.setText("");
-                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (s.toString().contains("\n")) {
+                    EventBus.getDefault().post(new ActivateJobEvent(s.toString().replace("\n", "")));
+                    editText.setText("");
+                }
             }
-        });
+        };
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if(i == EditorInfo.IME_ACTION_DONE){
-                    EventBus.getDefault().post(new ActivateJobEvent(editText.getText().toString()));
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    String text = editText.getText().toString();
+                    if (text.contains("\n")) {
+                        text = text.replace("\n", "");
+                    }
+                    EventBus.getDefault().post(new ActivateJobEvent(text));
                     editText.setText("");
                 }
                 return false;
             }
         });
+    }
+
+    public void setData(Widget widget) {
+        editText.requestFocus();
+
+        editText.removeTextChangedListener(textWatcher);
+        editText.addTextChangedListener(textWatcher);
     }
 
     private void setSizes(final LinearLayout parent) {

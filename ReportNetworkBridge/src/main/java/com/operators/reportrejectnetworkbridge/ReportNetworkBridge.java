@@ -14,6 +14,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.ReportCycleUnitsNetwor
 import com.operators.reportrejectnetworkbridge.interfaces.ReportInventoryNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportStopNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.server.request.ReportFixUnitsProducedRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendApproveFirstItemRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendMultipleStopRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportCycleUnitsRequest;
@@ -282,9 +283,9 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
 
     @Override
     public void sendReportFixUnits(String siteUrl, String sessionId, String machineId, String operatorId, double amount, Integer joshId, final SendReportCallback callback, final int totalRetries, int specificRequestTimeout) {
-        SendReportCycleUnitsRequest sendReportCycleUnitsRequest = new SendReportCycleUnitsRequest(sessionId, machineId, operatorId, amount, joshId);
+        ReportFixUnitsProducedRequest reportFixUnitsProducedRequest = new ReportFixUnitsProducedRequest(sessionId, amount, joshId);
         final int[] retryCount = {0};
-        Call<StandardResponse> call = mReportCycleUnitsNetworkManagerInterface.reportCycleUnitsRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendReportCycleUnits(sendReportCycleUnitsRequest);
+        Call<StandardResponse> call = mReportCycleUnitsNetworkManagerInterface.reportFixUnitsProduced(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).reportFixUnitsProduced(reportFixUnitsProducedRequest);
         call.enqueue(new Callback<StandardResponse>() {
             @Override
             public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {

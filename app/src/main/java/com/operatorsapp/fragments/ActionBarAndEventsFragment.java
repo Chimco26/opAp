@@ -1439,17 +1439,25 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             }
                             case 3: {
                                 if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+                                    mOnGoToScreenListener.goToFragment(FixUnitsProducedFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true, true);
+                                } else {
+                                    mOnGoToScreenListener.goToFragment(FixUnitsProducedFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true, true);
+                                }
+                                break;
+                            }
+                            case 4: {
+                                if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
                                     mOnGoToScreenListener.goToFragment(ReportProductionFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true, true);
                                 } else {
                                     mOnGoToScreenListener.goToFragment(ReportProductionFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true, true);
                                 }
                                 break;
                             }
-                            case 4: {
+                            case 5: {
                                 mListener.onOpenQCActivity(0, true);
                                 break;
                             }
-                            case 5: {
+                            case 6: {
                                 openSetupEndFragment();
                                 break;
                             }

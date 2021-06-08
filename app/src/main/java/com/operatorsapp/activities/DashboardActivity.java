@@ -113,6 +113,7 @@ import com.operatorsapp.dialogs.SetupEndDialog;
 import com.operatorsapp.dialogs.TitleAndSubWithSelectableListDialog;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.AdvancedSettingsFragment;
+import com.operatorsapp.fragments.FixUnitsProducedFragment;
 import com.operatorsapp.fragments.LenoxDashboardFragment;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.ReportCycleUnitsFragment;
@@ -248,6 +249,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     public static final String REPORT_REJECT_TAG = "ReportRejects";
     public static final String REPORT_UNIT_CYCLE_TAG = "ReportUnitsInCycle";
+    public static final String REPORT_FIX_PRODUCED_UNITS = "ReportFixProducedUnits";
     public static final String REPORT_PRODUCTION_TAG = "ReportProduction";
     private static final int POOLING_BACKUP_DELAY = 1000 * 60 * 5;
     private static final String INTERVAL_KEY = "OpAppPollingInterval";
@@ -1023,10 +1025,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Subscribe
-    public void onActivateJob(ActivateJobEvent event){
+    public void onActivateJob(ActivateJobEvent event) {
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
         postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
                 String.valueOf(persistenceManager.getMachineId()),
+                "0",
                 event.getErpJobId(),
                 persistenceManager.getOperatorId(),
                 false));
@@ -3552,6 +3555,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 case REPORT_UNIT_CYCLE_TAG:
                     reportFragment = ReportCycleUnitsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSpinnerProductPosition);
+
+                    break;
+
+                case REPORT_FIX_PRODUCED_UNITS:
+                    reportFragment = FixUnitsProducedFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSpinnerProductPosition);
 
                     break;
 

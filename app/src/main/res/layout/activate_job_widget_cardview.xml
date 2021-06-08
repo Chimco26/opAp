@@ -76,9 +76,9 @@
             android:gravity="center"
             android:textColor="@color/black"
             android:textSize="20sp"
+            android:inputType="textNoSuggestions"
             app:autoSizeMaxTextSize="25sp"
             app:autoSizeTextType="uniform"
-            android:inputType="number"
             android:imeOptions="actionDone"/>
 
 

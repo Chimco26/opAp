@@ -226,19 +226,20 @@
                                 android:orientation="horizontal"
                                 android:weightSum="5">
 
-                                <TextView
+                                <EditText
                                     android:id="@+id/units_text_view"
                                     style="@style/FontStyle_T6"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:background="@android:color/transparent"
-                                    android:gravity="center"
+                                    android:inputType="numberDecimal|numberSigned"
                                     android:maxLines="1"
                                     android:text="@string/one"
                                     android:textColor="@color/status_bar"
-                                    android:textSize="22sp"
+                                    android:textSize="26sp"
                                     app:autoSizeMaxTextSize="22sp"
-                                    app:autoSizeTextType="uniform" />
+                                    app:autoSizeTextType="uniform"
+                                    android:gravity="center"
+                                    android:background="@drawable/edit_text_background_selector"/>
 
                             </LinearLayout>
                         </LinearLayout>

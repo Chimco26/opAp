@@ -65,9 +65,9 @@ public class PackageTypeSpinnerAdapter extends ArrayAdapter<PackageTypesResponse
             name.setText(item);
             String color = mSpinnerItems.get(position).getColor();
             if (color == null) {
-                mRowName.setTextColor(ContextCompat.getColor(getContext(), R.color.status_bar));
+                name.setTextColor(ContextCompat.getColor(getContext(), R.color.status_bar));
             }else {
-                mRowName.setTextColor(Color.parseColor(color));
+                name.setTextColor(Color.parseColor(color));
             }
             name.setTextSize(22);
         }

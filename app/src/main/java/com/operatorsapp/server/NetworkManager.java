@@ -353,6 +353,10 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     }
 
     private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit) {
+        if (timeUnit == TimeUnit.MILLISECONDS && timeout < 1000){
+            timeout = 1000;
+        }
+
         ConnectionPool pool = new ConnectionPool(5, timeout, timeUnit);
 
         try {
@@ -772,6 +776,20 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         } catch (RuntimeException e) {
 
             SendReportUtil.sendAcraExeption(e, "reportCycleUnitsRetroFitServiceRequests");
+        }
+        return mRetrofit.create(EmeraldSendReportCycleUnits.class);
+    }
+
+    @Override
+    public EmeraldSendReportCycleUnits reportFixUnitsProduced(String siteUrl, int timeout, TimeUnit timeUnit) {
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldSendReportCycleUnits.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "reportFixUnitsProduced");
         }
         return mRetrofit.create(EmeraldSendReportCycleUnits.class);
     }
