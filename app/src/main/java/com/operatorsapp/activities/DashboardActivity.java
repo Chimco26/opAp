@@ -1303,6 +1303,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         PersistenceManager.getInstance().setReportRejectDefaultUnits(machineStatus.getAllMachinesData().get(0).getReportRejectDefaultUnits());
                         PersistenceManager.getInstance().setRequireWorkerSignIn(machineStatus.getAllMachinesData().get(0).isRequireWorkerSignIn());
                         PersistenceManager.getInstance().setActivateJobWidgetOnOpApp(machineStatus.getAllMachinesData().get(0).isActivateJobWidgetOnOpApp());
+                        PersistenceManager.getInstance().setAllowTextOnReportStop(machineStatus.getAllMachinesData().get(0).ismAllowTextOnReportStop());
 
                         String opName = machineStatus.getAllMachinesData().get(0).getOperatorName();
                         String opId = machineStatus.getAllMachinesData().get(0).getOperatorId();

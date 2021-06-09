@@ -3,7 +3,7 @@
 
     <dbname value="events" />
 
-    <version value="18" />
+    <version value="19" />
 
     <list>
         <mapping class="com.example.common.Event" />

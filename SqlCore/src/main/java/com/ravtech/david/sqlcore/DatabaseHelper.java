@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     // Database Version
-    private static final int DATABASE_VERSION = 18;
+    private static final int DATABASE_VERSION = 19;
 
     // Database Name
     private static final String DATABASE_NAME = "events.db";
@@ -73,6 +73,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_JOB_DATA_ITEMS = "jobdataitems";
     private static final String KEY_QUALITY_TEST_ITEMS = "qualitytestitems";
     private static final String KEY_HAVE_EXTRA = "extra";
+    private static final String KEY_DESCR = "descr";
 
 
     // Table Create Statements
@@ -113,6 +114,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_ALARMS_EVENTS + " TEXT," +
             KEY_JOB_DATA_ITEMS + " TEXT," +
             KEY_QUALITY_TEST_ITEMS + " TEXT," +
+            KEY_DESCR + " TEXT," +
             KEY_INVENTORY + " TEXT" +
             ")";
 
@@ -486,6 +488,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_JOB_DATA_ITEMS, event.getJobDataItemsJson());
         values.put(KEY_QUALITY_TEST_ITEMS, event.getQualityTestsJson());
         values.put(KEY_HAVE_EXTRA, event.haveExtra());
+        values.put(KEY_DESCR, event.getDescr());
 
         return values;
     }
@@ -544,6 +547,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             event.setJobDataItemsJson(c.getString(c.getColumnIndex(KEY_JOB_DATA_ITEMS)));
             event.setQualityTestsJson(c.getString(c.getColumnIndex(KEY_QUALITY_TEST_ITEMS)));
             event.setHaveExtra(c.getInt(c.getColumnIndex(KEY_HAVE_EXTRA)) > 0);
+            event.setDescr(c.getString(c.getColumnIndex(KEY_DESCR)));
 
 
         }

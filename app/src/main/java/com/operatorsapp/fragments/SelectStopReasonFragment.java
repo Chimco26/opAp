@@ -27,6 +27,7 @@ import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.StopSubReasonAdapter;
+import com.operatorsapp.dialogs.InputDialog;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnSelectedSubReasonListener;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
@@ -58,6 +59,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     private static final int NUMBER_OF_COLUMNS = 5;
     private static final float MINIMUM_VERSION_TO_NEW_API = 1.7f;
     private static final String EXTRA_VIEW_LOG_REPORT_IS_SUCCESS = "EXTRA_VIEW_LOG_REPORT_IS_SUCCESS";
+    private static final String EVENT_NOTE = "EVENT_NOTE";
 
     //    private ReportFieldsForMachine mReportFieldsForMachine;
     private Integer mJoshId = 0;
@@ -83,9 +85,10 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     private SelectStopReasonFragmentListener mListener;
     private boolean isFromViewLogRoot;
     private StopReasonsGroup mStopReason;
+    private String mEventNote;
 
 
-    public static SelectStopReasonFragment newInstance(int position, StopReasonsGroup stopReasonsGroup, int joshId, int reasonId, String eName, String lName, boolean isOpen) {
+    public static SelectStopReasonFragment newInstance(int position, StopReasonsGroup stopReasonsGroup, int joshId, int reasonId, String eName, String lName, boolean isOpen, String descr) {
         SelectStopReasonFragment selectedStopReasonFragment = new SelectStopReasonFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(SELECTED_STOP_REASON_POSITION, position);
@@ -94,6 +97,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         bundle.putString(IL_NAME, lName);
         bundle.putInt(REASON_ID, reasonId);
         bundle.putBoolean(IS_OPEN, isOpen);
+        bundle.putString(EVENT_NOTE, descr);
         selectedStopReasonFragment.setArguments(bundle);
         selectedStopReasonFragment.setStopReasons(stopReasonsGroup);
         return selectedStopReasonFragment;
@@ -112,8 +116,8 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
             mReasonId = getArguments().getInt(REASON_ID);
             mEnName = getArguments().getString(EN_NAME);
             mILName = getArguments().getString(IL_NAME);
+            mEventNote = getArguments().getString(EVENT_NOTE);
             mIsOpen = getArguments().getBoolean(IS_OPEN, false);
-
         }
 
     }
@@ -278,6 +282,28 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
     private void sendReport() {
 
+        if (PersistenceManager.getInstance().isAllowTextOnReportStop()) {
+            String value = (mSelectedEvents.size() == 1 && mEventNote != null) ? mEventNote : "";
+            InputDialog.getInputDialog(getContext(), getString(R.string.add_comment), value,
+                    new InputDialog.InputDialogListener() {
+                        @Override
+                        public void onSubmit(String text) {
+                            performReport(text);
+                        }
+                        @Override
+                        public void onCancel() {
+                            performReport(null);
+
+                        }
+                    }).show();
+        }else {
+
+            performReport(null);
+        }
+
+    }
+
+    private void performReport(String text) {
         ProgressDialogManager.show(getActivity());
 
         ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
@@ -308,11 +334,9 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
         } else {
 
-            mReportCore.sendMultipleStopReport(mSelectedReason, mSelectedSubreason.getId(), eventsId, mJoshId, false);
+            mReportCore.sendMultipleStopReport(mSelectedReason, mSelectedSubreason.getId(), eventsId, mJoshId, false, text);
 
         }
-
-
     }
 
 

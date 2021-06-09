@@ -22,8 +22,10 @@ public class SendMultipleStopRequest {
     private boolean mByRootEvent;
     @SerializedName("OnlyUnReported")
     private boolean mOnlyUnReported;
+    @SerializedName("Notes")
+    private String mNotes;
 
-    public SendMultipleStopRequest(String mSessionId, String mMachineId, String mOperatorId, int mStopReasonId, int mStopSubReasonId, Integer mJoshId, long[] mEventID, boolean mByRootEvent, boolean mOnlyUnReported) {
+    public SendMultipleStopRequest(String mSessionId, String mMachineId, String mOperatorId, int mStopReasonId, int mStopSubReasonId, Integer mJoshId, long[] mEventID, boolean mByRootEvent, boolean mOnlyUnReported, String notes) {
         this.mSessionId = mSessionId;
         this.mMachineId = mMachineId;
         this.mOperatorId = mOperatorId;
@@ -33,5 +35,6 @@ public class SendMultipleStopRequest {
         this.mEventID = mEventID;
         this.mByRootEvent = mByRootEvent;
         this.mOnlyUnReported = mOnlyUnReported;
+        this.mNotes = notes;
     }
 }

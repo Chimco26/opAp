@@ -122,6 +122,8 @@ public class AllMachinesData {
     private boolean isAllowReportingOnSetupEvents;
     @SerializedName("AllowReportingSetupAfterSetupEnd")
     private boolean mAllowReportingSetupAfterSetupEnd;
+    @SerializedName("AllowTextOnReportStop")
+    private boolean mAllowTextOnReportStop;
     @SerializedName("RequireWorkerSignIn")
     private boolean mRequireWorkerSignIn;
     @SerializedName("ActivateJobWidgetOnOpApp")
@@ -141,6 +143,10 @@ public class AllMachinesData {
 
     public boolean ismAllowReportingSetupAfterSetupEnd() {
         return mAllowReportingSetupAfterSetupEnd;
+    }
+
+    public boolean ismAllowTextOnReportStop() {
+        return mAllowTextOnReportStop;
     }
 
     public boolean isManageServiceCallForTechnician() {
