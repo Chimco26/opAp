@@ -39,24 +39,24 @@ public class ActivateJobViewHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().contains("\n") || s.toString().contains("\r")) {
+                    String text = s.toString().replace("\n","");
+                    text = text.replace("\r","");
+                    EventBus.getDefault().post(new ActivateJobEvent(text));
+                    editText.setText("");
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().contains("\n")) {
-                    EventBus.getDefault().post(new ActivateJobEvent(s.toString().replace("\n", "")));
-                    editText.setText("");
-                }
             }
         };
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_DONE) {
-                    String text = editText.getText().toString();
-                    if (text.contains("\n")) {
-                        text = text.replace("\n", "");
-                    }
+                    String text = editText.getText().toString().replace("\n","");
+                    text = text.replace("\r","");
                     EventBus.getDefault().post(new ActivateJobEvent(text));
                     editText.setText("");
                 }
