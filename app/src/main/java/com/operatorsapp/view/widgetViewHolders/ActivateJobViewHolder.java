@@ -2,6 +2,7 @@ package com.operatorsapp.view.widgetViewHolders;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.operatorsapp.model.event.ActivateJobEvent;
 import org.greenrobot.eventbus.EventBus;
 
 public class ActivateJobViewHolder extends RecyclerView.ViewHolder {
+    private static final String TAG = ActivateJobViewHolder.class.getSimpleName();
     private final int mHeight;
     private final int mWidth;
     private final EditText editText;
@@ -39,30 +41,20 @@ public class ActivateJobViewHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().contains("\n") || s.toString().contains("\r")) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.d(TAG, "afterTextChanged: " + s.toString());
+                if(editText.getText().toString().contains("\n")){
+                    Log.d(TAG, "onTextChanged: true");
                     String text = s.toString().replace("\n","");
                     text = text.replace("\r","");
                     EventBus.getDefault().post(new ActivateJobEvent(text));
                     editText.setText("");
                 }
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
         };
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i == EditorInfo.IME_ACTION_DONE) {
-                    String text = editText.getText().toString().replace("\n","");
-                    text = text.replace("\r","");
-                    EventBus.getDefault().post(new ActivateJobEvent(text));
-                    editText.setText("");
-                }
-                return false;
-            }
-        });
     }
 
     public void setData(Widget widget) {
