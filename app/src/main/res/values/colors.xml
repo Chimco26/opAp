@@ -79,6 +79,7 @@
     <color name="green_dark_2">#127510</color>
     <color name="red_dark">#850f16</color>
     <color name="grey_icon_color">#6C7374</color>
+    <color name="gray_light">#dcdcdc</color>
 
     <array name="colorList">
         <item>@color/blue1</item>

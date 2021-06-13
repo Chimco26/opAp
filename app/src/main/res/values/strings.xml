@@ -614,4 +614,14 @@
     <string name="number_of_batches">Number of Batches</string>
     <string name="units_to_add_remove">&placeholder1; to Add/Remove</string>
     <string name="add_comment">Add comment</string>
+    <string name="details_are_missing">Details are missing</string>
+    <string name="uploading_images_is_not_possible_without_these_permissions">Uploading images is not possible without these permissions</string>
+    <string name="show_camera_dialog_title">Add Image</string>
+    <string name="show_camera_dialog_gallery">Chose from gallery</string>
+    <string name="show_camera_dialog_take_a_picture">Take a new photo</string>
+    <string name="failed_to_load_image">Failed to load image, upload anyway?</string>
+    <string name="upload_completed">Upload Completed</string>
+    <string name="upload_failed">Upload Failed</string>
+    <string name="service_report">Service report</string>
+    <string name="attach_files">Attach Files</string>
 </resources>

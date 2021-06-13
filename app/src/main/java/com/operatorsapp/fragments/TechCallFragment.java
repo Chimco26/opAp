@@ -30,6 +30,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.adapters.TechCallAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.GenericDialog;
+import com.operatorsapp.dialogs.ServiceReportDialog;
 import com.operatorsapp.dialogs.TechCallFilter;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
@@ -483,6 +484,7 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
 
                     if (request.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE){
                         mTechCallList.remove(techCallInfo);
+                        openServiceReportDialog(techCallInfo);
                     }else {
                         techCallInfo.setmResponseType(request.getmResponseType());
                     }
@@ -502,6 +504,10 @@ public class TechCallFragment extends Fragment implements View.OnClickListener {
                 mListener.onGetNotificationsFromServer();
             }
         });
+    }
+
+    private void openServiceReportDialog(TechCallInfo techCallInfo) {
+        ServiceReportDialog.newInstance(String.valueOf(techCallInfo.getmNotificationId())).show(getChildFragmentManager(), ServiceReportDialog.TAG);
     }
 
     private void removeCall(final TechCallInfo techCallInfo) {

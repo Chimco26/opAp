@@ -11,6 +11,8 @@ import com.example.common.operator.SaveShiftWorkersRequest;
 import com.example.common.request.BaseRequest;
 import com.example.common.request.GetPackageTypesRequest;
 import com.example.common.request.MachineIdRequest;
+import com.example.common.request.ServiceCallFileRequest;
+import com.example.common.request.UpdateServiceCallDescriptionRequest;
 import com.example.common.task.CreateTaskHistoryRequest;
 import com.example.common.task.CreateTaskRequest;
 import com.example.common.task.GetTaskFilesRequest;
@@ -62,5 +64,11 @@ public interface EmeraldGetSimple {
 
     @POST("/LeaderMESApi/UpdateMachineStopBit")
     Call<StandardResponse> updateMachineStopBit(@Body MachineIdRequest request);
+
+    @POST("/LeaderMESApi/UpdateServiceCallFilesMobile")
+    Call<StandardResponse> postFilesForServiceCall(ServiceCallFileRequest request);
+
+    @POST("/LeaderMESApi/UpdateServiceCallDescription")
+    Call<StandardResponse> updateServiceCallDescription(UpdateServiceCallDescriptionRequest request);
 }
 
