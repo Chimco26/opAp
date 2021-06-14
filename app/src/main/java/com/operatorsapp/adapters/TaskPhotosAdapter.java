@@ -42,9 +42,9 @@ public class TaskPhotosAdapter extends RecyclerView.Adapter<TaskPhotosAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         if (getItemViewType(position) == TYPE_FILE) {
-            Picasso.with(holder.itemView.getContext()).load(mFileList.get(position)).centerCrop().resize(50, 50).into(holder.mPhotoIv);
+            Picasso.with(holder.itemView.getContext()).load(mFileList.get(position)).into(holder.mPhotoIv);
         }else {
-            Picasso.with(holder.itemView.getContext()).load(mFilesUrlList.get(position - mFileList.size()).getmFilePath()).centerCrop().resize(50, 50).into(holder.mPhotoIv);
+            Picasso.with(holder.itemView.getContext()).load(mFilesUrlList.get(position - mFileList.size()).getmFilePath()).into(holder.mPhotoIv);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

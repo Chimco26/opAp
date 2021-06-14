@@ -2,7 +2,7 @@ package com.operatorsapp.dialogs;
 
 
 import android.Manifest;
-import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -72,6 +73,7 @@ public class ServiceReportDialog extends DialogFragment {
     private int mApiCallsBeforeExitCounter = 0;
     private EditText reportEt;
     private RecyclerView photosRv;
+    private ServiceReportDialogListener mListener;
 
 
     public static ServiceReportDialog newInstance(String notificationID) {
@@ -80,6 +82,22 @@ public class ServiceReportDialog extends DialogFragment {
         args.putString(KEY_NOTIFICATION_ID, notificationID);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        if (getParentFragment() instanceof ServiceReportDialogListener) {
+            mListener = (ServiceReportDialogListener) getParentFragment();
+        } else {
+            Log.d(TAG, "onAttach: must override ServiceReportDialogListener");
+        }
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        mListener.onComplete();
+        super.onDismiss(dialog);
     }
 
     @Override
@@ -106,7 +124,6 @@ public class ServiceReportDialog extends DialogFragment {
         initListeners(view);
     }
 
-
     private void initListeners(View view) {
         view.findViewById(R.id.FSRD_attach_files_IV).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,10 +144,17 @@ public class ServiceReportDialog extends DialogFragment {
                 if (reportEt.getText().toString().length() == 0) {
                     Toast.makeText(getContext(), getResources().getString(R.string.details_are_missing), Toast.LENGTH_SHORT).show();
                 } else {
+                    ProgressDialogManager.show(getActivity());
                     sendServiceReport(reportEt.getText().toString());
                     uploadFilesForServiceCall(Integer.parseInt(mNotificationID));
-
                 }
+            }
+        });
+
+        view.findViewById(R.id.FSRD_close_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
             }
         });
     }
@@ -232,7 +256,6 @@ public class ServiceReportDialog extends DialogFragment {
     private void uploadFilesForServiceCall(int notificationID) {
 
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
-        ProgressDialogManager.show(getActivity());
         for (File file : mFilesForUpload) {
             mApiCallsBeforeExitCounter++;
             String fileExt = file.getName().substring(file.getName().lastIndexOf(".") + 1);
@@ -247,10 +270,7 @@ public class ServiceReportDialog extends DialogFragment {
                         Toast.makeText(getActivity(), getActivity().getString(R.string.upload_completed), Toast.LENGTH_SHORT).show();
                     }
 
-                    if (mApiCallsBeforeExitCounter == 0) {
-                        ProgressDialogManager.dismiss();
-                        dismiss();
-                    }
+                    completeDialog();
                 }
 
                 @Override
@@ -263,10 +283,7 @@ public class ServiceReportDialog extends DialogFragment {
                         }
                         Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
                     }
-                    if (mApiCallsBeforeExitCounter == 0) {
-                        ProgressDialogManager.dismiss();
-                        dismiss();
-                    }
+                    completeDialog();
                 }
             }, NetworkManager.getInstance(), persistenceManager.getTotalRetries(), persistenceManager.getRequestTimeout());
         }
@@ -333,7 +350,6 @@ public class ServiceReportDialog extends DialogFragment {
     }
 
     private void sendServiceReport(String textServiceReport) {
-        ProgressDialogManager.show(getActivity());
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
 
         mApiCallsBeforeExitCounter++;
@@ -344,22 +360,27 @@ public class ServiceReportDialog extends DialogFragment {
                     @Override
                     public void onRequestSuccess(StandardResponse response) {
                         mApiCallsBeforeExitCounter--;
-                        if (mApiCallsBeforeExitCounter == 0) {
-                            ProgressDialogManager.dismiss();
-                            dismiss();
-                        }
+                        completeDialog();
                     }
 
                     @Override
                     public void onRequestFailed(StandardResponse reason) {
                         mApiCallsBeforeExitCounter--;
                         Toast.makeText(getContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
-                        if (mApiCallsBeforeExitCounter == 0) {
-                            ProgressDialogManager.dismiss();
-                            dismiss();
-                        }
+                        completeDialog();
                     }
                 }
-        , NetworkManager.getInstance(), persistenceManager.getTotalRetries(), persistenceManager.getRequestTimeout());
+                , NetworkManager.getInstance(), persistenceManager.getTotalRetries(), persistenceManager.getRequestTimeout());
+    }
+
+    private void completeDialog() {
+        if (mApiCallsBeforeExitCounter == 0) {
+            ProgressDialogManager.dismiss();
+            dismiss();
+        }
+    }
+
+    public interface ServiceReportDialogListener {
+        void onComplete();
     }
 }

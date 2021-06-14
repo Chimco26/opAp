@@ -66,9 +66,9 @@ public interface EmeraldGetSimple {
     Call<StandardResponse> updateMachineStopBit(@Body MachineIdRequest request);
 
     @POST("/LeaderMESApi/UpdateServiceCallFilesMobile")
-    Call<StandardResponse> postFilesForServiceCall(ServiceCallFileRequest request);
+    Call<StandardResponse> postFilesForServiceCall(@Body ServiceCallFileRequest request);
 
     @POST("/LeaderMESApi/UpdateServiceCallDescription")
-    Call<StandardResponse> updateServiceCallDescription(UpdateServiceCallDescriptionRequest request);
+    Call<StandardResponse> updateServiceCallDescription(@Body UpdateServiceCallDescriptionRequest request);
 }
 

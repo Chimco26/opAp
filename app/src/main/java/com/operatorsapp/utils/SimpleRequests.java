@@ -1256,7 +1256,7 @@ public class SimpleRequests {
             @Override
             public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
 
-                if (response.body() != null && response.body().getError() == null) {
+                if (response.body() != null && response.body().getError().getErrorDesc() == null) {
                     if (callback != null) {
 
                         callback.onRequestSuccess(response.body());
@@ -1303,7 +1303,7 @@ public class SimpleRequests {
             @Override
             public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
 
-                if (response.body() != null && response.body().getError() == null) {
+                if (response.body() != null && response.body().getError().getErrorDesc() == null) {
                     if (callback != null) {
 
                         callback.onRequestSuccess(response.body());
