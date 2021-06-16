@@ -27,6 +27,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,6 +41,7 @@ import com.example.common.department.ProductionStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.AutoCompleteAdapter;
 import com.operatorsapp.adapters.DepartmentAdapter;
+import com.operatorsapp.adapters.DepartmentNewDisplayAdapter;
 import com.operatorsapp.adapters.SimpleSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
@@ -71,6 +73,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     private boolean canGoNext = false;
     private String mMachineName;
     private DepartmentAdapter mDepartmentAdapter;
+    private DepartmentNewDisplayAdapter mDepartmentNewDisplayAdapter;
     private RecyclerView departementRecyclerView;
     private TextView noDataTv;
     private SelectMachineFragmentListener mListener;
@@ -172,7 +175,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             mSignInBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isOperatorLogin() ? View.VISIBLE : View.GONE);
             mQcTestBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isQualityTest() ? View.VISIBLE : View.GONE);
 
-            initDepartmentRv();
+//            initDepartmentRv();
+            initDepartmentRvNewDisplay();
             mSearchField.addTextChangedListener(mTextWatcher);
             mGoButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -200,6 +204,23 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             departementRecyclerView.setAdapter(mDepartmentAdapter);
 
             mDepartmentAdapter.setMultiSelection(false);
+            mApplyMultiSelectBtn.setVisibility(View.GONE);
+            mLoginLayout.setVisibility(View.GONE);
+            mStatusLayout.setVisibility(View.GONE);
+            mMainLayoutTitle.setVisibility(View.VISIBLE);
+            mBtnLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void initDepartmentRvNewDisplay() {
+        if (mDepartmentMachine.getDepartmentMachine() != null && mDepartmentMachine.getDepartmentMachine().size() > 0) {
+            mDepartmentNewDisplayAdapter = new DepartmentNewDisplayAdapter(mDepartmentMachine.getDepartmentMachine(), this);
+
+            departementRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+
+            departementRecyclerView.setAdapter(mDepartmentNewDisplayAdapter);
+
+            mDepartmentNewDisplayAdapter.setMultiSelection(false);
             mApplyMultiSelectBtn.setVisibility(View.GONE);
             mLoginLayout.setVisibility(View.GONE);
             mStatusLayout.setVisibility(View.GONE);
