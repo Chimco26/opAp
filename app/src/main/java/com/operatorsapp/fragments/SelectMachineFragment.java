@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ import com.example.common.department.ProductionStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.AutoCompleteAdapter;
 import com.operatorsapp.adapters.DepartmentAdapter;
+import com.operatorsapp.adapters.DepartmentNewDisplayAdapter;
 import com.operatorsapp.adapters.SimpleSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
@@ -61,6 +63,9 @@ import static com.operatorsapp.managers.PersistenceManager.setMachineData;
 
 public class SelectMachineFragment extends BackStackAwareFragment implements AdapterView.OnItemClickListener, View.OnClickListener, DepartmentAdapter.DepartmentAdapterListener {
     public static final String LOG_TAG = SelectMachineFragment.class.getSimpleName();
+    private final static int INTERVAL = 1000 * 60 * 5; // 5 minutes
+    private final static int ONLINE_DISPLAY = 2;
+
     private static final String MACHINES_LIST = "machines_list";
     //    private GoToScreenListener mNavigationCallback;
     private AppCompatAutoCompleteTextView mSearchField;
@@ -71,6 +76,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     private boolean canGoNext = false;
     private String mMachineName;
     private DepartmentAdapter mDepartmentAdapter;
+    private DepartmentNewDisplayAdapter mDepartmentNewDisplayAdapter;
     private RecyclerView departementRecyclerView;
     private TextView noDataTv;
     private SelectMachineFragmentListener mListener;
@@ -85,6 +91,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     private Button mApplyMultiSelectBtn;
     private Spinner mStatusSpinner;
     private RelativeLayout mStatusLayout;
+    private Handler mHandlerUpdateMachinesStatus;
+    private String mStringMachinesFilter;
 
 
     public static SelectMachineFragment newInstance() {
@@ -172,7 +180,13 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             mSignInBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isOperatorLogin() ? View.VISIBLE : View.GONE);
             mQcTestBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isQualityTest() ? View.VISIBLE : View.GONE);
 
-            initDepartmentRv();
+
+            if (mDepartmentMachine.getUserGroupPermission().getDisplayType() == ONLINE_DISPLAY){
+                initDepartmentRvNewDisplay();
+            }else {
+                initDepartmentRv();
+//                initDepartmentRvNewDisplay();
+            }
             mSearchField.addTextChangedListener(mTextWatcher);
             mGoButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -206,6 +220,62 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             mMainLayoutTitle.setVisibility(View.VISIBLE);
             mBtnLayout.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void initDepartmentRvNewDisplay() {
+        if (mDepartmentMachine.getDepartmentMachine() != null && mDepartmentMachine.getDepartmentMachine().size() > 0) {
+            mDepartmentNewDisplayAdapter = new DepartmentNewDisplayAdapter(mDepartmentMachine.getDepartmentMachine(), this);
+
+            departementRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+
+            departementRecyclerView.setAdapter(mDepartmentNewDisplayAdapter);
+
+            mDepartmentNewDisplayAdapter.setMultiSelection(false);
+            mApplyMultiSelectBtn.setVisibility(View.GONE);
+            mLoginLayout.setVisibility(View.GONE);
+            mStatusLayout.setVisibility(View.GONE);
+            mMainLayoutTitle.setVisibility(View.VISIBLE);
+            mBtnLayout.setVisibility(View.VISIBLE);
+
+            updateStatusEvery5Min();
+        }
+    }
+
+    private void updateStatusEvery5Min() {
+        mHandlerUpdateMachinesStatus = new Handler();
+        mHandlerUpdateMachinesStatus.postDelayed(new Runnable() {
+            public void run() {
+                mHandlerUpdateMachinesStatus.postDelayed(this, INTERVAL);
+                updateDepartmentMachinesStatus();
+            }
+        }, INTERVAL);
+    }
+
+    private void updateDepartmentMachinesStatus() {
+            SimpleRequests.getDepartmentsMachines(PersistenceManager.getInstance().getSiteUrl(), new GetDepartmentCallback() {
+                @Override
+                public void onGetDepartmentSuccess(DepartmentsMachinesResponse response) {
+                    mDepartmentMachine = response;
+                    if (mDepartmentNewDisplayAdapter != null && mDepartmentMachine != null){
+                     mDepartmentNewDisplayAdapter.updateMachinesStatus(mDepartmentMachine.getDepartmentMachine());
+                     if (mStringMachinesFilter != null) {
+                         mDepartmentNewDisplayAdapter.getFilter().filter(mStringMachinesFilter);
+                     }else {
+                         mDepartmentNewDisplayAdapter.notifyDataSetChanged();
+                     }
+                    }
+                }
+
+                @Override
+                public void onGetDepartmentFailed(StandardResponse reason) { }
+            }, NetworkManager.getInstance(), PersistenceManager.getInstance().getTotalRetries(), PersistenceManager.getInstance().getRequestTimeout());
+
+        }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mHandlerUpdateMachinesStatus = null;
     }
 
     protected void setActionBar() {
@@ -280,9 +350,16 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             canGoNext = false;
+            mStringMachinesFilter = s.toString();
 //            mGoButton.setEnabled(false);
-            mDepartmentAdapter.setSearchFilter(s.toString());
-            mDepartmentAdapter.getFilter().filter(s);
+            if (mDepartmentAdapter != null) {
+                mDepartmentAdapter.setSearchFilter(s.toString());
+                mDepartmentAdapter.getFilter().filter(s);
+            }else if (mDepartmentNewDisplayAdapter != null) {
+//                mDepartmentNewDisplayAdapter.setSearchFilter(s.toString());
+                mDepartmentNewDisplayAdapter.getFilter().filter(s);
+            }
+
             //mGoButtonBackground.setImageResource(R.drawable.button_bg_disabled);
 
         }
