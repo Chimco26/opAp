@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.common.department.DepartmentMachine;
@@ -24,14 +23,12 @@ public class DepartmentNewDisplayAdapter extends RecyclerView.Adapter<Department
         implements Filterable, MachineAdapter.MachineAdapterListener {
 
 
-    private final List<DepartmentMachine> mDepartments;
+    private List<DepartmentMachine> mDepartments;
     private List<DepartmentMachine> mDepartmentFil;
-    private DepartmentFilter mFilter = new DepartmentFilter();
-    private String mSearchFilter;
-    private DepartmentAdapter.DepartmentAdapterListener mListener;
+    private final DepartmentFilter mFilter = new DepartmentFilter();
+    private final DepartmentAdapter.DepartmentAdapterListener mListener;
     private boolean isMultiSelect = false;
-    private ArrayList<String> selectedMachineList = new ArrayList<>();
-    private ArrayList<String> machineLineIdList = new ArrayList<>();
+    private final ArrayList<String> selectedMachineList = new ArrayList<>();
 
     public DepartmentNewDisplayAdapter(List<DepartmentMachine> departmentResponse, DepartmentAdapter.DepartmentAdapterListener departmentAdapterListener) {
 
@@ -46,7 +43,7 @@ public class DepartmentNewDisplayAdapter extends RecyclerView.Adapter<Department
     public DepartmentNewDisplayAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        return new DepartmentNewDisplayAdapter.ViewHolder(inflater.inflate(R.layout.item_department_new_display, parent, false));
+        return new ViewHolder(inflater.inflate(R.layout.item_department_new_display, parent, false));
     }
 
     @Override
@@ -60,19 +57,6 @@ public class DepartmentNewDisplayAdapter extends RecyclerView.Adapter<Department
         initRv(position, viewHolder);
     }
 
-//    private void initRv(int position, DepartmentNewDisplayAdapter.ViewHolder viewHolder) {
-//
-//        MachineAdapter machineAdapter = new MachineAdapter(mDepartmentFil.get(position).getDepartmentMachineValue(), selectedMachineList, isMultiSelect, this);
-//
-//        RecyclerView recyclerView = viewHolder.mRv;
-//
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(viewHolder.mRv.getContext(), LinearLayoutManager.VERTICAL, false);
-//
-//        recyclerView.setLayoutManager(layoutManager);
-//
-//        recyclerView.setAdapter(machineAdapter);
-//
-//    }
 
 
     private void initRv(int position, ViewHolder viewHolder) {
@@ -81,18 +65,14 @@ public class DepartmentNewDisplayAdapter extends RecyclerView.Adapter<Department
 
         RecyclerView recyclerView = viewHolder.mRv;
 
-        //            departementRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 5));
-//        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(viewHolder.mRv.getContext(), 5);
-
         recyclerView.setLayoutManager(new GridLayoutManager(viewHolder.mRv.getContext(), 5));
+
+        recyclerView.setNestedScrollingEnabled(false);
 
         recyclerView.setAdapter(machineAdapter);
 
     }
 
-    public void setSearchFilter(String searchFilter) {
-        mSearchFilter = searchFilter;
-    }
 
     @Override
     public int getItemCount() {
@@ -122,6 +102,14 @@ public class DepartmentNewDisplayAdapter extends RecyclerView.Adapter<Department
 
     public ArrayList<String> getSelectedMachineList() {
         return selectedMachineList;
+    }
+
+    public void updateMachinesStatus(List<DepartmentMachine> mDepartmentMachine) {
+        if (mDepartmentMachine != null){
+            mDepartments = mDepartmentMachine;
+            mDepartmentFil.clear();
+            mDepartmentFil.addAll(mDepartmentMachine);
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

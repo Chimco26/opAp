@@ -5,7 +5,7 @@
     xmlns:toos="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_margin="10dp"
-    android:background="@color/gray_light">
+    android:background="@color/C2">
 
     <LinearLayout
         android:layout_width="wrap_content"

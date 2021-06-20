@@ -4,7 +4,7 @@
     android:layout_height="100dp"
     xmlns:tool="http://schemas.android.com/tools"
     android:gravity="center"
-    android:background="@color/gray_light"
+    android:background="@drawable/background_item_machines_new_display"
     android:layout_margin="10dp"
     android:orientation="vertical">
 
