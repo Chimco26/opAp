@@ -541,4 +541,8 @@
     <string name="select_test">Test wählen</string>
     <string name="confirm_machine_selection">Möchten Sie diese Aktion wirklich auf alle Maschinen anwenden?</string>
     <string name="you_ve_reached_the_shift_production_target">Sie haben das Schichtproduktionsziel erreicht!</string>
+    <string name="number_of_batches">Anzahl der Chargen</string>
+    <string name="units_to_add_remove">zum Hinzufügen/Entfernen</string>
+    <string name="add_comment">Kommentar hinzufügen</string>
+    <string name="attach_files">Dateien anhängen</string>
 </resources>

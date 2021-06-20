@@ -532,4 +532,8 @@
     <string name="select_test">选择测试</string>
     <string name="confirm_machine_selection">您确定要对所有机器应用此操作吗？</string>
     <string name="you_ve_reached_the_shift_production_target">您已达到轮班生产目标！</string>
+    <string name="number_of_batches">批次数</string>
+    <string name="units_to_add_remove">添加/移除</string>
+    <string name="add_comment">添加评论</string>
+    <string name="attach_files">附加文件</string>
 </resources>

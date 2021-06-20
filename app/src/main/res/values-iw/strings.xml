@@ -552,5 +552,9 @@
     <string name="check_for_updates">בדיקת עדכונים</string>
     <string name="select_test">בחר בדיקה</string>
     <string name="confirm_machine_selection">אתה בטוח שאתה רוצה לבצע את פעולה זו לכל המכונות שנבחרו?</string>
+    <string name="number_of_batches">מספר אצוות</string>
+    <string name="units_to_add_remove">להוסיף/להוריד</string>
+    <string name="add_comment">הוסף תגובה</string>
+    <string name="attach_files">צירוף קבצים</string>
 
 </resources>

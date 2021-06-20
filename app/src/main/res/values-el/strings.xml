@@ -541,4 +541,7 @@
     <string name="no_report_permission_on_setup">Δεν έχετε εξουσιοδότηση για αναφορά συμβάντων κατά την ΕΓΚΑΤΑΣΤΑΣΗ. Παρακαλούμε επικοινωνήστε με τον διαχειριστή του συστήματος για περισσότερες άδειες.</string>
     <string name="confirm_machine_selection">Είστε βέβαιοι ότι θέλετε να εφαρμόσετε αυτήν την ενέργεια σε όλα τα μηχανήματα;</string>
     <string name="you_ve_reached_the_shift_production_target">Φτάσατε στον στόχο παραγωγής της βάρδιας!</string>
+    <string name="number_of_batches">Αριθμός παρτίδων</string>
+    <string name="units_to_add_remove">για Προσθήκη/Αφαίρεση</string>
+    <string name="add_comment">Προσθέστε σχόλιο</string>
 </resources>

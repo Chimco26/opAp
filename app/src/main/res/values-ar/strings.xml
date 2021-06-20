@@ -541,4 +541,8 @@
     <string name="select_test">تحديد الاختبار</string>
     <string name="confirm_machine_selection">هل ترغب بالتأكيد في تطبيق هذا الإجراء على جميع الماكينات؟</string>
     <string name="you_ve_reached_the_shift_production_target">لقد حققت هدف الإنتاج لنوبة العمل!</string>
+    <string name="number_of_batches">عدد الدُفعات</string>
+    <string name="units_to_add_remove">للإضافة/الإزالة</string>
+    <string name="add_comment">أضف تعليقًا</string>
+    <string name="attach_files">إرفاق ملفات</string>
 </resources>

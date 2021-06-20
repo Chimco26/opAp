@@ -494,4 +494,5 @@
     <string name="select_test">Seleziona test</string>
     <string name="confirm_machine_selection">Sei sicuro di voler applicare questa azione a tutte le macchine?</string>
     <string name="you_ve_reached_the_shift_production_target">Hai raggiunto il target di produzione del turno!</string>
+    <string name="attach_files">Allega file</string>
 </resources>

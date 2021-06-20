@@ -510,4 +510,8 @@
     <string name="back">Powrót</string>
     <string name="confirm_machine_selection">Czy na pewno chcesz zastosować to działanie do wszystkich maszyn?</string>
     <string name="you_ve_reached_the_shift_production_target">Osiągnąłeś cel produkcyjny zmiany!</string>
+    <string name="number_of_batches">Liczba partii</string>
+    <string name="units_to_add_remove">aby dodać/usunąć</string>
+    <string name="add_comment">Dodaj komentarz</string>
+    <string name="attach_files">Załącz pliki</string>
 </resources>

@@ -540,4 +540,8 @@
     <string name="no_report_permission_on_setup">No se le permite informar eventos en la CONFIGURACIÓN. Contacte con el administrador del sistema para obtener más permisos</string>
     <string name="confirm_machine_selection">¿Está seguro de que quiere aplicar esta acción a todas las máquinas?</string>
     <string name="you_ve_reached_the_shift_production_target">¡Ha alcanzado el objetivo de producción del turno!</string>
+    <string name="number_of_batches">Número de lotes</string>
+    <string name="units_to_add_remove">para agregar/quitar</string>
+    <string name="add_comment">Añadir comentario</string>
+    <string name="attach_files">Adjuntar archivos</string>
 </resources>

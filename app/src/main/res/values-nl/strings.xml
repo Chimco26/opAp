@@ -547,4 +547,8 @@
     <string name="select_test">Selecteer test</string>
     <string name="confirm_machine_selection">Weet u zeker dat u deze actie op alle machines wilt toepassen?</string>
     <string name="you_ve_reached_the_shift_production_target">U hebt het doel van de ploegendienst bereikt!</string>
+    <string name="number_of_batches">Aantal batches</string>
+    <string name="units_to_add_remove">Toevoegen/Verwijderen</string>
+    <string name="add_comment">Commentaar toevoegen</string>
+    <string name="attach_files">Bestanden toevoegen</string>
 </resources>

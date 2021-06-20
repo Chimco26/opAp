@@ -536,4 +536,8 @@
     <string name="select_test">Вибрати тест</string>
     <string name="confirm_machine_selection">Ви дійсно хочете застосувати цю дію до всіх пристроїв?</string>
     <string name="you_ve_reached_the_shift_production_target">Ви досягли цілі виробництва за зміну!</string>
+    <string name="number_of_batches">Кількість партій</string>
+    <string name="units_to_add_remove">Додати/Видалити</string>
+    <string name="add_comment">Додати коментар</string>
+    <string name="attach_files">Прикріпити файли</string>
 </resources>

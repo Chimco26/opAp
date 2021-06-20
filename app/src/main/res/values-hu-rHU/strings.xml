@@ -527,5 +527,9 @@
     <string name="select_test">Teszt kiválasztása</string>
     <string name="confirm_machine_selection">אתה בטוח שאתה רוצה לבצע את פעולה זו לכל המכונות שנבחרו?</string>
     <string name="you_ve_reached_the_shift_production_target">Ön elérte a műszak gyártási célkitűzését!</string>
+    <string name="number_of_batches">Tételek száma</string>
+    <string name="units_to_add_remove">Hozzáadandó/Eltávolítandó</string>
+    <string name="add_comment">Megjegyzés hozzáadása</string>
+    <string name="attach_files">Fájlok csatolása</string>
 
 </resources>

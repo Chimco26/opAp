@@ -44,14 +44,14 @@
                     android:layout_marginStart="5dp"
                     android:layout_weight="4.4"
                     android:orientation="horizontal"
-                    android:weightSum="4">
+                    android:weightSum="10">
 
                     <ImageView
                         android:id="@+id/event_stopped_shift_log_item_icon"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="1.5"
+                        android:layout_weight="3"
                         android:src="@drawable/ic_cloud" />
 
                     <TextView
@@ -60,7 +60,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:layout_weight="2.5"
+                        android:layout_weight="4"
                         android:gravity="center_vertical"
                         android:maxLines="1"
                         android:paddingStart="5dp"
@@ -69,6 +69,18 @@
                         android:textStyle="bold"
                         app:autoSizeMaxTextSize="20sp"
                         app:autoSizeTextType="uniform" />
+
+                    <com.operatorsapp.view.SquareImageView
+                        android:id="@+id/event_stopped_shift_log_item_split_event"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:padding="6dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_gravity="center_vertical|end"
+                        android:src="@drawable/scissors"
+                        android:background="@drawable/circle_withe_small_stroke"
+                        android:visibility="gone"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -79,11 +91,11 @@
                 android:layout_marginStart="14dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1.8"
-                android:autoSizeMaxTextSize="18sp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/black"
                 android:textSize="18sp"
+                app:autoSizeMaxTextSize="18sp"
                 app:autoSizeTextType="uniform" />
 
             <TextView
@@ -101,18 +113,18 @@
                 android:visibility="gone"
                 app:autoSizeTextType="uniform" />
 
-            <ImageView
-                android:id="@+id/event_stopped_shift_log_item_split_event"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="3dp"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
-                android:src="@drawable/scissors"
-                android:visibility="gone" />
+<!--            <ImageView-->
+<!--                android:id="@+id/event_stopped_shift_log_item_split_event"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_gravity="center_vertical"-->
+<!--                android:layout_marginEnd="3dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:background="@color/white"-->
+<!--                android:paddingTop="3dp"-->
+<!--                android:paddingBottom="3dp"-->
+<!--                android:src="@drawable/scissors"-->
+<!--                android:visibility="gone" />-->
 
 
         </LinearLayout>

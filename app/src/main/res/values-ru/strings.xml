@@ -536,4 +536,8 @@
     <string name="select_test">Выбрать тест</string>
     <string name="confirm_machine_selection">Вы уверены, что хотите применить это действие ко всем машинам?</string>
     <string name="you_ve_reached_the_shift_production_target">Вы достигли целевого объема производства за смену!</string>
+    <string name="units_to_add_remove">для добавления/удаления</string>
+    <string name="add_comment">Добавить комментарий</string>
+    <string name="number_of_batches">Количество партий</string>
+    <string name="attach_files">Прикрепить Файлы</string>
 </resources>
