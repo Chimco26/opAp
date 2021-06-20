@@ -426,11 +426,12 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
             mDownloadHelper.cancelDownloadFileFromUrl();
 
-        } else {
+        }
+        else {
 
-            mSelectedPdf = new PdfObject(null, galleryModel.getUrl());
+         mSelectedPdf = new PdfObject(null, galleryModel.getUrl());
 
-            initLoading(galleryModel.getUrl());
+         initLoading(galleryModel.getUrl());
 
         }
 
@@ -652,6 +653,9 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void showLoadingError() {
+
+        isLoad = false;
+        mSelectedPdf = null;
 
         mLoadingProgress.setVisibility(View.GONE);
 

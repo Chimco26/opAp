@@ -67,6 +67,7 @@ public class LauncherDialog extends Dialog {
                     ri.activityInfo.packageName.contains("acrobat") ||
                     ri.activityInfo.packageName.contains("vending") ||
                     ri.activityInfo.packageName.contains("file") ||
+                    ri.activityInfo.packageName.contains("camera") ||
                     ri.activityInfo.packageName.contains("chrome"))
             {
                 selectedApps.add(ri);
