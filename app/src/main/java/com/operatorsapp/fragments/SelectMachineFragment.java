@@ -181,12 +181,12 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             mQcTestBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isQualityTest() ? View.VISIBLE : View.GONE);
 
 
-            if (mDepartmentMachine.getUserGroupPermission().getDisplayType() == ONLINE_DISPLAY){
-                initDepartmentRvNewDisplay();
-            }else {
-                initDepartmentRv();
+//            if (mDepartmentMachine.getUserGroupPermission().getDisplayType() == ONLINE_DISPLAY){
 //                initDepartmentRvNewDisplay();
-            }
+//            }else {
+            initDepartmentRv();
+//                initDepartmentRvNewDisplay();
+//            }
             mSearchField.addTextChangedListener(mTextWatcher);
             mGoButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -237,7 +237,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             mMainLayoutTitle.setVisibility(View.VISIBLE);
             mBtnLayout.setVisibility(View.VISIBLE);
 
-            updateStatusEvery5Min();
+//            updateStatusEvery5Min();
         }
     }
 
@@ -252,25 +252,26 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     }
 
     private void updateDepartmentMachinesStatus() {
-            SimpleRequests.getDepartmentsMachines(PersistenceManager.getInstance().getSiteUrl(), new GetDepartmentCallback() {
-                @Override
-                public void onGetDepartmentSuccess(DepartmentsMachinesResponse response) {
-                    mDepartmentMachine = response;
-                    if (mDepartmentNewDisplayAdapter != null && mDepartmentMachine != null){
-                     mDepartmentNewDisplayAdapter.updateMachinesStatus(mDepartmentMachine.getDepartmentMachine());
-                     if (mStringMachinesFilter != null) {
-                         mDepartmentNewDisplayAdapter.getFilter().filter(mStringMachinesFilter);
-                     }else {
-                         mDepartmentNewDisplayAdapter.notifyDataSetChanged();
-                     }
+        SimpleRequests.getDepartmentsMachines(PersistenceManager.getInstance().getSiteUrl(), new GetDepartmentCallback() {
+            @Override
+            public void onGetDepartmentSuccess(DepartmentsMachinesResponse response) {
+                mDepartmentMachine = response;
+                if (mDepartmentNewDisplayAdapter != null && mDepartmentMachine != null) {
+                    mDepartmentNewDisplayAdapter.updateMachinesStatus(mDepartmentMachine.getDepartmentMachine());
+                    if (mStringMachinesFilter != null) {
+                        mDepartmentNewDisplayAdapter.getFilter().filter(mStringMachinesFilter);
+                    } else {
+                        mDepartmentNewDisplayAdapter.notifyDataSetChanged();
                     }
                 }
+            }
 
-                @Override
-                public void onGetDepartmentFailed(StandardResponse reason) { }
-            }, NetworkManager.getInstance(), PersistenceManager.getInstance().getTotalRetries(), PersistenceManager.getInstance().getRequestTimeout());
+            @Override
+            public void onGetDepartmentFailed(StandardResponse reason) {
+            }
+        }, NetworkManager.getInstance(), PersistenceManager.getInstance().getTotalRetries(), PersistenceManager.getInstance().getRequestTimeout());
 
-        }
+    }
 
     @Override
     public void onDestroy() {
@@ -355,7 +356,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             if (mDepartmentAdapter != null) {
                 mDepartmentAdapter.setSearchFilter(s.toString());
                 mDepartmentAdapter.getFilter().filter(s);
-            }else if (mDepartmentNewDisplayAdapter != null) {
+            } else if (mDepartmentNewDisplayAdapter != null) {
 //                mDepartmentNewDisplayAdapter.setSearchFilter(s.toString());
                 mDepartmentNewDisplayAdapter.getFilter().filter(s);
             }
