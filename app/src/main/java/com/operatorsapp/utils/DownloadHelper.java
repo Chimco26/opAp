@@ -15,6 +15,8 @@ import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.net.URLConnection;
 
+import static android.os.Environment.DIRECTORY_DCIM;
+
 /**
  * David Vardi
  */
@@ -84,21 +86,21 @@ public class DownloadHelper {
 
                 URL url = new URL(params[0]);
 
-                if (url.toString() != null) {
+//                if (url.toString() != null) {
+//
+//                    folder = new File(Environment.getExternalStoragePublicDirectory(DIRECTORY_DCIM).toString(), String.valueOf(url));
+//
+//                    if (!folder.exists()) {
+//
+//                        //noinspection ResultOfMethodCallIgnored
+//                        folder.mkdirs();
+//                    }
+//                } else {
+//
+//                    folder = context.getCacheDir();
+//                }
 
-                    folder = new File(Environment.getExternalStorageDirectory().toString(), String.valueOf(url));
-
-                    if (!folder.exists()) {
-
-                        //noinspection ResultOfMethodCallIgnored
-                        folder.mkdirs();
-                    }
-                } else {
-
-                    folder = context.getCacheDir();
-                }
-
-                mFile = new File(folder, url.getPath().substring(url.getPath().lastIndexOf("/")));
+                mFile = new File(Environment.getExternalStoragePublicDirectory(DIRECTORY_DCIM), url.getPath().substring(url.getPath().lastIndexOf("/")));
 
                 URLConnection connection = url.openConnection();
 
