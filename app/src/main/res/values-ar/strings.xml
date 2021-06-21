@@ -545,4 +545,14 @@
     <string name="units_to_add_remove">للإضافة/الإزالة</string>
     <string name="add_comment">أضف تعليقًا</string>
     <string name="attach_files">إرفاق ملفات</string>
+    <string name="uploading_images_is_not_possible_without_these_permissions">تحميل الصور غير ممكن بدون هذه الأذونات</string>
+    <string name="upload_failed">التحميل فشل</string>
+    <string name="upload_completed">قد تم التحميل</string>
+    <string name="show_camera_dialog_take_a_picture">التقط صورة</string>
+    <string name="service_report">تقرير الخدمة</string>
+    <string name="machines">ماكنات</string>
+    <string name="failed_to_load_image">فشل عرض الصورة، هل تود تحميلها على أية حال؟</string>
+    <string name="details_are_missing">التفاصيل مفقودة</string>
+    <string name="show_camera_dialog_gallery">اختر من المعرض</string>
+    <string name="show_camera_dialog_title">اضف صوره</string>
 </resources>

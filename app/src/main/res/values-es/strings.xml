@@ -118,8 +118,8 @@
     <string name="shift_log_standard">Estandar&#160;</string>
     <string name="approving_technician">Tecnico Autorizado</string>
     <string name="approve">Aprobar</string>
-    <string name="setup_end">Final Preparacion</string>
-    <string name="first_item_approval">Final Preparacion</string>
+    <string name="setup_end">STOP SETUP</string>
+    <string name="first_item_approval">STOP SETUP</string>
     <string name="send_logs">Enviar Registros</string>
     <string name="alarm">"Alarma"</string>
     <string name="loading_data">Cargando datos..</string>
@@ -158,7 +158,7 @@
         <item>Probar pedido</item>
     </array>
 
-    <string name="approve_first_item">Final de Preparacion</string>
+    <string name="approve_first_item">STOP SETUP</string>
     <string name="welcome">Bienvenido</string>
     <string name="log_in_to_nyour_factory">Login en su fábrica</string>
 
@@ -299,7 +299,7 @@
     <string name="hr2">h</string>
     <string name="see_pending_jobs">Ver trabajos pendientes</string>
     <string name="pending_jobs">Trabajos pendientes</string>
-    <string name="end_setup">Finalizar configuración</string>
+    <string name="end_setup">STOP SETUP</string>
     <string name="you_are_in_setup_mode">Está en modo de configuración</string>
     <string name="get_ready_for_your_next_job">Prepárese para su próximo trabajo</string>
     <string name="see_job">Ver trabajo</string>
@@ -364,7 +364,7 @@
     <string name="dont_activate">No activar</string>
     <string name="no_setup">Sin instalación</string>
     <string name="go_to_setup">Vaya a configuración</string>
-    <string name="setup_mode">Modo de configuración</string>
+    <string name="setup_mode">Estado SETUP</string>
     <string name="rejects_quantity">Cantidad de rechazados</string>
     <string name="there_are_no_stop_event">No hay puntos de parada que informar</string>
     <string name="theoretical_units">Unidades teóricas</string>
@@ -544,4 +544,14 @@
     <string name="units_to_add_remove">para agregar/quitar</string>
     <string name="add_comment">Añadir comentario</string>
     <string name="attach_files">Adjuntar archivos</string>
+    <string name="uploading_images_is_not_possible_without_these_permissions">No es posible subir imágenes sin estos permisos</string>
+    <string name="upload_failed">Error al subir</string>
+    <string name="upload_completed">Subida completada</string>
+    <string name="show_camera_dialog_take_a_picture">Tomar una nueva foto</string>
+    <string name="service_report">Informe de servicio</string>
+    <string name="machines">Máquinas</string>
+    <string name="failed_to_load_image">Fallo al cargar la imagen; ¿subirla de todas formas?</string>
+    <string name="details_are_missing">Faltan datos</string>
+    <string name="show_camera_dialog_gallery">Elegir de la galería</string>
+    <string name="show_camera_dialog_title">Añadir imagen</string>
 </resources>

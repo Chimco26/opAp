@@ -514,4 +514,14 @@
     <string name="units_to_add_remove">aby dodać/usunąć</string>
     <string name="add_comment">Dodaj komentarz</string>
     <string name="attach_files">Załącz pliki</string>
+    <string name="uploading_images_is_not_possible_without_these_permissions">Przesyłanie obrazów nie jest możliwe bez tych zezwoleń</string>
+    <string name="upload_failed">Nie udało się wysłać</string>
+    <string name="upload_completed">Zakończono wysyłanie</string>
+    <string name="show_camera_dialog_take_a_picture">Zrób nowe zdjęcie</string>
+    <string name="service_report">Raport serwisowy</string>
+    <string name="machines">Maszyny</string>
+    <string name="failed_to_load_image">Pobieranie obrazu nie powiodło się, czy w dalszym ciągu chcesz przesłać?</string>
+    <string name="details_are_missing">Brakuje szczegółów</string>
+    <string name="show_camera_dialog_gallery">Wybrałeś(-aś) z galerii</string>
+    <string name="show_camera_dialog_title">Dodaj zdjęcie</string>
 </resources>

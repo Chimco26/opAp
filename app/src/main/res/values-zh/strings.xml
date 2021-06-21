@@ -536,4 +536,14 @@
     <string name="units_to_add_remove">添加/移除</string>
     <string name="add_comment">添加评论</string>
     <string name="attach_files">附加文件</string>
+    <string name="uploading_images_is_not_possible_without_these_permissions">没有这些权限就无法上传图片</string>
+    <string name="upload_failed">上傳失敗</string>
+    <string name="upload_completed">上傳已完成</string>
+    <string name="show_camera_dialog_take_a_picture">拍攝新照片</string>
+    <string name="service_report">服务报告</string>
+    <string name="machines">機器</string>
+    <string name="failed_to_load_image">无法加载图片，仍然上传吗？</string>
+    <string name="details_are_missing">详情缺失</string>
+    <string name="show_camera_dialog_gallery">從圖庫中選擇</string>
+    <string name="show_camera_dialog_title">添加圖片</string>
 </resources>

@@ -544,4 +544,8 @@
     <string name="number_of_batches">Αριθμός παρτίδων</string>
     <string name="units_to_add_remove">για Προσθήκη/Αφαίρεση</string>
     <string name="add_comment">Προσθέστε σχόλιο</string>
+    <string name="attach_files">Επισύναψη αρχείων</string>
+    <string name="uploading_images_is_not_possible_without_these_permissions">Δεν είναι δυνατή η μεταφόρτωση εικόνων χωρίς αυτές τις άδειες</string>
+    <string name="service_report">Αναφορά υπηρεσίας</string>
+    <string name="details_are_missing">Λείπουν στοιχεία</string>
 </resources>
