@@ -2122,7 +2122,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 @Override
                 public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
 
-                    if (response.body() != null && response.body().getError() != null) {
+                    if (response.body() != null && response.body().getError() != null && response.body().getError().getErrorDesc() != null) {
                         onFailure(call, new Throwable(response.body().getError().getErrorDesc()));
                     } else {
                         new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.RESPOND_TO_NOTIFICATION, true, "Respond to Notification- ID: " + notification[0].getmNotificationID());

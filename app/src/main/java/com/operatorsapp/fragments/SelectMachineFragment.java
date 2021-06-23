@@ -185,7 +185,6 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 initDepartmentRvNewDisplay();
             }else {
                 initDepartmentRv();
-//                initDepartmentRvNewDisplay();
             }
             mSearchField.addTextChangedListener(mTextWatcher);
             mGoButton.setOnClickListener(new View.OnClickListener() {
