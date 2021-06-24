@@ -22,6 +22,10 @@ public class TimeToEndCounter
         mOnTimeToEndChangedListener = new WeakReference<>(onTimeToEndChangedListener);
     }
 
+    public OnTimeToEndChangedListener getOnTimeToEndChangedListener() {
+        return mOnTimeToEndChangedListener.get();
+    }
+
     public void calculateTimeToEnd(final int timeInMilliseconds) {
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
@@ -48,6 +52,7 @@ public class TimeToEndCounter
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
         }
+
 
         mCountDownTimer = new CountDownTimer(timeInMilliseconds, COUNT_DOWN_INTERVAL) {
 

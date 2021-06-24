@@ -522,7 +522,7 @@ public class AllDashboardDataCore{
 
 
     private void startTimer(int timeInSeconds) {
-        if (mTimeToEndCounter == null) {
+        if (mTimeToEndCounter == null || mTimeToEndCounter.getOnTimeToEndChangedListener() == null) {
             mTimeToEndCounter = new TimeToEndCounter(new OnTimeToEndChangedListener() {
                 @Override
                 public void onTimeToEndChanged(long millisUntilFinished) {
