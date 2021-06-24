@@ -91,6 +91,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     private Button mApplyMultiSelectBtn;
     private Spinner mStatusSpinner;
     private RelativeLayout mStatusLayout;
+    private TextView selectMachineTitle;
     private Handler mHandlerUpdateMachinesStatus;
     private String mStringMachinesFilter;
 
@@ -144,6 +145,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         mMainLayoutTitle = rootView.findViewById(R.id.main);
         mStatusSpinner = rootView.findViewById(R.id.FSM_production_status_spn);
         mStatusLayout = rootView.findViewById(R.id.FSM_production_status_rl);
+        selectMachineTitle = rootView.findViewById(R.id.select_machine_title);
 
         mApplyMultiSelectBtn.setOnClickListener(this);
         mQcTestBtn.setOnClickListener(this);
@@ -185,6 +187,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 initDepartmentRvNewDisplay();
             }else {
                 initDepartmentRv();
+//                initDepartmentRvNewDisplay();
             }
             mSearchField.addTextChangedListener(mTextWatcher);
             mGoButton.setOnClickListener(new View.OnClickListener() {
@@ -222,6 +225,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     }
 
     private void initDepartmentRvNewDisplay() {
+        selectMachineTitle.setVisibility(View.GONE);
+
         if (mDepartmentMachine.getDepartmentMachine() != null && mDepartmentMachine.getDepartmentMachine().size() > 0) {
             mDepartmentNewDisplayAdapter = new DepartmentNewDisplayAdapter(mDepartmentMachine.getDepartmentMachine(), this);
 
@@ -251,25 +256,26 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     }
 
     private void updateDepartmentMachinesStatus() {
-            SimpleRequests.getDepartmentsMachines(PersistenceManager.getInstance().getSiteUrl(), new GetDepartmentCallback() {
-                @Override
-                public void onGetDepartmentSuccess(DepartmentsMachinesResponse response) {
-                    mDepartmentMachine = response;
-                    if (mDepartmentNewDisplayAdapter != null && mDepartmentMachine != null){
-                     mDepartmentNewDisplayAdapter.updateMachinesStatus(mDepartmentMachine.getDepartmentMachine());
-                     if (mStringMachinesFilter != null) {
-                         mDepartmentNewDisplayAdapter.getFilter().filter(mStringMachinesFilter);
-                     }else {
-                         mDepartmentNewDisplayAdapter.notifyDataSetChanged();
-                     }
+        SimpleRequests.getDepartmentsMachines(PersistenceManager.getInstance().getSiteUrl(), new GetDepartmentCallback() {
+            @Override
+            public void onGetDepartmentSuccess(DepartmentsMachinesResponse response) {
+                mDepartmentMachine = response;
+                if (mDepartmentNewDisplayAdapter != null && mDepartmentMachine != null) {
+                    mDepartmentNewDisplayAdapter.updateMachinesStatus(mDepartmentMachine.getDepartmentMachine());
+                    if (mStringMachinesFilter != null) {
+                        mDepartmentNewDisplayAdapter.getFilter().filter(mStringMachinesFilter);
+                    } else {
+                        mDepartmentNewDisplayAdapter.notifyDataSetChanged();
                     }
                 }
+            }
 
-                @Override
-                public void onGetDepartmentFailed(StandardResponse reason) { }
-            }, NetworkManager.getInstance(), PersistenceManager.getInstance().getTotalRetries(), PersistenceManager.getInstance().getRequestTimeout());
+            @Override
+            public void onGetDepartmentFailed(StandardResponse reason) {
+            }
+        }, NetworkManager.getInstance(), PersistenceManager.getInstance().getTotalRetries(), PersistenceManager.getInstance().getRequestTimeout());
 
-        }
+    }
 
     @Override
     public void onDestroy() {
@@ -354,7 +360,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             if (mDepartmentAdapter != null) {
                 mDepartmentAdapter.setSearchFilter(s.toString());
                 mDepartmentAdapter.getFilter().filter(s);
-            }else if (mDepartmentNewDisplayAdapter != null) {
+            } else if (mDepartmentNewDisplayAdapter != null) {
 //                mDepartmentNewDisplayAdapter.setSearchFilter(s.toString());
                 mDepartmentNewDisplayAdapter.getFilter().filter(s);
             }

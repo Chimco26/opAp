@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="180dp"
-    android:layout_height="100dp"
+    android:layout_width="184dp"
+    android:layout_height="95dp"
     xmlns:tool="http://schemas.android.com/tools"
     android:gravity="center"
-    android:background="@drawable/background_item_machines_new_display"
+    android:background="@color/T4_color"
     android:layout_margin="10dp"
     android:orientation="vertical">
 
@@ -12,7 +12,7 @@
         android:id="@+id/IDMND_parameter_TV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:textSize="15sp"
         android:textColor="@android:color/white"
         android:padding="3dp"
         tool:text="fbgvd"/>
@@ -21,10 +21,12 @@
         android:id="@+id/IDMND_title_TV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="21sp"
+        android:textSize="22sp"
         android:textColor="@android:color/white"
         android:textStyle="bold"
-        android:padding="3dp"
+        android:padding="2dp"
+        android:maxLines="1"
+        android:ellipsize="end"
         tool:text="fbgvd"/>
 
     <TextView

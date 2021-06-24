@@ -8,6 +8,7 @@
         <item>Attivare Lavoro</item>
         <item>Dichiara sottoprodotto</item>
         <item>Cambia unità nel ciclo</item>
+        <item>Fix Units Produced</item>
         <item>Rapporto Produzione</item>
         <item>Test dell\'ordine</item>
     </array>
@@ -494,4 +495,18 @@
     <string name="select_test">Seleziona test</string>
     <string name="confirm_machine_selection">Sei sicuro di voler applicare questa azione a tutte le macchine?</string>
     <string name="you_ve_reached_the_shift_production_target">Hai raggiunto il target di produzione del turno!</string>
+    <string name="attach_files">Allega file</string>
+    <string name="number_of_batches">Numero di lotti</string>
+    <string name="units_to_add_remove">da aggiungere/rimuovere</string>
+    <string name="add_comment">Aggiungi un commento</string>
+    <string name="uploading_images_is_not_possible_without_these_permissions">Non è possibile caricare immagini senza questi permessi</string>
+    <string name="upload_failed">Caricamento fallito</string>
+    <string name="upload_completed">Caricamento completato</string>
+    <string name="show_camera_dialog_take_a_picture">Fai una nuovo foto</string>
+    <string name="service_report">Rapporto di servizio</string>
+    <string name="machines">Macchine</string>
+    <string name="failed_to_load_image">Caricamento immagine non riuscito. Vuoi caricare comunque?</string>
+    <string name="details_are_missing">Mancano dei dettagli</string>
+    <string name="show_camera_dialog_gallery">Scegli dalla galleria</string>
+    <string name="show_camera_dialog_title">Aggiungi immagine</string>
 </resources>

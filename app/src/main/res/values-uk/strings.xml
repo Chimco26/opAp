@@ -150,6 +150,7 @@
         <item>Нове завдання</item>
         <item>Додати брак</item>
         <item>Змінити кількість одиниць в циклі</item>
+        <item>Fix Units Produced</item>
         <item>Виробничий звіт</item>
         <item>Замовити тест</item>
     </array>
@@ -536,4 +537,18 @@
     <string name="select_test">Вибрати тест</string>
     <string name="confirm_machine_selection">Ви дійсно хочете застосувати цю дію до всіх пристроїв?</string>
     <string name="you_ve_reached_the_shift_production_target">Ви досягли цілі виробництва за зміну!</string>
+    <string name="number_of_batches">Кількість партій</string>
+    <string name="units_to_add_remove">Додати/Видалити</string>
+    <string name="add_comment">Додати коментар</string>
+    <string name="attach_files">Прикріпити файли</string>
+    <string name="uploading_images_is_not_possible_without_these_permissions">Завантаження зображень неможливе без цих дозволів</string>
+    <string name="upload_failed">Помилка завантаження</string>
+    <string name="upload_completed">Завантаження завершено</string>
+    <string name="show_camera_dialog_take_a_picture">Зробити нове фото</string>
+    <string name="service_report">Звіт про обслуговування</string>
+    <string name="machines">Машини</string>
+    <string name="failed_to_load_image">Не вдалося завантажити зображення, завантажити у будь-якому випадку?</string>
+    <string name="details_are_missing">Деталі відсутні</string>
+    <string name="show_camera_dialog_gallery">Вибрати з галереї</string>
+    <string name="show_camera_dialog_title">Додати зображення</string>
 </resources>

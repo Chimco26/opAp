@@ -5,7 +5,7 @@
     xmlns:toos="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_margin="10dp"
-    android:background="@color/C2">
+    android:background="@color/reports_background">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -17,7 +17,7 @@
             android:id="@+id/IDND_department_name_TV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22sp"
+            android:textSize="25sp"
             android:textColor="@android:color/black"
             toos:text="jhgjyhcgs"
             android:layout_margin="5dp"
@@ -26,13 +26,13 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black"
-            android:layout_margin="6dp"/>
+            android:background="@color/warm_grey"
+            android:layout_margin="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22sp"
+            android:textSize="25sp"
             android:textColor="@android:color/black"
             android:layout_margin="5dp"
             android:text="@string/machines"
@@ -42,7 +42,7 @@
             android:id="@+id/IDND_machines_amount_TV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22sp"
+            android:textSize="25sp"
             android:textColor="@android:color/black"
             android:layout_margin="5dp"
             toos:text="12"
@@ -51,15 +51,15 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black"
-            android:layout_margin="6dp"/>
+            android:background="@color/warm_grey"
+            android:layout_margin="10dp"/>
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/black"
+        android:background="@color/divider_gray"
         android:layout_margin="6dp"/>
 
     <androidx.recyclerview.widget.RecyclerView

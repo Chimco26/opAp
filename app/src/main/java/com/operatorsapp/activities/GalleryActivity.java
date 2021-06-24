@@ -171,27 +171,21 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-//    private void initTest() {
-//        mFileUrls.add("https://www.ets.org/Media/Tests/GRE/pdf/gre_research_validity_data.pdf");
-//
-//        mFileUrls.add(mFileUrls.get(0));
-//        mFileUrls.add(mFileUrls.get(0));
-//        mFileUrls.add(mFileUrls.get(0));
-//
-//        mFileUrls.add("https://s1.q4cdn.com/806093406/files/doc_downloads/test.pdf");
-//
-//        mFileUrls.add(mFileUrls.get(0));
-//        mFileUrls.add(mFileUrls.get(0));
-//        mFileUrls.add(mFileUrls.get(0));
-//        mFileUrls.add(mFileUrls.get(0));
-//        mFileUrls.add(mFileUrls.get(0));
-//        mFileUrls.add(mFileUrls.get(0));
-//        mFileUrls.add(mFileUrls.get(0));
-//        mFileUrls.add(mFileUrls.get(0));
-//        mFileUrls.add(mFileUrls.get(0));
-//        mFileUrls.add(mFileUrls.get(0));
-//        mFileUrls.add(mFileUrls.get(0));
-//    }
+    private void initTest() {
+        mFileUrls.add("https://www.ets.org/Media/Tests/GRE/pdf/gre_research_validity_data.pdf");
+
+        mFileUrls.add(mFileUrls.get(mFileUrls.size() - 1));
+        mFileUrls.add(mFileUrls.get(mFileUrls.size() - 1));
+        mFileUrls.add(mFileUrls.get(mFileUrls.size() - 1));
+
+        mFileUrls.add("https://s1.q4cdn.com/806093406/files/doc_downloads/test.pdf");
+
+        mFileUrls.add(mFileUrls.get(mFileUrls.size() - 1));
+        mFileUrls.add(mFileUrls.get(mFileUrls.size() - 1));
+        mFileUrls.add(mFileUrls.get(mFileUrls.size() - 1));
+        mFileUrls.add(mFileUrls.get(mFileUrls.size() - 1));
+
+    }
 
     private void initRv() {
 
@@ -426,11 +420,12 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
             mDownloadHelper.cancelDownloadFileFromUrl();
 
-        } else {
+        }
+        else {
 
-            mSelectedPdf = new PdfObject(null, galleryModel.getUrl());
+         mSelectedPdf = new PdfObject(null, galleryModel.getUrl());
 
-            initLoading(galleryModel.getUrl());
+         initLoading(galleryModel.getUrl());
 
         }
 
@@ -652,6 +647,9 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void showLoadingError() {
+
+        isLoad = false;
+        mSelectedPdf = null;
 
         mLoadingProgress.setVisibility(View.GONE);
 

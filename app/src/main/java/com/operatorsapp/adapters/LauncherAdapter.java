@@ -62,6 +62,8 @@ public class LauncherAdapter extends RecyclerView.Adapter<LauncherAdapter.ViewHo
             name = "Chrome";
         }else if (name.contains("pdf")){
             name = "PDF";
+        }else if (name.contains("camera")){
+            name = "Camera";
         }
         return name;
     }

@@ -80,6 +80,7 @@
     <color name="red_dark">#850f16</color>
     <color name="grey_icon_color">#6C7374</color>
     <color name="gray_light">#dcdcdc</color>
+    <color name="warm_grey">#979797</color>
 
     <array name="colorList">
         <item>@color/blue1</item>

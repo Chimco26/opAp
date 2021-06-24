@@ -60,7 +60,7 @@ public class ServiceReportDialog extends DialogFragment {
     private static final int KEY_REQUEST_FOR_PERMISSIONS = 45678;
 
     private static final String[] PERMISSIONS = {
-            android.Manifest.permission.CAMERA,
+//            android.Manifest.permission.CAMERA,
             android.Manifest.permission.READ_EXTERNAL_STORAGE,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
     };
@@ -129,7 +129,9 @@ public class ServiceReportDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (checkPermission()) {
-                    showImageDialog();
+//                    showImageDialog();
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent, REQUEST_FOR_ACTIVITY_GALLERY);
                 } else {
                     if (getActivity() != null) {
                         requestPermissions(PERMISSIONS, KEY_REQUEST_FOR_PERMISSIONS);
@@ -172,7 +174,9 @@ public class ServiceReportDialog extends DialogFragment {
 
         if (requestCode == KEY_REQUEST_FOR_PERMISSIONS) {
             if (grantResults.length > 0 && checkIfHaveAllPermissions(grantResults)) {
-                showImageDialog();
+//                showImageDialog();
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, REQUEST_FOR_ACTIVITY_GALLERY);
             } else {
                 Toast.makeText(getActivity(), getResources().getString(R.string.uploading_images_is_not_possible_without_these_permissions), Toast.LENGTH_SHORT).show();
             }

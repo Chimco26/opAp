@@ -149,6 +149,7 @@
         <item>Nieuwe order</item>
         <item>Voeg uitval toe</item>
         <item>Veranderen stuks per rotatie</item>
+        <item>Fix Units Produced</item>
         <item>Productie Rapport</item>
         <item>Besteltest</item>
     </array>
@@ -547,4 +548,18 @@
     <string name="select_test">Selecteer test</string>
     <string name="confirm_machine_selection">Weet u zeker dat u deze actie op alle machines wilt toepassen?</string>
     <string name="you_ve_reached_the_shift_production_target">U hebt het doel van de ploegendienst bereikt!</string>
+    <string name="number_of_batches">Aantal batches</string>
+    <string name="units_to_add_remove">Toevoegen/Verwijderen</string>
+    <string name="add_comment">Commentaar toevoegen</string>
+    <string name="attach_files">Bestanden toevoegen</string>
+    <string name="uploading_images_is_not_possible_without_these_permissions">Het uploaden van afbeeldingen is niet mogelijk zonder deze toestemmingen</string>
+    <string name="upload_failed">Upload afgebroken</string>
+    <string name="upload_completed">Upload afgerond</string>
+    <string name="show_camera_dialog_take_a_picture">Maak een nieuwe foto</string>
+    <string name="service_report">Serviceverslag</string>
+    <string name="machines">Machines</string>
+    <string name="failed_to_load_image">Opladen afbeelding mislukt. Toch uploaden?</string>
+    <string name="details_are_missing">Er ontbreken details</string>
+    <string name="show_camera_dialog_gallery">Kies uit galerij</string>
+    <string name="show_camera_dialog_title">Afbeelding toevoegen</string>
 </resources>

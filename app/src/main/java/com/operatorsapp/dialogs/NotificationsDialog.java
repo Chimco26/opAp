@@ -14,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.operatorsapp.R;
@@ -41,6 +42,7 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
     private ImageView newNotSendIv;
     private ImageView newNotTemplateIv;
     private RecyclerView recyclerView;
+    private ProgressBar mProgressBar;
     private ArrayList<Notification> mTemplateList;
 
     public NotificationsDialog(Context context, NotificationsDialogListener listener) {
@@ -67,6 +69,7 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
         newNotBodyEt = findViewById(R.id.NVP_create_notification_tv);
         newNotSendIv = findViewById(R.id.NVP_create_notification_iv);
         newNotTemplateIv = findViewById(R.id.NVP_template_notification_iv);
+        mProgressBar = findViewById(R.id.NVP_ProgressBar);
 
         newNotSendIv.setOnClickListener(this);
         newNotTemplateIv.setOnClickListener(this);
@@ -105,11 +108,11 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
     }
 
     private void getTopNotifications() {
-        ProgressDialogManager.show((AppCompatActivity) getContext());
+       mProgressBar.setVisibility(View.VISIBLE);
         NetworkManager.getInstance().getTopNotification(new TopNotificationRequest(PersistenceManager.getInstance().getSessionId(), DEFAULT_NUM_TEMPLATE), new Callback<NotificationHistoryResponse>() {
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
-                ProgressDialogManager.dismiss();
+                mProgressBar.setVisibility(View.GONE);
                 if (response.body() != null && response.body().getError().getErrorDesc() == null) {
                     mTemplateList = response.body().getmNotificationsList();
                     openTemplateDialog();
@@ -120,7 +123,7 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
 
             @Override
             public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
-                ProgressDialogManager.dismiss();
+                mProgressBar.setVisibility(View.GONE);
                 mListener.onGetNotificationTemplateError(t.getMessage());
             }
         });

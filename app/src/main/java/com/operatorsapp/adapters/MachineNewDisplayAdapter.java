@@ -48,8 +48,7 @@ public class MachineNewDisplayAdapter extends RecyclerView.Adapter<MachineNewDis
     public void onBindViewHolder(@NonNull final MachineNewDisplayAdapter.ViewHolder viewHolder, final int position) {
         DepartmentMachineValue machine = mMachinesFil.get(position);
 
-        GradientDrawable background = (GradientDrawable) viewHolder.itemView.getBackground();
-        background.setColor(Color.parseColor(mMachinesFil.get(position).getMachineStatusColor()));
+        viewHolder.itemView.setBackgroundColor(Color.parseColor(mMachinesFil.get(position).getMachineStatusColor()));
 
         viewHolder.mTitle.setText(machine.getMachineName());
         viewHolder.mTime.setText(getHourAndMinFormat(mMachinesFil.get(position).getStatusTime(), viewHolder.itemView.getContext()));
@@ -112,9 +111,9 @@ public class MachineNewDisplayAdapter extends RecyclerView.Adapter<MachineNewDis
 
         if (h > 0) {
 
-            time = String.format("%s %s", h, context.getString(R.string.hr));
+            time = String.format("%s %s", h, context.getString(R.string.hr2));
             if (totalMinuteDuration % 60 != 0) {
-                time = String.format("%s %s %s %s", h, context.getString(R.string.hr), totalMinuteDuration % 60, context.getString(R.string.min));
+                time = String.format("%s %s %s %s", h, context.getString(R.string.hr2), totalMinuteDuration % 60, context.getString(R.string.min));
             }
         } else {
             time = String.format("%s %s", totalMinuteDuration, context.getString(R.string.min));
