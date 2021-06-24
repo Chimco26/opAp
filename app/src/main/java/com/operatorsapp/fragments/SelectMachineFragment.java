@@ -183,12 +183,11 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             mQcTestBtn.setVisibility(mDepartmentMachine.getUserGroupPermission().isQualityTest() ? View.VISIBLE : View.GONE);
 
 
-//            if (mDepartmentMachine.getUserGroupPermission().getDisplayType() == ONLINE_DISPLAY){
-//                initDepartmentRvNewDisplay();
-//            }else {
-            initDepartmentRv();
-//                initDepartmentRvNewDisplay();
-//            }
+            if (mDepartmentMachine.getUserGroupPermission().getDisplayType() == ONLINE_DISPLAY) {
+                initDepartmentRvNewDisplay();
+            } else {
+                initDepartmentRv();
+            }
             mSearchField.addTextChangedListener(mTextWatcher);
             mGoButton.setOnClickListener(new View.OnClickListener() {
                 @Override
