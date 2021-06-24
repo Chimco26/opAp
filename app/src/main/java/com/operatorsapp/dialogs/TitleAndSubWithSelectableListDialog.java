@@ -3,6 +3,7 @@ package com.operatorsapp.dialogs;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,6 @@ import java.util.ArrayList;
 import static org.litepal.LitePalApplication.getContext;
 
 public class TitleAndSubWithSelectableListDialog implements View.OnClickListener {
-    private final Activity mContext;
 
     private final String mPositiveBtnTxt;
     private final TitleAndSubWithSelectableListDialogListener mListener;
@@ -39,9 +39,8 @@ public class TitleAndSubWithSelectableListDialog implements View.OnClickListener
     private TextView selectAllTv;
 
 
-    public TitleAndSubWithSelectableListDialog(Activity activity, final TitleAndSubWithSelectableListDialogListener listener
+    public TitleAndSubWithSelectableListDialog(final TitleAndSubWithSelectableListDialogListener listener
             , String title, String subTitle, String positiveBtn, ArrayList<MachinesLineDetail> arrayList) {
-        mContext = activity;
         mTitle = title;
         mSubTitle = subTitle;
         mPositiveBtnTxt = positiveBtn;
@@ -49,11 +48,11 @@ public class TitleAndSubWithSelectableListDialog implements View.OnClickListener
         mMachineLineList = arrayList;
     }
 
-    public AlertDialog showTitleAndSubWithSelectableListDialog() {
+    public AlertDialog showTitleAndSubWithSelectableListDialog(Context context) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        LayoutInflater inflater = mContext.getLayoutInflater();
+        LayoutInflater inflater = LayoutInflater.from(context);
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.alert_machine_list, null);
         builder.setView(view);
 
@@ -93,7 +92,7 @@ public class TitleAndSubWithSelectableListDialog implements View.OnClickListener
         mSelectedMachineIds = new ArrayList<>();
         ArrayList<SelectableString> selectableStrings = new ArrayList<>();
         for (MachinesLineDetail machine : mMachineLineList) {
-            selectableStrings.add(new SelectableString(machine.getMachineName(), false, String.valueOf(machine.getMachineID()), mContext.getResources().getColor(R.color.blue1)));
+            selectableStrings.add(new SelectableString(machine.getMachineName(), false, String.valueOf(machine.getMachineID()), getContext().getResources().getColor(R.color.blue1)));
         }
         mRv = view.findViewById(R.id.AML_rv);
         mRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -125,13 +124,13 @@ public class TitleAndSubWithSelectableListDialog implements View.OnClickListener
             case R.id.AML_select_all_lil:
                 selectAllChkBx.setChecked(!selectAllChkBx.isChecked());
                 if (selectAllChkBx.isChecked()){
-                    selectAllTv.setText(mContext.getResources().getString(R.string.deselect_all));
+                    selectAllTv.setText(getContext().getResources().getString(R.string.deselect_all));
                     mSelectedMachineIds.clear();
                     for (MachinesLineDetail machine : mMachineLineList) {
                         mSelectedMachineIds.add(machine.getMachineID());
                     }
                 }else {
-                    selectAllTv.setText(mContext.getResources().getString(R.string.select_all));
+                    selectAllTv.setText(getContext().getResources().getString(R.string.select_all));
                     mSelectedMachineIds.clear();
                 }
 

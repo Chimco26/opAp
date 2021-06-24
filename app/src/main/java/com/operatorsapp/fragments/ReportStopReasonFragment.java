@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +26,6 @@ import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
@@ -37,6 +35,7 @@ import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.NewStopReasonsAdapter;
 import com.operatorsapp.adapters.StopReasonsAdapter;
 import com.operatorsapp.application.OperatorApplication;
+import com.operatorsapp.dialogs.InputDialog;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
@@ -100,6 +99,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     private boolean isFromViewLogRoot;
     private int mMachineIdForRequest;
     private Event mRootEvent;
+    private String mEventNote;
 
     public static ReportStopReasonFragment newInstance(boolean isOpen, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition,
                                                        boolean isReportingOnSetupEvents, boolean isReportingOnSetupEnd, boolean isSetupMode, int machineId, String rootMachineName) {
@@ -294,45 +294,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             mFlavorSpanDif = -2;
             mRecyclerView.setPadding(200, 0, 0, 0);
         }
-
-//        setupStopReasons();
-
-//        if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
-//            OppAppLogger.i(TAG, "No Reasons in list");
-//            StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Missing_reports, "missing reports");
-//            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
-//        } else {
-//
-//            mGridLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS + mFlavorSpanDif);
-//            mRecyclerView.setLayoutManager(mGridLayoutManager);
-//            int spacing = 0;//40
-//
-//            Configuration config = getResources().getConfiguration();
-//            if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-//                mRecyclerView.addItemDecoration(new GridSpacingItemDecorationRTL(NUMBER_OF_COLUMNS + mFlavorSpanDif, spacing, true, 0));
-//            } else {
-//                mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS + mFlavorSpanDif, spacing, true, 0));
-//            }
-//            initNewStopReasons();
-//
-//            mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                @Override
-//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                    PersistenceManager.getInstance().setisNewStopReasonDesign(isChecked);
-//                    if (isChecked) {
-//                        initNewStopReasons();
-//                    } else {
-//                        initStopReasons();
-//                    }
-//                }
-//            });
-//
-//            setSpanCount(mIsOpen);
-//
-//        }
-
-//        mSwitch.setChecked(PersistenceManager.getInstance().isNewStopReasonDesign());
-
+        
         view.findViewById(R.id.FRSRN_close_select_events).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -375,7 +337,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         //Analytics
         new GoogleAnalyticsHelper().trackScreen(getActivity(), "Report Stop Reason- circle level 1");
 
-        StopReasonsAdapter mStopReasonsAdapter = new StopReasonsAdapter(getContext(), mStopReasonsList, this);
+        StopReasonsAdapter mStopReasonsAdapter = new StopReasonsAdapter(mStopReasonsList, this);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setAdapter(mStopReasonsAdapter);
     }
@@ -384,7 +346,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         //Analytics
         new GoogleAnalyticsHelper().trackScreen(getActivity(), "Report Stop Reason- table");
 
-        NewStopReasonsAdapter newStopReasonsAdapter = new NewStopReasonsAdapter(getActivity(), mStopReasonsList, this);
+        NewStopReasonsAdapter newStopReasonsAdapter = new NewStopReasonsAdapter(mStopReasonsList, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mRecyclerView.setAdapter(newStopReasonsAdapter);
     }
@@ -425,7 +387,8 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment.newInstance(position, mStopReasonsList.get(position), mJoshId,
                         mStopReasonsList.get(position).getId(),
                         mStopReasonsList.get(position).getEName(),
-                        mStopReasonsList.get(position).getLName(), mIsOpen), isFromViewLogRoot);
+                        mStopReasonsList.get(position).getLName(), mIsOpen,
+                        (mRootEvent != null && mRootEvent.getEventID().floatValue() == mSelectedEvents.get(0) && mRootEvent.getDescr() != null) ?mRootEvent.getDescr():null), isFromViewLogRoot);
             }
         } catch (IllegalStateException e) {
 
@@ -477,6 +440,28 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
     private void sendReport() {
 
+        if (PersistenceManager.getInstance().isAllowTextOnReportStop()) {
+            String value = (mSelectedEvents.size() == 1 && mRootEvent != null && mRootEvent.getEventID().floatValue() == mSelectedEvents.get(0) && mRootEvent.getDescr() != null) ? mEventNote : "";
+            InputDialog.getInputDialog(getContext(), getString(R.string.add_comment), value,
+                    new InputDialog.InputDialogListener() {
+                        @Override
+                        public void onSubmit(String text) {
+                            performReport(text);
+                        }
+                        @Override
+                        public void onCancel() {
+                            performReport(null);
+
+                        }
+                    }).show();
+        }else {
+
+            performReport(null);
+        }
+
+    }
+
+    private void performReport(String text) {
         ProgressDialogManager.show(getActivity());
 
         ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
@@ -512,11 +497,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         } else {
 
             mReportCore.sendMultipleStopReport(mStopReasonsList.get(mSelectedPosition).getId(),
-                    mSelectedSubreason.getId(), eventsId, mJoshId, false);
+                    mSelectedSubreason.getId(), eventsId, mJoshId, false, text);
 
         }
-
-
     }
 
 
@@ -614,7 +597,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ProgressDialogManager.dismiss();
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        ProgressDialogManager.dismiss();
+                    }
                 }
             });
         }

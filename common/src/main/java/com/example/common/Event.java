@@ -61,6 +61,8 @@ public class Event extends DataSupport implements Parcelable {
     private int mEventReasonID;
     @SerializedName("Color")
     private String color;
+    @SerializedName("Descr")
+    private String descr;
 
     private int type;
 
@@ -122,6 +124,14 @@ public class Event extends DataSupport implements Parcelable {
         mEventReasonID = reasonId;
         this.color = color;
         this.type = type;
+    }
+
+    public String getDescr() {
+        return descr;
+    }
+
+    public void setDescr(String descr) {
+        this.descr = descr;
     }
 
     public String getColor() {

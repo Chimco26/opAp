@@ -140,6 +140,7 @@
         <item>Aktiválja a munkát</item>
         <item>Elutasítás hozzáadása</item>
         <item>Egységek módosítása ciklusban</item>
+        <item>Fix Units Produced</item>
         <item>Jelentés készítése</item>
         <item>Teszt rendelése</item>
     </array>
@@ -527,5 +528,19 @@
     <string name="select_test">Teszt kiválasztása</string>
     <string name="confirm_machine_selection">אתה בטוח שאתה רוצה לבצע את פעולה זו לכל המכונות שנבחרו?</string>
     <string name="you_ve_reached_the_shift_production_target">Ön elérte a műszak gyártási célkitűzését!</string>
+    <string name="number_of_batches">Tételek száma</string>
+    <string name="units_to_add_remove">Hozzáadandó/Eltávolítandó</string>
+    <string name="add_comment">Megjegyzés hozzáadása</string>
+    <string name="attach_files">Fájlok csatolása</string>
+    <string name="uploading_images_is_not_possible_without_these_permissions">Ezen engedélyek nélkül nem lehetséges képeket feltölteni</string>
+    <string name="upload_failed">Feltöltés sikertelen</string>
+    <string name="upload_completed">Feltöltés befejeződött</string>
+    <string name="show_camera_dialog_take_a_picture">Készítsen egy új fényképet</string>
+    <string name="service_report">Szervizjelentés</string>
+    <string name="machines">gép</string>
+    <string name="failed_to_load_image">Nem sikerült a képet betölteni, mégis feltölti?</string>
+    <string name="details_are_missing">Részletek hiányoznak</string>
+    <string name="show_camera_dialog_gallery">Kiválasztott galéria</string>
+    <string name="show_camera_dialog_title">Kép hozzáadása</string>
 
 </resources>

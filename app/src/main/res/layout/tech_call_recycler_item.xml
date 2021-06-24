@@ -1,35 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_marginStart="20dp"
-    android:layout_marginEnd="20dp"
-    android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginBottom="5dp"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_gravity="center"
+        android:id="@+id/TCR_top_ll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/tech_call_item_machine_name_tv"
-            style="@style/ProximaNovaSemiBold"
-            android:textSize="14sp"
-            android:padding="10dp"
-            android:textColor="@color/black"
-            android:ellipsize="end"
-            android:visibility="gone"
-            android:layout_width="120dp"
-            android:layout_gravity="center_vertical"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
             <ImageView
@@ -44,47 +33,68 @@
                 android:id="@+id/tech_call_item_subtext_tv"
                 style="@style/ProximaNovaSemiBold"
                 android:layout_width="80dp"
-                android:maxLines="2"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:maxLines="2"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
         </LinearLayout>
-        
+
+
         <TextView
-            android:id="@+id/tech_call_item_text_tv"
+            android:id="@+id/tech_call_item_machine_name_tv"
             style="@style/ProximaNovaSemiBold"
-            android:textSize="16sp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            android:ellipsize="end"
             android:padding="5dp"
             android:textColor="@color/black"
-            android:text="@string/service_call_exists"
-            android:ellipsize="end"
+            android:textSize="16sp"
+            android:visibility="invisible" />
+
+        <RelativeLayout
+            android:id="@+id/tech_call_item_text_rl"
             android:layout_width="0dp"
-            android:layout_weight="2"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_height="wrap_content" />
+            android:layout_weight="2">
+
+            <TextView
+                android:id="@+id/tech_call_item_text_tv"
+                style="@style/ProximaNovaSemiBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="@string/service_call_exists"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </RelativeLayout>
         <!--<View-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"/>-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_weight="1"/>-->
 
         <TextView
             android:id="@+id/tech_call_item_time_tv"
             style="@style/ProximaNovaSemiBold"
-            android:textSize="16sp"
-            android:padding="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textColor="@color/black"
-            android:text="@string/service_call_exists"
-            android:layout_width="0dp"
             android:layout_weight="2"
-            android:layout_height="wrap_content" />
-<!--
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"/>-->
+            android:padding="5dp"
+            android:text="@string/service_call_exists"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+        <!--
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>-->
 
         <!--<TextView-->
         <!--android:id="@+id/tech_call_item_status_tv"-->
@@ -100,101 +110,110 @@
 
         <FrameLayout
             android:id="@+id/tech_call_item_manage_call_fl"
-           android:layout_width="0dp"
-            android:layout_weight="1.5"
-           android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="1.5"
             android:background="@color/grey_lite"
             android:padding="1dp">
 
 
-           <LinearLayout
-               android:paddingStart="5dp"
-               android:paddingEnd="5dp"
-               android:orientation="horizontal"
-               android:layout_gravity="center"
-               android:gravity="center"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:background="@color/white_five">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/white_five"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp">
 
 
-               <ImageView
-                   android:id="@+id/tech_call_item_manage_call_iv"
-                   android:layout_gravity="center_vertical"
-                   android:layout_width="30dp"
-                   android:layout_height="30dp"
-                   android:paddingStart="5dp"
-                   android:paddingEnd="5dp"
-                   android:src="@drawable/wrench"/>
+                <ImageView
+                    android:id="@+id/tech_call_item_manage_call_iv"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:src="@drawable/wrench" />
 
-               <TextView
-                   android:id="@+id/tech_call_item_manage_call_tv"
-                   style="@style/ProximaNovaSemiBold"
-                   android:textSize="16sp"
-                   android:textAlignment="center"
-                   android:layout_gravity="center_vertical"
-                   android:textColor="@color/black"
-                   android:text="@string/start_service"
-                   android:minEms="8"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content" />
-           </LinearLayout>
+                <TextView
+                    android:id="@+id/tech_call_item_manage_call_tv"
+                    style="@style/ProximaNovaSemiBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:minEms="8"
+                    android:text="@string/start_service"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
         </FrameLayout>
 
 
         <ImageView
             android:id="@+id/tech_call_item_remove_iv"
-            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
-            android:src="@android:drawable/ic_menu_delete"/>
+            android:src="@android:drawable/ic_menu_delete" />
 
         <ImageView
             android:id="@+id/tech_call_item_arrow_iv"
-            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:src="@android:drawable/arrow_down_float"/>
+            android:src="@android:drawable/arrow_down_float" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tech_call_event_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/tech_call_item_more_info_lil"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginStart="120dp"
-        android:layout_marginEnd="80dp"
         android:visibility="gone">
 
         <TextView
             style="@style/ProximaNovaSemiBold"
-            android:textSize="16sp"
-            android:padding="10dp"
-            android:layout_marginEnd="10dp"
-            android:textColor="@color/black"
-            android:text="@string/more_info"
-            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="@string/description"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tech_call_item_more_info_tv"
             style="@style/ProximaNovaSemiBold"
-            android:textSize="16sp"
-            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_gravity="center_vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
     <View
-        android:background="@color/recycler_view_divider"
         android:layout_width="match_parent"
-        android:layout_height="1px"/>
+        android:layout_height="1px"
+        android:background="@color/recycler_view_divider" />
 </LinearLayout>

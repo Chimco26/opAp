@@ -1,7 +1,6 @@
 package com.operatorsapp.adapters;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +9,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.common.permissions.WidgetInfo;
+import com.github.mikephil.charting.jobs.MoveViewJob;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
@@ -21,14 +22,15 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.interfaces.OnKeyboardManagerListener;
+import com.operatorsapp.view.widgetViewHolders.ActivateJobViewHolder;
 import com.operatorsapp.view.widgetViewHolders.CounterViewHolder;
 import com.operatorsapp.view.widgetViewHolders.FreeTextViewHolder;
 import com.operatorsapp.view.widgetViewHolders.GenericTimeViewHolder;
-import com.operatorsapp.view.widgetViewHolders.ReportProductionViewHolder;
-import com.operatorsapp.view.widgetViewHolders.OrderTestViewHolder;
 import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
+import com.operatorsapp.view.widgetViewHolders.OrderTestViewHolder;
 import com.operatorsapp.view.widgetViewHolders.ProjectionViewHolderNew;
 import com.operatorsapp.view.widgetViewHolders.RangeViewHolder;
+import com.operatorsapp.view.widgetViewHolders.ReportProductionViewHolder;
 import com.operatorsapp.view.widgetViewHolders.ReportStopViewHolder;
 import com.operatorsapp.view.widgetViewHolders.TimeLeftViewHolder;
 import com.operatorsapp.view.widgetViewHolders.TimeViewHolder;
@@ -40,12 +42,12 @@ import java.util.List;
 
 import static androidx.recyclerview.widget.RecyclerView.Adapter;
 import static androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import static com.operators.machinedatainfra.models.Widget.FIELD_TYPE_ACTIVATE_JOB;
 
 public class WidgetAdapter extends Adapter {
     private static final long TEN_HOURS = 60000L * 60 * 10;
     private final DashboardCentralContainerListener mDashboardCentralContainerListener;
     private final OnKeyboardManagerListener mOnKeyboardManagerListener;
-    private Activity mContext;
     private List<Widget> mWidgets;
     private final int NUMERIC = 0;
     private final int RANGE = 1;
@@ -77,13 +79,12 @@ public class WidgetAdapter extends Adapter {
     private ShowDashboardCroutonListener mShowDashboardCroutonListener;
 
 
-    public WidgetAdapter(Activity context, List<Widget> widgets, GoToScreenListener goToScreenListener,
+    public WidgetAdapter(List<Widget> widgets, GoToScreenListener goToScreenListener,
                          Integer joshId, boolean closedState, int height, int width,
                          DashboardCentralContainerListener dashboardCentralContainerListener,
                          ReportFieldsForMachine reportFieldsForMachine, MachineStatus machineStatus,
                          ShowDashboardCroutonListener showDashboardCroutonListener, OnKeyboardManagerListener onKeyboardManagerListener, SparseArray<WidgetInfo> permissionResponse) {
         mWidgets = widgets;
-        mContext = context;
         mGoToScreenListener = goToScreenListener;
         mJoshId = joshId;
         mClosedState = closedState;
@@ -171,22 +172,21 @@ public class WidgetAdapter extends Adapter {
             case NUMERIC: {
 
                 return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
-                        mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth,
+                        mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth,
                         WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(),
                         WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean());
             }
             case RANGE: {
-                return new RangeViewHolder(inflater.inflate(R.layout.range_widget_cardview, parent, false),
-                        mContext, mClosedState, mHeight, mWidth);
+                return new RangeViewHolder(inflater.inflate(R.layout.range_widget_cardview, parent, false), mClosedState, mHeight, mWidth);
             }
             case PROJECTION: {
                 return new ProjectionViewHolderNew(inflater.inflate(R.layout.projection_widget_cardview_new, parent, false), mHeight, mWidth);
             }
             case TIME: {
-                return new TimeViewHolder(inflater.inflate(R.layout.time_widget_cardview, parent, false), mContext, mGoToScreenListener, mHeight, mWidth);
+                return new TimeViewHolder(inflater.inflate(R.layout.time_widget_cardview, parent, false), mGoToScreenListener, mHeight, mWidth);
             }
             case COUNTER: {
-                return new CounterViewHolder(inflater.inflate(R.layout.counter_widget_cardview, parent, false), mContext, mDashboardCentralContainerListener, mHeight, mWidth);
+                return new CounterViewHolder(inflater.inflate(R.layout.counter_widget_cardview, parent, false), mDashboardCentralContainerListener, mHeight, mWidth);
             }
             case IMAGE: {
                 return new ImageViewHolder(inflater.inflate(R.layout.image_widget_cardview, parent, false));
@@ -210,22 +210,40 @@ public class WidgetAdapter extends Adapter {
             case ORDER_TEST: {
                 return new OrderTestViewHolder(inflater.inflate(R.layout.order_test_widget_cardview, parent, false), mHeight, mWidth);
             }
+            case FIELD_TYPE_ACTIVATE_JOB: {
+                return new ActivateJobViewHolder(inflater.inflate(R.layout.activate_job_widget_cardview, parent, false), mHeight, mWidth);
+            }
             case REPORT_PRODUCTION: {
                 return new ReportProductionViewHolder(inflater.inflate(R.layout.report_production_widget_cardview, parent, false), mHeight, mWidth);
 //                return new ReportProductionViewHolder(inflater.inflate(R.layout.report_production_widget_cardview, parent, false), mHeight, mWidth,
-//                        mReportFieldsForMachine, mOnKeyboardManagerListener, mShowDashboardCroutonListener, mJoshId, mContext);
+//                        mReportFieldsForMachine, mOnKeyboardManagerListener, mShowDashboardCroutonListener, mJoshId);
             }
             case MACHINE_WORK_BIT: {
-                return new MachineWorkBitViewHolder(inflater.inflate(R.layout.machine_work_bit_cardview, parent, false), mHeight, mWidth,mContext,mShowDashboardCroutonListener);
+                return new MachineWorkBitViewHolder(inflater.inflate(R.layout.machine_work_bit_cardview, parent, false), mHeight, mWidth, mShowDashboardCroutonListener);
             }
             case TOP_5_STOP_EVENTS: {
                 return new TopStopEventsViewHolder(inflater.inflate(R.layout.top_stop_events_cardview, parent, false), mHeight, mWidth);
             }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
-                mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth,
+                mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth,
                 WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(),
                 WidgetInfo.getWidgetInfo(mPermissionResponse, WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean());
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        detach(recyclerView);
+    }
+
+    public void detach(@NonNull RecyclerView recyclerView) {
+        MoveViewJob.getInstance(null, 0, 0, null, null);
+        int childCOunt = recyclerView.getChildCount();
+        for (int i = 0; i < childCOunt; i++) {
+            if (recyclerView.getChildViewHolder(recyclerView.getChildAt(i)) instanceof NumericViewHolder) {
+                ((NumericViewHolder) recyclerView.getChildViewHolder(recyclerView.getChildAt(i))).clearTouchListener();
+            }
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -257,11 +275,11 @@ public class WidgetAdapter extends Adapter {
                     break;
                 case TIME:
                     final TimeViewHolder timeViewHolder = (TimeViewHolder) holder;
-                    timeViewHolder.setTimeItem(widget);
+                    timeViewHolder.setTimeItem(holder.itemView.getContext(), widget);
                     break;
                 case RANGE:
                     final RangeViewHolder rangeViewHolder = (RangeViewHolder) holder;
-                    rangeViewHolder.setRangeItem(widget);
+                    rangeViewHolder.setRangeItem(rangeViewHolder.itemView.getContext(), widget);
                     break;
                 case PROJECTION:
                     final ProjectionViewHolderNew projectionViewHolder = (ProjectionViewHolderNew) holder;
@@ -291,11 +309,16 @@ public class WidgetAdapter extends Adapter {
                     reportProductionViewHolder.setData(widget);
                 }
                 case MACHINE_WORK_BIT: {
-                   final MachineWorkBitViewHolder machineWorkBitViewHolder = (MachineWorkBitViewHolder) holder;
-                   machineWorkBitViewHolder.setData(widget);
+                    final MachineWorkBitViewHolder machineWorkBitViewHolder = (MachineWorkBitViewHolder) holder;
+                    machineWorkBitViewHolder.setData(widget);
                 }
                 case TOP_5_STOP_EVENTS: {
                     final TopStopEventsViewHolder topStopEventsViewHolder = (TopStopEventsViewHolder) holder;
+//                   Nathat missing
+                }
+                case FIELD_TYPE_ACTIVATE_JOB: {
+                    final ActivateJobViewHolder activateJobViewHolder = (ActivateJobViewHolder) holder;
+                    activateJobViewHolder.setData(widget);
 //                   Nathat missing
                 }
             }
@@ -387,6 +410,9 @@ public class WidgetAdapter extends Adapter {
                 break;
             case 13:
                 type = TOP_5_STOP_EVENTS;
+                break;
+            case FIELD_TYPE_ACTIVATE_JOB:
+                type = FIELD_TYPE_ACTIVATE_JOB;
                 break;
 
             default:

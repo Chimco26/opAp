@@ -3,11 +3,6 @@ package com.operatorsapp.fragments;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -15,12 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.common.Event;
 import com.example.common.StandardResponse;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.example.common.permissions.WidgetInfo;
 import com.example.oppapplog.OppAppLogger;
+import com.github.mikephil.charting.jobs.MoveViewJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
@@ -40,11 +43,13 @@ import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.SingleLineKeyboard;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.operators.machinedatainfra.models.Widget.FIELD_TYPE_ACTIVATE_JOB;
 import static org.acra.ACRA.LOG_TAG;
 
 /**
@@ -78,12 +83,13 @@ public class WidgetFragment extends Fragment implements
     private SparseArray<WidgetInfo> mPermissionResponse;
     private Integer mJoshId = null;
     private ShowDashboardCroutonListener mShowDashboardCroutonListener;
+    private WeakReference<DashboardUICallbackListener> mUiCallbackListener;
 
     public static WidgetFragment newInstance(ReportFieldsForMachine reportFieldsForMachine, int joshId) {
         WidgetFragment widgetFragment = new WidgetFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(ReportFieldsForMachine.TAG, reportFieldsForMachine);
-        bundle.putInt(KEY_JOSH_ID,joshId);
+        bundle.putInt(KEY_JOSH_ID, joshId);
         return widgetFragment;
     }
 
@@ -118,68 +124,68 @@ public class WidgetFragment extends Fragment implements
 //                    if (getActivity() == null) {
 //                        return;
 //                    }
-                    Display display = getActivity().getWindowManager().getDefaultDisplay();
-                    Point size = new Point();
-                    display.getSize(size);
-                    int mWidth = size.x;
-                    int mHeight = size.y;
+            Display display = getActivity().getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int mWidth = size.x;
+            int mHeight = size.y;
 
-                    mWidgetsLayoutWidth = (int) (mWidth * 0.84);
-                    mRecyclersHeight = (int) (mHeight * 0.67);
+            mWidgetsLayoutWidth = (int) (mWidth * 0.84);
+            mRecyclersHeight = (int) (mHeight * 0.67);
 
-                    mSpanCount = 3;//(int) ((view.getWidth()) / (getActivity().getResources().getDimension(R.dimen.widget_width)));
-                    mSpanCount = Math.max(mSpanCount, 1);
-                    ViewGroup mWidgetsLayout = view.findViewById(R.id.fragment_dashboard_widgets_layout);
-                    ViewGroup.MarginLayoutParams mWidgetsParams = (ViewGroup.MarginLayoutParams) mWidgetsLayout.getLayoutParams();
-                    mWidgetsLayout.setLayoutParams(mWidgetsParams);
+            mSpanCount = 3;//(int) ((view.getWidth()) / (getActivity().getResources().getDimension(R.dimen.widget_width)));
+            mSpanCount = Math.max(mSpanCount, 1);
+            ViewGroup mWidgetsLayout = view.findViewById(R.id.fragment_dashboard_widgets_layout);
+            ViewGroup.MarginLayoutParams mWidgetsParams = (ViewGroup.MarginLayoutParams) mWidgetsLayout.getLayoutParams();
+            mWidgetsLayout.setLayoutParams(mWidgetsParams);
 
-                    mWidgetRecycler = view.findViewById(R.id.fragment_dashboard_widgets);
-                    mGridLayoutManager = new GridLayoutManager(getActivity(), mSpanCount);
-                    mWidgetRecycler.setLayoutManager(mGridLayoutManager);
-                    GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(mSpanCount, 14, true, 0);
-                    mGridSpacingItemDecoration.setSpacingTop(0);
-                    mGridSpacingItemDecoration.setSpacingBottom(8);
-                    mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
-                    mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener,mJoshId,
-                            true, mRecyclersHeight, mWidgetsLayoutWidth,
-                            mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus,mShowDashboardCroutonListener, new OnKeyboardManagerListener() {
-                        @Override
-                        public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
-                            if (mKeyBoardLayout != null) {
-                                mKeyBoardLayout.setVisibility(View.VISIBLE);
-                                if (mKeyBoard == null)
-                                    mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
+            mWidgetRecycler = view.findViewById(R.id.fragment_dashboard_widgets);
+            mGridLayoutManager = new GridLayoutManager(getActivity(), mSpanCount);
+            mWidgetRecycler.setLayoutManager(mGridLayoutManager);
+            GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(mSpanCount, 14, true, 0);
+            mGridSpacingItemDecoration.setSpacingTop(0);
+            mGridSpacingItemDecoration.setSpacingBottom(8);
+            mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
+            mWidgetAdapter = new WidgetAdapter(mWidgets, mOnGoToScreenListener, mJoshId,
+                    true, mRecyclersHeight, mWidgetsLayoutWidth,
+                    mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus, mShowDashboardCroutonListener, new OnKeyboardManagerListener() {
+                @Override
+                public void onOpenKeyboard(Context context, SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
+                    if (mKeyBoardLayout != null) {
+                        mKeyBoardLayout.setVisibility(View.VISIBLE);
+                        if (mKeyBoard == null)
+                            mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
 
-                                mKeyBoard.setChars(complementChars);
-                                mKeyBoard.openKeyBoard(text);
-                                mKeyBoard.setListener(listener);
-                                if (mDashboardCentralContainerListener != null) {
-                                    mDashboardCentralContainerListener.onKeyboardEvent(true);
-                                }
-                            }
+                        mKeyBoard.setChars(complementChars);
+                        mKeyBoard.openKeyBoard(context, text);
+                        mKeyBoard.setListener(listener);
+                        if (mDashboardCentralContainerListener != null) {
+                            mDashboardCentralContainerListener.onKeyboardEvent(true);
                         }
-
-                        @Override
-                        public void onCloseKeyboard() {
-                            if (mKeyBoardLayout != null) {
-                                mKeyBoardLayout.setVisibility(View.GONE);
-                            }
-                            if (mKeyBoard != null) {
-                                mKeyBoard.setListener(null);
-                            }
-                            if (mDashboardCentralContainerListener != null) {
-                                mDashboardCentralContainerListener.onKeyboardEvent(false);
-                            }
-                        }
-
-                    }, mPermissionResponse);
-                    mWidgetRecycler.setAdapter(mWidgetAdapter);
-
-                    mLoadingDataView = view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
-                    mLoadingDataView.setVisibility(View.VISIBLE);
-                    mKeyBoardLayout = view.findViewById(R.id.FW_keyboard);
-
+                    }
                 }
+
+                @Override
+                public void onCloseKeyboard() {
+                    if (mKeyBoardLayout != null) {
+                        mKeyBoardLayout.setVisibility(View.GONE);
+                    }
+                    if (mKeyBoard != null) {
+                        mKeyBoard.setListener(null);
+                    }
+                    if (mDashboardCentralContainerListener != null) {
+                        mDashboardCentralContainerListener.onKeyboardEvent(false);
+                    }
+                }
+
+            }, mPermissionResponse);
+            mWidgetRecycler.setAdapter(mWidgetAdapter);
+
+            mLoadingDataView = view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
+            mLoadingDataView.setVisibility(View.VISIBLE);
+            mKeyBoardLayout = view.findViewById(R.id.FW_keyboard);
+
+        }
 //            });
 //
 //        }
@@ -193,7 +199,8 @@ public class WidgetFragment extends Fragment implements
         try {
             mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
-            mOnActivityCallbackRegistered.onFragmentAttached(this);
+            mUiCallbackListener = new WeakReference<DashboardUICallbackListener>((DashboardUICallbackListener) this);
+            mOnActivityCallbackRegistered.onFragmentAttached(mUiCallbackListener);
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mDashboardCentralContainerListener = (DashboardCentralContainerListener) getActivity();
             mShowDashboardCroutonListener = (ShowDashboardCroutonListener) getActivity();
@@ -207,13 +214,24 @@ public class WidgetFragment extends Fragment implements
     public void onDetach() {
         OppAppLogger.d(LOG_TAG, "onDetach(), start ");
         super.onDetach();
-        mOnActivityCallbackRegistered.onFragmentDetached(this);
+        mOnActivityCallbackRegistered.onFragmentDetached(mUiCallbackListener);
+        mUiCallbackListener = null;
         mOnActivityCallbackRegistered = null;
         mOnGoToScreenListener = null;
         mReportFieldsFragmentCallbackListener = null;
         mDashboardCentralContainerListener = null;
         mShowDashboardCroutonListener = null;
         OppAppLogger.d(LOG_TAG, "onDetach(), end ");
+        MoveViewJob.getInstance(null, 0, 0, null, null);
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (mWidgetAdapter != null && mWidgetRecycler != null) {
+            mWidgetAdapter.detach(mWidgetRecycler);
+        }
+        super.onDestroyView();
     }
 
     @Override
@@ -247,6 +265,11 @@ public class WidgetFragment extends Fragment implements
 
         mWidgets = widgetList;
         if (widgetList != null && widgetList.size() > 0) {
+            if (PersistenceManager.getInstance().isActivateJobWidgetOnOpApp()) {
+                Widget activateJobWidget = new Widget();
+                activateJobWidget.setmFieldType(FIELD_TYPE_ACTIVATE_JOB);
+                widgetList.add(0, activateJobWidget);
+            }
             saveAndRestoreChartData(widgetList);
             PersistenceManager.getInstance().setMachineDataStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
 //            mNoDataView.setVisibility(View.GONE);
@@ -255,7 +278,7 @@ public class WidgetFragment extends Fragment implements
             if (mWidgetAdapter != null) {
                 mWidgetAdapter.setNewData(widgetList, mPermissionResponse);
             } else {
-                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener,
+                mWidgetAdapter = new WidgetAdapter(widgetList, mOnGoToScreenListener,
                         mJoshId, !mIsOpen, mRecyclersHeight, mWidgetsLayoutWidth,
                         mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus, mShowDashboardCroutonListener, this, mPermissionResponse);
                 mWidgetRecycler.setAdapter(mWidgetAdapter);
@@ -424,14 +447,14 @@ public class WidgetFragment extends Fragment implements
 
 
     @Override
-    public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
+    public void onOpenKeyboard(Context context, SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
         if (mKeyBoardLayout != null) {
             mKeyBoardLayout.setVisibility(View.VISIBLE);
             if (mKeyBoard == null)
                 mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
 
             mKeyBoard.setChars(complementChars);
-            mKeyBoard.openKeyBoard(text);
+            mKeyBoard.openKeyBoard(context, text);
             mKeyBoard.setListener(listener);
             if (mDashboardCentralContainerListener != null) {
                 mDashboardCentralContainerListener.onKeyboardEvent(true);

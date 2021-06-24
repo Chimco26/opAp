@@ -1,5 +1,6 @@
 package com.operatorsapp.dialogs;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,6 @@ import com.example.common.department.MachinesLineDetail;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.TechCallFilterAdapter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -30,7 +30,7 @@ public class TechCallFilter extends DialogFragment {
     private TechCallFilterAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
-    public static TechCallFilter newInstants(MachineLineResponse machineLine, HashMap<Integer, Boolean> filteredOutMachines, TechCallFilterListener listener){
+    public static TechCallFilter newInstants(MachineLineResponse machineLine, HashMap<Integer, Boolean> filteredOutMachines, TechCallFilterListener listener) {
         TechCallFilter filter = new TechCallFilter();
         filter.setMachineLine(machineLine);
         filter.setFilteredOutMachines(filteredOutMachines);
@@ -81,11 +81,11 @@ public class TechCallFilter extends DialogFragment {
         mSelectAllCB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mSelectAllCB.isChecked()){
+                if (!mSelectAllCB.isChecked()) {
                     for (MachinesLineDetail machine : mMachineLine.getMachinesData()) {
                         mFilteredOutMachines.put(machine.getMachineID(), false);
                     }
-                }else {
+                } else {
                     for (MachinesLineDetail machine : mMachineLine.getMachinesData()) {
                         mFilteredOutMachines.put(machine.getMachineID(), true);
                     }
@@ -100,10 +100,10 @@ public class TechCallFilter extends DialogFragment {
     private void setSelectAll() {
 
         boolean isCheck = true;
-        if (mFilteredOutMachines != null && !mFilteredOutMachines.isEmpty()){
+        if (mFilteredOutMachines != null && !mFilteredOutMachines.isEmpty()) {
             Set<Integer> keys = mFilteredOutMachines.keySet();
             for (int key : keys) {
-                if (!mFilteredOutMachines.get(key)){
+                if (!mFilteredOutMachines.get(key)) {
                     isCheck = false;
                     break;
                 }
@@ -112,15 +112,16 @@ public class TechCallFilter extends DialogFragment {
         mSelectAllCB.setChecked(isCheck);
         mAdapter.updateFilterList(mFilteredOutMachines);
 
-        mRecyclerView.post(new Runnable()
-        {
+        mRecyclerView.post(new Runnable() {
             @Override
             public void run() {
-                mAdapter.notifyDataSetChanged();
+                if (getContext() != null
+                        && getContext() instanceof Activity
+                        && !((Activity) getContext()).isDestroyed()) {
+                    mAdapter.notifyDataSetChanged();
+                }
             }
         });
-        
-
     }
 
     @Override

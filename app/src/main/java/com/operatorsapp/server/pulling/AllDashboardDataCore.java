@@ -48,6 +48,7 @@ import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -65,12 +66,12 @@ import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 
-public class AllDashboardDataCore implements OnTimeToEndChangedListener {
+public class AllDashboardDataCore{
     private static final String LOG_TAG = AllDashboardDataCore.class.getSimpleName();
 
     private static final int START_DELAY = 0;
     private static boolean isOnlineChecking = false;
-    private final AllDashboardDataCoreListener mListener;
+    private final WeakReference<AllDashboardDataCoreListener> mListener;
     private EmeraldJobBase mJob;
 
     private GetMachineStatusNetworkBridgeInterface mGetMachineStatusNetworkBridgeInterface;
@@ -112,7 +113,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         mShiftLogPersistenceManagerInterface = shiftLogPersistenceManagerInterface;
         mShiftLogNetworkBridgeInterface = shiftLogNetworkBridgeInterface;
 
-        mListener = listener;
+        mListener = new WeakReference<>(listener);
 
     }
 
@@ -147,6 +148,9 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         if (mStopEventsLineCallback != null) {
             mStopEventsLineCallback = null;
         }
+        if (mMachinePermissionsCallback != null) {
+            mMachinePermissionsCallback = null;
+        }
     }
 
     public void stopTimer() {
@@ -163,7 +167,9 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             @Override
             protected void executeJob(final JobBase.OnJobFinishedListener onJobFinishedListener) {
 
-                mListener.onExecuteJob(onJobFinishedListener);
+                if(mListener != null && mListener.get() != null) {
+                    mListener.get().onExecuteJob(onJobFinishedListener);
+                }
                 //sendRequestForPolling(onJobFinishedListener, jobId);
             }
         };
@@ -214,7 +220,9 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         catch (IOException e)          { e.printStackTrace(); }
         catch (InterruptedException e) { e.printStackTrace(); }
 
-        if (!isOnline) mListener.onNoInternetConnection();
+        if (!isOnline && mListener != null && mListener.get() != null){
+            mListener.get().onNoInternetConnection();
+        }
 
 //        HandlerThread handlerThread = new HandlerThread("HandlerThread");
 //        handlerThread.start();
@@ -245,8 +253,8 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     }
 
     private void getStopEventsLine() {
-        if (mStopEventsLineCallback != null){
-            PersistenceManager pm = PersistenceManager.getInstance();
+        PersistenceManager pm = PersistenceManager.getInstance();
+        if (mStopEventsLineCallback != null && pm.getMachineLineId() > 0){
             SimpleRequests.getLineShiftLog(pm.getSiteUrl(), mStopEventsLineCallback, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
         }
     }
@@ -514,19 +522,19 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
 
     private void startTimer(int timeInSeconds) {
-        if (mTimeToEndCounter == null) {
-            mTimeToEndCounter = new TimeToEndCounter(this);
+        if (mTimeToEndCounter == null || mTimeToEndCounter.getOnTimeToEndChangedListener() == null) {
+            mTimeToEndCounter = new TimeToEndCounter(new OnTimeToEndChangedListener() {
+                @Override
+                public void onTimeToEndChanged(long millisUntilFinished) {
+                    if (mMachineStatusUICallback != null) {
+                        mMachineStatusUICallback.onTimerChanged(millisUntilFinished);
+                    } else {
+                        OppAppLogger.w(LOG_TAG, "onTimeToEndChanged() mMachineStatusUICallback is null");
+                    }
+                }
+            });
         }
         mTimeToEndCounter.calculateTimeToEnd(timeInSeconds);
-    }
-
-    @Override
-    public void onTimeToEndChanged(long millisUntilFinished) {
-        if (mMachineStatusUICallback != null) {
-            mMachineStatusUICallback.onTimerChanged(millisUntilFinished);
-        } else {
-            OppAppLogger.w(LOG_TAG, "onTimeToEndChanged() mMachineStatusUICallback is null");
-        }
     }
 
     public static String getDate(long milliSeconds, String dateFormat) {

@@ -2,6 +2,7 @@ package com.operatorsapp.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -12,7 +13,6 @@ import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 
 public class BasicTitleTextBtnDialog implements View.OnClickListener {
-    private final Activity mContext;
     private final String mTitle;
     private final String mSubtitle;
     private final String mPositiveBtnTxt;
@@ -25,9 +25,8 @@ public class BasicTitleTextBtnDialog implements View.OnClickListener {
     private int mSelectedTechnicianId;
 
 
-    public BasicTitleTextBtnDialog(Activity activity, final BasicTitleTextBtnDialogListener listener,
+    public BasicTitleTextBtnDialog(final BasicTitleTextBtnDialogListener listener,
                                    String title, String subTitle, String msg, String positiveBtn, String negativeBtn) {
-        mContext = activity;
         mTitle = title;
         mSubtitle = subTitle;
         mMessage = msg;
@@ -36,11 +35,11 @@ public class BasicTitleTextBtnDialog implements View.OnClickListener {
         mListener = listener;
     }
 
-    public AlertDialog showBasicTitleTextBtnDialog() {
+    public AlertDialog showBasicTitleTextBtnDialog(Context context) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        LayoutInflater inflater = mContext.getLayoutInflater();
+        LayoutInflater inflater = LayoutInflater.from(context);
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.title_text_btn_dialog, null);
         builder.setView(view);
 

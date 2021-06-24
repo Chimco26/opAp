@@ -154,7 +154,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
         mSubtitleTv.setVisibility(View.GONE);
         mTabsLil.setVisibility(View.GONE);
         setRecyclerViewParams(85.0f);
-        mRecyclerView.setAdapter(new TechnicianAdapter(getContext(), mTechniciansList, this));
+        mRecyclerView.setAdapter(new TechnicianAdapter(mTechniciansList, this));
     }
 
     private void setOpenCalls(int position) {
@@ -331,7 +331,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
             }
         }
         setRecyclerViewParams(65.0f);
-        mRecyclerView.setAdapter(new NotificationHistoryAdapter(getContext(), notList, null));
+        mRecyclerView.setAdapter(new NotificationHistoryAdapter(notList, null));
     }
 
     @Override

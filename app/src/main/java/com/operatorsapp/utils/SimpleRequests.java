@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.example.common.ErrorResponse;
 import com.example.common.MultipleRejectRequestModel;
+import com.example.common.PackageTypesResponse;
 import com.example.common.StandardResponse;
 import com.example.common.StopLogs.StopLogsResponse;
 import com.example.common.callback.CreateTaskCallback;
@@ -19,8 +20,11 @@ import com.example.common.department.MachineLineResponse;
 import com.example.common.machineData.ShiftOperatorResponse;
 import com.example.common.operator.SaveShiftWorkersRequest;
 import com.example.common.request.BaseRequest;
+import com.example.common.request.GetPackageTypesRequest;
 import com.example.common.request.MachineIdRequest;
 import com.example.common.request.RecipeUpdateRequest;
+import com.example.common.request.ServiceCallFileRequest;
+import com.example.common.request.UpdateServiceCallDescriptionRequest;
 import com.example.common.task.CreateTaskHistoryRequest;
 import com.example.common.task.CreateTaskRequest;
 import com.example.common.task.GetTaskFilesRequest;
@@ -569,7 +573,7 @@ public class SimpleRequests {
 
         Call<PendingJobStandardResponse> call = getPendingJobListNetworkManager.emeraldGetPendingJobList(siteUrl, requestTimeout, TimeUnit.SECONDS).getPendingJobListRequest(getPendingJobListRequest);
 
-        if (call == null){
+        if (call == null) {
             callback.onGetPendingJobListFailed(null);
             return;
         }
@@ -1105,7 +1109,7 @@ public class SimpleRequests {
         final int[] retryCount = {0};
 
         Call<StandardResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
-                requestTimeout, TimeUnit.SECONDS).updateMachineStopBit(new MachineIdRequest(String.valueOf(machineId),PersistenceManager.getInstance().getSessionId()));
+                requestTimeout, TimeUnit.SECONDS).updateMachineStopBit(new MachineIdRequest(String.valueOf(machineId), PersistenceManager.getInstance().getSessionId()));
 
         call.enqueue(new Callback<StandardResponse>() {
             @Override
@@ -1192,5 +1196,146 @@ public class SimpleRequests {
         });
     }
 
+    public static void getPackageTypes(long jobId, String siteUrl, final SimpleCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<PackageTypesResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                requestTimeout, TimeUnit.SECONDS).getPackageTypes(new GetPackageTypesRequest(PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), jobId));
+
+        call.enqueue(new Callback<PackageTypesResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<PackageTypesResponse> call, @NonNull Response<PackageTypesResponse> response) {
+
+                if (response.body() != null && response.body().getResponseDictionaryDT() != null && response.body().getResponseDictionaryDT().getPackageTypes() != null
+                        && (response.body().getError().getErrorDesc() == null || response.body().getError().getErrorDesc().isEmpty())) {
+                    if (callback != null) {
+
+                        callback.onRequestSuccess(response.body());
+                    } else {
+
+                        OppAppLogger.w(LOG_TAG, "getPackageTypes(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<PackageTypesResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "getPackageTypes Error");
+                        callback.onRequestFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.w(LOG_TAG, "getPackageTypes(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    public static void postFilesForServiceCall(int notificationID, String fileName, String fileExt, String base64String, String siteUrl, final SimpleCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        ServiceCallFileRequest request = new ServiceCallFileRequest(PersistenceManager.getInstance().getSessionId(), notificationID, base64String, 0, fileName, fileExt, 0);
+
+        Call<StandardResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                requestTimeout, TimeUnit.SECONDS).postFilesForServiceCall(request);
+
+        call.enqueue(new Callback<StandardResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+
+                if (response.body() != null && response.body().getError().getErrorDesc() == null) {
+                    if (callback != null) {
+
+                        callback.onRequestSuccess(response.body());
+                    } else {
+
+                        OppAppLogger.w(LOG_TAG, "postFilesForServiceCall(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "postFilesForServiceCall Error");
+                        callback.onRequestFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.w(LOG_TAG, "postFilesForServiceCall(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+
+    public static void updateServiceCallDescription(String siteUrl, UpdateServiceCallDescriptionRequest request, final SimpleCallback callback, GetSimpleNetworkManager getSimpleNetworkManager, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<StandardResponse> call = getSimpleNetworkManager.emeraldGetSimple(siteUrl,
+                requestTimeout, TimeUnit.SECONDS).updateServiceCallDescription(request);
+
+        call.enqueue(new Callback<StandardResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+
+                if (response.body() != null && response.body().getError().getErrorDesc() == null) {
+                    if (callback != null) {
+
+                        callback.onRequestSuccess(response.body());
+                    } else {
+
+                        OppAppLogger.w(LOG_TAG, "postFilesForServiceCall(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorResponse.ErrorCode.Retrofit, "postFilesForServiceCall Error");
+                        callback.onRequestFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.w(LOG_TAG, "postFilesForServiceCall(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
 
 }

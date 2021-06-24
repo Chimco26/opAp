@@ -117,16 +117,16 @@ public class ChartFragment extends BackStackAwareFragment {
             mStandard.setText(standardText);
             mMax.setText(maxText);
 
-            mChart.setData(mStandardValues, mXValues,mMinVal, mMaxVal);
+            mChart.setData(mChart.getContext(), mStandardValues, mXValues,mMinVal, mMaxVal);
             mChart.setAxis(context, mMinVal, mStandardVal, mMaxVal, mMidnightLimit);
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b){
-                        mChart.setData(mStandardValues, mXValues,mMinVal, mMaxVal);
+                        mChart.setData(mChart.getContext(), mStandardValues, mXValues,mMinVal, mMaxVal);
                     }else {
-                        mChart.setData(mValues, mXValues,mMinVal, mMaxVal);
+                        mChart.setData(mChart.getContext(), mValues, mXValues,mMinVal, mMaxVal);
                     }
                 }
             });

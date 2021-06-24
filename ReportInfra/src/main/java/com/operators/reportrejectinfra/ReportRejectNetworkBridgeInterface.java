@@ -11,12 +11,15 @@ public interface ReportRejectNetworkBridgeInterface {
                         SendReportStopCallback callback, int totalRetries, int specificRequestTimeout);
 
     void sendMultipleReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, long[] eventId, Integer jobId,
-                                SendReportStopCallback callback, int totalRetries, int specificRequestTimeout, boolean byRootEvent);
+                                SendReportStopCallback callback, int totalRetries, int specificRequestTimeout, boolean byRootEvent, String notes);
 
     void sendReportCycleUnits(String siteUrl, String sessionId, String machineId, String operatorId, double unitsPerCycle, Integer jobId,
                               SendReportCallback callback, int totalRetries, int specificRequestTimeout);
 
-    void sendReportInventory(String siteUrl, String sessionId, String machineId, String operatorId, int packageTypeId, int units, Integer jobId,
+    void sendReportFixUnits(String siteUrl, String sessionId, String machineId, String operatorId, double amount, Integer joshId,
+                              SendReportCallback callback, int totalRetries, int specificRequestTimeout);
+
+    void sendReportInventory(String siteUrl, String sessionId, String machineId, String operatorId, int packageTypeId, int units, Integer jobId, Integer numOfBatch,
                              SendReportCallback callback, int totalRetries, int specificRequestTimeout);
 
 

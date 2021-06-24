@@ -18,7 +18,6 @@ import java.util.List;
 
 public class SimpleSpinnerAdapter extends ArrayAdapter<SelectableString> {
     private boolean isPosition = false;
-    private Context mContext;
     private List<SelectableString> mSpinnerItems;
     private TextView mRowName;
     private View mView;
@@ -26,13 +25,11 @@ public class SimpleSpinnerAdapter extends ArrayAdapter<SelectableString> {
     public SimpleSpinnerAdapter(Context context, int resource, List<SelectableString> list) {
         super(context, resource, list);
         mSpinnerItems = list;
-        mContext = context;
     }
 
     public SimpleSpinnerAdapter(Context context, int resource, List<SelectableString> list, boolean isPosition) {
         super(context, resource, list);
         mSpinnerItems = list;
-        mContext = context;
         this.isPosition = isPosition;
     }
 
@@ -45,14 +42,14 @@ public class SimpleSpinnerAdapter extends ArrayAdapter<SelectableString> {
             row = inflater.inflate(R.layout.base_spinner_item, parent, false);
             mView = row;
             mRowName = row.findViewById(R.id.spinner_item_name);
-            mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+            mRowName.setTextColor(ContextCompat.getColor(getContext(), R.color.status_bar));
             if(mSpinnerItems != null && mSpinnerItems.get(isPosition ? position : 0) != null)
             {
                 mRowName.setText(mSpinnerItems.get(isPosition ? position : 0).getString());
             }
             else
             {
-                mRowName.setText(mContext.getString(R.string.dashes));
+                mRowName.setText(getContext().getString(R.string.dashes));
             }
 
             mRowName.setTextSize(22);
@@ -71,7 +68,7 @@ public class SimpleSpinnerAdapter extends ArrayAdapter<SelectableString> {
         if (item != null) {
             TextView name = row.findViewById(R.id.spinner_item_name);
             name.setText(mSpinnerItems.get(position).getString());
-            name.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+            name.setTextColor(ContextCompat.getColor(getContext(), R.color.status_bar));
             name.setTextSize(22);
         }
         return row;
@@ -80,7 +77,7 @@ public class SimpleSpinnerAdapter extends ArrayAdapter<SelectableString> {
     public void setTitle(int position) {
 
         mRowName = mView.findViewById(R.id.spinner_item_name);
-        mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+        mRowName.setTextColor(ContextCompat.getColor(getContext(), R.color.status_bar));
         mRowName.setText(mSpinnerItems.get(position).getString());
         mRowName.setTextSize(24);
     }

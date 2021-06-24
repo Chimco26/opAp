@@ -14,6 +14,9 @@ public class UserGroupPermission {
     @SerializedName("QualityTest")
     private boolean isQualityTest;
 
+    @SerializedName("DisplayType")
+    private Integer displayType;
+
     public UserGroupPermission() {
         this.isChangeProductionStatus = false;
         this.isOperatorLogin = false;
@@ -31,4 +34,10 @@ public class UserGroupPermission {
     public boolean isQualityTest() {
         return isQualityTest;
     }
+
+    public Integer getDisplayType() {
+        if (displayType == null){
+            return 0;
+        }
+        return displayType; }
 }

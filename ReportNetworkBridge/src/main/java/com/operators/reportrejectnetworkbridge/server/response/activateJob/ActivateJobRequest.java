@@ -18,6 +18,9 @@ public class ActivateJobRequest implements Parcelable {
     @SerializedName("JobID")
     @Expose
     private String jobID;
+    @SerializedName("ERPJobID")
+    @Expose
+    private String eRPJobID;
     @SerializedName("WorkerID")
     @Expose
     private String workerID;
@@ -75,6 +78,7 @@ public class ActivateJobRequest implements Parcelable {
         dest.writeValue(this.sessionID);
         dest.writeValue(this.machineID);
         dest.writeValue(this.jobID);
+        dest.writeValue(this.eRPJobID);
         dest.writeString(this.workerID);
         dest.writeByte(this.isToEndSetup ? (byte) 1 : (byte) 0);
     }
@@ -90,10 +94,20 @@ public class ActivateJobRequest implements Parcelable {
         this.isToEndSetup = isToEndSetup;
     }
 
+    public ActivateJobRequest(String sessionID, String machineID, String jobID, String eRPJobID, String workerID, boolean isToEndSetup) {
+        this.sessionID = sessionID;
+        this.machineID = machineID;
+        this.jobID = jobID;
+        this.eRPJobID = eRPJobID;
+        this.workerID = workerID;
+        this.isToEndSetup = isToEndSetup;
+    }
+
     protected ActivateJobRequest(Parcel in) {
         this.sessionID = in.readString();
         this.machineID = in.readString();
         this.jobID = in.readString();
+        this.eRPJobID = in.readString();
         this.workerID = in.readString();
         this.isToEndSetup = in.readByte() != 0;
     }

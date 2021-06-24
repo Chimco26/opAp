@@ -20,6 +20,16 @@ public class DepartmentMachineValue implements Cloneable {
     @SerializedName("LineID")
     @Expose
     private Integer lineId;
+    @SerializedName("StatusTime")
+    @Expose
+    private Integer statusTime;
+    @SerializedName("IsEndOfLine")
+    @Expose
+    private boolean isEndOfLine;
+    @SerializedName("MachineStatusColor")
+    @Expose
+    private String machineStatusColor;
+
 
     public Integer getLineId() {
         return lineId;
@@ -61,4 +71,9 @@ public class DepartmentMachineValue implements Cloneable {
         this.machineStatus = machineStatus;
     }
 
+    public Integer getStatusTime() { return statusTime; }
+
+    public boolean isEndOfLine() { return isEndOfLine; }
+
+    public String getMachineStatusColor() { return machineStatusColor; }
 }

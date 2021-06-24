@@ -207,7 +207,7 @@ public class TaskBoardFragment extends Fragment implements TaskColumnAdapter.Tas
             @Override
             public void onClick(View view) {
                 TaskFilterDialog taskFilterDialog = new TaskFilterDialog(getContext());
-                AlertDialog dialog = taskFilterDialog.showTaskFilterDialog();
+                AlertDialog dialog = taskFilterDialog.showTaskFilterDialog(getContext());
                 dialog.show();
                 dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override

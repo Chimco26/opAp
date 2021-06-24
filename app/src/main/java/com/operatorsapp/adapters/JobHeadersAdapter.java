@@ -17,18 +17,15 @@ import java.util.Map;
 
 public class JobHeadersAdapter extends RecyclerView.Adapter<JobHeadersAdapter.ViewHolder> {
 
-    private final Context mContext;
     private final ArrayList<Header> mHeaders;
     private final HashMap<String, Header> mHashMapHeader;
 
     private JobHeadersAdaperListener mListener;
 
 
-    public JobHeadersAdapter(ArrayList<Header> list, HashMap<String, Header> hashMapHeaders, JobHeadersAdaperListener listener, Context context) {
+    public JobHeadersAdapter(ArrayList<Header> list, HashMap<String, Header> hashMapHeaders, JobHeadersAdaperListener listener) {
 
         mListener = listener;
-
-        mContext = context;
 
         mHeaders = list;
 
@@ -88,8 +85,8 @@ public class JobHeadersAdapter extends RecyclerView.Adapter<JobHeadersAdapter.Vi
     }
 
     private void updateView(@NonNull ViewHolder viewHolder, int blue1, int white) {
-        viewHolder.mTv.setBackgroundColor(mContext.getResources().getColor(blue1));
-        viewHolder.mTv.setTextColor(mContext.getResources().getColor(white));
+        viewHolder.mTv.setBackgroundColor(viewHolder.itemView.getContext().getResources().getColor(blue1));
+        viewHolder.mTv.setTextColor(viewHolder.itemView.getContext().getResources().getColor(white));
     }
 
     @Override

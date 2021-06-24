@@ -18,13 +18,10 @@ public class LenoxMachineAdapter extends RecyclerView.Adapter<LenoxMachineAdapte
 
     private final ArrayList<Machine> mMachines;
     private final LenoxMachineAdapterListener mListener;
-    private final Context mContext;
     private int mSelectedMachineId;
 
-    public LenoxMachineAdapter(Context context, ArrayList<Machine> machines, LenoxMachineAdapterListener listener){
-
-        mContext = context;
-
+    public LenoxMachineAdapter(ArrayList<Machine> machines, LenoxMachineAdapterListener listener){
+        
         mMachines = machines;
 
         mListener = listener;
@@ -58,12 +55,13 @@ public class LenoxMachineAdapter extends RecyclerView.Adapter<LenoxMachineAdapte
     }
 
     private void updateBackground(@NonNull ViewHolder holder, int position) {
+        Context context = holder.itemView.getContext();
         if (mMachines.get(position).getId() == mSelectedMachineId){
-            holder.mTv.setBackgroundColor(mContext.getResources().getColor(R.color.machine_blue));
-            holder.mTv.setTextColor((mContext.getResources().getColor(R.color.white)));
+            holder.mTv.setBackgroundColor(context.getResources().getColor(R.color.machine_blue));
+            holder.mTv.setTextColor((context.getResources().getColor(R.color.white)));
         }else {
-            holder.mTv.setBackground(mContext.getResources().getDrawable(R.drawable.blue_stroke));
-            holder.mTv.setTextColor((mContext.getResources().getColor(R.color.machine_blue)));
+            holder.mTv.setBackground(context.getResources().getDrawable(R.drawable.blue_stroke));
+            holder.mTv.setTextColor((context.getResources().getColor(R.color.machine_blue)));
         }
     }
 

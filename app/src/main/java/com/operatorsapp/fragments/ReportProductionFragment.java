@@ -4,11 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -24,7 +19,14 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import com.example.common.ErrorResponse;
+import com.example.common.PackageTypesResponse;
 import com.example.common.StandardResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
@@ -33,11 +35,12 @@ import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
+import com.operators.reportrejectinfra.SimpleCallback;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
-import com.operatorsapp.adapters.RejectProductionSpinnerAdapter;
+import com.operatorsapp.adapters.PackageTypeSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
@@ -48,6 +51,7 @@ import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.GoogleAnalyticsHelper;
 import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.ShowCrouton;
+import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 
 import static com.operatorsapp.application.OperatorApplication.isEnglishLang;
@@ -76,6 +80,9 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
     private Spinner mJobsSpinner;
     private ShowDashboardCroutonListener mDashboardCroutonListener;
     private int mSelectedPosition;
+    private EditText mNumOfBatch;
+    private Spinner mPackageTypeSpinner;
+    private int mPackageSelectedPosition;
 
 
     public static ReportProductionFragment newInstance(int currentProductId, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
@@ -140,6 +147,8 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
 
         mPlusButton = view.findViewById(R.id.button_plus);
 
+        mNumOfBatch = view.findViewById(R.id.batches_et);
+
         mMinusButton = view.findViewById(R.id.button_minus);
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getPackageTypes() == null || mReportFieldsForMachine.getPackageTypes().size() == 0) {
@@ -188,28 +197,10 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
         mButtonCancel = view.findViewById(R.id.button_cancel);
 
         mJobsSpinner = view.findViewById(R.id.report_job_spinner);
+        initJobsSpinner();
 
-        Spinner rejectReasonSpinner = view.findViewById(R.id.package_type_spinner);
-        if (mReportFieldsForMachine != null && getActivity() != null) {
-            final RejectProductionSpinnerAdapter reasonSpinnerArrayAdapter = new RejectProductionSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getPackageTypes());
-            reasonSpinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
-            rejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
-            rejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
-
-            rejectReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    reasonSpinnerArrayAdapter.setTitle(position);
-                    mSelectedPackageTypeName = isEnglishLang() ? mReportFieldsForMachine.getPackageTypes().get(position).getEName() : mReportFieldsForMachine.getPackageTypes().get(position).getLName();
-                    mSelectedPackageTypeId = mReportFieldsForMachine.getPackageTypes().get(position).getId();
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-        }
+        mPackageTypeSpinner = view.findViewById(R.id.package_type_spinner);
+        getPackagesTypes();
 
         Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "keyboardIsShown");
 
@@ -217,9 +208,52 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
             KeyboardUtils.keyboardIsShownC(getActivity(), this);
         }
 
-        initJobsSpinner();
-
         disableSpinnerProgressBar();
+    }
+
+    private void getPackagesTypes() {
+        PersistenceManager persistenceManager = PersistenceManager.getInstance();
+        SimpleRequests.getPackageTypes(mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJobID()
+                , persistenceManager.getSiteUrl(), new SimpleCallback() {
+                    @Override
+                    public void onRequestSuccess(StandardResponse response) {
+                        initPackageTypeSpinner(((PackageTypesResponse) response));
+                    }
+
+                    @Override
+                    public void onRequestFailed(StandardResponse reason) {
+
+                    }
+                }, NetworkManager.getInstance(), persistenceManager.getTotalRetries(), persistenceManager.getRequestTimeout());
+    }
+
+    private void initPackageTypeSpinner(final PackageTypesResponse packageTypes) {
+        if (mReportFieldsForMachine != null && getActivity() != null) {
+            final PackageTypeSpinnerAdapter reasonSpinnerArrayAdapter = new PackageTypeSpinnerAdapter(getActivity(), R.layout.base_spinner_item, packageTypes.getResponseDictionaryDT().getPackageTypes());
+            reasonSpinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
+            mPackageTypeSpinner.setAdapter(reasonSpinnerArrayAdapter);
+            mPackageTypeSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+
+            mPackageTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    mPackageSelectedPosition = position;
+//                    mPackageTypeSpinner.setSelection(position);
+                    mSelectedPackageTypeName = isEnglishLang() ? packageTypes.getResponseDictionaryDT().getPackageTypes().get(position).getEName() : packageTypes.getResponseDictionaryDT().getPackageTypes().get(position).getLName();
+                    mSelectedPackageTypeId = packageTypes.getResponseDictionaryDT().getPackageTypes().get(position).getId();
+                    mUnitsCounter = packageTypes.getResponseDictionaryDT().getPackageTypes().get(position).getEffectiveAmount();
+                    mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+            mPackageTypeSpinner.setSelection(mPackageSelectedPosition);
+        }
     }
 
     @Override
@@ -315,7 +349,11 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
         mReportCore.registerListener(mReportCallbackListener);
         OppAppLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " type value: " + mSelectedPackageTypeId + " type name: " + mSelectedPackageTypeName + " JobId: " + mJoshId);
 
-        mReportCore.sendInventoryReport(mSelectedPackageTypeId, mUnitsCounter, mJoshId);
+        int numOfBatch = 1;
+        if (!mNumOfBatch.getText().toString().equals("")) {
+            numOfBatch = Integer.parseInt(mNumOfBatch.getText().toString());
+        }
+        mReportCore.sendInventoryReport(mSelectedPackageTypeId, mUnitsCounter, mJoshId, numOfBatch);
 
 //        SendBroadcast.refreshPolling(getContext());
     }
@@ -356,9 +394,9 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
             mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getError().getErrorDesc(), true);
             SendBroadcast.refreshPolling(getContext());
 
-            if (getFragmentManager() != null) {
+            if (getChildFragmentManager() != null) {
 
-                getFragmentManager().popBackStack(null, getChildFragmentManager().POP_BACK_STACK_INCLUSIVE);
+                getChildFragmentManager().popBackStack(null, getChildFragmentManager().POP_BACK_STACK_INCLUSIVE);
 
             }
 
@@ -388,7 +426,9 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ProgressDialogManager.dismiss();
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        ProgressDialogManager.dismiss();
+                    }
                 }
             });
         }
@@ -417,8 +457,10 @@ public class ReportProductionFragment extends BackStackAwareFragment implements 
                 mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        mSelectedPosition = position;
                         activeJobsSpinnerAdapter.setTitle(position);
                         mJoshId = mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
+                        getPackagesTypes();
                     }
 
                     @Override

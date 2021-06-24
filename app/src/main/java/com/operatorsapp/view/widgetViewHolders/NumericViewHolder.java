@@ -64,7 +64,6 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
     private TextView mSubtitle;
     private TextView mValue;
     private TextView mEditBtn;
-    private Activity mContext;
     private DashboardCentralContainerListener mDashboardCentralContainerListener;
     private int mHeight;
     private int mWidth;
@@ -74,11 +73,9 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
     private OnKeyboardManagerListener mOnKeyboardManagerListener;
 
-    public NumericViewHolder(View itemView, Activity activity, DashboardCentralContainerListener listener, OnKeyboardManagerListener onKeyboardManagerListener,
+    public NumericViewHolder(View itemView, DashboardCentralContainerListener listener, OnKeyboardManagerListener onKeyboardManagerListener,
                              ReportFieldsForMachine reportFieldsForMachine, int height, int width, boolean showChangeUnitInCycleBtn, boolean showAddRejectsBtn) {
         super(itemView);
-
-        mContext = activity;
         mDashboardCentralContainerListener = listener;
         mOnKeyboardManagerListener = onKeyboardManagerListener;
         mReportFieldsForMachine = reportFieldsForMachine;
@@ -147,6 +144,12 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         });
         mEditCycleCancelBtn = itemView.findViewById(R.id.NWC_edit_quantity_cancel_btn);
 
+    }
+
+    public void clearTouchListener() {
+        mEditNumberEt.setOnTouchListener(null);
+        mEditCycleEt.setOnTouchListener(null);
+        closeKeyboard(0);
     }
 
     private void initUnitAndWeight(View unitTv, View weightTv) {
@@ -218,7 +221,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
     private void setKeyBoard(final EditText editText, String[] complementChars, final View nextBtn) {
         if (mOnKeyboardManagerListener != null) {
-            mOnKeyboardManagerListener.onOpenKeyboard(new SingleLineKeyboard.OnKeyboardClickListener() {
+            mOnKeyboardManagerListener.onOpenKeyboard(editText.getContext(), new SingleLineKeyboard.OnKeyboardClickListener() {
                 @Override
                 public void onKeyboardClick(String text) {
                     editText.setText(text);
@@ -250,7 +253,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mEditCycleLy.setVisibility(View.VISIBLE);
         mEditCycleReportBtn.setEnabled(true);
 //        mEditCycleEt.requestFocus();
-//        KeyboardUtils.showKeyboard(mContext);
+//        KeyboardUtils.showKeyboard(context);
 
         mEditCycleCancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -324,10 +327,10 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
     private void setNumericReportRejctStep2Spinners() {
         if (mReportFieldsForMachine != null) {
 
-            final RejectReasonSpinnerAdapter reasonSpinnerArrayAdapter = new RejectReasonSpinnerAdapter(mContext, R.layout.base_spinner_item, mReportFieldsForMachine.getRejectReasons());
+            final RejectReasonSpinnerAdapter reasonSpinnerArrayAdapter = new RejectReasonSpinnerAdapter(mSpinner1.getContext(), R.layout.base_spinner_item, mReportFieldsForMachine.getRejectReasons());
             reasonSpinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
             mSpinner1.setAdapter(reasonSpinnerArrayAdapter);
-            mSpinner1.getBackground().setColorFilter(ContextCompat.getColor(mContext, R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+            mSpinner1.getBackground().setColorFilter(ContextCompat.getColor(mSpinner1.getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
             mSpinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -343,10 +346,10 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
             });
 
             if (PersistenceManager.getInstance().getDisplayRejectFactor()) {
-                final RejectCauseSpinnerAdapter causeSpinnerArrayAdapter = new RejectCauseSpinnerAdapter(mContext, R.layout.base_spinner_item, mReportFieldsForMachine.getRejectCauses());
+                final RejectCauseSpinnerAdapter causeSpinnerArrayAdapter = new RejectCauseSpinnerAdapter(mSpinner2.getContext(), R.layout.base_spinner_item, mReportFieldsForMachine.getRejectCauses());
                 causeSpinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
                 mSpinner2.setAdapter(causeSpinnerArrayAdapter);
-                mSpinner2.getBackground().setColorFilter(ContextCompat.getColor(mContext, R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+                mSpinner2.getBackground().setColorFilter(ContextCompat.getColor(mSpinner2.getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
                 mSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -376,7 +379,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mEditStep2Ly.setVisibility(View.GONE);
         mEditCycleLy.setVisibility(View.GONE);
 //        mEditNumberEt.requestFocus();
-//        KeyboardUtils.showKeyboard(mContext);
+//        KeyboardUtils.showKeyboard(context);
 
         mStep1CancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override

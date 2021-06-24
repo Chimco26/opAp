@@ -2,6 +2,8 @@ package com.operatorsapp.adapters;
 
 import android.app.Activity;
 import androidx.annotation.NonNull;
+
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +20,12 @@ import java.util.List;
 public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
 
     private MachineStatus mCurrentMachineStatus;
-    private Activity mContext;
     private List<JobActionsSpinnerItem> mSpinnerItems;
     private int mCurrentProductionId;
 
-    public JobsSpinnerAdapter(Activity context, int resource, List<JobActionsSpinnerItem> operators, MachineStatus currentMachineStatus) {
+    public JobsSpinnerAdapter(Context context, int resource, List<JobActionsSpinnerItem> operators, MachineStatus currentMachineStatus) {
         super(context, resource, operators);
         mSpinnerItems = operators;
-        mContext = context;
         mCurrentMachineStatus = currentMachineStatus;
         mCurrentProductionId = mSpinnerItems.get(0).getUniqueID();
     }
@@ -35,7 +35,7 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         if (row == null) {
-            LayoutInflater inflater = mContext.getLayoutInflater();
+            LayoutInflater inflater = LayoutInflater.from(getContext());
             row = inflater.inflate(R.layout.spinner_job_item, parent, false);
             TextView rowName = row.findViewById(R.id.spinner_job_item_name);
             rowName.setTextSize(20);
@@ -48,7 +48,7 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
     public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         if (row == null) {
-            LayoutInflater inflater = mContext.getLayoutInflater();
+            LayoutInflater inflater = LayoutInflater.from(getContext());
             row = inflater.inflate(R.layout.spinner_jobs_item_dropdown, parent, false);
         }
 //        checkMachineStatusConfig();
@@ -58,9 +58,9 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
         ((ImageView) row.findViewById(R.id.SJID_image)).setBackground(getContext().getResources().getDrawable(R.drawable.circle_white));
 
         if (mSpinnerItems.get(position).isEnabled()) {
-            name.setTextColor(mContext.getResources().getColor(R.color.white));
+            name.setTextColor(getContext().getResources().getColor(R.color.white));
         } else {
-            name.setTextColor(mContext.getResources().getColor(R.color.dialog_text_gray));
+            name.setTextColor(getContext().getResources().getColor(R.color.dialog_text_gray));
         }
 
         return row;

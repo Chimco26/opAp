@@ -2,6 +2,7 @@ package com.operatorsapp.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import androidx.annotation.NonNull;
@@ -32,7 +33,6 @@ import java.util.List;
 public class SetupEndDialog implements OnKeyboardManagerListener {
 
     private static final int STATIC_REASON_ID = 100;
-    private final Activity mContext;
     private final List<ActiveJob> mActiveJobs;
     private AlertDialog mAlaramAlertDialog;
     private ReportFieldsForMachine mReportFieldsForMachine;
@@ -45,7 +45,6 @@ public class SetupEndDialog implements OnKeyboardManagerListener {
 
 
     public SetupEndDialog(Activity activity, ReportFieldsForMachine reportFieldsForMachine, ActiveJobsListForMachine activeJobsListForMachine) {
-        mContext = activity;
         mReportFieldsForMachine = reportFieldsForMachine;
         mActiveJobs = activeJobsListForMachine.getActiveJobs();
 //        filter0Units();todo
@@ -64,11 +63,11 @@ public class SetupEndDialog implements OnKeyboardManagerListener {
         mActiveJobs.removeAll(toDelete);
     }
 
-    public AlertDialog showNoProductionAlarm(final SetupEndDialogListener listener) {
+    public AlertDialog showNoProductionAlarm(Activity context, final SetupEndDialogListener listener) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        LayoutInflater inflater = mContext.getLayoutInflater();
+        LayoutInflater inflater = context.getLayoutInflater();
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_setup_end, null);
         builder.setView(view);
         isRejects = PersistenceManager.getInstance().getAddRejectsOnSetupEnd();
@@ -78,8 +77,8 @@ public class SetupEndDialog implements OnKeyboardManagerListener {
         builder.setCancelable(true);
         mAlaramAlertDialog = builder.create();
 
-        setListeners(listener, view);
-        setUpTechnicianSpinner(view);
+        setListeners(context, listener, view);
+        setUpTechnicianSpinner(context, view);
 
         mAlaramAlertDialog.show();
         return mAlaramAlertDialog;
@@ -140,7 +139,7 @@ public class SetupEndDialog implements OnKeyboardManagerListener {
         view.findViewById(R.id.FAFI_next_btn).setVisibility(gone);
     }
 
-    public void setListeners(final SetupEndDialogListener listener, View view) {
+    public void setListeners(final Activity context, final SetupEndDialogListener listener, View view) {
         view.findViewById(R.id.button_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,7 +157,7 @@ public class SetupEndDialog implements OnKeyboardManagerListener {
         mAlaramAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                mContext.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+                context.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
                 listener.onDismissSetupEndDialog();
             }
         });
@@ -184,13 +183,13 @@ public class SetupEndDialog implements OnKeyboardManagerListener {
         return rejectForMultipleRequests;
     }
 
-    private void setUpTechnicianSpinner(View view) {
+    private void setUpTechnicianSpinner(Activity context, View view) {
         Spinner technicianSpinner = view.findViewById(R.id.technician_spinner);
-        final TechnicianSpinnerAdapter technicianSpinnerAdapter = new TechnicianSpinnerAdapter(mContext, R.layout.base_spinner_item, mReportFieldsForMachine.getTechnicians());
+        final TechnicianSpinnerAdapter technicianSpinnerAdapter = new TechnicianSpinnerAdapter(context, R.layout.base_spinner_item, mReportFieldsForMachine.getTechnicians());
         technicianSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         technicianSpinner.setAdapter(technicianSpinnerAdapter);
 
-        technicianSpinner.getBackground().setColorFilter(ContextCompat.getColor(mContext, R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+        technicianSpinner.getBackground().setColorFilter(ContextCompat.getColor(context, R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
         technicianSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -210,13 +209,13 @@ public class SetupEndDialog implements OnKeyboardManagerListener {
     }
 
     @Override
-    public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
+    public void onOpenKeyboard(Context context, SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
         if (mKeyBoardLayout != null) {
             if (mKeyBoard == null)
-                mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, mContext);
+                mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, context);
 
             mKeyBoard.setChars(complementChars);
-            mKeyBoard.openKeyBoard(text);
+            mKeyBoard.openKeyBoard(context, text);
             mKeyBoard.setListener(listener);
         }
     }

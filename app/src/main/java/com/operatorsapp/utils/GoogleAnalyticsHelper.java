@@ -3,8 +3,6 @@ package com.operatorsapp.utils;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
@@ -12,19 +10,19 @@ import com.operatorsapp.managers.PersistenceManager;
 public class GoogleAnalyticsHelper {
 
 
-    public FirebaseAnalytics getTracker(Context context){
+    public FirebaseAnalytics getTracker(Context context) {
 
         try {
-            return ((OperatorApplication)context.getApplicationContext()).getDefaultTracker();
-        }catch (NullPointerException e){
+            return ((OperatorApplication) context.getApplicationContext()).getDefaultTracker();
+        } catch (NullPointerException e) {
             return FirebaseAnalytics.getInstance(context);
         }
 
     }
 
-    public void trackScreen(Context context, String screenName){
+    public void trackScreen(Context context, String screenName) {
 
-        if (context == null){
+        if (context == null) {
             return;
         }
         FirebaseAnalytics firebaseAnalytics = getTracker(context);
@@ -41,9 +39,9 @@ public class GoogleAnalyticsHelper {
         trackSite(context, "screen", "", screenName, FirebaseAnalytics.Event.VIEW_ITEM);
     }
 
-    public void trackEvent(Context context, EventCategory category, boolean isSucceed , String label){
+    public void trackEvent(Context context, EventCategory category, boolean isSucceed, String label) {
 
-        if (context == null){
+        if (context == null) {
             return;
         }
         FirebaseAnalytics firebaseAnalytics = getTracker(context);
@@ -62,9 +60,9 @@ public class GoogleAnalyticsHelper {
         trackContent(context, getCategory(category), label, FirebaseAnalytics.Event.SELECT_CONTENT);
     }
 
-    private void trackSite(Context context, String category, String label, String screenName, String name){
+    private void trackSite(Context context, String category, String label, String screenName, String name) {
 
-        if (context == null){
+        if (context == null) {
             return;
         }
         FirebaseAnalytics firebaseAnalytics = getTracker(context);
@@ -80,9 +78,9 @@ public class GoogleAnalyticsHelper {
         firebaseAnalytics.logEvent(pm.getSiteName(), params);
     }
 
-    private void trackContent(Context context, String category, String label, String name){
+    private void trackContent(Context context, String category, String label, String name) {
 
-        if (context == null){
+        if (context == null) {
             return;
         }
         FirebaseAnalytics firebaseAnalytics = getTracker(context);
@@ -99,7 +97,7 @@ public class GoogleAnalyticsHelper {
     }
 
     private String getCategory(EventCategory category) {
-        switch (category){
+        switch (category) {
             case TECH_CALL:
                 return "Technician Call";
             case OPEN_NOTIFICATIONS:
@@ -112,6 +110,8 @@ public class GoogleAnalyticsHelper {
                 return "Reject Report";
             case CHANGE_UNIT_IN_CYCLE:
                 return "Change Unit in Cycle";
+            case FIX_UNITS:
+                return "Report Fix Units";
             case TOGGLE_SHIFT_LOG_VIEW:
                 return "Toggle Shift Log Vew";
             case SPLIT_STOP_EVENT:
@@ -128,12 +128,13 @@ public class GoogleAnalyticsHelper {
                 return "Edit Recipe";
             case SHIFT_REPORT:
                 return "Shift Report";
-            default:return "";
+            default:
+                return "";
         }
     }
 
 
-    public enum EventCategory{
+    public enum EventCategory {
         TECH_CALL,
         OPEN_NOTIFICATIONS,
         OPERATOR_SIGN_IN,
@@ -148,6 +149,7 @@ public class GoogleAnalyticsHelper {
         SEND_NOTIFICATION,
         RESPOND_TO_NOTIFICATION,
         RECIPE_EDIT,
-        SHIFT_REPORT
+        SHIFT_REPORT,
+        FIX_UNITS;
     }
 }

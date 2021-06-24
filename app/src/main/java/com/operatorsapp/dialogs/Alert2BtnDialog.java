@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import androidx.appcompat.app.AlertDialog;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -17,7 +18,6 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.QCActivity;
 
 public class Alert2BtnDialog implements View.OnClickListener {
-    private final Activity mContext;
 
     private final String mPositiveBtnTxt;
     private final String mNegativeBtnTxt;
@@ -27,26 +27,25 @@ public class Alert2BtnDialog implements View.OnClickListener {
     private boolean isSelected = false;
 
 
-    public Alert2BtnDialog(Activity activity, final Alert2BtnDialogListener listener
+    public Alert2BtnDialog(final Alert2BtnDialogListener listener
             , String msg, String positiveBtn, String negativeBtn) {
-        mContext = activity;
         mMessage = msg;
         mPositiveBtnTxt = positiveBtn;
         mNegativeBtnTxt = negativeBtn;
         mListener = listener;
     }
 
-    public AlertDialog showAlert2BtnDialog(boolean isFullScreen) {
+    public AlertDialog showAlert2BtnDialog(final Activity context, boolean isFullScreen) {
 
         AlertDialog.Builder builder;
-        LayoutInflater inflater = mContext.getLayoutInflater();
+        LayoutInflater inflater = LayoutInflater.from(context);
         @SuppressLint("InflateParams") View view;
 
         if (isFullScreen){
-            builder = new AlertDialog.Builder(mContext, R.style.Dialog_full_screen);
+            builder = new AlertDialog.Builder(context, R.style.Dialog_full_screen);
             view = inflater.inflate(R.layout.alert_2_btn_dialog_full_screen, null);
         }else {
-            builder = new AlertDialog.Builder(mContext);
+            builder = new AlertDialog.Builder(context);
             view = inflater.inflate(R.layout.alert_2_btn_dialog, null);
         }
 
@@ -68,9 +67,9 @@ public class Alert2BtnDialog implements View.OnClickListener {
         } else {
             negativeBtn.setVisibility(View.GONE);
         }
-        if (mContext instanceof QCActivity){
-            negativeBtn.setBackgroundColor(mContext.getResources().getColor(R.color.blue1));
-            negativeBtn.setTextColor(mContext.getResources().getColor(R.color.white));
+        if (context instanceof QCActivity){
+            negativeBtn.setBackgroundColor(context.getResources().getColor(R.color.blue1));
+            negativeBtn.setTextColor(context.getResources().getColor(R.color.white));
         }
 
         builder.setView(view);
@@ -84,8 +83,8 @@ public class Alert2BtnDialog implements View.OnClickListener {
         mAlarmAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                if (!isSelected && mContext instanceof QCActivity)
-                    mContext.finish();
+                if (!isSelected && context instanceof QCActivity)
+                    context.finish();
             }
         });
 

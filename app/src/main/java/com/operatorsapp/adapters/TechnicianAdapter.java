@@ -18,11 +18,9 @@ public class TechnicianAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 
     private final List<Technician> mTechList;
-    private final Context mContext;
     private final TechItemListener mListener;
 
-    public TechnicianAdapter(Context context, List<Technician> techniciansList, TechItemListener listener) {
-        mContext = context;
+    public TechnicianAdapter(List<Technician> techniciansList, TechItemListener listener) {
         mTechList = techniciansList;
         mListener = listener;
     }

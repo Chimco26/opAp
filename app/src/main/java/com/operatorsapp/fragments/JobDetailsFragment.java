@@ -351,7 +351,7 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
 
     private void validateDialog(final Integer jobId, final boolean isToSetupEnd) {
 
-        BasicTitleTextSingleBtnDialog basicTitleTextBtnDialog = new BasicTitleTextSingleBtnDialog(getActivity(),
+        BasicTitleTextSingleBtnDialog basicTitleTextBtnDialog = new BasicTitleTextSingleBtnDialog(
                 new BasicTitleTextSingleBtnDialog.BasicTitleTextBtnDialogListener() {
                     @Override
                     public void onClickPositiveBtn() {
@@ -373,7 +373,7 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
                 , getString(R.string.activate_job_dialog_message), getString(R.string.activate)
         );
 
-        basicTitleTextBtnDialog.showBasicTitleTextBtnDialog().show();
+        basicTitleTextBtnDialog.showBasicTitleTextBtnDialog(getActivity()).show();
 
     }
 
@@ -544,7 +544,7 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
 
             mMaterialItemRv.setLayoutManager(layoutManager);
 
-            JobMaterialsSplitAdapter mMaterialAdapter = new JobMaterialsSplitAdapter(mCurrentJobDetails.getJobs().get(0).getMaterials(), getActivity());
+            JobMaterialsSplitAdapter mMaterialAdapter = new JobMaterialsSplitAdapter(mCurrentJobDetails.getJobs().get(0).getMaterials());
 
             mMaterialItemRv.setAdapter(mMaterialAdapter);
 
@@ -567,7 +567,7 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
             mPropsRv.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
         }
 
-        mPropsRv.setAdapter(new PendingJobPropsAdapter(getActivity(), mCurrentPendingJob.getProperties(), mHashMapHeaders));
+        mPropsRv.setAdapter(new PendingJobPropsAdapter(mCurrentPendingJob.getProperties(), mHashMapHeaders));
 
         mPropsRvOpenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -774,10 +774,11 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
 
                 @Override
                 public void run() {
-
-                    mProductPdfNoImageTv.setText(getString(R.string.loading_error));
-                    mProductPdfNoImageLy.setVisibility(View.VISIBLE);
-                    mProductPdfView.setVisibility(View.INVISIBLE);
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        mProductPdfNoImageTv.setText(getString(R.string.loading_error));
+                        mProductPdfNoImageLy.setVisibility(View.VISIBLE);
+                        mProductPdfView.setVisibility(View.INVISIBLE);
+                    }
                 }
             });
         }

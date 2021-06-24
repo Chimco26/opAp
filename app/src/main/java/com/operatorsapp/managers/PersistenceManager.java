@@ -42,6 +42,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import static android.text.format.DateUtils.DAY_IN_MILLIS;
+
 public class PersistenceManager implements LoginPersistenceManagerInterface,
         ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
         JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface, ReportFieldsForMachinePersistenceManagerInterface, ReportPersistenceManagerInterface, MachineDataPersistenceManagerInterface, ActiveJobsListForMachinePersistenceManagerInterface {
@@ -123,6 +125,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PENDING_JOB_SAVED_FILTERS = "PENDING_JOB_SAVED_FILTERS";
     private static final String KPI_LIST = "KPI_LIST";
     private static final String PREF_REQUIRE_WORKER_SIGN_IN = "PREF_REQUIRE_WORKER_SIGN_IN";
+    private static final String PREF_REQUIRE_ACTIVATE_JOB_WIDGET = "PREF_REQUIRE_ACTIVATE_JOB_WIDGET";
+    private static final String PREF_ALLOW_TEXT_REPORT_STOP = "PREF_ALLOW_TEXT_REPORT_STOP";
 
 
     private static PersistenceManager msInstance;
@@ -421,7 +425,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     @Override
     public String getMachineDataStartingFrom() {
-        return SecurePreferences.getInstance().getString(PREF_MACHINE_DATA_STARTING_FROM, TimeUtils.getDate(System.currentTimeMillis() - (24 * 60 * 60 * 1000), "yyyy-MM-dd HH:mm:ss.SSS"));
+        return SecurePreferences.getInstance().getString(PREF_MACHINE_DATA_STARTING_FROM, TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
     }
 
     @Override
@@ -1035,5 +1039,21 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public boolean isRequireWorkerSignIn() {
         return SecurePreferences.getInstance().getBoolean(PREF_REQUIRE_WORKER_SIGN_IN, false);
+    }
+
+    public void setActivateJobWidgetOnOpApp(boolean activateJobWidgetOnOpApp) {
+        SecurePreferences.getInstance().setBoolean(PREF_REQUIRE_ACTIVATE_JOB_WIDGET, activateJobWidgetOnOpApp);
+    }
+
+    public boolean isActivateJobWidgetOnOpApp(){
+        return SecurePreferences.getInstance().getBoolean(PREF_REQUIRE_ACTIVATE_JOB_WIDGET, false);
+    }
+
+    public void setAllowTextOnReportStop(boolean ismAllowTextOnReportStop) {
+        SecurePreferences.getInstance().setBoolean(PREF_ALLOW_TEXT_REPORT_STOP, ismAllowTextOnReportStop);
+    }
+
+    public boolean isAllowTextOnReportStop(){
+        return SecurePreferences.getInstance().getBoolean(PREF_ALLOW_TEXT_REPORT_STOP, false);
     }
 }

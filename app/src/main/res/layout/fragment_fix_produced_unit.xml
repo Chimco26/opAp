@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:weightSum="10">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/rectangle_11_copy_2"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/ID_title"
+            style="@style/Roboto_Regular_Status_Data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:gravity="center_vertical"
+            android:maxLength="50"
+            android:text="@string/id"
+            android:textColor="@color/status_bar"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/report_cycle_id_text_view"
+            style="@style/Roboto_Regular_Status_Data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/ID_title"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/ID_title"
+            android:gravity="center_vertical"
+            android:maxEms="50"
+            android:text="@string/product_id"
+            android:textSize="16sp" />
+
+        <FrameLayout
+            android:id="@+id/report_job_spinner_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="39dp"
+            android:layout_toEndOf="@id/job_title">
+
+            <Spinner
+                android:id="@+id/report_job_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/active_jobs_progressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/C16"
+                android:indeterminateTintMode="src_atop"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/job_title"
+            style="@style/Roboto_Regular_Status_Title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/report_job_spinner_frame"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toEndOf="@+id/report_cycle_id_text_view"
+            android:gravity="center_vertical"
+            android:text="@string/josh"
+            android:textColor="@color/status_bar"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9">
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/reports_background"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:weightSum="10">
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="3" />
+
+                    <com.operatorsapp.view.SquareImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_weight="1.5"
+                        android:background="@drawable/icrepeat" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.25" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@color/divider_gray" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.25" />
+
+                    <TextView
+                        android:id="@+id/FRCU_units_subtitle_tv"
+                        style="@style/FontStyle_T120"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_weight="2"
+                        android:maxLines="2"
+                        android:text="@string/units_to_add_remove"
+                        android:textSize="30sp"
+                        app:autoSizeMaxTextSize="30sp"
+                        app:autoSizeMinTextSize="2sp"
+                        app:autoSizeTextType="uniform" />
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="3" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="top"
+                android:orientation="vertical"
+                android:weightSum="6">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:orientation="horizontal"
+                    android:weightSum="3.75">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="0.25" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.25"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="4">
+
+                        <TextView
+                            android:id="@+id/FRCU_units_tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1.5"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:text="@string/units"
+                            android:textColor="@color/black"
+                            android:textSize="22sp"
+                            app:autoSizeMaxTextSize="22sp"
+                            app:autoSizeMinTextSize="2sp"
+                            app:autoSizeTextType="uniform" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2.5"
+                            android:background="@color/divider_gray"
+                            android:gravity="center">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@android:color/white"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:weightSum="5">
+
+                                <EditText
+                                    android:id="@+id/units_text_view"
+                                    style="@style/FontStyle_T6"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:inputType="numberDecimal|numberSigned"
+                                    android:maxLines="1"
+                                    android:text="@string/one"
+                                    android:textColor="@color/status_bar"
+                                    android:textSize="26sp"
+                                    app:autoSizeMaxTextSize="22sp"
+                                    app:autoSizeTextType="uniform"
+                                    android:gravity="center"
+                                    android:background="@drawable/edit_text_background_selector"/>
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.5"
+                        android:gravity="bottom"
+                        android:orientation="vertical"
+                        android:weightSum="3">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2.2"
+                            android:gravity="end"
+                            android:orientation="horizontal"
+                            android:weightSum="2.2">
+
+                            <TextView
+                                android:id="@+id/button_cancel"
+                                style="@style/FontStyle_Button"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:maxHeight="50dp"
+                                android:maxLines="1"
+                                android:padding="5dp"
+                                android:text="@string/cancel"
+                                android:textAllCaps="true"
+                                android:textColor="@drawable/button_cancel_text_selector"
+                                android:textSize="22sp"
+                                app:autoSizeMaxTextSize="22sp"
+                                app:autoSizeTextType="uniform" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="1dp"
+                                android:layout_weight="0.2" />
+
+                            <Button
+                                android:id="@+id/button_report"
+                                style="@style/FontStyle_Button"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@drawable/buttons_selector"
+                                android:maxHeight="50dp"
+                                android:maxLines="1"
+                                android:padding="5dp"
+                                android:text="@string/report"
+                                android:textColor="@drawable/button_text_color_selector"
+                                android:textSize="22sp"
+                                app:autoSizeMaxTextSize="22sp"
+                                app:autoSizeTextType="uniform" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="0.25" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

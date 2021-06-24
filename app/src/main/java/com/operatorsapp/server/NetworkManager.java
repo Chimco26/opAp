@@ -110,6 +110,7 @@ import com.operatorsapp.server.responses.TopRejectResponse;
 import com.operatorsapp.utils.SendReportUtil;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -155,26 +156,27 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         GetReportMultipleRequestNetworkManager,
         GetSimpleNetworkManager {
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
-    private static NetworkManager msInstance;
+    private static WeakReference<NetworkManager> msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
-    private Retrofit mRetrofit;
-    private OkHttpClient okHttpClient;
+    private static Retrofit mRetrofit;
+    private static OkHttpClient okHttpClient;
 
     HeaderInterceptor headerInterceptor = new HeaderInterceptor();
 
     public static NetworkManager initInstance() {
-        if (msInstance == null) {
-            msInstance = new NetworkManager();
+        if (msInstance == null || msInstance.get() == null) {
+            msInstance = new WeakReference<>(new NetworkManager());
         }
 
-        return msInstance;
+        return msInstance.get();
     }
 
     public static NetworkManager getInstance() {
-        if (msInstance == null) {
+        if (msInstance == null || msInstance.get() == null) {
             OppAppLogger.e(LOG_TAG, "getInstance(), fail, NetworkManager is not init");
+            return null;
         }
-        return msInstance;
+        return msInstance.get();
     }
 
     public NetworkManager() {
@@ -351,14 +353,18 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     }
 
     private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit) {
-        ConnectionPool pool = new ConnectionPool(5, 10000, TimeUnit.MILLISECONDS);
+        if (timeUnit == TimeUnit.MILLISECONDS && timeout < 1000){
+            timeout = 1000;
+        }
+
+        ConnectionPool pool = new ConnectionPool(5, timeout, timeUnit);
 
         try {
             if (mRetrofit == null || !mRetrofit.baseUrl().toString().equals(siteUrl)) {
                 Dispatcher dispatcher = new okhttp3.Dispatcher();
                 dispatcher.setMaxRequests(1);
                 HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-                loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
                 if (okHttpClient == null) {
                     if (timeout >= 0 && timeUnit != null) {
                         okHttpClient = new OkHttpClient.Builder()
@@ -369,6 +375,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                                 .addInterceptor(headerInterceptor)
                                 .addInterceptor(loggingInterceptor)
                                 .dispatcher(dispatcher)
+                                .retryOnConnectionFailure(false)
                                 .build();
                     } else {
                         okHttpClient = new OkHttpClient.Builder()
@@ -376,6 +383,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                                 .dispatcher(dispatcher)
                                 .addInterceptor(headerInterceptor)
                                 .addInterceptor(loggingInterceptor)
+                                .retryOnConnectionFailure(false)
                                 .build();
                     }
                 } else if (timeUnit != null) {
@@ -390,6 +398,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                                 .addInterceptor(headerInterceptor)
                                 .addInterceptor(loggingInterceptor)
                                 .readTimeout(timeout, timeUnit)
+                                .retryOnConnectionFailure(false)
                                 .build();
                     }
                 }
@@ -767,6 +776,20 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         } catch (RuntimeException e) {
 
             SendReportUtil.sendAcraExeption(e, "reportCycleUnitsRetroFitServiceRequests");
+        }
+        return mRetrofit.create(EmeraldSendReportCycleUnits.class);
+    }
+
+    @Override
+    public EmeraldSendReportCycleUnits reportFixUnitsProduced(String siteUrl, int timeout, TimeUnit timeUnit) {
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldSendReportCycleUnits.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "reportFixUnitsProduced");
         }
         return mRetrofit.create(EmeraldSendReportCycleUnits.class);
     }

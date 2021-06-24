@@ -20,13 +20,16 @@ public class SendReportInventoryRequest {
     private int mUnits;
     @SerializedName("joshID")
     private Integer mJobId;
+    @SerializedName("NumOfBatch")
+    private Integer numOfBatch = 1;
 
-    public SendReportInventoryRequest(String sessionId, String machineId, String operatorId, int packageTypeId, int units, @Nullable Integer jobId) {
+    public SendReportInventoryRequest(String sessionId, String machineId, String operatorId, int packageTypeId, int units, @Nullable Integer jobId, Integer numOfBatch) {
         mSessionId = sessionId;
         mMachineId = machineId;
         mOperatorId = operatorId;
         mPackageTypeId = packageTypeId;
         mUnits = units;
         mJobId = jobId;
+        this.numOfBatch = numOfBatch;
     }
 }

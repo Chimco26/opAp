@@ -80,7 +80,7 @@ public class ViewTagsHelper {
 
         recyclerView.setLayoutManager(layoutManager);
 
-        recyclerView.setAdapter(new No0ChannelAdapter(context, listener, (ArrayList<ChannelSplits>) channelSplits, No0ChannelAdapter.TYPE_CHANNEL_1_99));
+        recyclerView.setAdapter(new No0ChannelAdapter(listener, (ArrayList<ChannelSplits>) channelSplits, No0ChannelAdapter.TYPE_CHANNEL_1_99));
 
     }
 

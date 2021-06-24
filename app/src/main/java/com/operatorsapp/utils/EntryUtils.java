@@ -36,8 +36,6 @@ public class EntryUtils {
                     }
                 }
             }
-            Log.d(TAG, "getAveragedPoints: series: " + entries1.size());
-            Log.d(TAG, "getAveragedPoints: standard series: " + averagedItems.size());
             toReturn.add(averagedItems);
         }
         return toReturn;

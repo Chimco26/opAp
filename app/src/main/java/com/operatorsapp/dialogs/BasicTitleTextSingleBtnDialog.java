@@ -13,7 +13,6 @@ import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 
 public class BasicTitleTextSingleBtnDialog implements View.OnClickListener {
-    private final Activity mContext;
     private final String mTitle;
     private final String mSubtitle;
     private final String mPositiveBtnTxt;
@@ -25,9 +24,8 @@ public class BasicTitleTextSingleBtnDialog implements View.OnClickListener {
     private int mSelectedTechnicianId;
 
 
-    public BasicTitleTextSingleBtnDialog(Activity activity, final BasicTitleTextBtnDialogListener listener,
+    public BasicTitleTextSingleBtnDialog(final BasicTitleTextBtnDialogListener listener,
                                    String title, String subTitle, String msg, String positiveBtn) {
-        mContext = activity;
         mTitle = title;
         mSubtitle = subTitle;
         mMessage = msg;
@@ -35,11 +33,11 @@ public class BasicTitleTextSingleBtnDialog implements View.OnClickListener {
         mListener = listener;
     }
 
-    public AlertDialog showBasicTitleTextBtnDialog() {
+    public AlertDialog showBasicTitleTextBtnDialog(Activity activity) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
-        LayoutInflater inflater = mContext.getLayoutInflater();
+        LayoutInflater inflater = activity.getLayoutInflater();
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.title_txt_single_btn_dialog, null);
         builder.setView(view);
 

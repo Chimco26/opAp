@@ -37,21 +37,18 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
     private StopEventLogAdapterListener mListener;
     private Filter mFilter = new StopLogsFilter();
     private ArrayList<Event> itemsFiltered = new ArrayList<>();
-    private Context mContext;
 
     public StopEventLogAdapter(ArrayList<Event> machineLineItems, StopEventLogAdapterListener listener) {
         items = machineLineItems;
         ArrayList<Event> events = filterEvents(items);
         itemsFiltered = reorderEvents((List<Event>) events);
         mListener = listener;
-        mContext = null;
     }
 
     @NonNull
     @Override
     public StopEventLogAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        mContext = parent.getContext();
         return new StopEventLogAdapter.ViewHolder(inflater.inflate(R.layout.item_stop_event_log, parent, false));
     }
 
@@ -158,37 +155,38 @@ public class StopEventLogAdapter extends RecyclerView.Adapter<StopEventLogAdapte
 
     private void setTechCallStatusForEvent(ViewHolder viewHolder, Notification notification) {
 
+        Context context = viewHolder.itemView.getContext();
         int icon = R.drawable.technician_blue_svg;
-        String txt = mContext.getResources().getString(R.string.waiting_for_replay);
+        String txt = context.getResources().getString(R.string.waiting_for_replay);
         switch (notification.getmResponseType()) {
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_UNSET:
                 icon = R.drawable.call_recieved;
-                txt = mContext.getResources().getString(R.string.waiting_for_replay);
+                txt = context.getResources().getString(R.string.waiting_for_replay);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
                 icon = R.drawable.call_sent_blue;
-                txt = mContext.getResources().getString(R.string.call_approved);
+                txt = context.getResources().getString(R.string.call_approved);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
                 icon = R.drawable.call_declined;
-                txt = mContext.getResources().getString(R.string.call_declined);
+                txt = context.getResources().getString(R.string.call_declined);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
                 icon = R.drawable.cancel_blue;
-                txt = mContext.getResources().getString(R.string.service_call_was_canceled);
+                txt = context.getResources().getString(R.string.service_call_was_canceled);
 //                techViewHolder.mManageCallFl.setVisibility(View.INVISIBLE);
 //                techViewHolder.mRemoveIv.setVisibility(View.INVISIBLE);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
                 icon = R.drawable.at_work_blue;
-                txt = mContext.getResources().getString(R.string.at_work);
-//                techViewHolder.mManageCallIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.check_all));
-//                techViewHolder.mManageCallTv.setText(mContext.getResources().getString(R.string.finish_service));
+                txt = context.getResources().getString(R.string.at_work);
+//                techViewHolder.mManageCallIv.setImageDrawable(context.getResources().getDrawable(R.drawable.check_all));
+//                techViewHolder.mManageCallTv.setText(context.getResources().getString(R.string.finish_service));
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
                 icon = R.drawable.service_done;
-                txt = mContext.getResources().getString(R.string.service_completed);
+                txt = context.getResources().getString(R.string.service_completed);
 //                techViewHolder.mManageCallFl.setVisibility(View.INVISIBLE);
                 break;
         }

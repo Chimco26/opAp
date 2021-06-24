@@ -2,6 +2,7 @@ package com.operatorsapp.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.CountDownTimer;
 import androidx.appcompat.app.AlertDialog;
@@ -16,7 +17,6 @@ import com.operatorsapp.utils.TimeUtils;
 import static android.text.format.DateUtils.SECOND_IN_MILLIS;
 
 public class NextJobTimerDialog implements View.OnClickListener {
-    private final Activity mContext;
     private final String mTitle;
     private final String mSubtitle;
     private final String mPositiveBtnTxt;
@@ -29,9 +29,8 @@ public class NextJobTimerDialog implements View.OnClickListener {
     private CountDownTimer mCountDownTimer;
 
 
-    public NextJobTimerDialog(Activity activity, final NextJobTimerDialogListener listener,
+    public NextJobTimerDialog(final NextJobTimerDialogListener listener,
                               String title, String subTitle, String msg, String positiveBtn, String negativeBtn, int counter, boolean autoActivateNextJobTimer) {
-        mContext = activity;
         mTitle = title;
         mSubtitle = subTitle;
         mMessage = msg;
@@ -42,11 +41,11 @@ public class NextJobTimerDialog implements View.OnClickListener {
         mAutoActivateNextJobTimer = autoActivateNextJobTimer;
     }
 
-    public AlertDialog showNextJobTimerDialog() {
+    public AlertDialog showNextJobTimerDialog(Context context) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        LayoutInflater inflater = mContext.getLayoutInflater();
+        LayoutInflater inflater = LayoutInflater.from(context);
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_target_reached, null);
         builder.setView(view);
 
@@ -70,7 +69,7 @@ public class NextJobTimerDialog implements View.OnClickListener {
 
             }.start();
         }
-        imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_production_blue1));
+        imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_production_blue1));
         title.setText(mTitle);
         if (mMessage == null || mMessage.isEmpty()){
             subTitle.setText("");

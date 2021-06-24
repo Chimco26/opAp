@@ -37,6 +37,7 @@ import com.operators.reportrejectinfra.GetVersionCallback;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.VersionResponse;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
+import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
@@ -78,7 +79,6 @@ public class LoginFragment extends Fragment {
 
         // Analytics
         new GoogleAnalyticsHelper().trackScreen(getActivity(), "Login screen");
-
 
     }
 
@@ -158,6 +158,15 @@ public class LoginFragment extends Fragment {
         };
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        mSiteUrl.addTextChangedListener(null);
+        mUserName.addTextChangedListener(null);
+        mPassword.addTextChangedListener(null);
+        mPassword.setOnEditorActionListener(null);
+        super.onDestroyView();
     }
 
     private Boolean isNetworkAvailable(Context application) {
@@ -477,7 +486,9 @@ public class LoginFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ProgressDialogManager.dismiss();
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        ProgressDialogManager.dismiss();
+                    }
                 }
             });
         }

@@ -155,6 +155,7 @@
         <item>Neuer Job</item>
         <item>Ausschussteile hinzufügen</item>
         <item>Kavität ändern</item>
+        <item>Fix Units Produced</item>
         <item>Produktions-Report</item>
         <item>Test bestellen</item>
     </array>
@@ -541,4 +542,18 @@
     <string name="select_test">Test wählen</string>
     <string name="confirm_machine_selection">Möchten Sie diese Aktion wirklich auf alle Maschinen anwenden?</string>
     <string name="you_ve_reached_the_shift_production_target">Sie haben das Schichtproduktionsziel erreicht!</string>
+    <string name="number_of_batches">Anzahl der Chargen</string>
+    <string name="units_to_add_remove">zum Hinzufügen/Entfernen</string>
+    <string name="add_comment">Kommentar hinzufügen</string>
+    <string name="attach_files">Dateien anhängen</string>
+    <string name="uploading_images_is_not_possible_without_these_permissions">Das Hochladen von Bildern ist ohne diese Berechtigungen nicht möglich</string>
+    <string name="upload_failed">Upload fehlgeschlagen</string>
+    <string name="upload_completed">Upload abgeschlossen</string>
+    <string name="show_camera_dialog_take_a_picture">Nehmen Sie ein neues Foto auf.</string>
+    <string name="service_report">Servicebericht</string>
+    <string name="machines">Maschinen</string>
+    <string name="failed_to_load_image">Bild konnte nicht geladen werden, trotzdem hochladen?</string>
+    <string name="details_are_missing">Es fehlen Details</string>
+    <string name="show_camera_dialog_gallery">Wählen Sie ein Bild aus der Galerie.</string>
+    <string name="show_camera_dialog_title">Bild hinzufügen</string>
 </resources>

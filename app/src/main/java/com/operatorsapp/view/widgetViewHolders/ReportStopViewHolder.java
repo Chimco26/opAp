@@ -1,5 +1,6 @@
 package com.operatorsapp.view.widgetViewHolders;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import androidx.recyclerview.widget.RecyclerView;
@@ -138,10 +139,13 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         mCenterLayout.post(new Runnable() {
             @Override
             public void run() {
-                final float reportedWidth = mCenterLayout.getWidth() * reportedPercent / 100;
-                final float filterShortWidth = mCenterLayout.getWidth() * filterShortPercent / 100;
-                final float noReportedWidth = mCenterLayout.getWidth() * noReportedPercent / 100;
-                updateViewsWidth(reportedWidth, filterShortWidth, noReportedWidth);
+                if (mCenterLayout.getContext() != null && mCenterLayout.getContext() instanceof Activity && !((Activity) mCenterLayout.getContext()).isDestroyed()) {
+
+                    final float reportedWidth = mCenterLayout.getWidth() * reportedPercent / 100;
+                    final float filterShortWidth = mCenterLayout.getWidth() * filterShortPercent / 100;
+                    final float noReportedWidth = mCenterLayout.getWidth() * noReportedPercent / 100;
+                    updateViewsWidth(reportedWidth, filterShortWidth, noReportedWidth);
+                }
             }
         });
     }
@@ -190,28 +194,37 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         mFilterShort.post(new Runnable() {
             @Override
             public void run() {
-                ViewGroup.MarginLayoutParams mItemViewParams4;
-                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mFilterShort.getLayoutParams();
-                mItemViewParams4.width = (int) filterShortWidth;
-                mFilterShort.requestLayout();
+                if (mFilterShort.getContext() != null && mFilterShort.getContext() instanceof Activity && !((Activity) mFilterShort.getContext()).isDestroyed()) {
+
+                    ViewGroup.MarginLayoutParams mItemViewParams4;
+                    mItemViewParams4 = (ViewGroup.MarginLayoutParams) mFilterShort.getLayoutParams();
+                    mItemViewParams4.width = (int) filterShortWidth;
+                    mFilterShort.requestLayout();
+                }
             }
         });
         mReported.post(new Runnable() {
             @Override
             public void run() {
-                ViewGroup.MarginLayoutParams mItemViewParams4;
-                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mReported.getLayoutParams();
-                mItemViewParams4.width = (int) reportedWidth;
-                mReported.requestLayout();
+                if (mReported.getContext() != null && mReported.getContext() instanceof Activity && !((Activity) mReported.getContext()).isDestroyed()) {
+
+                    ViewGroup.MarginLayoutParams mItemViewParams4;
+                    mItemViewParams4 = (ViewGroup.MarginLayoutParams) mReported.getLayoutParams();
+                    mItemViewParams4.width = (int) reportedWidth;
+                    mReported.requestLayout();
+                }
             }
         });
         mNotReported.post(new Runnable() {
             @Override
             public void run() {
-                ViewGroup.MarginLayoutParams mItemViewParams4;
-                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mNotReported.getLayoutParams();
-                mItemViewParams4.width = (int) noReportedPercent;
-                mReported.requestLayout();
+                if (mNotReported.getContext() != null && mNotReported.getContext() instanceof Activity && !((Activity) mNotReported.getContext()).isDestroyed()) {
+
+                    ViewGroup.MarginLayoutParams mItemViewParams4;
+                    mItemViewParams4 = (ViewGroup.MarginLayoutParams) mNotReported.getLayoutParams();
+                    mItemViewParams4.width = (int) noReportedPercent;
+                    mReported.requestLayout();
+                }
             }
         });
     }

@@ -150,6 +150,7 @@
         <item>Новое задание</item>
         <item>Добавить брак</item>
         <item>Изменить количество единиц в цикле</item>
+        <item>Fix Units Produced</item>
         <item>Производственный отчет</item>
         <item>Заказать тест</item>
     </array>
@@ -536,4 +537,18 @@
     <string name="select_test">Выбрать тест</string>
     <string name="confirm_machine_selection">Вы уверены, что хотите применить это действие ко всем машинам?</string>
     <string name="you_ve_reached_the_shift_production_target">Вы достигли целевого объема производства за смену!</string>
+    <string name="units_to_add_remove">для добавления/удаления</string>
+    <string name="add_comment">Добавить комментарий</string>
+    <string name="number_of_batches">Количество партий</string>
+    <string name="attach_files">Прикрепить Файлы</string>
+    <string name="uploading_images_is_not_possible_without_these_permissions">Загрузка изображений невозможна без этих разрешений</string>
+    <string name="upload_failed">Загрузка не удалась</string>
+    <string name="upload_completed">Загрузка завершена</string>
+    <string name="show_camera_dialog_take_a_picture">Сделать фото</string>
+    <string name="service_report">Отчет об обслуживании</string>
+    <string name="machines">Машины</string>
+    <string name="failed_to_load_image">Не удалось загрузить изображение, загрузить в любом случае?</string>
+    <string name="details_are_missing">Отсутствуют подробности</string>
+    <string name="show_camera_dialog_gallery">Выбрать из галереи</string>
+    <string name="show_camera_dialog_title">Добавить изображение</string>
 </resources>

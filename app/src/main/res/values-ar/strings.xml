@@ -156,6 +156,7 @@
         <item>مهمة جديده</item>
         <item>اضافة مردودات</item>
         <item>تغيير عدد الوحدات في الدورة</item>
+        <item>Fix Units Produced</item>
         <item>تقرير الإنتاج</item>
         <item>طلب الاختبار</item>
     </array>
@@ -541,4 +542,18 @@
     <string name="select_test">تحديد الاختبار</string>
     <string name="confirm_machine_selection">هل ترغب بالتأكيد في تطبيق هذا الإجراء على جميع الماكينات؟</string>
     <string name="you_ve_reached_the_shift_production_target">لقد حققت هدف الإنتاج لنوبة العمل!</string>
+    <string name="number_of_batches">عدد الدُفعات</string>
+    <string name="units_to_add_remove">للإضافة/الإزالة</string>
+    <string name="add_comment">أضف تعليقًا</string>
+    <string name="attach_files">إرفاق ملفات</string>
+    <string name="uploading_images_is_not_possible_without_these_permissions">تحميل الصور غير ممكن بدون هذه الأذونات</string>
+    <string name="upload_failed">التحميل فشل</string>
+    <string name="upload_completed">قد تم التحميل</string>
+    <string name="show_camera_dialog_take_a_picture">التقط صورة</string>
+    <string name="service_report">تقرير الخدمة</string>
+    <string name="machines">ماكنات</string>
+    <string name="failed_to_load_image">فشل عرض الصورة، هل تود تحميلها على أية حال؟</string>
+    <string name="details_are_missing">التفاصيل مفقودة</string>
+    <string name="show_camera_dialog_gallery">اختر من المعرض</string>
+    <string name="show_camera_dialog_title">اضف صوره</string>
 </resources>

@@ -3,6 +3,8 @@ package com.operatorsapp.adapters;
 import android.app.Activity;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +15,13 @@ import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
 
 public class LanguagesSpinnerAdapterActionBar extends ArrayAdapter<String> {
-    private Activity mContext;
     private String[] mSpinnerItems;
     private TextView mRowName;
     //    private View mView;
     private boolean mIsFirst = true;
 
-    public LanguagesSpinnerAdapterActionBar(Activity context, int resource, String[] spinnerItems) {
+    public LanguagesSpinnerAdapterActionBar(Context context, int resource, String[] spinnerItems) {
         super(context, resource, spinnerItems);
-        this.mContext = context;
         this.mSpinnerItems = spinnerItems;
     }
 
@@ -30,7 +30,7 @@ public class LanguagesSpinnerAdapterActionBar extends ArrayAdapter<String> {
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         if (row == null) {
-            LayoutInflater inflater = mContext.getLayoutInflater();
+            LayoutInflater inflater = LayoutInflater.from(getContext());
             row = inflater.inflate(R.layout.spinner_language_item, parent, false);
 //            mView = row;
             mRowName = row.findViewById(R.id.spinner_language_item_name);
@@ -52,7 +52,7 @@ public class LanguagesSpinnerAdapterActionBar extends ArrayAdapter<String> {
     public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         if (row == null) {
-            LayoutInflater inflater = mContext.getLayoutInflater();
+            LayoutInflater inflater = LayoutInflater.from(getContext());
             row = inflater.inflate(R.layout.spinner_language_item, parent, false);
         }
 
@@ -60,20 +60,20 @@ public class LanguagesSpinnerAdapterActionBar extends ArrayAdapter<String> {
         if (item != null) {
             mRowName = row.findViewById(R.id.spinner_language_item_name);
             mRowName.setText(item);
-            mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+            mRowName.setTextColor(ContextCompat.getColor(getContext(), R.color.status_bar));
             mRowName.setTextSize(17);
         }
         return row;
     }
 
     public void setTitle(int position) {
-        mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+        mRowName.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
         mRowName.setText(mSpinnerItems[position]);
         mRowName.setTextSize(20);
     }
 
     public void setTitle(String language) {
-        mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+        mRowName.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
         mRowName.setText(language);
         mRowName.setTextSize(20);
     }

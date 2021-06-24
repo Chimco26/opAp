@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Widget {
+
+    public static final int FIELD_TYPE_ACTIVATE_JOB = 100;
+
     @SerializedName("CurrentValue")
     private String mCurrentValue;
 
@@ -210,6 +213,10 @@ public class Widget {
 
     public Integer getFieldType() {
         return mFieldType;
+    }
+
+    public void setmFieldType(Integer mFieldType) {
+        this.mFieldType = mFieldType;
     }
 
     public Float getHighLimit() {

@@ -1,6 +1,7 @@
 package com.operatorsapp.view;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,58 +16,59 @@ import com.operatorsapp.R;
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class ProjectionViewStart extends View {
 
-    private Bitmap mLeftView;
-    private Bitmap mLeftViewBlue;
-    private Bitmap mLeftViewGray;
-    //private Paint mPaint;
+    private boolean isBlue;
 
     public ProjectionViewStart(Context context) {
         super(context);
         this.setDrawingCacheEnabled(true);
-        init(context);
     }
 
     public ProjectionViewStart(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.setDrawingCacheEnabled(true);
-        init(context);
     }
 
-    private void init(Context context) {
-        mLeftViewBlue = drawableToBitmap(context.getDrawable(R.drawable.data_left_quantity_oval));
-        mLeftViewGray = drawableToBitmap(context.getDrawable(R.drawable.data_left_quantity_oval_gray));
-        //   mPaint = new Paint();
-    }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        Bitmap mLeftView;
+        if (isBlue) {
+            mLeftView = drawableToBitmap(this.getContext().getResources().getDrawable(R.drawable.data_left_quantity_oval));
+        }else {
+            mLeftView = drawableToBitmap(this.getContext().getResources().getDrawable(R.drawable.data_left_quantity_oval_gray));
+        }
         if (mLeftView != null && !mLeftView.isRecycled()) {
             canvas.drawBitmap(mLeftView, 0, 0, null);
         }
     }
 
-    public void setCurrentView(boolean blue) {
-        if (blue) {
-            mLeftView = mLeftViewBlue;
-        } else {
-            mLeftView = mLeftViewGray;
-        }
+    @Override
+    protected void onDetachedFromWindow() {
+
+        super.onDetachedFromWindow();
     }
 
-    public void hideView() {
-        if (mLeftView != null && !mLeftView.isRecycled()) {
-            mLeftView.recycle();
-            mLeftView = null;
-            forceRedraw();
-        }
+    public void setCurrentView(boolean blue) {
+        this.isBlue = blue;
     }
+
+//    public void hideView() {
+//        if (mLeftView != null && !mLeftView.isRecycled()) {
+//            mLeftView.recycle();
+//            mLeftView = null;
+//            forceRedraw();
+//        }
+//    }
 
     public void forceRedraw() {
         post(new Runnable() {
             @Override
             public void run() {
-                invalidate();
+                if (getContext() != null && getContext() instanceof Activity && !((Activity) getContext()).isDestroyed()) {
+
+                    invalidate();
+                }
             }
         });
     }

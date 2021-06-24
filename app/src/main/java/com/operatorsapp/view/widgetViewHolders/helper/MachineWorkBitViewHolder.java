@@ -1,24 +1,21 @@
 package com.operatorsapp.view.widgetViewHolders.helper;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.common.StandardResponse;
-import com.example.common.task.TaskFilesResponse;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.reportrejectinfra.SimpleCallback;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
@@ -36,15 +33,13 @@ public class MachineWorkBitViewHolder extends RecyclerView.ViewHolder {
 //    private Switch mSwitch;
 //    private CompoundButton.OnCheckedChangeListener mSwitchListener;
     private ShowDashboardCroutonListener mShowDashboardCroutonListener;
-    private Activity mContext;
     private Widget mWidget;
 
-    public MachineWorkBitViewHolder(@NonNull View itemView, int height, int width, Activity context, ShowDashboardCroutonListener showDashboardCroutonListener) {
+    public MachineWorkBitViewHolder(@NonNull View itemView, int height, int width, ShowDashboardCroutonListener showDashboardCroutonListener) {
         super(itemView);
 
         mHeight = height;
         mWidth = width;
-        mContext = context;
         mShowDashboardCroutonListener = showDashboardCroutonListener;
 //        mTitle = itemView.findViewById(R.id.MWBC_title);
 //        mSwitch = itemView.findViewById(R.id.MWBC_switch_SW);
@@ -63,9 +58,7 @@ public class MachineWorkBitViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 initPowerBtn(!mWidget.getCurrentValue().equals("1"));
-                changeMachineModeRequest();
-
-
+                changeMachineModeRequest(v.getContext());
             }
         });
 
@@ -77,36 +70,38 @@ public class MachineWorkBitViewHolder extends RecyclerView.ViewHolder {
 //        mSwitch.setOnCheckedChangeListener(mSwitchListener);
     }
 
-    private void changeMachineModeRequest() {
-        ProgressDialogManager.show(mContext);
+    private void changeMachineModeRequest(final Context context) {
+        ProgressDialogManager.show((Activity) context);
         PersistenceManager pm = PersistenceManager.getInstance();
         SimpleRequests.updateMachineStopBit(pm.getMachineId(), pm.getSiteUrl(), new SimpleCallback() {
             @Override
             public void onRequestSuccess(StandardResponse response) {
-                dismissProgressDialog();
+                dismissProgressDialog((Activity) context);
                 if (response.getFunctionSucceed()) {
                     mShowDashboardCroutonListener.onShowCrouton(response.getError().getErrorDesc(), false);
                 } else {
                     mShowDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + response.getError().getErrorDesc(), true);
                 }
-                SendBroadcast.refreshPolling(mContext);
+                SendBroadcast.refreshPolling(context);
             }
 
             @Override
             public void onRequestFailed(StandardResponse reason) {
-                dismissProgressDialog();
+                dismissProgressDialog((Activity) context);
                 mShowDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getError().getErrorDesc(), true);
-                SendBroadcast.refreshPolling(mContext);
+                SendBroadcast.refreshPolling(context);
             }
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
     }
 
-    private void dismissProgressDialog() {
-        if (mContext != null) {
-            mContext.runOnUiThread(new Runnable() {
+    private void dismissProgressDialog(final Activity context) {
+        if (context != null) {
+            context.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ProgressDialogManager.dismiss();
+                    if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
+                        ProgressDialogManager.dismiss();
+                    }
                 }
             });
         }
@@ -132,10 +127,10 @@ public class MachineWorkBitViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void initPowerBtn(boolean isOn) {
-//        mPowerBtn.setBackgroundColor(mContext.getResources().getColor(isOn ? R.color.red_light :  R.color.green_dark_2));
-        mPowerBtn.setBackground(mContext.getResources().getDrawable(isOn ? R.drawable.button_red_with_round_corners :  R.drawable.button_green_with_round_corners));
-        mPowerText.setText(mContext.getResources().getText(isOn ?  R.string.stop : R.string.start));
-        mPowerImg.setImageDrawable(mContext.getResources().getDrawable(isOn ? R.drawable.ic_outline_stop_24 : R.drawable.ic_baseline_power_settings_new_24 ));
+//        mPowerBtn.setBackgroundColor(context.getResources().getColor(isOn ? R.color.red_light :  R.color.green_dark_2));
+        mPowerBtn.setBackground(mPowerBtn.getContext().getResources().getDrawable(isOn ? R.drawable.button_red_with_round_corners : R.drawable.button_green_with_round_corners));
+        mPowerText.setText(mPowerBtn.getContext().getResources().getText(isOn ? R.string.stop : R.string.start));
+        mPowerImg.setImageDrawable(mPowerBtn.getContext().getResources().getDrawable(isOn ? R.drawable.ic_outline_stop_24 : R.drawable.ic_baseline_power_settings_new_24));
     }
 
 

@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import androidx.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
@@ -13,10 +12,13 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.example.oppapplog.OppAppLogger;
 import com.operatorsapp.R;
 import com.operatorsapp.utils.TimeUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.Date;
 
 import de.keyboardsurfer.android.widget.crouton.Configuration;
@@ -102,6 +104,12 @@ public class CroutonCreator {
         }
     }
 
+    public void cancel() {
+        if (mCurrentCrouton != null && mCurrentCrouton.mCrouton != null && mCurrentCrouton.mCrouton.get() != null) {
+            mCurrentCrouton.mCrouton.get().cancel();
+        }
+    }
+
     private boolean checkIfConnectivityCroutonIsDisplayed() {
         if (!mCurrentCrouton.isEmpty() && mCurrentCrouton.getCroutonType().equals(CroutonType.CONNECTIVITY)) {
             OppAppLogger.v(LOG_TAG, "showErrorCrouton(), connectivity crouton is displayed");
@@ -124,7 +132,7 @@ public class CroutonCreator {
             case ALERT_DIALOG:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.crouton_alert_view, null);
                 setOnClickListener(croutonView);
-                 croutonText = croutonView.findViewById(R.id.crouton_text);
+                croutonText = croutonView.findViewById(R.id.crouton_text);
                 croutonText.setText(croutonMessage);
                 setProgressCountDown(croutonView, PersistenceManager.getInstance().getTimeToDownParameterDialog());
                 break;
@@ -221,7 +229,7 @@ public class CroutonCreator {
 
     public class EmeraldCrouton {
 
-        private Crouton mCrouton;
+        private WeakReference<Crouton> mCrouton;
 
         private CroutonType mCroutonType;
 
@@ -231,11 +239,15 @@ public class CroutonCreator {
         }
 
         Crouton getCrouton() {
-            return mCrouton;
+            if (mCrouton != null) {
+                return mCrouton.get();
+            } else {
+                return null;
+            }
         }
 
         void setCrouton(Crouton crouton) {
-            mCrouton = crouton;
+            mCrouton = new WeakReference<>(crouton);
         }
 
         void removeCrouton() {

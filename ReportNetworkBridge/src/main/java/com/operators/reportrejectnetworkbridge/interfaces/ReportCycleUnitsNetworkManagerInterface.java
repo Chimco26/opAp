@@ -9,4 +9,5 @@ public interface ReportCycleUnitsNetworkManagerInterface {
     EmeraldSendReportCycleUnits reportCycleUnitsRetroFitServiceRequests(String siteUrl);
 
     EmeraldSendReportCycleUnits reportCycleUnitsRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit);
+    EmeraldSendReportCycleUnits reportFixUnitsProduced(String siteUrl, int timeout, TimeUnit timeUnit);
 }

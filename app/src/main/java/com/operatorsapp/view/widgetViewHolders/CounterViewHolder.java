@@ -15,7 +15,6 @@ import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 
 public class CounterViewHolder extends RecyclerView.ViewHolder {
 
-    private final Context mContext;
     private final int mHeight;
     private final int mWidth;
     private LinearLayout mParentLayout;
@@ -30,10 +29,9 @@ public class CounterViewHolder extends RecyclerView.ViewHolder {
     private TextView mValue10000;
     private DashboardCentralContainerListener mDashboardCentralContainerListener;
 
-    public CounterViewHolder(View itemView, Context context, DashboardCentralContainerListener listener, int height, int width) {
+    public CounterViewHolder(View itemView, DashboardCentralContainerListener listener, int height, int width) {
         super(itemView);
 
-        mContext = context;
         mHeight = height;
         mWidth = width;
         mDashboardCentralContainerListener = listener;
@@ -81,7 +79,7 @@ public class CounterViewHolder extends RecyclerView.ViewHolder {
 
         if (value[0] > 99999) {
             mSubtitle.setVisibility(View.VISIBLE);
-            mSubtitle.setText(mContext.getResources().getString(R.string.total_amount) + " " + value[0]);
+            mSubtitle.setText(mSubtitle.getContext().getResources().getString(R.string.total_amount) + " " + value[0]);
         } else {
             mSubtitle.setVisibility(View.INVISIBLE);
         }

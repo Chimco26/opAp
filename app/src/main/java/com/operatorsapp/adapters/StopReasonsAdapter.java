@@ -28,12 +28,10 @@ import java.util.List;
 public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.ViewHolder> {
 
     private ArrayList<StopReasonsGroup> mStopItemsList;
-    private Context mContext;
     private OnStopReasonSelectedCallbackListener mOnStopReasonSelectedCallbackListener;
 
-    public StopReasonsAdapter(Context context, ArrayList<StopReasonsGroup> stopItemsList, OnStopReasonSelectedCallbackListener onStopReasonSelectedCallbackListener) {
+    public StopReasonsAdapter(ArrayList<StopReasonsGroup> stopItemsList, OnStopReasonSelectedCallbackListener onStopReasonSelectedCallbackListener) {
         mStopItemsList = stopItemsList;
-        mContext = context;
         mOnStopReasonSelectedCallbackListener = onStopReasonSelectedCallbackListener;
     }
 
@@ -64,23 +62,23 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
 
         holder.mStopTitle.setText(nameByLang);
 
-        if (BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
-            holder.mReasonImage.setBackground(mContext.getResources().getDrawable(ReasonImageLenox.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId())));
+        if (BuildConfig.FLAVOR.equals(holder.itemView.getContext().getString(R.string.lenox_flavor_name))) {
+            holder.mReasonImage.setBackground(holder.itemView.getContext().getResources().getDrawable(ReasonImageLenox.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId())));
         } else {
 
-            int imgId = mStopItemsList.get(position).getGroupIcon(mContext);
+            int imgId = mStopItemsList.get(position).getGroupIcon(holder.itemView.getContext());
             if (imgId == 0){
 //                imgId = ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
                 imgId = R.drawable.general_copy_4;
             }
             holder.mReasonImage.setImageResource(imgId);
 
-            Drawable selector = mContext.getDrawable(R.drawable.simple_circle);
+            Drawable selector = holder.itemView.getContext().getDrawable(R.drawable.simple_circle);
             selector.setTint(mStopItemsList.get(position).getGroupColor());
             holder.mReasonImage.setBackground(selector);
-//            holder.mReasonImage.setBackground(mContext.getResources().getDrawable(imgId));
-//            holder.mReasonImage.setBackground(mContext.getResources().getDrawable(ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId())));
-//            holder.mReasonImage.setBackground(mContext.getResources().getDrawable(ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getEventGroupIconID())));
+//            holder.mReasonImage.setBackground(context.getResources().getDrawable(imgId));
+//            holder.mReasonImage.setBackground(context.getResources().getDrawable(ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId())));
+//            holder.mReasonImage.setBackground(context.getResources().getDrawable(ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getEventGroupIconID())));
         }
     }
 

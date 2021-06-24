@@ -34,7 +34,7 @@ public class ReportCore {
     public void sendReportReject(int rejectReasonId, int rejectReasonCause, Double units, Double weight, Integer joshId) {
         if (mReportPersistenceManagerInterface != null) {
             String workerID = mReportPersistenceManagerInterface.getOperatorId();
-            if (workerID != null && workerID.equals("0")){
+            if (workerID != null && workerID.equals("0")) {
                 workerID = "";
             }
             mReportRejectNetworkBridgeInterface.sendReportReject(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
@@ -114,7 +114,7 @@ public class ReportCore {
 
     }
 
-    public void sendMultipleStopReport(int stopReasonId, int stopSubReasonId, long[] eventId, int joshId, boolean byRootEvent) {
+    public void sendMultipleStopReport(int stopReasonId, int stopSubReasonId, long[] eventId, int joshId, boolean byRootEvent, String notes) {
         if (mReportPersistenceManagerInterface != null) {
             mReportRejectNetworkBridgeInterface.sendMultipleReportStop(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
@@ -136,7 +136,7 @@ public class ReportCore {
                                 OppAppLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
-                    }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout(), byRootEvent);
+                    }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout(), byRootEvent, notes);
         }
     }
 
@@ -166,11 +166,37 @@ public class ReportCore {
         }
     }
 
-    public void sendInventoryReport(int packageTypeId, int units, Integer joshId) {
+    public void sendReportFixUnits(double amount, Integer joshId) {
+        if (mReportPersistenceManagerInterface != null) {
+            mReportRejectNetworkBridgeInterface.sendReportFixUnits(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
+                    String.valueOf(mReportPersistenceManagerInterface.getMachineId())
+                    , mReportPersistenceManagerInterface.getOperatorId(), amount, joshId, new SendReportCallback() {
+                        @Override
+                        public void onSendReportSuccess(StandardResponse o) {
+                            if (mReportCallbackListener != null) {
+                                mReportCallbackListener.sendReportSuccess(o);
+                            } else {
+                                OppAppLogger.w(LOG_TAG, "sendReportFixUnitsSuccess() mReportCallbackListener is null ");
+                            }
+                        }
+
+                        @Override
+                        public void onSendReportFailed(StandardResponse reason) {
+                            if (mReportCallbackListener != null) {
+                                mReportCallbackListener.sendReportFailure(reason);
+                            } else {
+                                OppAppLogger.w(LOG_TAG, "sendReportFixUnitsSuccess() mReportCallbackListener is null ");
+                            }
+                        }
+                    }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());
+        }
+    }
+
+    public void sendInventoryReport(int packageTypeId, int units, Integer joshId, int numberOfBatch) {
         if (mReportPersistenceManagerInterface != null) {
             mReportRejectNetworkBridgeInterface.sendReportInventory(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
-                    , mReportPersistenceManagerInterface.getOperatorId(), packageTypeId, units, joshId, new SendReportCallback() {
+                    , mReportPersistenceManagerInterface.getOperatorId(), packageTypeId, units, joshId, numberOfBatch, new SendReportCallback() {
                         @Override
                         public void onSendReportSuccess(StandardResponse o) {
                             if (mReportCallbackListener != null) {

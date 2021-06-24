@@ -11,8 +11,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.net.URLConnection;
+
+import static android.os.Environment.DIRECTORY_DCIM;
 
 /**
  * David Vardi
@@ -20,8 +23,7 @@ import java.net.URLConnection;
 public class DownloadHelper {
 
     private static final String TAG = DownloadHelper.class.getSimpleName();
-
-    private Context mContext;
+    private final WeakReference<Context> contextWeakReference;
 
     private File mFile;
 
@@ -31,7 +33,7 @@ public class DownloadHelper {
 
     public DownloadHelper(Context context, DownloadFileListener listener) {
 
-        this.mContext = context;
+        this.contextWeakReference = new WeakReference<>(context);
 
         this.mListener = listener;
 
@@ -51,7 +53,8 @@ public class DownloadHelper {
         }
     }
 
-    @SuppressLint("StaticFieldLeak")// work but can be problematic because there are non static fields in async class
+    @SuppressLint("StaticFieldLeak")
+// work but can be problematic because there are non static fields in async class
     private class DownloadFileFromURL extends AsyncTask<String, String, String> {
 
         protected void onPreExecute() {
@@ -72,6 +75,9 @@ public class DownloadHelper {
         @Override
         protected String doInBackground(String... params) {
 
+            Context context = contextWeakReference.get();
+            if (context == null){return null;}
+
             int count;
 
             File folder;
@@ -80,21 +86,21 @@ public class DownloadHelper {
 
                 URL url = new URL(params[0]);
 
-                if (url.toString() != null) {
+//                if (url.toString() != null) {
+//
+//                    folder = new File(Environment.getExternalStoragePublicDirectory(DIRECTORY_DCIM).toString(), String.valueOf(url));
+//
+//                    if (!folder.exists()) {
+//
+//                        //noinspection ResultOfMethodCallIgnored
+//                        folder.mkdirs();
+//                    }
+//                } else {
+//
+//                    folder = context.getCacheDir();
+//                }
 
-                    folder = new File(Environment.getExternalStorageDirectory().toString(), String.valueOf(url));
-
-                    if (!folder.exists()) {
-
-                        //noinspection ResultOfMethodCallIgnored
-                        folder.mkdirs();
-                    }
-                } else {
-
-                    folder = mContext.getCacheDir();
-                }
-
-                mFile = new File(folder, url.getPath().substring(url.getPath().lastIndexOf("/")));
+                mFile = new File(Environment.getExternalStoragePublicDirectory(DIRECTORY_DCIM), url.getPath().substring(url.getPath().lastIndexOf("/")));
 
                 URLConnection connection = url.openConnection();
 

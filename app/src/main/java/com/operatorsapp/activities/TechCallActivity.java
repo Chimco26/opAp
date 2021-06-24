@@ -3,8 +3,6 @@ package com.operatorsapp.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -13,9 +11,6 @@ import android.os.Parcelable;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.example.common.StandardResponse;
 import com.example.common.callback.GetMachineLineCallback;
@@ -24,7 +19,6 @@ import com.example.common.department.MachinesLineDetail;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.Technician;
 import com.operatorsapp.R;
-import com.operatorsapp.adapters.MachineLineAdapter;
 import com.operatorsapp.fragments.TechCallFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
@@ -36,14 +30,12 @@ import com.operatorsapp.server.requests.TechCall24HRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.TechCall24HResponse;
-import com.operatorsapp.utils.ClearData;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -157,7 +149,7 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
                             if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
                                 techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmTitle(),
                                         not.getmAdditionalText(), TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
-                                        not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID()));
+                                        not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID(), not.getmEventName()));
 
 //                                boolean isNew = true;
 //                                if (techList != null && techListCopy.size() > 0) {
@@ -254,6 +246,10 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
 
     @Override
     protected void onDestroy() {
+        if (mCroutonCreator != null) {
+            mCroutonCreator.cancel();
+            mCroutonCreator = null;
+        }
 
         Intent intent = getIntent();
         intent.putExtra(EXTRA_IS_MACHINE_CHANGED, isMachineChanged);

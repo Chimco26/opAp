@@ -14,6 +14,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.ReportCycleUnitsNetwor
 import com.operators.reportrejectnetworkbridge.interfaces.ReportInventoryNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportStopNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.server.request.ReportFixUnitsProducedRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendApproveFirstItemRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendMultipleStopRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportCycleUnitsRequest;
@@ -105,9 +106,9 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
 
     }
 
-    public void sendMultipleReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, long[] eventId, Integer jobId, final SendReportStopCallback callback, final int totalRetries, int specificRequestTimeout, boolean byRootEvent) {
+    public void sendMultipleReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, long[] eventId, Integer jobId, final SendReportStopCallback callback, final int totalRetries, int specificRequestTimeout, boolean byRootEvent, String notes) {
 
-        SendMultipleStopRequest sendMultipleStopRequest = new SendMultipleStopRequest(sessionId, machineId, operatorId, stopReasonId, stopSubReasonId, jobId, eventId, byRootEvent, false);
+        SendMultipleStopRequest sendMultipleStopRequest = new SendMultipleStopRequest(sessionId, machineId, operatorId, stopReasonId, stopSubReasonId, jobId, eventId, byRootEvent, false , notes);
 
         final int[] retryCount = {0};
 
@@ -281,8 +282,47 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
     }
 
     @Override
-    public void sendReportInventory(String siteUrl, String sessionId, String machineId, String operatorId, int packageTypeId, int units, Integer jobId, final SendReportCallback callback, final int totalRetries, int specificRequestTimeout) {
-        SendReportInventoryRequest sendReportInventoryRequest = new SendReportInventoryRequest(sessionId, machineId, operatorId, packageTypeId, units, jobId);
+    public void sendReportFixUnits(String siteUrl, String sessionId, String machineId, String operatorId, double amount, Integer joshId, final SendReportCallback callback, final int totalRetries, int specificRequestTimeout) {
+        ReportFixUnitsProducedRequest reportFixUnitsProducedRequest = new ReportFixUnitsProducedRequest(sessionId, amount, joshId);
+        final int[] retryCount = {0};
+        Call<StandardResponse> call = mReportCycleUnitsNetworkManagerInterface.reportFixUnitsProduced(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).reportFixUnitsProduced(reportFixUnitsProducedRequest);
+        call.enqueue(new Callback<StandardResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
+                if (response.isSuccessful()) {
+                    if (callback != null) {
+                        callback.onSendReportSuccess(response.body());
+                    } else {
+                        OppAppLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
+                    }
+                } else {
+                    onFailure(call, new Exception("response not successful"));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<StandardResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        StandardResponse errorObject = new StandardResponse(ErrorObjectInterface.ErrorCode.Retrofit, "Send_Report_Failed Error");
+                        callback.onSendReportFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    @Override
+    public void sendReportInventory(String siteUrl, String sessionId, String machineId, String operatorId, int packageTypeId, int units, Integer jobId, Integer numOfBatch, final SendReportCallback callback, final int totalRetries, int specificRequestTimeout) {
+        SendReportInventoryRequest sendReportInventoryRequest = new SendReportInventoryRequest(sessionId, machineId, operatorId, packageTypeId, units, jobId, numOfBatch);
         final int[] retryCount = {0};
         Call<StandardResponse> call = mReportInventoryNetworkManagerInterface.reportInventoryRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendReportInventory(sendReportInventoryRequest);
         call.enqueue(new Callback<StandardResponse>() {

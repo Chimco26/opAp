@@ -155,6 +155,7 @@
         <item>Νέα δουλειά</item>
         <item>Προσθέστε εξαρτήματα απόρριψης</item>
         <item>Αλλάξτε την κοιλότητα</item>
+        <item>Fix Units Produced</item>
         <item>Έκθεση παραγωγής</item>
         <item>Δοκιμή παραγγελίας</item>
     </array>
@@ -541,4 +542,11 @@
     <string name="no_report_permission_on_setup">Δεν έχετε εξουσιοδότηση για αναφορά συμβάντων κατά την ΕΓΚΑΤΑΣΤΑΣΗ. Παρακαλούμε επικοινωνήστε με τον διαχειριστή του συστήματος για περισσότερες άδειες.</string>
     <string name="confirm_machine_selection">Είστε βέβαιοι ότι θέλετε να εφαρμόσετε αυτήν την ενέργεια σε όλα τα μηχανήματα;</string>
     <string name="you_ve_reached_the_shift_production_target">Φτάσατε στον στόχο παραγωγής της βάρδιας!</string>
+    <string name="number_of_batches">Αριθμός παρτίδων</string>
+    <string name="units_to_add_remove">για Προσθήκη/Αφαίρεση</string>
+    <string name="add_comment">Προσθέστε σχόλιο</string>
+    <string name="attach_files">Επισύναψη αρχείων</string>
+    <string name="uploading_images_is_not_possible_without_these_permissions">Δεν είναι δυνατή η μεταφόρτωση εικόνων χωρίς αυτές τις άδειες</string>
+    <string name="service_report">Αναφορά υπηρεσίας</string>
+    <string name="details_are_missing">Λείπουν στοιχεία</string>
 </resources>

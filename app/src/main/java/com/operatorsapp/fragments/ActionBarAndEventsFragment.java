@@ -127,7 +127,6 @@ import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.requests.SendNotificationRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
-import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.ClearData;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
@@ -143,11 +142,11 @@ import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.EmeraldSpinner;
 import com.operatorsapp.view.LinearLayoutManagerNoPredictiveAnimation;
 import com.operatorsapp.view.PinchRecyclerView;
-import com.operatorsapp.view.TimeLineView;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 
 import org.litepal.crud.DataSupport;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -233,7 +232,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private TextView mSelectedNumberTv;
     private View mSelectedNumberLy;
     private Event mLastEvent;
-    private Fragment mVisiblefragment;
+    private WeakReference<Fragment> mVisiblefragment;
     private boolean mFromAnotherActivity;
     private TextView mMinDurationText;
     private LinearLayout mMinDurationLil;
@@ -269,9 +268,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private boolean mSetupEndDialogShow;
     private boolean mCycleWarningViewShow;
     private EmeraldSpinner mJobsSpinner;
-    private LinearLayout mScrollView;
-    private TimeLineView mTimeView;
-    private ArrayList<String> mTimes;
     public static final int PIXEL_FOR_MINUTE = 10;
     private PinchRecyclerView mEventsRecycler;
     private EventsAdapter mEventsAdapter;
@@ -283,7 +279,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mFilterLy;
     private View mFilterBtn;
     private View mFiltersView;
-    private AsyncTask<Void, Void, String> mAsyncTask;
+    private static WeakReference<AsyncTask<Void, Void, String>> mAsyncTask;
     private ImageView mLegendBtn;
     private LegendDialog mLegendDialog;
     private Event mOpenEvent;
@@ -301,6 +297,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private boolean isAsyncTaskFinished = true;
     private RelativeLayout taskRl;
     private RelativeLayout productionStatusRl;
+    private WeakReference<DashboardUICallbackListener> mUiCallbackListener;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -395,7 +392,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         RecyclerView lenoxMachineLy = view.findViewById(R.id.FAAE_lenox_machines_rv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         lenoxMachineLy.setLayoutManager(linearLayoutManager);
-        lenoxMachineLy.setAdapter(new LenoxMachineAdapter(getContext(), mMachines, this));
+        lenoxMachineLy.setAdapter(new LenoxMachineAdapter(mMachines, this));
     }
 
     public ViewGroup.LayoutParams initView(@NonNull View view) {
@@ -488,7 +485,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mTimerTextView = view.findViewById(R.id.text_view_timer);
         mSelectedNumberTv = view.findViewById(R.id.FAAE_selected_nmbr);
         mSelectedNumberLy = view.findViewById(R.id.FAAE_event_selected_ly);
-        mTimeView = view.findViewById(R.id.FAAE_time_container);
         initLenoxMachineRv(view);
         mNoNotificationsText = view.findViewById(R.id.fragment_dashboard_no_notif);
         mLoadingDataText = view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
@@ -698,13 +694,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mBottomRl.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (mListener != null) {
-                        mListener.onResizeBottomMargin(mBottomRl.getHeight());
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        if (mListener != null) {
+                            mListener.onResizeBottomMargin(mBottomRl.getHeight());
+                        }
                     }
                 }
             });
         }
     }
+
+
 
     private void initBottomNotificationLayout(View view) {
 
@@ -748,8 +748,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             public void onClick(View view) {
                 if (mLegendDialog == null)
                     mLegendDialog = LegendDialog.newInstants();
-                if (getFragmentManager() != null)
-                    mLegendDialog.show(getFragmentManager(), null);
+                if (getChildFragmentManager() != null)
+                    mLegendDialog.show(getChildFragmentManager(), null);
             }
         });
     }
@@ -1212,7 +1212,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
-            mOnActivityCallbackRegistered.onFragmentAttached(this);
+            mUiCallbackListener = new WeakReference<DashboardUICallbackListener>((DashboardUICallbackListener)this);
+            mOnActivityCallbackRegistered.onFragmentAttached(mUiCallbackListener);
             mListener = (ActionBarAndEventsFragmentListener) context;
             OperatorCoreToDashboardActivityCallback operatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
             if (operatorCoreToDashboardActivityCallback != null) {
@@ -1231,7 +1232,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         super.onDetach();
         mCroutonCallback = null;
         mOnGoToScreenListener = null;
-        mOnActivityCallbackRegistered.onFragmentDetached(this);
+        mOnActivityCallbackRegistered.onFragmentDetached(mUiCallbackListener);
+        mUiCallbackListener = null;
         mOnActivityCallbackRegistered = null;
         mOperatorCore.unregisterListener();
         mOperatorCore = null;
@@ -1310,13 +1312,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
         if (actionBar != null) {
 
-            if (mVisiblefragment != null && !(mVisiblefragment instanceof ActionBarAndEventsFragment
-                    || mVisiblefragment instanceof WidgetFragment
-                    || mVisiblefragment instanceof RecipeFragment
-                    || mVisiblefragment instanceof SelectStopReasonFragment
-                    || mVisiblefragment instanceof ReportStopReasonFragment
-                    || mVisiblefragment instanceof SelectMachineFragment
-                    || mVisiblefragment instanceof ReportShiftFragment)) {
+            if (mVisiblefragment != null && mVisiblefragment.get() != null && !(mVisiblefragment.get() instanceof ActionBarAndEventsFragment
+                    || mVisiblefragment.get() instanceof WidgetFragment
+                    || mVisiblefragment.get() instanceof RecipeFragment
+                    || mVisiblefragment.get() instanceof SelectStopReasonFragment
+                    || mVisiblefragment.get() instanceof ReportStopReasonFragment
+                    || mVisiblefragment.get() instanceof SelectMachineFragment
+                    || mVisiblefragment.get() instanceof ReportShiftFragment)) {
                 return;
             }
 
@@ -1437,17 +1439,25 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             }
                             case 3: {
                                 if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+                                    mOnGoToScreenListener.goToFragment(FixUnitsProducedFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true, true);
+                                } else {
+                                    mOnGoToScreenListener.goToFragment(FixUnitsProducedFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true, true);
+                                }
+                                break;
+                            }
+                            case 4: {
+                                if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
                                     mOnGoToScreenListener.goToFragment(ReportProductionFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true, true);
                                 } else {
                                     mOnGoToScreenListener.goToFragment(ReportProductionFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true, true);
                                 }
                                 break;
                             }
-                            case 4: {
+                            case 5: {
                                 mListener.onOpenQCActivity(0, true);
                                 break;
                             }
-                            case 5: {
+                            case 6: {
                                 openSetupEndFragment();
                                 break;
                             }
@@ -1525,7 +1535,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             technicianRl.setVisibility(View.INVISIBLE);
             mJobsSpinner.setVisibility(View.INVISIBLE);
             displayOperatorView(View.INVISIBLE);
-        }else {
+        } else {
             taskRl.setVisibility(View.VISIBLE);
             productionStatusRl.setVisibility(View.VISIBLE);
             technicianRl.setVisibility(View.VISIBLE);
@@ -1536,7 +1546,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void startTechCallActivity() {
 
-        if (getActivity() != null && ((DashboardActivity) getActivity()).getReportForMachine() != null ) {
+        if (getActivity() != null && ((DashboardActivity) getActivity()).getReportForMachine() != null) {
             Intent intent = new Intent(getActivity(), TechCallActivity.class);
             intent.putExtra(TechCallActivity.EXTRA_REPORT_FIELD_FOR_MACHINE, ((DashboardActivity) getActivity()).getReportForMachine());
             intent.putExtra(TechCallActivity.EXTRA_MANAGE_SERVICE_CALL_FOR_TECHNICIAN, mCurrentMachineStatus != null && mCurrentMachineStatus.getmAllMachinesData().get(0).isManageServiceCallForTechnician());
@@ -1630,7 +1640,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
                     TechCallInfo techCall = new TechCallInfo(PersistenceManager.getInstance().getMachineId(), 0, techName, getString(R.string.called_technician) + "\n" + techName,
-                            "", Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID(), 0);
+                            "", Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID(), 0, null);
                     PersistenceManager.getInstance().setCalledTechnician(techCall);
                     PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                     setTechnicianCallStatus();
@@ -1679,7 +1689,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                        .build());
 
                 final GenericDialog dialog = new GenericDialog(getActivity(), t.getMessage(), getString(R.string.call_technician_title), getString(R.string.ok), true);
-                final AlertDialog alertDialog = dialog.showNoProductionAlarm();
+                final AlertDialog alertDialog = dialog.showNoProductionAlarm(getContext());
                 dialog.setListener(new GenericDialog.OnGenericDialogListener() {
                     @Override
                     public void onActionYes() {
@@ -1916,7 +1926,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
                             TechCallInfo techCall = new TechCallInfo(PersistenceManager.getInstance().getMachineId(), 0, techName, getString(R.string.called_technician) + "\n" + techName,
-                                    "", Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technicianId, 0);
+                                    "", Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technicianId, 0, null);
                             PersistenceManager.getInstance().setCalledTechnician(techCall);
                             PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                             setTechnicianCallStatus();
@@ -1962,7 +1972,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                                .build());
 
                         final GenericDialog dialog = new GenericDialog(getActivity(), t.getMessage(), getString(R.string.call_technician_title), getString(R.string.ok), true);
-                        final AlertDialog alertDialog = dialog.showNoProductionAlarm();
+                        final AlertDialog alertDialog = dialog.showNoProductionAlarm(getContext());
                         dialog.setListener(new GenericDialog.OnGenericDialogListener() {
                             @Override
                             public void onActionYes() {
@@ -2045,7 +2055,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 } else {
                     if (response.body() != null) {
                         onFailure(call, new Throwable(response.body().getError().getErrorDesc()));
-                    }else {
+                    } else {
                         ShowCrouton.showSimpleCrouton(mCroutonCallback, getString(R.string.credentials_error), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                     }
                 }
@@ -2061,7 +2071,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         });
     }
 
-    private void sendNotificationResponse(final int notificationId, final int responseType, final boolean isRefresh) {
+    private void sendNotificationResponse(final int notificationId, final int responseType,
+                                          final boolean isRefresh) {
 
         final PersistenceManager pm = PersistenceManager.getInstance();
         final Notification[] notification = new Notification[1];
@@ -2111,7 +2122,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 @Override
                 public void onResponse(@NonNull Call<StandardResponse> call, @NonNull Response<StandardResponse> response) {
 
-                    if (response.body() != null && response.body().getError() != null) {
+                    if (response.body() != null && response.body().getError() != null && response.body().getError().getErrorDesc() != null) {
                         onFailure(call, new Throwable(response.body().getError().getErrorDesc()));
                     } else {
                         new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.RESPOND_TO_NOTIFICATION, true, "Respond to Notification- ID: " + notification[0].getmNotificationID());
@@ -2288,7 +2299,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mBlockOperatorChange = false;
+                if (getActivity() != null && !getActivity().isDestroyed()) {
+                    mBlockOperatorChange = false;
+                }
             }
         }, BLOCK_OPERATOR_SPINNER_TIME);
     }
@@ -2299,7 +2312,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mBlockStatusChange = false;
+                if (getActivity() != null && !getActivity().isDestroyed()) {
+                    mBlockStatusChange = false;
+                }
             }
         }, BLOCK_PRODUCTION_SPINNER_TIME);
     }
@@ -2461,7 +2476,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onSelectMode(Event event) {
 
-        startSelectMode(event,null);
+        startSelectMode(event, null);
     }
 
     public void startSelectMode(Event event, MyTaskListener myTaskListener) {
@@ -2487,7 +2502,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         boolean isAllowReportingOnSetupEvents = false;
         boolean isSetupEnd = false;
         boolean isAllowReportingSetupAfterSetupEnd = false;
-        if (mCurrentMachineStatus != null){
+        if (mCurrentMachineStatus != null) {
             isAllowReportingOnSetupEvents = mCurrentMachineStatus.isAllowReportingOnSetupEvents();
             isSetupEnd = mCurrentMachineStatus.getAllMachinesData().get(0).isSetupEnd();
             isAllowReportingSetupAfterSetupEnd = mCurrentMachineStatus.isAllowReportingSetupAfterSetupEnd();
@@ -2495,7 +2510,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (mListener != null && events != null && events.size() > 0) {
 //            if (!(isSetupEnd || isAllowReportingOnSetupEvents)){
-            if (event.getEventGroupID() == 10 && !isAllowReportingOnSetupEvents){
+            if (event.getEventGroupID() == 10 && !isAllowReportingOnSetupEvents) {
                 ShowCrouton.showSimpleCrouton(mCroutonCallback, getString(R.string.no_report_permission_on_setup), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                 return;
             }
@@ -2510,20 +2525,20 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mFirstSeletedEvent = event;
 
         if (myTaskListener == null) {
-            if (mAsyncTask != null) {
-                mAsyncTask.cancel(true);
+            if (mAsyncTask != null && mAsyncTask.get() != null) {
+                mAsyncTask.get().cancel(true);
             }
 //            if (mEventHandler != null){
 //                mEventHandler.removeCallbacksAndMessages(null);
 //            }
-        setShiftLogAdapter(cursor);
+            setShiftLogAdapter(cursor);
 
-        initEvents(events);
+            initEvents(events);
 
-        onStopEventSelected(event.getEventID(), true);
+            onStopEventSelected(event.getEventID(), true);
 
-         mShowAlarmCheckBoxLy.setVisibility(View.GONE);
-         mMinDurationLil.setVisibility(View.GONE);
+            mShowAlarmCheckBoxLy.setVisibility(View.GONE);
+            mMinDurationLil.setVisibility(View.GONE);
         } else {
             myTaskListener.onUpdateEventsRecyclerViews(cursor, events);
             myTaskListener.onStartSelectMode(event);
@@ -2541,7 +2556,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         dialog.show();
     }
 
-    private void sendTechCall(final Technician technician, com.example.common.StopLogs.Event event, final String additionalText) {
+    private void sendTechCall(final Technician technician, com.
+            example.common.StopLogs.Event event, final String additionalText) {
 
         PersistenceManager pm = PersistenceManager.getInstance();
         ProgressDialogManager.show(getActivity());
@@ -2594,25 +2610,29 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TECH_CALL, false, "reason: " + m);
 
                 final GenericDialog dialog = new GenericDialog(getActivity(), t.getMessage(), getString(R.string.call_technician_title), getString(R.string.ok), true);
-                final AlertDialog alertDialog = dialog.showNoProductionAlarm();
+                final AlertDialog alertDialog = dialog.showNoProductionAlarm(getContext());
                 dialog.setListener(new GenericDialog.OnGenericDialogListener() {
                     @Override
                     public void onActionYes() {
                         alertDialog.cancel();
                     }
+
                     @Override
-                    public void onActionNo() { }
+                    public void onActionNo() {
+                    }
+
                     @Override
-                    public void onActionAnother() {}
+                    public void onActionAnother() {
+                    }
                 });
             }
         });
     }
 
 
-    private void getLineEvents(){
+    private void getLineEvents() {
         PersistenceManager pm = PersistenceManager.getInstance();
-        if (pm.getMachineLineId() < 1){
+        if (pm.getMachineLineId() < 1) {
             return;
         }
         getLineShiftLog(pm.getSiteUrl(), new GetStopLogCallback() {
@@ -2625,7 +2645,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     for (com.example.common.StopLogs.Event event : response.getEvents()) {
 
-                        if (event.getRootEventID() == 0 && (lastEventRegistered == null || event.getEventID() > lastEventRegistered.getEventID())){
+                        if (event.getRootEventID() == 0 && (lastEventRegistered == null || event.getEventID() > lastEventRegistered.getEventID())) {
                             lastEventReceived = event;
                             break;
                         }
@@ -2637,7 +2657,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         boolean isAllowReportingOnSetupEvents = false;
                         boolean isSetupEnd = false;
                         boolean isAllowReportingSetupAfterSetupEnd = false;
-                        if (mCurrentMachineStatus != null){
+                        if (mCurrentMachineStatus != null) {
                             isAllowReportingOnSetupEvents = mCurrentMachineStatus.isAllowReportingOnSetupEvents();
                             isSetupEnd = mCurrentMachineStatus.getAllMachinesData().get(0).isSetupEnd();
                             isAllowReportingSetupAfterSetupEnd = mCurrentMachineStatus.isAllowReportingSetupAfterSetupEnd();
@@ -2667,10 +2687,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void setShiftLogAdapter(Cursor cursor) {
-        if (mShiftLogAdapter != null){
+        if (mShiftLogAdapter != null) {
             mShiftLogAdapter.closeCursor();
         }
-        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), cursor,
+        mShiftLogAdapter = new ShiftLogSqlAdapter(cursor,
                 !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight,
                 mIsSelectionMode, mSelectedEvents, mCurrentMachineStatus != null && mCurrentMachineStatus.isAllowReportingOnSetupEvents());
 
@@ -2725,7 +2745,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 displayOperatorView(View.INVISIBLE);
             }
             mListener.onLockScreenForceLoginOperator();
-        }else {
+        } else {
             if (isVisible()) {
                 taskRl.setVisibility(View.VISIBLE);
                 productionStatusRl.setVisibility(View.VISIBLE);
@@ -2780,7 +2800,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //    }
 
     @Override
-    public void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MachineJoshDataResponse machineJoshDataResponse) {
+    public void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse
+            actualBarExtraResponse, MachineJoshDataResponse machineJoshDataResponse) {
 
         if (events == null) {
             events = new ArrayList<>();
@@ -2806,24 +2827,26 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
         if (isAdded() && isAsyncTaskFinished) {
             final Event finalLatestEvent1 = finalLatestEvent;
-            if (mAsyncTask != null) {
-                mAsyncTask.cancel(true);
+            if (mAsyncTask != null && mAsyncTask.get() != null) {
+                mAsyncTask.get().cancel(true);
             }
-            mAsyncTask = new MyTask(events, actualBarExtraResponse, new MyTaskListener() {
+            MyTaskListener myTaskListener = new MyTaskListener() {
                 @Override
                 public void onComplete() {
-                    if (isAdded() && getActivity() != null && mAsyncTask != null && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && getActivity() != null && mAsyncTask != null && mAsyncTask.get() != null && !mAsyncTask.get().isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                if (getActivity() != null && !getActivity().isDestroyed()) {
 // in all polling befor the request i update the getshiftlogstartingfrom to current time (for the request i used the previous value of getshiftlogstartingfrom , make the update after that)
-                                // if the conditions bellow is completed the endtime of last event is seted to shiftlogstartingfrom in place of time of last polling request
-                                if (mIsTimeLine) {
-                                    if (finalLatestEvent1 != null && finalLatestEvent1.getEventEndTime() != null
-                                            && finalLatestEvent1.getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
-                                            mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
+                                    // if the conditions bellow is completed the endtime of last event is seted to shiftlogstartingfrom in place of time of last polling request
+                                    if (mIsTimeLine) {
+                                        if (finalLatestEvent1 != null && finalLatestEvent1.getEventEndTime() != null
+                                                && finalLatestEvent1.getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
+                                                mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
-                                        PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent1.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
+                                            PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent1.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
+                                        }
                                     }
                                 }
                             }
@@ -2833,13 +2856,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onUpdateEventsRecyclerViews(final Cursor oldCursor, final ArrayList<Event> newEvents) {
-                    if (isAdded() && mAsyncTask != null && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && mAsyncTask != null && mAsyncTask.get() != null && !mAsyncTask.get().isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                setShiftLogAdapter(oldCursor);
-                                if (newEvents != null) {
-                                    initEvents(newEvents);
+                                if (getActivity() != null && !getActivity().isDestroyed()) {
+                                    setShiftLogAdapter(oldCursor);
+                                    if (newEvents != null) {
+                                        initEvents(newEvents);
+                                    }
                                 }
                             }
                         });
@@ -2848,14 +2873,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onStartSelectMode(final Event event) {
-                    if (isAdded() && mAsyncTask != null && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && mAsyncTask != null && mAsyncTask.get() != null && !mAsyncTask.get().isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                onStopEventSelected(event.getEventID(), true);
+                                if (getActivity() != null && !getActivity().isDestroyed()) {
+                                    onStopEventSelected(event.getEventID(), true);
 
-                                mShowAlarmCheckBoxLy.setVisibility(View.GONE);
-                                mMinDurationLil.setVisibility(View.GONE);
+                                    mShowAlarmCheckBoxLy.setVisibility(View.GONE);
+                                    mMinDurationLil.setVisibility(View.GONE);
+                                }
                             }
                         });
                     }
@@ -2863,14 +2890,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onShowNotificationText(final boolean show) {
-                    if (isAdded() && mAsyncTask != null && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && mAsyncTask != null && mAsyncTask.get() != null && !mAsyncTask.get().isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (show) {
-                                    mNoNotificationsText.setVisibility(View.VISIBLE);
-                                } else {
-                                    mNoNotificationsText.setVisibility(View.GONE);
+                                if (getActivity() != null && !getActivity().isDestroyed()) {
+                                    if (show) {
+                                        mNoNotificationsText.setVisibility(View.VISIBLE);
+                                    } else {
+                                        mNoNotificationsText.setVisibility(View.GONE);
+                                    }
                                 }
                             }
                         });
@@ -2879,11 +2908,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onOpenDialog(final Event event) {
-                    if (isAdded() && mAsyncTask != null && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && mAsyncTask != null && mAsyncTask.get() != null && !mAsyncTask.get().isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                openDialog(event);
+                                if (getActivity() != null && !getActivity().isDestroyed()) {
+                                    openDialog(event);
+                                }
                             }
                         });
                     }
@@ -2891,18 +2922,21 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onClearAllSelectedEvents() {
-                    if (isAdded() && mAsyncTask != null && !mAsyncTask.isCancelled()) {
+                    if (isAdded() && mAsyncTask != null && mAsyncTask.get() != null && !mAsyncTask.get().isCancelled()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (mListener != null) {
-                                    mListener.onClearAllSelectedEvents();
+                                if (getActivity() != null && !getActivity().isDestroyed()) {
+                                    if (mListener != null) {
+                                        mListener.onClearAllSelectedEvents();
+                                    }
                                 }
                             }
                         });
                     }
                 }
-            }).execute();
+            };
+            mAsyncTask = new WeakReference<>(new MyTask(events, actualBarExtraResponse, myTaskListener).execute());
 //            if (mEventHandler != null){
 //                mEventHandler.removeCallbacksAndMessages(null);
 //            }
@@ -3066,8 +3100,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //        if (mEventHandler != null){
 //            mEventHandler.removeCallbacksAndMessages(null);
 //        }
-        if (mAsyncTask != null) {
-            mAsyncTask.cancel(true);
+        if (mAsyncTask != null && mAsyncTask.get() != null) {
+            mAsyncTask.get().cancel(true);
         }
     }
 
@@ -3086,7 +3120,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onClearAllSelectedEvents();
     }
 
-    public void updateEvents(MyTask myTask, ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MyTaskListener myTaskListener) {
+    public void updateEvents(MyTask myTask, ArrayList<Event> events, ActualBarExtraResponse
+            actualBarExtraResponse, MyTaskListener myTaskListener) {
 
         if (getActivity() == null || !isAdded() || myTask == null || myTask.isCancelled()) {
             return;
@@ -3239,7 +3274,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void initEventRecycler(View view) {
         mEventsRecycler = view.findViewById(R.id.FAAE_events_recycler);
         mEventsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen);
+        mEventsAdapter = new EventsAdapter(this, mIsSelectionMode, mIsOpen);
         mEventsRecycler.setAdapter(mEventsAdapter);
 
         final boolean[] isZooming = {false};
@@ -3288,7 +3323,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
-    public void clearEventsRecycler(){
+    public void clearEventsRecycler() {
         mIsSelectionMode = false;
         mNoData = true;
         mSelectedEvents = new ArrayList<>();
@@ -3430,7 +3465,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
+                    }
                 }
             });
         }
@@ -3544,8 +3581,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         super.onDestroy();
 
         removeBroadcasts();
-        if (mAsyncTask != null) {
-            mAsyncTask.cancel(true);
+        if (mAsyncTask != null && mAsyncTask.get() != null) {
+            mAsyncTask.get().cancel(true);
         }
 //        if (mEventHandler != null){
 //            mEventHandler.removeCallbacksAndMessages(null);
@@ -3750,13 +3787,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     public void setVisiblefragment(Fragment visibleFragment) {
 
-        mVisiblefragment = visibleFragment;
+        mVisiblefragment = new WeakReference<>(visibleFragment);
 
         if (mToolBarView != null) {
 
-            if (mVisiblefragment instanceof ActionBarAndEventsFragment ||
-                    mVisiblefragment instanceof RecipeFragment ||
-                    mVisiblefragment instanceof WidgetFragment) {
+            if (mVisiblefragment.get() instanceof ActionBarAndEventsFragment ||
+                    mVisiblefragment.get() instanceof RecipeFragment ||
+                    mVisiblefragment.get() instanceof WidgetFragment) {
 
                 mToolBarView.findViewById(R.id.toolbar_job_spinner).setVisibility(View.VISIBLE);
 
@@ -3858,7 +3895,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
-    private void sendTokenWithSessionIdToServer(final String languageCode, final String languagesName) {
+    private void sendTokenWithSessionIdToServer(final String languageCode,
+                                                final String languagesName) {
         ProgressDialogManager.show(getActivity());
         final PersistenceManager pm = PersistenceManager.getInstance();
         final String id = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -3903,7 +3941,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void getNotificationsFromServer(final boolean openNotifications) {
 
-        if(PersistenceManager.getInstance().getMachineId() == -1){
+        if (PersistenceManager.getInstance().getMachineId() == -1) {
             return;
         }
         NetworkManager.getInstance().getNotificationHistory(new Callback<NotificationHistoryResponse>() {
@@ -3921,7 +3959,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
                             techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmResponseType() + "",
                                     not.getmAdditionalText(), TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
-                                    not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID()));
+                                    not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID(), not.getmEventName()));
                         }
                     }
 

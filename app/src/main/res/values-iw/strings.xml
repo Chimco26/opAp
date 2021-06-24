@@ -152,6 +152,7 @@
         <item>פק"ע חדשה</item>
         <item>הוספת פסולים</item>
         <item>שינוי יחידות במחזור</item>
+        <item>Fix Units Produced</item>
         <item>דיווח ייצור</item>
         <item>הזמן בדיקה</item>
     </array>
@@ -552,5 +553,19 @@
     <string name="check_for_updates">בדיקת עדכונים</string>
     <string name="select_test">בחר בדיקה</string>
     <string name="confirm_machine_selection">אתה בטוח שאתה רוצה לבצע את פעולה זו לכל המכונות שנבחרו?</string>
+    <string name="number_of_batches">מספר אצוות</string>
+    <string name="units_to_add_remove">להוסיף/להוריד</string>
+    <string name="add_comment">הוסף תגובה</string>
+    <string name="attach_files">צירוף קבצים</string>
+    <string name="uploading_images_is_not_possible_without_these_permissions">לא ניתן להעלות תמונה בלי הרשאות מתאימות</string>
+    <string name="upload_failed">העלאה נכשלה</string>
+    <string name="upload_completed">העלאה הושלמה</string>
+    <string name="show_camera_dialog_take_a_picture">צלם תמונה</string>
+    <string name="service_report">דו\"ח שירות</string>
+    <string name="machines">מכונות</string>
+    <string name="failed_to_load_image">טעינת התמונה נכשלה, לעדכן בכל מקרה?</string>
+    <string name="details_are_missing">חסרים פרטים</string>
+    <string name="show_camera_dialog_gallery">בחר מהגלריה</string>
+    <string name="show_camera_dialog_title">הוסף תמונה</string>
 
 </resources>

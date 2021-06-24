@@ -27,7 +27,6 @@ public class TimeViewHolder extends RecyclerView.ViewHolder {
 
     private static final long FOUR_HOURS = 60000L * 60 * 4;
 
-    private final Context mContext;
     private final int mHeight;
     private final int mWidth;
     private LinearLayout mParentLayout;
@@ -39,10 +38,9 @@ public class TimeViewHolder extends RecyclerView.ViewHolder {
     private GoToScreenListener mGoToScreenListener;
 
 
-    public TimeViewHolder(View itemView, Context context, GoToScreenListener listener, int height, int width) {
+    public TimeViewHolder(View itemView, GoToScreenListener listener, int height, int width) {
         super(itemView);
 
-        mContext = context;
         mHeight = height;
         mWidth = width;
         mGoToScreenListener = listener;
@@ -55,7 +53,7 @@ public class TimeViewHolder extends RecyclerView.ViewHolder {
         mChart = itemView.findViewById(R.id.lineChart_time);
     }
     
-    public void setTimeItem(final Widget widget) {
+    public void setTimeItem(Context context, final Widget widget) {
 //        mDivider.post(new Runnable() {
 //            @Override
 //            public void run() {
@@ -70,16 +68,16 @@ public class TimeViewHolder extends RecyclerView.ViewHolder {
         setSizes(mParentLayout);
         String nameByLang2 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         mTitle.setText(nameByLang2);
-        mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));
+        mSubtitle.setText(new StringBuilder(context.getString(R.string.standard)).append(widget.getStandardValue()));
         mValue.setText(widget.getCurrentValue());
         try {
             if (Float.valueOf(widget.getCurrentValue()) < widget.getLowLimit() || Float.valueOf(widget.getCurrentValue()) > widget.getHighLimit()) {
-                mValue.setTextColor(mContext.getResources().getColor(R.color.red_line));
+                mValue.setTextColor(context.getResources().getColor(R.color.red_line));
             } else {
-                mValue.setTextColor(mContext.getResources().getColor(R.color.C16));
+                mValue.setTextColor(context.getResources().getColor(R.color.C16));
             }
         } catch (NumberFormatException e) {
-            mValue.setTextColor(mContext.getResources().getColor(R.color.C16));
+            mValue.setTextColor(context.getResources().getColor(R.color.C16));
         }
         int xValuesIncreaseIndex = 0;
         ArrayList<Entry> tenHoursValues = new ArrayList<>();
@@ -98,7 +96,7 @@ public class TimeViewHolder extends RecyclerView.ViewHolder {
                             TimeUtils.getDateForNotification(widget.getMachineParamHistoricData().get(i).getTime()) != null &&
                             TimeUtils.getDateForNotification(widget.getMachineParamHistoricData().get(i - 1).getTime()).before(date) &&
                             TimeUtils.getDateForNotification(widget.getMachineParamHistoricData().get(i).getTime()).after(date)) {
-                        xValues[i] = mContext.getResources().getString(R.string.midnight);
+                        xValues[i] = context.getResources().getString(R.string.midnight);
                         xValuesIncreaseIndex = 1;
                         midnightLimit = i;
                     }
@@ -134,8 +132,8 @@ public class TimeViewHolder extends RecyclerView.ViewHolder {
                 fourHoursList.add(fourHoursValues);
                 tenHoursList.add(tenHoursValues);
             }
-            mChart.setData(getAveragedPoints(fourHoursList), xValues, widget.getLowLimit(), widget.getHighLimit());
-            mChart.setLimitLines(widget.getLowLimit(), widget.getHighLimit(), widget.getStandardValue(), midnightLimit);
+            mChart.setData(mChart.getContext(), getAveragedPoints(fourHoursList), xValues, widget.getLowLimit(), widget.getHighLimit());
+            mChart.setLimitLines(mChart.getContext(), widget.getLowLimit(), widget.getHighLimit(), widget.getStandardValue(), midnightLimit);
             final float midnightFinal = midnightLimit;
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

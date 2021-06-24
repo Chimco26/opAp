@@ -3,8 +3,6 @@ package com.operators.machinestatusinfra.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-
 public class AllMachinesData {
     @SerializedName("CurrentJobID")
     private int currentJobID;
@@ -124,8 +122,16 @@ public class AllMachinesData {
     private boolean isAllowReportingOnSetupEvents;
     @SerializedName("AllowReportingSetupAfterSetupEnd")
     private boolean mAllowReportingSetupAfterSetupEnd;
+    @SerializedName("AllowTextOnReportStop")
+    private boolean mAllowTextOnReportStop;
     @SerializedName("RequireWorkerSignIn")
     private boolean mRequireWorkerSignIn;
+    @SerializedName("ActivateJobWidgetOnOpApp")
+    private boolean ativateJobWidgetOnOpApp;
+
+    public boolean isActivateJobWidgetOnOpApp() {
+        return ativateJobWidgetOnOpApp;
+    }
 
     public boolean isRequireWorkerSignIn() {
         return mRequireWorkerSignIn;
@@ -137,6 +143,10 @@ public class AllMachinesData {
 
     public boolean ismAllowReportingSetupAfterSetupEnd() {
         return mAllowReportingSetupAfterSetupEnd;
+    }
+
+    public boolean ismAllowTextOnReportStop() {
+        return mAllowTextOnReportStop;
     }
 
     public boolean isManageServiceCallForTechnician() {

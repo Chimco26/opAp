@@ -222,7 +222,7 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
                 for (Event event: mSelectedItems) {
                     list.add(event.getEventID() * 1f);
                 }
-                mListener.onReportEvents(item.getMachineId(), mStopLogsItems, list, item.getRootEventID() == 0, getRootMachineName(item));
+                mListener.onReportEvents(item.getMachineId(), mStopLogsItems, list, item.getRootEventID() == 0, getRootMachineName(item), item.getDescr());
             }
         });
     }
@@ -254,10 +254,10 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
     public void onLogSelected(Event item) {
         ArrayList<Float> list = new ArrayList<>();
         list.add(item.getEventID() * 1f);
-        if (rootMap.containsKey(item.getRootEventID()) && rootMap.get(item.getRootEventID()).size() > 0) {
-            mListener.onReportEvents(item.getMachineId(), rootMap.get(item.getRootEventID()), list, item.getRootEventID() == 0, getRootMachineName(item));
+        if (rootMap.containsKey(item.getRootEventID()) && rootMap.get(item.getRootEventID()) != null && rootMap.get(item.getRootEventID()).size() > 0) {
+            mListener.onReportEvents(item.getMachineId(), rootMap.get(item.getRootEventID()), list, item.getRootEventID() == 0, getRootMachineName(item), item.getDescr());
         } else {
-            mListener.onReportEvents(item.getMachineId(), mStopLogsItems, list, item.getRootEventID() == 0, getRootMachineName(item));
+            mListener.onReportEvents(item.getMachineId(), mStopLogsItems, list, item.getRootEventID() == 0, getRootMachineName(item), item.getDescr());
         }
     }
 
@@ -319,7 +319,7 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
                     PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
                     TechCallInfo techCall = new TechCallInfo(machineId, 0, techName, getString(R.string.called_technician) + "\n" + techName,
-                            additionalText, Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID(), 0);
+                            additionalText, Calendar.getInstance().getTimeInMillis(), response.body().getLeaderRecordID(), technician.getID(), 0, null);
                     PersistenceManager.getInstance().setCalledTechnician(techCall);
                     PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                     ProgressDialogManager.dismiss();
@@ -348,7 +348,7 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
                 new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.TECH_CALL, false, "reason: " + m);
 
                 final GenericDialog dialog = new GenericDialog(getActivity(), t.getMessage(), getString(R.string.call_technician_title), getString(R.string.ok), true);
-                final AlertDialog alertDialog = dialog.showNoProductionAlarm();
+                final AlertDialog alertDialog = dialog.showNoProductionAlarm(getContext());
                 dialog.setListener(new GenericDialog.OnGenericDialogListener() {
                     @Override
                     public void onActionYes() {
@@ -375,7 +375,7 @@ public class StopEventLogFragment extends Fragment implements StopEventLogAdapte
 
     public interface OnStopEventLogFragmentListener {
 
-        void onReportEvents(int machineId, ArrayList<Event> subEvents, ArrayList<Float> eventsIds, boolean isRoot, String rootMachineName);
+        void onReportEvents(int machineId, ArrayList<Event> subEvents, ArrayList<Float> eventsIds, boolean isRoot, String machineName, String rootMachineName);
     }
 
 }

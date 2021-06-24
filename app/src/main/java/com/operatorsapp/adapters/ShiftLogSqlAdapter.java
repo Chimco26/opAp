@@ -1,6 +1,7 @@
 package com.operatorsapp.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -37,7 +38,7 @@ import java.util.ArrayList;
 
 public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> {
 
-    private Context mContext;
+
     private boolean mClosedState;
     private int mCloseWidth;
     private int mOpenWidth;
@@ -54,11 +55,10 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     private boolean isAllowReportingOnSetupEvents;
     private ArrayList<TechCallInfo> mTechCallList;
 
-    public ShiftLogSqlAdapter(Context context, Cursor cursor, boolean closedState, int closeWidth,
+    public ShiftLogSqlAdapter(Cursor cursor, boolean closedState, int closeWidth,
                               OnStopClickListener onStopClickListener, int openWidth, int height,
                               boolean selectMode, ArrayList<Float> selectedEvents, boolean isAllowReportingOnSetupEvents) {
         super(cursor);
-        mContext = context;
         this.isAllowReportingOnSetupEvents = isAllowReportingOnSetupEvents;
         mClosedState = closedState;
         mCloseWidth = closeWidth;
@@ -123,7 +123,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         private View mParameterCard;
         private View mStoppedCard;
 
-        ShiftLogViewHolder(View itemView) {
+        ShiftLogViewHolder(final View itemView) {
             super(itemView);
             mParameterCard = itemView.findViewById(R.id.parameter_cardview);
             mStoppedCard = itemView.findViewById(R.id.stopped_cardview);
@@ -134,8 +134,12 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             mStoppedTitleLayout.post(new Runnable() {
                 @Override
                 public void run() {
-                    mStoppedTitleLayout.getLayoutParams().width = mCloseWidth - 50;
-                    mStoppedTitleLayout.requestLayout();
+                    if (itemView.getContext() != null
+                            && itemView.getContext() instanceof Activity
+                            && !((Activity) itemView.getContext()).isDestroyed()) {
+                        mStoppedTitleLayout.getLayoutParams().width = mCloseWidth - 50;
+                        mStoppedTitleLayout.requestLayout();
+                    }
                 }
             });
             mStoppedTitle = itemView.findViewById(R.id.event_stopped_shift_log_item_title);
@@ -156,8 +160,12 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             mParameterTitleLayout.post(new Runnable() {
                 @Override
                 public void run() {
-                    mParameterTitleLayout.getLayoutParams().width = mCloseWidth - 50;
-                    mParameterTitleLayout.requestLayout();
+                    if (itemView.getContext() != null
+                            && itemView.getContext() instanceof Activity
+                            && !((Activity) itemView.getContext()).isDestroyed()) {
+                        mParameterTitleLayout.getLayoutParams().width = mCloseWidth - 50;
+                        mParameterTitleLayout.requestLayout();
+                    }
                 }
             });
             mParameterTitle = itemView.findViewById(R.id.event_parameter_shift_log_item_title);
@@ -241,14 +249,14 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                     && (event.getEventReasonID() != 100 || isAllowReportingOnSetupEvents)) {
 
                 mFirstStopEventPosition = viewHolder.getAdapterPosition();
-                if (!BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
+                if (!BuildConfig.FLAVOR.equals(holder.itemView.getContext().getString(R.string.lenox_flavor_name))) {
                     holder.mSplitEvent.setVisibility(View.VISIBLE);
 
                 }
                 holder.mSplitEvent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        validateDialog(event.getEventID());
+                        validateDialog(v.getContext(), event.getEventID());
 
                     }
                 });
@@ -333,18 +341,18 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                     holder.mStoppedTime.setTextColor(Color.RED);
                 } else {
                     holder.mStoppedIcon.setImageResource(R.drawable.ic_hand_blue);
-                    holder.mStoppedTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                    holder.mStoppedTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+                    holder.mStoppedTitle.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.black));
+                    holder.mStoppedTime.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.status_bar));
                     holder.mStoppedTime.setTypeface(null, Typeface.BOLD);
                 }
             } else {
-                if (BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
+                if (BuildConfig.FLAVOR.equals(holder.itemView.getContext().getString(R.string.lenox_flavor_name))) {
                     holder.mStoppedIcon.setImageResource(ReasonImageLenox.getImageForStopReasonShiftLog(event.getEventGroupID()));
                 } else {
                     holder.mStoppedIcon.setImageResource(ReasonImage.getImageForStopReasonShiftLog(event.getEventGroupID()));
                 }
-                holder.mStoppedTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                holder.mStoppedTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+                holder.mStoppedTitle.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.black));
+                holder.mStoppedTime.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.status_bar));
                 holder.mStoppedTime.setTypeface(null, Typeface.NORMAL);
             }
             holder.mStoppedTime.setText(TimeUtils.getTimeFromString(event.getTime()));
@@ -370,7 +378,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             if (durationInMillis == 0){
                 durationInMillis = 1;
             }
-            holder.mStoppedDuration.setText(TimeUtils.getDurationTime(mContext, durationInMillis));
+            holder.mStoppedDuration.setText(TimeUtils.getDurationTime(holder.itemView.getContext(), durationInMillis));
             if (mClosedState) {
                 holder.mStoppedDivider.setVisibility(View.GONE);
                 holder.mStoppedSubtitle.setVisibility(View.INVISIBLE);
@@ -398,8 +406,8 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 //                        mOnStopClickListener.onStopEventSelected(event.getEventID(), true);
 
                         v.setTag(true);
-                        holder.mStoppedTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                        holder.mStoppedTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+                        holder.mStoppedTitle.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.black));
+                        holder.mStoppedTime.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.status_bar));
                         holder.mStoppedTime.setTypeface(null, Typeface.NORMAL);
 //                        mOnStopClickListener.onStopClicked(event.getEventID(), event.getTime(), event.getEventEndTime(), event.getDuration());
                         event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
@@ -440,14 +448,14 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                     holder.mParameterTime.setTextColor(Color.RED);
                 } else {
                     holder.mParameterIcon.setImageResource(R.drawable.ic_sun_blue);
-                    holder.mParameterTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                    holder.mParameterTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+                    holder.mParameterTitle.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.black));
+                    holder.mParameterTime.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.status_bar));
                     holder.mParameterTime.setTypeface(null, Typeface.BOLD);
                 }
             } else {
                 holder.mParameterIcon.setImageResource(R.drawable.ic_sun_grey);
-                holder.mParameterTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                holder.mParameterTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+                holder.mParameterTitle.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.black));
+                holder.mParameterTime.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.status_bar));
                 holder.mParameterTime.setTypeface(null, Typeface.NORMAL);
             }
             String groupName = OperatorApplication.isEnglishLang() ? event.getEventGroupEname() : event.getEventGroupLname();
@@ -493,8 +501,8 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                 public void onClick(View v) {
                     if (!event.isTreated()) {
                         holder.mParameterIcon.setImageResource(R.drawable.ic_sun_grey);
-                        holder.mParameterTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                        holder.mParameterTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+                        holder.mParameterTitle.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.black));
+                        holder.mParameterTime.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.status_bar));
                         holder.mParameterTime.setTypeface(null, Typeface.NORMAL);
                         event.setTreated(true);
                     } else {
@@ -504,8 +512,8 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                             holder.mParameterTime.setTextColor(Color.RED);
                         } else {
                             holder.mParameterIcon.setImageResource(R.drawable.ic_sun_blue);
-                            holder.mParameterTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                            holder.mParameterTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+                            holder.mParameterTitle.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.black));
+                            holder.mParameterTime.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.status_bar));
                         }
                         holder.mParameterTime.setTypeface(null, Typeface.BOLD);
                         event.setTreated(false);
@@ -547,10 +555,10 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         holder.mTechCallFl.setVisibility(View.VISIBLE);
     }
 
-    private void validateDialog(final float eventID) {
+    private void validateDialog(Context context, final float eventID) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_notes, null);
         builder.setView(dialogView);
 

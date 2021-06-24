@@ -4,9 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,8 +22,6 @@ import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Created by alex on 07/01/2019.
@@ -30,15 +30,13 @@ import java.util.Comparator;
 public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final ArrayList<TechCallInfo> mTechList;
-    private final Context mContext;
     private final TechCallItemListener mListener;
     private final boolean isManageServiceCall;
-//    private final String mMachineName;
+    //    private final String mMachineName;
     private final MachineLineResponse mMachineLine;
     private final boolean isViewOnly;
 
-    public TechCallAdapter(Context context, ArrayList<TechCallInfo> mTechList, boolean isManageServiceCall, boolean isViewOnly, MachineLineResponse machineLine, TechCallItemListener listener) {
-        mContext = context;
+    public TechCallAdapter(ArrayList<TechCallInfo> mTechList, boolean isManageServiceCall, boolean isViewOnly, MachineLineResponse machineLine, TechCallItemListener listener) {
         this.mTechList = mTechList;
 //        mMachineName = machineName;
         this.isManageServiceCall = isManageServiceCall;
@@ -58,17 +56,18 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final TechViewHolder techViewHolder = (TechViewHolder) holder;
+        Context context = holder.itemView.getContext();
 
         boolean isNewestCall = !isNewerCallExists(mTechList.get(position));
-        if ((isManageServiceCall || !isViewOnly) && isNewestCall){
+        if ((isManageServiceCall || !isViewOnly) && isNewestCall) {
             techViewHolder.mManageCallFl.setVisibility(View.VISIBLE);
-            techViewHolder.mManageCallIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.wrench));
-            techViewHolder.mManageCallTv.setText(mContext.getResources().getString(R.string.start_service));
-        }else {
+            techViewHolder.mManageCallIv.setImageDrawable(context.getResources().getDrawable(R.drawable.wrench));
+            techViewHolder.mManageCallTv.setText(context.getResources().getString(R.string.start_service));
+        } else {
             techViewHolder.mManageCallFl.setVisibility(View.INVISIBLE);
         }
 
-        if (!isViewOnly && isNewestCall){
+        if (!isViewOnly && isNewestCall) {
             techViewHolder.mRemoveIv.setVisibility(View.VISIBLE);
             techViewHolder.mRemoveIv.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -76,7 +75,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     mListener.onRemoveCallPressed(mTechList.get(position));
                 }
             });
-        }else {
+        } else {
             techViewHolder.mRemoveIv.setVisibility(View.INVISIBLE);
         }
 
@@ -92,36 +91,36 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         techViewHolder.mTimeTv.setText(TimeUtils.getDate(mTechList.get(position).getmCallTime(), TimeUtils.COMMON_DATE_FORMAT));
 
         int icon = R.drawable.technician_blue_svg;
-        String txt = mContext.getResources().getString(R.string.waiting_for_replay);
-        switch (mTechList.get(position).getmResponseType()){
+        String txt = context.getResources().getString(R.string.waiting_for_replay);
+        switch (mTechList.get(position).getmResponseType()) {
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_UNSET:
                 icon = R.drawable.call_recieved;
-                txt = mContext.getResources().getString(R.string.waiting_for_replay);
+                txt = context.getResources().getString(R.string.waiting_for_replay);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
                 icon = R.drawable.call_sent_blue;
-                txt = mContext.getResources().getString(R.string.call_approved);
+                txt = context.getResources().getString(R.string.call_approved);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
                 icon = R.drawable.call_declined;
-                txt = mContext.getResources().getString(R.string.call_declined);
+                txt = context.getResources().getString(R.string.call_declined);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
                 icon = R.drawable.cancel_blue;
-                txt = mContext.getResources().getString(R.string.service_call_was_canceled);
+                txt = context.getResources().getString(R.string.service_call_was_canceled);
                 techViewHolder.mManageCallFl.setVisibility(View.INVISIBLE);
                 techViewHolder.mRemoveIv.setVisibility(View.INVISIBLE);
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
                 icon = R.drawable.at_work_blue;
-                txt = mContext.getResources().getString(R.string.at_work);
-                techViewHolder.mManageCallIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.check_all));
-                techViewHolder.mManageCallTv.setText(mContext.getResources().getString(R.string.finish_service));
+                txt = context.getResources().getString(R.string.at_work);
+                techViewHolder.mManageCallIv.setImageDrawable(context.getResources().getDrawable(R.drawable.check_all));
+                techViewHolder.mManageCallTv.setText(context.getResources().getString(R.string.finish_service));
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
                 icon = R.drawable.service_done;
-                txt = mContext.getResources().getString(R.string.service_completed);
+                txt = context.getResources().getString(R.string.service_completed);
                 techViewHolder.mManageCallFl.setVisibility(View.INVISIBLE);
                 techViewHolder.mRemoveIv.setVisibility(View.INVISIBLE);
                 break;
@@ -130,7 +129,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         techViewHolder.mSubTextTv.setText(txt);
         if (mMachineLine != null && mMachineLine.getLineID() > 0) {
             for (MachinesLineDetail machine : mMachineLine.getMachinesData()) {
-                if (machine.getMachineID() == mTechList.get(position).getmMachineId()){
+                if (machine.getMachineID() == mTechList.get(position).getmMachineId()) {
                     techViewHolder.mMachineNameTv.setText(machine.getMachineName());
                     break;
                 }
@@ -141,7 +140,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private boolean isNewerCallExists(TechCallInfo techCallInfo) {
         for (TechCallInfo call : mTechList) {
             if (call.getmNotificationId() == techCallInfo.getmNotificationId() && call.getmResponseType() > techCallInfo.getmResponseType())
-               return true;
+                return true;
         }
         return false;
     }
@@ -152,6 +151,9 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public class TechViewHolder extends RecyclerView.ViewHolder {
+        private final RelativeLayout mTechnicianRL;
+        private final LinearLayout mtopLl;
+        private TextView mEventInfoTv;
         private LinearLayout mMoreInfoLil;
         private TextView mMachineNameTv;
         private TextView mSubTextTv;
@@ -180,22 +182,76 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mStatusIv = itemView.findViewById(R.id.tech_call_item_status_iv);
             mSubTextTv = itemView.findViewById(R.id.tech_call_item_subtext_tv);
             mMachineNameTv = itemView.findViewById(R.id.tech_call_item_machine_name_tv);
-            if (mMachineLine != null && mMachineLine.getLineID() > 0){
+            mEventInfoTv = itemView.findViewById(R.id.tech_call_event_tv);
+            mTechnicianRL = itemView.findViewById(R.id.tech_call_item_text_rl);
+            mtopLl = itemView.findViewById(R.id.TCR_top_ll);
+            if (mMachineLine != null && mMachineLine.getLineID() > 0) {
                 mMachineNameTv.setVisibility(View.VISIBLE);
             }
+
+            mTechnicianRL.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    mTechnicianRL.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    int margin = 0;
+                    if (mTechnicianRL.getContext().getResources().getConfiguration().getLayoutDirection()
+                            == View.LAYOUT_DIRECTION_RTL) {
+                        margin = (int) (mTechnicianRL.getX() - mTechnicianRL.getWidth());
+                    } else {
+                        margin = (int) mTechnicianRL.getX();
+                    }
+                    LinearLayout.LayoutParams eventInfoParams = (LinearLayout.LayoutParams) mEventInfoTv.getLayoutParams();
+                    eventInfoParams.setMarginStart(margin);
+                    mEventInfoTv.setLayoutParams(eventInfoParams);
+                    LinearLayout.LayoutParams moreInfoParams = (LinearLayout.LayoutParams) mMoreInfoLil.getLayoutParams();
+                    moreInfoParams.setMarginStart(margin);
+                    mMoreInfoLil.setLayoutParams(moreInfoParams);
+                }
+            });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mMoreInfoLil.setVisibility(isMoreInfoOpen ? View.GONE : View.VISIBLE);
-                    isMoreInfoOpen = !isMoreInfoOpen;
-                    mArrowIv.setRotation(isMoreInfoOpen ? 180 : 0);
+                    String description = mTechList.get(getAdapterPosition()).getmAdditionalText();
+
+                    String eventText = String.valueOf(mTechList.get(getAdapterPosition()).getEventId());
+                    String eventName = mTechList.get(getAdapterPosition()).getmEventName();
+                    if (eventName != null && !eventName.isEmpty()) {
+                        eventText += String.format(" - %s", mTechList.get(getAdapterPosition()).getmEventName());
+                    }
+
+                    boolean showDescription = description != null && !description.isEmpty();
+                    boolean showEventInfo = mTechList.get(getAdapterPosition()).getEventId() != 0;
+
+                    if (!showDescription && !showEventInfo) {
+                        mMoreInfoLil.setVisibility(View.GONE);
+                        mEventInfoTv.setVisibility(View.GONE);
+                    } else {
+                        if (isMoreInfoOpen) {
+                            mMoreInfoLil.setVisibility(View.GONE);
+                            mEventInfoTv.setVisibility(View.GONE);
+                        } else {
+                            if (showDescription) {
+                                mMoreInfoLil.setVisibility(View.VISIBLE);
+                            }else {
+                                mMoreInfoLil.setVisibility(View.GONE);
+                            }
+                            if (showEventInfo) {
+                                mEventInfoTv.setVisibility(View.VISIBLE);
+                                mEventInfoTv.setText(eventText);
+                            }else {
+                                mEventInfoTv.setVisibility(View.GONE);
+                            }
+                        }
+                        isMoreInfoOpen = !isMoreInfoOpen;
+                        mArrowIv.setRotation(isMoreInfoOpen ? 180 : 0);
+                    }
                 }
             });
         }
     }
 
-    public interface TechCallItemListener{
+    public interface TechCallItemListener {
         void onRemoveCallPressed(TechCallInfo techCallInfo);
 
         void onManageCall(TechCallInfo techCallInfo);

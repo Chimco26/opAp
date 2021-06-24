@@ -2,6 +2,8 @@ package com.operatorsapp.adapters;
 
 import android.app.Activity;
 import androidx.annotation.NonNull;
+
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +17,14 @@ import java.util.List;
 
 public class JoshProductNameSpinnerAdapter extends ArrayAdapter<ActiveJob>
 {
-    private Activity mContext;
     private List<ActiveJob> mSpinnerItems;
     private TextView mRowName;
     private View mView;
 
-    public JoshProductNameSpinnerAdapter(Activity context, int resource, List<ActiveJob> activeJobs)
+    public JoshProductNameSpinnerAdapter(Context context, int resource, List<ActiveJob> activeJobs)
     {
         super(context, resource, activeJobs);
         mSpinnerItems = activeJobs;
-        mContext = context;
     }
 
     @NonNull
@@ -34,7 +34,7 @@ public class JoshProductNameSpinnerAdapter extends ArrayAdapter<ActiveJob>
         View row = convertView;
         if (row == null)
         {
-            LayoutInflater inflater = mContext.getLayoutInflater();
+            LayoutInflater inflater = LayoutInflater.from(getContext());
             row = inflater.inflate(R.layout.item_product_spinner, parent, false);
             mView = row;
             mRowName = row.findViewById(R.id.IPSL_name);
@@ -52,7 +52,7 @@ public class JoshProductNameSpinnerAdapter extends ArrayAdapter<ActiveJob>
         View row = convertView;
         if (row == null)
         {
-            LayoutInflater inflater = mContext.getLayoutInflater();
+            LayoutInflater inflater = LayoutInflater.from(getContext());
             row = inflater.inflate(R.layout.item_product_spinner_list, parent, false);
         }
         TextView name = row.findViewById(R.id.IPSL_name);

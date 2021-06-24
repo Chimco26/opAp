@@ -19,6 +19,7 @@ import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.dialogs.Alert2BtnDialog;
+import com.operatorsapp.dialogs.InputDialog;
 import com.operatorsapp.fragments.ReportStopReasonFragment;
 import com.operatorsapp.fragments.SelectStopReasonFragment;
 import com.operatorsapp.fragments.StopEventLogFragment;
@@ -67,6 +68,7 @@ public class StopEventLogActivity extends AppCompatActivity
     private boolean isReportingOnSetupEnd;
     private boolean isReportingOnSetupEvents;
     private boolean isSetupMode;
+    private String mEventNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +100,7 @@ public class StopEventLogActivity extends AppCompatActivity
     }
 
     @Override
-    public void onReportEvents(int machineId, ArrayList<Event> subEvents, ArrayList<Float> eventsIds, boolean b, String rootMachineName) {
+    public void onReportEvents(int machineId, ArrayList<Event> subEvents, ArrayList<Float> eventsIds, boolean b, String rootMachineName, String eventDescriptionNote) {
 
         ReportStopReasonFragment fragment = ReportStopReasonFragment.newInstance(true, null, 0, isReportingOnSetupEvents, isReportingOnSetupEnd, isSetupMode, machineId, rootMachineName);
         getSupportFragmentManager().beginTransaction().add(R.id.ASE_container, fragment).addToBackStack(ReportStopReasonFragment.TAG).commit();
@@ -107,6 +109,7 @@ public class StopEventLogActivity extends AppCompatActivity
         fragment.setFromViewLog(true);
         fragment.setFromViewLogRoot(b);
         mSubEvents = subEvents;
+        mEventNote = eventDescriptionNote;
     }
 
     @Override
@@ -157,7 +160,7 @@ public class StopEventLogActivity extends AppCompatActivity
         }
 
         if (mSubEvents != null && mSubEvents.size() > 0) {
-            Alert2BtnDialog alert2BtnDialog = new Alert2BtnDialog(this, new Alert2BtnDialog.Alert2BtnDialogListener() {
+            Alert2BtnDialog alert2BtnDialog = new Alert2BtnDialog(new Alert2BtnDialog.Alert2BtnDialogListener() {
                 @Override
                 public void onClickPositiveBtn() {
 //                    sendReport(position, mSelectedSubreason);
@@ -176,7 +179,7 @@ public class StopEventLogActivity extends AppCompatActivity
                 }
             }, title, getString(R.string.yes), getString(R.string.only_to_this_event));
 
-            alert2BtnDialog.showAlert2BtnDialog(false).show();
+            alert2BtnDialog.showAlert2BtnDialog(this, false).show();
         }else {
             sendReport(position, mSelectedSubreason, false);
         }
@@ -190,6 +193,15 @@ public class StopEventLogActivity extends AppCompatActivity
     @Override
     public void onShowCroutonRequest(String croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mCroutonCreator != null) {
+            mCroutonCreator.cancel();
+            mCroutonCreator = null;
+        }
     }
 
     @Override
@@ -260,8 +272,31 @@ public class StopEventLogActivity extends AppCompatActivity
 
     //SEND REPORT
 
-    private void sendReport(int position, StopReasonsGroup subReasons, boolean byRootEvent) {
+    private void sendReport(final int position, final StopReasonsGroup subReasons, final boolean byRootEvent) {
 
+        if (PersistenceManager.getInstance().isAllowTextOnReportStop()) {
+            String value = (mSelectedEvents.size() == 1 && mEventNote != null) ? mEventNote : "";
+            InputDialog.getInputDialog(this, getString(R.string.add_comment), value,
+                    new InputDialog.InputDialogListener() {
+                        @Override
+                        public void onSubmit(String text) {
+                            performReport(position, subReasons, byRootEvent, text);
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            performReport(position, subReasons, byRootEvent, null);
+
+                        }
+                    }).show();
+        }else {
+
+            performReport(position, subReasons, byRootEvent, null);
+        }
+
+    }
+
+    private void performReport(int position, StopReasonsGroup subReasons, boolean byRootEvent, String text) {
         this.position = position;
         this.subReason = subReasons;
 
@@ -274,19 +309,6 @@ public class StopEventLogActivity extends AppCompatActivity
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
 
         mReportCore.registerListener(mReportCallbackListener);
-
-//        long[] eventsId = new long[mSelectedEvents.size()];
-//
-//        for (int i = 0; i < mSelectedEvents.size(); i++) {
-//
-//            eventsId[i] = mSelectedEvents.get(i).intValue();
-//
-////            SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId(),
-////                    mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName(),
-////                    mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getLName(),
-////                    mSelectedSubreason.getEName(), mSelectedSubreason.getLName());
-//
-//        }
 
         if (PersistenceManager.getInstance().getVersion() < MINIMUM_VERSION_TO_NEW_API) {
 
@@ -305,11 +327,9 @@ public class StopEventLogActivity extends AppCompatActivity
                 }
             }
             mReportCore.sendMultipleStopReport(getReportForMachine().getStopReasons().get(position).getId(),
-                    subReasons.getId(), eventsId, PersistenceManager.getInstance().getJoshId(), byRootEvent);
+                    subReasons.getId(), eventsId, PersistenceManager.getInstance().getJoshId(), byRootEvent, text);
 
         }
-
-
     }
 
 

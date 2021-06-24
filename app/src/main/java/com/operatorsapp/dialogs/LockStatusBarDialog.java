@@ -18,7 +18,6 @@ import com.operatorsapp.managers.PersistenceManager;
 
 public class LockStatusBarDialog extends Dialog {
 
-    private final Context mContext;
     private final LockStatusBarListener mListener;
     private ImageView mShowHidePassIv;
     private EditText mPassEt;
@@ -28,7 +27,6 @@ public class LockStatusBarDialog extends Dialog {
 
     public LockStatusBarDialog(Context context, LockStatusBarListener listener) {
         super(context);
-        mContext = context;
         mListener = listener;
     }
 
@@ -55,7 +53,7 @@ public class LockStatusBarDialog extends Dialog {
             @Override
             public void onClick(View view) {
 
-                checkPassword();
+                checkPassword(view.getContext());
             }
         });
 
@@ -78,13 +76,13 @@ public class LockStatusBarDialog extends Dialog {
 
     }
 
-    private void checkPassword(){
+    private void checkPassword(Context context){
 
         if (mPassEt.getText().toString().toLowerCase().equals(PersistenceManager.getInstance().getPassword().toLowerCase())){
             mListener.unlockSuccess();
             this.dismiss();
         }else {
-            Toast.makeText(mContext, R.string.password_incorrect, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.password_incorrect, Toast.LENGTH_SHORT).show();
         }
     }
 
