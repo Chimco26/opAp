@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -40,12 +41,14 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         QCTestOrderFragment.QCTestOrderFragmentListener,
         QCDetailsFragment.QCDetailsFragmentListener,
         JobOrMaterialFragment.JobOrMaterialFragmentListener,
-        TestReportFragment.TestReportFragmentListener,
-        Thread.UncaughtExceptionHandler{
+        TestReportFragment.TestReportFragmentListener
+        //        ,Thread.UncaughtExceptionHandler
+{
 
     public static final String QC_IS_FROM_SELECT_MACHINE_SCREEN = "QC_IS_FROM_SELECT_MACHINE_SCREEN";
     public static final String QC_TEST_ID = "QC_TEST_ID";
     public static final String QC_EDIT_MODE = "QC_EDIT_MODE";
+    private static final String TAG = QCActivity.class.getSimpleName();
 
     private CroutonCreator mCroutonCreator;
     private QCDetailsFragment mQcDetailsFragment;
@@ -280,19 +283,20 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         showQCTestOrderFragment(pendingJob.getID());
     }
 
-    @Override
-    public void uncaughtException(Thread t, Throwable e) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("crash", true);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                | Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(OperatorApplication.getAppContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        AlarmManager mgr = (AlarmManager) OperatorApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
-        finish();
-        System.exit(2);
-    }
+//    @Override
+//    public void uncaughtException(Thread t, Throwable e) {
+//        Log.e(TAG, "uncaughtException: ");
+//        Intent intent = new Intent(this, MainActivity.class);
+//        intent.putExtra("crash", true);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+//                | Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                | Intent.FLAG_ACTIVITY_NEW_TASK);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(OperatorApplication.getAppContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+//        AlarmManager mgr = (AlarmManager) OperatorApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
+//        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+//        finish();
+//        System.exit(2);
+//    }
 
     private void openTestReportFragment() {
         TestReportFragment testListFragment = TestReportFragment.newInstance();

@@ -35,5 +35,9 @@ public class UserGroupPermission {
         return isQualityTest;
     }
 
-    public Integer getDisplayType() { return displayType; }
+    public Integer getDisplayType() {
+        if (displayType == null){
+            return 0;
+        }
+        return displayType; }
 }
