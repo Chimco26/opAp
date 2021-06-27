@@ -38,6 +38,7 @@ import com.example.common.department.DepartmentMachine;
 import com.example.common.department.DepartmentMachineValue;
 import com.example.common.department.DepartmentsMachinesResponse;
 import com.example.common.department.ProductionStatus;
+import com.example.common.permissions.UserGroupPermission;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.AutoCompleteAdapter;
 import com.operatorsapp.adapters.DepartmentAdapter;
@@ -227,7 +228,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         selectMachineTitle.setVisibility(View.GONE);
 
         if (mDepartmentMachine.getDepartmentMachine() != null && mDepartmentMachine.getDepartmentMachine().size() > 0) {
-            mDepartmentNewDisplayAdapter = new DepartmentNewDisplayAdapter(mDepartmentMachine.getDepartmentMachine(), this);
+
+            mDepartmentNewDisplayAdapter = new DepartmentNewDisplayAdapter(mDepartmentMachine.getDepartmentMachine(), getMachineParameterName(mDepartmentMachine.getUserGroupPermission()),this);
 
             departementRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
@@ -242,6 +244,13 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
             updateStatusEvery5Min();
         }
+    }
+
+    private String getMachineParameterName(UserGroupPermission userGroupPermission) {
+        if (userGroupPermission != null){
+            return userGroupPermission.getMainParameterName();
+        }
+        return null;
     }
 
     private void updateStatusEvery5Min() {

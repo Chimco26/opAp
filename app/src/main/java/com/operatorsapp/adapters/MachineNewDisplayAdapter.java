@@ -25,8 +25,9 @@ public class MachineNewDisplayAdapter extends RecyclerView.Adapter<MachineNewDis
     private final List<DepartmentMachineValue> mMachines;
     private final List<DepartmentMachineValue> mMachinesFil;
     private final MachineAdapter.MachineAdapterListener mListener;
+    private final String mMachineParameterName;
 
-    public MachineNewDisplayAdapter(List<DepartmentMachineValue> departmentResponse, ArrayList<String> selectedMachineList, boolean isMultiSelect, MachineAdapter.MachineAdapterListener machineAdapterListener) {
+    public MachineNewDisplayAdapter(List<DepartmentMachineValue> departmentResponse, ArrayList<String> selectedMachineList, boolean isMultiSelect, String machineParameterName, MachineAdapter.MachineAdapterListener machineAdapterListener) {
 
         mMachines = departmentResponse;
         mMachinesFil = new ArrayList<>();
@@ -34,6 +35,7 @@ public class MachineNewDisplayAdapter extends RecyclerView.Adapter<MachineNewDis
         mListener = machineAdapterListener;
         mSelectedMachineList = selectedMachineList;
         this.isMultiSelect = isMultiSelect;
+        mMachineParameterName = machineParameterName;
     }
 
     @NonNull
@@ -51,6 +53,7 @@ public class MachineNewDisplayAdapter extends RecyclerView.Adapter<MachineNewDis
         viewHolder.itemView.setBackgroundColor(Color.parseColor(mMachinesFil.get(position).getMachineStatusColor()));
 
         viewHolder.mTitle.setText(machine.getMachineName());
+        viewHolder.mParameter.setText(getMachineParameterName(mMachinesFil.get(position) ,mMachineParameterName));
         viewHolder.mTime.setText(getHourAndMinFormat(mMachinesFil.get(position).getStatusTime(), viewHolder.itemView.getContext()));
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +80,20 @@ public class MachineNewDisplayAdapter extends RecyclerView.Adapter<MachineNewDis
         } else {
             viewHolder.mTitle.setTextColor(Color.WHITE);
         }
+    }
+
+    private String getMachineParameterName(DepartmentMachineValue departmentMachineValue, String mMachineParameterName) {
+        switch (mMachineParameterName) {
+            case "Product":
+               return departmentMachineValue.getProductName();
+            case "ProductCatalogID":
+               return departmentMachineValue.getProductCatalog();
+            case "ERPJobID":
+                return departmentMachineValue.getErpJobID();
+            case "Customer":
+                return departmentMachineValue.getClientName();
+        }
+        return "";
     }
 
     @Override
