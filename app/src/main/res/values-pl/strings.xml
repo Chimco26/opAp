@@ -10,7 +10,7 @@
         <item>Aktywuj zadanie</item>
         <item>Dodaj odrzucenia</item>
         <item>Zmień jednostki w cyklu</item>
-        <item>Fix Units Produced</item>
+        <item>Wyprodukowano: &placeholder1;</item>
         <item>Zgłoś produkcję</item>
         <item>Test zamówienia</item>
     </array>
@@ -463,7 +463,7 @@
     <string name="max_value_must_be_greater_than_min">Maks. wartość musi być większa niż min. wartość</string>
     <string name="stop_logs">Zatrzymaj dziennik zdarzeń</string>
     <string name="start_service">uruchom usługę</string>
-    <string name="finish_service">zatrzymaj usługę</string>
+    <string name="finish_service">Zgłoś i zakończ</string>
     <string name="source">Źródło</string>
     <string name="deselect_all">Odznacz wszystko</string>
     <string name="root_cause">Przyczyna główna</string>

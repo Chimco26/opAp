@@ -1,6 +1,5 @@
 package com.operatorsapp.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.BaseSplits;
+import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSplitName;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSplits;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.ViewHolder> {
@@ -27,12 +28,14 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
     private final Channel100AdapterListener mListener;
     private final ArrayList<ChannelSplits> mChannelSplits;
     private final int mType;
+    private final List<ChannelSplitName> channelSplitNames;
     private View mMainView;
 
-    public No0ChannelAdapter(Channel100AdapterListener listener, ArrayList<ChannelSplits> channelSplits, int type) {
+    public No0ChannelAdapter(Channel100AdapterListener listener, ArrayList<ChannelSplits> channelSplits, int type, List<ChannelSplitName> channelSplitName) {
         mListener = listener;
         mChannelSplits = channelSplits;
         mType = type;
+        channelSplitNames = channelSplitName;
     }
 
 
@@ -82,7 +85,10 @@ public class No0ChannelAdapter extends RecyclerView.Adapter<No0ChannelAdapter.Vi
                 viewHolder.mImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mListener.onImageProductClick(mChannelSplits.get(viewHolder.getAdapterPosition()).getBaseSplits().get(0).getMaterialImageLink(), mChannelSplits.get(viewHolder.getAdapterPosition()).getlName() + "");
+                        String splitLName = mChannelSplits.get(viewHolder.getAdapterPosition()).getSplitLName(mChannelSplits.get(viewHolder.getAdapterPosition()).getSplitNumber(), channelSplitNames);
+                        splitLName = splitLName != null ? splitLName : mChannelSplits.get(viewHolder.getAdapterPosition()).geteName();
+                        String name = OperatorApplication.isEnglishLang() ? mChannelSplits.get(viewHolder.getAdapterPosition()).geteName() : splitLName;
+                        mListener.onImageProductClick(mChannelSplits.get(viewHolder.getAdapterPosition()).getBaseSplits().get(0).getMaterialImageLink(), name);
 
                     }
                 });

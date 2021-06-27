@@ -15,16 +15,16 @@ public class TimeToEndCounter
     private static final int COUNT_DOWN_INTERVAL = 1000;
     private static final String ZERO_TIME = "00:00:00";
     public static final int FINISHED = 0;
-    private WeakReference<OnTimeToEndChangedListener> mOnTimeToEndChangedListener;
+    private OnTimeToEndChangedListener mOnTimeToEndChangedListener;
     private CountDownTimer mCountDownTimer;
 
     public TimeToEndCounter(OnTimeToEndChangedListener onTimeToEndChangedListener) {
-        mOnTimeToEndChangedListener = new WeakReference<>(onTimeToEndChangedListener);
+        mOnTimeToEndChangedListener = onTimeToEndChangedListener;
     }
 
-    public OnTimeToEndChangedListener getOnTimeToEndChangedListener() {
-        return mOnTimeToEndChangedListener.get();
-    }
+//    public OnTimeToEndChangedListener getOnTimeToEndChangedListener() {
+//        return mOnTimeToEndChangedListener.get();
+//    }
 
     public void calculateTimeToEnd(final int timeInMilliseconds) {
         if (mCountDownTimer != null) {
@@ -33,14 +33,14 @@ public class TimeToEndCounter
 
         mCountDownTimer = new CountDownTimer(timeInMilliseconds, COUNT_DOWN_INTERVAL) {
             public void onTick(long millisUntilFinished) {
-                if (mOnTimeToEndChangedListener.get() != null) {
-                    mOnTimeToEndChangedListener.get().onTimeToEndChanged(millisUntilFinished);
-                }
+//                if (mOnTimeToEndChangedListener.get() != null) {
+                    mOnTimeToEndChangedListener.onTimeToEndChanged(millisUntilFinished);
+//                }
             }
 
             public void onFinish() {
-                if (mOnTimeToEndChangedListener.get() != null) {
-                    mOnTimeToEndChangedListener.get().onTimeToEndChanged(FINISHED);
+                if (mOnTimeToEndChangedListener != null) {
+                    mOnTimeToEndChangedListener.onTimeToEndChanged(FINISHED);
                 }
                 OppAppLogger.i(LOG_TAG, "onFinish()");
             }
@@ -63,8 +63,8 @@ public class TimeToEndCounter
 
             @Override
             public void onFinish() {
-                if (mOnTimeToEndChangedListener.get() != null) {
-                    mOnTimeToEndChangedListener.get().onTimeToEndChanged(FINISHED);
+                if (mOnTimeToEndChangedListener != null) {
+                    mOnTimeToEndChangedListener.onTimeToEndChanged(FINISHED);
                 }
                 OppAppLogger.i(LOG_TAG, "onFinish()");
             }
@@ -73,6 +73,8 @@ public class TimeToEndCounter
     }
 
     public void stopTimer() {
-        mCountDownTimer.cancel();
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+        }
     }
 }

@@ -38,6 +38,7 @@ import com.example.common.department.DepartmentMachine;
 import com.example.common.department.DepartmentMachineValue;
 import com.example.common.department.DepartmentsMachinesResponse;
 import com.example.common.department.ProductionStatus;
+import com.example.common.permissions.UserGroupPermission;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.AutoCompleteAdapter;
 import com.operatorsapp.adapters.DepartmentAdapter;
@@ -227,7 +228,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         selectMachineTitle.setVisibility(View.GONE);
 
         if (mDepartmentMachine.getDepartmentMachine() != null && mDepartmentMachine.getDepartmentMachine().size() > 0) {
-            mDepartmentNewDisplayAdapter = new DepartmentNewDisplayAdapter(mDepartmentMachine.getDepartmentMachine(), this);
+
+            mDepartmentNewDisplayAdapter = new DepartmentNewDisplayAdapter(mDepartmentMachine.getDepartmentMachine(), getMachineParameterName(mDepartmentMachine.getUserGroupPermission()),this);
 
             departementRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
@@ -244,12 +246,21 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         }
     }
 
+    private String getMachineParameterName(UserGroupPermission userGroupPermission) {
+        if (userGroupPermission != null){
+            return userGroupPermission.getMainParameterName();
+        }
+        return null;
+    }
+
     private void updateStatusEvery5Min() {
         mHandlerUpdateMachinesStatus = new Handler();
         mHandlerUpdateMachinesStatus.postDelayed(new Runnable() {
             public void run() {
-                mHandlerUpdateMachinesStatus.postDelayed(this, INTERVAL);
-                updateDepartmentMachinesStatus();
+                if(mHandlerUpdateMachinesStatus != null) {
+                    mHandlerUpdateMachinesStatus.postDelayed(this, INTERVAL);
+                    updateDepartmentMachinesStatus();
+                }
             }
         }, INTERVAL);
     }
@@ -279,7 +290,10 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mHandlerUpdateMachinesStatus = null;
+        if (mHandlerUpdateMachinesStatus != null) {
+            mHandlerUpdateMachinesStatus.removeCallbacksAndMessages (null);
+            mHandlerUpdateMachinesStatus = null;
+        }
     }
 
     protected void setActionBar() {

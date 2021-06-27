@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSplitName;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSplits;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.No0ChannelAdapter;
@@ -59,7 +60,7 @@ public class ViewTagsHelper {
 
     }
 
-    public static void addRv(Context context, List<ChannelSplits> channelSplits, LinearLayout mainView, No0ChannelAdapter.Channel100AdapterListener listener) {
+    public static void addRv(Context context, List<ChannelSplits> channelSplits, LinearLayout mainView, No0ChannelAdapter.Channel100AdapterListener listener, List<ChannelSplitName> channelSplitName) {
 
         float mDensity = context.getResources().getDisplayMetrics().density;
 
@@ -80,7 +81,7 @@ public class ViewTagsHelper {
 
         recyclerView.setLayoutManager(layoutManager);
 
-        recyclerView.setAdapter(new No0ChannelAdapter(listener, (ArrayList<ChannelSplits>) channelSplits, No0ChannelAdapter.TYPE_CHANNEL_1_99));
+        recyclerView.setAdapter(new No0ChannelAdapter(listener, (ArrayList<ChannelSplits>) channelSplits, No0ChannelAdapter.TYPE_CHANNEL_1_99, channelSplitName));
 
     }
 

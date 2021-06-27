@@ -28,7 +28,9 @@ import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.responses.JobListForMaterialResponse;
 import com.operatorsapp.server.responses.JobListForTestResponse;
+import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.KeyboardUtils;
+import com.operatorsapp.utils.MyExceptionHandler;
 
 import java.util.List;
 
@@ -42,7 +44,6 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
         QCDetailsFragment.QCDetailsFragmentListener,
         JobOrMaterialFragment.JobOrMaterialFragmentListener,
         TestReportFragment.TestReportFragmentListener
-        //        ,Thread.UncaughtExceptionHandler
 {
 
     public static final String QC_IS_FROM_SELECT_MACHINE_SCREEN = "QC_IS_FROM_SELECT_MACHINE_SCREEN";
@@ -61,6 +62,7 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qc);
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
         this.configureToolbar();
         mCroutonCreator = new CroutonCreator();
         mProgressBar = findViewById(R.id.AQA_progress);
@@ -118,6 +120,12 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
                 mProgressBar.setVisibility(View.GONE);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ChangeLang.initLanguage(this);
     }
 
     private void chooseMaterial() {
@@ -282,21 +290,6 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
 //        getSupportFragmentManager().popBackStack();
         showQCTestOrderFragment(pendingJob.getID());
     }
-
-//    @Override
-//    public void uncaughtException(Thread t, Throwable e) {
-//        Log.e(TAG, "uncaughtException: ");
-//        Intent intent = new Intent(this, MainActivity.class);
-//        intent.putExtra("crash", true);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-//                | Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                | Intent.FLAG_ACTIVITY_NEW_TASK);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(OperatorApplication.getAppContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
-//        AlarmManager mgr = (AlarmManager) OperatorApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
-//        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
-//        finish();
-//        System.exit(2);
-//    }
 
     private void openTestReportFragment() {
         TestReportFragment testListFragment = TestReportFragment.newInstance();
