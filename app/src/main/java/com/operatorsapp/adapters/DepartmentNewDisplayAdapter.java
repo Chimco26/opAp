@@ -29,13 +29,16 @@ public class DepartmentNewDisplayAdapter extends RecyclerView.Adapter<Department
     private final DepartmentAdapter.DepartmentAdapterListener mListener;
     private boolean isMultiSelect = false;
     private final ArrayList<String> selectedMachineList = new ArrayList<>();
+    private final String mMachineParameterName;
 
-    public DepartmentNewDisplayAdapter(List<DepartmentMachine> departmentResponse, DepartmentAdapter.DepartmentAdapterListener departmentAdapterListener) {
+    public DepartmentNewDisplayAdapter(List<DepartmentMachine> departmentResponse, String machineParameterName ,DepartmentAdapter.DepartmentAdapterListener departmentAdapterListener) {
 
         mDepartments = departmentResponse;
         mDepartmentFil = new ArrayList<>();
         mDepartmentFil.addAll(departmentResponse);
         mListener = departmentAdapterListener;
+        mMachineParameterName = machineParameterName;
+
     }
 
     @NonNull
@@ -61,7 +64,7 @@ public class DepartmentNewDisplayAdapter extends RecyclerView.Adapter<Department
 
     private void initRv(int position, ViewHolder viewHolder) {
 
-        MachineNewDisplayAdapter machineAdapter = new MachineNewDisplayAdapter(mDepartmentFil.get(position).getDepartmentMachineValue(), selectedMachineList, isMultiSelect, this);
+        MachineNewDisplayAdapter machineAdapter = new MachineNewDisplayAdapter(mDepartmentFil.get(position).getDepartmentMachineValue(), selectedMachineList, isMultiSelect, mMachineParameterName,this);
 
         RecyclerView recyclerView = viewHolder.mRv;
 

@@ -17,6 +17,9 @@ public class UserGroupPermission {
     @SerializedName("DisplayType")
     private Integer displayType;
 
+    @SerializedName("MainParameterName")
+    private String mainParameterName;
+
     public UserGroupPermission() {
         this.isChangeProductionStatus = false;
         this.isOperatorLogin = false;
@@ -40,4 +43,7 @@ public class UserGroupPermission {
             return 0;
         }
         return displayType; }
+
+
+    public String getMainParameterName() { return mainParameterName; }
 }

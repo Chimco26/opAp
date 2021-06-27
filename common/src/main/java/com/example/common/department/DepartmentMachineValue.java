@@ -29,6 +29,18 @@ public class DepartmentMachineValue implements Cloneable {
     @SerializedName("MachineStatusColor")
     @Expose
     private String machineStatusColor;
+    @SerializedName("ProductName")
+    @Expose
+    private String productName;
+    @SerializedName("ProductCatalog")
+    @Expose
+    private String productCatalog;
+    @SerializedName("ErpJobID")
+    @Expose
+    private String erpJobID;
+    @SerializedName("ClientName")
+    @Expose
+    private String clientName;
 
 
     public Integer getLineId() {
@@ -76,4 +88,12 @@ public class DepartmentMachineValue implements Cloneable {
     public boolean isEndOfLine() { return isEndOfLine; }
 
     public String getMachineStatusColor() { return machineStatusColor; }
+
+    public String getProductName() { return productName; }
+
+    public String getProductCatalog() { return productCatalog; }
+
+    public String getErpJobID() { return erpJobID; }
+
+    public String getClientName() { return clientName; }
 }
