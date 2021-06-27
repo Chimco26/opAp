@@ -1,7 +1,5 @@
 package com.operatorsapp.server.pulling;
 
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.util.Log;
 
 import com.example.common.ErrorResponse;
@@ -30,8 +28,6 @@ import com.operators.shiftloginfra.ShiftLogCoreCallback;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
-import com.operatorsapp.application.OperatorApplication;
-import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.polling.EmeraldJobBase;
 import com.operatorsapp.server.NetworkManager;
@@ -43,15 +39,10 @@ import com.operatorsapp.server.pulling.interfaces.OnTimeToEndChangedListener;
 import com.operatorsapp.server.pulling.interfaces.ShiftForMachineUICallback;
 import com.operatorsapp.server.pulling.interfaces.ShiftLogUICallback;
 import com.operatorsapp.server.pulling.timecounter.TimeToEndCounter;
-import com.operatorsapp.utils.ChangeLang;
-import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,7 +57,7 @@ import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 
-public class AllDashboardDataCore{
+public class AllDashboardDataCore {
     private static final String LOG_TAG = AllDashboardDataCore.class.getSimpleName();
 
     private static final int START_DELAY = 0;
@@ -120,13 +111,27 @@ public class AllDashboardDataCore{
     public void registerListener(MachineStatusUICallback machineStatusUICallback, MachineDataUICallback machineDataUICallback,
                                  ShiftLogUICallback shiftLogUICallback, ActualBarExtraDetailsUICallback actualBarExtraDetailsUICallback, MachineJoshDataCallback machineJoshDataCallback,
                                  MachinePermissionCallback machinePermissionCallback, GetStopLogCallback stopEventsLineCallback) {
-        mMachineStatusUICallback = machineStatusUICallback;
-        mMachineDataUICallback = machineDataUICallback;
-        mShiftLogUICallback = shiftLogUICallback;
-        mActualBarExtraUICallback = actualBarExtraDetailsUICallback;
-        mMachineJoshDataCallback = machineJoshDataCallback;
-        mMachinePermissionsCallback = machinePermissionCallback;
-        mStopEventsLineCallback = stopEventsLineCallback;
+        if (machineStatusUICallback != null) {
+            mMachineStatusUICallback = machineStatusUICallback;
+        }
+        if (machineDataUICallback != null) {
+            mMachineDataUICallback = machineDataUICallback;
+        }
+        if (shiftLogUICallback != null) {
+            mShiftLogUICallback = shiftLogUICallback;
+        }
+        if (actualBarExtraDetailsUICallback != null) {
+            mActualBarExtraUICallback = actualBarExtraDetailsUICallback;
+        }
+        if (machineJoshDataCallback != null) {
+            mMachineJoshDataCallback = machineJoshDataCallback;
+        }
+        if (machinePermissionCallback != null) {
+            mMachinePermissionsCallback = machinePermissionCallback;
+        }
+        if (stopEventsLineCallback != null) {
+            mStopEventsLineCallback = stopEventsLineCallback;
+        }
     }
 
     public void unregisterListener() {
@@ -167,7 +172,7 @@ public class AllDashboardDataCore{
             @Override
             protected void executeJob(final JobBase.OnJobFinishedListener onJobFinishedListener) {
 
-                if(mListener != null && mListener.get() != null) {
+                if (mListener != null && mListener.get() != null) {
                     mListener.get().onExecuteJob(onJobFinishedListener);
                 }
                 //sendRequestForPolling(onJobFinishedListener, jobId);
@@ -214,13 +219,15 @@ public class AllDashboardDataCore{
         Runtime runtime = Runtime.getRuntime();
         try {
             Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
+            int exitValue = ipProcess.waitFor();
             isOnline = (exitValue == 0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        catch (IOException e)          { e.printStackTrace(); }
-        catch (InterruptedException e) { e.printStackTrace(); }
 
-        if (!isOnline && mListener != null && mListener.get() != null){
+        if (!isOnline && mListener != null && mListener.get() != null) {
             mListener.get().onNoInternetConnection();
         }
 
@@ -254,7 +261,7 @@ public class AllDashboardDataCore{
 
     private void getStopEventsLine() {
         PersistenceManager pm = PersistenceManager.getInstance();
-        if (mStopEventsLineCallback != null && pm.getMachineLineId() > 0){
+        if (mStopEventsLineCallback != null && pm.getMachineLineId() > 0) {
             SimpleRequests.getLineShiftLog(pm.getSiteUrl(), mStopEventsLineCallback, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
         }
     }
@@ -273,7 +280,7 @@ public class AllDashboardDataCore{
                                 startTimer(timeToEndInSeconds);
                             }
                         }
-                        OppAppLogger.w(LOG_TAG, ""+mMachineDataUICallback);
+                        OppAppLogger.w(LOG_TAG, "" + mMachineDataUICallback);
                         if (mMachineStatusUICallback != null) {
                             if (machineStatus.getAllMachinesData().size() > 0) {
                                 mMachineStatusUICallback.onStatusReceivedSuccessfully(machineStatus);
@@ -346,7 +353,7 @@ public class AllDashboardDataCore{
                     } else {
                         onFailure(call, new Throwable(""));
                     }
-                }else {
+                } else {
                     OppAppLogger.w(LOG_TAG, "getPermissionForMachine() mMachinePermissionsCallback is null");
                 }
             }
@@ -516,13 +523,15 @@ public class AllDashboardDataCore{
                     }
 
                 }, mShiftLogPersistenceManagerInterface.getTotalRetries(), mShiftLogPersistenceManagerInterface.getRequestTimeout()
-                , new MachineJoshDataRequest(mShiftLogPersistenceManagerInterface.getMachineId(),startingFrom,mShiftLogPersistenceManagerInterface.getSessionId()));
+                , new MachineJoshDataRequest(mShiftLogPersistenceManagerInterface.getMachineId(), startingFrom, mShiftLogPersistenceManagerInterface.getSessionId()));
 
     }
 
 
     private void startTimer(int timeInSeconds) {
-        if (mTimeToEndCounter == null || mTimeToEndCounter.getOnTimeToEndChangedListener() == null) {
+        if (mTimeToEndCounter == null ) {//|| mTimeToEndCounter.getOnTimeToEndChangedListener() == null
+            stopTimer();
+            mTimeToEndCounter = null;
             mTimeToEndCounter = new TimeToEndCounter(new OnTimeToEndChangedListener() {
                 @Override
                 public void onTimeToEndChanged(long millisUntilFinished) {
@@ -545,6 +554,34 @@ public class AllDashboardDataCore{
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(milliSeconds);
         return formatter.format(calendar.getTime());
+    }
+
+    public MachineStatusUICallback getmMachineStatusUICallback() {
+        return mMachineStatusUICallback;
+    }
+
+    public MachineDataUICallback getmMachineDataUICallback() {
+        return mMachineDataUICallback;
+    }
+
+    public ActualBarExtraDetailsUICallback getmActualBarExtraUICallback() {
+        return mActualBarExtraUICallback;
+    }
+
+    public MachineJoshDataCallback getmMachineJoshDataCallback() {
+        return mMachineJoshDataCallback;
+    }
+
+    public ShiftLogUICallback getmShiftLogUICallback() {
+        return mShiftLogUICallback;
+    }
+
+    public GetStopLogCallback getmStopEventsLineCallback() {
+        return mStopEventsLineCallback;
+    }
+
+    public MachinePermissionCallback getmMachinePermissionsCallback() {
+        return mMachinePermissionsCallback;
     }
 
     public interface AllDashboardDataCoreListener {

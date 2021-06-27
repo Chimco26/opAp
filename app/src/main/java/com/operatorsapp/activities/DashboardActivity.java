@@ -1118,8 +1118,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     public void dashboardDataStartPolling() {
 
-        mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(),
-                getShiftLogUICallback(), getActualBarUICallback(), getMachineJoshDataCallback(), getPermissionForMachine(), getStopEventsLineCallback());
+        mAllDashboardDataCore.registerListener(
+                mAllDashboardDataCore.getmMachineStatusUICallback() == null ? getMachineStatusUICallback(): null
+                , mAllDashboardDataCore.getmMachineDataUICallback() == null ? getMachineDataUICallback(): null
+                , mAllDashboardDataCore.getmShiftLogUICallback() == null ? getShiftLogUICallback(): null
+                , mAllDashboardDataCore.getmActualBarExtraUICallback() == null ? getActualBarUICallback(): null
+                , mAllDashboardDataCore.getmMachineJoshDataCallback() == null ? getMachineJoshDataCallback(): null
+                , mAllDashboardDataCore.getmMachinePermissionsCallback() == null ? getPermissionForMachine(): null
+                , mAllDashboardDataCore.getmStopEventsLineCallback() == null ? getStopEventsLineCallback(): null);
 
         mAllDashboardDataCore.stopPolling();
 
@@ -1569,7 +1575,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void startShiftTimer(long timeInSeconds) {
-        if (mTimeToEndCounter == null || mTimeToEndCounter.getOnTimeToEndChangedListener() == null) {
+        if (mTimeToEndCounter == null ) {//|| mTimeToEndCounter.getOnTimeToEndChangedListener() == null
             mTimeToEndCounter = new TimeToEndCounter(new OnTimeToEndChangedListener() {
                 @Override
                 public void onTimeToEndChanged(long millisUntilFinished) {
