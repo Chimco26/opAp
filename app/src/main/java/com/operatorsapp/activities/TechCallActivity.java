@@ -30,6 +30,7 @@ import com.operatorsapp.server.requests.TechCall24HRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.TechCall24HResponse;
+import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
@@ -93,6 +94,12 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
                 ShowCrouton.showSimpleCrouton(TechCallActivity.this, reason.getError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
         }, NetworkManager.getInstance(), pm.getTotalRetries(), pm.getRequestTimeout());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ChangeLang.initLanguage(this);
     }
 
     private void setLineLayouts() {

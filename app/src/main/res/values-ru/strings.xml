@@ -150,7 +150,7 @@
         <item>Новое задание</item>
         <item>Добавить брак</item>
         <item>Изменить количество единиц в цикле</item>
-        <item>Fix Units Produced</item>
+        <item>Фикс. количество произведенных &placeholder1;</item>
         <item>Производственный отчет</item>
         <item>Заказать тест</item>
     </array>
@@ -489,7 +489,7 @@
     <string name="max_value_must_be_greater_than_min">Максимальное значение должно быть больше минимального значения</string>
     <string name="powered_by_leadermes">Работает на Matics</string>
     <string name="start_service">начало обслуживания</string>
-    <string name="finish_service">конец обслуживания</string>
+    <string name="finish_service">Создать отчет и закончить</string>
     <string name="source">Источник</string>
     <string name="deselect_all">Убрать Выделение со Всего</string>
     <string name="root_cause">Основная Причина</string>

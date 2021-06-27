@@ -26,13 +26,14 @@ import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.github.barteksc.pdfviewer.util.Constants;
 import com.github.chrisbanes.photoview.OnScaleChangedListener;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.halilibo.bettervideoplayer.BetterVideoCallback;
-import com.halilibo.bettervideoplayer.BetterVideoPlayer;
+//import com.halilibo.bettervideoplayer.BetterVideoCallback;
+//import com.halilibo.bettervideoplayer.BetterVideoPlayer;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.GalleryAdapter;
 import com.operatorsapp.model.GalleryModel;
 import com.operatorsapp.model.PdfObject;
+import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.DownloadHelper;
 import com.shockwave.pdfium.PdfDocument;
 
@@ -46,7 +47,9 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         DownloadHelper.DownloadFileListener,
         OnPageChangeListener,
         OnLoadCompleteListener,
-        OnErrorListener, BetterVideoCallback {
+        OnErrorListener
+//        , BetterVideoCallback
+{
 
     private static final String TAG = GalleryActivity.class.getSimpleName();
 
@@ -72,7 +75,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     private TextView mLoadingTv;
     private boolean isLoad;
     private DownloadHelper mDownloadHelper;
-    private BetterVideoPlayer mPlayer;
+//    private BetterVideoPlayer mPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +109,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         mPdfViewer = findViewById(R.id.AG_pdf);
 
-        mPlayer = findViewById(R.id.AG_player);
+//        mPlayer = findViewById(R.id.AG_player);
 
         mScaleTv = findViewById(R.id.AG_scale_tv);
 
@@ -525,6 +528,11 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ChangeLang.initLanguage(this);
+    }
 
     @Override
     public void onPostExecute(File file) {
@@ -659,46 +667,46 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onPause() {
         super.onPause();
-        mPlayer.pause();
+//        mPlayer.pause();
     }
 
-    @Override
-    public void onStarted(BetterVideoPlayer player) {
-
-    }
-
-    @Override
-    public void onPaused(BetterVideoPlayer player) {
-
-    }
-
-    @Override
-    public void onPreparing(BetterVideoPlayer player) {
-
-    }
-
-    @Override
-    public void onPrepared(BetterVideoPlayer player) {
-
-    }
-
-    @Override
-    public void onBuffering(int percent) {
-
-    }
-
-    @Override
-    public void onError(BetterVideoPlayer player, Exception e) {
-
-    }
-
-    @Override
-    public void onCompletion(BetterVideoPlayer player) {
-
-    }
-
-    @Override
-    public void onToggleControls(BetterVideoPlayer player, boolean isShowing) {
-
-    }
+//    @Override
+//    public void onStarted(BetterVideoPlayer player) {
+//
+//    }
+//
+//    @Override
+//    public void onPaused(BetterVideoPlayer player) {
+//
+//    }
+//
+//    @Override
+//    public void onPreparing(BetterVideoPlayer player) {
+//
+//    }
+//
+//    @Override
+//    public void onPrepared(BetterVideoPlayer player) {
+//
+//    }
+//
+//    @Override
+//    public void onBuffering(int percent) {
+//
+//    }
+//
+//    @Override
+//    public void onError(BetterVideoPlayer player, Exception e) {
+//
+//    }
+//
+//    @Override
+//    public void onCompletion(BetterVideoPlayer player) {
+//
+//    }
+//
+//    @Override
+//    public void onToggleControls(BetterVideoPlayer player, boolean isShowing) {
+//
+//    }
 }

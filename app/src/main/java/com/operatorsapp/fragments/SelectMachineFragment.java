@@ -257,8 +257,10 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         mHandlerUpdateMachinesStatus = new Handler();
         mHandlerUpdateMachinesStatus.postDelayed(new Runnable() {
             public void run() {
-                mHandlerUpdateMachinesStatus.postDelayed(this, INTERVAL);
-                updateDepartmentMachinesStatus();
+                if(mHandlerUpdateMachinesStatus != null) {
+                    mHandlerUpdateMachinesStatus.postDelayed(this, INTERVAL);
+                    updateDepartmentMachinesStatus();
+                }
             }
         }, INTERVAL);
     }
@@ -288,7 +290,10 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mHandlerUpdateMachinesStatus = null;
+        if (mHandlerUpdateMachinesStatus != null) {
+            mHandlerUpdateMachinesStatus.removeCallbacksAndMessages (null);
+            mHandlerUpdateMachinesStatus = null;
+        }
     }
 
     protected void setActionBar() {

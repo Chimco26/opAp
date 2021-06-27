@@ -152,7 +152,7 @@
         <item>פק"ע חדשה</item>
         <item>הוספת פסולים</item>
         <item>שינוי יחידות במחזור</item>
-        <item>Fix Units Produced</item>
+        <item> מיוצרות&placeholder1;תקן </item>
         <item>דיווח ייצור</item>
         <item>הזמן בדיקה</item>
     </array>
@@ -516,7 +516,7 @@
     <string name="max_value_must_be_greater_than_min">הערך המקסימלי חייב להיות גבוה מהערך המינימלי</string>
     <string name="install_activity_not_found">לא ניתן למצוא את קבצי ההתקנה של האפליקציה, נסה להתקין מחדש דרך חנות האפליקציות</string>
     <string name="start_service">התחל טיפול</string>
-    <string name="finish_service">סיום טיפול</string>
+    <string name="finish_service">דווח וסיים</string>
     <string name="report_stop_reason_to_all_connected_events">דווח סיבת עצירה לכל האירועים המקושרים</string>
     <string name="source">מקור</string>
     <string name="deselect_all">בטל בחירה</string>

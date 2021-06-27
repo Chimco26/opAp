@@ -155,7 +155,7 @@
         <item>Activer l\'OF</item>
         <item>Mettre les rebuts</item>
         <item>Changement d\'unité de cycle</item>
-        <item>Fix Units Produced</item>
+        <item>&placeholder1; fixes produites</item>
         <item>Déclarer une production</item>
         <item>Commander un test</item>
     </array>
@@ -493,7 +493,7 @@
     <string name="activate_custom_y_axis_values">Activer les valeurs personnalisées de l\'axe Y</string>
     <string name="max_value_must_be_greater_than_min">La valeur maximale doit être supérieure à la valeur minimale</string>
     <string name="start_service">démarrer le service</string>
-    <string name="finish_service">terminer le service</string>
+    <string name="finish_service">Rapport et fin</string>
     <string name="source">Source</string>
     <string name="deselect_all">Tout désélectionner</string>
     <string name="root_cause">Tout désélectionner</string>

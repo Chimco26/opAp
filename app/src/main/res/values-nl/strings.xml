@@ -149,7 +149,7 @@
         <item>Nieuwe order</item>
         <item>Voeg uitval toe</item>
         <item>Veranderen stuks per rotatie</item>
-        <item>Fix Units Produced</item>
+        <item>Vaste &placeholder1; geproduceerd</item>
         <item>Productie Rapport</item>
         <item>Besteltest</item>
     </array>
@@ -500,7 +500,7 @@
     <string name="activate_custom_y_axis_values">Activeer aangepaste Y-aswaarden</string>
     <string name="max_value_must_be_greater_than_min">Max. waarde moet groter zijn dan min. waarde</string>
     <string name="start_service">dienstverlening starten</string>
-    <string name="finish_service">dienstverlening afsluiten</string>
+    <string name="finish_service">Verslag uitbrengen en afmaken</string>
     <string name="source">Bron</string>
     <string name="deselect_all">Deselecteren All</string>
     <string name="root_cause">Hoofdoorzaak</string>

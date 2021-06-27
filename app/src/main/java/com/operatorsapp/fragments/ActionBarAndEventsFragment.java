@@ -705,7 +705,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
 
-
     private void initBottomNotificationLayout(View view) {
 
         if (view != null) {
@@ -1212,7 +1211,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
-            mUiCallbackListener = new WeakReference<DashboardUICallbackListener>((DashboardUICallbackListener)this);
+            mUiCallbackListener = new WeakReference<DashboardUICallbackListener>((DashboardUICallbackListener) this);
             mOnActivityCallbackRegistered.onFragmentAttached(mUiCallbackListener);
             mListener = (ActionBarAndEventsFragmentListener) context;
             OperatorCoreToDashboardActivityCallback operatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
@@ -1389,7 +1388,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 String[] options = getResources().getStringArray(R.array.jobs_spinner_array);
 
+                String placeHolder = getResources().getString(R.string.placeholder1);
                 for (int i = 0; i < options.length; i++) {
+                    if (options[i].contains(placeHolder)) {
+                        options[i] = options[i].replace(placeHolder, PersistenceManager.getInstance().getTranslationForKPIS().getKPIByName("Units"));
+                    }
                     mJobActionsSpinnerItems.add(new JobActionsSpinnerItem(i, options[i]));
                 }
                 // add approve first item with unique ID;

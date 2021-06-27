@@ -8,7 +8,7 @@
         <item>Attivare Lavoro</item>
         <item>Dichiara sottoprodotto</item>
         <item>Cambia unità nel ciclo</item>
-        <item>Fix Units Produced</item>
+        <item>Correggi &placeholder1; prodotte</item>
         <item>Rapporto Produzione</item>
         <item>Test dell\'ordine</item>
     </array>
@@ -448,7 +448,7 @@
     <string name="activate_custom_y_axis_values">Attiva valori personalizzati asse Y</string>
     <string name="max_value_must_be_greater_than_min">Il valore massimo deve essere maggiore di quello minimo</string>
     <string name="start_service">inizio servizio</string>
-    <string name="finish_service">fine servizio</string>
+    <string name="finish_service">Segnala e finisci</string>
     <string name="source">Sorgente</string>
     <string name="deselect_all">Deseleziona tutto</string>
     <string name="root_cause">Causa alla base</string>

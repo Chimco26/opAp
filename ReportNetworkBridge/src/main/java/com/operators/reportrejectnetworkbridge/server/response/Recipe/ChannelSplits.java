@@ -98,4 +98,17 @@ public class ChannelSplits implements Parcelable {
             return new ChannelSplits[size];
         }
     };
+
+    public String getSplitLName(Integer splitNumber, List<ChannelSplitName> channelSplitNames) {
+        for (ChannelSplitName channelSplitName : channelSplitNames) {
+            if (channelSplitName.getKey().equals("Split")) {
+                for (Value value : channelSplitName.getValue()) {
+                    if (value.getKey().equals(splitNumber)) {
+                        return value.getValue();
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }

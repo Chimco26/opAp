@@ -140,7 +140,7 @@
         <item>Aktiválja a munkát</item>
         <item>Elutasítás hozzáadása</item>
         <item>Egységek módosítása ciklusban</item>
-        <item>Fix Units Produced</item>
+        <item>Fix &placeholder1; legyártva</item>
         <item>Jelentés készítése</item>
         <item>Teszt rendelése</item>
     </array>
@@ -481,7 +481,7 @@
     <string name="activate_custom_y_axis_values">Egyedi Y tengely értékek aktiválása</string>
     <string name="max_value_must_be_greater_than_min">A max. értéknek nagyobbnak kell lennie a min. értéknél</string>
     <string name="start_service">indítsa el a szolgáltatást</string>
-    <string name="finish_service">befejezni a szolgáltatást</string>
+    <string name="finish_service">Jelentés és befejezés</string>
     <string name="source">Forrás</string>
     <string name="deselect_all">Összes kiválasztás törlése</string>
     <string name="root_cause">Kiváltó ok</string>

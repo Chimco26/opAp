@@ -1,6 +1,7 @@
 package com.operators.reportrejectnetworkbridge.interfaces;
 
 import com.example.common.StandardResponse;
+import com.example.common.request.BaseRequest;
 import com.example.common.request.RecipeUpdateRequest;
 import com.operators.reportrejectnetworkbridge.server.request.GetAllRecipesRequest;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
@@ -16,5 +17,8 @@ public interface EmeraldGetAllRecipe {
 
     @POST("/LeaderMESApi/UpdateProductRecipeJobOpApp")
     Call<StandardResponse> updateRecipe(@Body RecipeUpdateRequest recipeUpdateRequest);
+
+    @POST("/LeaderMESApi/GetRecipeTranslation")
+    Call<StandardResponse> updateRecipe(@Body BaseRequest request);
 
 }

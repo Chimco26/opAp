@@ -43,6 +43,9 @@ public class RecipeResponse implements Parcelable {
     @SerializedName("ProductFiles")
     @Expose
     private List<String> productFiles;
+    @SerializedName("ChannelSplitName")
+    @Expose
+    private List<ChannelSplitName> channelSplitName = null;
 
     public RecipeResponse() {
     }
@@ -54,6 +57,10 @@ public class RecipeResponse implements Parcelable {
         this.functionSucceed = FunctionSucceed;
         this.Recipe = Recipe;
         this.note = note;
+    }
+
+    public List<ChannelSplitName> getChannelSplitName() {
+        return channelSplitName;
     }
 
     public boolean getCanEditRecipe() {
@@ -174,4 +181,16 @@ public class RecipeResponse implements Parcelable {
         }
     };
 
+    public String getChannelLName(int channelNumber) {
+        for (ChannelSplitName channelSplitName : channelSplitName) {
+            if (channelSplitName.getKey().equals("Channel")) {
+                for (Value value : channelSplitName.getValue()) {
+                    if (value.getKey() == channelNumber) {
+                        return value.getValue();
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }

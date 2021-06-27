@@ -272,10 +272,12 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
             mLayoutChannel100NoDataTv.setVisibility(View.GONE);
             mLayoutChannel100RvLy.setVisibility(View.VISIBLE);
 
+            String channelLName = mRecipeResponse.getChannelLName(mRecipeResponse.getRecipe().getChannels().get(mRecipeResponse.getRecipe().getChannels().size() - 1).getChannelNumber());
+            channelLName = channelLName != null ? channelLName : mRecipeResponse.getRecipe().getChannels().get(mRecipeResponse.getRecipe().getChannels().size() - 1).getChannelEname();
             mLayoutChannel100Title.setText(
                     OperatorApplication.isEnglishLang() ?
                             mRecipeResponse.getRecipe().getChannels().get(mRecipeResponse.getRecipe().getChannels().size() - 1).getChannelEname()
-                            : mRecipeResponse.getRecipe().getChannels().get(mRecipeResponse.getRecipe().getChannels().size() - 1).getChannelLname());
+                            : channelLName);
 
             No0ChannelAdapter mNo0ChannelAdapter = new No0ChannelAdapter(new No0ChannelAdapter.Channel100AdapterListener() {
                 @Override
@@ -293,7 +295,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
             },
                     (ArrayList<ChannelSplits>) mRecipeResponse.getRecipe().getChannels()
                             .get(mRecipeResponse.getRecipe().getChannels().size() - 1).getChannelSplits()
-                    , No0ChannelAdapter.TYPE_CHANNEL_100);
+                    , No0ChannelAdapter.TYPE_CHANNEL_100, mRecipeResponse.getChannelSplitName());
 
             LinearLayoutManager layoutManager
                     = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -693,7 +695,10 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
 
                 for (Channel recipe : recipeResponse_1_99) {
 
-                    ViewTagsHelper.addTitle(getActivity(), OperatorApplication.isEnglishLang() ? recipe.getChannelEname() : recipe.getChannelLname(), mlayoutChannel1_99);
+                    String channelLName = mRecipeResponse.getChannelLName(recipe.getChannelNumber());
+                    channelLName = channelLName != null ? channelLName : recipe.getChannelEname();
+
+                    ViewTagsHelper.addTitle(getActivity(), OperatorApplication.isEnglishLang() ? recipe.getChannelEname() : channelLName, mlayoutChannel1_99);
 
                     ViewTagsHelper.addRv(getActivity(), recipe.getChannelSplits(), mlayoutChannel1_99, new No0ChannelAdapter.Channel100AdapterListener() {
                         @Override
@@ -705,7 +710,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
                         public void onEditMode(BaseSplits item) {
                             openEditValue(item);
                         }
-                    });
+                    }, mRecipeResponse.getChannelSplitName());
 
                     ViewTagsHelper.addSeparator(getActivity(), mlayoutChannel1_99);
                 }
