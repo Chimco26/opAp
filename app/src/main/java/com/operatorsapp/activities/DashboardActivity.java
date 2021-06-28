@@ -1576,14 +1576,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void startShiftTimer(long timeInSeconds) {
         if (mTimeToEndCounter == null ) {//|| mTimeToEndCounter.getOnTimeToEndChangedListener() == null
-            mTimeToEndCounter = new TimeToEndCounter(new OnTimeToEndChangedListener() {
-                @Override
-                public void onTimeToEndChanged(long millisUntilFinished) {
-                    shiftForMachineTimer();
-                }
-            });
+            mTimeToEndCounter = new TimeToEndCounter();
         }
-        mTimeToEndCounter.calculateShiftToEnd(timeInSeconds);
+        mTimeToEndCounter.calculateShiftToEnd(timeInSeconds, new OnTimeToEndChangedListener() {
+            @Override
+            public void onTimeToEndChanged(long millisUntilFinished) {
+                shiftForMachineTimer();
+            }
+        });
 
     }
 

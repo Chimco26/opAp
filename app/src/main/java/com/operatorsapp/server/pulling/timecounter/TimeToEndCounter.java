@@ -15,32 +15,23 @@ public class TimeToEndCounter
     private static final int COUNT_DOWN_INTERVAL = 1000;
     private static final String ZERO_TIME = "00:00:00";
     public static final int FINISHED = 0;
-    private OnTimeToEndChangedListener mOnTimeToEndChangedListener;
     private CountDownTimer mCountDownTimer;
 
-    public TimeToEndCounter(OnTimeToEndChangedListener onTimeToEndChangedListener) {
-        mOnTimeToEndChangedListener = onTimeToEndChangedListener;
-    }
-
-//    public OnTimeToEndChangedListener getOnTimeToEndChangedListener() {
-//        return mOnTimeToEndChangedListener.get();
-//    }
-
-    public void calculateTimeToEnd(final int timeInMilliseconds) {
+    public void calculateTimeToEnd(final int timeInMilliseconds, final OnTimeToEndChangedListener listener) {
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
         }
 
         mCountDownTimer = new CountDownTimer(timeInMilliseconds, COUNT_DOWN_INTERVAL) {
             public void onTick(long millisUntilFinished) {
-//                if (mOnTimeToEndChangedListener.get() != null) {
-                    mOnTimeToEndChangedListener.onTimeToEndChanged(millisUntilFinished);
-//                }
+                if (listener != null) {
+                    listener.onTimeToEndChanged(millisUntilFinished);
+                }
             }
 
             public void onFinish() {
-                if (mOnTimeToEndChangedListener != null) {
-                    mOnTimeToEndChangedListener.onTimeToEndChanged(FINISHED);
+                if (listener != null) {
+                    listener.onTimeToEndChanged(FINISHED);
                 }
                 OppAppLogger.i(LOG_TAG, "onFinish()");
             }
@@ -48,7 +39,7 @@ public class TimeToEndCounter
         }.start();
     }
 
-    public void calculateShiftToEnd(final long timeInMilliseconds) {
+    public void calculateShiftToEnd(final long timeInMilliseconds, final OnTimeToEndChangedListener listener) {
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
         }
@@ -63,8 +54,8 @@ public class TimeToEndCounter
 
             @Override
             public void onFinish() {
-                if (mOnTimeToEndChangedListener != null) {
-                    mOnTimeToEndChangedListener.onTimeToEndChanged(FINISHED);
+                if (listener != null) {
+                    listener.onTimeToEndChanged(FINISHED);
                 }
                 OppAppLogger.i(LOG_TAG, "onFinish()");
             }
@@ -75,6 +66,7 @@ public class TimeToEndCounter
     public void stopTimer() {
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
+            mCountDownTimer = null;
         }
     }
 }

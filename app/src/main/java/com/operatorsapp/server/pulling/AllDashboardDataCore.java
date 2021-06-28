@@ -156,6 +156,7 @@ public class AllDashboardDataCore {
         if (mMachinePermissionsCallback != null) {
             mMachinePermissionsCallback = null;
         }
+        stopTimer();
     }
 
     public void stopTimer() {
@@ -532,18 +533,18 @@ public class AllDashboardDataCore {
         if (mTimeToEndCounter == null ) {//|| mTimeToEndCounter.getOnTimeToEndChangedListener() == null
             stopTimer();
             mTimeToEndCounter = null;
-            mTimeToEndCounter = new TimeToEndCounter(new OnTimeToEndChangedListener() {
-                @Override
-                public void onTimeToEndChanged(long millisUntilFinished) {
-                    if (mMachineStatusUICallback != null) {
-                        mMachineStatusUICallback.onTimerChanged(millisUntilFinished);
-                    } else {
-                        OppAppLogger.w(LOG_TAG, "onTimeToEndChanged() mMachineStatusUICallback is null");
-                    }
-                }
-            });
+            mTimeToEndCounter = new TimeToEndCounter();
         }
-        mTimeToEndCounter.calculateTimeToEnd(timeInSeconds);
+        mTimeToEndCounter.calculateTimeToEnd(timeInSeconds, new OnTimeToEndChangedListener() {
+            @Override
+            public void onTimeToEndChanged(long millisUntilFinished) {
+                if (mMachineStatusUICallback != null) {
+                    mMachineStatusUICallback.onTimerChanged(millisUntilFinished);
+                } else {
+                    OppAppLogger.w(LOG_TAG, "onTimeToEndChanged() mMachineStatusUICallback is null");
+                }
+            }
+        });
     }
 
     public static String getDate(long milliSeconds, String dateFormat) {
