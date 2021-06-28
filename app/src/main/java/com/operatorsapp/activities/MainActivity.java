@@ -59,7 +59,7 @@ import static android.app.AlarmManager.INTERVAL_DAY;
 
 //import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements GoToScreenListener, OnCroutonRequestListener, Thread.UncaughtExceptionHandler {
+public class MainActivity extends AppCompatActivity implements GoToScreenListener, OnCroutonRequestListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int STORAGE_REQUEST_CODE = 1;
@@ -272,16 +272,16 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         }
     }
 
-    @Override
-    public void uncaughtException(Thread t, Throwable e) {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(OperatorApplication.getAppContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        AlarmManager mgr = (AlarmManager) OperatorApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
-        finish();
-        System.exit(2);
-    }
+//    @Override
+//    public void uncaughtException(Thread t, Throwable e) {
+//        Intent intent = new Intent(Intent.ACTION_MAIN);
+//        intent.addCategory(Intent.CATEGORY_HOME);
+//        intent.addCategory(Intent.CATEGORY_DEFAULT);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(OperatorApplication.getAppContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+//        AlarmManager mgr = (AlarmManager) OperatorApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
+//        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+//        finish();
+//        System.exit(2);
+//    }
 }

@@ -43,6 +43,7 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ChangeLang;
+import com.operatorsapp.utils.MyExceptionHandler;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 
@@ -96,7 +97,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activate_job_activity);
-
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
         mCroutonCreator = new CroutonCreator();
 
         getExtras();

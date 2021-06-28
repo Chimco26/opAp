@@ -32,6 +32,7 @@ import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.TechCall24HResponse;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.Consts;
+import com.operatorsapp.utils.MyExceptionHandler;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.TimeUtils;
@@ -63,6 +64,7 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tech_call);
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
         mCroutonCreator = new CroutonCreator();
         setToolbar();
         getExtras();
@@ -103,11 +105,11 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
     }
 
     private void setLineLayouts() {
-        if (mMachineLineResponse != null && mMachineLineResponse.getLineID() != 0){
+        if (mMachineLineResponse != null && mMachineLineResponse.getLineID() != 0) {
             machineLineItems.clear();
             machineLineItems.addAll(mMachineLineResponse.getMachinesData());
             TechCallFragment fragment = (TechCallFragment) getSupportFragmentManager().findFragmentByTag(TechCallFragment.LOG_TAG);
-            if (fragment != null && fragment.isVisible()){
+            if (fragment != null && fragment.isVisible()) {
                 fragment.setLineLayout(mMachineLineResponse);
             }
         }
@@ -150,13 +152,13 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
                     ArrayList<TechCallInfo> techList = new ArrayList<>();
                     for (Notification not : response.body().getmNotificationsList()) {
 
-                            not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
-                            not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
+                        not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
+                        not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
 
-                            if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
-                                techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmTitle(),
-                                        not.getmAdditionalText(), TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
-                                        not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID(), not.getmEventName()));
+                        if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
+                            techList.add(new TechCallInfo(not.getMachineID(), not.getmResponseType(), not.getmTargetName(), not.getmTitle(),
+                                    not.getmAdditionalText(), TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
+                                    not.getmNotificationID(), not.getmTargetUserId(), not.getmEventID(), not.getmEventName()));
 
 //                                boolean isNew = true;
 //                                if (techList != null && techListCopy.size() > 0) {
@@ -177,8 +179,8 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
 //                                }
 //                                if (isNew) {
 //                                }
-                            }
                         }
+                    }
                     PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
                     PersistenceManager.getInstance().setCalledTechnicianList(techList);
                     openTechCallFragment();
@@ -207,7 +209,7 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
                 machinesIdArray[i] = machineLineItems.get(i).getMachineID();
             }
             NetworkManager.getInstance().getNotificationHistory(machinesIdArray, notificationCallback);
-        }else {
+        } else {
             NetworkManager.getInstance().getNotificationHistory(notificationCallback);
         }
 
@@ -225,19 +227,19 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
 
 
     @Override
-    public void onGetLast24HCalls(){
+    public void onGetLast24HCalls() {
         TechCall24HRequest request = new TechCall24HRequest(PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId() + "");
         NetworkManager.getInstance().getTechCall24H(request, new Callback<TechCall24HResponse>() {
             @Override
             public void onResponse(Call<TechCall24HResponse> call, Response<TechCall24HResponse> response) {
-                if (response.body() != null && response.body().getError() == null){
+                if (response.body() != null && response.body().getError() == null) {
                     Fragment frag = getSupportFragmentManager().findFragmentByTag(TechCallFragment.LOG_TAG);
                     if (frag != null && frag.isVisible()) {
-                        ((TechCallFragment)frag).setLast24hCallList(response.body().getCalls24Hours());
+                        ((TechCallFragment) frag).setLast24hCallList(response.body().getCalls24Hours());
                     }
-                }else {
+                } else {
                     String msg = "General Response Error";
-                    if (response.body() != null){
+                    if (response.body() != null) {
                         msg = response.body().getError().getMessage();
                     }
                     onFailure(call, new Throwable(msg));

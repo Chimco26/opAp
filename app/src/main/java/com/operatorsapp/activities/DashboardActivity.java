@@ -242,8 +242,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         EasyPermissions.PermissionCallbacks,
         SelectStopReasonFragment.SelectStopReasonFragmentListener,
         SignInOperatorFragment.SignInOperatorFragmentListener,
-        SelectMachineFragment.SelectMachineFragmentListener,
-        Thread.UncaughtExceptionHandler {
+        SelectMachineFragment.SelectMachineFragmentListener{
 
     private static final String TAG = DashboardActivity.class.getSimpleName();
 
@@ -3775,19 +3774,19 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     }
 
-    @Override
-    public void uncaughtException(Thread t, Throwable e) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("crash", true);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                | Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(OperatorApplication.getAppContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        AlarmManager mgr = (AlarmManager) OperatorApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
-        finish();
-        System.exit(2);
-    }
+//    @Override
+//    public void uncaughtException(Thread t, Throwable e) {
+//        Intent intent = new Intent(this, MainActivity.class);
+//        intent.putExtra("crash", true);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+//                | Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                | Intent.FLAG_ACTIVITY_NEW_TASK);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(OperatorApplication.getAppContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+//        AlarmManager mgr = (AlarmManager) OperatorApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
+//        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+//        finish();
+//        System.exit(2);
+//    }
 
     private class DownloadFile extends AsyncTask<String, String, String> {
 
