@@ -32,6 +32,7 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.responses.StopReasonsGroup;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.DavidVardi;
+import com.operatorsapp.utils.MyExceptionHandler;
 import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
@@ -74,7 +75,7 @@ public class StopEventLogActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stop_event);
-
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
         mCroutonCreator = new CroutonCreator();
 
         if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {

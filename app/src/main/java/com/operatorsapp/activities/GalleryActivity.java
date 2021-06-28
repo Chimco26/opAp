@@ -35,6 +35,7 @@ import com.operatorsapp.model.GalleryModel;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.DownloadHelper;
+import com.operatorsapp.utils.MyExceptionHandler;
 import com.shockwave.pdfium.PdfDocument;
 
 import java.io.File;
@@ -81,7 +82,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
-
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
         mFileUrls = getIntent().getStringArrayListExtra(EXTRA_FILE_URL);
 
         mTitle = getIntent().getStringExtra(EXTRA_RECIPE_FILES_TITLE);
