@@ -53,7 +53,9 @@ public class MachineNewDisplayAdapter extends RecyclerView.Adapter<MachineNewDis
         viewHolder.itemView.setBackgroundColor(Color.parseColor(mMachinesFil.get(position).getMachineStatusColor()));
 
         viewHolder.mTitle.setText(machine.getMachineName());
-        viewHolder.mParameter.setText(getMachineParameterName(mMachinesFil.get(position) ,mMachineParameterName));
+        if (mMachineParameterName != null) {
+            viewHolder.mParameter.setText(getMachineParameterName(mMachinesFil.get(position), mMachineParameterName));
+        }
         viewHolder.mTime.setText(getHourAndMinFormat(mMachinesFil.get(position).getStatusTime(), viewHolder.itemView.getContext()));
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
