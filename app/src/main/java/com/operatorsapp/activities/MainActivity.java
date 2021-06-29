@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        if(!BuildConfig.DEBUG){Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));}
+        if(!BuildConfig.DEBUG){Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));}
 
         Log.d(TAG, "ChangeLang: ");
         ChangeLang.initLanguage(this);
