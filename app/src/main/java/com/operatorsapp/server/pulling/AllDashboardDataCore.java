@@ -363,7 +363,9 @@ public class AllDashboardDataCore {
             public void onFailure(Call<PermissionResponse> call, Throwable t) {
                 OppAppLogger.w(LOG_TAG, "getPermissionForMachine() failed");
                 StandardResponse errorResponse = new StandardResponse(ErrorResponse.ErrorCode.No_data, "getPermissionForMachine Response is null Error");
-                mMachinePermissionsCallback.onMachinePermissionCallbackFailed(errorResponse);
+                if (mMachinePermissionsCallback != null) {
+                    mMachinePermissionsCallback.onMachinePermissionCallbackFailed(errorResponse);
+                }
             }
         });
     }
@@ -441,13 +443,17 @@ public class AllDashboardDataCore {
         mShiftLogNetworkBridgeInterface.GetShiftForMachine(mShiftLogPersistenceManagerInterface.getSiteUrl(), mShiftLogPersistenceManagerInterface.getSessionId(), mShiftLogPersistenceManagerInterface.getMachineId(), new ShiftForMachineCoreCallback<ShiftForMachineResponse>() {
             @Override
             public void onShiftForMachineSucceeded(ShiftForMachineResponse shiftForMachineResponse) {
-                shiftForMachineUICallback.onGetShiftForMachineSucceeded(shiftForMachineResponse);
+                if (shiftForMachineUICallback != null) {
+                    shiftForMachineUICallback.onGetShiftForMachineSucceeded(shiftForMachineResponse);
+                }
                 OppAppLogger.w(LOG_TAG, "getShiftForMachine() onShiftForMachineSucceeded");
             }
 
             @Override
             public void onShiftForMachineFailed(StandardResponse reason) {
-                shiftForMachineUICallback.onGetShiftForMachineFailed(reason);
+                if (shiftForMachineUICallback != null) {
+                    shiftForMachineUICallback.onGetShiftForMachineFailed(reason);
+                }
                 OppAppLogger.w(LOG_TAG, "getShiftForMachine() onShiftForMachineFailed" + reason.getError().getErrorDesc());
             }
 
@@ -530,7 +536,7 @@ public class AllDashboardDataCore {
 
 
     private void startTimer(int timeInSeconds) {
-        if (mTimeToEndCounter == null ) {//|| mTimeToEndCounter.getOnTimeToEndChangedListener() == null
+        if (mTimeToEndCounter == null) {//|| mTimeToEndCounter.getOnTimeToEndChangedListener() == null
             stopTimer();
             mTimeToEndCounter = null;
             mTimeToEndCounter = new TimeToEndCounter();
@@ -542,6 +548,7 @@ public class AllDashboardDataCore {
                     mMachineStatusUICallback.onTimerChanged(millisUntilFinished);
                 } else {
                     OppAppLogger.w(LOG_TAG, "onTimeToEndChanged() mMachineStatusUICallback is null");
+                    stopTimer();
                 }
             }
         });

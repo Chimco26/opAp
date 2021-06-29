@@ -419,7 +419,11 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     }
 
     private ArrayList<String> getSelectedMachines() {
-        return mDepartmentAdapter.getSelectedMachineList();
+        if (mDepartmentAdapter != null) {
+            return mDepartmentAdapter.getSelectedMachineList();
+        }else {
+            return mDepartmentNewDisplayAdapter.getSelectedMachineList();
+        }
     }
 
     private void openConfirmationDialog() {
@@ -573,7 +577,11 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     }
 
     private void setLoginMode() {
-        mDepartmentAdapter.setMultiSelection(true);
+        if (mDepartmentAdapter != null) {
+            mDepartmentAdapter.setMultiSelection(true);
+        }else {
+            mDepartmentNewDisplayAdapter.setMultiSelection(true);
+        }
         mApplyMultiSelectBtn.setVisibility(View.VISIBLE);
         mLoginLayout.setVisibility(View.VISIBLE);
         mMainLayoutTitle.setVisibility(View.GONE);
@@ -582,7 +590,11 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     }
 
     private void setStatusMode() {
-        mDepartmentAdapter.setMultiSelection(true);
+        if (mDepartmentAdapter != null) {
+            mDepartmentAdapter.setMultiSelection(true);
+        }else {
+            mDepartmentNewDisplayAdapter.setMultiSelection(true);
+        }
         mApplyMultiSelectBtn.setVisibility(View.VISIBLE);
         mStatusLayout.setVisibility(View.VISIBLE);
         mLoginLayout.setVisibility(View.GONE);

@@ -353,20 +353,25 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     }
 
     private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit) {
+        if (timeUnit == null){
+            timeUnit = TimeUnit.MILLISECONDS;
+        }
         if (timeUnit == TimeUnit.MILLISECONDS && timeout < 1000){
             timeout = 1000;
+        }else if (timeUnit != TimeUnit.MILLISECONDS && timeout == 0){
+            timeout = 10;
         }
 
         ConnectionPool pool = new ConnectionPool(5, timeout, timeUnit);
 
         try {
-            if (mRetrofit == null || !mRetrofit.baseUrl().toString().equals(siteUrl)) {
+            if (mRetrofit == null || !mRetrofit.baseUrl().toString().replace("/", "").equals(siteUrl.replace("/", ""))) {
                 Dispatcher dispatcher = new okhttp3.Dispatcher();
                 dispatcher.setMaxRequests(1);
                 HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
                 loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
                 if (okHttpClient == null) {
-                    if (timeout >= 0 && timeUnit != null) {
+                    if (timeout > 0 && timeUnit != null) {
                         okHttpClient = new OkHttpClient.Builder()
                                 .connectionPool(pool)
                                 .connectTimeout(timeout, timeUnit)
@@ -401,6 +406,9 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                                 .retryOnConnectionFailure(false)
                                 .build();
                     }
+                }
+                if (okHttpClient.connectTimeoutMillis() < 1000){
+                    okHttpClient.newBuilder().connectTimeout(1000, TimeUnit.MILLISECONDS).build();
                 }
 //                Gson builder = new GsonBuilder().disableHtmlEscaping().create(); to disable encoding if needed but need to check if can cause bug in one of the request in the app and in server side
                 mRetrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(siteUrl).client(okHttpClient).build();

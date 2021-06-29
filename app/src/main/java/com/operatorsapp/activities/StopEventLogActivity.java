@@ -16,6 +16,7 @@ import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.dialogs.Alert2BtnDialog;
@@ -75,7 +76,7 @@ public class StopEventLogActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stop_event);
-        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
+        if(!BuildConfig.DEBUG){Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));}
         mCroutonCreator = new CroutonCreator();
 
         if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {

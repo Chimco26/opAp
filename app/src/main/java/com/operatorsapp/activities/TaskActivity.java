@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.common.task.TaskProgress;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.fragments.TaskBoardFragment;
 import com.operatorsapp.fragments.TaskDetailsFragment;
@@ -30,7 +31,7 @@ public class TaskActivity extends AppCompatActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
+        if(!BuildConfig.DEBUG){Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));}
 
         setContentView(R.layout.task_activity);
         mCroutonCreator = new CroutonCreator();

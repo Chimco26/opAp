@@ -29,6 +29,7 @@ import com.github.chrisbanes.photoview.PhotoView;
 //import com.halilibo.bettervideoplayer.BetterVideoCallback;
 //import com.halilibo.bettervideoplayer.BetterVideoPlayer;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.GalleryAdapter;
 import com.operatorsapp.model.GalleryModel;
@@ -82,7 +83,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
-        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
+        if(!BuildConfig.DEBUG){Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));}
         mFileUrls = getIntent().getStringArrayListExtra(EXTRA_FILE_URL);
 
         mTitle = getIntent().getStringExtra(EXTRA_RECIPE_FILES_TITLE);

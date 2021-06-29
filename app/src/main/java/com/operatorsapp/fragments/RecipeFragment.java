@@ -369,6 +369,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
                 if (response.getError().getErrorDesc() != null) {
                     onRequestFailed(response);
                 } else {
+                    showProgress(false);
                     mListener.onRefreshRecipe();
                     new GoogleAnalyticsHelper().trackEvent(getActivity(), GoogleAnalyticsHelper.EventCategory.RECIPE_EDIT, true, "Recipe edited successfully");
                 }

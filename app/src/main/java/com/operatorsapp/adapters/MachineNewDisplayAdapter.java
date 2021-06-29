@@ -56,7 +56,7 @@ public class MachineNewDisplayAdapter extends RecyclerView.Adapter<MachineNewDis
         if (mMachineParameterName != null) {
             viewHolder.mParameter.setText(getMachineParameterName(mMachinesFil.get(position), mMachineParameterName));
         }
-        viewHolder.mTime.setText(getHourAndMinFormat(mMachinesFil.get(position).getStatusTime(), viewHolder.itemView.getContext()));
+        viewHolder.mTime.setText(getTimeFormatFromMinute(mMachinesFil.get(position).getStatusTime(), viewHolder.itemView.getContext()));
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,22 +122,32 @@ public class MachineNewDisplayAdapter extends RecyclerView.Adapter<MachineNewDis
 
     }
 
-    public static String getHourAndMinFormat(long totalMinuteDuration, Context context) {
+    public static String getTimeFormatFromMinute(long totalMinuteDuration, Context context) {
+
+        long d = TimeUnit.DAYS.convert(totalMinuteDuration, TimeUnit.MINUTES);
 
         long h = TimeUnit.HOURS.convert(totalMinuteDuration, TimeUnit.MINUTES);
 
         String time;
 
-        if (h > 0) {
-
-            time = String.format("%s %s", h, context.getString(R.string.hr2));
-            if (totalMinuteDuration % 60 != 0) {
+        if (d > 0) {
+            long hour = h % 24;
+            if (hour != 0) {
+                time = String.format("%s %s %s %s", d, context.getString(R.string.days2), hour, context.getString(R.string.hr2));
+            } else {
+                time = String.format("%s %s", d, context.getString(R.string.days2));
+            }
+        } else if (h > 0) {
+            long minute = totalMinuteDuration % 60;
+            if (minute != 0) {
                 time = String.format("%s %s %s %s", h, context.getString(R.string.hr2), totalMinuteDuration % 60, context.getString(R.string.min));
+            } else {
+                time = String.format("%s %s", h, context.getString(R.string.hr2));
             }
         } else {
             time = String.format("%s %s", totalMinuteDuration, context.getString(R.string.min));
         }
         return time;
-
     }
+
 }

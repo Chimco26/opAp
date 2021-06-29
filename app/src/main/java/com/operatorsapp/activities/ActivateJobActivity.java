@@ -29,6 +29,7 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDe
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobStandardResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.PendingJobsAdapter;
 import com.operatorsapp.dialogs.BasicTitleTextBtnDialog;
@@ -97,7 +98,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activate_job_activity);
-        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
+        if(!BuildConfig.DEBUG){Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));}
         mCroutonCreator = new CroutonCreator();
 
         getExtras();

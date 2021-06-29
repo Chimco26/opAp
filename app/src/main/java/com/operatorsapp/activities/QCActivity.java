@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.JobListFragment;
@@ -62,7 +63,7 @@ public class QCActivity extends AppCompatActivity implements OnCroutonRequestLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qc);
-        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
+        if(!BuildConfig.DEBUG){Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));}
         this.configureToolbar();
         mCroutonCreator = new CroutonCreator();
         mProgressBar = findViewById(R.id.AQA_progress);

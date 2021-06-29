@@ -72,6 +72,7 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.GetPe
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsStandardResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobStandardResponse;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
 import com.operatorsapp.server.callback.PostUpdateNotesForJobCallback;
