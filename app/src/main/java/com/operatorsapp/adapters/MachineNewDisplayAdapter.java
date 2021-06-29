@@ -65,8 +65,8 @@ public class MachineNewDisplayAdapter extends RecyclerView.Adapter<MachineNewDis
                 if (isMultiSelect) {
                     if (mSelectedMachineList.contains(String.valueOf(machineValue.getId()))) {
                         mSelectedMachineList.remove(String.valueOf(machineValue.getId()));
-                        viewHolder.mTitle.setTextColor(view.getContext().getResources().getColor(R.color.black));
-                        viewHolder.itemView.setBackgroundColor(view.getContext().getResources().getColor(R.color.white_five));
+                        viewHolder.mTitle.setTextColor(view.getContext().getResources().getColor(R.color.white));
+                        viewHolder.itemView.setBackgroundColor(Color.parseColor(mMachinesFil.get(position).getMachineStatusColor()));
                     } else {
                         mSelectedMachineList.add(String.valueOf(machineValue.getId()));
                         viewHolder.mTitle.setTextColor(view.getContext().getResources().getColor(R.color.blue1));
