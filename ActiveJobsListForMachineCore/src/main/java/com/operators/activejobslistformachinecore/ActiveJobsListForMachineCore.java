@@ -8,22 +8,24 @@ import com.operators.activejobslistformachineinfra.ActiveJobsListForMachineCallb
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachineNetworkBridgeInterface;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachinePersistenceManagerInterface;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by Sergey on 14/08/2016.
  */
 public class ActiveJobsListForMachineCore {
     private static final String LOG_TAG = ActiveJobsListForMachineCore.class.getSimpleName();
-    private ActiveJobsListForMachineNetworkBridgeInterface mActiveJobsListForMachineNetworkBridgeInterface;
-    private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener;
-    private ActiveJobsListForMachinePersistenceManagerInterface mActiveJobsListForMachinePersistenceManagerInterface;
+    private WeakReference<ActiveJobsListForMachineNetworkBridgeInterface> mActiveJobsListForMachineNetworkBridgeInterface;
+    private WeakReference<ActiveJobsListForMachineUICallbackListener> mActiveJobsListForMachineUICallbackListener;
+    private WeakReference<ActiveJobsListForMachinePersistenceManagerInterface> mActiveJobsListForMachinePersistenceManagerInterface;
 
     public ActiveJobsListForMachineCore(ActiveJobsListForMachinePersistenceManagerInterface activeJobsListForMachinePersistenceManagerInterface, ActiveJobsListForMachineNetworkBridgeInterface activeJobsListForMachineNetworkBridgeInterface) {
-        mActiveJobsListForMachinePersistenceManagerInterface = activeJobsListForMachinePersistenceManagerInterface;
-        mActiveJobsListForMachineNetworkBridgeInterface = activeJobsListForMachineNetworkBridgeInterface;
+        mActiveJobsListForMachinePersistenceManagerInterface = new WeakReference<>(activeJobsListForMachinePersistenceManagerInterface);
+        mActiveJobsListForMachineNetworkBridgeInterface = new WeakReference<>(activeJobsListForMachineNetworkBridgeInterface);
     }
 
     public void registerListener(ActiveJobsListForMachineUICallbackListener activeJobsListForMachineUICallbackListener) {
-        mActiveJobsListForMachineUICallbackListener = activeJobsListForMachineUICallbackListener;
+        mActiveJobsListForMachineUICallbackListener = new WeakReference<>(activeJobsListForMachineUICallbackListener);
     }
 
     public void unregisterListener() {
@@ -31,15 +33,15 @@ public class ActiveJobsListForMachineCore {
     }
 
     public void getActiveJobsListForMachine() {
-        if (mActiveJobsListForMachinePersistenceManagerInterface != null) {
-            mActiveJobsListForMachineNetworkBridgeInterface.getActiveJobsForMachine(mActiveJobsListForMachinePersistenceManagerInterface.getSiteUrl(), mActiveJobsListForMachinePersistenceManagerInterface.getSessionId(),
-                    mActiveJobsListForMachinePersistenceManagerInterface.getMachineId(), new ActiveJobsListForMachineCallback() {
+        if (mActiveJobsListForMachinePersistenceManagerInterface != null && mActiveJobsListForMachineNetworkBridgeInterface.get() != null) {
+            mActiveJobsListForMachineNetworkBridgeInterface.get().getActiveJobsForMachine(mActiveJobsListForMachinePersistenceManagerInterface.get().getSiteUrl(), mActiveJobsListForMachinePersistenceManagerInterface.get().getSessionId(),
+                    mActiveJobsListForMachinePersistenceManagerInterface.get().getMachineId(), new ActiveJobsListForMachineCallback() {
                         @Override
                         public void onGetActiveJobsListForMachineSuccess(ActiveJobsListForMachine activeJobsListForMachine) {
                             if (activeJobsListForMachine != null) {
                                 if (activeJobsListForMachine.getActiveJobs() != null) {
-                                    if (activeJobsListForMachine.getActiveJobs().size() > 0 && mActiveJobsListForMachineUICallbackListener != null) {
-                                        mActiveJobsListForMachineUICallbackListener.onActiveJobsListForMachineReceived(activeJobsListForMachine);
+                                    if (activeJobsListForMachine.getActiveJobs().size() > 0 && mActiveJobsListForMachineUICallbackListener != null && mActiveJobsListForMachineUICallbackListener.get() != null) {
+                                        mActiveJobsListForMachineUICallbackListener.get().onActiveJobsListForMachineReceived(activeJobsListForMachine);
                                     }
                                     else {
                                         OppAppLogger.w(LOG_TAG, "getActiveJobsListForMachine() activeJobsListForMachine list is empty");
@@ -57,13 +59,15 @@ public class ActiveJobsListForMachineCore {
 
                         @Override
                         public void onGetActiveJobsListForMachineFailed(StandardResponse reason) {
-                            mActiveJobsListForMachineUICallbackListener.onActiveJobsListForMachineReceiveFailed(reason);
+                            if (mActiveJobsListForMachineUICallbackListener != null && mActiveJobsListForMachineUICallbackListener.get() != null) {
+                                mActiveJobsListForMachineUICallbackListener.get().onActiveJobsListForMachineReceiveFailed(reason);
+                            }
                             OppAppLogger.e(LOG_TAG, "getActiveJobsListForMachine() - onGetActiveJobsListForMachineFailed() ");
 
 
                         }
-                    }, mActiveJobsListForMachinePersistenceManagerInterface.getTotalRetries(),
-                    mActiveJobsListForMachinePersistenceManagerInterface.getRequestTimeout());
+                    }, mActiveJobsListForMachinePersistenceManagerInterface.get().getTotalRetries(),
+                    mActiveJobsListForMachinePersistenceManagerInterface.get().getRequestTimeout());
         }
     }
 }

@@ -182,11 +182,13 @@ public class RecipeResponse implements Parcelable {
     };
 
     public String getChannelLName(int channelNumber) {
-        for (ChannelSplitName channelSplitName : channelSplitName) {
-            if (channelSplitName.getKey().equals("Channel")) {
-                for (Value value : channelSplitName.getValue()) {
-                    if (value.getKey() == channelNumber) {
-                        return value.getValue();
+        if (channelSplitName != null) {
+            for (ChannelSplitName channelSplitName : channelSplitName) {
+                if (channelSplitName.getKey().equals("Channel")) {
+                    for (Value value : channelSplitName.getValue()) {
+                        if (value.getKey() == channelNumber) {
+                            return value.getValue();
+                        }
                     }
                 }
             }

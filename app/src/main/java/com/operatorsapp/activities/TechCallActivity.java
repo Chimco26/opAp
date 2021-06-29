@@ -18,6 +18,7 @@ import com.example.common.department.MachineLineResponse;
 import com.example.common.department.MachinesLineDetail;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.Technician;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.fragments.TechCallFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -64,7 +65,7 @@ public class TechCallActivity extends AppCompatActivity implements TechCallFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tech_call);
-        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
+        if(!BuildConfig.DEBUG){Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));}
         mCroutonCreator = new CroutonCreator();
         setToolbar();
         getExtras();

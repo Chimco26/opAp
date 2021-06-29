@@ -490,7 +490,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         super.onCreate(savedInstanceState);
         OppAppLogger.d(TAG, "onCreate(), start ");
 
-        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
+        if(!BuildConfig.DEBUG){Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));}
         setContentView(R.layout.activity_dashboard);
         updateAndroidSecurityProvider(this);
 
@@ -1128,8 +1128,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mAllDashboardDataCore.stopPolling();
 
-        NetworkManager.getInstance().clearPollingRequest();
-
+        if (NetworkManager.getInstance() != null) {
+            NetworkManager.getInstance().clearPollingRequest();
+        }
         mAllDashboardDataCore.startPolling();
 
     }
@@ -1422,7 +1423,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void setWidgetItemInPager() {
-        if (mViewPagerFragment != null && mViewPagerFragment.get() != null) {
+        if (mViewPagerFragment != null && mViewPagerFragment.get() != null && mViewPagerFragment.get().getPager() != null) {
             if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
                 mViewPagerFragment.get().getPager().setCurrentItem(1);
             } else {
