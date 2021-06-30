@@ -75,24 +75,29 @@ public class LoginCore {
     }
 
     public void silentLoginFromDashBoard(final String siteUrl, final String username, final String password, final LoginUICallback<Machine> loginUICallback) {
-        final String EncryptedPassword = Base64.encodeToString(password.getBytes(), Base64.NO_WRAP);
 
-        mLoginNetworkBridgeInterface.login(siteUrl, username, EncryptedPassword, mLoginPersistenceManagerInterface.getCurrentLang(), new LoginCoreCallback() {
-            @Override
-            public void onLoginSucceeded(String sessionId, String siteName, final int userId) {
+        if (password == null) {
+            loginUICallback.onLoginFailed(new StandardResponse(ErrorObjectInterface.ErrorCode.Credentials_mismatch, "silentLoginFromDashBoard, onLoginFailed password null"));
+        } else {
+            final String EncryptedPassword = Base64.encodeToString(password.getBytes(), Base64.NO_WRAP);
 
-                OppAppLogger.d(LOG_TAG, "silentLoginFromDashBoard, onLoginSucceeded(), " + sessionId);
+            mLoginNetworkBridgeInterface.login(siteUrl, username, EncryptedPassword, mLoginPersistenceManagerInterface.getCurrentLang(), new LoginCoreCallback() {
+                @Override
+                public void onLoginSucceeded(String sessionId, String siteName, final int userId) {
 
-                saveSessionData(sessionId, siteUrl, username, password, userId);
-                loginUICallback.onLoginSucceeded(null, siteName);
-            }
+                    OppAppLogger.d(LOG_TAG, "silentLoginFromDashBoard, onLoginSucceeded(), " + sessionId);
 
-            @Override
-            public void onLoginFailed(StandardResponse reason) {
-                OppAppLogger.d(LOG_TAG, "silentLoginFromDashBoard, onLoginFailed");
-                loginUICallback.onLoginFailed(reason);
-            }
-        }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());
+                    saveSessionData(sessionId, siteUrl, username, password, userId);
+                    loginUICallback.onLoginSucceeded(null, siteName);
+                }
+
+                @Override
+                public void onLoginFailed(StandardResponse reason) {
+                    OppAppLogger.d(LOG_TAG, "silentLoginFromDashBoard, onLoginFailed");
+                    loginUICallback.onLoginFailed(reason);
+                }
+            }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());
+        }
     }
 
 

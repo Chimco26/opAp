@@ -3522,11 +3522,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             return;
         }
         int count = machineStatus.getTaskCountTotal();
-        if (count > 0) {
-            mToolBarTaskCount.setVisibility(View.VISIBLE);
-            mToolBarTaskCount.setText(String.valueOf(count));
-        } else {
-            mToolBarTaskCount.setVisibility(View.INVISIBLE);
+        if (mToolBarTaskCount != null) {
+            if (count > 0) {
+                mToolBarTaskCount.setVisibility(View.VISIBLE);
+                mToolBarTaskCount.setText(String.valueOf(count));
+            } else {
+                mToolBarTaskCount.setVisibility(View.INVISIBLE);
+            }
         }
         AllMachinesData machinesData = machineStatus.getAllMachinesData().get(0);
         String nameByLang = OperatorApplication.isEnglishLang() ? machinesData.getCurrentProductEname() : machinesData.getCurrentProductName();
