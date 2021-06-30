@@ -259,16 +259,20 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             public void run() {
                 if(mHandlerUpdateMachinesStatus != null) {
                     mHandlerUpdateMachinesStatus.postDelayed(this, INTERVAL);
-                    updateDepartmentMachinesStatus();
+                    updateDepartmentMachinesStatus(false);
                 }
             }
         }, INTERVAL);
     }
 
-    private void updateDepartmentMachinesStatus() {
+    private void updateDepartmentMachinesStatus(boolean withProgressBar) {
+        if (withProgressBar){
+            mProgress.setVisibility(View.VISIBLE);
+        }
         SimpleRequests.getDepartmentsMachines(PersistenceManager.getInstance().getSiteUrl(), new GetDepartmentCallback() {
             @Override
             public void onGetDepartmentSuccess(DepartmentsMachinesResponse response) {
+                mProgress.setVisibility(View.GONE);
                 mDepartmentMachine = response;
                 if (mDepartmentNewDisplayAdapter != null && mDepartmentMachine != null) {
                     mDepartmentNewDisplayAdapter.updateMachinesStatus(mDepartmentMachine.getDepartmentMachine());
@@ -282,6 +286,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
             @Override
             public void onGetDepartmentFailed(StandardResponse reason) {
+                mProgress.setVisibility(View.GONE);
             }
         }, NetworkManager.getInstance(), PersistenceManager.getInstance().getTotalRetries(), PersistenceManager.getInstance().getRequestTimeout());
 
@@ -452,7 +457,9 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                     signInSelectedMachines(dialog);
                 } else {
                     setProductionModeForMachine(dialog);
+                    updateDepartmentMachinesStatus(true);
                 }
+                dialog.dismiss();
                 progressBar.setVisibility(View.VISIBLE);
             }
         });

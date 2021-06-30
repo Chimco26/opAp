@@ -51,7 +51,7 @@ public class MachineNewDisplayAdapter extends RecyclerView.Adapter<MachineNewDis
         DepartmentMachineValue machine = mMachinesFil.get(position);
 
         viewHolder.itemView.setBackgroundColor(Color.parseColor(mMachinesFil.get(position).getMachineStatusColor()));
-
+        viewHolder.mTitle.setTextColor(viewHolder.itemView.getContext().getResources().getColor(R.color.white));
         viewHolder.mTitle.setText(machine.getMachineName());
         if (mMachineParameterName != null) {
             viewHolder.mParameter.setText(getMachineParameterName(mMachinesFil.get(position), mMachineParameterName));
