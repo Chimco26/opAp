@@ -514,7 +514,9 @@ public class TechCallFragment extends Fragment implements View.OnClickListener, 
     private void openServiceReportDialog(TechCallInfo techCallInfo) {
         try {
             ServiceReportDialog.newInstance(String.valueOf(techCallInfo.getmNotificationId())).show(getChildFragmentManager(), ServiceReportDialog.TAG);
-        }catch (Exception e){}
+        }catch (Exception e){
+            mListener.onGetNotificationsFromServer();
+        }
     }
 
     private void removeCall(final TechCallInfo techCallInfo) {
