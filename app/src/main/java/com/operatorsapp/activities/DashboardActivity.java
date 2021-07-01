@@ -339,9 +339,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mIsCollapse = true;
             collapseNow(true);
         } else if (collapseNotificationHandler != null) {
-            new Handler().postDelayed(new Runnable() {
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    handler.removeCallbacksAndMessages(null);
                     // cancel collapse loop after 1 minute
                     if (DashboardActivity.this != null && !DashboardActivity.this.isDestroyed()) {
                         collapseNotificationHandler.removeCallbacksAndMessages(null);
@@ -2648,7 +2650,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     String.format("%s:", getString(R.string.update_this_production_status_also_to)),
                     getString(R.string.apply), (ArrayList<MachinesLineDetail>) machineLineItems
             );
-            android.app.AlertDialog dialog = titleAndSubWithSelectableListDialog.showTitleAndSubWithSelectableListDialog(getApplicationContext());
+            android.app.AlertDialog dialog = titleAndSubWithSelectableListDialog.showTitleAndSubWithSelectableListDialog(this);
             dialog.show();
             dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
