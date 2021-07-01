@@ -165,7 +165,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             public void onGetDepartmentSuccess(DepartmentsMachinesResponse response) {
                 mProgress.setVisibility(View.GONE);
                 mDepartmentMachine = response;
-                initView();
+                updateDepartmentMachinesStatus(true);
             }
 
             @Override
@@ -265,21 +265,25 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         }, INTERVAL);
     }
 
-    private void updateDepartmentMachinesStatus(boolean withProgressBar) {
+    private void updateDepartmentMachinesStatus(final boolean withProgressBar) {
         if (withProgressBar){
             mProgress.setVisibility(View.VISIBLE);
         }
         SimpleRequests.getDepartmentsMachines(PersistenceManager.getInstance().getSiteUrl(), new GetDepartmentCallback() {
             @Override
             public void onGetDepartmentSuccess(DepartmentsMachinesResponse response) {
-                mProgress.setVisibility(View.GONE);
                 mDepartmentMachine = response;
-                if (mDepartmentNewDisplayAdapter != null && mDepartmentMachine != null) {
-                    mDepartmentNewDisplayAdapter.updateMachinesStatus(mDepartmentMachine.getDepartmentMachine());
-                    if (mStringMachinesFilter != null) {
-                        mDepartmentNewDisplayAdapter.getFilter().filter(mStringMachinesFilter);
-                    } else {
-                        mDepartmentNewDisplayAdapter.notifyDataSetChanged();
+                if (withProgressBar){
+                    mProgress.setVisibility(View.GONE);
+                    initView();
+                }else {
+                    if (mDepartmentNewDisplayAdapter != null && mDepartmentMachine != null) {
+                        mDepartmentNewDisplayAdapter.updateMachinesStatus(mDepartmentMachine.getDepartmentMachine());
+                        if (mStringMachinesFilter != null) {
+                            mDepartmentNewDisplayAdapter.getFilter().filter(mStringMachinesFilter);
+                        } else {
+                            mDepartmentNewDisplayAdapter.notifyDataSetChanged();
+                        }
                     }
                 }
             }
@@ -457,7 +461,6 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                     signInSelectedMachines(dialog);
                 } else {
                     setProductionModeForMachine(dialog);
-                    updateDepartmentMachinesStatus(true);
                 }
                 dialog.dismiss();
                 progressBar.setVisibility(View.VISIBLE);
