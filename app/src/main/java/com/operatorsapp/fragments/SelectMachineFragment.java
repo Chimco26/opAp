@@ -90,6 +90,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     private RelativeLayout mMainLayoutTitle;
     private LinearLayout mBtnLayout;
     private Button mApplyMultiSelectBtn;
+    private Button mCancelMultiSelectBtn;
     private Spinner mStatusSpinner;
     private RelativeLayout mStatusLayout;
     private TextView selectMachineTitle;
@@ -140,6 +141,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         noDataTv = rootView.findViewById(R.id.FSM_no_data_tv);
         mProgress = rootView.findViewById(R.id.FSM_progress);
         mApplyMultiSelectBtn = rootView.findViewById(R.id.FSM_multi_select_apply_btn);
+        mCancelMultiSelectBtn = rootView.findViewById(R.id.FSM_multi_select_cancel_btn);
+
         mBtnLayout = rootView.findViewById(R.id.FSM_top_buttons_layout_lil);
         mLoginLayout = rootView.findViewById(R.id.FSM_operator_login_rl);
         mLoginIdEt = rootView.findViewById(R.id.FSM_operator_login_input_et);
@@ -148,6 +151,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         mStatusLayout = rootView.findViewById(R.id.FSM_production_status_rl);
         selectMachineTitle = rootView.findViewById(R.id.select_machine_title);
 
+        mCancelMultiSelectBtn.setOnClickListener(this);
         mApplyMultiSelectBtn.setOnClickListener(this);
         mQcTestBtn.setOnClickListener(this);
         mSignInBtn.setOnClickListener(this);
@@ -165,7 +169,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             public void onGetDepartmentSuccess(DepartmentsMachinesResponse response) {
                 mProgress.setVisibility(View.GONE);
                 mDepartmentMachine = response;
-                initView();
+                updateDepartmentMachinesStatus(true);
             }
 
             @Override
@@ -185,6 +189,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
 
             if (mDepartmentMachine.getUserGroupPermission().getDisplayType() == ONLINE_DISPLAY) {
+//                initDepartmentRv();
                 initDepartmentRvNewDisplay();
             } else {
                 initDepartmentRv();
@@ -217,6 +222,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
             mDepartmentAdapter.setMultiSelection(false);
             mApplyMultiSelectBtn.setVisibility(View.GONE);
+            mCancelMultiSelectBtn.setVisibility(View.GONE);
             mLoginLayout.setVisibility(View.GONE);
             mStatusLayout.setVisibility(View.GONE);
             mMainLayoutTitle.setVisibility(View.VISIBLE);
@@ -237,6 +243,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
             mDepartmentNewDisplayAdapter.setMultiSelection(false);
             mApplyMultiSelectBtn.setVisibility(View.GONE);
+            mCancelMultiSelectBtn.setVisibility(View.GONE);
             mLoginLayout.setVisibility(View.GONE);
             mStatusLayout.setVisibility(View.GONE);
             mMainLayoutTitle.setVisibility(View.VISIBLE);
@@ -265,21 +272,25 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         }, INTERVAL);
     }
 
-    private void updateDepartmentMachinesStatus(boolean withProgressBar) {
+    private void updateDepartmentMachinesStatus(final boolean withProgressBar) {
         if (withProgressBar){
             mProgress.setVisibility(View.VISIBLE);
         }
         SimpleRequests.getDepartmentsMachines(PersistenceManager.getInstance().getSiteUrl(), new GetDepartmentCallback() {
             @Override
             public void onGetDepartmentSuccess(DepartmentsMachinesResponse response) {
-                mProgress.setVisibility(View.GONE);
                 mDepartmentMachine = response;
-                if (mDepartmentNewDisplayAdapter != null && mDepartmentMachine != null) {
-                    mDepartmentNewDisplayAdapter.updateMachinesStatus(mDepartmentMachine.getDepartmentMachine());
-                    if (mStringMachinesFilter != null) {
-                        mDepartmentNewDisplayAdapter.getFilter().filter(mStringMachinesFilter);
-                    } else {
-                        mDepartmentNewDisplayAdapter.notifyDataSetChanged();
+                if (withProgressBar){
+                    mProgress.setVisibility(View.GONE);
+                    initView();
+                }else {
+                    if (mDepartmentNewDisplayAdapter != null && mDepartmentMachine != null) {
+                        mDepartmentNewDisplayAdapter.updateMachinesStatus(mDepartmentMachine.getDepartmentMachine());
+                        if (mStringMachinesFilter != null) {
+                            mDepartmentNewDisplayAdapter.getFilter().filter(mStringMachinesFilter);
+                        } else {
+                            mDepartmentNewDisplayAdapter.notifyDataSetChanged();
+                        }
                     }
                 }
             }
@@ -409,6 +420,9 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             case R.id.FSM_multi_select_apply_btn:
                 openConfirmationDialog();
                 break;
+            case R.id.FSM_multi_select_cancel_btn:
+                initView();
+                break;
             case R.id.FSM_change_factory_btn:
 
 //                if (mNavigationCallback != null){
@@ -457,7 +471,6 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                     signInSelectedMachines(dialog);
                 } else {
                     setProductionModeForMachine(dialog);
-                    updateDepartmentMachinesStatus(true);
                 }
                 dialog.dismiss();
                 progressBar.setVisibility(View.VISIBLE);
@@ -589,6 +602,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         }else {
             mDepartmentNewDisplayAdapter.setMultiSelection(true);
         }
+        mCancelMultiSelectBtn.setVisibility(View.VISIBLE);
         mApplyMultiSelectBtn.setVisibility(View.VISIBLE);
         mLoginLayout.setVisibility(View.VISIBLE);
         mMainLayoutTitle.setVisibility(View.GONE);
@@ -602,6 +616,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         }else {
             mDepartmentNewDisplayAdapter.setMultiSelection(true);
         }
+        mCancelMultiSelectBtn.setVisibility(View.VISIBLE);
         mApplyMultiSelectBtn.setVisibility(View.VISIBLE);
         mStatusLayout.setVisibility(View.VISIBLE);
         mLoginLayout.setVisibility(View.GONE);

@@ -70,7 +70,7 @@ public class MachineNewDisplayAdapter extends RecyclerView.Adapter<MachineNewDis
                     } else {
                         mSelectedMachineList.add(String.valueOf(machineValue.getId()));
                         viewHolder.mTitle.setTextColor(view.getContext().getResources().getColor(R.color.blue1));
-                        viewHolder.itemView.setBackgroundColor(view.getContext().getResources().getColor(R.color.grey_lite));
+                        viewHolder.itemView.setBackgroundColor(view.getContext().getResources().getColor(R.color.dialog_text_gray));
                     }
 
                 }

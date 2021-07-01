@@ -220,7 +220,7 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="30dp">
+        android:paddingStart="30dp">
 
         <TextView
             android:id="@+id/select_machine_title"
@@ -323,6 +323,11 @@
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
     <Button
         android:id="@+id/FSM_multi_select_apply_btn"
         android:layout_width="wrap_content"
@@ -340,4 +345,23 @@
         android:visibility="gone"
         app:autoSizeMaxTextSize="22sp"
         app:autoSizeTextType="uniform" />
+
+    <Button
+        android:id="@+id/FSM_multi_select_cancel_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@drawable/button_lite_blue_with_round_corners"
+        android:padding="10dp"
+        android:text="@string/cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="20dp"
+        android:visibility="gone"
+        app:autoSizeMaxTextSize="22sp"
+        app:autoSizeTextType="uniform" />
+    </LinearLayout>
 </LinearLayout>
