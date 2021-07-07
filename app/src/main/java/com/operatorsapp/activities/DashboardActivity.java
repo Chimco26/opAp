@@ -490,7 +490,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         super.onCreate(savedInstanceState);
         OppAppLogger.d(TAG, "onCreate(), start ");
 
-        if(!BuildConfig.DEBUG){Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));}
+        if(!BuildConfig.DEBUG){ Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this)); }
         setContentView(R.layout.activity_dashboard);
         updateAndroidSecurityProvider(this);
 

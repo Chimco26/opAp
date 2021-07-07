@@ -98,7 +98,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activate_job_activity);
-        if(!BuildConfig.DEBUG){Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));}
+        if(!BuildConfig.DEBUG){ Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this)); }
         mCroutonCreator = new CroutonCreator();
 
         getExtras();

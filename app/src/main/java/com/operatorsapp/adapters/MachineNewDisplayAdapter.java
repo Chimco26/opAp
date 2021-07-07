@@ -61,6 +61,7 @@ public class MachineNewDisplayAdapter extends RecyclerView.Adapter<MachineNewDis
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 DepartmentMachineValue machineValue = mMachinesFil.get(position);
                 if (isMultiSelect) {
                     if (mSelectedMachineList.contains(String.valueOf(machineValue.getId()))) {
